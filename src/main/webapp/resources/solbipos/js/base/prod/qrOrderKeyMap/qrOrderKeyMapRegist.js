@@ -327,6 +327,26 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
         });
     };
 
+    // QR동기화
+    $scope.QRSynchronize = function () {
+
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/base/prod/qrOrderKeyMap/qrOrderKeyMap/getQRSynchronize.sb', params, function (response) {
+
+            var data = response.data.data.list;
+
+            if (data.status === 200) {
+
+                $scope._popMsg(data.message);
+                $scope._popMsg(data.data);
+
+            }else{
+                $scope._popMsg(data.message);
+            }
+        });
+    };
+
 }]);
 
 

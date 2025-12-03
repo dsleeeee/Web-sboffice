@@ -1,5 +1,8 @@
 package kr.co.solbipos.base.prod.qrOrderKeyMap.web;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -21,8 +24,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
@@ -46,6 +55,13 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 @Controller
 @RequestMapping("/base/prod/qrOrderKeyMap")
 public class QrOrderKeyMapController {
+
+    // (개발)
+    public static final String QR_API_URL = "https://testqr-api.orderpick.kr";
+    public static final String JWT_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTg2OTAxOTg0NiwianRpIjoiYTc4OWM1NWEtYzc1Zi00MjBlLTlhY2MtZGU0ODcwYzRlOWExIiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiTUVUQV9DSVRZIiwicmlkZXIiOm51bGwsInJvbGUiOm51bGwsImlzc3VlVGFyZ2V0IjoiUE9TX1NFUlZFUiJ9.NUEZjMZjmNDZdRPNbWEjiVdFDJz2mcGdaD9YQljgWrMkVpwqzIXA1RLDWsTInSP4yMnPncbgaRR-CrmPSqwjhw";
+    // (운영)
+    //public static final String OMS_API_URL  = "https://qr-api.orderpick.kr";
+    //public static final String ACCESS_TOKEN  = "";
 
     private final SessionService sessionService;
     private final QrOrderKeyMapService qrOrderKeyMapService;
@@ -213,5 +229,110 @@ public class QrOrderKeyMapController {
         int result = qrOrderKeyMapService.saveQrOrderKeyMap(qrOrderKeyMapVOS, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * QR오더- QR동기화
+     * @param qrOrderKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 12. 03
+     */
+    @RequestMapping(value = "/qrOrderKeyMap/getQRSynchronize.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getQRSynchronize(QrOrderKeyMapVO qrOrderKeyMapVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String apiFullUrl = QR_API_URL + "/qr/menu/v1/pos/" + sessionInfoVO.getStoreCd() + "/sync";
+
+        Map<String, Object> resultMap = putRequest(qrOrderKeyMapVO, apiFullUrl, JWT_TOKEN);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * put 호출
+     *
+     * @param qrOrderKeyMapVO
+     * @param apiUrl
+     * @param tokenOrKey
+     * @author 이다솜
+     * @since  2025. 12. 03
+     */
+    public Map<String, Object> putRequest(@RequestBody QrOrderKeyMapVO qrOrderKeyMapVO, String apiUrl, String tokenOrKey) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        HttpURLConnection connection = null;
+
+        // 결과값 셋팅
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = null;
+
+        try {
+            // 1. URL 객체 생성
+            URL url = new URL(apiUrl);
+            System.out.println("API 호출 URL: " + url);
+
+            // 2. HttpURLConnection 객체 생성 및 설정
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + tokenOrKey);
+            connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
+
+            // 3. 서버로 데이터 전송 (JSON payload)
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String jsonData = mapper.writeValueAsString(qrOrderKeyMapVO);
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+                os.flush();
+            }
+
+            // 4. 응답 코드 확인
+            int responseCode = connection.getResponseCode();
+            System.out.println("HTTP 응답 코드: " + responseCode);
+
+            // 5. 응답 본문 읽기
+            if (responseCode >= 200 && responseCode <= 299) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {
+                    });
+                    System.out.println("서버 응답: " + response.toString());
+                }
+            } else {
+                // 에러 발생 시 에러 스트림을 읽음
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine = null;
+                    while ((errorLine = br.readLine()) != null) {
+                        errorResponse.append(errorLine.trim());
+                    }
+                    resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {
+                    });
+                    System.out.println("에러 응답: " + errorResponse.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return resultMap;
     }
 }

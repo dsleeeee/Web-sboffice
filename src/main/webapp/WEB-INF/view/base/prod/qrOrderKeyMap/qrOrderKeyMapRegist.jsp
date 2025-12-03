@@ -14,6 +14,8 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="_pageView('qrOrderKeyMapRegistCtrl', 1)"><s:message code="cmm.search"/></button>
+            <%-- QR동기화 --%>
+            <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="QRSynchronize()"><s:message code="qrOrderKeyMap.QRSynchronize"/></button>
         </div>
 
 
@@ -302,7 +304,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251128.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251203.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
