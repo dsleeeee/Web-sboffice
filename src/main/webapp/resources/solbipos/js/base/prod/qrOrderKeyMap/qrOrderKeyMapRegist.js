@@ -129,7 +129,7 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
         scope.prodClassCd = "";
         scope.prodClassCdNm = "";
         scope.barCd = "";
-        scope.useYnAllCombo.selectedIndex = 0;
+        scope.useYnAllCombo.selectedIndex = 1;
         scope.prodTypeFgAllCombo.selectedIndex = 0;
         scope.regYnAllCombo.selectedIndex = 2;
 
@@ -590,6 +590,7 @@ app.controller('qrOrderProdCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope.regYnDataMap = new wijmo.grid.DataMap(regYn, 'value', 'name');
 
         $scope.regYnAllCombo.selectedIndex = 2;
+        $scope.useYnAllCombo.selectedIndex = 1;
 
     };
 

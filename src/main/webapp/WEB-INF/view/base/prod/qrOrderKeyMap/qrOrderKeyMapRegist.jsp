@@ -175,6 +175,7 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
+                                    is-read-only="true"
                                     initialized="_initComboBox(s)">
                             </wj-combo-box>
                         </div>
@@ -301,7 +302,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251128.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251128.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
