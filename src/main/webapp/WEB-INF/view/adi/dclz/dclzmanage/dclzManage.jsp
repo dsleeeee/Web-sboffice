@@ -71,7 +71,7 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
-      <%-- 엑셀 다운로드  --%>
+      <%-- 엑셀 다운로드 --%>
       <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
         <s:message code="cmm.excel.down" />
       </button>
