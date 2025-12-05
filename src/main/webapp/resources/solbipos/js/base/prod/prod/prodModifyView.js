@@ -356,6 +356,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 저장버튼 show
             $("#btnSaveProd").css("display", "");
 
+            // 재고관련 그리드 초기화
+            $scope._gridDataInit();
+
             // 상품정보 set (초기값 셋팅)
             $scope.setProdModifyInfo(params);
         }

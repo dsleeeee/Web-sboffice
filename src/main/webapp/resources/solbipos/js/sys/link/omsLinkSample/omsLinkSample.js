@@ -233,4 +233,28 @@ app.controller('omsLinkSampleCtrl', ['$scope', '$http', function ($scope, $http)
         });
     };
 
+    // QR 동기화이벤트
+    $scope.qrSynchronize = function (searchType) {
+
+        if ($("#qrSynchronize_posShopId").val() === "") {
+            $scope._popMsg(messages['omsLinkSample.posShopId'] + messages['cmm.require.text']); // POS사매장ID을(를) 입력해주세요.
+            return;
+        }
+
+        var params = {};
+        params.linkType = "007";
+        params.searchType = searchType;
+        params.posShopId = $("#qrSynchronize_posShopId").val();
+
+        $scope._postJSONSave.withOutPopUp("/sys/link/omsLinkSample/getOmsLinkSampleReqApi.sb", params, function (response) {
+
+            // api 로그 seq값
+            var seq = response.data.data;
+
+            // OMS연동샘플 API 호출 목록 조회(방금 호출한 건 즉시조회)
+            $scope.searchOmsLinkSampleReqList(seq);
+
+        });
+    };
+
 }]);

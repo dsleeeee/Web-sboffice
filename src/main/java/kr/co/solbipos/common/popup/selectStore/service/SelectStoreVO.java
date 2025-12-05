@@ -117,6 +117,9 @@ public class SelectStoreVO extends PageVO {
     /** 점포유형 */
     private String mrpizzaShopType;
 
+    /** 거래처코드 */
+    private String vendrCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -317,5 +320,13 @@ public class SelectStoreVO extends PageVO {
 
     public void setMrpizzaShopType(String mrpizzaShopType) {
         this.mrpizzaShopType = mrpizzaShopType;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

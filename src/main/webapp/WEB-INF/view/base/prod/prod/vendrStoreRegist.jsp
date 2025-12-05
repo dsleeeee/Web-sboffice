@@ -44,8 +44,8 @@
                                     <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.vendrNm"/>"     binding="vendrNm"       width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.tradeFg"/>"     binding="tradeFg"       width="60" align="center" data-map="tradeFgComboDataMap"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.tradeForm"/>"   binding="tradeForm"     width="60" align="center" data-map="tradeFormComboDataMap"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.acquireUprc"/>" binding="acquireUprc"   width="60" align="center" data-type="Number"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.acquireRate"/>" binding="acquireRate"   width="60" align="center" data-type="Number"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.acquireUprc"/>" binding="acquireUprc"   width="60" align="center" data-type="Number" visible="false"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.acquireRate"/>" binding="acquireRate"   width="60" align="center" data-type="Number" visible="false"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="prod.vendrStoreRegist.currQty"/>"     binding="currQty"       width="60" align="center"></wj-flex-grid-column>
                                     <wj-flex-grid-column header=""     binding="seq" width="70"  align="center" visible="false"></wj-flex-grid-column>
 
@@ -94,7 +94,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/vendrStoreRegist.js?ver=20251113.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/vendrStoreRegist.js?ver=20251126.01" charset="utf-8"></script>
 
 <%-- 거래처 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/searchVendr.jsp">

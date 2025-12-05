@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AcquireSlipRegist.xml
+    매입전표등록 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.11.21
+-->
+<mapper namespace="kr.co.solbipos.kookmin.acquire.acquireSilpRegist.service.impl.AcquireSlipRegistMapper">
+    <!-- 매입전표 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchInOutStockList" parameterType="AcquireSlipRegistVO" resultType="DefaultMap">
+        /* AcquireSlipRegistMapper.getSearchInOutStockList */
+        SELECT  A.SLIP_NO
+        ,       A.SLIP_FG
+        ,       A.PROC_FG
+        ,       A.VENDR_CD
+        ,       B.VENDR_NM
+        ,       DECODE(A.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
+        ,       A.INSTOCK_DATE
+        FROM    TB_PO_HQ_VENDR_INSTOCK A
+        ,       TB_HQ_VENDOR B
+        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+        AND     B.VENDR_CD      = A.VENDR_CD
+        <if test='dateFg == "reg"'>
+            AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "in"'>
+            AND A.INSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='slipNo != null and slipNo != ""'>
+            AND A.SLIP_NO LIKE '%' || #{slipNo} || '%'
+        </if>
+        <if test='orderSlipNo != null and orderSlipNo != ""'>
+            AND A.ORDER_SLIP_NO  LIKE '%' || #{orderSlipNo} || '%'
+        </if>
+        <if test='slipFg != null and slipFg != ""'>
+            AND A.SLIP_FG = #{slipFg}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND A.PROC_FG = #{procFg}
+        </if>
+        <if test='vendrCd != null and vendrCd != ""'>
+            AND A.VENDR_CD = #{vendrCd}
+        </if>
+        ORDER
+        BY      A.SLIP_NO DESC
+    </select>
+
+    <!-- 거래처 발주등록 - 발주 상세 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER, TB_HQ_VENDOR, TB_HQ_EMPLOYEE, TB_CM_NMCODE
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 발주 상세 내역을 조회한다.
+    -->
+    <select id="getInOutStockSlipInfo" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getInOutStockSlipInfo */
+        SELECT  tphvi.SLIP_NO
+        ,       tphvi.PROC_FG
+        ,       tphvi.VENDR_CD
+        ,       thv.VENDR_NM
+        ,       DECODE(tphvi.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
+        ,       tphvi.INSTOCK_DATE
+        ,       tphvi.DTL_CNT
+        ,       tphvi.REMARK
+        ,       tphvi.ORDER_SLIP_NO
+        ,       tphvi.REG_DT
+        ,       thereg.EMP_NM AS REG_NM
+        ,       DECODE(tphvi.PROC_FG, 0, NULL, tphvi.CONFM_DT) AS CONFM_DT
+        ,       DECODE(tphvi.PROC_FG, 0, NULL, theconfm.EMP_NM) AS CONFM_NM
+        ,       tphvi.IN_TOT_QTY * tphvi.SLIP_FG AS IN_TOT_QTY
+        ,       tphvi.IN_TOT * tphvi.SLIP_FG AS IN_TOT
+        ,       (SELECT CASE WHEN MAX(STORAGE_CD) IS NULL THEN '001' ELSE MAX(STORAGE_CD) END FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
+        ,       tphvi.STORE_CD
+        ,       tms.STORE_NM
+        ,		tphvi.TRADE_FG
+        ,		tphvi.TRADE_FORM
+        ,		(SELECT COUNT(*) FROM TB_PO_HQ_VENDR_INSTOCK_DTL WHERE HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD AND SLIP_NO = tphvi.SLIP_NO) AS PROD_CNT
+        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+        ,       TB_HQ_VENDOR thv
+        ,       TB_HQ_EMPLOYEE thereg
+        ,       TB_HQ_EMPLOYEE theconfm
+        ,       TB_MS_STORE tms
+        WHERE   tphvi.HQ_OFFICE_CD        = #{hqOfficeCd}
+        AND     tphvi.SLIP_NO             = #{slipNo}
+        AND     thv.HQ_OFFICE_CD          = tphvi.HQ_OFFICE_CD
+        AND     thv.VENDR_CD              = tphvi.VENDR_CD
+        AND     thereg.HQ_OFFICE_CD   (+) = tphvi.HQ_OFFICE_CD
+        AND     thereg.USER_ID        (+) = tphvi.REG_ID
+        AND     theconfm.HQ_OFFICE_CD (+) = tphvi.HQ_OFFICE_CD
+        AND     theconfm.USER_ID      (+) = tphvi.CONFM_ID
+        AND		tms.HQ_OFFICE_CD		  = tphvi.HQ_OFFICE_CD
+        AND		tms.STORE_CD		      = tphvi.STORE_CD
+    </select>
+
+    <!-- 매입전표등록 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 매입전표등록 신규전표번호를 조회한다.
+    -->
+    <select id="getNewSlipNo" parameterType="vendrInstockVO" resultType="String">
+        /* USE : AcquireSlipRegistMapper.getNewSlipNo */
+        SELECT  NVL(MAX(tphvi.SLIP_NO), #{yymm}||'0000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tphvi.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphvi.SLIP_NO       LIKE  #{yymm}||'%'
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출정보 HD 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보를 등록한다.
+    -->
+    <insert id="insertVendrInstock" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.insertVendrInstock */
+        INSERT INTO TB_PO_HQ_VENDR_INSTOCK
+        (
+                HQ_OFFICE_CD
+        ,       SLIP_NO
+        ,       SLIP_FG
+        ,       VENDR_CD
+        ,       PROC_FG
+        ,       ORDER_SLIP_NO
+        ,       INSTOCK_DATE
+        ,       DTL_CNT
+        ,       IN_TOT_QTY
+        ,       IN_AMT
+        ,       IN_VAT
+        ,       IN_TOT
+        ,       REMARK
+        ,       IN_REG_DT
+        ,       IN_REG_ID
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       STORE_CD
+        ,       TRADE_FG
+        ,       TRADE_FORM
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{slipNo}
+        ,       #{slipFg}
+        ,       #{vendrCd}
+        ,       #{procFg}
+        ,       #{orderSlipNo}
+        ,       #{instockDate}
+        ,       0
+        ,       0
+        ,       0
+        ,       0
+        ,       0
+        ,       #{remark}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{storeCd}
+        ,       #{tradeFg}
+        ,       #{tradeForm}
+        )
+    </insert>
+
+
+    <!-- 매입전표등록 - 입고/반출정보 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보를 수정한다.
+    -->
+    <update id="updateVendrInstock" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateVendrInstock */
+        UPDATE  TB_PO_HQ_VENDR_INSTOCK
+        SET     VENDR_CD        = #{vendrCd}
+        ,       ORDER_SLIP_NO   = #{orderSlipNo}
+        ,       INSTOCK_DATE    = #{instockDate}
+        ,       REMARK          = #{remark}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        ,       STORE_CD        = #{storeCd}
+        ,       TRADE_FG        = #{tradeFg}
+        ,       TRADE_FORM      = #{tradeForm}
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     SLIP_NO         = #{slipNo}
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출정보 현재 진행상태 값 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보의 현재 진행상태 값을 조회한다.
+    -->
+    <select id="getInOutStockProcFg" parameterType="acquireSlipRegistVO" resultType="String">
+        /* AcquireSlipRegistMapper.getInOutStockProcFg */
+        SELECT  NVL(PROC_FG, -1) AS CHECK_PROC_FG
+        FROM    TB_PO_HQ_VENDR_INSTOCK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SLIP_NO = #{slipNo}
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출 삭제시 상품이 있는지 여부 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 입고/반출 삭제시 상품이 있는지 여부를 조회한다.
+    -->
+    <select id="getInOutStockProdExist" parameterType="acquireSlipRegistVO" resultType="String">
+        /* USE : AcquireSlipRegistMapper.getInOutStockProdExist */
+        SELECT  DECODE(COUNT(tshvid.PROD_CD), 0, 'N', 'Y') AS IS_EXIST
+        FROM    TB_PO_HQ_VENDR_INSTOCK_DTL tshvid
+        WHERE   tshvid.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tshvid.SLIP_NO      = #{slipNo}
+        AND     ROWNUM              = 1
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출정보 HD 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보를 삭제한다.
+    -->
+    <delete id="deleteInOutStockSlipInfo" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.deleteInOutStockSlipInfo */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+    <!-- 매입전표등록 - 입고/반출 PROD 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_PROD
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출 상품정보를 삭제한다.
+    -->
+    <delete id="deleteInOutStockProdInfo" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.deleteInOutStockProdInfo */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+    <!-- 매입전표등록 - 입고/반출정보 진행상태 변경 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 진행상태를 변경한다.
+    -->
+    <update id="updateInOutStockProcFg" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateInOutStockProcFg */
+        UPDATE  TB_PO_HQ_VENDR_INSTOCK
+        SET     PROC_FG   = #{procFg}
+        <if test='procFg == "0"'>
+            ,       CONFM_DT = NULL
+            ,       CONFM_ID = NULL
+        </if>
+        <if test='procFg == "1"'>
+            ,       CONFM_DT = #{modDt}
+            ,       CONFM_ID = #{modId}
+        </if>
+        ,       MOD_DT = #{modDt}
+        ,       MOD_ID = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC, TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 등록한다.
+    -->
+    <insert id="insertVendrExact" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.insertVendrExact */
+        INSERT INTO TB_PO_HQ_VENDR_EXACT_CALC
+        (
+                HQ_OFFICE_CD
+        ,       VENDR_CD
+        ,       EXCCLC_DATE
+        ,       SEQ_NO
+        ,       EXCCLC_FG
+        ,       EXCCLC_AMT
+        ,       EXCCLC_VAT
+        ,       EXCCLC_TOT
+        ,       SLIP_NO
+        ,       REMARK
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        SELECT  tphvi.HQ_OFFICE_CD
+        ,       tphvi.VENDR_CD
+        ,       tphvi.INSTOCK_DATE
+        ,       (SELECT TO_NUMBER(NVL(MAX(SEQ_NO), 0)+1) FROM TB_PO_HQ_VENDR_EXACT_CALC WHERE HQ_OFFICE_CD = tphvi.HQ_OFFICE_CD AND VENDR_CD = tphvi.VENDR_CD AND EXCCLC_DATE = tphvi.INSTOCK_DATE)
+        ,       tphvi.SLIP_FG
+        ,       tphvi.IN_AMT
+        ,       tphvi.IN_VAT
+        ,       tphvi.IN_TOT
+        ,       tphvi.SLIP_NO
+        ,       tphvi.REMARK
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tphvi.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tphvi.SLIP_NO       =   #{slipNo}
+    </insert>
+
+    <delete id="deleteVendrInstockProdConfm" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.deleteVendrInstockProdConfm */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  	= 	#{hqOfficeCd}
+        AND     SLIP_NO       	= 	#{slipNo}
+        <if test='delFg != null and delFg == "Y"'>
+            AND		STORAGE_CD		!=	#{outStorageCd}
+        </if>
+    </delete>
+
+    <update id="mergeVendrInstockProdConfm" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.mergeVendrInstockProdConfm */
+        MERGE INTO TB_PO_HQ_VENDR_INSTOCK_PROD C
+        USING
+            (
+                SELECT  HQ_OFFICE_CD
+                ,       SLIP_NO
+                ,       PROD_CD
+                ,       #{outStorageCd}	AS OUT_STORAGE_CD
+                ,       DECODE(SLIP_FG,1,'01','16') AS OCCR_FG
+                ,       SLIP_FG
+                ,       DECODE(#{confmYn}, '1','Y','N') AS CONFM_YN
+                ,       COST_UPRC
+                ,       PO_UNIT_FG
+                ,       PO_UNIT_QTY
+                ,       IN_UNIT_QTY
+                ,       IN_ETC_QTY
+                ,       IN_TOT_QTY
+                ,       IN_AMT
+                ,       IN_VAT
+                ,       IN_TOT
+                ,       SEQ
+                ,       ACQUIRE_RATE
+                FROM    TB_PO_HQ_VENDR_INSTOCK_DTL
+                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     SLIP_NO         =   #{slipNo}
+            ) N
+        ON  (
+                        C.HQ_OFFICE_CD  = N.HQ_OFFICE_CD
+                AND     C.SLIP_NO		= N.SLIP_NO
+                AND     C.PROD_CD  	    = N.PROD_CD
+                AND     C.STORAGE_CD  	= N.OUT_STORAGE_CD
+                AND     C.OCCR_FG		= N.OCCR_FG
+                AND     C.SEQ           = N.SEQ
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET 	C.CONFM_YN    	= N.CONFM_YN
+        ,       C.MOD_DT      	= #{modDt}
+        ,       C.MOD_ID      	= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       SLIP_NO
+        ,       PROD_CD
+        ,       STORAGE_CD
+        ,       OCCR_FG
+        ,       SLIP_FG
+        ,       CONFM_YN
+        ,       COST_UPRC
+        ,       PO_UNIT_FG
+        ,       PO_UNIT_QTY
+        ,       IN_UNIT_QTY
+        ,       IN_ETC_QTY
+        ,       IN_TOT_QTY
+        ,       IN_AMT
+        ,       IN_VAT
+        ,       IN_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       SEQ
+        ,       ACQUIRE_RATE
+        )
+        VALUES
+        (
+                N.HQ_OFFICE_CD
+        ,       N.SLIP_NO
+        ,       N.PROD_CD
+        ,       N.OUT_STORAGE_CD
+        ,       N.OCCR_FG
+        ,       N.SLIP_FG
+        ,       N.CONFM_YN
+        ,       N.COST_UPRC
+        ,       N.PO_UNIT_FG
+        ,       N.PO_UNIT_QTY
+        ,       N.IN_UNIT_QTY
+        ,       N.IN_ETC_QTY
+        ,       N.IN_TOT_QTY
+        ,       N.IN_AMT
+        ,       N.IN_VAT
+        ,       N.IN_TOT
+        ,		#{regDt}
+        ,		#{regId}
+        ,		#{modDt}
+        ,		#{modId}
+        ,       N.SEQ
+        ,       N.ACQUIRE_RATE
+        )
+    </update>
+
+    <!-- 매입전표등록 - 상품마스터 최종판매단가 update -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 입고 시, 입력한 원가단가를 상품마스터의 최종판매단가에 update 한다.
+    -->
+    <update id="updateLastCostUprc" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateLastCostUprc */
+        MERGE INTO TB_HQ_PRODUCT C
+        USING
+            (
+                SELECT  HQ_OFFICE_CD
+                ,       PROD_CD
+                ,       MAX(COST_UPRC)  AS COST_UPRC
+                FROM    TB_PO_HQ_VENDR_INSTOCK_DTL
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     SLIP_NO         = #{slipNo}
+                GROUP
+                BY		HQ_OFFICE_CD
+                ,		PROD_CD
+            ) N
+        ON (
+                        C.HQ_OFFICE_CD = N.HQ_OFFICE_CD
+                AND     C.PROD_CD  	= N.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET 	C.LAST_COST_UPRC = N.COST_UPRC
+    </update>
+
+    <select id="getOutStorageCd" parameterType="acquireSlipRegistVO" resultType="String">
+        /* USE : AcquireSlipRegistMapper.getOutStorageCd */
+        SELECT  DISTINCT STORAGE_CD
+        FROM    TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  	=	#{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_EXACT_CALC
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 진행상태 변경시 거래처정산 데이터를 삭제한다.
+    -->
+    <delete id="deleteVendrExact" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.deleteVendrExact */
+        DELETE  TB_PO_HQ_VENDR_EXACT_CALC
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+    <!-- 매입전표등록 - 진행구분 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 진행구분을 조회한다.
+    -->
+    <select id="getChkProcFg" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getChkProcFg */
+        SELECT  tphvi.PROC_FG
+        ,       tphvi.DTL_CNT
+        ,       DECODE(tphvi.ORDER_SLIP_NO, NULL, 'N', 'Y') AS INSTOCK_TYPE
+        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tphvi.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     tphvi.SLIP_NO       = #{slipNo}
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출상품 추가/변경 등록 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL, TB_HQ_PRODUCT, TB_HQ_ENVST
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 입고/반출상품 추가/변경 등록 리스트를 조회한다.
+    -->
+    <select id="getSearchInOutStockProdList" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getSearchInOutStockProdList */
+        SELECT	A.PROD_CD
+        ,       C.PROD_NM
+        ,       A.PO_UNIT_FG
+        ,       A.PO_UNIT_QTY
+        ,       C.PO_UNIT_ALLOW_FG
+        ,       A.SLIP_FG
+        ,       A.COST_UPRC   -- 매입율 기반으로 매입가 설정(처리 논의)
+        ,       C.PO_MIN_QTY
+        ,       TO_NUMBER(DECODE(A.IN_TOT_QTY , 0, NULL, A.IN_TOT_QTY *A.SLIP_FG)) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(A.IN_UNIT_QTY, 0, NULL, A.IN_UNIT_QTY*A.SLIP_FG)) AS IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(A.IN_ETC_QTY , 0, NULL, A.IN_ETC_QTY *A.SLIP_FG)) AS IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(A.IN_TOT_QTY , 0, NULL, A.IN_TOT_QTY *A.SLIP_FG)) AS IN_TOT_QTY
+        ,       A.IN_AMT*A.SLIP_FG AS IN_AMT
+        ,       A.IN_VAT*A.SLIP_FG AS IN_VAT
+        ,       A.IN_TOT*A.SLIP_FG AS IN_TOT
+        ,       DECODE(C.VAT_FG, '1', 1, 0) AS VAT_FG01
+        ,       DECODE(D.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+        ,       E.NMCODE_NM AS PO_UNIT_FG_NM
+        ,		C.SPLY_UPRC
+        ,		F.SALE_UPRC
+        ,       A.ACQUIRE_RATE
+        ,       A.SEQ
+        FROM	TB_PO_HQ_VENDR_INSTOCK_DTL A
+        ,		TB_PO_HQ_VENDR_INSTOCK B
+        ,		TB_MS_PRODUCT C
+        ,       TB_HQ_VENDOR D
+        ,		TB_HQ_NMCODE E
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 F
+        WHERE	B.HQ_OFFICE_CD 		=	A.HQ_OFFICE_CD
+        AND		B.SLIP_NO 			=	A.SLIP_NO
+        AND		C.STORE_CD 			= 	B.STORE_CD
+        AND		C.PROD_CD 			=	A.PROD_CD
+        AND		D.HQ_OFFICE_CD 		=	A.HQ_OFFICE_CD
+        AND		D.VENDR_CD 			=	B.VENDR_CD
+        AND		E.HQ_OFFICE_CD 	(+)	=	A.HQ_OFFICE_CD
+        AND		E.NMCODE_GRP_CD	(+)	=   '093'
+        AND     E.NMCODE_CD    	(+)	=   A.PO_UNIT_FG
+        AND		F.STORE_CD			=	C.STORE_CD
+        AND		F.PROD_CD			=	A.PROD_CD
+        AND     A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     A.SLIP_NO           =   #{slipNo}
+        AND     B.VENDR_CD          =   #{vendrCd}
+        AND		F.SALE_DATE    		= 	#{today}
+        ORDER
+        BY      A.PROD_CD
+        ,       A.SEQ
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출정보 DTL 등록 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 DTL을 등록한다.
+    -->
+    <insert id="insertVendrInstockDtl" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.insertVendrInstockDtl */
+        INSERT INTO TB_PO_HQ_VENDR_INSTOCK_DTL
+        (
+                HQ_OFFICE_CD
+        ,       SLIP_NO
+        ,       STORAGE_CD
+        ,       HQ_BRAND_CD
+        ,       PROD_CD
+        ,       SLIP_FG
+        ,       COST_UPRC
+        ,       PO_UNIT_FG
+        ,       PO_UNIT_QTY
+        ,       IN_UNIT_QTY
+        ,       IN_ETC_QTY
+        ,       IN_TOT_QTY
+        ,       IN_AMT
+        ,       IN_VAT
+        ,       IN_TOT
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       SEQ
+        ,       ACQUIRE_RATE
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{slipNo}
+        ,       #{storageCd}
+        ,       #{hqBrandCd}
+        ,       #{prodCd}
+        ,       #{slipFg}
+        ,       #{costUprc}
+        ,       #{poUnitFg}
+        ,       #{poUnitQty}
+        ,       #{inUnitQty}
+        ,       #{inEtcQty}
+        ,       #{inTotQty}
+        ,       #{inAmt}
+        ,       #{inVat}
+        ,       #{inTot}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{seq}
+        ,       #{acquireRate}
+        )
+    </insert>
+
+    <!-- 매입전표등록 - 입고/반출정보 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 DTL을 수정한다.
+    -->
+    <update id="updateVendrInstockDtl" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateVendrInstockDtl */
+        UPDATE  TB_PO_HQ_VENDR_INSTOCK_DTL
+        SET     COST_UPRC       = #{costUprc}
+        ,       IN_UNIT_QTY     = #{inUnitQty}
+        ,       IN_ETC_QTY      = #{inEtcQty}
+        ,       IN_TOT_QTY      = #{inTotQty}
+        ,       IN_AMT          = #{inAmt}
+        ,       IN_VAT          = #{inVat}
+        ,       IN_TOT          = #{inTot}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        ,       ACQUIRE_RATE    = #{acquireRate}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+        AND     SEQ           = #{seq}
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출정보 DTL 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 DTL을 삭제한다.
+    -->
+    <delete id="deleteVendrInstockDtl" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.deleteVendrInstockDtl */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+        AND     SEQ           = #{seq}
+    </delete>
+
+    <!-- 매입전표등록 - 입고/반출 상품 공급가 수정(본사) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출시 본사 상품 공급가 수정한다.
+    -->
+    <update id="updateProdSplyUprc" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateProdSplyUprc */
+        <![CDATA[
+            UPDATE  TB_HQ_PRODUCT
+            SET     SPLY_UPRC   = #{splyUprc}
+            ,       MOD_DT      = #{modDt}
+            ,       MOD_ID      = #{modId}
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     PROD_CD       = #{prodCd}
+            AND     SPLY_UPRC     <> #{splyUprc}
+        ]]>
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출 상품 공급가 수정(매장) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출시 본사 상품 공급가 수정한다.
+    -->
+    <update id="updateStProdSplyUprc" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateStProdSplyUprc */
+        <![CDATA[
+            UPDATE  TB_MS_PRODUCT
+            SET     SPLY_UPRC   = #{splyUprc}
+            ,       MOD_DT      = #{modDt}
+            ,       MOD_ID      = #{modId}
+            WHERE   STORE_CD  IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND     PROD_CD   =  #{prodCd}
+            AND     SPLY_UPRC <> #{splyUprc}
+        ]]>
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출정보 DTL의 집계정보 HD에 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 거래처 입고/반출정보 DTL의 집계정보를 HD에 수정한다.
+    -->
+    <update id="updateVendrInstockDtlSumHd" parameterType="acquireSlipRegistVO">
+        /* USE : AcquireSlipRegistMapper.updateVendrInstockDtlSumHd */
+        UPDATE  TB_PO_HQ_VENDR_INSTOCK
+        SET         (
+                        DTL_CNT
+                    ,   IN_TOT_QTY
+                    ,   IN_AMT
+                    ,   IN_VAT
+                    ,   IN_TOT)
+                =   (
+                        SELECT  COUNT(tphvid.PROD_CD)
+                        ,       NVL(SUM(tphvid.IN_TOT_QTY),0)
+                        ,       NVL(SUM(tphvid.IN_AMT),0)
+                        ,       NVL(SUM(tphvid.IN_VAT),0)
+                        ,       NVL(SUM(tphvid.IN_TOT),0)
+                        FROM    TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+                        WHERE   tphvid.HQ_OFFICE_CD  = #{hqOfficeCd}
+                        AND     tphvid.SLIP_NO       = #{slipNo}
+                    )
+        ,       MOD_DT = #{modDt}
+        ,       MOD_ID = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 매입전표등록 - 입고/반출상품 추가/변경 등록 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_VENDOR_PROD, TB_MS_PRODUCT, TB_PO_STORE_VENDR_INSTOCK_DTL, TB_MS_VENDOR
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 입고/반출상품 추가/변경 등록 리스트를 조회한다.
+    -->
+    <select id="getSearchInOutStockRegList" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getSearchInOutStockRegList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	A.HQ_OFFICE_CD
+        ,		NVL(B.SLIP_NO,#{slipNo})	AS SLIP_NO
+        ,		A.PROD_CD
+        ,		D.PROD_NM
+        ,       DECODE(D.VAT_FG, '1', 1, 0) AS VAT_FG01
+        ,		D.LAST_COST_UPRC
+        ,		D.PO_UNIT_ALLOW_FG
+        ,       D.PO_UNIT_FG
+        ,       D.PO_UNIT_QTY
+        ,       DECODE(D.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+        ,       TO_NUMBER(DECODE(C.IN_UNIT_QTY, 0, NULL, C.IN_UNIT_QTY*C.SLIP_FG)) AS PREV_IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(C.IN_ETC_QTY,  0, NULL, C.IN_ETC_QTY*C.SLIP_FG )) AS PREV_IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(C.IN_TOT_QTY,  0, NULL, C.IN_TOT_QTY*C.SLIP_FG )) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(C.IN_AMT, 0, NULL, C.IN_AMT*C.SLIP_FG)) AS PREV_IN_AMT
+        ,       TO_NUMBER(DECODE(C.IN_VAT,  0, NULL, C.IN_VAT*C.SLIP_FG )) AS PREV_IN_VAT
+        ,       TO_NUMBER(DECODE(C.IN_TOT,  0, NULL, C.IN_TOT*C.SLIP_FG )) AS PREV_IN_TOT
+        ,       TO_NUMBER(DECODE(C.IN_AMT    ,  0, NULL, C.IN_AMT*C.SLIP_FG     )) AS IN_AMT
+        ,       TO_NUMBER(DECODE(C.IN_VAT    ,  0, NULL, C.IN_VAT*C.SLIP_FG     )) AS IN_VAT
+        ,       TO_NUMBER(DECODE(C.IN_TOT    ,  0, NULL, C.IN_TOT*C.SLIP_FG     )) AS IN_TOT
+        ,		D.SPLY_UPRC
+        ,		A.ACQUIRE_UPRC
+        ,		NVL(C.ACQUIRE_RATE, A.ACQUIRE_RATE) ACQUIRE_RATE
+        ,		A.SEQ
+        ,		F.SALE_UPRC
+        ,       NVL(C.COST_UPRC, D.COST_UPRC) COST_UPRC
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+        ,		TB_PO_HQ_VENDR_INSTOCK B
+        ,		TB_PO_HQ_VENDR_INSTOCK_DTL C
+        ,		TB_MS_PRODUCT D
+        ,		TB_HQ_VENDOR E
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 F
+        ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL G
+        WHERE	B.HQ_OFFICE_CD 		=   A.HQ_OFFICE_CD
+        AND		B.VENDR_CD 		    =	A.VENDR_CD
+        AND		B.TRADE_FG 			=   A.TRADE_FG
+        AND		B.TRADE_FORM 		=   A.TRADE_FORM
+        AND		C.HQ_OFFICE_CD	(+) =   A.HQ_OFFICE_CD
+        AND 	C.SLIP_NO 		(+) =   B.SLIP_NO
+        AND		C.PROD_CD		(+) =   A.PROD_CD
+        AND		C.SEQ 			(+) =   A.SEQ
+        AND		D.STORE_CD 		    = 	B.STORE_CD  
+        AND		D.PROD_CD			= 	A.PROD_CD
+        AND     E.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
+        AND     E.VENDR_CD      	=   A.VENDR_CD
+        AND		F.STORE_CD     		=   B.STORE_CD
+        AND		F.PROD_CD          	=   A.PROD_CD
+        AND		G.HQ_OFFICE_CD		=	A.HQ_OFFICE_CD
+        AND		G.PROD_CD			= 	A.PROD_CD
+        AND     G.VENDR_CD      	=   A.VENDR_CD
+        AND		G.SEQ 			 	= 	A.SEQ
+        AND		G.STORE_CD			= 	B.STORE_CD
+        AND		A.HQ_OFFICE_CD		= 	#{hqOfficeCd}
+        AND		A.VENDR_CD			= 	#{vendrCd}
+        AND		B.SLIP_NO			= 	#{slipNo}
+        AND     D.USE_YN            =   'Y'
+        AND     D.PO_PROD_FG        IN  ('1','2')
+        AND		F.SALE_DATE        	=   #{today}
+        <if test='prodCd != null and prodCd != ""'>
+            AND A.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="barcdCd != null and barcdCd != ''">
+            AND D.PROD_CD IN    (
+                                    SELECT  thpb.PROD_CD
+                                    FROM    TB_HQ_PRODUCT_BARCD thpb
+                                    WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     thpb.BARCD_CD     = #{barcdCd}
+                                )
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND D.PROD_CLASS_CD IN  (
+                                        SELECT	#{prodClassCd} AS PROD_CLASS_CD
+                                        FROM	DUAL
+                                        UNION
+                                        SELECT  thpc.PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        ORDER
+        BY		A.PROD_CD
+        ,       A.SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장 공통 - 매장 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcquireSelectStoreList" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getAcquireSelectStoreList */
+        SELECT  DISTINCT
+                tms.HQ_OFFICE_CD
+        ,       tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tms.SYS_STAT_FG
+        ,       thn.STORE_CHG_NOT
+        FROM    TB_MS_STORE tms
+        ,       (
+                    SELECT  NMCODE_NM AS STORE_CD
+                    ,       '변경제한매장' AS STORE_CHG_NOT
+                    FROM    TB_HQ_NMCODE
+                    WHERE   1=1
+                    AND     HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     NMCODE_GRP_CD = '164'
+                    AND     USE_YN = 'Y'
+                ) thn
+        ,       TB_HQ_PRODUCT_VENDOR_STORE_DTL thpvsd
+        WHERE   1=1
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='storeChgNot != null and storeChgNot != ""'>
+            <if test='storeChgNot == "1"'>
+                AND thn.STORE_CHG_NOT IS NOT NULL
+            </if>
+            <if test='storeChgNot == "2"'>
+                AND thn.STORE_CHG_NOT IS NULL
+            </if>
+        </if>
+        AND (
+        ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND     thn.STORE_CD        (+) = tms.STORE_CD
+        AND	    thpvsd.STORE_Cd     (+) = tms.STORE_CD
+        AND     thpvsd.HQ_OFFICE_CD (+) = #{hqOfficeCd}
+        <if test='vendrCd != null and vendrCd != ""'>
+            AND	thpvsd.VENDR_CD = #{vendrCd}
+        </if>
+        ORDER
+        BY      tms.STORE_CD
+    </select>
+
+    <!-- 거래처 선택모듈 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR
+                   TB_MS_VENDOR
+        PARAM    : iostockCmmVO
+        COMMENTS : 거래처 발주등록 - 거래처 선택모듈 리스트를 조회한다.
+    -->
+    <select id="getAcquireSelectVendrList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getAcquireSelectVendrList */
+        SELECT 	DISTINCT thv.VENDR_CD
+        ,       thv.VENDR_NM
+        ,       thv.SHIP_FG
+        ,       thv.VAT_INCLD_YN
+        ,       thv.USE_YN
+        FROM    TB_HQ_VENDOR thv
+        ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL thpvsd
+        WHERE   thpvsd.HQ_OFFICE_CD (+) = thv.HQ_OFFICE_CD
+        AND 	thpvsd.VENDR_CD 	(+) = thv.VENDR_CD
+        AND		thv.HQ_OFFICE_CD        = #{hqOfficeCd}
+        <if test='vendrFg != null and vendrFg != ""'>
+            AND     thv.VENDOR_FG    = #{vendrFg}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND		thpvsd.STORE_CD = #{storeCd}
+        </if>
+        ORDER
+        BY		thv.VENDR_CD
+    </select>
+
+    <!-- 엑셀업로드 - 현재 세션ID 와 동일한 데이터 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 현재 세션ID 와 동일한 데이터를 삭제한다.
+    -->
+    <delete id="deleteExcelUpload" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.deleteExcelUpload */
+        DELETE  TB_PO_TEMP_EXCEL
+        WHERE   SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 엑셀업로드 - 엑셀업로드 입력 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 엑셀업로드 한 데이터를 입력한다.
+    -->
+    <insert id="insertExcelUpload" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.insertExcelUpload */
+        MERGE INTO TB_PO_TEMP_EXCEL
+        USING DUAL
+        ON  (
+                    SESSION_ID = #{sessionId}
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND STORE_CD = #{storeCd}
+                AND PROD_BARCD_CD = TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL))
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                PROD_CD = TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL))
+        ,       BARCD_CD = TRIM(REPLACE(REPLACE(#{barcdCd}, CHR(10), NULL), CHR(13), NULL))
+        ,       UPRC = TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL))
+        ,       UNIT_QTY = TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL))
+        ,       ETC_QTY = TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL))
+        ,       QTY = TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL))
+        ,       REMARK = #{remark}
+        ,       MOD_DT = #{modDt}
+        ,       MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                SESSION_ID
+        ,       HQ_OFFICE_CD
+        ,       STORE_CD
+        ,       PROD_BARCD_CD
+        ,       PROD_CD
+        ,       BARCD_CD
+        ,       UPRC
+        ,       UNIT_QTY
+        ,       ETC_QTY
+        ,       QTY
+        ,       REMARK
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{sessionId}
+        ,       #{hqOfficeCd}
+        ,       #{storeCd}
+        ,       TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{barcdCd}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL))
+        ,       TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL))
+        ,       #{remark}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+         )
+    </insert>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadProdCd" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.updateExcelUploadProdCd */
+        UPDATE  TB_PO_TEMP_EXCEL tpte
+        SET     tpte.PROD_CD =  (
+                                    SELECT  thp.PROD_CD
+                                    FROM    TB_HQ_PRODUCT thp
+                                    WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     thp.PROD_CD = tpte.PROD_BARCD_CD
+                                )
+        WHERE tpte.SESSION_ID = #{sessionId}
+        AND     tpte.PROD_CD IS NULL
+    </update>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadBarcdCd" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.updateExcelUploadBarcdCd */
+        UPDATE  TB_PO_TEMP_EXCEL tpte
+        SET     tpte.PROD_CD =  (
+                                    SELECT  thpb.PROD_CD
+                                    FROM    TB_HQ_PRODUCT_BARCD thpb
+                                    WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     thpb.BARCD_CD = tpte.PROD_BARCD_CD
+                                )
+        WHERE   tpte.SESSION_ID = #{sessionId}
+        AND     tpte.PROD_CD IS NULL
+    </update>
+
+    <!-- 엑셀업로드 - UPRC 를 LAST_COST_UPRC 로 UPDATE -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : UPRC 를 LAST_COST_UPRC 로 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadUprc" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.updateExcelUploadUprc */
+        UPDATE  TB_PO_TEMP_EXCEL tpte
+        SET     tpte.UPRC = (
+                                SELECT  thp.LAST_COST_UPRC
+                                FROM    TB_HQ_PRODUCT thp
+                                WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND     thp.PROD_CD = tpte.PROD_BARCD_CD
+                            )
+        WHERE   tpte.SESSION_ID = #{sessionId}
+        AND     tpte.PROD_CD IS NOT NULL
+        AND     tpte.UPRC IS NULL
+    </update>
+
+    <!--  매입전표등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 매입전표등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteInOutStockToExcelUploadData" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.deleteInOutStockToExcelUploadData */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       IN    (
+                                        SELECT  PROD_CD
+                                        FROM    TB_PO_TEMP_EXCEL
+                                        WHERE   SESSION_ID  = #{sessionId}
+                                        AND     PROD_CD     IS NOT NULL
+                                    )
+        AND     SEQ             =   (
+                                        SELECT  MAX(SEQ)
+                                        FROM    TB_HQ_PRODUCT_VENDOR_STORE_HDR
+                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                        AND     PROD_CD         IN  (
+                                                                        SELECT  PROD_CD
+                                                                        FROM    TB_PO_TEMP_EXCEL
+                                                                        WHERE   SESSION_ID  = #{sessionId}
+                                                                        AND     PROD_CD     IS NOT NULL
+                                                                    )
+                                        AND     VENDR_CD        IN  (
+                                                                        SELECT  VENDR_CD
+                                                                        FROM    TB_PO_HQ_VENDR_INSTOCK
+                                                                        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                        AND     SLIP_NO       = #{slipNo}
+                                                                    )
+                                    )
+    </delete>
+
+    <!--  매입전표등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 매입전표등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력한다.
+    -->
+    <insert id="insertInOutStockToExcelUploadData" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.insertInOutStockToExcelUploadData */
+        <selectKey resultType="int" keyProperty="vatFg" order="BEFORE">
+            SELECT  DECODE(VAT_INCLD_YN,'Y',1,0) AS VAT_FG
+            FROM    TB_HQ_VENDOR
+            WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND     VENDR_CD      = #{vendrCd}
+        </selectKey>
+        MERGE INTO TB_PO_HQ_VENDR_INSTOCK_DTL A
+        USING
+            (
+                SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                ,       #{slipNo} AS SLIP_NO
+                ,       '999' AS STORAGE_CD		<!-- 전체 재고용 창고코드 ('001' -> '000' -> '999') -->
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       #{slipFg} AS SLIP_FG
+                ,       tpte.UPRC AS COST_UPRC
+                ,       thp.PO_UNIT_FG
+                ,       thp.PO_UNIT_QTY
+                ,       tpte.UNIT_QTY * ${slipFg} AS IN_UNIT_QTY
+                ,       tpte.ETC_QTY * ${slipFg} AS IN_ETC_QTY
+                ,       tpte.QTY * ${slipFg} AS IN_TOT_QTY
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)) * ${slipFg} AS IN_AMT
+                ,       (ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS IN_VAT
+                ,       (ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)
+                        - ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)*NVL(${vatFg},0)/11)
+                        + ROUND(ROUND(tpte.UPRC*(tpte.UNIT_QTY*thp.PO_UNIT_QTY + tpte.ETC_QTY)/thp.PO_UNIT_QTY)*DECODE(thp.VAT_FG, '1', 1, 0)/(10+NVL(${vatFg},0)))) * ${slipFg} AS IN_TOT
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       (
+                            SELECT  MAX(SEQ)
+                            FROM    TB_HQ_PRODUCT_VENDOR_STORE_HDR
+                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND     PROD_CD = tpte.PROD_CD
+                            AND     VENDR_CD =  (
+                                                    SELECT  VENDR_CD
+                                                    FROM    TB_PO_HQ_VENDR_INSTOCK
+                                                    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                    AND     SLIP_NO       = #{slipNo}
+                                                )
+                        )   AS SEQ
+                FROM    (
+                            SELECT  tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       MAX(NVL(tpte.UPRC, 0)) UPRC
+                            ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/thp.PO_UNIT_QTY) AS UNIT_QTY
+                            ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY)
+                                        * DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                                    ) AS ETC_QTY
+                            ,       (SUM (NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                    - DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                    ,       DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                            )
+                                    ) AS QTY
+                            FROM    TB_PO_TEMP_EXCEL tpte
+                            ,       TB_HQ_PRODUCT thp
+                            WHERE   tpte.SESSION_ID   =   #{sessionId}
+                            AND     tpte.PROD_CD      IS  NOT NULL
+                            AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
+                            AND     thp.PROD_CD       =   tpte.PROD_CD
+                            AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                            AND     thp.PO_PROD_FG    IN  ('1','2')
+                            AND     thp.USE_YN        =   'Y'
+                            AND     tpte.PROD_CD      IN    (
+                                                                SELECT  PROD_CD
+                                                                FROM    TB_HQ_VENDOR_PROD
+                                                                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                AND     VENDR_CD      = #{vendrCd}
+                                                            )
+                            GROUP
+                            BY      tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                            ,       thp.PO_UNIT_ALLOW_FG
+                        ) tpte
+                ,       TB_HQ_PRODUCT thp
+                WHERE   thp.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                AND     thp.HQ_OFFICE_CD   =   tpte.HQ_OFFICE_CD
+                AND     thp.PROD_CD        =   tpte.PROD_CD
+                AND     NVL(tpte.QTY,0)    >   0
+            ) B
+        ON  (
+                    A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+                AND A.SLIP_NO       = B.SLIP_NO
+                AND A.STORAGE_CD    = B.STORAGE_CD
+                AND A.PROD_CD       = B.PROD_CD
+                AND A.SEQ           = B.SEQ
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                A.SLIP_FG           = B.SLIP_FG
+        ,       A.IN_UNIT_QTY       = A.IN_UNIT_QTY + B.IN_UNIT_QTY
+        ,       A.IN_ETC_QTY        = A.IN_ETC_QTY  + B.IN_ETC_QTY
+        ,       A.IN_TOT_QTY        = A.IN_TOT_QTY  + B.IN_TOT_QTY
+        ,       A.IN_AMT            = A.IN_AMT      + B.IN_AMT
+        ,       A.IN_VAT            = A.IN_VAT      + B.IN_VAT
+        ,       A.IN_TOT            = A.IN_TOT      + B.IN_TOT
+        ,       A.MOD_DT            = B.MOD_DT
+        ,       A.MOD_ID            = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            HQ_OFFICE_CD
+        ,   SLIP_NO
+        ,   STORAGE_CD
+        ,   HQ_BRAND_CD
+        ,   PROD_CD
+        ,   SLIP_FG
+        ,   COST_UPRC
+        ,   PO_UNIT_FG
+        ,   PO_UNIT_QTY
+        ,   IN_UNIT_QTY
+        ,   IN_ETC_QTY
+        ,   IN_TOT_QTY
+        ,   IN_AMT
+        ,   IN_VAT
+        ,   IN_TOT
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ,   SEQ
+        )
+        VALUES
+        (
+            B.HQ_OFFICE_CD
+        ,   B.SLIP_NO
+        ,   B.STORAGE_CD
+        ,   B.HQ_BRAND_CD
+        ,   B.PROD_CD
+        ,   B.SLIP_FG
+        ,   B.COST_UPRC
+        ,   B.PO_UNIT_FG
+        ,   B.PO_UNIT_QTY
+        ,   B.IN_UNIT_QTY
+        ,   B.IN_ETC_QTY
+        ,   B.IN_TOT_QTY
+        ,   B.IN_AMT
+        ,   B.IN_VAT
+        ,   B.IN_TOT
+        ,   B.REG_DT
+        ,   B.REG_ID
+        ,   B.MOD_DT
+        ,   B.MOD_ID
+        ,   (
+                SELECT  MAX(SEQ)
+                FROM    TB_HQ_PRODUCT_VENDOR_STORE_HDR
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     PROD_CD         = B.PROD_CD
+                AND     VENDR_CD        =   (
+                                                SELECT  VENDR_CD
+                                                FROM    TB_PO_HQ_VENDR_INSTOCK
+                                                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                AND     SLIP_NO       = #{slipNo}
+                                            )
+            )
+        )
+    </insert>
+
+    <!--  매입전표등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
+        PARAM    : excelUploadMPSVO
+        COMMENTS : 매입전표등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
+        /* USE : AcquireSlipRegistMapper.deleteExcelUploadCompleteData */
+        DELETE  TB_PO_TEMP_EXCEL
+        WHERE   SESSION_ID  = #{sessionId}
+        AND     PROD_CD     IS NOT NULL
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    (
+                                                SELECT  tpte.PROD_CD
+                                                ,       (SUM (NVL(tpte.UNIT_QTY, 0)*thp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                                        - DECODE(${slipFg}, 1, DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                                        ,       DECODE(SUBSTR(thp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),thp.PO_UNIT_QTY), 0)
+                                                                )
+                                                        ) AS QTY
+                                                FROM    TB_PO_TEMP_EXCEL tpte
+                                                ,       TB_HQ_PRODUCT thp
+                                                WHERE   tpte.SESSION_ID   =   #{sessionId}
+                                                AND     tpte.PROD_CD      IS  NOT NULL
+                                                AND     thp.HQ_OFFICE_CD  =   tpte.HQ_OFFICE_CD
+                                                AND     thp.PROD_CD       =   tpte.PROD_CD
+                                                AND     thp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                AND     thp.PO_PROD_FG    IN  ('1','2')
+                                                AND     thp.USE_YN        =   'Y'
+                                                AND     tpte.PROD_CD      IN    (
+                                                                                    SELECT  PROD_CD
+                                                                                    FROM    TB_HQ_VENDOR_PROD
+                                                                                    WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                                    AND     VENDR_CD      = #{vendrCd}
+                                                                                )
+                                                GROUP
+                                                BY      tpte.PROD_CD
+                                                ,       thp.PO_UNIT_QTY
+                                                ,       thp.PO_UNIT_ALLOW_FG
+                                            ) tpte
+                                    WHERE   NVL(tpte.QTY,0) > 0
+                                )
+    </delete>
+
+    <!-- 매입전표등록 - 반출서 반출정보 조회(반출처, 공급자 정보) -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_VENDOR, TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 반출서 반출정보 조회(반출처, 공급자 정보)한다.
+    -->
+    <select id="getInOutStockInfo" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getInOutStockInfo */
+        SELECT  tho.HQ_OFFICE_NM AS INSTOCK_NM
+        ,       tho.TEL_NO AS INSTOCK_TEL_NO
+        ,       tho.FAX_NO AS INSTOCK_FAX_NO
+        ,       tho.EMAIL_ADDR AS INSTOCK_EMAIL_ADDR
+        ,       tho.ADDR || ' ' || tho.ADDR_DTL AS INSTOCK_ADDR
+        ,       thv.VENDR_NM AS SUPPLIER_NM
+        ,       thv.TEL_NO AS SUPPLIER_TEL_NO
+        ,       thv.FAX_NO AS SUPPLIER_FAX_NO
+        ,       thv.EMAIL_ADDR AS SUPPLIER_EMAIL_ADDR
+        ,       thv.ADDR || ' ' || thv.ADDR_DTL AS SUPPLIER_ADDR
+        ,       tphvi.SLIP_NO
+        ,       tphvi.INSTOCK_DATE
+        ,       tphvi.REMARK
+        ,       tphvi.DTL_CNT
+        FROM    TB_HQ_OFFICE tho
+        ,       TB_HQ_VENDOR thv
+        ,       TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tho.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thv.HQ_OFFICE_CD    =   tho.HQ_OFFICE_CD
+        AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     tphvi.HQ_OFFICE_CD  =   tho.HQ_OFFICE_CD
+        AND     tphvi.SLIP_NO       =   #{slipNo}
+    </select>
+
+    <!-- 매입전표등록 - 입고/반출상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_IN_DTL, TB_HQ_PRODUCT, TB_HQ_ENVST
+        PARAM    : acquireSlipRegistVO
+        COMMENTS : 매입전표등록 - 입고/반출상품 리스트를 조회한다.
+    -->
+    <select id="getInOutStockProdList" parameterType="acquireSlipRegistVO" resultType="DefaultMap">
+        /* USE : AcquireSlipRegistMapper.getInOutStockProdList */
+        SELECT  tphvid.PROD_CD
+        ,       thp.PROD_NM
+        ,       tphvid.PO_UNIT_FG
+        ,       tphvid.PO_UNIT_QTY
+        ,       thp.PO_UNIT_ALLOW_FG
+        ,       tphvid.SLIP_FG
+        ,       tphvid.COST_UPRC
+        ,       thp.PO_MIN_QTY
+        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY , 0, NULL, tphvid.IN_TOT_QTY *tphvid.SLIP_FG)) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(tphvid.IN_UNIT_QTY, 0, NULL, tphvid.IN_UNIT_QTY*tphvid.SLIP_FG)) AS IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tphvid.IN_ETC_QTY , 0, NULL, tphvid.IN_ETC_QTY *tphvid.SLIP_FG)) AS IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY , 0, NULL, tphvid.IN_TOT_QTY *tphvid.SLIP_FG)) AS IN_TOT_QTY
+        ,       tphvid.IN_AMT*tphvid.SLIP_FG AS IN_AMT
+        ,       tphvid.IN_VAT*tphvid.SLIP_FG AS IN_VAT
+        ,       tphvid.IN_TOT*tphvid.SLIP_FG AS IN_TOT
+        ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
+        ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+        ,       thn.NMCODE_NM AS PO_UNIT_FG_NM
+        FROM    TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_HQ_VENDOR thv
+        ,       TB_HQ_NMCODE thn
+        WHERE   tphvid.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tphvid.SLIP_NO      =   #{slipNo}
+        AND     thp.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
+        AND     thp.PROD_CD         =   tphvid.PROD_CD
+        AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
+        AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
+        AND     thn.NMCODE_GRP_CD(+)=   '093'
+        AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
+        ORDER
+        BY      tphvid.PROD_CD
+    </select>
+</mapper>

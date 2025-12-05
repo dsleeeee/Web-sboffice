@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    InStockReportByAcquire.xml
+    매입처별 입고내역서 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.12.02
+-->
+<mapper namespace="kr.co.solbipos.kookmin.acquire.inStockReportByAcquire.service.impl.InStockReportByAcquireMapper">
+
+    <!-- 매입처별 입고 내역서 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getInStockReportByAcquireList" parameterType="InStockReportByAcquireVO" resultType="DefaultMap">
+        /* AcquireSlipRegistMapper.getInStockReportByAcquireList */
+        SELECT	D.PROD_CLASS_NM
+        ,		D.PROD_CLASS_CD
+        ,		B.VENDR_CD
+        ,		CASE
+                     WHEN GROUPING(B.VENDR_CD) = 1 AND GROUPING(D.PROD_CLASS_CD) = 0 THEN '소계'
+                     WHEN GROUPING(B.VENDR_CD) = 1 AND GROUPING(D.PROD_CLASS_CD) = 1 THEN '합계'
+                     ELSE E.VENDR_NM
+                END AS VENDR_NM
+        ,		SUM(CASE WHEN A.SLIP_FG = '1' AND B.TRADE_FG IN ('2','3') THEN A.IN_TOT ELSE 0 END) AS CASH_AMT
+        ,		SUM(CASE WHEN A.SLIP_FG = '1' AND B.TRADE_FG IN ('0','1') THEN A.IN_TOT ELSE 0 END) AS AR_AMT
+        ,		SUM(CASE WHEN A.SLIP_FG = '-1' THEN A.IN_TOT ELSE 0 END) 							AS RTN_AMT
+        ,		SUM(CASE WHEN C.VAT_FG = '1' THEN A.IN_TOT ELSE 0 END) 			                    AS TAX_AMT
+        ,		SUM(CASE WHEN C.VAT_FG IN ('2','3') THEN A.IN_TOT ELSE 0 END) 	                    AS TF_AMT
+        ,		SUM(A.IN_TOT)	                                                                    AS TOT_AMT
+        FROM	TB_PO_HQ_VENDR_INSTOCK_PROD A
+        ,		TB_PO_HQ_VENDR_INSTOCK B
+        ,		TB_HQ_PRODUCT C
+        ,		TB_HQ_PRODUCT_CLASS D
+        ,		TB_HQ_VENDOR E
+        WHERE	B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		B.SLIP_NO		= A.SLIP_NO
+        AND		C.HQ_OFFICE_CD	= A.HQ_OFFICE_CD
+        AND 	C.PROD_CD		= A.PROD_CD
+        AND		D.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		D.PROD_CLASS_CD = C.PROD_CLASS_CD
+        AND		E.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		E.VENDR_CD 		= B.VENDR_CD
+        AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		A.CONFM_YN 		= 'Y'
+        AND		B.PROC_FG 		= '1'
+        AND     B.INSTOCK_DATE  BETWEEN #{startDate} AND #{endDate}
+        <if test="storeCd != null and storeCd != ''">
+            AND B.STORE_CD = #{storeCd}
+        </if>
+        GROUP BY GROUPING SETS (
+                                    (D.PROD_CLASS_NM, D.PROD_CLASS_CD, B.VENDR_CD, E.VENDR_NM),  -- 분류, 벤더별 합계
+                                    (D.PROD_CLASS_NM, D.PROD_CLASS_CD),                          -- 분류별 합계
+                                    ()                                                           -- 전체 합계
+                                )
+        ORDER
+        BY		D.PROD_CLASS_CD NULLS LAST
+        ,		B.VENDR_CD
+    </select>
+</mapper>

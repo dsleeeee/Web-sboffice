@@ -20,202 +20,200 @@
         <div class="wj-dialog-body" ng-controller="couponRegistCtrl">
             <div>
                 <div style="height:450px; overflow-y: auto;">
-                    <f:form id="regForm" name="regForm" >
-                        <%-- 쿠폰정보 --%>
-                        <div>
-                            <h3 class="h3_tbl lh25">
-                                <s:message code="couponInfo.couponInfoDtl" />
-                                <a href="#" class="btn_grayS fr" id="coupnIssue" ng-model="coupn.coupnIssue" ng-click="couponIssue()" ><s:message code="couponInfo.couponIssue" /></a>
-                            </h3>
-                        </div>
-                        <table class="searchTbl">
-                            <colgroup>
-                                <col class="w15" />
-                                <col class="w35" />
-                                <col class="w15" />
-                                <col class="w35" />
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <%-- 쿠폰코드 --%>
-                                    <th>
-                                        <s:message code="couponInfo.coupnCd" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="coupnCd" ng-model="coupn.coupnCd" readonly placeholder="자동채번">
-                                    </td>
-                                    <%-- 상태 --%>
-                                    <th>
-                                        <s:message code="couponInfo.status" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="coupnStatus" ng-model="coupn.coupnStatus" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 쿠폰명 --%>
-                                    <th>
-                                        <s:message code="couponInfo.coupnNm" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="coupnNm" ng-model="coupn.coupnNm">
-                                    </td>
-                                    <%-- 사용매장 --%>
-                                    <th>
-                                        <s:message code="couponInfo.useStore" />
-                                    </th>
-                                    <td>
-                                        <%-- 매장선택 모듈 사용시 include --%>
-                                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                                            <jsp:param name="targetTypeFg" value="S"/>
-                                            <jsp:param name="targetId" value="couponRegistStore"/>
-                                        </jsp:include>
-                                        <%--// 매장선택 모듈 사용시 include --%>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 사용부서 --%>
-                                    <th>
-                                        <s:message code="couponInfo.usePart" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input fl mr5" style="cursor:pointer; width:200px;" id="selectPart" ng-click="selectPartShow()" value="선택" readonly/>
-                                        <input type="hidden" id="selectPartCd"/>
-                                        <button type="button" class="btn_skyblue fl" id="selectPartCancel" ng-click="selectPartCancel()">
-                                            <s:message code="cmm.selectCancel"/>
-                                        </button>
-                                        <%--// 매장선택 모듈 사용시 include --%>
-                                    </td>
-                                    <%-- 상품선택 --%>
-                                    <th>
-                                        <s:message code="cmm.prod.select" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input fl mr5" style="cursor:pointer; width:200px;" id="selectProd" ng-click="selectProdShow()" value="선택" readonly/>
-                                        <input type="hidden" id="selectProdCd"/>
-                                        <button type="button" class="btn_skyblue fl" id="selectProdCancel" ng-click="selectProdCancel()">
-                                            <s:message code="cmm.selectCancel"/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 사용기간 --%>
-                                    <th>
-                                        <s:message code="couponInfo.usePeriod" />
-                                    </th>
-                                    <td>
-                                        <div class="sb-select">
-                                            <span class="txtIn"><input id="dtlStartDate" name="dtlStartDate" class="w110px" /></span>
-                                            <span class="rg">~</span>
-                                            <span class="txtIn"><input id="dtlEndDate" name="dtlEndDate" class="w110px" /></span>
-                                        </div>
-                                    </td>
-                                    <%-- 발행수량 --%>
-                                    <th>
-                                        <s:message code="couponInfo.issueQty" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="coupnCount" ng-model="coupn.coupnCount">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <%-- 쿠폰출력정보 --%>
-                        <h3 class="h3_tbl"><s:message code="couponInfo.couponPrintDtl" /></h3>
-                        <table class="searchTbl">
-                            <colgroup>
-                                <col class="w15" />
-                                <col class="w35" />
-                                <col class="w15" />
-                                <col class="w35" />
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <%-- 제목 --%>
-                                    <th>
-                                        <s:message code="couponInfo.title" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="title" ng-model="coupn.title">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 발행처 --%>
-                                    <th>
-                                        <s:message code="couponInfo.issuer" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="issuer" ng-model="coupn.issuer">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 사용매장 --%>
-                                    <th>
-                                        <s:message code="couponInfo.useStore" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="useStore" ng-model="coupn.useStore">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 인쇄문구 --%>
-                                    <th>
-                                        <s:message code="couponInfo.printMsg" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="printMsg" ng-model="coupn.printMsg">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <%-- 쿠폰회수정보 --%>
+                    <%-- 쿠폰정보 --%>
+                    <div>
                         <h3 class="h3_tbl lh25">
-                            <s:message code="couponInfo.couponSaleDtl" />
-                            <a href="#" class="btn_grayS fr" id="selectSaleCoupon" ng-model="coupn.selectSaleCoupon" ng-click="selectSaleCoupon()" ><s:message code="couponInfo.srchSaleCoupon" /></a>
+                            <s:message code="couponInfo.couponInfoDtl" />
+                            <a href="#" class="btn_grayS fr" id="coupnIssue" ng-model="coupn.coupnIssue" ng-click="couponIssue()" ><s:message code="couponInfo.couponIssue" /></a>
                         </h3>
-                        <table class="searchTbl">
-                            <colgroup>
-                                <col class="w15" />
-                                <col class="w35" />
-                                <col class="w15" />
-                                <col class="w35" />
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <%-- 회수수량 --%>
-                                    <th>
-                                        <s:message code="couponInfo.saleCnt" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="srchSaleCnt" ng-model="coupn.saleCnt" readonly>
-                                    </td>
-                                    <%-- 미회수량 --%>
-                                    <th>
-                                        <s:message code="couponInfo.notSaleCnt" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="srchNotSaleCnt" ng-model="coupn.notSaleCnt" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <%-- 회수금액 --%>
-                                    <th>
-                                        <s:message code="couponInfo.saleAmt" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="srchSaleAmt" ng-model="coupn.saleAmt" readonly>
-                                    </td>
-                                    <%-- 미회수금액 --%>
-                                    <th>
-                                        <s:message code="couponInfo.notSaleAmt" />
-                                    </th>
-                                    <td>
-                                        <input type="text" class="sb-input w100" id="srchNotSaleAmt" ng-model="coupn.notSaleAmt" readonly>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </f:form>
+                    </div>
+                    <table class="searchTbl">
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <%-- 쿠폰코드 --%>
+                                <th>
+                                    <s:message code="couponInfo.coupnCd" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="coupnCd" ng-model="coupn.coupnCd" readonly placeholder="자동채번">
+                                </td>
+                                <%-- 상태 --%>
+                                <th>
+                                    <s:message code="couponInfo.status" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="coupnStatus" ng-model="coupn.coupnStatus" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 쿠폰명 --%>
+                                <th>
+                                    <s:message code="couponInfo.coupnNm" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="coupnNm" ng-model="coupn.coupnNm">
+                                </td>
+                                <%-- 사용매장 --%>
+                                <th>
+                                    <s:message code="couponInfo.useStore" />
+                                </th>
+                                <td>
+                                    <%-- 매장선택 모듈 사용시 include --%>
+                                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                                        <jsp:param name="targetTypeFg" value="S"/>
+                                        <jsp:param name="targetId" value="couponRegistStore"/>
+                                    </jsp:include>
+                                    <%--// 매장선택 모듈 사용시 include --%>
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 사용부서 --%>
+                                <th>
+                                    <s:message code="couponInfo.usePart" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input fl mr5" style="cursor:pointer; width:200px;" id="selectPart" ng-click="selectPartShow()" value="선택" readonly/>
+                                    <input type="hidden" id="selectPartCd"/>
+                                    <button type="button" class="btn_skyblue fl" id="selectPartCancel" ng-click="selectPartCancel()">
+                                        <s:message code="cmm.selectCancel"/>
+                                    </button>
+                                    <%--// 매장선택 모듈 사용시 include --%>
+                                </td>
+                                <%-- 상품선택 --%>
+                                <th>
+                                    <s:message code="cmm.prod.select" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input fl mr5" style="cursor:pointer; width:200px;" id="selectProd" ng-click="selectProdShow()" value="선택" readonly/>
+                                    <input type="hidden" id="selectProdCd"/>
+                                    <button type="button" class="btn_skyblue fl" id="selectProdCancel" ng-click="selectProdCancel()">
+                                        <s:message code="cmm.selectCancel"/>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 사용기간 --%>
+                                <th>
+                                    <s:message code="couponInfo.usePeriod" />
+                                </th>
+                                <td>
+                                    <div class="sb-select">
+                                        <span class="txtIn"><input id="dtlStartDate" name="dtlStartDate" class="w110px" /></span>
+                                        <span class="rg">~</span>
+                                        <span class="txtIn"><input id="dtlEndDate" name="dtlEndDate" class="w110px" /></span>
+                                    </div>
+                                </td>
+                                <%-- 발행수량 --%>
+                                <th>
+                                    <s:message code="couponInfo.issueQty" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="coupnCount" ng-model="coupn.coupnCount">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <%-- 쿠폰출력정보 --%>
+                    <h3 class="h3_tbl"><s:message code="couponInfo.couponPrintDtl" /></h3>
+                    <table class="searchTbl">
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <%-- 제목 --%>
+                                <th>
+                                    <s:message code="couponInfo.title" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="title" ng-model="coupn.title">
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 발행처 --%>
+                                <th>
+                                    <s:message code="couponInfo.issuer" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="issuer" ng-model="coupn.issuer">
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 사용매장 --%>
+                                <th>
+                                    <s:message code="couponInfo.useStore" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="useStore" ng-model="coupn.useStore">
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 인쇄문구 --%>
+                                <th>
+                                    <s:message code="couponInfo.printMsg" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="printMsg" ng-model="coupn.printMsg">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <%-- 쿠폰회수정보 --%>
+                    <h3 class="h3_tbl lh25">
+                        <s:message code="couponInfo.couponSaleDtl" />
+                        <a href="#" class="btn_grayS fr" id="selectSaleCoupon" ng-model="coupn.selectSaleCoupon" ng-click="selectSaleCoupon()" ><s:message code="couponInfo.srchSaleCoupon" /></a>
+                    </h3>
+                    <table class="searchTbl">
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <%-- 회수수량 --%>
+                                <th>
+                                    <s:message code="couponInfo.saleCnt" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="srchSaleCnt" ng-model="coupn.saleCnt" readonly>
+                                </td>
+                                <%-- 미회수량 --%>
+                                <th>
+                                    <s:message code="couponInfo.notSaleCnt" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="srchNotSaleCnt" ng-model="coupn.notSaleCnt" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <%-- 회수금액 --%>
+                                <th>
+                                    <s:message code="couponInfo.saleAmt" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="srchSaleAmt" ng-model="coupn.saleAmt" readonly>
+                                </td>
+                                <%-- 미회수금액 --%>
+                                <th>
+                                    <s:message code="couponInfo.notSaleAmt" />
+                                </th>
+                                <td>
+                                    <input type="text" class="sb-input w100" id="srchNotSaleAmt" ng-model="coupn.notSaleAmt" readonly>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="btnSet2">
                     <%-- 수정 --%>

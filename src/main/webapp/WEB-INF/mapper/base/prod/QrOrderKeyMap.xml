@@ -312,16 +312,12 @@
         INNER JOIN TB_MS_STORE tms ON
             tms.STORE_CD  = tmp.STORE_CD
         LEFT OUTER JOIN (
-                            SELECT STORE_CD
+                            SELECT  STORE_CD
                             ,       PROD_CD
                             FROM    TB_MS_KCPQR_KEY
                             WHERE   STORE_CD    = #{storeCd}
                             AND     POS_NO      = #{posNo}
                             AND     TU_CLS_TYPE = #{tuClsType}
-                            AND     TU_CLS_CD   = #{tuClsCd}
-                            GROUP
-                            BY      STORE_CD
-                            ,       PROD_CD
                         ) tmkk ON
                 tmp.STORE_CD = tmkk.STORE_CD
             AND tmp.PROD_CD = tmkk.PROD_CD
@@ -447,4 +443,17 @@
         ,   #{modId}
         )
     </insert>
+
+    <!-- 개발/운영 URL 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 개발/운영 URL을 조회한다.
+    -->
+    <select id="getApiEnvNm" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
+        /* USE : QrOrderKeyMapMapper.getApiEnvNm */
+        SELECT  FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL', 'API_URL')         AS API_URL
+        ,       FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL', 'ACCESS_TOKEN')    AS ACCESS_TOKEN
+        FROM    DUAL
+    </select>
 </mapper>

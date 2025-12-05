@@ -226,4 +226,12 @@ public class QrOrderKeyMapServiceImpl implements QrOrderKeyMapService {
 
         return procCnt;
     }
+
+    /** 개발/운영 URL 조회 */
+    @Override
+    public List<DefaultMap<Object>> getApiEnvNm(QrOrderKeyMapVO qrOrderKeyMapVO, SessionInfoVO sessionInfoVO) {
+        qrOrderKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return qrOrderKeyMapMapper.getApiEnvNm(qrOrderKeyMapVO);
+    }
 }

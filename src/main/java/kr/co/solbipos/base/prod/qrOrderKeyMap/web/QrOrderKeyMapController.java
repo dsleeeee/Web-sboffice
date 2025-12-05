@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -30,6 +32,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,23 +63,25 @@ public class QrOrderKeyMapController {
     public static final String QR_API_URL = "https://testqr-api.orderpick.kr";
     public static final String JWT_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTg2OTAxOTg0NiwianRpIjoiYTc4OWM1NWEtYzc1Zi00MjBlLTlhY2MtZGU0ODcwYzRlOWExIiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiTUVUQV9DSVRZIiwicmlkZXIiOm51bGwsInJvbGUiOm51bGwsImlzc3VlVGFyZ2V0IjoiUE9TX1NFUlZFUiJ9.NUEZjMZjmNDZdRPNbWEjiVdFDJz2mcGdaD9YQljgWrMkVpwqzIXA1RLDWsTInSP4yMnPncbgaRR-CrmPSqwjhw";
     // (운영)
-    //public static final String OMS_API_URL  = "https://qr-api.orderpick.kr";
-    //public static final String ACCESS_TOKEN  = "";
+    public static final String OMS_API_URL  = "https://qr-api.orderpick.kr";
+    public static final String ACCESS_TOKEN  = "";
 
     private final SessionService sessionService;
     private final QrOrderKeyMapService qrOrderKeyMapService;
     private final CmmEnvUtil cmmEnvUtil;
     private final DayProdService dayProdService;
+    private final MessageService messageService;
 
 
     /**
      * Constructor Injection
      */
-    public QrOrderKeyMapController(SessionService sessionService, QrOrderKeyMapService qrOrderKeyMapService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService) {
+    public QrOrderKeyMapController(SessionService sessionService, QrOrderKeyMapService qrOrderKeyMapService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, MessageService messageService) {
         this.sessionService = sessionService;
         this.qrOrderKeyMapService = qrOrderKeyMapService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.dayProdService = dayProdService;
+        this.messageService = messageService;
     }
 
 
@@ -248,9 +253,20 @@ public class QrOrderKeyMapController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = QR_API_URL + "/qr/menu/v1/pos/" + sessionInfoVO.getStoreCd() + "/sync";
+        String apiUrl = "";
+        String apiToken = "";
 
-        Map<String, Object> resultMap = putRequest(qrOrderKeyMapVO, apiFullUrl, JWT_TOKEN);
+        // 개발/운영 URL 조회
+        List<DefaultMap<Object>> apiInfoList = qrOrderKeyMapService.getApiEnvNm(qrOrderKeyMapVO,sessionInfoVO);
+
+        if(apiInfoList.size() > 0){
+            apiUrl = apiInfoList.get(0).getStr("apiUrl");
+            apiToken = apiInfoList.get(0).getStr("accessToken");
+        }
+
+        String apiFullUrl = apiUrl + "/qr/menu/v1/pos/" + sessionInfoVO.getStoreCd() + "/sync";
+
+        Map<String, Object> resultMap = putRequest(qrOrderKeyMapVO, apiFullUrl, apiToken);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -276,6 +292,7 @@ public class QrOrderKeyMapController {
         try {
             // 1. URL 객체 생성
             URL url = new URL(apiUrl);
+            System.out.println("매장코드 : " + qrOrderKeyMapVO.getStoreCd());
             System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
