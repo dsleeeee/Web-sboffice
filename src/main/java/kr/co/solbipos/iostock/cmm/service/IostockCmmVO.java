@@ -117,6 +117,9 @@ public class IostockCmmVO extends PageVO {
     /**  */
     private String targetBrandFg;
 
+    /** 거래처 구분 */
+    private String vendrFg;
+
     /**
      * @return the orgnFg
      */
@@ -479,5 +482,13 @@ public class IostockCmmVO extends PageVO {
 
     public void setTargetBrandFg(String targetBrandFg) {
         this.targetBrandFg = targetBrandFg;
+    }
+
+    public String getVendrFg() {
+        return vendrFg;
+    }
+
+    public void setVendrFg(String vendrFg) {
+        this.vendrFg = vendrFg;
     }
 }

@@ -23,7 +23,8 @@ var tradeFgComboData = [
 
 // 구분 데이터
 var tradeFormComboData = [
-    {"name": "일반", "value": "1"}
+    {"name": "일반", "value": "0"},
+    {"name": "특판", "value": "1"}
 ];
 
 /**
@@ -62,7 +63,11 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "vendrCd") { // 거래처코드 클릭
                     if (selectedRow.status !== "I") {
-                        selectedRow.prodCd = $scope.paramData.prodCd;
+                        var params = selectedRow;
+                        params.prodCd       = $scope.paramData.prodCd;
+                        // 매장 상품 저장 시 필요
+                        params.sdselGrpCd   = $scope.paramData.sdselGrpCd;
+                        params.prodClassCd  = $scope.paramData.prodClassCd;
                         $scope._broadcast('prodStoreRegistCtrl', selectedRow);
                     }
                 }
@@ -74,11 +79,15 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("prodVendrRegistCtrl", function(event, data) {
         $scope.wjVendrStoreRegistLayer.show(true);
+
+        // 매장 그리드 초기화
+        var scope = agrid.getScope('prodStoreRegistCtrl');
+        scope._gridDataInit();
+
         $scope.paramData = data;
+
         $scope.getSearchRegistVendr(data);
 
-        var emptyParams = {};
-        $scope._broadcast('prodStoreRegistCtrl', emptyParams);
         event.preventDefault();
     });
 
@@ -119,6 +128,8 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
         var params = new Array();
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+
+            // 필수값 체크
             if($scope.flex.collectionView.itemsEdited[i].tradeFg === null || $scope.flex.collectionView.itemsEdited[i].tradeFg === "" ){
                 $scope._popMsg(messages["prod.vendrStoreRegist.tradeFg"] + " " + messages["cmm.require.text"]); // 구분을 입력하세요.
                 return false;
@@ -127,19 +138,20 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
                 $scope._popMsg(messages["prod.vendrStoreRegist.tradeForm"] + " " + messages["cmm.require.text"]); // 형태를 입력하세요.
                 return false;
             }
-            if($scope.flex.collectionView.itemsEdited[i].acquireUprc === null || $scope.flex.collectionView.itemsEdited[i].acquireUprc === "" ){
-                $scope._popMsg(messages["prod.vendrStoreRegist.acquireUprc"] + " " + messages["cmm.require.text"]); // 매입가를 입력하세요.
-                return false;
-            }
-            if($scope.flex.collectionView.itemsEdited[i].acquireRate === null || $scope.flex.collectionView.itemsEdited[i].acquireRate === "" ){
-                $scope._popMsg(messages["prod.vendrStoreRegist.acquireRate"] + " " + messages["cmm.require.text"]); // 매입율을 입력하세요.
-                return false;
-            }
+            // if($scope.flex.collectionView.itemsEdited[i].acquireUprc === null || $scope.flex.collectionView.itemsEdited[i].acquireUprc === "" ){
+            //     $scope._popMsg(messages["prod.vendrStoreRegist.acquireUprc"] + " " + messages["cmm.require.text"]); // 매입가를 입력하세요.
+            //     return false;
+            // }
+            // if($scope.flex.collectionView.itemsEdited[i].acquireRate === null || $scope.flex.collectionView.itemsEdited[i].acquireRate === "" ){
+            //     $scope._popMsg(messages["prod.vendrStoreRegist.acquireRate"] + " " + messages["cmm.require.text"]); // 매입율을 입력하세요.
+            //     return false;
+            // }
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             $scope.flex.collectionView.itemsEdited[i].prodCd = $scope.paramData.prodCd;
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            // 필수 값 체크
             if($scope.flex.collectionView.itemsAdded[i].tradeFg === null || $scope.flex.collectionView.itemsAdded[i].tradeFg === "" ){
                 $scope._popMsg(messages["prod.vendrStoreRegist.tradeFg"] + " " + messages["cmm.require.text"]); // 구분을 입력하세요.
                 return false;
@@ -148,21 +160,21 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
                 $scope._popMsg(messages["prod.vendrStoreRegist.tradeForm"] + " " + messages["cmm.require.text"]); // 형태를 입력하세요.
                 return false;
             }
-            if($scope.flex.collectionView.itemsAdded[i].acquireUprc === null || $scope.flex.collectionView.itemsAdded[i].acquireUprc === "" ){
-                $scope._popMsg(messages["prod.vendrStoreRegist.acquireUprc"] + " " + messages["cmm.require.text"]); // 매입가를 입력하세요.
-                return false;
-            }
-            if($scope.flex.collectionView.itemsAdded[i].acquireRate === null || $scope.flex.collectionView.itemsAdded[i].acquireRate === "" ){
-                $scope._popMsg(messages["prod.vendrStoreRegist.acquireRate"] + " " + messages["cmm.require.text"]); // 매입율을 입력하세요.
-                return false;
-            }
+            // if($scope.flex.collectionView.itemsAdded[i].acquireUprc === null || $scope.flex.collectionView.itemsAdded[i].acquireUprc === "" ){
+            //     $scope._popMsg(messages["prod.vendrStoreRegist.acquireUprc"] + " " + messages["cmm.require.text"]); // 매입가를 입력하세요.
+            //     return false;
+            // }
+            // if($scope.flex.collectionView.itemsAdded[i].acquireRate === null || $scope.flex.collectionView.itemsAdded[i].acquireRate === "" ){
+            //     $scope._popMsg(messages["prod.vendrStoreRegist.acquireRate"] + " " + messages["cmm.require.text"]); // 매입율을 입력하세요.
+            //     return false;
+            // }
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             $scope.flex.collectionView.itemsAdded[i].prodCd = $scope.paramData.prodCd;
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/prod/prod/saveProdVendr.sb", params, function(){
+        $scope._postJSONSave.withPopUp("/base/prod/prod/prod/saveProdVendr.sb", params, function(response){
             $scope.getSearchRegistVendr($scope.paramData);
         });
     }
@@ -209,6 +221,8 @@ app.controller('prodStoreRegistCtrl', ['$scope', '$http', function ($scope, $htt
             $scope.flex.collectionView.itemsEdited[i].prodCd = $scope.paramData.prodCd;
             $scope.flex.collectionView.itemsEdited[i].vendrCd = $scope.paramData.vendrCd;
             $scope.flex.collectionView.itemsEdited[i].seq = $scope.paramData.seq;
+            $scope.flex.collectionView.itemsEdited[i].sdselGrpCd = $scope.paramData.sdselGrpCd;
+            $scope.flex.collectionView.itemsEdited[i].prodClassCd = $scope.paramData.prodClassCd;
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
 

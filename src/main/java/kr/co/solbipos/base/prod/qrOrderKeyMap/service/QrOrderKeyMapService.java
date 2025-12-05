@@ -38,4 +38,7 @@ public interface QrOrderKeyMapService {
 
     /** QR오더 - QR오더 키맵 수정 */
     int saveQrOrderKeyMap(QrOrderKeyMapVO[] qrOrderKeyMapVOS, SessionInfoVO sessionInfoVO);
+
+    /** 개발/운영 URL 조회 */
+    List<DefaultMap<Object>> getApiEnvNm(QrOrderKeyMapVO qrOrderKeyMapVO, SessionInfoVO sessionInfoVO);
 }

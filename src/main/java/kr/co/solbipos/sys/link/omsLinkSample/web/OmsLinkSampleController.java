@@ -6,9 +6,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.store.storeMrpizza.storeMrpizzaBatchChange.service.StoreMrpizzaBatchChangeVO;
 import kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO;
 import kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleService;
 import kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO;
@@ -153,6 +151,9 @@ public class OmsLinkSampleController {
         } else if (omsLinkSampleVO.getLinkType().equals("006")) { // 배대사 매핑 삭제
             apiUrl += "/oms/v1/shops/" + omsLinkSampleVO.getPosShopId() + "/delivery-agency";
             seq = deleteRequest(omsLinkSampleVO, apiUrl, accessToken);
+        } else if (omsLinkSampleVO.getLinkType().equals("007")) { // QR 동기화 이벤트
+            apiUrl += "/qr/menu/v1/pos/" + omsLinkSampleVO.getPosShopId() + "/sync";
+            seq = putRequest(omsLinkSampleVO, apiUrl, accessToken);
         }
 
         // api 로그 seq값 전달(api 호출 로그 조회시 사용)
@@ -471,5 +472,94 @@ public class OmsLinkSampleController {
         }
 
         return baseUrl + "?" + sj.toString();
+    }
+
+    /**
+     * put 호출
+     *
+     * @param   omsLinkSampleVO
+     * @param   apiUrl
+     * @param   accessToken
+     * @author  김유승
+     * @since   2025. 12. 04
+     */
+    public int putRequest(@RequestBody OmsLinkSampleVO omsLinkSampleVO, String apiUrl, String accessToken) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        HttpURLConnection connection = null;
+
+        // API 호출 로그 저장을 위한 셋팅
+        ApiLinkVO apiLinkVO = new ApiLinkVO();
+        apiLinkVO.setLinkType(omsLinkSampleVO.getLinkType());
+
+        try {
+            // 1. URL 객체 생성
+            URL url = new URL(apiUrl);
+            apiLinkVO.setUrl(apiUrl);
+
+            // 2. HttpURLConnection 객체 생성 및 설정
+            apiLinkVO.setRequestDt(currentDateTimeString());
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
+            apiLinkVO.setRequestMethod(connection.getRequestMethod());
+
+            // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
+            omsLinkSampleVO.setLinkType(null);
+            omsLinkSampleVO.setSearchType(null);
+
+            // 3. 서버로 데이터 전송 (JSON payload)
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String jsonData = mapper.writeValueAsString(omsLinkSampleVO);
+            apiLinkVO.setRequest(jsonData);
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+                os.flush();
+            }
+
+            // 4. 응답 코드 확인
+            int responseCode = connection.getResponseCode();
+            apiLinkVO.setResponseDt(currentDateTimeString());
+            apiLinkVO.setStatusCode(String.valueOf(responseCode));
+            System.out.println("HTTP 응답 코드: " + responseCode);
+
+            // 5. 응답 본문 읽기
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    apiLinkVO.setResponse(response.toString());
+                    System.out.println("서버 응답: " + response.toString());
+                }
+            } else {
+                // 에러 발생 시 에러 스트림을 읽음
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine = null;
+                    while ((errorLine = br.readLine()) != null) {
+                        errorResponse.append(errorLine.trim());
+                    }
+                    apiLinkVO.setResponse(errorResponse.toString());
+                    System.out.println("에러 응답: " + errorResponse.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
     }
 }

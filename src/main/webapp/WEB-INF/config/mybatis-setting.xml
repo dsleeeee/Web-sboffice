@@ -1300,6 +1300,13 @@
     <!-- 국민대 > 쿠폰관리 > 쿠폰상태관리(관리자) -->
     <typeAlias alias="couponIssueStatusVO" type="kr.co.solbipos.kookmin.coupon.couponIssueStatus.service.CouponIssueStatusVO"/>
 
+    <!-- 국민대 > 매입관리 > 매입전표등록 -->
+    <typeAlias alias="acquireSlipRegistVO" type="kr.co.solbipos.kookmin.acquire.acquireSilpRegist.service.AcquireSlipRegistVO"/>
+    <!-- 국민대 > 매입관리 > 매입처별 입고내역서 -->
+    <typeAlias alias="inStockReportByAcquireVO" type="kr.co.solbipos.kookmin.acquire.inStockReportByAcquire.service.InStockReportByAcquireVO"/>
+    <!-- 국민대 > 매입관리 > 매입처별 상세매입내역(상품별) -->
+    <typeAlias alias="inStockReportDtlVO" type="kr.co.solbipos.kookmin.acquire.inStockReportDtl.service.InStockReportDtlVO"/>
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->

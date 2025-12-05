@@ -1,0 +1,688 @@
+/****************************************************************
+ *
+ * 파일명 : inOutStockDtl.js
+ * 설  명 : 국민대 > 매입처관리 > 매입전표 등록 > 입고정보 팝업JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2025.11.21     김유승      1.0
+ *
+ * **************************************************************/
+/**
+ * get application
+ */
+// 구분 데이터
+var tradeFgComboData = [
+    {"name": "위탁", "value": "0"},
+    {"name": "외상", "value": "1"},
+    {"name": "현매(월)", "value": "2"},
+    {"name": "현매(거)", "value": "3"}
+];
+
+// 구분 데이터
+var tradeFormComboData = [
+    {"name": "일반", "value": "0"},
+    {"name": "특판", "value": "1"}
+];
+
+/** 입고/반출정보 controller */
+app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('inOutStockDtlCtrl', $scope, $http, true));
+
+    // 발주/미발주입고 구분
+    $scope._setComboData("inOutStockType", [
+        {"name": messages["acquireSlipRegist.dtl.orderInstock"], "value": "Y"},
+        {"name": messages["acquireSlipRegist.dtl.notOrderInstock"], "value": "N"}
+    ]);
+
+    $scope._setComboData("tradeFgComboData", tradeFgComboData);
+    $scope._setComboData("tradeFormComboData", tradeFormComboData);
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("inOutStockDtlCtrl", function (event, data) {
+
+        var comboParams         = {};
+
+        // 출고창고
+        var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';
+        // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+        $scope._queryCombo("combo", "saveVendrDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+        $scope.slipNo = data.slipNo;
+        $scope.slipFg = data.slipFg;
+
+
+        // 발주/무발주입고에 대한 내용을 발주입고 상태로 layer show
+        $scope.orderLayerShowFg = true;
+
+        // 값 초기화
+        $scope.setDefault();
+        // 입고/반출 텍스트 세팅
+        $scope.setText();
+
+        // 신규등록이 아닌 경우 상세정보 조회
+        if ($scope.slipNo !== '') {
+            $scope.getInOutStockSlipInfo();
+        }
+
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+
+    // 기본값 설정 및 버튼 세팅
+    $scope.setDefault = function () {
+        // 등록한 내역 조회를 한 후 instockType 값을 조회해 와서 세팅하면서 이벤트가 발생하는데
+        // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
+        $scope.slipSearchYn = 'N';
+        $scope.btnDtlConfirmShowFg = false;
+        $("#inOutStockDtlStoreCd").val('');
+        $("#inOutStockDtlStoreNm").val('선택');
+        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+        $("#inOutStockDtlStoreNm").attr("disabled", false);
+        $("#tradeFg").attr("disabled", false);
+        $("#tradeForm").attr("disabled", false);
+
+        // 입고
+        if($scope.slipFg === 1) {
+            $scope.btnSaveShowFg                         = true;  // 저장
+            $scope.btnDelShowFg                          = false; // 삭제
+            $scope.selectOrderSlipShowFg                 = true;  // 발주번호선택
+            $scope.procLayerIfFg                         = false; // 진행상태내역
+            $scope.instockTypeDisabledFg                 = false; // 발주/무발주 combo
+            $scope.instockDtlSelectVendrNmDisabled  = false; // 입고 거래처선택 모듈 input
+            $scope.instockDtlSelectVendrBtnDisabled = false; // 입고 선택취소
+
+            $("#instockDtlSelectVendrCd").val('');
+            $("#instockDtlSelectVendrNm").val('선택');
+        }
+        // 반출
+        else {
+            $scope.btnSaveShowFg                         = true;  // 저장
+            $scope.btnDelShowFg                          = false; // 삭제
+            $scope.outstockDtlSelectVendrNmDisabled  = false; // 반출 거래처선택 모듈 input
+            $scope.outstockDtlSelectVendrBtnDisabled = false; // 반출 선택취소
+
+            $("#outstockDtlSelectVendrCd").val('');
+            $("#outstockDtlSelectVendrNm").val('선택');
+        }
+
+        // $("#instockDtlSelectVendrCd").val('');
+        // $("#instockDtlSelectVendrNm").val('선택');
+
+        // 기본값 설정
+        $scope.default = {
+            instockType: 'N',
+            orderSlipNo: '',
+            instockDate: new Date(),
+            remark     : '',
+        };
+
+        $scope.slipInfo = angular.copy($scope.default);
+    };
+
+
+    // slipFg 값에 따라 입고 또는 반출에 대한 텍스트를 설정한다.
+    $scope.setText = function () {
+        // 입고인 경우
+        if ($scope.slipFg === 1) {
+            $scope.instockLayerIfFg = true;
+            $scope.rtnLayerIfFg     = false;
+
+            $scope.instockDateTxt = messages["acquireSlipRegist.dtl.instockDate"];
+            $scope.instockTotQtyTxt = messages["acquireSlipRegist.dtl.inTotQty"];
+            $scope.instockTotAmtTxt = messages["acquireSlipRegist.dtl.inTotAmt"];
+        }
+        // 반출인 경우
+        else if ($scope.slipFg === -1) {
+            $scope.instockLayerIfFg = false;
+            $scope.rtnLayerIfFg     = true;
+
+            $scope.instockDateTxt = messages["acquireSlipRegist.dtl.rtnDate"];
+            $scope.instockTotQtyTxt = messages["acquireSlipRegist.dtl.rtnTotQty"];
+            $scope.instockTotAmtTxt = messages["acquireSlipRegist.dtl.rtnTotAmt"];
+        }
+    };
+
+
+    // 전표 상세 조회
+    $scope.getInOutStockSlipInfo = function () {
+        var params    = {};
+        params.slipNo = $scope.slipNo;
+        params.slipFg = $scope.slipFg;
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        $http({
+            method : 'POST', //방식
+            url    : "/kookmin/acquire/acquireSlipRegist/inOutStockDtl/getInOutStockSlipInfo.sb", /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                // 진행구분이 조정등록이 아니면 상품추가/변경 불가
+                if (!$.isEmptyObject(response.data.data)) {
+                    var data            = response.data.data;
+                    $scope.slipSearchYn = 'Y';
+
+                    // 전표상태가 등록인 경우 버튼 컨트롤
+                    if (data.procFg != "" && data.procFg == "0") {
+                        $scope.btnSaveShowFg             = true;
+                        $scope.btnDelShowFg              = true;
+                        $scope.btnDtlConfirmShowFg       = true;
+                        $scope.btnDtlConfirmCancelShowFg = false;
+                        $scope.procNm                    = messages["acquireSlipRegist.dtl.procFg0"];
+                        $scope.outstorageCdDisabledFg	 = false;
+
+                        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                        $("#inOutStockDtlStoreNm").attr("disabled", false);
+
+                        // 등록 상품이 있을 경우
+                        if(data.prodCnt > 0){
+                            $scope.instockDtlSelectVendrNmDisabled  = true;
+                            $scope.instockDtlSelectVendrBtnDisabled = true;
+                            $scope.outstockDtlSelectVendrNmDisabled  = true;
+                            $scope.outstockDtlSelectVendrBtnDisabled = true;
+                            $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                            $("#inOutStockDtlStoreNm").attr("disabled", true);
+                            $("#tradeFg").attr("disabled", true);
+                            $("#tradeForm").attr("disabled", true);
+                        }
+                        // 등록 상품이 없없 경우
+                        else{
+                            $scope.instockDtlSelectVendrNmDisabled  = false;
+                            $scope.instockDtlSelectVendrBtnDisabled = false;
+                            $scope.outstockDtlSelectVendrNmDisabled  = false;
+                            $scope.outstockDtlSelectVendrBtnDisabled = false;
+                            $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                            $("#inOutStockDtlStoreNm").attr("disabled", false);
+                            $("#tradeFg").attr("disabled", false);
+                            $("#tradeForm").attr("disabled", false);
+                        }
+
+                    }
+                    // 전표상태가 확정인 경우 버튼 컨트롤
+                    else {
+                        $scope.btnSaveShowFg             = false;
+                        $scope.btnDelShowFg              = false;
+                        $scope.btnDtlConfirmShowFg       = false;
+                        $scope.btnDtlConfirmCancelShowFg = true;
+                        $scope.procNm                    = messages["acquireSlipRegist.dtl.procFg1"];
+
+                        $scope.outstorageCdDisabledFg	 = true;
+
+                        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                        $("#inOutStockDtlStoreNm").attr("disabled", true);
+                    }
+
+                    // 진행상태 관련 레이어 show 여부
+                    $scope.procLayerIfFg = true;
+
+                    // 입고
+                    if ($scope.slipFg === 1) {
+                        // 무발주 입고인 경우
+                        if (data.instockType === 'N') {
+                            // 거래처 선택 모듈값 세팅
+                            $("#instockDtlSelectVendrCd").val(data.vendrCd);
+                            $("#instockDtlSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
+                        }
+                    }
+                    // 반출
+                    else if ($scope.slipFg === -1) {
+                        // 거래처 선택 모듈값 세팅
+                        $("#outstockDtlSelectVendrCd").val(data.vendrCd);
+                        $("#outstockDtlSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
+                    }
+
+                    // 매장 세팅
+                    $("#inOutStockDtlStoreCd").val(data.storeCd);
+                    $("#inOutStockDtlStoreNm").val('[' + data.storeCd + '] ' + data.storeNm);
+
+                    $scope.slipInfo.tradeFg = data.tradeFg;
+                    $scope.slipInfo.tradeForm = data.tradeForm;
+
+                    data.instockDate = new Date(getFormatDate(data.instockDate, "-"));
+
+                    data.regDt    = (nvl(data.regDt, '') !== '' ? getFormatDateTime(data.regDt) : '');
+                    data.confmDt  = (nvl(data.confmDt, '') !== '' ? getFormatDateTime(data.confmDt) : '');
+                    data.inTotQty = (nvl(data.inTotQty, '') !== '' ? addComma(data.inTotQty) : '');
+                    data.inTot    = (nvl(data.inTot, '') !== '' ? addComma(data.inTot) : '');
+
+                    // 상품이 등록되어 있는 경우에는 거래처 선택 불가
+                    if (data.dtlCnt > 0) {
+                        // 발주/무발주 입고 disabled
+                        $scope.instockTypeDisabledFg = true;
+
+                        // 입고
+                        if ($scope.slipFg === 1) {
+                            // 발주 입고인 경우
+                            if (data.instockType === 'Y') {
+                                // 발주번호선택 버튼 show 여부
+                                $scope.selectOrderSlipShowFg = false;
+                            } else if (data.instockType === 'N') {
+                                // 거래처선택 모듈 disabled 컨트롤
+                                $scope.instockDtlSelectVendrNmDisabled  = true;
+                                $scope.instockDtlSelectVendrBtnDisabled = true;
+                            }
+                        }
+                        // 반출
+                        else if ($scope.slipFg === -1) {
+                            // 거래처선택 모듈 disabled 컨트롤
+                            $scope.outstockDtlSelectVendrNmDisabled  = true;
+                            $scope.outstockDtlSelectVendrBtnDisabled = true;
+                        }
+                    }
+                    // 상품이 등록되어 있지 않은 경우
+                    else {
+                        $scope.instockTypeDisabledFg = false; // 발주/무발주 combo disabled
+                        $scope.selectOrderSlipShowFg = true;  // 발주번호선택 버튼 show 여부
+
+                        // 입고
+                        if ($scope.slipFg === 1) {
+                            // 거래처선택 모듈 disabled 컨트롤
+                            $scope.instockDtlSelectVendrNmDisabled  = false;
+                            $scope.instockDtlSelectVendrBtnDisabled = false;
+                        }
+                        // 반출
+                        else if ($scope.slipFg === -1) {
+                            // 거래처선택 모듈 disabled 컨트롤
+                            $scope.outstockDtlSelectVendrNmDisabled  = false;
+                            $scope.outstockDtlSelectVendrBtnDisabled = false;
+                        }
+                    }
+
+                    $scope.slipInfo = data;
+                } else {
+                    // 팝업 닫기 및 값 초기화
+                    $scope.popupClose();
+                    $scope._popMsg(response.data.message);
+                    return false;
+                }
+            }
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope._popMsg(response.data.message);
+            return false;
+        }).then(function () {
+            // "complete" code here
+        });
+    };
+
+
+    // 입고/반출 저장
+    $scope.submitForm = function () {
+        //값체크
+        if (!$scope.valueCheck()) return false;
+
+        var params = {};
+        // 저장시 저장은 잘 되지만 Assertion failed in Wijmo: Date expected. 라고 debug에서 에러가 발생해 따로따로 넣도록 수정.
+        // params              = $scope.slipInfo;
+        params.slipNo      = $scope.slipNo;
+        params.slipFg      = $scope.slipFg;
+        params.instockDate = wijmo.Globalize.format($scope.slipInfo.instockDate, 'yyyyMMdd');
+        params.remark      = $scope.slipInfo.remark;
+
+        // 입고
+        if ($scope.slipFg === 1) {
+            params.vendrCd     = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#instockDtlSelectVendrCd").val());
+            params.orderSlipNo = $scope.slipInfo.orderSlipNo;
+            params.instockType = $scope.slipInfo.instockType;
+        }
+        // 반출
+        else if ($scope.slipFg === -1) {
+            params.vendrCd = $("#outstockDtlSelectVendrCd").val();
+        }
+
+        params.storeCd = $("#inOutStockDtlStoreCd").val();
+        params.tradeFg = $scope.slipInfo.tradeFg;
+        params.tradeForm = $scope.slipInfo.tradeForm;
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        $http({
+            method : 'POST', //방식
+            url    : "/kookmin/acquire/acquireSlipRegist/inOutStockDtl/saveInOutStockSlipInfo.sb", /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                $scope._popMsg(messages['cmm.saveSucc']);
+
+                if (!$.isEmptyObject(response.data.data)) {
+                    var data = response.data.data;
+                    console.log(data);
+
+                    // 입고/반출 리스트 그리드 조회
+                    var acquireSlipRegistScope = agrid.getScope('acquireSlipRegistCtrl');
+                    acquireSlipRegistScope.getSearchInOutStockList();
+
+                    var params     = {};
+                    params.slipNo  = data.slipNo;
+                    params.slipFg  = parseInt(data.slipFg);
+                    params.vendrCd = data.vendrCd;
+                    $scope._broadcast('inOutStockRegistCtrl', params);
+                } else {
+                    $scope.popupClose();
+                }
+            }
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope._popMsg(response.data.message);
+            return false;
+        });
+    };
+
+
+    // 값 체크
+    $scope.valueCheck = function () {
+        if ($scope.slipFg === 1) {
+            // 발주 입고인 경우
+            if ($scope.slipInfo.instockType === 'Y') {
+                // 발주타입을 선택해주세요.
+                if ($scope.slipInfo.orderSlipNo === "") {
+                    $scope._popMsg(messages["acquireSlipRegist.dtl.require.selectOrderSlipNo"]);
+                    return false;
+                }
+            }
+            // 무발주 입고인 경우
+            else {
+                // 거래처를 선택해주세요.
+                if ($("#instockDtlSelectVendrCd").val() === "") {
+                    $scope._popMsg(messages["acquireSlipRegist.dtl.require.selectVendr"]);
+                    return false;
+                }
+            }
+        } else if ($scope.slipFg === -1) {
+            // 거래처를 선택해주세요.
+            if ($("#outstockDtlSelectVendrCd").val() === "") {
+                $scope._popMsg(messages["acquireSlipRegist.dtl.require.selectVendr"]);
+                return false;
+            }
+        }
+        
+        // 매장 선택
+        if($("#inOutStockDtlStoreCd").val() === ""){
+            $scope._popMsg(messages["cmm.require.selectStore"]);
+            return false;
+        }
+
+        return true;
+    };
+
+
+    $scope.delete = function () {
+        /** 선택하신 자료를 삭제하시겠습니까? */
+        var msg = messages["cmm.choo.delete"];
+        s_alert.popConf(msg, function () {
+            var params    = {};
+            params.slipNo = $scope.slipNo;
+
+            //가상로그인 session 설정
+            if(document.getElementsByName('sessionId')[0]){
+                params['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+
+            $http({
+                method : 'POST', //방식
+                url    : "/kookmin/acquire/acquireSlipRegist/inOutStockDtl/deleteInOutStockSlipInfo.sb", /* 통신할 URL */
+                params : params, /* 파라메터로 보낼 데이터 */
+                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+            }).then(function successCallback(response) {
+                if (response.data.status === 'OK') {
+                    $scope._popMsg(messages['cmm.delSucc']);
+                    $scope.popupClose();
+                } else if (response.data.status === 'FAIL') {
+                    $scope._popMsg(response.data.message);
+                } else {
+                    var msg = response.data.status + ' : ' + response.data.message;
+                    $scope._popMsg(msg);
+                    return false;
+                }
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                $scope._popMsg(response.data.message);
+                return false;
+            });
+        });
+    };
+
+
+    // 확정 및 확정취소
+    $scope.confirm = function (procFg) {
+        var msg = '';
+
+        var inTotQty = $scope.slipInfo.inTotQty;
+        if(inTotQty <= 0 ){
+            msg = messages["acquireSlipRegist.dtl.confirmCheck"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
+//    alert("saveDtlOutStorageCd :::"+$scope.slipInfo.outStorageCd)
+
+        if (procFg === '1') {
+            /** 확정처리 하시겠습니까? */
+            msg = messages["acquireSlipRegist.dtl.confirmMsg"];
+        }
+        else if (procFg === '0') {
+            /** 확정취소 하시겠습니까? */
+            msg = messages["acquireSlipRegist.dtl.confirmCancelMsg"];
+        }
+
+
+        s_alert.popConf(msg, function () {
+            var params         = {};
+            params.slipNo      = $scope.slipNo;
+            params.procFg      = procFg;
+            params.slipFg      = $scope.slipFg;
+            params.outStorageCd	= $scope.slipInfo.outStorageCd;
+
+            // 입고이면서 발주입고인 경우만 발주번호를 파라미터에 세팅
+            if ($scope.slipFg === 1) {
+                params.orderSlipNo = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.orderSlipNo : '');
+            }
+
+            //가상로그인 session 설정
+            if(document.getElementsByName('sessionId')[0]){
+                params['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+
+            $http({
+                method : 'POST', //방식
+                url    : "/kookmin/acquire/acquireSlipRegist/inOutStockDtl/saveInOutStockProcFg.sb", /* 통신할 URL */
+                params : params, /* 파라메터로 보낼 데이터 */
+                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+            }).then(function successCallback(response) {
+                if (response.data.status === 'OK') {
+                    $scope._popMsg(messages['cmm.saveSucc']);
+
+                    // 입고/반출 리스트 그리드 조회
+                    var acquireSlipRegistScope = agrid.getScope('acquireSlipRegistCtrl');
+                    acquireSlipRegistScope.getSearchInOutStockList();
+
+                    var params    = {};
+                    params.slipNo = $scope.slipNo;
+                    params.slipFg = $scope.slipFg;
+
+                    // 입고
+                    if ($scope.slipFg === 1) {
+                        params.vendrCd = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#instockDtlSelectVendrCd").val());
+                    }
+                    // 반출
+                    else if ($scope.slipFg === -1) {
+                        params.vendrCd = $("#outstockDtlSelectVendrCd").val();
+                    }
+
+                    $scope._broadcast('inOutStockRegistCtrl', params);
+                } else if (response.data.status === 'FAIL') {
+                    $scope._popMsg(response.data.message);
+                } else {
+                    var msg = response.data.status + ' : ' + response.data.message;
+                    $scope._popMsg(msg);
+                    return false;
+                }
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                $scope._popMsg(response.data.message);
+                return false;
+            });
+        });
+    };
+
+
+    // 발주번호선택 팝업 호출
+    $scope.selectOrderSlip = function () {
+        var params = {};
+        $scope._broadcast('acquireSlipRegistOrderSlipCtrl', params);
+    };
+
+
+    // 팝업 닫기, 입고/반출 리스트 그리드 조회
+    $scope.popupClose = function () {
+        // 팝업 닫기
+        var inOutStockRegistPopScope = agrid.getScope("inOutStockRegistCtrl");
+        inOutStockRegistPopScope.wjInOutStockRegistPopLayer.hide(true);
+
+        // 입고/반출 리스트 그리드 조회
+        var acquireSlipRegistScope = agrid.getScope('acquireSlipRegistCtrl');
+        acquireSlipRegistScope.getSearchInOutStockList();
+    };
+
+
+    angular.element(document).ready(function () {
+        // 발주/무발주 입고 선택시 이벤트.
+        // 콤보를 생성하면서 이벤트가 한번 발생하는데 컨트롤하는 내역이 페이지에 생성되지 않은 경우가 발생하여 document ready가 되면 이벤트 생성.
+        $scope.selectedIndexChanged = function (s, e) {
+            // 발주 입고
+            if (s.selectedValue === "Y") {
+                $scope.orderLayerShowFg    = true;
+                $scope.notOrderLayerShowFg = false;
+            }
+            //무발주 입고
+            else {
+                $scope.orderLayerShowFg    = false;
+                $scope.notOrderLayerShowFg = true;
+            }
+
+            // 등록한 내역 조회를 한 후 instockType 값을 조회해 와서 세팅하면서 이벤트가 발생하는데
+            // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
+            if ($scope.slipSearchYn === 'N') { // 등록한 내역 조회인 경우에는 초기화하지 않는다.
+                // 발주/무발주 선택변경시 값 초기화
+                $scope.slipInfo.orderSlipNo = '';
+                $scope.slipInfo.vendrCd     = '';
+                $scope.slipInfo.vendrNm     = '-거래처-';
+                // $("#instockDtlSelectVendrCd").val('');
+                // $("#instockDtlSelectVendrNm").val('선택');
+            } else {
+                $scope.slipSearchYn = 'N';
+            }
+        };
+    });
+
+
+
+
+    // 거래처선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.instockDtlSelectVendrShow = function () {
+        $scope._broadcast('instockDtlSelectVendrCtrl');
+    };
+
+    // 거래처선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.outstockDtlSelectVendrShow = function () {
+        $scope._broadcast('outstockDtlSelectVendrCtrl');
+    };
+
+
+    //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+    // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+    // comboId : combo 생성할 ID
+    // gridMapId : grid 에서 사용할 Map ID
+    // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+    // params : 데이터 조회할 url에 보낼 파라미터
+    // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+    // callback : queryCombo 후 callback 할 함수
+    $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+        var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+        if (url) {
+            comboUrl = url;
+        }
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params.sid = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : comboUrl, /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data.list)) {
+                    var list       = response.data.data.list;
+                    var comboArray = [];
+                    var comboData  = {};
+
+                    if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+                        comboArray = [];
+                        if (option === "A") {
+                            comboData.name  = messages["cmm.all"];
+                            comboData.value = "";
+                            comboArray.push(comboData);
+                        } else if (option === "S") {
+                            comboData.name  = messages["cmm.select"];
+                            comboData.value = "";
+                            comboArray.push(comboData);
+                        }
+
+                        for (var i = 0; i < list.length; i++) {
+                            comboData       = {};
+                            comboData.name  = list[i].nmcodeNm;
+                            comboData.value = list[i].nmcodeCd;
+                            comboArray.push(comboData);
+                        }
+                        $scope._setComboData(comboId, comboArray);
+                    }
+
+                    if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+                        comboArray = [];
+                        for (var i = 0; i < list.length; i++) {
+                            comboData      = {};
+                            comboData.id   = list[i].nmcodeCd;
+                            comboData.name = list[i].nmcodeNm;
+                            comboArray.push(comboData);
+                        }
+                        $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+                    }
+                }
+            }
+        }, function errorCallback(response) {
+            $scope._popMsg(messages["cmm.error"]);
+            return false;
+        }).then(function () {
+            if (typeof callback === 'function') {
+                $timeout(function () {
+                    callback();
+                }, 10);
+            }
+        });
+    };
+
+}]);

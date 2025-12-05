@@ -586,4 +586,13 @@ public interface ProdMapper {
 
     /** 상품 삭제 팝업 - 상품_매입처_매장 영구삭제 */
     int deleteProdInfoVendorStoreDtl(ProdVO prodVO1);
+
+    /** 매입처 등록 매장 수 조회 */
+    int getVendrStoreCnt(ProdVO prodVO);
+
+    /** 본사 상품 매장 등록 수 조회 */
+    int getHqProductStoreCnt(ProdVO prodVO);
+
+    /** 동일 형태 매입처 등록여부 확인 */
+    int getHdrInfoCnt(ProdVO prodVO);
 }
