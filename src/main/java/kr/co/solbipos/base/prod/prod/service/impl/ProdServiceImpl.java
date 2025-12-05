@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -910,7 +911,7 @@ public class ProdServiceImpl implements ProdService {
             String storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
 
             // 판매가가 기존 판매가와 다른 경우
-            if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {
+            if(prodVO.getSaleUprc() != null && !prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {
 
 //                prodVO.setSalePrcFg("1"); // 본사에서 변경
                 prodVO.setStartDate(currentDateString());
@@ -2434,7 +2435,11 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<Object>> getProdStockByStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 소속구분 설정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return prodMapper.getProdStockByStoreList(prodVO);
     }
@@ -2444,7 +2449,11 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 소속구분 설정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return prodMapper.getProdBookVendrStockInfoList(prodVO);
     }
@@ -2464,6 +2473,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 상품 매입처 저장 */
+    @Transactional
     @Override
     public int saveProdVendr(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -2476,6 +2486,12 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setRegId(sessionInfoVO.getUserId());
             prodVO.setModId(sessionInfoVO.getUserId());
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            // 동일 형태 매입처 등록여부 확인
+            int hdrCnt = prodMapper.getHdrInfoCnt(prodVO);
+            if(hdrCnt > 0){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("prod.vendrStoreRegist.dupVendrCd"));
+            }
 
             result = prodMapper.saveProdVendr(prodVO);
         }
@@ -2493,7 +2509,13 @@ public class ProdServiceImpl implements ProdService {
     @Override
     public int saveProdVendrStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
+        int adResult = 0;
         String currentDt = currentDateTimeString();
+
+        List<ProdVO> insertVoList = new ArrayList<>();
+        List<ProdVO> deleteVoList = new ArrayList<>();
+
+        int i = 1;
 
         for(ProdVO prodVO : prodVOs ){
 
@@ -2509,7 +2531,35 @@ public class ProdServiceImpl implements ProdService {
                 result = prodMapper.deleteProdVendrStore(prodVO);
             }
 
+            // 등록 매장 수 조회(TB_HQ_PRODUCT_VENDOR_STORE_DTL)
+            int storeCnt = prodMapper.getVendrStoreCnt(prodVO);
+
+            // 등록 매장 수 조회(TB_HQ_PRODUCT_STORE)
+            int hqProdStoreCnt = prodMapper.getHqProductStoreCnt(prodVO);
+
+            if(prodVO.isSelectFg()){
+                // DTL에 등록인데 상품별 매장에 없을 시 등록
+                if(storeCnt > 0 && hqProdStoreCnt == 0){
+                    insertVoList.add(prodVO);
+                }
+            }else{
+                // DTL에 없으면 상품별 매장 삭제
+                if(storeCnt == 0){
+                    deleteVoList.add(prodVO);
+                }
+            }
+
         }
+
+        // 상품적용매장 등록
+        if (insertVoList != null && !insertVoList.isEmpty()) {
+            result = insertProdStore(insertVoList.toArray(new ProdVO[0]), sessionInfoVO);
+        }
+        // 상품적용매장 삭제
+        if(deleteVoList != null && !deleteVoList.isEmpty()){
+            result = deleteProdStore(deleteVoList.toArray(new ProdVO[0]), sessionInfoVO);
+        }
+
         return result;
     }
 }

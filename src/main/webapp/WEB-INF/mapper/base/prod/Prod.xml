@@ -8064,21 +8064,36 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
-                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
-                ,       SF_ZERO_TO_NULL((A.CURR_QTY))   AS CURR_QTY
-                FROM    TB_ST_HQ_STOCK_CUR A
-                ,       TB_HQ_PRODUCT B
-                WHERE   A.HQ_OFFICE_CD    	=   #{hqOfficeCd}
-                AND     A.STORAGE_CD      	=   '999'
-                AND     B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
-                AND     B.PROD_CD           =   A.PROD_CD
-                AND     B.STOCK_PROD_YN     =   'Y'
-                AND     B.USE_YN            =   'Y'
-                AND     B.PROD_CD           =   #{prodCd}
-            </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT	A.VENDR_CD
+                ,		C.VENDR_NM
+                ,		DECODE(A.TRADE_FG,'0', '위탁', '1', '외상', '2', '현매(월)', '3', '현매(거)','') AS TRADE_FG
+                ,		DECODE(A.TRADE_FORM,'0', '일반', '1', '특판', '') AS TRADE_FORM
+                ,		B.COST_UPRC
+                ,		B.ACQUIRE_RATE
+                ,		SUM(B.IN_TOT_QTY)   AS IN_TOT_QTY
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+                ,		TB_PO_HQ_VENDR_INSTOCK_PROD B
+                ,		TB_HQ_VENDOR C
+                WHERE 	B.HQ_OFFICE_CD 	(+)	=	A.HQ_OFFICE_CD
+                AND		B.PROD_CD 		(+)	=	A.PROD_CD
+                AND		B.SEQ 			(+)	=	A.SEQ
+                AND		C.HQ_OFFICE_CD		=	A.HQ_OFFICE_CD
+                AND		C.VENDR_CD 			=	A.VENDR_CD
+                AND		A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+                AND		A.PROD_CD 		    =	#{prodCd}
+                AND		B.CONFM_YN 		(+)	=	'Y'
+                GROUP
+                BY		A.VENDR_CD
+                ,		C.VENDR_NM
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
+                ,		A.SEQ
+                ,		B.COST_UPRC
+                ,		B.ACQUIRE_RATE
+                ORDER
+                BY		A.VENDR_CD
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
             </when>
         </choose>
     </select>
@@ -8094,35 +8109,65 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  C.STORE_NM
-                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
-                FROM    TB_ST_STORE_STOCK_CUR A
-                ,       TB_MS_PRODUCT B
-                ,		TB_MS_STORE C
-                WHERE   B.STORE_CD          =   A.STORE_CD
-                AND     A.STORAGE_CD        =   '999'
-                AND     B.PROD_CD           =   A.PROD_CD
-                AND     B.STOCK_PROD_YN     =   'Y'
-                AND     B.USE_YN            =   'Y'
-                AND		C.STORE_CD          =   A.STORE_CD
-                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     B.PROD_CD           =   #{prodCd}
+                SELECT	B.STORE_CD
+                ,		E.STORE_NM
+                ,		SUM(D.IN_TOT_QTY)   AS IN_TOT_QTY
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+                ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
+                ,		TB_PO_HQ_VENDR_INSTOCK C
+                ,		TB_PO_HQ_VENDR_INSTOCK_PROD D
+                ,		TB_MS_STORE	E
+                WHERE	B.HQ_OFFICE_CD	    =	A.HQ_OFFICE_CD
+                AND		B.VENDR_CD 		    =	A.VENDR_CD
+                AND		B.PROD_CD 		    =	A.PROD_CD
+                AND		B.SEQ 			    =	A.SEQ
+                AND		C.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		C.STORE_CD 		(+) =	B.STORE_CD
+                AND 	D.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		D.SLIP_NO 		(+) =	C.SLIP_NO
+                AND		D.PROD_CD		(+) =	B.PROD_CD
+                AND		D.SEQ 			(+) =	B.SEQ
+                AND		E.HQ_OFFICE_CD		=	B.HQ_OFFICE_CD
+                AND		E.STORE_CD			=	B.STORE_CD
+                AND		A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+                AND		A.PROD_CD 		    =	#{prodCd}
+                AND		D.CONFM_YN 		(+)	=	'Y'
+                GROUP
+                BY		B.STORE_CD
+                ,		E.STORE_NM
+                ORDER
+                BY		B.STORE_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  C.STORE_NM
-                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
-                FROM    TB_ST_STORE_STOCK_CUR A
-                ,       TB_MS_PRODUCT B
-                ,		TB_MS_STORE C
-                WHERE   B.STORE_CD          =   A.STORE_CD
-                AND     A.STORAGE_CD        =   '999'
-                AND     B.PROD_CD           =   A.PROD_CD
-                AND     B.STOCK_PROD_YN     =   'Y'
-                AND     B.USE_YN            =   'Y'
-                AND		C.STORE_CD          =   A.STORE_CD
-                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     B.PROD_CD           =   #{prodCd}
+                SELECT	B.STORE_CD
+                ,		E.STORE_NM
+                ,		SUM(D.IN_TOT_QTY)   AS IN_TOT_QTY
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+                ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
+                ,		TB_PO_HQ_VENDR_INSTOCK C
+                ,		TB_PO_HQ_VENDR_INSTOCK_PROD D
+                ,		TB_MS_STORE	E
+                WHERE	B.HQ_OFFICE_CD	    =	A.HQ_OFFICE_CD
+                AND		B.VENDR_CD 		    =	A.VENDR_CD
+                AND		B.PROD_CD 		    =	A.PROD_CD
+                AND		B.SEQ 			    =	A.SEQ
+                AND		C.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		C.STORE_CD 		(+) =	B.STORE_CD
+                AND 	D.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		D.SLIP_NO 		(+) =	C.SLIP_NO
+                AND		D.PROD_CD		(+) =	B.PROD_CD
+                AND		D.SEQ 			(+) =	B.SEQ
+                AND		E.HQ_OFFICE_CD		=	B.HQ_OFFICE_CD
+                AND		E.STORE_CD			=	B.STORE_CD
+                AND		A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+                AND		A.PROD_CD 		    =	#{prodCd}
+                AND		D.CONFM_YN 		(+)	=	'Y'
+                GROUP
+                BY		B.STORE_CD
+                ,		E.STORE_NM
+                ORDER
+                BY		B.STORE_CD
             </when>
         </choose>
     </select>
@@ -8138,41 +8183,106 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  A.STORE_CD
-                ,       C.STORE_NM
-                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
-                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
-                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
-                FROM    TB_ST_STORE_STOCK_CUR A
-                ,       TB_MS_PRODUCT B
-                ,		TB_MS_STORE C
-                WHERE   B.STORE_CD          =   A.STORE_CD
-                AND     A.STORAGE_CD        =   '999'
-                AND     B.PROD_CD           =   A.PROD_CD
-                AND     B.STOCK_PROD_YN     =   'Y'
-                AND     B.USE_YN            =   'Y'
-                AND		C.STORE_CD          =   A.STORE_CD
-                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     B.PROD_CD           =   #{prodCd}
+                SELECT	B.STORE_CD
+                ,		E.STORE_NM
+                ,		A.VENDR_CD
+                ,		F.VENDR_NM
+                ,		DECODE(A.TRADE_FG,'0', '위탁', '1', '외상', '2', '현매(월)', '3', '현매(거)','') AS TRADE_FG
+                ,		DECODE(A.TRADE_FORM,'0', '일반', '1', '특판', '') AS TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
+                ,		SUM(D.IN_TOT_QTY)   AS IN_TOT_QTY
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+                ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
+                ,		TB_PO_HQ_VENDR_INSTOCK C
+                ,		TB_PO_HQ_VENDR_INSTOCK_PROD D
+                ,		TB_MS_STORE	E
+                ,		TB_HQ_VENDOR F
+                WHERE	B.HQ_OFFICE_CD	    =	A.HQ_OFFICE_CD
+                AND		B.VENDR_CD 		    =	A.VENDR_CD
+                AND		B.PROD_CD 		    =	A.PROD_CD
+                AND		B.SEQ 			    =	A.SEQ
+                AND		C.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		C.STORE_CD 		(+) =	B.STORE_CD
+                AND 	D.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		D.SLIP_NO 		(+) =	C.SLIP_NO
+                AND		D.PROD_CD		(+) =	B.PROD_CD
+                AND		D.SEQ 			(+) =	B.SEQ
+                AND		E.HQ_OFFICE_CD		=	B.HQ_OFFICE_CD
+                AND		E.STORE_CD			=	B.STORE_CD
+                AND		F.HQ_OFFICE_CD		=	A.HQ_OFFICE_CD
+                AND		F.VENDR_CD			=	A.VENDR_CD
+                AND		A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+                AND		A.PROD_CD 		    =	#{prodCd}
+                AND		D.CONFM_YN 		(+)	=	'Y'
+                GROUP
+                BY		B.STORE_CD
+                ,		E.STORE_NM
+                ,		A.VENDR_CD
+                ,		F.VENDR_NM
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
+                ORDER
+                BY		B.STORE_CD
+                ,		A.VENDR_CD
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  A.STORE_CD
-                ,       C.STORE_NM
-                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
-                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
-                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
-                FROM    TB_ST_STORE_STOCK_CUR A
-                ,       TB_MS_PRODUCT B
-                ,		TB_MS_STORE C
-                WHERE   B.STORE_CD          =   A.STORE_CD
-                AND     A.STORAGE_CD        =   '999'
-                AND     B.PROD_CD           =   A.PROD_CD
-                AND     B.STOCK_PROD_YN     =   'Y'
-                AND     B.USE_YN            =   'Y'
-                AND		C.STORE_CD          =   A.STORE_CD
-                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     B.PROD_CD           =   #{prodCd}
+                SELECT	B.STORE_CD
+                ,		E.STORE_NM
+                ,		A.VENDR_CD
+                ,		F.VENDR_NM
+                ,		DECODE(A.TRADE_FG,'0', '위탁', '1', '외상', '2', '현매(월)', '3', '현매(거)','') AS TRADE_FG
+                ,		DECODE(A.TRADE_FORM,'0', '일반', '1', '특판', '') AS TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
+                ,		SUM(D.IN_TOT_QTY)   AS IN_TOT_QTY
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+                ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
+                ,		TB_PO_HQ_VENDR_INSTOCK C
+                ,		TB_PO_HQ_VENDR_INSTOCK_PROD D
+                ,		TB_MS_STORE	E
+                ,		TB_HQ_VENDOR F
+                WHERE	B.HQ_OFFICE_CD	    =	A.HQ_OFFICE_CD
+                AND		B.VENDR_CD 		    =	A.VENDR_CD
+                AND		B.PROD_CD 		    =	A.PROD_CD
+                AND		B.SEQ 			    =	A.SEQ
+                AND		C.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		C.STORE_CD 		(+) =	B.STORE_CD
+                AND 	D.HQ_OFFICE_CD 	(+) =	B.HQ_OFFICE_CD
+                AND		D.SLIP_NO 		(+) =	C.SLIP_NO
+                AND		D.PROD_CD		(+) =	B.PROD_CD
+                AND		D.SEQ 			(+) =	B.SEQ
+                AND		E.HQ_OFFICE_CD		=	B.HQ_OFFICE_CD
+                AND		E.STORE_CD			=	B.STORE_CD
+                AND		F.HQ_OFFICE_CD		=	A.HQ_OFFICE_CD
+                AND		F.VENDR_CD			=	A.VENDR_CD
+                AND		A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+                AND		A.PROD_CD 		    =	#{prodCd}
+                AND     B.STORE_CD          =   #{storeCd}
+                AND		D.CONFM_YN 		(+)	=	'Y'
+                GROUP
+                BY		B.STORE_CD
+                ,		E.STORE_NM
+                ,		A.VENDR_CD
+                ,		F.VENDR_NM
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
+                ORDER
+                BY		B.STORE_CD
+                ,		A.VENDR_CD
+                ,		A.TRADE_FG
+                ,		A.TRADE_FORM
+                ,		D.COST_UPRC
+                ,		D.ACQUIRE_RATE
             </when>
         </choose>
     </select>
@@ -8293,29 +8403,25 @@
     -->
     <select id="getSearchRegistStore" parameterType="prodVO" resultMap="prodStoreListMap">
         /* USE : ProdMapper.getSearchRegistStore */
-        SELECT 	DECODE(B.HQ_OFFICE_CD,NULL,'N','Y')	AS SELECT_FG
+        SELECT	DECODE(B.HQ_OFFICE_CD,NULL,'N','Y')	AS SELECT_FG
         ,		A.HQ_OFFICE_CD
-        ,		A.PROD_CD
+        ,		B.PROD_CD
         ,		A.STORE_CD
-        ,		C.STORE_NM
+        ,		A.STORE_NM
         ,       B.VENDR_CD
         ,       B.SEQ
-        ,       D.CURR_QTY
-        FROM 	TB_HQ_PRODUCT_STORE A
+        ,       C.CURR_QTY
+        FROM	TB_MS_STORE A
         ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
-        ,       TB_MS_STORE C
-        ,		TB_ST_STORE_STOCK_CUR D
-        WHERE 	B.HQ_OFFICE_CD	(+)	= A.HQ_OFFICE_CD
-        AND 	B.PROD_CD 		(+)	= A.PROD_CD
-        AND 	B.STORE_CD 		(+)	= A.STORE_CD
-        AND		C.STORE_CD 			= A.STORE_CD
-        AND 	D.STORE_CD 		(+)	= A.STORE_CD
-        AND 	D.PROD_CD 		(+)	= A.PROD_CD
+        ,		TB_ST_STORE_STOCK_CUR C
+        WHERE	B.STORE_CD 		(+) = A.STORE_CD
+        AND 	C.STORE_CD 		(+)	= A.STORE_CD
+        AND 	C.PROD_CD 		(+)	= B.PROD_CD
         AND 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
-        AND 	A.PROD_CD 			= #{prodCd}
-        AND     B.VENDR_CD      (+)	= #{vendrCd}
-        AND     B.SEQ           (+)	= #{seq}
-        AND 	D.STORAGE_CD 	(+) = '999'
+        AND 	B.PROD_CD 		(+) = #{prodCd}
+        AND     B.VENDR_CD      (+) = #{vendrCd}
+        AND		B.SEQ			(+)	= #{seq}
+        AND 	C.STORAGE_CD 	(+) = '999'
         ORDER
         BY      A.STORE_CD
     </select>
@@ -8424,4 +8530,53 @@
                                 AND     DEL_TYPE_FG     = #{delTypeFg}
                             )
     </delete>
+
+    <!-- 매입처 등록 매장 수 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        PARAM    : prodVO
+        COMMENTS : 상품의 삭제여부를 파악하기 위해 등록 매장 수 조회한다.
+    -->
+    <select id="getVendrStoreCnt" parameterType="prodVO" resultType="Integer" >
+        /* USE : ProdMapper.getVendrStoreCnt */
+        SELECT	COUNT(*)
+        FROM	TB_HQ_PRODUCT_VENDOR_STORE_DTL A
+        WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		A.PROD_CD 		= #{prodCd}
+        AND		A.STORE_CD 		= #{storeCd}
+    </select>
+
+    <!-- 본사 상품 등록 매장 수 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 본사 상품의 등록여부를 파악하기 위해 등록 매장 수 조회한다.
+    -->
+    <select id="getHqProductStoreCnt" parameterType="prodVO" resultType="Integer" >
+        /* USE : ProdMapper.getHqProductStoreCnt */
+        SELECT	COUNT(*)
+        FROM	TB_HQ_PRODUCT_STORE A
+        WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		A.PROD_CD 		= #{prodCd}
+        AND		A.STORE_CD 		= #{storeCd}
+    </select>
+
+    <!-- 동일 형태 매입처 등록여부 확인 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        PARAM    : prodVO
+        COMMENTS : 상품의 삭제여부를 파악하기 위해 등록 매장 수 조회한다.
+    -->
+    <select id="getHdrInfoCnt" parameterType="prodVO" resultType="Integer" >
+        /* USE : ProdMapper.getHdrInfoCnt */
+        SELECT	COUNT(*)
+        FROM	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+        WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		A.PROD_CD 		= #{prodCd}
+        AND		A.VENDR_CD 		= #{vendrCd}
+        AND     A.TRADE_FG      = #{tradeFg}
+        AND     A.TRADE_FORM    = #{tradeForm}
+    </select>
+
+
 </mapper>

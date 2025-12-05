@@ -1510,11 +1510,11 @@
                 <wj-flex-grid-column header="<s:message code="prod.sh.acquireCd"/>"     binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sh.acquireNm"/>"     binding="vendrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sh.acquireRank"/>"   binding="" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="currQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="tradeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="tradeForm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="acquireRate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="acquireRate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="inTotQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -1538,7 +1538,7 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="prod.storeNm"/>"     binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"  binding="currQty" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"  binding="inTotQty" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="prod.sh.prodFg"/>"   binding="" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
@@ -1573,11 +1573,11 @@
         <wj-flex-grid-column header="<s:message code="prod.sh.acquireCd"/>"     binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.sh.acquireNm"/>"     binding="vendrNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.sh.acquireRank"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="currQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="tradeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="tradeForm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="acquireRate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="costUprc" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="inTotQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
         </div>
@@ -1723,7 +1723,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251204.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

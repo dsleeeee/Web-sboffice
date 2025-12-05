@@ -396,7 +396,7 @@
         thv.ACQUIRE_CD,
         (CASE thv.ACQUIRE_CD WHEN '000' THEN '수정예정' WHEN '003' THEN '국내개인' ELSE '' END) AS ACQUIRE_CD_NM,
         thv.ACQUIRE_FG,
-        (CASE thv.ACQUIRE_FG WHEN '1' THEN '현매' WHEN '2' THEN '현매(월)' WHEN '3' THEN '위탁' WHEN '4' THEN '외상' WHEN '5' THEN '현매(거)' ELSE '' END) AS ACQUIRE_FG_NM,
+        (CASE thv.ACQUIRE_FG WHEN '0' THEN '위탁' WHEN '1' THEN '외상' WHEN '2' THEN '현매(월)' WHEN '3' THEN '현매(거)' ELSE '' END) AS ACQUIRE_FG_NM,
         thv.MANAGE_SPOT_CD,
         (CASE thv.MANAGE_SPOT_CD WHEN '000' THEN '수정예정' WHEN '002' THEN '문구점' ELSE '' END) AS MANAGE_SPOT_CD_NM
         FROM TB_HQ_VENDOR thv,

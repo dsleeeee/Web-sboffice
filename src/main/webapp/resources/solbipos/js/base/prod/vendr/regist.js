@@ -47,11 +47,10 @@ var acquireCdData = [
 
 // 매입구분
 var acquireFgData = [
-    {"name":"현매","value":"1"},
-    {"name":"현매(월)","value":"2"},
-    {"name":"위탁","value":"3"},
-    {"name":"외상","value":"4"},
-    {"name":"현매(거)","value":"5"}
+    {"name": "위탁", "value": "0"},
+    {"name": "외상", "value": "1"},
+    {"name": "현매(월)", "value": "2"},
+    {"name": "현매(거)", "value": "3"}
 ];
 
 // 관리지점

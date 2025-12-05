@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    InStockReportDtl.xml
+    매입처별 상세매입내역(상품별) sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.12.03
+-->
+<mapper namespace="kr.co.solbipos.kookmin.acquire.inStockReportDtl.service.impl.InStockReportDtlMapper">
+
+    <!-- 매입처별 상세매입내역(상품별) -  조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getInStockReportDtlList" parameterType="InStockReportDtlVO" resultType="DefaultMap">
+    /* InStockReportDtlMapper.getInStockReportDtlList */
+    SELECT	CASE WHEN GROUPING(B.VENDR_CD) = 1 AND GROUPING(B.STORE_CD) = 1 AND GROUPING(A.PROD_CD) = 1 THEN '총계'ELSE B.VENDR_CD END        AS VENDR_CD
+    ,       E.VENDR_NM
+    ,		CASE WHEN GROUPING(B.VENDR_CD) = 0 AND GROUPING(B.STORE_CD) = 1 AND GROUPING(A.PROD_CD) = 1 THEN '매입처 합계' ELSE B.STORE_CD END AS STORE_CD
+    ,       F.STORE_NM
+    ,		CASE WHEN GROUPING(B.VENDR_CD) = 0 AND GROUPING(B.STORE_CD) = 0 AND GROUPING(A.PROD_CD) = 1 THEN '점소 소계' ELSE A.PROD_CD END    AS PROD_CD
+    ,		CASE WHEN GROUPING(A.PROD_CD) = 1 THEN NULL ELSE C.PROD_NM END 		AS PROD_NM
+    ,		DECODE(CASE WHEN GROUPING(A.PROD_CD) = 1 THEN NULL ELSE B.TRADE_FG END, '0', '위탁', '1', '외상', '2', '현매(월)', '3', '현매(거)')  AS TRADE_FG
+    ,		CASE WHEN GROUPING(A.PROD_CD) = 1 THEN NULL ELSE G.SALE_UPRC END 	AS SALE_UPRC
+    ,		CASE WHEN GROUPING(A.PROD_CD) = 1 THEN NULL ELSE A.COST_UPRC END 	AS COST_UPRC
+    ,		CASE WHEN GROUPING(A.PROD_CD) = 1 THEN NULL ELSE A.ACQUIRE_RATE END AS ACQUIRE_RATE
+    ,		SUM(CASE WHEN A.SLIP_FG = '1'  THEN A.IN_TOT_QTY ELSE 0 END) 		AS ACQUIRE_QTY
+    ,		SUM(CASE WHEN A.SLIP_FG = '1'  THEN A.IN_TOT ELSE 0 END)     		AS ACQUIRE_AMT
+    ,		SUM(CASE WHEN A.SLIP_FG = '-1' THEN A.IN_TOT_QTY ELSE 0 END) 		AS RTN_QTY
+    ,		SUM(CASE WHEN A.SLIP_FG = '-1' THEN A.IN_TOT ELSE 0 END)     		AS RTN_AMT
+    ,		SUM(A.IN_TOT)                                                       AS TOT_AMT
+    FROM	TB_PO_HQ_VENDR_INSTOCK_PROD A
+    ,   	TB_PO_HQ_VENDR_INSTOCK B
+    ,   	TB_HQ_PRODUCT C
+    ,   	TB_HQ_VENDOR E
+    ,   	TB_MS_STORE F
+    ,   	TB_HQ_PRODUCT_SALE_PRICE_V01 G
+    WHERE   B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+    AND     B.SLIP_NO       = A.SLIP_NO
+    AND     C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+    AND     C.PROD_CD       = A.PROD_CD
+    AND     E.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+    AND     E.VENDR_CD      = B.VENDR_CD
+    AND     F.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+    AND     F.STORE_CD      = B.STORE_CD
+    AND     G.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+    AND     G.PROD_CD       = A.PROD_CD
+    AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+    AND     A.CONFM_YN      = 'Y'
+    AND     B.PROC_FG       = '1'
+    AND     G.SALE_DATE     = #{today}
+    AND     B.INSTOCK_DATE  BETWEEN #{startDate} AND #{endDate}
+    <if test="storeCd != null and storeCd != ''">
+        AND B.STORE_CD = #{storeCd}
+    </if>
+    <if test="vendrCd != null and vendrCd != ''">
+        AND E.VENDR_CD = #{vendrCd}
+    </if>
+    <if test="prodClassCd != null and prodClassCd != ''">
+        AND C.PROD_CLASS_CD IN  (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                ) --상품분류
+    </if>
+    GROUP BY GROUPING SETS
+    (
+        /* 상세행 */
+        (
+            B.VENDR_CD, E.VENDR_NM, B.STORE_CD, F.STORE_NM, A.PROD_CD,
+            C.PROD_NM, B.TRADE_FG, G.SALE_UPRC,	A.COST_UPRC, A.ACQUIRE_RATE
+        )
+        ,
+        /* 벤더 + 점포 소계 */
+        (B.VENDR_CD, E.VENDR_NM, B.STORE_CD, F.STORE_NM)
+           ,
+        /* 벤더 소계 */
+        (B.VENDR_CD, E.VENDR_NM)
+           ,
+        /* 전체 합계 */
+           ()
+        )
+    ORDER
+    BY		B.VENDR_CD NULLS LAST
+    ,		B.STORE_CD NULLS LAST
+    ,		A.PROD_CD NULLS LAST
+    </select>
+</mapper>

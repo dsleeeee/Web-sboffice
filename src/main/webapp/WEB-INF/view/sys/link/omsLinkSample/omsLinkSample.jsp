@@ -84,6 +84,15 @@
                 <button class="btn_skyblue ml5" ng-click="delAgencyMapping('real')"><s:message code="omsLinkSample.realSearch"/></button>
             </td>
         </tr>
+        <tr>
+            <%-- QR 동기화이벤트 --%>
+            <th><s:message code="omsLinkSample.qrSynchronize"/>(007)</th>
+            <td>
+                <input type="text" class="sb-input" id="qrSynchronize_posShopId" placeholder="<s:message code="omsLinkSample.posShopId"/>[posShopId]"/>
+                <button class="btn_skyblue ml5" ng-click="qrSynchronize('test')"><s:message code="omsLinkSample.testSearch"/></button>
+                <button class="btn_skyblue ml5" ng-click="qrSynchronize('real')"><s:message code="omsLinkSample.realSearch"/></button>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -123,4 +132,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/omsLinkSample/omsLinkSample.js?ver=20251016.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/omsLinkSample/omsLinkSample.js?ver=20251204.01" charset="utf-8"></script>
