@@ -109,6 +109,10 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     }
     if(orgnFg === 'HQ') {
       $("#btnStoreProdBatchList").css("display", "");
+
+        if (urlProdFg !== "0") { // 일반상품관리, 도서상품관리 화면에서는 hidden
+            $("#btnStoreProdBatchList").css("display", "none");
+        }
     }
   }
   // $scope.btnShowFg = false; // 본사, 매장 모두 신규상품등록 가능하게 주석
@@ -187,8 +191,13 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if( col.binding === "prodCd" || col.binding === "storeCnt") {
+        if( col.binding === "prodCd") {
           wijmo.addClass(e.cell, 'wijLink');
+        }
+        if(col.binding === "storeCnt") {
+          if (orgnFg === 'HQ' && urlProdFg === "0") {
+              wijmo.addClass(e.cell, 'wijLink');
+          }
         }
       }
     });
@@ -227,7 +236,9 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           }
           // 등록매장수
         } else if(col.binding === "storeCnt"){
-          $scope.registProdStore(selectedRow);
+            if (orgnFg === 'HQ' && urlProdFg === "0") {
+                $scope.registProdStore(selectedRow);
+            }
         }
       }
     });
