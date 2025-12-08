@@ -359,6 +359,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 재고관련 그리드 초기화
             $scope._gridDataInit();
 
+            // 초기재고 필수 입력
+            $("#prodModifyStartStockQty").prop("required", true);
+
             // 상품정보 set (초기값 셋팅)
             $scope.setProdModifyInfo(params);
         }
@@ -1841,6 +1844,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     // 상품 수정 가능
                     $("#btnSaveProd").css("display", "");
                 }
+
+                // 초기재고 필수입력 제거
+                $("#prodModifyStartStockQty").removeAttr("required");
 
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {
