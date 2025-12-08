@@ -530,15 +530,21 @@ public class OmsLinkSampleController {
             System.out.println("HTTP 응답 코드: " + responseCode);
 
             // 5. 응답 본문 읽기
-            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+            if (responseCode >= 200 && responseCode < 300) {
+                // 성공적인 응답 (2xx)
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
                     StringBuilder response = new StringBuilder();
                     String responseLine = null;
                     while ((responseLine = br.readLine()) != null) {
                         response.append(responseLine.trim());
                     }
-                    apiLinkVO.setResponse(response.toString());
-                    System.out.println("서버 응답: " + response.toString());
+                    if (response.length() > 0) {
+                        apiLinkVO.setResponse(response.toString());
+                        System.out.println("서버 응답: " + response.toString());
+                    } else {
+                        apiLinkVO.setResponse("성공: 응답 본문이 없습니다.");
+                        System.out.println("성공: 응답 본문이 없습니다.");
+                    }
                 }
             } else {
                 // 에러 발생 시 에러 스트림을 읽음

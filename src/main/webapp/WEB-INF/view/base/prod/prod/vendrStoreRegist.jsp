@@ -94,7 +94,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/vendrStoreRegist.js?ver=20251126.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/vendrStoreRegist.js?ver=20251126.02" charset="utf-8"></script>
 
 <%-- 거래처 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/searchVendr.jsp">

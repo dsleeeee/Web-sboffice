@@ -114,7 +114,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/inStockReportDtl/inStockReportDtl.js?ver=20251202.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/inStockReportDtl/inStockReportDtl.js?ver=20251202.02" charset="utf-8"></script>
 
 <%-- 매입처별 상세매입내역(상품별) 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/kookmin/acquire/inStockReportDtl/inStockReportDtlReport.jsp">

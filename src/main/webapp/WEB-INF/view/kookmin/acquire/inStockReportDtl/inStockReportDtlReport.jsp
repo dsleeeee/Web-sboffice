@@ -26,4 +26,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/inStockReportDtl/inStockReportDtlReport.js?ver=20251203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/inStockReportDtl/inStockReportDtlReport.js?ver=20251203.02" charset="utf-8"></script>

@@ -76,6 +76,22 @@ app.controller('inStockReportDtlCtrl', ['$scope', '$http', '$timeout', function 
     // 입고/반출 리스트 조회
     $scope.getInStockReportDtlList = function () {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 6달(186일) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+            return false;
+        }
+
         // 매장(을)를 선택해주세요.
         if($("#inStockReportDtlStoreCd").val() === "") {
             $scope._popMsg(messages["cmm.require.selectStore"]);
@@ -93,6 +109,8 @@ app.controller('inStockReportDtlCtrl', ['$scope', '$http', '$timeout', function 
         $scope.startDate    = params.startDate;
         $scope.endDate      = params.endDate;
         $scope.storeCd      = params.storeCd;
+        $scope.vendrCd      = params.vendrCd;
+        $scope.selectProdClassCd = params.prodClassCd;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/kookmin/acquire/inStockReportDtl/inStockReportDtl/getInStockReportDtlList.sb", params);
@@ -139,9 +157,11 @@ app.controller('inStockReportDtlCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
         var params       = {};
-        params.startDate = $scope.startDate;
-        params.endDate = $scope.endDate;
-        params.storeCd = $scope.storeCd;
+        params.startDate    = $scope.startDate;
+        params.endDate      = $scope.endDate;
+        params.storeCd      = $scope.storeCd;
+        params.vendrCd      = $scope.vendrCd;
+        params.prodClassCd  = $scope.selectProdClassCd;
         $scope._broadcast('inStockReportDtlReportCtrl', params);
 
     };

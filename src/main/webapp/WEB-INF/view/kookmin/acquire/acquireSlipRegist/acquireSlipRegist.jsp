@@ -158,7 +158,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/acquireSlipRegist/acquireSlipRegist.js?ver=20251119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/acquireSlipRegist/acquireSlipRegist.js?ver=20251119.02" charset="utf-8"></script>
 
 <%-- 입고/반출 상세 팝업전용 레이어 --%>
 <c:import url="/WEB-INF/view/kookmin/acquire/acquireSlipRegist/inOutStockRegistPop.jsp">

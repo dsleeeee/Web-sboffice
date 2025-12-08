@@ -42,6 +42,8 @@ app.controller('inStockReportDtlReportCtrl', ['$scope', '$http', '$timeout', fun
         params.startDate    = $scope.data.startDate;
         params.endDate      = $scope.data.endDate;
         params.storeCd      = $scope.data.storeCd;
+        params.prodClassCd  = $scope.data.prodClassCd;
+        params.vendrCd      = $scope.data.vendrCd;
 
         //가상로그인 session 설정
         if(document.getElementsByName('sessionId')[0]){

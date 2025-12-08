@@ -123,6 +123,7 @@ app.controller('acquireSlipRegistCtrl', ['$scope', '$http', '$timeout', function
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.vendrCd   = $("#acquireSlipRegistSelectVendrCd").val();
+        params.storeCd   = $("#acquireSlipRegistStoreCd").val();
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/kookmin/acquire/acquireSlipRegist/acquireSlipRegist/getSearchInOutStockList.sb", params);

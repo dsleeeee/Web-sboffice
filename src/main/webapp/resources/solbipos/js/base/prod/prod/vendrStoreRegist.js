@@ -125,6 +125,29 @@ app.controller('prodVendrRegistCtrl', ['$scope', '$http', function ($scope, $htt
     // 거래처 저장
     $scope.saveProdVendr = function () {
 
+        var set = new Set();
+        var dupList = [];
+
+        // 거래처 - 구분 - 형태 중복 체크
+        $scope.flex.collectionView.items.forEach(function(item) {
+            var key = JSON.stringify({
+                vendrCd: item.vendrCd.trim().removeEnter(),
+                tradeFg: item.tradeFg.trim().removeEnter(),
+                tradeForm: item.tradeForm.trim().removeEnter()
+            });
+
+            if (set.has(key)) {
+                dupList.push(key);
+            } else {
+                set.add(key);
+            }
+        });
+
+        if (dupList.length > 0) {
+            $scope._popMsg(messages["prod.vendrStoreRegist.dupVendrCd"]);
+            return false;
+        }
+
         var params = new Array();
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {

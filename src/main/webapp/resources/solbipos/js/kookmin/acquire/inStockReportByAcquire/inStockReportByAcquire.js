@@ -118,6 +118,22 @@ app.controller('inStockReportByAcquireCtrl', ['$scope', '$http', '$timeout', fun
     // 입고내역서 조회
     $scope.getInStockReportByAcquireList = function () {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 6달(186일) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+            return false;
+        }
+
         // 매장(을)를 선택해주세요.
         if($("#inStockReportByAcquireStoreCd").val() === "") {
             $scope._popMsg(messages["cmm.require.selectStore"]);

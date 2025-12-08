@@ -50,6 +50,9 @@
         <if test='vendrCd != null and vendrCd != ""'>
             AND A.VENDR_CD = #{vendrCd}
         </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
         ORDER
         BY      A.SLIP_NO DESC
     </select>
@@ -600,7 +603,7 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{seq}
-        ,       #{acquireRate}
+        ,       ROUND(#{acquireRate},2)
         )
     </insert>
 

@@ -304,7 +304,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251203.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

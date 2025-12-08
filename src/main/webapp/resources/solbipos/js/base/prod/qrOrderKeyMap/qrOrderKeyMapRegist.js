@@ -332,7 +332,7 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
 
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/base/prod/qrOrderKeyMap/qrOrderKeyMap/getQRSynchronize.sb', params, function (response) {
+        $scope._postJSONQuery.withPopUp('/base/prod/qrOrderKeyMap/qrOrderKeyMap/getQRSynchronize.sb', params, function (response) {
 
             var data = response.data.data.list;
 

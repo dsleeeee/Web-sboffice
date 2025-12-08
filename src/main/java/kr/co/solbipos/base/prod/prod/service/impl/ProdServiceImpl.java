@@ -2488,10 +2488,10 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             // 동일 형태 매입처 등록여부 확인
-            int hdrCnt = prodMapper.getHdrInfoCnt(prodVO);
-            if(hdrCnt > 0){
-                throw new JsonException(Status.SERVER_ERROR, messageService.get("prod.vendrStoreRegist.dupVendrCd"));
-            }
+//            int hdrCnt = prodMapper.getHdrInfoCnt(prodVO);
+//            if(hdrCnt > 0){
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get("prod.vendrStoreRegist.dupVendrCd"));
+//            }
 
             result = prodMapper.saveProdVendr(prodVO);
         }
