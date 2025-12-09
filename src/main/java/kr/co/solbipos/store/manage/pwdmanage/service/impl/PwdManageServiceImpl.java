@@ -167,8 +167,19 @@ public class PwdManageServiceImpl implements PwdManageService {
     @Override
     public PwChgResult updatePasswordUnLock(PwdManageVO pwdManageVO , SessionInfoVO sessionInfoVO) {
 
-        // 사용자 상태 - 정상
-        pwdManageVO.setUserStatFg(UserStatFg.NORMAL);
+        pwdManageVO.setPwdChgFg(PwdChgFg.WEB);
+
+        String oldPassword = pwdManageMapper.getOldPassword(pwdManageVO);
+        String confPassWord = EncUtil.setEncSHA256(pwdManageVO.getUserId() + "123456");
+        String confPassWord2 = EncUtil.setEncSHA256(pwdManageVO.getUserId() + "0000");
+
+        // 현재 비밀번호가 초기 비밀번호 이면
+        if(oldPassword.equals(confPassWord) || oldPassword.equals(confPassWord2)){
+            pwdManageVO.setUserStatFg(UserStatFg.PASSWORD_TEMPORARY);
+        }else{
+            pwdManageVO.setUserStatFg(UserStatFg.NORMAL);
+        }
+
         pwdManageVO.setModDt(currentDateTimeString());
         pwdManageVO.setModId(sessionInfoVO.getUserId());
 
