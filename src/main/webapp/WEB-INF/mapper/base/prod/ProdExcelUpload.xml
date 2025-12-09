@@ -613,6 +613,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 FROM 	TB_MS_PRODUCT_CLASS
                 WHERE 	STORE_CD = #{storeCd}
+                AND     PROD_CLASS_CD BETWEEN '80001' AND '99999'
             </when>
         </choose>
         ),
