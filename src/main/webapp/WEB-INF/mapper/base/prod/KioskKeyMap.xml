@@ -1102,7 +1102,7 @@
                 (CASE WHEN thkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
                 (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                 thp.REMARK,
-                (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                thpst.SALE_TIME
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
@@ -1122,6 +1122,16 @@
                     ) thkk ON
                     thp.HQ_OFFICE_CD = thkk.HQ_OFFICE_CD
                     AND thp.PROD_CD = thkk.PROD_CD
+                LEFT OUTER JOIN (
+                        SELECT HQ_OFFICE_CD,
+                        PROD_CD,
+                        LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME
+                        FROM TB_HQ_PRODUCT_SALE_TIME
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        GROUP BY HQ_OFFICE_CD, PROD_CD
+                    ) thpst ON
+                    thp.HQ_OFFICE_CD = thpst.HQ_OFFICE_CD
+                    AND	thp.PROD_CD  = thpst.PROD_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -1198,7 +1208,7 @@
                 tmp.REMARK,
                 DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
                 DECODE(NVL(tmp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상') AS SELFAPP_YN,
-                (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                tmpst.SALE_TIME
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
@@ -1219,6 +1229,16 @@
                     ) tmkk ON
                     tmp.STORE_CD = tmkk.STORE_CD
                     AND tmp.PROD_CD = tmkk.PROD_CD
+                LEFT OUTER JOIN (
+                        SELECT STORE_CD,
+                        PROD_CD,
+                        LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME
+                        FROM TB_MS_PRODUCT_SALE_TIME
+                        WHERE STORE_CD = #{storeCd}
+                        GROUP BY STORE_CD, PROD_CD
+                        ) tmpst ON
+                    tmp.STORE_CD = tmpst.STORE_CD
+                    AND	tmp.PROD_CD  = tmpst.PROD_CD
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
