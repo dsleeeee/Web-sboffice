@@ -373,6 +373,13 @@ app.controller('allStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
         if ($scope.flex.collectionView.items[i].gChk) {
+
+            // [A0001] 보나비 등록제한. 관리자에게 문의하십시오.
+            if ($scope.flex.collectionView.items[i].hqOfficeCd === "A0001") {
+                $scope._popMsg("[" + $scope.flex.collectionView.items[i].hqOfficeCd + "] " + $scope.flex.collectionView.items[i].hqOfficeNm + " " + messages["verManage.store.reg.chk.msg"]);
+                return false;
+            }
+
             if($scope.flex.collectionView.items[i].storeCd !== "DS89117" && $scope.flex.collectionView.items[i].hqOfficeCd !== "A0001") { // DS89117, A0001보나비 예외처리(키오스크 포스는 다른버전 사용 가능)
                 if ($scope.flex.collectionView.items[i].diffVerCnt > 0) {
                     $scope._popMsg("NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
