@@ -222,6 +222,12 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
         params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
+        if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
+            params.isB2BContract = true;
+        } else {
+            params.isB2BContract = false;
+        }
+
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
 
@@ -290,7 +296,11 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
             if (item.gChk) {
                 params.linkType = "005";
                 params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
-                params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
+
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR06" || $scope.srchDlvrAgencyCombo.selectedValue === "DR07" || $scope.srchDlvrAgencyCombo.selectedValue === "DR22" ||
+                    $scope.srchDlvrAgencyCombo.selectedValue === "DR24" || $scope.srchDlvrAgencyCombo.selectedValue === "DR29") {
+                    params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
+                }
 
                 if ($scope.srchDlvrAgencyCombo.selectedValue === "DR01" || $scope.srchDlvrAgencyCombo.selectedValue === "DR02" || $scope.srchDlvrAgencyCombo.selectedValue === "DR03") {
                     params.storeCode = "";
