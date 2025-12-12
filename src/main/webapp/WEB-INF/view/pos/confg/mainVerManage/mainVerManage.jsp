@@ -95,7 +95,7 @@
     var progFgData = ${ccu.getCommCode("059")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/mainVerManage/mainVerManage.js?ver=20250807.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/mainVerManage/mainVerManage.js?ver=20251212.01" charset="utf-8"></script>
 
 <%-- 메인버전 등록 팝업 --%>
 <c:import url="/WEB-INF/view/pos/confg/mainVerManage/mainVerRegist.jsp">

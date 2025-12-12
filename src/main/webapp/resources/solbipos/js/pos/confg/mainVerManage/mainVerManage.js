@@ -71,9 +71,14 @@ app.controller('mainVerManageCtrl', ['$scope', '$http', function ($scope, $http)
                 if (col.binding === "mainVerRegist") {
                     // 값이 있으면 링크 효과
                     if (selectedRow[("mainVerRegist")] === "등록") {
-                        $scope.setSelectedStore(selectedRow);
-                        $scope.wjMainVerRegistLayer.show(true);
-                        event.preventDefault();
+                        if(selectedRow.hqOfficeCd === 'A0001') {
+                            $scope._popMsg("[" + selectedRow.hqOfficeCd + "] " + selectedRow.hqOfficeNm + " " + messages["mainVerManage.reg.chk.msg"]);  // [A0001] 보나비 등록제한. 관리자에게 문의하십시오.
+                            return false;
+                        } else {
+                            $scope.setSelectedStore(selectedRow);
+                            $scope.wjMainVerRegistLayer.show(true);
+                            event.preventDefault();
+                        }
                     }
                 }
 
