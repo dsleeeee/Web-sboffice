@@ -58,6 +58,8 @@ app.controller('popUpStoreModGrpCtrl', ['$scope', '$http', '$timeout', function 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save("/base/prod/touchKey/touchKey/saveStoreModGrp.sb", params, function(){
         $scope.popUpStoreModGrpLayer.hide();
+        // 터치키 재조회
+        document.getElementById('btnSrchTouchKey').click();
       });
     });
   }

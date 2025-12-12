@@ -257,6 +257,8 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', '$timeout', function (
                     $scope.popUpApplyStoreLayer.hide(true);
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
+                    // 터치키 재조회
+                    document.getElementById('btnSrchTouchKey').click();
                 }
             }
         }, function errorCallback(response) {
