@@ -378,10 +378,27 @@
     <select id="getStoreCd" parameterType="storeManageVO" resultType="String">
         /* USE : StoreManageMapper.getStoreCd */
         <if test='sysStatFg.toString() == "DEMO"'>
-            SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
+            <!-- SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
               FROM TB_MS_STORE
              WHERE STORE_CD LIKE 'DS%'
-               AND LENGTH(STORE_CD) = 7
+               AND LENGTH(STORE_CD) = 7 -->
+                SELECT  MIN(STORE_CD) AS STORE_CD
+                FROM
+                        (
+                            SELECT  'DS'|| LPAD(TO_CHAR(SEQ_NUM), 5, '0') AS STORE_CD
+                            FROM    (
+                                        SELECT LEVEL AS SEQ_NUM
+                                        FROM DUAL
+                                        <![CDATA[
+                                            CONNECT BY LEVEL <= 99999
+                                        ]]>
+                                    )
+                            MINUS
+                            SELECT  STORE_CD
+                            FROM    TB_MS_STORE
+                            WHERE   STORE_CD LIKE 'DS%'
+                            AND     LENGTH(STORE_CD) = 7
+                        )
         </if>
         <if test='sysStatFg.toString() != "DEMO"'>
             SELECT 'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
