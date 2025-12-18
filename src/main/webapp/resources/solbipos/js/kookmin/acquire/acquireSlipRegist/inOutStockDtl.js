@@ -77,10 +77,6 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
         $scope.slipSearchYn = 'N';
         $scope.btnDtlConfirmShowFg = false;
-        $("#inOutStockDtlStoreCd").val('');
-        $("#inOutStockDtlStoreNm").val('선택');
-        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
-        $("#inOutStockDtlStoreNm").attr("disabled", false);
         $("#tradeFg").attr("disabled", false);
         $("#tradeForm").attr("disabled", false);
 
@@ -96,6 +92,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
             $("#instockDtlSelectVendrCd").val('');
             $("#instockDtlSelectVendrNm").val('선택');
+            $("#inStockDtlStoreCd").val('');
+            $("#inStockDtlStoreNm").val('선택');
+            $("#inStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+            $("#inStockDtlStoreNm").attr("disabled", false);
         }
         // 반출
         else {
@@ -106,6 +106,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
             $("#outstockDtlSelectVendrCd").val('');
             $("#outstockDtlSelectVendrNm").val('선택');
+            $("#outStockDtlStoreCd").val('');
+            $("#outStockDtlStoreNm").val('선택');
+            $("#outStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+            $("#outStockDtlStoreNm").attr("disabled", false);
         }
 
         // $("#instockDtlSelectVendrCd").val('');
@@ -178,8 +182,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                         $scope.procNm                    = messages["acquireSlipRegist.dtl.procFg0"];
                         $scope.outstorageCdDisabledFg	 = false;
 
-                        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
-                        $("#inOutStockDtlStoreNm").attr("disabled", false);
+                        $("#inStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                        $("#inStockDtlStoreNm").attr("disabled", false);
+                        $("#outStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                        $("#outStockDtlStoreNm").attr("disabled", false);
 
                         // 등록 상품이 있을 경우
                         if(data.prodCnt > 0){
@@ -187,8 +193,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                             $scope.instockDtlSelectVendrBtnDisabled = true;
                             $scope.outstockDtlSelectVendrNmDisabled  = true;
                             $scope.outstockDtlSelectVendrBtnDisabled = true;
-                            $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", true);
-                            $("#inOutStockDtlStoreNm").attr("disabled", true);
+                            $("#inStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                            $("#inStockDtlStoreNm").attr("disabled", true);
+                            $("#outStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                            $("#outStockDtlStoreNm").attr("disabled", true);
                             $("#tradeFg").attr("disabled", true);
                             $("#tradeForm").attr("disabled", true);
                         }
@@ -198,8 +206,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                             $scope.instockDtlSelectVendrBtnDisabled = false;
                             $scope.outstockDtlSelectVendrNmDisabled  = false;
                             $scope.outstockDtlSelectVendrBtnDisabled = false;
-                            $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", false);
-                            $("#inOutStockDtlStoreNm").attr("disabled", false);
+                            $("#inStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                            $("#inStockDtlStoreNm").attr("disabled", false);
+                            $("#outStockDtlStorebtnCancelStoreCd").attr("disabled", false);
+                            $("#outStockDtlStoreNm").attr("disabled", false);
                             $("#tradeFg").attr("disabled", false);
                             $("#tradeForm").attr("disabled", false);
                         }
@@ -215,8 +225,10 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
                         $scope.outstorageCdDisabledFg	 = true;
 
-                        $("#inOutStockDtlStorebtnCancelStoreCd").attr("disabled", true);
-                        $("#inOutStockDtlStoreNm").attr("disabled", true);
+                        $("#inStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                        $("#inStockDtlStoreNm").attr("disabled", true);
+                        $("#outStockDtlStorebtnCancelStoreCd").attr("disabled", true);
+                        $("#outStockDtlStoreNm").attr("disabled", true);
                     }
 
                     // 진행상태 관련 레이어 show 여부
@@ -230,17 +242,22 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                             $("#instockDtlSelectVendrCd").val(data.vendrCd);
                             $("#instockDtlSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
                         }
+                        // 매장 세팅
+                        $("#inStockDtlStoreCd").val(data.storeCd);
+                        $("#inStockDtlStoreNm").val('[' + data.storeCd + '] ' + data.storeNm);
                     }
                     // 반출
                     else if ($scope.slipFg === -1) {
                         // 거래처 선택 모듈값 세팅
                         $("#outstockDtlSelectVendrCd").val(data.vendrCd);
                         $("#outstockDtlSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
+
+                        // 매장 세팅
+                        $("#outStockDtlStoreCd").val(data.storeCd);
+                        $("#outStockDtlStoreNm").val('[' + data.storeCd + '] ' + data.storeNm);
                     }
 
-                    // 매장 세팅
-                    $("#inOutStockDtlStoreCd").val(data.storeCd);
-                    $("#inOutStockDtlStoreNm").val('[' + data.storeCd + '] ' + data.storeNm);
+
 
                     $scope.slipInfo.tradeFg = data.tradeFg;
                     $scope.slipInfo.tradeForm = data.tradeForm;
@@ -332,13 +349,14 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
             params.vendrCd     = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.vendrCd : $("#instockDtlSelectVendrCd").val());
             params.orderSlipNo = $scope.slipInfo.orderSlipNo;
             params.instockType = $scope.slipInfo.instockType;
+            params.storeCd = $("#inStockDtlStoreCd").val();
         }
         // 반출
         else if ($scope.slipFg === -1) {
             params.vendrCd = $("#outstockDtlSelectVendrCd").val();
+            params.storeCd = $("#outStockDtlStoreCd").val();
         }
 
-        params.storeCd = $("#inOutStockDtlStoreCd").val();
         params.tradeFg = $scope.slipInfo.tradeFg;
         params.tradeForm = $scope.slipInfo.tradeForm;
 
@@ -401,18 +419,24 @@ app.controller('inOutStockDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                     return false;
                 }
             }
+
+            // 매장 선택
+            if($("#inStockDtlStoreCd").val() === ""){
+                $scope._popMsg(messages["cmm.require.selectStore"]);
+                return false;
+            }
         } else if ($scope.slipFg === -1) {
             // 거래처를 선택해주세요.
             if ($("#outstockDtlSelectVendrCd").val() === "") {
                 $scope._popMsg(messages["acquireSlipRegist.dtl.require.selectVendr"]);
                 return false;
             }
-        }
-        
-        // 매장 선택
-        if($("#inOutStockDtlStoreCd").val() === ""){
-            $scope._popMsg(messages["cmm.require.selectStore"]);
-            return false;
+
+            // 매장 선택
+            if($("#outStockDtlStoreCd").val() === ""){
+                $scope._popMsg(messages["cmm.require.selectStore"]);
+                return false;
+            }
         }
 
         return true;

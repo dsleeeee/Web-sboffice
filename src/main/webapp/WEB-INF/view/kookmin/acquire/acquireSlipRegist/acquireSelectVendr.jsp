@@ -59,6 +59,7 @@
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.targetId = "${param.targetId}";
+        $scope.targetStoreCd = "${param.targetStoreCd}";
         $("#"+$scope.targetId+"Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
 
         // 상위 객체 상속 : T/F 는 picker
@@ -124,8 +125,10 @@
                 params.vendrFg = '${param.vendrFg}';
             }
 
-            if($("#inOutStockDtlStoreCd").val() !== null && $("#inOutStockDtlStoreCd").val() !== undefined && $("#inOutStockDtlStoreCd").val() !== ""){
-                params.storeCd = $("#inOutStockDtlStoreCd").val();
+            var storeCd = $("#"+$scope.targetStoreCd).val();
+
+            if(storeCd !== null && storeCd !== undefined && storeCd !== ""){
+                params.storeCd = storeCd;
             }
             $scope._inquirySub("/kookmin/acquire/acquireSlipRegist/acquireSelectVendr/getAcquireSelectVendrList.sb", params, function () {
                 $scope.searchFg = "Y";

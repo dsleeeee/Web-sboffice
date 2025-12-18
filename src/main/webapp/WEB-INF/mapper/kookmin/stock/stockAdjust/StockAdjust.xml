@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StockAdjust.xml
+    재고조정 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.12.16
+-->
+<mapper namespace="kr.co.solbipos.kookmin.stock.stockAdjust.service.impl.StockAdjustMapper">
+
+    <!-- 재고조정 - 조정 사유 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAdjustReason" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* USE : StockAdjustMapper.getSearchAdjustList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  NMCODE_CD
+                ,       NMCODE_NM
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD = '135'
+                AND     USE_YN = 'Y'
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  NMCODE_CD
+                ,       NMCODE_NM
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD = #{storeCd}
+                AND     NMCODE_GRP_CD = '135'
+                AND     USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 재고조정 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : stockAdjustVO
+        COMMENTS : 재고조정 - 재고조정 리스트를 조회한다.
+    -->
+    <select id="getSearchAdjustList" parameterType="stockAdjustVO" resultType="DefaultMap">
+        /* USE : StockAdjustMapper.getSearchAdjustList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.ADJ_DATE
+                ,       A.HQ_OFFICE_CD
+                ,       A.SEQ_NO
+                ,       A.ADJ_TITLE
+                ,       A.PROC_FG
+                ,       A.DTL_CNT
+                ,       A.CONFM_DATE
+                ,       SUBSTR(A.REG_DT,0,8) AS REG_DATE
+                ,		A.ADJ_STORAGE_CD
+                ,       A.REASON_CD AS ADJ_REASON
+                ,       SUBSTR(A.MOD_DT,0,8) AS MOD_DATE
+                ,       A.REG_ID
+                ,       A.MOD_ID
+                ,       A.CONFM_ID
+                FROM    TB_ST_HQ_ADJUST A
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='procFg != null and procFg != ""'>
+                    AND A.PROC_FG = #{procFg}
+                </if>
+                <if test='adjReason != null and adjReason != ""'>
+                    AND A.REASON_CD = #{adjReason}
+                </if>
+                ORDER
+                BY      A.ADJ_DATE DESC
+                ,       A.SEQ_NO DESC
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.ADJ_DATE
+                ,       A.STORE_CD
+                ,       A.SEQ_NO
+                ,       A.ADJ_TITLE
+                ,       A.PROC_FG
+                ,       A.DTL_CNT
+                ,       A.CONFM_DATE
+                ,       SUBSTR(A.REG_DT,0,8) AS REG_DATE
+                ,		A.ADJ_STORAGE_CD
+                ,       A.REASON_CD AS ADJ_REASON
+                ,       SUBSTR(A.MOD_DT,0,8) AS MOD_DATE
+                ,       A.REG_ID
+                ,       A.MOD_ID
+                ,       A.CONFM_ID
+                FROM    TB_ST_STORE_ADJUST A
+                WHERE   STORE_CD  = #{storeCd}
+                AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='procFg != null and procFg != ""'>
+                    AND A.PROC_FG = #{procFg}
+                </if>
+                <if test='adjReason != null and adjReason != ""'>
+                    AND A.REASON_CD = #{adjReason}
+                </if>
+                ORDER
+                BY      A.ADJ_DATE DESC
+                ,       A.SEQ_NO DESC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 조정 DTL 전부 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteAllAdjustDtl" parameterType="stockAdjustVO">
+        /* USE : StockAdjustMapper.deleteAllAdjustDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ADJUST_DTL
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ADJUST_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </delete>
+
+
+    <!-- 재고조정 - 조정 HD 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정일자, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteAdjustHd" parameterType="stockAdjustVO">
+        /* USE : StockAdjustMapper.deleteAdjustHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ADJUST
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ADJUST
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 재고조정 - 조정 진행구분 및 제목 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 진행구분 및 제목을 조회한다.
+    -->
+    <select id="getProcFgCheck" parameterType="stockAdjustVO" resultType="DefaultMap">
+        /* USE : StockAdjustMapper.getProcFgCheck */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.PROC_FG
+                ,       A.ADJ_TITLE
+                ,       A.ADJ_STORAGE_CD
+                ,       B.STORAGE_NM
+                ,       A.REASON_CD AS ADJ_REASON
+                ,		A.ADJ_STORE_CD
+                ,		C.STORE_NM
+                ,		A.ADJ_VENDR_CD
+                ,		D.VENDR_NM
+                FROM    TB_ST_HQ_ADJUST A
+                ,       TB_HQ_STORAGE   B
+                ,		TB_MS_STORE C
+                ,		TB_HQ_VENDOR D
+                WHERE   B.HQ_OFFICE_CD		= A.HQ_OFFICE_CD
+                AND		B.STORAGE_CD 		= A.ADJ_STORAGE_CD
+                AND		C.STORE_CD			= A.ADJ_STORE_CD
+                AND		D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+                AND		D.VENDR_CD 			= A.ADJ_VENDR_CD
+                AND 	A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND     A.ADJ_DATE          = #{adjDate}
+                AND     A.SEQ_NO            = #{seqNo}
+
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.PROC_FG
+                ,       A.ADJ_TITLE
+                ,       A.ADJ_STORAGE_CD
+                ,       B.STORAGE_NM
+                ,       A.REASON_CD AS ADJ_REASON
+                FROM    TB_ST_STORE_ADJUST A
+                ,       TB_MS_STORAGE B
+                WHERE   A.STORE_CD          = #{storeCd}
+                AND     A.ADJ_DATE          = #{adjDate}
+                AND     A.SEQ_NO            = #{seqNo}
+                AND		A.STORE_CD		    = B.STORE_CD
+                AND		A.ADJ_STORAGE_CD    = B.STORAGE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 조정 상세 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ADJUST_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                 , TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 상세 리스트를 조회한다.
+    -->
+    <select id="getSearchAdjustDtlList" parameterType="stockAdjustVO" resultType="DefaultMap">
+        /* USE : StockAdjustMapper.getSearchAdjustDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  E.BARCD_CD
+                ,       C.PROD_CD
+                ,       C.PROD_NM
+                ,       C.PO_UNIT_QTY
+                ,       NVL (
+                                (
+                                    SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                                    AND PROD_CD = C.PROD_CD
+                                    AND #{adjDate} BETWEEN START_DATE AND END_DATE
+                                ), 0
+                            ) AS SALE_UPRC
+                ,       NVL(D.AVG_COST_UPRC, C.COST_UPRC) AS COST_UPRC
+                ,       B.CURR_QTY
+                ,       B.ADJ_QTY
+                ,       B.ADJ_AMT
+                ,       B.REMARK
+                ,       'U' AS ADJ_PROD_STATUS
+                ,		A.ADJ_STORAGE_CD
+                ,       A.ADJ_STORE_CD
+                ,       A.ADJ_VENDR_CD
+                ,       B.SEQ
+                ,       C.LAST_COST_UPRC
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_ST_HQ_ADJUST		A
+                ,		TB_ST_HQ_ADJUST_DTL B
+                ,       TB_HQ_PRODUCT C
+                ,       (
+                            SELECT  A.PROD_CD
+                            ,       A.AVG_COST_UPRC
+                            ,       (A.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                            FROM    (
+                                        SELECT  A.IOSTOCK_YM
+                                        ,       A.HQ_OFFICE_CD
+                                        ,       A.PROD_CD
+                                        ,       A.BASE_QTY
+                                        ,       A.AVG_COST_UPRC
+                                        FROM    TB_ST_HQ_STOCK_MONTHLY A
+                                        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                        AND     A.IOSTOCK_YM    =   SUBSTR(#{adjDate}, 0, 6)
+                                    ) A
+                            ,       (
+                                        SELECT  A.IOSTOCK_DATE
+                                        ,       A.HQ_OFFICE_CD
+                                        ,       A.PROD_CD
+                                        ,       SUM(A.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                        FROM    TB_ST_HQ_STOCK_DAILY A
+                                        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                        AND     A.IOSTOCK_DATE  =   #{adjDate}
+                                        GROUP
+                                        BY      A.IOSTOCK_DATE
+                                        ,       A.HQ_OFFICE_CD
+                                        ,       A.PROD_CD
+                                    ) B
+                            WHERE   B.PROD_CD   (+) =   A.PROD_CD
+                        )   D
+                ,       TB_HQ_PRODUCT_BARCD E
+                WHERE   B.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.ADJ_DATE          =   #{adjDate}
+                AND     B.SEQ_NO            =   #{seqNo}
+                AND		B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
+                AND     B.ADJ_DATE       	=   A.ADJ_DATE
+                AND     B.SEQ_NO            =   A.SEQ_NO
+                AND     B.HQ_OFFICE_CD      =   C.HQ_OFFICE_CD
+                AND     B.PROD_CD           =   C.PROD_CD
+                AND     D.PROD_CD       (+) =   B.PROD_CD
+                AND     E.HQ_OFFICE_CD  (+) =   B.HQ_OFFICE_CD
+                AND     E.PROD_CD       (+) =   B.PROD_CD
+                ORDER
+                BY      B.PROD_CD
+                ,       B.SEQ
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  tmpb.BARCD_CD, tmp.PROD_CD, tmp.PROD_NM, tmp.PO_UNIT_QTY
+                ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = tmp.STORE_CD
+                AND PROD_CD = tmp.PROD_CD
+                AND #{adjDate} BETWEEN START_DATE AND END_DATE
+                ), 0) AS SALE_UPRC
+                ,       tmp.COST_UPRC
+                ,       tssad.CURR_QTY
+                ,       tssad.ADJ_QTY
+                ,       tssad.ADJ_AMT
+                ,       tssad.REMARK
+                ,       'U' AS ADJ_PROD_STATUS
+                ,		tssa.ADJ_STORAGE_CD
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_ST_STORE_ADJUST		tssa
+                ,		TB_ST_STORE_ADJUST_DTL tssad
+                ,       TB_MS_PRODUCT tmp
+                ,       TB_MS_PRODUCT_BARCD tmpb
+                WHERE   tssad.STORE_CD          =   #{storeCd}
+                AND     tssad.ADJ_DATE          =   #{adjDate}
+                AND     tssad.SEQ_NO            =   #{seqNo}
+                AND		tssad.STORE_CD     		=   tssa.STORE_CD
+                AND     tssad.ADJ_DATE       	=   tssa.ADJ_DATE
+                AND     tssad.SEQ_NO           	=   tssa.SEQ_NO
+                AND     tssad.STORE_CD          =   tmp.STORE_CD
+                AND     tssad.PROD_CD           =   tmp.PROD_CD
+                AND     tmpb.STORE_CD       (+) =   tssad.STORE_CD
+                AND     tmpb.PROD_CD        (+) =   tssad.PROD_CD
+                ORDER
+                BY      tssad.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 조정 상품 DTL 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteAdjustDtl" parameterType="stockAdjustVO">
+        /* USE : stockAdjustMapper.deleteAdjustDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ADJUST_DTL
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ADJ_DATE        = #{adjDate}
+                AND     SEQ_NO          = #{seqNo}
+                AND     PROD_CD         = #{prodCd}
+                AND     SEQ             = #{seq}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ADJUST_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 재고조정 - 조정 상품 DTL 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 상품 DTL을 등록한다.
+    -->
+    <insert id="insertAdjustDtl" parameterType="stockAdjustVO">
+        /* USE : StockAdjustMapper.insertAdjustDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_ST_HQ_ADJUST_DTL
+                (
+                    HQ_OFFICE_CD
+                ,   ADJ_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   ADJ_QTY
+                ,   ADJ_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   SEQ
+                )
+                VALUES
+                (
+                    #{hqOfficeCd}
+                ,   #{adjDate}
+                ,   #{seqNo}
+                ,   #{hqBrandCd}
+                ,   #{prodCd}
+                ,   #{costUprc}
+                ,   #{poUnitQty}
+                ,   #{currQty}
+                ,   #{adjQty}
+                ,   #{adjAmt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{seq}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_ST_STORE_ADJUST_DTL
+                (
+                    STORE_CD
+                ,   ADJ_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   ADJ_QTY
+                ,   ADJ_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd}
+                ,   #{adjDate}
+                ,   #{seqNo}
+                ,   #{hqBrandCd}
+                ,   #{prodCd}
+                ,   #{costUprc}
+                ,   #{poUnitQty}
+                ,   #{currQty}
+                ,   #{adjQty}
+                ,   #{adjAmt}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 재고조정 - 조정 상품 DTL 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 상품 DTL을 수정한다.
+    -->
+    <update id="updateAdjustDtl" parameterType="stockAdjustVO">
+        /* USE : StockAdjustMapper.updateAdjustDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_HQ_ADJUST_DTL
+                SET     ADJ_QTY   = #{adjQty}
+                ,       ADJ_AMT   = #{adjAmt}
+                ,       REMARK    = #{remark}
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ADJ_DATE        = #{adjDate}
+                AND     SEQ_NO          = #{seqNo}
+                AND     PROD_CD         = #{prodCd}
+                AND     SEQ             = #{seq}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_ADJUST_DTL
+                SET     ADJ_QTY   = #{adjQty}
+                ,       ADJ_AMT   = #{adjAmt}
+                ,       REMARK    = #{remark}
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ADJ_DATE      = #{adjDate}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 재고조정 - 조정 HD 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정 HD을 수정한다.
+    -->
+    <update id="updateAdjustHd" parameterType="stockAdjustVO">
+        /* USE : StockAdjustMapper.updateAdjustHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_HQ_ADJUST
+                SET     (
+                            DTL_CNT
+                        ,   TOT_ADJ_AMT
+                        )
+                        =
+                        (
+                            SELECT  NVL(COUNT(tshad.PROD_CD), 0)
+                            ,       NVL(SUM(tshad.ADJ_AMT), 0)
+                            FROM    TB_ST_HQ_ADJUST_DTL tshad
+                            WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                            AND     tshad.ADJ_DATE      =   #{adjDate}
+                            AND     tshad.SEQ_NO        =   #{seqNo}
+                        )
+                ,       ADJ_TITLE       = #{adjTitle}
+                ,       REASON_CD       = #{adjReason}
+                ,       ADJ_STORAGE_CD  = #{adjStorageCd}
+                ,       PROC_FG         = #{procFg}
+                ,       CONFM_DATE      = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+                ,       CONFM_ID        = DECODE(#{procFg}, '0', NULL, #{modId})
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ADJ_DATE        = #{adjDate}
+                AND     SEQ_NO          = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_ADJUST
+                SET     (
+                            DTL_CNT
+                        ,   TOT_ADJ_AMT
+                        )
+                        =
+                        (
+                            SELECT  NVL(COUNT(tssad.PROD_CD), 0)
+                            ,       NVL(SUM(tssad.ADJ_AMT), 0)
+                            FROM    TB_ST_STORE_ADJUST_DTL tssad
+                            WHERE   tssad.STORE_CD  =   #{storeCd}
+                            AND     tssad.ADJ_DATE  =   #{adjDate}
+                            AND     tssad.SEQ_NO    =   #{seqNo}
+                        )
+                ,       ADJ_TITLE       = #{adjTitle}
+                ,       REASON_CD       = #{adjReason}
+                ,       ADJ_STORAGE_CD  = #{adjStorageCd}
+                ,       PROC_FG         = #{procFg}
+                ,       CONFM_DATE      = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+                ,       CONFM_ID        = DECODE(#{procFg}, '0', NULL, #{modId})
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
+                WHERE   STORE_CD    = #{storeCd}
+                AND     ADJ_DATE    = #{adjDate}
+                AND     SEQ_NO      = #{seqNo}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 재고실사 - 실사등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION
+        PARAM    : stockAdjustVO
+        COMMENTS : 실사등록 상품 리스트 조회한다.
+    -->
+    <select id="getSearchAdjustRegistList" parameterType="stockAdjustVO" resultType="DefaultMap">
+        /* USE : StockAdjustMapper.getSearchAdjustRegistList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT	E.BARCD_CD
+                , 		A.PROD_CD
+                , 		D.PROD_NM
+                , 		D.PO_UNIT_QTY
+                ,		NVL	(
+                                (
+                                    SELECT 	MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                    FROM 	TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE 	HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+                                    AND 	PROD_CD 		= A.PROD_CD
+                                    AND 	#{adjDate} BETWEEN START_DATE AND END_DATE
+                                ), 0
+                            ) AS SALE_UPRC
+                ,       NVL(F.AVG_COST_UPRC, D.COST_UPRC) AS COST_UPRC
+                ,       NVL(NVL(C.CURR_QTY, F.CURR_QTY), 0) AS CURR_QTY
+                ,       C.ADJ_QTY
+                ,       C.ADJ_AMT
+                ,       C.REMARK
+                ,       DECODE(C.PROD_CD, NULL, 'I', 'U') AS ADJ_PROD_STATUS
+                ,       D.LAST_COST_UPRC
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_DTL A
+                ,		TB_ST_HQ_ADJUST B
+                ,		TB_ST_HQ_ADJUST_DTL C
+                ,		TB_MS_PRODUCT D
+                ,		TB_MS_PRODUCT_BARCD E
+                ,       (
+                            SELECT  A.PROD_CD
+                            , 		A.CURR_QTY
+                            , 		B.AVG_COST_UPRC
+                            FROM    TB_ST_HQ_STOCK_CUR A
+                            ,       TB_ST_HQ_STOCK_MONTHLY B
+                            WHERE   A.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+                            AND		A.STORAGE_CD		=	'999'   -- 전체재고용 창고코드를 999 씀 / 창고코드 확인
+                            AND     B.IOSTOCK_YM  (+) 	=   SUBSTR(#{adjDate}, 0, 6)
+                            AND     B.HQ_OFFICE_CD(+) 	=   A.HQ_OFFICE_CD
+                            AND     B.PROD_CD     (+) 	=   A.PROD_CD
+                        )   F
+                WHERE	B.HQ_OFFICE_CD      =	A.HQ_OFFICE_CD
+                AND		B.ADJ_STORE_CD 		=	A.STORE_CD
+                AND		B.ADJ_VENDR_CD 	 	=	A.VENDR_CD
+                AND		C.HQ_OFFICE_CD  (+)	= 	A.HQ_OFFICE_CD
+                AND		C.PROD_CD 		(+)	=	A.PROD_CD
+                AND		C.ADJ_DATE 		(+)	=	B.ADJ_DATE
+                AND		C.SEQ_NO 		(+)	=	B.SEQ_NO
+                AND		C.SEQ			(+)	=	A.SEQ
+                AND		D.STORE_CD			=	A.STORE_CD
+                AND		D.PROD_CD			=	A.PROD_CD
+                AND		E.STORE_CD		(+)	=	A.STORE_CD
+                AND		E.PROD_CD		(+)	=	A.PROD_CD
+                AND		F.PROD_CD		(+)	=	A.PROD_CD
+                AND     A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.ADJ_DATE          =   #{adjDate}
+                AND     B.SEQ_NO            =   #{seqNo}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND A.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='barcdCd != null and barcdCd != ""'>
+                    AND E.BARCD_CD = #{barcdCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND D.PROD_CLASS_CD IN  (
+                                                SELECT  PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test='vendrCd != null and vendrCd != ""'>
+                    AND A.VENDR_CD = #{vendrCd}
+                </if>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND A.STORE_CD = #{storeCd}
+                </if>
+                <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+                    AND (D.PROD_CD = #{prodBarcdCd} OR E.BARCD_CD = #{prodBarcdCd})
+                </if>
+                <if test='adjFg == "Y"'>
+                    AND C.ADJ_QTY IS NOT NULL
+                </if>
+                <if test='adjFg == "N"'>
+                    AND C.ADJ_QTY IS NULL
+                </if>
+                ORDER
+                BY		A.PROD_CD
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT	E.BARCD_CD
+                , 		A.PROD_CD
+                , 		D.PROD_NM
+                , 		D.PO_UNIT_QTY
+                ,		NVL	(
+                                (
+                                SELECT 	MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                FROM 	TB_HQ_PRODUCT_SALE_PRICE
+                                WHERE 	HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+                                AND 	PROD_CD 		= A.PROD_CD
+                                AND 	#{adjDate} BETWEEN START_DATE AND END_DATE
+                                ), 0
+                            ) AS SALE_UPRC
+                ,       NVL(F.AVG_COST_UPRC, D.COST_UPRC) AS COST_UPRC
+                ,       NVL(NVL(C.CURR_QTY, F.CURR_QTY), 0) AS CMPT_CURR_QTY
+                ,       C.ADJ_QTY
+                ,       C.ADJ_AMT
+                ,       C.REMARK
+                ,       DECODE(C.PROD_CD, NULL, 'I', 'U') AS ADJ_PROD_STATUS
+                ,       D.LAST_COST_UPRC
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_DTL A
+                ,		TB_ST_HQ_ADJUST B
+                ,		TB_ST_HQ_ADJUST_DTL C
+                ,		TB_MS_PRODUCT D
+                ,		TB_MS_PRODUCT_BARCD E
+                ,       (
+                            SELECT  A.PROD_CD
+                            , 		A.CURR_QTY
+                            , 		B.AVG_COST_UPRC
+                            FROM    TB_ST_HQ_STOCK_CUR A
+                            ,       TB_ST_HQ_STOCK_MONTHLY B
+                            WHERE   A.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+                            AND		A.STORAGE_CD		=	'999'   -- 전체재고용 창고코드를 999 씀 / 창고코드 확인
+                            AND     B.IOSTOCK_YM  (+) 	=   SUBSTR(#{adjDate}, 0, 6)
+                            AND     B.HQ_OFFICE_CD(+) 	=   A.HQ_OFFICE_CD
+                            AND     B.PROD_CD     (+) 	=   A.PROD_CD
+                        )   F
+                WHERE	B.HQ_OFFICE_CD      =	A.HQ_OFFICE_CD
+                AND		B.ADJ_STORE_CD 		=	A.STORE_CD
+                AND		B.ADJ_VENDR_CD 	 	=	A.VENDR_CD
+                AND		C.HQ_OFFICE_CD  (+)	= 	A.HQ_OFFICE_CD
+                AND		C.PROD_CD 		(+)	=	A.PROD_CD
+                AND		C.ADJ_DATE 		(+)	=	B.ADJ_DATE
+                AND		C.SEQ_NO 		(+)	=	B.SEQ_NO
+                AND		C.SEQ			(+)	=	A.SEQ
+                AND		D.STORE_CD			=	A.STORE_CD
+                AND		D.PROD_CD			=	A.PROD_CD
+                AND		E.STORE_CD		(+)	=	A.STORE_CD
+                AND		E.PROD_CD		(+)	=	A.PROD_CD
+                AND		F.PROD_CD		(+)	=	A.PROD_CD
+                AND     A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.ADJ_DATE          =   #{adjDate}
+                AND     B.SEQ_NO            =   #{seqNo}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND A.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='barcdCd != null and barcdCd != ""'>
+                    AND E.BARCD_CD = #{barcdCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND D.PROD_CLASS_CD IN  (
+                                                SELECT  PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test='vendrCd != null and vendrCd != ""'>
+                    AND A.VENDR_CD = #{vendrCd}
+                </if>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND A.STORE_CD = #{storeCd}
+                </if>
+                <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+                    AND (D.PROD_CD = #{prodBarcdCd} OR E.BARCD_CD = #{prodBarcdCd})
+                </if>
+                <if test='adjFg == "Y"'>
+                    AND C.ADJ_QTY IS NOT NULL
+                </if>
+                <if test='adjFg == "N"'>
+                    AND C.ADJ_QTY IS NULL
+                </if>
+                ORDER
+                BY		A.PROD_CD
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 조정등록 신규 SEQ 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : adjVO
+        COMMENTS : 재고조정 - 조정등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getMaxSeqNo" parameterType="stockAdjustVO" resultType="String">
+        /* USE : StockAdjustMapper.getMaxSeqNo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  NVL(MAX(A.SEQ_NO), 0)+1 AS SEQ_NO
+                FROM    TB_ST_HQ_ADJUST A
+                WHERE   A.HQ_OFFICE_CD  =  #{hqOfficeCd}
+                AND     A.ADJ_DATE      =  #{adjDate}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  NVL(MAX(A.SEQ_NO), 0)+1 AS SEQ_NO
+                FROM    TB_ST_STORE_ADJUST A
+                WHERE   A.STORE_CD  =  #{storeCd}
+                AND     A.ADJ_DATE  =  #{adjDate}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고조정 - 조정 HD 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST, TB_ST_HQ_ADJUST_DTL
+        PARAM    : stockAdjustVO
+        COMMENTS : 재고조정 - 조정 HD을 등록한다.
+    -->
+    <insert id="insertAdjustHd" parameterType="stockAdjustVO">
+        /* USE : stockAdjustMapper.insertAdjustHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_ST_HQ_ADJUST
+                (
+                    HQ_OFFICE_CD
+                ,   STORAGE_CD
+                ,   ADJ_DATE
+                ,   SEQ_NO
+                ,   ADJ_TITLE
+                ,   PROC_FG
+                ,   ADJ_STORAGE_CD
+                ,   DTL_CNT
+                ,   TOT_ADJ_AMT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   REASON_CD
+                ,   ADJ_VENDR_CD
+                ,   ADJ_STORE_CD
+                )
+                SELECT  #{hqOfficeCd}
+                ,       #{storageCd}
+                ,       #{adjDate}
+                ,       #{seqNo}
+                ,       #{adjTitle}
+                ,       #{procFg}
+                ,       #{adjStorageCd}
+                ,       tshad.DTL_CNT
+                ,       tshad.TOT_ADJ_AMT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       #{adjReason}
+                ,       #{vendrCd}
+                ,       #{storeCd}
+                FROM    DUAL a
+                ,       (
+                            SELECT  SUM(DTL_CNT) AS DTL_CNT
+                            ,       SUM(TOT_ADJ_AMT) AS TOT_ADJ_AMT
+                            FROM
+                                    (
+                                        SELECT  0 AS DTL_CNT
+                                        ,       0 AS TOT_ADJ_AMT
+                                        FROM    dual
+                                        UNION ALL
+                                        SELECT  NVL(COUNT(tshad.PROD_CD), 0) AS DTL_CNT
+                                        ,       NVL(SUM(tshad.ADJ_AMT), 0) AS TOT_ADJ_AMT
+                                        FROM    TB_ST_HQ_ADJUST_DTL tshad
+                                        WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                        AND     tshad.ADJ_DATE      =   #{adjDate}
+                                        AND     tshad.SEQ_NO        =   #{seqNo}
+                                        GROUP
+                                        BY      tshad.HQ_OFFICE_CD
+                                        ,       #{storageCd}
+                                        ,       tshad.ADJ_DATE
+                                        ,       tshad.SEQ_NO
+                                        ,       #{adjTitle}
+                                        ,       #{procFg}
+                                        ,       #{regDt}
+                                        ,       #{regId}
+                                        ,       #{modDt}
+                                        ,       #{modId}
+                                        ,       #{adjReason}
+                                    )
+                        ) tshad
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_ST_STORE_ADJUST
+                (
+                STORE_CD,
+                STORAGE_CD,
+                ADJ_DATE,
+                SEQ_NO,
+                ADJ_TITLE,
+                PROC_FG,
+                ADJ_STORAGE_CD,
+                DTL_CNT,
+                TOT_ADJ_AMT,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                REASON_CD
+                )
+                SELECT  #{storeCd}
+                ,       #{storageCd}
+                ,       #{adjDate}
+                ,       #{seqNo}
+                ,       #{adjTitle}
+                ,       #{procFg}
+                ,       #{adjStorageCd}
+                ,      tshad.DTL_CNT
+                ,       tshad.TOT_ADJ_AMT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       #{adjReason}
+                FROM DUAL a,
+                (
+                SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(TOT_ADJ_AMT) AS TOT_ADJ_AMT
+                FROM
+                (
+                SELECT 0 AS DTL_CNT, 0 AS TOT_ADJ_AMT
+                FROM dual
+                UNION ALL
+                SELECT NVL(COUNT(tshad.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(tshad.ADJ_AMT), 0) AS TOT_ADJ_AMT
+                FROM    TB_ST_STORE_ADJUST_DTL tshad
+                WHERE   tshad.STORE_CD      =   #{storeCd}
+                AND     tshad.ADJ_DATE      =   #{adjDate}
+                AND     tshad.SEQ_NO        =   #{seqNo}
+                GROUP
+                BY      tshad.STORE_CD
+                ,       #{storageCd}
+                ,       tshad.ADJ_DATE
+                ,       tshad.SEQ_NO
+                ,       #{adjTitle}
+                ,       #{procFg}
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       #{adjReason}
+                )
+                ) tshad
+            </when>
+        </choose>
+    </insert>
+
+    <!--  재고조정 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고조정 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteAdjustToExcelUploadData" parameterType="stockAcinsVO">
+        /* USE : stockAdjustMapper.deleteAdjustToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ADJUST_DTL
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ADJ_DATE      = #{date}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       IN    (
+                                                SELECT  PROD_CD
+                                                FROM    TB_ST_STORE_TEMP_EXCEL
+                                                WHERE   SESSION_ID  = #{sessionId}
+                                                AND     PROD_CD     IS NOT NULL
+                                            )
+                AND     SEQ             =   (
+                                                SELECT  NVL(MAX(SEQ),0) AS SEQ
+                                                FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
+                                                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     PROD_CD         IN  (
+                                                                                SELECT  PROD_CD
+                                                                                FROM    TB_ST_STORE_TEMP_EXCEL
+                                                                                WHERE   SESSION_ID  = #{sessionId}
+                                                                                AND     PROD_CD     IS NOT NULL
+                                                                            )
+                                                AND     (VENDR_CD, STORE_CD) IN (
+                                                                                    SELECT  ADJ_VENDR_CD
+                                                                                    ,       ADJ_STORE_CD
+                                                                                    FROM    TB_ST_HQ_ADJUST
+                                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                                    AND     ADJ_DATE        = #{date}
+                                                                                    AND     SEQ_NO          = #{seqNo}
+                                                                                )
+                                                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ADJUST_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ADJ_DATE      = #{date}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       IN  ( SELECT  PROD_CD
+                FROM    TB_ST_STORE_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                )
+            </when>
+        </choose>
+    </delete>
+
+    <!--  재고조정 엑셀업로드 - 엑셀업로드 한 수량을 조정수량으로 입력 -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                   TB_ST_STORE_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고조정 엑셀업로드 - 엑셀업로드 한 수량을 조정수량으로 입력한다.
+    -->
+    <insert id="insertAdjustToExcelUploadData" parameterType="stockAcinsVO">
+        /* USE : stockAdjustMapper.insertAdjustToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_ST_HQ_ADJUST_DTL A
+                USING
+                    (
+                        SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                        ,       #{date} AS ADJ_DATE
+                        ,       #{seqNo} AS SEQ_NO
+                        ,       '00' AS HQ_BRAND_CD
+                        ,       tpte.PROD_CD
+                        ,       tpte.COST_UPRC AS COST_UPRC
+                        ,       tpte.PO_UNIT_QTY
+                        ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
+                        ,       tpte.QTY AS ADJ_QTY
+                        ,       tpte.COST_UPRC * tpte.QTY AS ADJ_AMT
+                        ,       tpte.REMARK
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
+                        ,       (
+                                    SELECT  NVL(MAX(SEQ),0) AS SEQ
+                                    FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     PROD_CD = tpte.PROD_CD
+                                    AND     (VENDR_CD, STORE_CD) IN (
+                                                                        SELECT  ADJ_VENDR_CD
+                                                                        ,       ADJ_STORE_CD
+                                                                        FROM    TB_ST_HQ_ADJUST
+                                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                        AND     ADJ_DATE        = #{date}
+                                                                        AND     SEQ_NO          = #{seqNo}
+                                                                    )
+                                )   AS SEQ
+                        FROM
+                                (
+                                    SELECT  tpte.HQ_OFFICE_CD
+                                    ,       tpte.PROD_CD
+                                    ,       thp.PO_UNIT_QTY
+                                    ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
+                                    ,       SUM(tpte.QTY)    AS QTY
+                                    ,       MAX(tpte.REMARK) AS REMARK
+                                    FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                                    ,       TB_HQ_PRODUCT thp
+                                    WHERE   tpte.SESSION_ID     =   #{sessionId}
+                                    AND     tpte.PROD_CD        IS NOT  NULL
+                                    AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     thp.PROD_CD         =   tpte.PROD_CD
+                                    AND     thp.STOCK_PROD_YN   =   'Y'
+                                    AND     thp.USE_YN          =   'Y'
+                                    GROUP
+                                    BY      tpte.HQ_OFFICE_CD
+                                    ,       tpte.PROD_CD
+                                    ,       thp.PO_UNIT_QTY
+                                ) tpte
+                        ,       TB_ST_HQ_STOCK_CUR tsssc
+                        WHERE   tsssc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
+                        AND     tsssc.storage_cd    (+) =   '999'
+                        AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                    )   B
+                ON  (
+                            A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                        AND A.ADJ_DATE = B.ADJ_DATE
+                        AND A.SEQ_NO = B.SEQ_NO
+                        AND A.PROD_CD = B.PROD_CD
+                        AND A.SEQ   = B.SEQ
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                    A.COST_UPRC     = B.COST_UPRC
+                ,   A.PO_UNIT_QTY   = B.PO_UNIT_QTY
+                ,   A.CURR_QTY      = B.CURR_QTY
+                ,   A.ADJ_QTY       = A.ADJ_QTY + B.ADJ_QTY
+                ,   A.ADJ_AMT       = A.ADJ_AMT + B.ADJ_AMT
+                ,   A.REMARK        = B.REMARK
+                ,   A.MOD_DT        = B.MOD_DT
+                ,   A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    HQ_OFFICE_CD
+                ,   ADJ_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   ADJ_QTY
+                ,   ADJ_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   SEQ
+                )
+                VALUES
+                (
+                    B.HQ_OFFICE_CD
+                ,   B.ADJ_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_QTY
+                ,   B.CURR_QTY
+                ,   B.ADJ_QTY
+                ,   B.ADJ_AMT
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                ,   B.SEQ
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_ST_STORE_ADJUST_DTL A
+                USING
+                (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       #{date}   AS ADJ_DATE
+                ,       #{seqNo}  AS SEQ_NO
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       tpte.COST_UPRC AS COST_UPRC
+                ,       tpte.PO_UNIT_QTY
+                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
+                ,       tpte.QTY AS ADJ_QTY
+                ,       tpte.COST_UPRC * tpte.QTY AS ADJ_AMT
+                ,       tpte.REMARK
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    (   SELECT  tpte.STORE_CD
+                ,       tpte.PROD_CD
+                ,       tmp.PO_UNIT_QTY
+                ,       NVL(MAX(tmp.COST_UPRC), 0) AS COST_UPRC
+                ,       SUM(tpte.QTY)    AS QTY
+                ,       MAX(tpte.REMARK) AS REMARK
+                FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tpte.SESSION_ID     =   #{sessionId}
+                AND     tpte.PROD_CD        IS NOT  NULL
+                AND     tmp.STORE_CD        =   #{storeCd}
+                AND     tmp.PROD_CD         =   tpte.PROD_CD
+                AND     tmp.STOCK_PROD_YN   =   'Y'
+                AND     tmp.USE_YN          =   'Y'
+                GROUP
+                BY      tpte.STORE_CD
+                ,       tpte.PROD_CD
+                ,       tmp.PO_UNIT_QTY
+                ) tpte
+                ,       TB_ST_STORE_STOCK_CUR tsssc
+                WHERE   tsssc.STORE_CD      (+) =   tpte.STORE_CD
+                AND     tsssc.storage_cd    (+) =   '999'
+                AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                ) B
+                ON (
+                A.STORE_CD = B.STORE_CD
+                AND A.ADJ_DATE = B.ADJ_DATE
+                AND A.SEQ_NO = B.SEQ_NO
+                AND A.PROD_CD = B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                A.COST_UPRC     = B.COST_UPRC,
+                A.PO_UNIT_QTY   = B.PO_UNIT_QTY,
+                A.CURR_QTY      = B.CURR_QTY,
+                A.ADJ_QTY       = A.ADJ_QTY + B.ADJ_QTY,
+                A.ADJ_AMT       = A.ADJ_AMT + B.ADJ_AMT,
+                A.REMARK        = B.REMARK,
+                A.MOD_DT        = B.MOD_DT,
+                A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (   STORE_CD
+                ,   ADJ_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   PO_UNIT_QTY
+                ,   CURR_QTY
+                ,   ADJ_QTY
+                ,   ADJ_AMT
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ) VALUES (
+                B.STORE_CD
+                ,   B.ADJ_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_QTY
+                ,   B.CURR_QTY
+                ,   B.ADJ_QTY
+                ,   B.ADJ_AMT
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!--  재고조정 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT
+                   TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고조정 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="stockAcinsVO">
+        /* USE : stockAdjustMapper.deleteExcelUploadCompleteData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_STORE_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_HQ_PRODUCT
+                                            WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                            AND     STOCK_PROD_YN =   'Y'
+                                            AND     USE_YN        =   'Y'
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  ( SELECT  PROD_CD
+                FROM    TB_MS_PRODUCT
+                WHERE   STORE_CD      =   #{storeCd}
+                AND     STOCK_PROD_YN =   'Y'
+                AND     USE_YN        =   'Y'
+                )
+            </when>
+        </choose>
+    </delete>
+</mapper>
