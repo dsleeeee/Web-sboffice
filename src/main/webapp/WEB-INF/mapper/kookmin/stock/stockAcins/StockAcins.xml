@@ -1,0 +1,1471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StockAcins.xml
+    재고실사 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.12.10
+-->
+<mapper namespace="kr.co.solbipos.kookmin.stock.stockAcins.service.impl.StockAcinsMapper">
+
+    <!-- 실사사유 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 실사사유를 조회한다.
+    -->
+    <select id="getSearchAcinsReason" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* StockAcinsMapper.getSearchAcinsReason */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  NMCODE_CD
+                ,       NMCODE_NM
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD   = '134'
+                AND     USE_YN          = 'Y'
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  NMCODE_CD
+                ,       NMCODE_NM
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD        = #{storeCd}
+                AND     NMCODE_GRP_CD   = '134'
+                AND     USE_YN          = 'Y'
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고실사 - 실사관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION
+        PARAM    : stockAcinsVO
+        COMMENTS : 실사관리 리스트를 조회한다.
+    -->
+    <select id="getSearchAcinsList" parameterType="stockAcinsVO" resultType="DefaultMap">
+        /* USE : StockAcinsMapper.getSearchAcinsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.ACINS_DATE
+                ,       A.HQ_OFFICE_CD
+                ,       A.SEQ_NO
+                ,       A.ACINS_TITLE
+                ,       A.PROC_FG
+                ,       A.DTL_CNT
+                ,       A.ADJ_CNT
+                ,       A.CONFM_DATE
+                ,       SUBSTR(A.REG_DT,0,8) AS REG_DATE
+                ,		A.ADJ_STORAGE_CD
+                ,       A.REASON_CD AS ACINS_REASON
+                ,       SUBSTR(A.MOD_DT,0,8) AS MOD_DATE
+                ,       A.REG_ID
+                ,       A.MOD_ID
+                ,       A.CONFM_ID
+                FROM    TB_ST_HQ_ACTUAL_INSPECTION A
+                WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     A.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='procFg != null and procFg != ""'>
+                    AND A.PROC_FG = #{procFg}
+                </if>
+                <if test='acinsReason != null and acinsReason != ""'>
+                    AND A.REASON_CD = #{acinsReason}
+                </if>
+                ORDER
+                BY      A.ACINS_DATE DESC
+                ,       A.SEQ_NO DESC
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.ACINS_DATE
+                ,       A.STORE_CD
+                ,       A.SEQ_NO
+                ,       A.ACINS_TITLE
+                ,       A.PROC_FG
+                ,       A.DTL_CNT
+                ,       A.ADJ_CNT
+                ,       A.CONFM_DATE
+                ,       SUBSTR(A.REG_DT,0,8) AS REG_DATE
+                ,		A.ADJ_STORAGE_CD
+                ,       A.REASON_CD AS ACINS_REASON
+                ,       SUBSTR(A.MOD_DT,0,8) AS MOD_DATE
+                ,       A.REG_ID
+                ,       A.MOD_ID
+                ,       A.CONFM_ID
+                FROM    TB_ST_STORE_ACTUAL_INSPECTION A
+                WHERE   A.STORE_CD    = #{storeCd}
+                AND     A.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
+                <if test='procFg != null and procFg != ""'>
+                    AND A.PROC_FG = #{procFg}
+                </if>
+                <if test='acinsReason != null and acinsReason != ""'>
+                    AND A.REASON_CD = #{acinsReason}
+                </if>
+                ORDER
+                BY      A.ACINS_DATE DESC
+                ,       A.SEQ_NO DESC
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고실사 - 실사 DTL 전부 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 실사일자, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteAllAcinsDtl" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteAllAcinsDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ACTUAL_INSPECTION_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 재고실사 - 실사 HD 전부 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 실사일자, SEQ_NO 에 해당하는 HD를 삭제한다
+    -->
+    <delete id="deleteAcinsHd" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteAcinsHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ACTUAL_INSPECTION
+                WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ACTUAL_INSPECTION
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 재고실사 - 실사등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION
+        PARAM    : stockAcinsVO
+        COMMENTS : 실사등록 상품 리스트 조회한다.
+    -->
+    <select id="getSearchAcinsRegistList" parameterType="stockAcinsVO" resultType="DefaultMap">
+        /* USE : StockAcinsMapper.getSearchAcinsRegistList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT	E.BARCD_CD
+                , 		A.PROD_CD
+                , 		D.PROD_NM
+                , 		D.PO_UNIT_QTY
+                ,		NVL	(
+                                (
+                                    SELECT 	MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                    FROM 	TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE 	HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+                                    AND 	PROD_CD 		= A.PROD_CD
+                                    AND 	#{acinsDate} BETWEEN START_DATE AND END_DATE
+                                ), 0
+                            ) AS SALE_UPRC
+                ,       NVL(F.AVG_COST_UPRC, D.COST_UPRC) AS COST_UPRC
+                ,       NVL(NVL(C.CMPT_CURR_QTY, F.CURR_QTY), 0) AS CMPT_CURR_QTY
+                ,       C.ACINS_QTY
+                ,       C.ACINS_AMT
+                ,       C.ADJ_QTY
+                ,       C.ADJ_AMT
+                ,       C.REMARK
+                ,       DECODE(C.PROD_CD, NULL, 'I', 'U') AS ACINS_PROD_STATUS
+                ,       D.LAST_COST_UPRC
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM	TB_HQ_PRODUCT_VENDOR_STORE_DTL A
+                ,		TB_ST_HQ_ACTUAL_INSPECTION B
+                ,		TB_ST_HQ_ACTUAL_INSPECTION_DTL C
+                ,		TB_MS_PRODUCT D
+                ,		TB_MS_PRODUCT_BARCD E
+                ,       (
+                            SELECT  A.PROD_CD
+                            , 		A.CURR_QTY
+                            , 		B.AVG_COST_UPRC
+                            FROM    TB_ST_HQ_STOCK_CUR A
+                            ,       TB_ST_HQ_STOCK_MONTHLY B
+                            WHERE   A.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+                            AND		A.STORAGE_CD		=	'999'   -- 전체재고용 창고코드를 999 씀 / 창고코드 확인
+                            AND     B.IOSTOCK_YM  (+) 	=   SUBSTR(#{acinsDate}, 0, 6)
+                            AND     B.HQ_OFFICE_CD(+) 	=   A.HQ_OFFICE_CD
+                            AND     B.PROD_CD     (+) 	=   A.PROD_CD
+                        )   F
+                WHERE	B.HQ_OFFICE_CD 			=	A.HQ_OFFICE_CD
+                AND		B.ACINS_STORE_CD 		=	A.STORE_CD
+                AND		B.ACINS_VENDR_CD 	 	=	A.VENDR_CD
+                AND		C.HQ_OFFICE_CD 		(+)	= 	A.HQ_OFFICE_CD
+                AND		C.PROD_CD 			(+)	=	A.PROD_CD
+                AND		C.ACINS_DATE 		(+)	=	B.ACINS_DATE
+                AND		C.SEQ_NO 			(+)	=	B.SEQ_NO
+                AND		C.SEQ				(+)	=	A.SEQ
+                AND		D.STORE_CD				=	A.STORE_CD
+                AND		D.PROD_CD				=	A.PROD_CD
+                AND		E.STORE_CD			(+)	=	A.STORE_CD
+                AND		E.PROD_CD			(+)	=	A.PROD_CD
+                AND		F.PROD_CD			(+)	=	A.PROD_CD
+                AND     A.HQ_OFFICE_CD          =   #{hqOfficeCd}
+                AND     B.ACINS_DATE            =   #{acinsDate}
+                AND     B.SEQ_NO                =   #{seqNo}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND A.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='barcdCd != null and barcdCd != ""'>
+                    AND E.BARCD_CD = #{barcdCd}
+                </if>
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND D.PROD_CLASS_CD IN    (
+                                                    SELECT  PROD_CLASS_CD
+                                                    FROM    TB_HQ_PRODUCT_CLASS
+                                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    CONNECT BY
+                                                    PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                )
+                </if>
+                <if test='vendrCd != null and vendrCd != ""'>
+                    AND A.VENDR_CD = #{vendrCd}
+                </if>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND A.STORE_CD = #{storeCd}
+                </if>
+                <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+                    AND (D.PROD_CD = #{prodBarcdCd} OR E.BARCD_CD = #{prodBarcdCd})
+                </if>
+                <if test='acinsFg == "Y"'>
+                    AND C.ACINS_QTY IS NOT NULL
+                </if>
+                <if test='acinsFg == "N"'>
+                    AND C.ACINS_QTY IS NULL
+                </if>
+                ORDER
+                BY		A.PROD_CD
+                ,       A.SEQ
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고실사 - 실사등록 신규 SEQ 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getMaxSeqNo" parameterType="stockAcinsVO" resultType="String">
+        /* USE : StockAcinsMapper.getMaxSeqNo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  NVL(MAX(A.SEQ_NO), 0)+1 AS SEQ_NO
+                FROM    TB_ST_HQ_ACTUAL_INSPECTION A
+                WHERE   A.HQ_OFFICE_CD  =  #{hqOfficeCd}
+                AND     A.ACINS_DATE    =  #{acinsDate}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  NVL(MAX(A.SEQ_NO), 0)+1 AS SEQ_NO
+                FROM    TB_ST_STORE_ACTUAL_INSPECTION A
+                WHERE   A.STORE_CD      =  #{storeCd}
+                AND     A.ACINS_DATE    =  #{acinsDate}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고실사 - 실사 상품 DTL 삭제(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteAcinsDtl" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteAcinsDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ACINS_DATE      = #{acinsDate}
+                AND     SEQ_NO          = #{seqNo}
+                AND     PROD_CD         = #{prodCd}
+                AND     SEQ             = #{seq}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ACTUAL_INSPECTION_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 재고실사 - 실사 상품 DTL 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 상품 DTL을 등록한다.
+    -->
+    <insert id="insertAcinsDtl" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.insertAcinsDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                (
+                    HQ_OFFICE_CD
+                ,   ACINS_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   ADJ_AMT
+                ,   CMPT_CURR_QTY
+                ,   ACINS_QTY
+                ,   ADJ_QTY
+                ,   ACINS_AMT
+                ,   PO_UNIT_QTY
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   SEQ
+                )
+                VALUES
+                (
+                    #{hqOfficeCd}
+                ,   #{acinsDate}
+                ,   #{seqNo}
+                ,   #{hqBrandCd}
+                ,   #{prodCd}
+                ,   #{costUprc}
+                ,   #{adjAmt}
+                ,   #{cmptCurrQty}
+                ,   #{acinsQty}
+                ,   #{adjQty}
+                ,   #{acinsAmt}
+                ,   #{poUnitQty}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{seq}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_ST_STORE_ACTUAL_INSPECTION_DTL
+                (
+                    STORE_CD
+                ,   ACINS_DATE
+                ,   SEQ_NO
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   COST_UPRC
+                ,   ADJ_AMT
+                ,   CMPT_CURR_QTY
+                ,   ACINS_QTY
+                ,   ADJ_QTY
+                ,   ACINS_AMT
+                ,   PO_UNIT_QTY
+                ,   REMARK
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd}
+                ,   #{acinsDate}
+                ,   #{seqNo}
+                ,   #{hqBrandCd}
+                ,   #{prodCd}
+                ,   #{costUprc}
+                ,   #{adjAmt}
+                ,   #{cmptCurrQty}
+                ,   #{acinsQty}
+                ,   #{adjQty}
+                ,   #{acinsAmt}
+                ,   #{poUnitQty}
+                ,   #{remark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 재고실사 - 실사 상품 DTL 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 상품 DTL을 수정한다.
+    -->
+    <update id="updateAcinsDtl" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.updateAcinsDtl */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                SET     ACINS_QTY   = #{acinsQty}
+                ,       ACINS_AMT   = #{acinsAmt}
+                ,       ADJ_QTY     = #{adjQty}
+                ,       ADJ_AMT     = #{adjAmt}
+                ,       REMARK      = #{remark}
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ACINS_DATE      = #{acinsDate}
+                AND     SEQ_NO          = #{seqNo}
+                AND     PROD_CD         = #{prodCd}
+                AND     SEQ             = #{seq}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_ACTUAL_INSPECTION_DTL
+                SET     ACINS_QTY = #{acinsQty}
+                ,       ACINS_AMT = #{acinsAmt}
+                ,       ADJ_QTY   = #{adjQty}
+                ,       ADJ_AMT   = #{adjAmt}
+                ,       REMARK    = #{remark}
+                WHERE   STORE_CD  = #{storeCd}
+                AND     ACINS_DATE    = #{acinsDate}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 재고실사 - 실사 HD 등록(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                   TB_ST_STORE_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION_DTL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 HD을 등록한다.
+    -->
+    <insert id="insertAcinsHd" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.insertAcinsHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_ST_HQ_ACTUAL_INSPECTION
+                (
+                        HQ_OFFICE_CD
+                ,       STORAGE_CD
+                ,       ACINS_DATE
+                ,       SEQ_NO
+                ,       ACINS_TITLE
+                ,       PROC_FG
+                ,       ADJ_STORAGE_CD
+                ,       DTL_CNT
+                ,       ADJ_CNT
+                ,       TOT_ACINS_AMT
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                ,       REASON_CD
+                ,       ACINS_VENDR_CD
+                ,       ACINS_STORE_CD
+                )
+                SELECT	#{hqOfficeCd}
+                ,		#{storageCd}
+                ,		#{acinsDate}
+                ,		#{seqNo}
+                ,		#{acinsTitle}
+                ,		#{procFg}
+                ,       #{adjStorageCd}
+                ,       A.DTL_CNT
+                ,       A.ADJ_CNT
+                ,       A.TOT_ACINS_AMT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       #{acinsReason}
+                ,       #{vendrCd}
+                ,       #{storeCd}
+                FROM    DUAL a
+                ,       (
+                            SELECT  SUM(DTL_CNT) AS DTL_CNT
+                            ,       SUM(ADJ_CNT) AS ADJ_CNT
+                            ,       SUM(TOT_ACINS_AMT) AS TOT_ACINS_AMT
+                            FROM
+                                    (
+                                        SELECT  0 AS DTL_CNT
+                                        ,       0 AS ADJ_CNT
+                                        ,       0 AS TOT_ACINS_AMT
+                                        FROM    dual
+                                        UNION ALL
+                                        SELECT  NVL(COUNT(A.PROD_CD), 0) AS DTL_CNT
+                                        ,       NVL(SUM(DECODE(A.ADJ_QTY, 0, 0, 1)), 0) AS ADJ_CNT
+                                        ,       NVL(SUM(A.ACINS_AMT), 0) AS TOT_ACINS_AMT
+                                        FROM	TB_ST_HQ_ACTUAL_INSPECTION_DTL A
+                                        WHERE	A.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                        AND     A.ACINS_DATE	=	#{acinsDate}
+                                        AND     A.SEQ_NO	    =	#{seqNo}
+                                        GROUP
+                                        BY		A.HQ_OFFICE_CD
+                                        ,		#{storageCd}
+                                        ,		A.ACINS_DATE
+                                        ,		A.SEQ_NO
+                                        ,		#{acinsTitle}
+                                        ,		#{procFg}
+                                        ,       #{regDt}
+                                        ,       #{regId}
+                                        ,       #{modDt}
+                                        ,       #{modId}
+                                        ,       #{acinsReason}
+                                    )
+                        ) A
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_ST_STORE_ACTUAL_INSPECTION
+                (
+                    STORE_CD
+                ,   STORAGE_CD
+                ,   ACINS_DATE
+                ,   SEQ_NO
+                ,   ACINS_TITLE
+                ,   PROC_FG
+                ,   ADJ_STORAGE_CD
+                ,   DTL_CNT
+                ,   ADJ_CNT
+                ,   TOT_ACINS_AMT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   REASON_CD
+                )
+                SELECT  #{storeCd}
+                ,       #{storageCd}
+                ,       #{acinsDate}
+                ,       #{seqNo}
+                ,       #{acinsTitle}
+                ,       #{procFg}
+                ,       #{adjStorageCd}
+                ,       A.DTL_CNT
+                ,       A.ADJ_CNT
+                ,       A.TOT_ACINS_AMT
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       #{acinsReason}
+                FROM    DUAL a
+                ,       (
+                            SELECT  SUM(DTL_CNT) AS DTL_CNT
+                            ,       SUM(ADJ_CNT) AS ADJ_CNT
+                            ,       SUM(TOT_ACINS_AMT) AS TOT_ACINS_AMT
+                            FROM
+                                    (
+                                        SELECT  0 AS DTL_CNT
+                                        ,       0 AS ADJ_CNT
+                                        ,       0 AS TOT_ACINS_AMT
+                                        FROM    dual
+                                        UNION ALL
+                                        SELECT  NVL(COUNT(A.PROD_CD), 0) AS DTL_CNT
+                                        ,       NVL(SUM(DECODE(A.ADJ_QTY, 0, 0, 1)), 0) AS ADJ_CNT
+                                        ,       NVL(SUM(A.ACINS_AMT), 0) AS TOT_ACINS_AMT
+                                        FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL A
+                                        WHERE   A.STORE_CD     =   #{storeCd}
+                                        AND     A.ACINS_DATE   =   #{acinsDate}
+                                        AND     A.SEQ_NO       =   #{seqNo}
+                                        GROUP
+                                        BY      A.STORE_CD
+                                        ,       #{storageCd}
+                                        ,       A.ACINS_DATE
+                                        ,       A.SEQ_NO
+                                        ,       #{acinsTitle}
+                                        ,       #{procFg}
+                                        ,       #{regDt}
+                                        ,       #{regId}
+                                        ,       #{modDt}
+                                        ,       #{modId}
+                                        ,       #{acinsReason}
+                                    )
+                        ) A
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 재고실사 - 실사 HD 수정(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 HD을 수정한다.
+    -->
+    <update id="updateAcinsHd" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.updateAcinsHd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_HQ_ACTUAL_INSPECTION
+                SET     (
+                            DTL_CNT
+                        ,   ADJ_CNT
+                        ,   TOT_ACINS_AMT
+                        )
+                        =
+                        (
+                            SELECT  NVL(COUNT(A.PROD_CD), 0)
+                            ,       NVL(SUM(DECODE(A.ADJ_QTY, 0, 0, 1)), 0)
+                            ,       NVL(SUM(A.ACINS_AMT), 0)
+                            FROM    TB_ST_HQ_ACTUAL_INSPECTION_DTL A
+                            WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                            AND     A.ACINS_DATE    =   #{acinsDate}
+                            AND     A.SEQ_NO        =   #{seqNo}
+                        )
+                ,       ACINS_TITLE     = #{acinsTitle}
+                ,       REASON_CD       = #{acinsReason}
+                ,       ADJ_STORAGE_CD  = #{adjStorageCd}
+                ,       PROC_FG         = #{procFg}
+                ,       CONFM_DATE      = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+                ,       CONFM_ID        = DECODE(#{procFg}, '0', NULL, #{modId})
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ACINS_DATE      = #{acinsDate}
+                AND     SEQ_NO          = #{seqNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_ACTUAL_INSPECTION
+                SET     (
+                            DTL_CNT
+                        ,   ADJ_CNT
+                        ,   TOT_ACINS_AMT
+                        )
+                        =
+                        (
+                            SELECT  NVL(COUNT(A.PROD_CD), 0)
+                            ,       NVL(SUM(DECODE(A.ADJ_QTY, 0, 0, 1)), 0)
+                            ,       NVL(SUM(A.ACINS_AMT), 0)
+                            FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL A
+                            WHERE   A.STORE_CD     =   #{storeCd}
+                            AND     A.ACINS_DATE   =   #{acinsDate}
+                            AND     A.SEQ_NO       =   #{seqNo}
+                        )
+                ,       ACINS_TITLE     = #{acinsTitle}
+                ,       REASON_CD       = #{acinsReason}
+                ,       ADJ_STORAGE_CD  = #{adjStorageCd}
+                ,       PROC_FG         = #{procFg}
+                ,       CONFM_DATE      = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+                ,       CONFM_ID        = DECODE(#{procFg}, '0', NULL, #{modId})
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
+                WHERE   STORE_CD        = #{storeCd}
+                AND     ACINS_DATE      = #{acinsDate}
+                AND     SEQ_NO          = #{seqNo}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 재고실사 - 실사 진행구분 및 제목 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION, TB_ST_STORE_ACTUAL_INSPECTION
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 진행구분 및 제목을 조회한다.
+    -->
+    <select id="getProcFgCheck" parameterType="stockAcinsVO" resultType="DefaultMap">
+        /* USE : StockAcinsMapper.getProcFgCheck */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.PROC_FG
+                ,       A.ACINS_TITLE
+                ,       A.ADJ_STORAGE_CD
+                ,       B.STORAGE_NM
+                ,       A.REASON_CD AS ACINS_REASON
+                ,       A.ACINS_STORE_CD
+                ,       A.ACINS_VENDR_CD
+                ,       C.STORE_NM
+                ,       D.VENDR_NM
+                FROM    TB_ST_HQ_ACTUAL_INSPECTION A
+                ,       TB_HQ_STORAGE B
+                ,		TB_MS_STORE C
+                ,		TB_HQ_VENDOR D
+                WHERE   C.STORE_CD 			= A.ACINS_STORE_CD
+                AND		D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+                AND		D.VENDR_CD 			= A.ACINS_VENDR_CD
+                AND		A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND     A.ACINS_DATE        = #{acinsDate}
+                AND     A.SEQ_NO            = #{seqNo}
+                AND     A.HQ_OFFICE_CD      = B.HQ_OFFICE_CD
+                AND     A.ADJ_STORAGE_CD    = B.STORAGE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.PROC_FG
+                ,       A.ACINS_TITLE
+                ,       A.ADJ_STORAGE_CD
+                ,       B.STORAGE_NM
+                ,       A.REASON_CD AS ACINS_REASON
+                FROM    TB_ST_STORE_ACTUAL_INSPECTION A
+                ,       TB_MS_STORAGE B
+                WHERE   A.STORE_CD          = #{storeCd}
+                AND     A.ACINS_DATE        = #{acinsDate}
+                AND     A.SEQ_NO            = #{seqNo}
+                AND		A.STORE_CD		    = B.STORE_CD
+                AND		A.ADJ_STORAGE_CD    = B.STORAGE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 재고실사 - 실사 상세 리스트 조회(본사) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                 , TB_HQ_PRODUCT_BARCD, TB_ST_HQ_STOCK_DAILY
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 - 실사 상세 리스트를 조회한다.
+    -->
+    <select id="getSearchAcinsDtlList" parameterType="stockAcinsVO" resultType="DefaultMap">
+        /* USE : StockAcinsMapper.getSearchAcinsDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  E.BARCD_CD
+                ,       C.PROD_CD
+                ,       C.PROD_NM
+                ,       C.PO_UNIT_QTY
+                ,		NVL(
+                                (
+                                    SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                                    AND PROD_CD = C.PROD_CD
+                                    AND #{acinsDate} BETWEEN START_DATE AND END_DATE
+                                ), 0
+                            ) AS SALE_UPRC
+                ,       NVL(D.AVG_COST_UPRC, C.COST_UPRC) AS COST_UPRC
+                ,       B.CMPT_CURR_QTY
+                ,       B.ACINS_QTY
+                ,       B.ACINS_AMT
+                ,       B.ADJ_QTY
+                ,       B.ADJ_AMT
+                ,       B.REMARK
+                ,       'U' AS ACINS_PROD_STATUS
+                ,		A.ADJ_STORAGE_CD
+                ,       C.LAST_COST_UPRC
+                ,       A.ACINS_VENDR_CD
+                ,       A.ACINS_STORE_CD
+                ,       B.SEQ
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_ST_HQ_ACTUAL_INSPECTION		A
+                ,		TB_ST_HQ_ACTUAL_INSPECTION_DTL 	B
+                ,       TB_HQ_PRODUCT C
+                ,       (
+                            SELECT	A.PROD_CD
+                            ,		A.AVG_COST_UPRC
+                            , 		(A.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                            FROM	(
+                                        SELECT	A.IOSTOCK_YM
+                                        ,       A.HQ_OFFICE_CD
+                                        ,		A.PROD_CD
+                                        ,       A.BASE_QTY
+                                        ,       A.AVG_COST_UPRC
+                                        FROM	TB_ST_HQ_STOCK_MONTHLY A
+                                        WHERE	A.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                        AND		A.IOSTOCK_YM	=	SUBSTR(#{acinsDate}, 0, 6)
+                                    ) A
+                            ,		(
+                                        SELECT	B.IOSTOCK_DATE
+                                        ,       B.HQ_OFFICE_CD
+                                        ,		B.PROD_CD
+                                        , 		SUM(B.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                        FROM	TB_ST_HQ_STOCK_DAILY B
+                                        WHERE	B.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                                        AND		B.IOSTOCK_DATE	=	#{acinsDate}
+                                        GROUP
+                                        BY		B.IOSTOCK_DATE
+                                        ,       B.HQ_OFFICE_CD
+                                        ,		B.PROD_CD
+                                    ) B
+                            WHERE	B.PROD_CD   (+) =   A.PROD_CD
+                        )   D
+                ,       TB_HQ_PRODUCT_BARCD E
+                WHERE   B.HQ_OFFICE_CD     =   #{hqOfficeCd}
+                AND     B.ACINS_DATE       =   #{acinsDate}
+                AND     B.SEQ_NO           =   #{seqNo}
+                AND		B.HQ_OFFICE_CD     =   A.HQ_OFFICE_CD
+                AND     B.ACINS_DATE       =   A.ACINS_DATE
+                AND     B.SEQ_NO           =   A.SEQ_NO
+                AND     B.HQ_OFFICE_CD     =   C.HQ_OFFICE_CD
+                AND     B.PROD_CD          =   C.PROD_CD
+                AND     D.PROD_CD      (+) =   B.PROD_CD
+                AND     E.HQ_OFFICE_CD (+) =   B.HQ_OFFICE_CD
+                AND     E.PROD_CD      (+) =   B.PROD_CD
+                ORDER
+                BY		B.PROD_CD
+                ,       B.SEQ
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  tmpb.BARCD_CD
+                ,       tmp.PROD_CD
+                ,       tmp.PROD_NM
+                ,       tmp.PO_UNIT_QTY
+                ,       NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                               FROM TB_MS_PRODUCT_SALE_PRICE
+                              WHERE STORE_CD = tmp.STORE_CD
+                                AND PROD_CD = tmp.PROD_CD
+                                AND #{acinsDate} BETWEEN START_DATE AND END_DATE
+                             ), 0) AS SALE_UPRC
+                ,       tmp.COST_UPRC
+                ,       tssaid.CMPT_CURR_QTY
+                ,       tssaid.ACINS_QTY
+                ,       tssaid.ACINS_AMT
+                ,       tssaid.ADJ_QTY
+                ,       tssaid.ADJ_AMT
+                ,       tssaid.REMARK
+                ,       'U' AS ACINS_PROD_STATUS
+                ,		tssai.ADJ_STORAGE_CD
+                ,       tmp.LAST_COST_UPRC
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_ST_STORE_ACTUAL_INSPECTION		tssai
+                ,		TB_ST_STORE_ACTUAL_INSPECTION_DTL 	tssaid
+                ,       TB_MS_PRODUCT tmp
+                ,       TB_MS_PRODUCT_BARCD tmpb
+                WHERE   tssaid.STORE_CD         =   #{storeCd}
+                AND     tssaid.ACINS_DATE       =   #{acinsDate}
+                AND     tssaid.SEQ_NO           =   #{seqNo}
+                AND		tssaid.STORE_CD     	=   tssai.STORE_CD
+                AND     tssaid.ACINS_DATE       =   tssai.ACINS_DATE
+                AND     tssaid.SEQ_NO           =   tssai.SEQ_NO
+                AND     tssaid.STORE_CD         =   tmp.STORE_CD
+                AND     tssaid.PROD_CD          =   tmp.PROD_CD
+                AND     tmpb.STORE_CD       (+) =   tssaid.STORE_CD
+                AND     tmpb.PROD_CD        (+) =   tssaid.PROD_CD
+                ORDER
+                BY      tssaid.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 엑셀업로드 - 현재 세션ID 와 동일한 데이터 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 현재 세션ID 와 동일한 데이터를 삭제한다.
+    -->
+    <delete id="deleteExcelUpload" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteExcelUpload */
+        DELETE  TB_ST_STORE_TEMP_EXCEL
+        WHERE   SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 엑셀업로드 - 엑셀업로드 입력 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 엑셀업로드 한 데이터를 입력한다.
+    -->
+    <insert id="insertExcelUpload" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.insertExcelUpload */
+        INSERT INTO TB_ST_STORE_TEMP_EXCEL
+        (
+            SESSION_ID
+        ,   HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   SEQ
+        ,   PROD_BARCD_CD
+        ,   PROD_CD
+        ,   UPRC
+        ,   PO_UNIT_QTY
+        ,   UNIT_QTY
+        ,   ETC_QTY
+        ,   QTY
+        ,   REMARK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{sessionId}
+        ,   #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{seq}
+        ,   TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{poUnitQty}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL))
+        ,   TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL))
+        ,   #{remark}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadProdCd" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.updateExcelUploadProdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.PROD_CD =  (
+                                            SELECT  thp.PROD_CD
+                                            FROM    TB_HQ_PRODUCT thp
+                                            WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND     thp.PROD_CD = tpte.PROD_BARCD_CD
+                                        )
+                WHERE   tpte.SESSION_ID = #{sessionId}
+                AND     tpte.PROD_CD IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.PROD_CD =  (
+                                            SELECT  tmp.PROD_CD
+                                            FROM    TB_MS_PRODUCT tmp
+                                            WHERE   tmp.STORE_CD = #{storeCd}
+                                            AND     tmp.PROD_CD = tpte.PROD_BARCD_CD
+                                        )
+                WHERE   tpte.SESSION_ID = #{sessionId}
+                AND     tpte.PROD_CD IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadBarcdCd" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.updateExcelUploadBarcdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.PROD_CD =  (
+                                            SELECT  MAX(thpb.PROD_CD)
+                                            FROM    TB_HQ_PRODUCT_BARCD thpb
+                                            WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND     thpb.BARCD_CD = tpte.PROD_BARCD_CD
+                                        )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.PROD_CD =  (
+                                            SELECT  MAX(tmpb.PROD_CD)
+                                            FROM    TB_MS_PRODUCT_BARCD tmpb
+                                            WHERE   tmpb.STORE_CD = #{storeCd}
+                                            AND     tmpb.BARCD_CD = tpte.PROD_BARCD_CD
+                                        )
+                WHERE   tpte.SESSION_ID = #{sessionId}
+                AND     tpte.PROD_CD IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - UPRC 를 LAST_COST_UPRC 로 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : UPRC 를 LAST_COST_UPRC 로 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadUprc" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.updateExcelUploadUprc */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.UPRC = (
+                                        SELECT thp.LAST_COST_UPRC
+                                        FROM TB_HQ_PRODUCT thp
+                                        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        AND thp.PROD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE   tpte.SESSION_ID = #{sessionId}
+                AND     tpte.PROD_CD IS NOT NULL
+                AND     tpte.UPRC IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_ST_STORE_TEMP_EXCEL tpte
+                SET     tpte.UPRC = (
+                                        SELECT tmp.LAST_COST_UPRC
+                                        FROM TB_MS_PRODUCT tmp
+                                        WHERE tmp.STORE_CD = #{storeCd}
+                                        AND tmp.PROD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE   tpte.SESSION_ID = #{sessionId}
+                AND     tpte.PROD_CD IS NOT NULL
+                AND     tpte.UPRC IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - 엑셀업로드 실패내역 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 엑셀업로드 실패내역을 조회한다.
+    -->
+    <select id="getExcelUploadErrInfoList" parameterType="stockAcinsVO" resultType="DefaultMap">
+        /* USE : StockAcinsMapper.getExcelUploadErrInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS
+                ,       DECODE(thvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS
+                ,       tpte.PROD_BARCD_CD
+                ,       tpte.PROD_CD
+                ,       tpte.UPRC
+                ,       tpte.UNIT_QTY
+                ,       tpte.ETC_QTY
+                ,       tpte.QTY
+                ,       tpte.REMARK
+                ,       thp.STOCK_PROD_YN
+                ,       thp.PO_PROD_FG
+                ,       thp.USE_YN
+                FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                ,       TB_HQ_PRODUCT thp
+                ,       TB_HQ_VENDOR_PROD thvp
+                WHERE   1=1
+                AND     tpte.SESSION_ID = #{sessionId}
+                AND     tpte.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thp.HQ_OFFICE_CD (+)= tpte.HQ_OFFICE_CD
+                AND     thp.PROD_CD (+)= tpte.PROD_CD
+                AND     thvp.HQ_OFFICE_CD (+)= tpte.HQ_OFFICE_CD
+                AND     thvp.VENDR_CD (+)= #{vendrCd}
+                AND     thvp.PROD_CD (+)= tpte.PROD_CD
+                ORDER
+                BY      tpte.PROD_BARCD_CD
+                ,       tpte.PROD_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS
+                ,       DECODE(tmvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS
+                ,       tpte.PROD_BARCD_CD
+                ,       tpte.PROD_CD
+                ,       tpte.UPRC
+                ,       tpte.UNIT_QTY
+                ,       tpte.ETC_QTY
+                ,       tpte.QTY
+                ,       tpte.REMARK
+                ,       tmp.STOCK_PROD_YN
+                ,       tmp.PO_PROD_FG
+                ,       tmp.USE_YN
+                FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                ,       TB_MS_PRODUCT tmp
+                ,       TB_MS_VENDOR_PROD tmvp
+                WHERE   1=1
+                AND     tpte.SESSION_ID = #{sessionId}
+                AND     tpte.STORE_CD = #{storeCd}
+                AND     tmp.STORE_CD (+)= tpte.STORE_CD
+                AND     tmp.PROD_CD (+)= tpte.PROD_CD
+                AND     tmvp.STORE_CD (+)= tpte.STORE_CD
+                AND     tmvp.VENDR_CD (+)= #{vendrCd}
+                AND     tmvp.PROD_CD (+)= tpte.PROD_CD
+                ORDER
+                BY      tpte.PROD_BARCD_CD
+                ,       tpte.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!--  재고실사 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_TEMP_EXCEL
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteAcinsToExcelUploadData" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteAcinsToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_HQ_ACTUAL_INSPECTION_DTL
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ACINS_DATE      = #{date}
+                AND     SEQ_NO          = #{seqNo}
+                AND     PROD_CD         IN  (
+                                                SELECT  PROD_CD
+                                                FROM    TB_ST_STORE_TEMP_EXCEL
+                                                WHERE   SESSION_ID  = #{sessionId}
+                                                AND     PROD_CD     IS NOT NULL
+                                            )
+                AND     SEQ             =   (
+                                                SELECT  NVL(MAX(SEQ),0) AS SEQ
+                                                FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
+                                                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     PROD_CD         IN  (
+                                                                                SELECT  PROD_CD
+                                                                                FROM    TB_ST_STORE_TEMP_EXCEL
+                                                                                WHERE   SESSION_ID  = #{sessionId}
+                                                                                AND     PROD_CD     IS NOT NULL
+                                                                            )
+                                                AND     (VENDR_CD, STORE_CD) IN (
+                                                                                    SELECT  ACINS_VENDR_CD
+                                                                                    ,       ACINS_STORE_CD
+                                                                                    FROM    TB_ST_HQ_ACTUAL_INSPECTION
+                                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                                    AND     ACINS_DATE      = #{date}
+                                                                                    AND     SEQ_NO          = #{seqNo}
+                                                                                )
+                                            )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_ACTUAL_INSPECTION_DTL
+                WHERE   STORE_CD      = #{storeCd}
+                AND     ACINS_DATE    = #{date}
+                AND     SEQ_NO        = #{seqNo}
+                AND     PROD_CD       IN    (
+                                                SELECT  PROD_CD
+                                                FROM    TB_ST_STORE_TEMP_EXCEL
+                                                WHERE   SESSION_ID  = #{sessionId}
+                                                AND     PROD_CD     IS NOT NULL
+                                            )
+            </when>
+        </choose>
+    </delete>
+
+    <!--  재고실사 엑셀업로드 - 엑셀업로드 한 수량을 실사수량으로 입력 -->
+    <!--
+        TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                   TB_ST_STORE_ACTUAL_INSPECTION_DTL, TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 엑셀업로드 - 엑셀업로드 한 수량을 실사수량으로 입력한다.
+    -->
+    <insert id="insertAcinsToExcelUploadData" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.insertAcinsToExcelUploadData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_ST_HQ_ACTUAL_INSPECTION_DTL A
+                USING
+                    (
+                        SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                        ,       #{date} AS ACINS_DATE
+                        ,       #{seqNo} AS SEQ_NO
+                        ,       '00' AS HQ_BRAND_CD
+                        ,       tpte.PROD_CD AS PROD_CD
+                        ,       tpte.COST_UPRC AS COST_UPRC
+                        ,       tpte.COST_UPRC AS ADJ_AMT
+                        ,       NVL(tsssc.CURR_QTY,0) AS CMPT_CURR_QTY
+                        ,       tpte.QTY AS ACINS_QTY
+                        ,       tpte.QTY AS ADJ_QTY
+                        ,       tpte.COST_UPRC * tpte.QTY AS ACINS_AMT
+                        ,       tpte.PO_UNIT_QTY AS PO_UNIT_QTY
+                        ,       tpte.REMARK AS REMARK
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
+                        ,       (
+                                    SELECT  NVL(MAX(SEQ),0) AS SEQ
+                                    FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     PROD_CD = tpte.PROD_CD
+                                    AND     (VENDR_CD, STORE_CD) IN (
+                                                                        SELECT  ACINS_VENDR_CD
+                                                                        ,       ACINS_STORE_CD
+                                                                        FROM    TB_ST_HQ_ACTUAL_INSPECTION
+                                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                        AND     ACINS_DATE      = #{date}
+                                                                        AND     SEQ_NO          = #{seqNo}
+                                                                    )
+                                )   AS SEQ
+                        FROM
+                            (
+                                SELECT  tpte.HQ_OFFICE_CD
+                                ,       tpte.PROD_CD
+                                ,       thp.PO_UNIT_QTY
+                                ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
+                                ,       SUM(tpte.QTY) AS QTY
+                                ,       MAX(tpte.REMARK) AS REMARK
+                                FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                                ,       TB_HQ_PRODUCT thp
+                                WHERE   tpte.SESSION_ID = #{sessionId}
+                                AND     tpte.PROD_CD IS NOT NULL
+                                AND     thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND     thp.PROD_CD = tpte.PROD_CD
+                                AND     thp.STOCK_PROD_YN = 'Y'
+                                AND     thp.USE_YN = 'Y'
+                                GROUP
+                                BY      tpte.HQ_OFFICE_CD
+                                ,       tpte.PROD_CD
+                                ,       thp.PO_UNIT_QTY
+                            ) tpte
+                        ,       TB_ST_HQ_STOCK_CUR tsssc
+                        WHERE   tsssc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
+                        AND     tsssc.storage_cd    (+) =   '999'
+                        AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                    ) B
+                ON  (
+                            A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                        AND A.ACINS_DATE = B.ACINS_DATE
+                        AND A.SEQ_NO = B.SEQ_NO
+                        AND A.PROD_CD = B.PROD_CD
+                        AND A.SEQ   = B.SEQ
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                    A.COST_UPRC     = B.COST_UPRC
+                ,   A.ADJ_AMT       = B.ADJ_AMT * (B.ADJ_QTY + A.ACINS_QTY - B.CMPT_CURR_QTY)
+                ,   A.CMPT_CURR_QTY = B.CMPT_CURR_QTY
+                ,   A.ACINS_QTY     = A.ACINS_QTY + B.ACINS_QTY
+                ,   A.ADJ_QTY       = B.ADJ_QTY   + A.ACINS_QTY - B.CMPT_CURR_QTY
+                ,   A.ACINS_AMT     = A.ACINS_AMT + B.ACINS_AMT
+                ,   A.PO_UNIT_QTY   = B.PO_UNIT_QTY
+                ,   A.REMARK        = B.REMARK
+                ,   A.MOD_DT        = B.MOD_DT
+                ,   A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.HQ_OFFICE_CD
+                ,   A.ACINS_DATE
+                ,   A.SEQ_NO
+                ,   A.HQ_BRAND_CD
+                ,   A.PROD_CD
+                ,   A.COST_UPRC
+                ,   A.ADJ_AMT
+                ,   A.CMPT_CURR_QTY
+                ,   A.ACINS_QTY
+                ,   A.ADJ_QTY
+                ,   A.ACINS_AMT
+                ,   A.PO_UNIT_QTY
+                ,   A.REMARK
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                ,   A.SEQ
+                )
+                VALUES
+                (
+                    B.HQ_OFFICE_CD
+                ,   B.ACINS_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.ADJ_AMT * (B.ADJ_QTY - B.CMPT_CURR_QTY)
+                ,   B.CMPT_CURR_QTY
+                ,   B.ACINS_QTY
+                ,   B.ADJ_QTY - B.CMPT_CURR_QTY
+                ,   B.ACINS_AMT
+                ,   B.PO_UNIT_QTY
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                ,   B.SEQ
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_ST_STORE_ACTUAL_INSPECTION_DTL A
+                USING
+                    (
+                        SELECT  #{storeCd} AS STORE_CD
+                        ,       #{date} AS ACINS_DATE
+                        ,       #{seqNo} AS SEQ_NO
+                        ,       '00' AS HQ_BRAND_CD
+                        ,       tpte.PROD_CD AS PROD_CD
+                        ,       tpte.COST_UPRC AS COST_UPRC
+                        ,       tpte.COST_UPRC * (tpte.QTY - NVL(tsssc.CURR_QTY,0)) AS ADJ_AMT
+                        ,       NVL(tsssc.CURR_QTY,0) AS CMPT_CURR_QTY
+                        ,       tpte.QTY AS ACINS_QTY
+                        ,       tpte.QTY - NVL(tsssc.CURR_QTY,0) AS ADJ_QTY
+                        ,       tpte.COST_UPRC * tpte.QTY AS ACINS_AMT
+                        ,       tpte.PO_UNIT_QTY AS PO_UNIT_QTY
+                        ,       tpte.REMARK AS REMARK
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
+                        FROM
+                                (
+                                    SELECT  tpte.STORE_CD
+                                    ,       tpte.PROD_CD
+                                    ,       tmp.PO_UNIT_QTY
+                                    ,       NVL(MAX(tmp.COST_UPRC), 0) AS COST_UPRC
+                                    ,       SUM(tpte.QTY)    AS QTY
+                                    ,       MAX(tpte.REMARK) AS REMARK
+                                    FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                                    ,       TB_MS_PRODUCT tmp
+                                    WHERE   tpte.SESSION_ID     =   #{sessionId}
+                                    AND     tpte.PROD_CD        IS NOT  NULL
+                                    AND     tmp.STORE_CD        =   #{storeCd}
+                                    AND     tmp.PROD_CD         =   tpte.PROD_CD
+                                    AND     tmp.STOCK_PROD_YN   =   'Y'
+                                    AND     tmp.USE_YN          =   'Y'
+                                    GROUP
+                                    BY      tpte.STORE_CD
+                                    ,       tpte.PROD_CD
+                                    ,       tmp.PO_UNIT_QTY
+                                ) tpte
+                        ,       TB_ST_STORE_STOCK_CUR tsssc
+                        WHERE   tsssc.STORE_CD      (+) =   tpte.STORE_CD
+                        AND     tsssc.storage_cd    (+) =   '999'
+                        AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                    ) B
+                ON  (
+                            A.STORE_CD      = B.STORE_CD
+                        AND A.ACINS_DATE    = B.ACINS_DATE
+                        AND A.SEQ_NO        = B.SEQ_NO
+                        AND A.PROD_CD       = B.PROD_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                    A.COST_UPRC     =  B.COST_UPRC
+                ,   A.ADJ_AMT       =  B.ADJ_AMT   + A.ADJ_AMT
+                ,   A.CMPT_CURR_QTY =  B.CMPT_CURR_QTY
+                ,   A.ACINS_QTY     =  A.ACINS_QTY + B.ACINS_QTY
+                ,   A.ADJ_QTY       =  B.ADJ_QTY   + A.ADJ_QTY
+                ,   A.ACINS_AMT     =  A.ACINS_AMT + B.ACINS_AMT
+                ,   A.PO_UNIT_QTY   =  B.PO_UNIT_QTY
+                ,   A.REMARK        =  B.REMARK
+                ,   A.MOD_DT        =  B.MOD_DT
+                ,   A.MOD_ID        =  B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.STORE_CD
+                ,   A.ACINS_DATE
+                ,   A.SEQ_NO
+                ,   A.HQ_BRAND_CD
+                ,   A.PROD_CD
+                ,   A.COST_UPRC
+                ,   A.ADJ_AMT
+                ,   A.CMPT_CURR_QTY
+                ,   A.ACINS_QTY
+                ,   A.ADJ_QTY
+                ,   A.ACINS_AMT
+                ,   A.PO_UNIT_QTY
+                ,   A.REMARK
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+                VALUES
+                (
+                    B.STORE_CD
+                ,   B.ACINS_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.ADJ_AMT
+                ,   B.CMPT_CURR_QTY
+                ,   B.ACINS_QTY
+                ,   B.ADJ_QTY
+                ,   B.ACINS_AMT
+                ,   B.PO_UNIT_QTY
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
+            </when>
+        </choose>
+    </insert>
+
+
+    <!--  재고실사 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT
+                   TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : stockAcinsVO
+        COMMENTS : 재고실사 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
+    -->
+    <delete id="deleteExcelUploadCompleteData" parameterType="stockAcinsVO">
+        /* USE : StockAcinsMapper.deleteExcelUploadCompleteData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_ST_STORE_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_HQ_PRODUCT
+                                            WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                            AND     STOCK_PROD_YN =   'Y'
+                                            AND     USE_YN        =   'Y'
+                                        )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_ST_STORE_TEMP_EXCEL
+                WHERE   SESSION_ID  = #{sessionId}
+                AND     PROD_CD     IS NOT NULL
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_MS_PRODUCT
+                                            WHERE   STORE_CD      =   #{storeCd}
+                                            AND     STOCK_PROD_YN =   'Y'
+                                            AND     USE_YN        =   'Y'
+                                        )
+            </when>
+        </choose>
+    </delete>
+</mapper>

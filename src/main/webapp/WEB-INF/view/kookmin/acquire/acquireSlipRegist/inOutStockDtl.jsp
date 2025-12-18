@@ -64,6 +64,7 @@
                         --%>
                         <jsp:include page="/WEB-INF/view/kookmin/acquire/acquireSlipRegist/acquireSelectVendr.jsp" flush="true">
                             <jsp:param name="targetId" value="instockDtlSelectVendr"/>
+                            <jsp:param name="targetStoreCd" value="inStockDtlStoreCd"/>
                             <jsp:param name="vendrFg" value="1"/>
                         </jsp:include>
                         <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
@@ -82,6 +83,7 @@
                     --%>
                     <jsp:include page="/WEB-INF/view/kookmin/acquire/acquireSlipRegist/acquireSelectVendr.jsp" flush="true">
                         <jsp:param name="targetId" value="outstockDtlSelectVendr"/>
+                        <jsp:param name="targetStoreCd" value="outStockDtlStoreCd"/>
                         <jsp:param name="vendrFg" value="1"/>
                     </jsp:include>
                     <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
@@ -114,14 +116,28 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr ng-if="instockLayerIfFg">
                 <%-- 매장선택 --%>
                 <th><s:message code="cmm.store.select"/></th>
                 <td>
                     <%-- 매장선택 모듈 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/kookmin/acquire/acquireSlipRegist/acquireSelectStore.jsp" flush="true">
                         <jsp:param name="targetTypeFg" value="S"/>
-                        <jsp:param name="targetId" value="inOutStockDtlStore"/>
+                        <jsp:param name="targetId" value="inStockDtlStore"/>
+                        <jsp:param name="targetVendrCd" value="instockDtlSelectVendrCd"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
+                </td>
+            </tr>
+            <tr ng-if="rtnLayerIfFg">
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
+                <td>
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/kookmin/acquire/acquireSlipRegist/acquireSelectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
+                        <jsp:param name="targetId" value="outStockDtlStore"/>
+                        <jsp:param name="targetVendrCd" value="outstockDtlSelectVendrCd"/>
                     </jsp:include>
                     <%--// 매장선택 모듈 사용시 include --%>
                 </td>
@@ -253,5 +269,5 @@
     var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/acquireSlipRegist/inOutStockDtl.js?ver=20220714.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/acquire/acquireSlipRegist/inOutStockDtl.js?ver=20251210.01" charset="utf-8"></script>
 

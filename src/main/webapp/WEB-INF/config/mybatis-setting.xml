@@ -1307,6 +1307,13 @@
     <!-- 국민대 > 매입관리 > 매입처별 상세매입내역(상품별) -->
     <typeAlias alias="inStockReportDtlVO" type="kr.co.solbipos.kookmin.acquire.inStockReportDtl.service.InStockReportDtlVO"/>
 
+    <!-- 국민대 > 재고관리 > 재고실사 -->
+    <typeAlias alias="stockAcinsVO" type="kr.co.solbipos.kookmin.stock.stockAcins.service.StockAcinsVO"/>
+    <!-- 국민대 > 재고관리 > 재고조정 -->
+    <typeAlias alias="stockAdjustVO" type="kr.co.solbipos.kookmin.stock.stockAdjust.service.StockAdjustVO"/>
+    <!-- 국민대 > 재고관리 > 재고폐기 -->
+    <typeAlias alias="stockDisuseVO" type="kr.co.solbipos.kookmin.stock.stockDisuse.service.StockDisuseVO"/>
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->

@@ -192,6 +192,7 @@ readonly/>
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
         var targetId = '${param.targetId}';
+        var targetVendrCd = "${param.targetVendrCd}";
         <%--var targetCornerId = '${param.targetCornerId}';--%>
         <%--var targetTableId = '${param.targetTableId}';--%>
         <%--var targetPosId = '${param.targetPosId}';--%>
@@ -365,10 +366,10 @@ readonly/>
             params.storeChgNot = $scope.popStoreChgNot;
             params.sysStatFg = $scope.popSysStatFg;
 
-            if($scope.slipFg !== null && $scope.slipFg !== undefined && $scope.slipFg == "1"){
-                params.vendrCd = $("#instockDtlSelectVendrCd").val();
-            }else if($scope.slipFg !== null && $scope.slipFg !== undefined && $scope.slipFg == "-1"){
-                params.vendrCd = $("#outstockDtlSelectVendrCd").val();
+            var vendrCd = $("#"+targetVendrCd).val();
+
+            if(vendrCd !== null && vendrCd !== undefined && vendrCd != ""){
+                params.vendrCd = vendrCd;
             }
 
             $scope._inquirySub("/kookmin/acquire/acquireSlipRegist/acquireSelectStore/getAcquireSelectStoreList.sb", params, function () {
