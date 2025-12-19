@@ -947,11 +947,16 @@ readonly/>
 
                 for (var i = 0; i < grid.rows.length; i++) {
                     grid.rows[i].visible = true;
+                    grid.rows[i].dataItem.visible = true;
                 }
                 if($scope.filterStoreNm !== undefined && $scope.filterStoreNm !== null && $scope.filterStoreNm !== ""){
                     for (var i = 0; i < grid.rows.length; i++) {
                         if (grid.rows[i].dataItem.storeNm.indexOf($scope.filterStoreNm) === -1) {
                             grid.rows[i].visible = false;
+                            grid.rows[i].dataItem.visible = false;
+                            grid.rows[i].dataItem.gChk = false;
+                        }else{
+                            grid.rows[i].dataItem.visible = true;
                         }
                     }
                 }
@@ -1009,7 +1014,7 @@ readonly/>
             var cnt        = 0;
 
             for (var i = 0; i < flex.length; i++) {
-                if (flex[i].gChk) {
+                if (flex[i].gChk && (flex[i].visible === undefined || flex[i].visible)) {
                     if (cnt == 0) {
                         strStoreCd = flex[i].storeCd;
                         strStoreNm = flex[i].storeNm;
