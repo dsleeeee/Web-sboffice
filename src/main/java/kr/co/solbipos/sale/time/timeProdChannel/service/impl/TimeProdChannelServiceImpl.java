@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.time.timeProdChannel.service.TimeProdChannelService;
 import kr.co.solbipos.sale.time.timeProdChannel.service.TimeProdChannelVO;
 import org.springframework.stereotype.Service;
@@ -59,9 +60,10 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
         }
 
         // 상품 array 값 세팅
-        if (timeProdChannelVO.getProdCds() != null && !"".equals(timeProdChannelVO.getProdCds())) {
-            String[] prodCdList = timeProdChannelVO.getProdCds().split(",");
-            timeProdChannelVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdChannelVO.getProdCds(), 3900));
+            timeProdChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때
@@ -149,9 +151,10 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
         }
 
         // 상품 array 값 세팅
-        if (timeProdChannelVO.getProdCds() != null && !"".equals(timeProdChannelVO.getProdCds())) {
-            String[] prodCdList = timeProdChannelVO.getProdCds().split(",");
-            timeProdChannelVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdChannelVO.getProdCds(), 3900));
+            timeProdChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때

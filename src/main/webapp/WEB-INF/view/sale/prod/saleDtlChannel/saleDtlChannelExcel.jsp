@@ -361,7 +361,7 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <c:if test="${userId == 'ds021' or userId == 'ds034' or userId == 'h0393'}">
+            <c:if test="${userId == 'ds019' or userId == 'ds034' or userId == 'h0393'}">
                 <%-- 일괄다운로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="allDownload()">
                     <s:message code="saleDtlChannelExcel.allDownload" />
@@ -466,4 +466,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20240813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20251230.01" charset="utf-8"></script>

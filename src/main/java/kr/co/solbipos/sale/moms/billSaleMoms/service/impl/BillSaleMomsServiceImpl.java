@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.moms.billSaleMoms.service.BillSaleMomsService;
 import kr.co.solbipos.sale.moms.billSaleMoms.service.BillSaleMomsVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,10 @@ public class BillSaleMomsServiceImpl implements BillSaleMomsService {
         }
 
         // 상품 array 값 세팅
-        if (billSaleMomsVO.getProdCds() != null && !"".equals(billSaleMomsVO.getProdCds())) {
-            String[] prodCdList = billSaleMomsVO.getProdCds().split(",");
-            billSaleMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(billSaleMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(billSaleMomsVO.getProdCds(), 3900));
+            billSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -96,9 +98,10 @@ public class BillSaleMomsServiceImpl implements BillSaleMomsService {
         }
 
         // 상품 array 값 세팅
-        if (billSaleMomsVO.getProdCds() != null && !"".equals(billSaleMomsVO.getProdCds())) {
-            String[] prodCdList = billSaleMomsVO.getProdCds().split(",");
-            billSaleMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(billSaleMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(billSaleMomsVO.getProdCds(), 3900));
+            billSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -130,9 +133,10 @@ public class BillSaleMomsServiceImpl implements BillSaleMomsService {
         }
 
         // 상품 array 값 세팅
-        if (billSaleMomsVO.getProdCds() != null && !"".equals(billSaleMomsVO.getProdCds())) {
-            String[] prodCdList = billSaleMomsVO.getProdCds().split(",");
-            billSaleMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(billSaleMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(billSaleMomsVO.getProdCds(), 3900));
+            billSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

@@ -148,7 +148,7 @@
         <%--//엑셀 리스트 --%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmKioskStore.js?ver=20240829.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmKioskStore.js?ver=20251223.01" charset="utf-8"></script>
 
 <%-- 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/lsmStore/excelUploadLsmKioskStore.jsp">

@@ -7,6 +7,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -64,5 +65,8 @@ public interface PopupMapper {
 
     /** 상품(멀티) 조회조건 사용시, 리스트 검색에 사용할 상품값 리턴 함수 호출 */
     String getSearchMultiProdRtn(ProdVO prodVO);
+
+    /** 포스(멀티) 조회조건 사용시, 리스트 검색에 사용할 상품값 리턴 함수 호출 */
+    String getSearchMultiPosRtn(ProdPosVO prodPosVO);
 }
 

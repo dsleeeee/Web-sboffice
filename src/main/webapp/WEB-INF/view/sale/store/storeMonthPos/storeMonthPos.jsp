@@ -640,7 +640,7 @@
     var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthPos/storeMonthPos.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthPos/storeMonthPos.js?ver=20251223.01" charset="utf-8"></script>
 
 <%-- 팝업 추후 개발 --%>
 <%-- 팝업 레이어 시작 --%>

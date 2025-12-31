@@ -204,7 +204,14 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
         $scope.storeCds = params.storeCds;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthList.sb", params, function () {
+        $.postJSON("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
     
@@ -407,7 +414,15 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
         params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthDtlList.sb", params, function () {});
+        $.postJSON("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthDtlList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
 
     //상세 화면 열기

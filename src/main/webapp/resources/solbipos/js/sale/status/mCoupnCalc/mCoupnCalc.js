@@ -92,6 +92,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
               params.storeHqBrandCd = selectedRow.brandCd;
               params.storeCd = selectedRow.storeCd;
               params.posNo = $scope.posNo;
+              params.posNos = $scope.posNos;
               params.mcoupnCd = selectedRow.mcoupnCd;
               params.saleFg = $scope.srchSaleFg;
               params.cashBillApprProcFg = $scope.srchCashBillApprProcFg;
@@ -233,6 +234,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.storeHqBrandCd = $scope.storeHqBrandCd;
         params.storeCds = $("#mCoupnCalcStoreCd").val();
         params.posNo = $("#mCoupnCalcSelectPosCd").val();
+        params.posNos = $("#mCoupnCalcSelectPosCd").val();
         params.mcoupnCd = $scope.srchMCoupnCombo.selectedValue;
         params.saleFg = $scope.srchSaleFgCombo.selectedValue;
         params.cashBillApprProcFg = $scope.srchApprProcFgCombo.selectedValue;
@@ -268,12 +270,59 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.startDate = params.startDate;
         $scope.endDate  = params.endDate;
         $scope.posNo    = params.posNo;
+        $scope.posNos    = params.posNos;
         $scope.srchSaleFg = params.saleFg;
         $scope.srchCashBillApprProcFg = params.cashBillApprProcFg;
 
-        $scope._inquiryMain("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcList.sb", params, function() {
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        // 가상로그인 대응한 session id 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
 
-            var grid = wijmo.Control.getControl("#wjGridmCoupnCalc");
+        $.postJSON("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            var list = response.data.list;
+            if (list.length === undefined || list.length === 0) {
+                $scope.data = new wijmo.collections.CollectionView([]);
+                if (true && response.message) {
+
+                    // 페이징 처리
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', 10);
+                    $scope._setPagingInfo('curr', 1);
+                    $scope._setPagingInfo('totCnt', 1);
+                    $scope._setPagingInfo('totalPage', 1);
+
+                    $scope._broadcast('drawPager');
+
+                    $scope._popMsg(response.message);
+                }
+                return false;
+            }
+            var data = new wijmo.collections.CollectionView(list);
+            data.trackChanges = true;
+            $scope.data = data;
+
+            // 페이징 처리
+            if (response.data.page && response.data.page.curr) {
+                var pagingInfo = response.data.page;
+                $scope._setPagingInfo('ctrlName', $scope.name);
+                $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                $scope._setPagingInfo('curr', pagingInfo.curr);
+                $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                $scope._broadcast('drawPager');
+            }
+
             var columns = grid.columns;
 
             // 조회조건 '승인구분'에 따른 컴럼 show/hidden 처리
@@ -313,7 +362,11 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             }
 
-        }, false);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
     // <-- //검색 호출 -->
 
@@ -349,6 +402,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.storeHqBrandCd = $scope.storeHqBrandCd;
         params.storeCds = $("#mCoupnCalcStoreCd").val();
         params.posNo = $("#mCoupnCalcSelectPosCd").val();
+        params.posNos = $("#mCoupnCalcSelectPosCd").val();
         params.mcoupnCd = $scope.srchMCoupnCombo.selectedValue;
         params.saleFg = $scope.srchSaleFgCombo.selectedValue;
         params.cashBillApprProcFg = $scope.srchApprProcFgCombo.selectedValue;
@@ -519,14 +573,16 @@ app.controller('mCoupnCalcExcelCtrl', ['$scope', '$http', '$timeout', function (
     $scope.searchExcelList = function (params) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcExcelList.sb", params, function (){
+        $.postJSON("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcExcelList.sb", params, function (response){
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
 
-            if ($scope.excelFlex.rows.length <= 0) {
+            if (grid.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
 
-            var grid = wijmo.Control.getControl("#wjGridmCoupnCalcExcel");
             var columns = grid.columns;
 
             // 조회조건 '승인구분'에 따른 컴럼 show/hidden 처리
@@ -580,6 +636,10 @@ app.controller('mCoupnCalcExcelCtrl', ['$scope', '$http', '$timeout', function (
                     }, 10);
                 });
             }, 10);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.excelFlex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

@@ -155,6 +155,9 @@ public class TimeProdVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -450,4 +453,12 @@ public class TimeProdVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
+    }
 }

@@ -538,7 +538,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20250703.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20251224.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

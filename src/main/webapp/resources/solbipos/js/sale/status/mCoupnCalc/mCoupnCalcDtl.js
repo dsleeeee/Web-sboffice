@@ -103,7 +103,11 @@ app.controller('mCoupnCalcDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.searchMCoupnCalcDtl = function (params) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcDtlList.sb", params);
+        $.postJSON("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcDtlList.sb", params, function (response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        });
     };
     
     // 엑셀 다운로드

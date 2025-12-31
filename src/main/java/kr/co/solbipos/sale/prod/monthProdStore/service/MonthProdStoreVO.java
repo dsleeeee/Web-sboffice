@@ -139,6 +139,9 @@ public class MonthProdStoreVO extends PageVO {
     /** 사이드상품분류코드(배열형) */
     private String arrProdClassCd [];
 
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -385,5 +388,13 @@ public class MonthProdStoreVO extends PageVO {
 
     public void setArrProdClassCd(String[] arrProdClassCd) {
         this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
     }
 }

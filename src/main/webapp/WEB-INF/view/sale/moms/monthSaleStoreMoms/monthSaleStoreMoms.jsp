@@ -429,4 +429,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/monthSaleStoreMoms/monthSaleStoreMoms.js?ver=20241217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/monthSaleStoreMoms/monthSaleStoreMoms.js?ver=20251229.01" charset="utf-8"></script>

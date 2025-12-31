@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.giftCalc.service.GiftCalcService;
 import kr.co.solbipos.sale.status.giftCalc.service.GiftCalcVO;
+import kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,14 +75,12 @@ public class GiftCalcServiceImpl implements GiftCalcService {
         }
 
         // 포스번호 셋팅
-        if (giftCalcVO.getPosNo() != null && !"".equals(giftCalcVO.getPosNo())) {
-            String[] arrPosNo = giftCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    giftCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(giftCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(giftCalcVO.getPosNos(), 3900));
+            giftCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
+
 
         return giftCalcMapper.getGiftCalcList(giftCalcVO);
     }
@@ -111,13 +110,10 @@ public class GiftCalcServiceImpl implements GiftCalcService {
         }
 
         // 포스번호 셋팅
-        if (giftCalcVO.getPosNo() != null && !"".equals(giftCalcVO.getPosNo())) {
-            String[] arrPosNo = giftCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    giftCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(giftCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(giftCalcVO.getPosNos(), 3900));
+            giftCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
 
         return giftCalcMapper.getGiftCalcExcelList(giftCalcVO);
@@ -140,13 +136,10 @@ public class GiftCalcServiceImpl implements GiftCalcService {
         }
 
         // 포스번호 셋팅
-        if (giftCalcVO.getPosNo() != null && !"".equals(giftCalcVO.getPosNo())) {
-            String[] arrPosNo = giftCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    giftCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(giftCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(giftCalcVO.getPosNos(), 3900));
+            giftCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
 
         return giftCalcMapper.getGiftCalcDtlList(giftCalcVO);

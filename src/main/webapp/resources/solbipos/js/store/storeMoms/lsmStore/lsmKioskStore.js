@@ -52,8 +52,60 @@ app.controller('lsmKioskStoreCtrl', ['$scope', '$http', '$timeout', function ($s
         params.tuClsTypeNm      = $scope.srchTuClsTypeNm;
 
         params.listScale = 500;
+
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        // 가상로그인 대응한 session id 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/store/storeMoms/lsmStore/lsmStore/getLsmKioskStoreList.sb", params, function (){
+        $.postJSON("/store/storeMoms/lsmStore/lsmStore/getLsmKioskStoreList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            var list = response.data.list;
+            if (list.length === undefined || list.length === 0) {
+                $scope.data = new wijmo.collections.CollectionView([]);
+                if (true && response.message) {
+
+                    // 페이징 처리
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', 10);
+                    $scope._setPagingInfo('curr', 1);
+                    $scope._setPagingInfo('totCnt', 1);
+                    $scope._setPagingInfo('totalPage', 1);
+
+                    $scope._broadcast('drawPager');
+
+                    $scope._popMsg(response.message);
+                }
+                return false;
+            }
+            var data = new wijmo.collections.CollectionView(list);
+            data.trackChanges = true;
+            $scope.data = data;
+
+            // 페이징 처리
+            if (response.data.page && response.data.page.curr) {
+                var pagingInfo = response.data.page;
+                $scope._setPagingInfo('ctrlName', $scope.name);
+                $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                $scope._setPagingInfo('curr', pagingInfo.curr);
+                $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                $scope._broadcast('drawPager');
+            }
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 
@@ -118,9 +170,10 @@ app.controller('lsmKioskStoreExcelCtrl', ['$scope', '$http', '$timeout', functio
         // 파라미터
         var params       = data;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/store/storeMoms/lsmStore/lsmStore/getLsmKioskStoreExcelList.sb", params, function() {
-
+        $.postJSON("/store/storeMoms/lsmStore/lsmStore/getLsmKioskStoreExcelList.sb", params, function(response) {
             var flex = $scope.excelFlex;
+            flex.itemsSource = response.data.list;
+            flex.itemsSource.trackChanges = true;
 
             if (flex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -156,6 +209,10 @@ app.controller('lsmKioskStoreExcelCtrl', ['$scope', '$http', '$timeout', functio
                     }, 10);
                 });
             }, 10);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var flex = $scope.excelFlex;
+            flex.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

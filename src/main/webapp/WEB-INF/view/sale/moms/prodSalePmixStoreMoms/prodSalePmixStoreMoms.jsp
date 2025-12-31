@@ -463,4 +463,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms.js?ver=20251230.01" charset="utf-8"></script>

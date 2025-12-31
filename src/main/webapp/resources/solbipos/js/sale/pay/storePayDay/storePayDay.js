@@ -193,8 +193,55 @@ app.controller('storePayDayCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.momsStoreFg05 = $scope.momsStoreFg05;
     params.listScale = 500;
 
+    // 페이징 처리
+    if ($scope._getPagingInfo('curr') > 0) {
+      params['curr'] = $scope._getPagingInfo('curr');
+    } else {
+      params['curr'] = 1;
+    }
+    // 가상로그인 대응한 session id 설정
+    if (document.getElementsByName('sessionId')[0]) {
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/pay/storePayDay/storePayDay/getStorePayDayList.sb", params, function(){
+    $.postJSON("/sale/pay/storePayDay/storePayDay/getStorePayDayList.sb", params, function(response){
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+
+      var list = response.data.list;
+      if (list.length === undefined || list.length === 0) {
+        $scope.data = new wijmo.collections.CollectionView([]);
+        if (true && response.message) {
+
+          // 페이징 처리
+          $scope._setPagingInfo('ctrlName', $scope.name);
+          $scope._setPagingInfo('pageScale', 10);
+          $scope._setPagingInfo('curr', 1);
+          $scope._setPagingInfo('totCnt', 1);
+          $scope._setPagingInfo('totalPage', 1);
+
+          $scope._broadcast('drawPager');
+
+          $scope._popMsg(response.message);
+        }
+        return false;
+      }
+      var data = new wijmo.collections.CollectionView(list);
+      data.trackChanges = true;
+      $scope.data = data;
+
+      // 페이징 처리
+      if (response.data.page && response.data.page.curr) {
+        var pagingInfo = response.data.page;
+        $scope._setPagingInfo('ctrlName', $scope.name);
+        $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+        $scope._setPagingInfo('curr', pagingInfo.curr);
+        $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+        $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+        $scope._broadcast('drawPager');
+      }
 
       // <-- 그리드 visible -->
       // 선택한 테이블에 따른 리스트 항목 visible
@@ -328,7 +375,11 @@ app.controller('storePayDayExcelCtrl', ['$scope', '$http', '$timeout', function 
   // 엑셀 리스트 조회
   $scope.searchExcelList = function (params) {
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/pay/storePayDay/storePayDay/getStorePayDayExcelList.sb", params, function() {
+    $.postJSON("/sale/pay/storePayDay/storePayDay/getStorePayDayExcelList.sb", params, function(response) {
+      var grid = $scope.excelFlex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+
       if ($scope.excelFlex.rows.length <= 0) {
         $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
         return false;

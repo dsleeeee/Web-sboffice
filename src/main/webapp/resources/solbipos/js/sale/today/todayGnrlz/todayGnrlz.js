@@ -47,7 +47,15 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     params.storeCd   = $("#todayGnrlzSelectStoreCd").val();
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlz/list.sb", params, null, false);
+    $.postJSON("/sale/today/todayGnrlz/todayGnrlz/list.sb", params, function(response) {
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    }, function(response) {
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
+    });
   };
 
   // 매출종합 엑셀 다운로드
@@ -110,7 +118,15 @@ app.controller('todayGnrlzPayCtrl', ['$scope', '$http', '$timeout', function ($s
     params.storeCd   = $scope.storeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzPay/list.sb", params, null, false);
+    $.postJSON("/sale/today/todayGnrlz/todayGnrlzPay/list.sb", params, function(response) {
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    }, function(response) {
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
+    });
   };
 
   // 결제수단별 엑셀 다운로드
@@ -173,7 +189,15 @@ app.controller('todayGnrlzMemberCtrl', ['$scope', '$http', '$timeout', function 
     params.storeCd   = $scope.storeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzMember/list.sb", params, null, false);
+    $.postJSON("/sale/today/todayGnrlz/todayGnrlzMember/list.sb", params, function(response) {
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    }, function(response) {
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
+    });
   };
 
   // 회원 Point 적립/사용 엑셀 다운로드
@@ -236,7 +260,15 @@ app.controller('todayGnrlzProdCtrl', ['$scope', '$http', '$timeout', function ($
     params.storeCd   = $scope.storeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlzProd/list.sb", params, null, false);
+    $.postJSON("/sale/today/todayGnrlz/todayGnrlzProd/list.sb", params, function(response) {
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    }, function(response) {
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
+    });
   };
 
   // 상품별 엑셀 다운로드

@@ -371,7 +371,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20251223.01" charset="utf-8"></script>
 
 <%-- 가승인-상품권결제차액 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/payTemporary/payTemporaryDtl.jsp">

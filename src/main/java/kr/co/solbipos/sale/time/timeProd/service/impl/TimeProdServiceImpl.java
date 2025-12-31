@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.time.timeProd.service.TimeProdService;
 import kr.co.solbipos.sale.time.timeProd.service.TimeProdVO;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,10 @@ public class TimeProdServiceImpl implements TimeProdService {
         }
 
         // 상품 array 값 세팅
-        if (timeProdVO.getProdCds() != null && !"".equals(timeProdVO.getProdCds())) {
-            String[] prodCdList = timeProdVO.getProdCds().split(",");
-            timeProdVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdVO.getProdCds(), 3900));
+            timeProdVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -124,9 +126,10 @@ public class TimeProdServiceImpl implements TimeProdService {
         }
 
         // 상품 array 값 세팅
-        if (timeProdVO.getProdCds() != null && !"".equals(timeProdVO.getProdCds())) {
-            String[] prodCdList = timeProdVO.getProdCds().split(",");
-            timeProdVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdVO.getProdCds(), 3900));
+            timeProdVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

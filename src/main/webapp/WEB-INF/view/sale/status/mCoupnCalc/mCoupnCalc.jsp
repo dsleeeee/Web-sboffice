@@ -480,7 +480,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalc.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalc.js?ver=20251223.01" charset="utf-8"></script>
 
 <%-- 모바일쿠폰 정산 상세화면 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/mCoupnCalc/mCoupnCalcDtl.jsp">

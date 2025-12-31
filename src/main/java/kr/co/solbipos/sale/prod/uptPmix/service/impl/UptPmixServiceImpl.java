@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.prod.uptPmix.service.UptPmixService;
 import kr.co.solbipos.sale.prod.uptPmix.service.UptPmixVO;
 import org.springframework.stereotype.Service;
@@ -58,9 +59,10 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         // 상품 array 값 세팅
-        if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {
-            String[] prodCdList = uptPmixVO.getProdCds().split(",");
-            uptPmixVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(uptPmixVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(uptPmixVO.getProdCds(), 3900));
+            uptPmixVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -101,9 +103,10 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         // 상품 array 값 세팅
-        if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {
-            String[] prodCdList = uptPmixVO.getProdCds().split(",");
-            uptPmixVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(uptPmixVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(uptPmixVO.getProdCds(), 3900));
+            uptPmixVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

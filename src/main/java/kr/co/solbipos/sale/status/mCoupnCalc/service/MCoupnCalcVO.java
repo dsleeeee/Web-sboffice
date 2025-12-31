@@ -117,6 +117,12 @@ public class MCoupnCalcVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 포스 번호 */
+    private String posNos;
+
+    /** 포스(멀티) 조회를 위한 쿼리 문자열*/
+    private String posNoQuery;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -340,4 +346,20 @@ public class MCoupnCalcVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getPosNos() {
+        return posNos;
+    }
+
+    public void setPosNos(String posNos) {
+        this.posNos = posNos;
+    }
+
+    public String getPosNoQuery() {
+        return posNoQuery;
+    }
+
+    public void setPosNoQuery(String posNoQuery) {
+        this.posNoQuery = posNoQuery;
+    }
 }

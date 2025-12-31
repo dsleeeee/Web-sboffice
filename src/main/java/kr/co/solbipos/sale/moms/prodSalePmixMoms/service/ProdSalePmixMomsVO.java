@@ -118,6 +118,9 @@ public class ProdSalePmixMomsVO extends PageVO {
     private String sQuery1;
     private String sQuery2;
 
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -326,5 +329,13 @@ public class ProdSalePmixMomsVO extends PageVO {
 
     public void setsQuery2(String sQuery2) {
         this.sQuery2 = sQuery2;
+    }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
     }
 }

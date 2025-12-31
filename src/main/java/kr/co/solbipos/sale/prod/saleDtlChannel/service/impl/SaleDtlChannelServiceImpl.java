@@ -8,6 +8,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.prod.saleDtlChannel.service.SaleDtlChannelService;
 import kr.co.solbipos.sale.prod.saleDtlChannel.service.SaleDtlChannelVO;
 import org.springframework.stereotype.Service;
@@ -63,9 +64,10 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
         }
 
         // 상품 array 값 세팅
-        if (saleDtlChannelVO.getProdCds() != null && !"".equals(saleDtlChannelVO.getProdCds())) {
-            String[] prodCdList = saleDtlChannelVO.getProdCds().split(",");
-            saleDtlChannelVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(saleDtlChannelVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(saleDtlChannelVO.getProdCds(), 3900));
+            saleDtlChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때
@@ -234,13 +236,72 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
         String[] storeCds = saleDtlChannelVO.getStoreCds().split(",");
         saleDtlChannelVO.setStoreCdList(storeCds);
 
+        String storeCds2 = "";
+        String storeCdQuery = "";
+
+        if (saleDtlChannelVO.getStoreCds() != null && !"".equals(saleDtlChannelVO.getStoreCds())) {
+            if(saleDtlChannelVO.getStoreCds().length() <= 4000) {
+                storeCdQuery = " AND DBMS_LOB.COMPARE(thsrm.STORE_CD_LIST, #{storeCds,jdbcType=CLOB}) = 0";
+            } else {
+                int len = (int) Math.ceil((double) saleDtlChannelVO.getStoreCds().length() / 4000);
+                for(int i = 0; i < len; i++) {
+                    storeCds2 = saleDtlChannelVO.getStoreCds().substring(4000 * i, (i != len - 1) ? (4000 * (i + 1)) : saleDtlChannelVO.getStoreCds().length());
+                    storeCdQuery += " AND DBMS_LOB.COMPARE(DBMS_LOB.SUBSTR(thsrm.STORE_CD_LIST," + 4000 + "," + (int)(1 + (4000 * i)) + "), '" + storeCds2 + "') = 0";
+                }
+            }
+            saleDtlChannelVO.setStoreCdQuery(storeCdQuery);
+        }
+
+        System.out.println(storeCdQuery + "매장쿼리");
+        System.out.println(saleDtlChannelVO.getStoreCds().length() + "매장길이");
+
+        String prodCds = "";
+        String prodCdQuery = "";
+
         // 상품 array 값 세팅
         if (saleDtlChannelVO.getProdCds() != null && !"".equals(saleDtlChannelVO.getProdCds())) {
             String[] prodCdList = saleDtlChannelVO.getProdCds().split(",");
             saleDtlChannelVO.setProdCdList(prodCdList);
+
+            if(saleDtlChannelVO.getProdCds().length() <= 4000) {
+                prodCdQuery = " AND DBMS_LOB.COMPARE(thsrm.PROD_CD_LIST, #{prodCds,jdbcType=CLOB}) = 0";
+            } else {
+                int len = (int) Math.ceil((double) saleDtlChannelVO.getProdCds().length() / 4000);
+                for(int i = 0; i < len; i++) {
+                    prodCds = saleDtlChannelVO.getProdCds().substring(4000 * i, (i != len - 1) ? (4000 * (i + 1)) : saleDtlChannelVO.getProdCds().length());
+                    prodCdQuery += " AND DBMS_LOB.COMPARE(DBMS_LOB.SUBSTR(thsrm.PROD_CD_LIST," + 4000 + "," + (int)(1 + (4000 * i)) + "), '" + prodCds + "') = 0";
+                }
+            }
+            saleDtlChannelVO.setProdCdQuery(prodCdQuery);
         }
 
-        return saleDtlChannelMapper.getSaleDtlChannelExcelList(saleDtlChannelVO);
+        System.out.println(prodCdQuery + "쿼리");
+        System.out.println(saleDtlChannelVO.getProdCds().length() + "길이");
+
+
+        List<DefaultMap<Object>> list = saleDtlChannelMapper.getSaleDtlChannelExcelList(saleDtlChannelVO);
+
+        // CLOB을 String으로 변환
+        for(DefaultMap<Object> map : list) {
+            convertClobToString(map, "storeHqBrandCdList");
+            convertClobToString(map, "storeCdList");
+            convertClobToString(map, "prodCdList");
+        }
+
+        return list;
+    }
+
+    /** CLOB → String 변환 */
+    private void convertClobToString(DefaultMap<Object> map, String key) {
+        Object value = map.get(key);
+        if(value instanceof java.sql.Clob) {
+            try {
+                java.sql.Clob clob = (java.sql.Clob) value;
+                map.put(key, clob.getSubString(1, (int) clob.length()));
+            } catch (Exception e) {
+                map.put(key, "");
+            }
+        }
     }
 
     /** 매출상세현황(채널별) 매출 다운로드 탭 - 자료생성 저장 */
@@ -284,6 +345,7 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
                     saleDtlChannelVO.setStoreHqBrandCd(userBrandList[i]);
                     procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
                 }
+                procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveUpdate(saleDtlChannelVO);
             }
         } else {
             procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);

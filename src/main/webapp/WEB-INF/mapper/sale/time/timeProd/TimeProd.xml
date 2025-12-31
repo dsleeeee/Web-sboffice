@@ -207,11 +207,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -478,11 +475,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -770,11 +764,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -1054,11 +1045,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -1340,11 +1328,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -1608,11 +1593,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -1898,11 +1880,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -2179,11 +2158,8 @@
                                 <if test='prodNm != null and prodNm != ""'>
                                     AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
                                 </if>
-                                <if test='prodCds != null and prodCds != ""'>
-                                    AND
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tmps2.PROD_CD = #{item}
-                                    </foreach>
+                                <if test='prodCdQuery != null and prodCdQuery != ""'>
+                                    AND tmps2.PROD_CD IN (${prodCdQuery})
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                                     AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때

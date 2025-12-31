@@ -231,6 +231,10 @@
         AND 	AMT.STORE_CD = CNT.STORE_CD
         AND 	AMT.STORE_NM = CNT.STORE_NM
         </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ORDER
+            BY      AMT.STORE_CD
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -451,6 +455,10 @@
             --         AND 	AMT.BRANCH_NM = CNT.BRANCH_NM
             AND 	AMT.STORE_CD = CNT.STORE_CD
             AND 	AMT.STORE_NM = CNT.STORE_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ORDER
+            BY      AMT.STORE_CD
         </if>
     </select>
 

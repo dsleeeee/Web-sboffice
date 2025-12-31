@@ -208,8 +208,14 @@ app.controller('storeLangUseCtrl', ['$scope', '$http', '$timeout', function ($sc
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeLangUse/storeLangUse/getStoreLangUseList.sb", params, function (){
-
+        $.postJSON("/sale/store/storeLangUse/storeLangUse/getStoreLangUseList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 
@@ -402,8 +408,12 @@ app.controller('storeLangUseExcelCtrl', ['$scope', '$http', '$timeout', function
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeLangUse/storeLangUse/getStoreLangUseList.sb", params, function (){
-            if ($scope.excelFlex.rows.length <= 0) {
+        $.postJSON("/sale/store/storeLangUse/storeLangUse/getStoreLangUseList.sb", params, function(response) {
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            if (grid.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
@@ -423,6 +433,10 @@ app.controller('storeLangUseExcelCtrl', ['$scope', '$http', '$timeout', function
                         }, 10);
                     });
             }, 10);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.excelFlex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

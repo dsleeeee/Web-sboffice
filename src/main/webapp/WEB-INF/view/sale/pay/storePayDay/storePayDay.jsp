@@ -443,4 +443,4 @@
   var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/pay/storePayDay/storePayDay.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/pay/storePayDay/storePayDay.js?ver=20251229.01" charset="utf-8"></script>

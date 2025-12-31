@@ -256,7 +256,11 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
 
         console.log(params);
 
-        $scope._inquiryMain("/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelExcelList.sb", params, function() {}, false);
+        $.postJSON("/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelExcelList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        });
     };
     // <-- //검색 호출 -->
 
@@ -340,6 +344,9 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].storeCdList = null;
+                    $scope.flex.collectionView.items[i].prodCdList = null;
+                    $scope.flex.collectionView.items[i].storeHqBrandCdList = null;
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }
@@ -348,6 +355,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
                 s_alert.pop(messages["cmm.not.select"]);
                 return;
             }
+
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelDel.sb", params, function(){

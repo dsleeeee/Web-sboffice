@@ -139,7 +139,14 @@ app.controller('prodSaleDayMomsCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        // params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -170,8 +177,50 @@ app.controller('prodSaleDayMomsCtrl', ['$scope', '$http', '$timeout', function (
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
 
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/prodSaleDayMoms/prodSaleDayMoms/getProdSaleDayMomsList.sb", params, function (){});
+        $.postJSON("/sale/moms/prodSaleDayMoms/prodSaleDayMoms/getProdSaleDayMomsList.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            var list = response.data.list;
+            if (list.length === undefined || list.length === 0) {
+                $scope.data = new wijmo.collections.CollectionView([]);
+                if (true && response.message) {
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', 10);
+                    $scope._setPagingInfo('curr', 1);
+                    $scope._setPagingInfo('totCnt', 1);
+                    $scope._setPagingInfo('totalPage', 1);
+                    $scope._broadcast('drawPager');
+                    $scope._popMsg(response.message);
+                }
+                return false;
+            }
+            var data = new wijmo.collections.CollectionView(list);
+            data.trackChanges = true;
+            $scope.data = data;
+
+            if (response.data.page && response.data.page.curr) {
+                var pagingInfo = response.data.page;
+                $scope._setPagingInfo('ctrlName', $scope.name);
+                $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                $scope._setPagingInfo('curr', pagingInfo.curr);
+                $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                $scope._broadcast('drawPager');
+            }
+        });
     };
     // <-- //검색 호출 -->
 
@@ -250,7 +299,14 @@ app.controller('prodSaleDayMomsCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        // params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -418,7 +474,11 @@ app.controller('prodSaleDayMomsExcelCtrl', ['$scope', '$http', '$timeout', funct
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/prodSaleDayMoms/prodSaleDayMoms/getProdSaleDayMomsExcelList.sb", params, function() {
+        $.postJSON("/sale/moms/prodSaleDayMoms/prodSaleDayMoms/getProdSaleDayMomsExcelList.sb", params, function(response) {
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;

@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstService;
 import kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstVO;
 import org.springframework.stereotype.Service;
@@ -62,9 +63,10 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
         }
 
         // 상품 array 값 세팅
-        if (saleAnalsMomsBstVO.getProdCds() != null && !"".equals(saleAnalsMomsBstVO.getProdCds())) {
-            String[] prodCdList = saleAnalsMomsBstVO.getProdCds().split(",");
-            saleAnalsMomsBstVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(saleAnalsMomsBstVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(saleAnalsMomsBstVO.getProdCds(), 3900));
+            saleAnalsMomsBstVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때

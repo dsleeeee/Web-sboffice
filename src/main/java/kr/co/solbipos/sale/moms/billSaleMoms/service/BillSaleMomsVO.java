@@ -111,6 +111,9 @@ public class BillSaleMomsVO extends PageVO {
     /** 상품코드 */
     private String prodCds;
 
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -300,4 +303,12 @@ public class BillSaleMomsVO extends PageVO {
     }
 
     public void setProdCds(String prodCds) { this.prodCds = prodCds; }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
+    }
 }

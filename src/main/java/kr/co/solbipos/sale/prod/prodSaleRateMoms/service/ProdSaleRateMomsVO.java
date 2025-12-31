@@ -125,6 +125,9 @@ public class ProdSaleRateMomsVO extends PageVO {
     /** 매장합산 */
     private String chkStoreSumDisplay;
 
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -372,4 +375,8 @@ public class ProdSaleRateMomsVO extends PageVO {
     public String getChkStoreSumDisplay() { return chkStoreSumDisplay; }
 
     public void setChkStoreSumDisplay(String chkStoreSumDisplay) { this.chkStoreSumDisplay = chkStoreSumDisplay; }
+
+    public String getProdCdQuery() { return prodCdQuery; }
+
+    public void setProdCdQuery(String prodCdQuery) { this.prodCdQuery = prodCdQuery; }
 }

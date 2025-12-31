@@ -181,7 +181,11 @@ app.controller('payMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
 
-        $scope._inquiryMain("/sale/pay/payMonth/payMonth/getPayMonthList.sb", params, function() {}, false);
+        $.postJSON("/sale/pay/payMonth/payMonth/getPayMonthList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        });
     };
     // <-- //검색 호출 -->
 

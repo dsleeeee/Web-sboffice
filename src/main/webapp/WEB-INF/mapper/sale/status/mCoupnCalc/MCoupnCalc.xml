@@ -72,11 +72,8 @@
                                     OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
-                        <if test='posNo != null and posNo != ""'>
-                            AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
+                        <if test='posNoQuery != null and posNoQuery != ""'>
+                            AND STORE_CD||'||'||POS_NO IN (${posNoQuery})
                         </if>
                         <if test='mcoupnCd != null and mcoupnCd != ""'>
                             AND MCOUPN_CD = #{mcoupnCd}
@@ -111,11 +108,8 @@
                                     OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
-                        <if test='posNo != null and posNo != ""'>
-                            AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
+                        <if test='posNoQuery != null and posNoQuery != ""'>
+                            AND STORE_CD||'||'||POS_NO IN (${posNoQuery})
                         </if>
                         <if test='mcoupnCd != null and mcoupnCd != ""'>
                             AND MCOUPN_CD = #{mcoupnCd}
@@ -265,11 +259,8 @@
                                     OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
-                        <if test='posNo != null and posNo != ""'>
-                            AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
+                        <if test='posNoQuery != null and posNoQuery != ""'>
+                            AND STORE_CD||'||'||POS_NO IN (${posNoQuery})
                         </if>
                         <if test='mcoupnCd != null and mcoupnCd != ""'>
                             AND MCOUPN_CD = #{mcoupnCd}
@@ -304,11 +295,8 @@
                                     OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
-                        <if test='posNo != null and posNo != ""'>
-                            AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
+                        <if test='posNoQuery != null and posNoQuery != ""'>
+                            AND STORE_CD||'||'||POS_NO IN (${posNoQuery})
                         </if>
                         <if test='mcoupnCd != null and mcoupnCd != ""'>
                             AND MCOUPN_CD = #{mcoupnCd}
@@ -439,11 +427,8 @@
                     OR	tsspm.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
-        <if test='posNo != null and posNo != ""'>
-            AND tsspm.STORE_CD||'||'||tsspm.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test='posNoQuery != null and posNoQuery != ""'>
+            AND tsspm.STORE_CD||'||'||tsspm.POS_NO IN (${posNoQuery})
         </if>
         <if test='mcoupnCd != null and mcoupnCd != ""'>
             AND tsspm.MCOUPN_CD = #{mcoupnCd}

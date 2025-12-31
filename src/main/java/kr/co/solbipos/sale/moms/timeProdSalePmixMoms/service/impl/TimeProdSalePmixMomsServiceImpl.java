@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.moms.timeProdSalePmixMoms.service.TimeProdSalePmixMomsService;
 import kr.co.solbipos.sale.moms.timeProdSalePmixMoms.service.TimeProdSalePmixMomsVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,9 +65,10 @@ public class TimeProdSalePmixMomsServiceImpl implements TimeProdSalePmixMomsServ
         }
 
         // 상품 array 값 세팅
-        if (timeProdSalePmixMomsVO.getProdCds() != null && !"".equals(timeProdSalePmixMomsVO.getProdCds())) {
-            String[] prodCdList = timeProdSalePmixMomsVO.getProdCds().split(",");
-            timeProdSalePmixMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdSalePmixMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdSalePmixMomsVO.getProdCds(), 3900));
+            timeProdSalePmixMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -158,9 +160,10 @@ public class TimeProdSalePmixMomsServiceImpl implements TimeProdSalePmixMomsServ
         }
 
         // 상품 array 값 세팅
-        if (timeProdSalePmixMomsVO.getProdCds() != null && !"".equals(timeProdSalePmixMomsVO.getProdCds())) {
-            String[] prodCdList = timeProdSalePmixMomsVO.getProdCds().split(",");
-            timeProdSalePmixMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(timeProdSalePmixMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdSalePmixMomsVO.getProdCds(), 3900));
+            timeProdSalePmixMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

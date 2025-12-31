@@ -156,10 +156,10 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/sale/moms/prodSalePmixMoms/prodSalePmixMoms/getProdSalePmixMomsList.sb", params, function (response) {
+        $.postJSON("/sale/moms/prodSalePmixMoms/prodSalePmixMoms/getProdSalePmixMomsList.sb", params, function (response) {
             // <-- 그리드 생성 -->
-            var list = response.data.data.list;
-            var length = response.data.data.list.length;
+            var list = response.data.list;
+            var length = response.data.list.length;
             var grid = wijmo.Control.getControl("#wjGridList");
 
             // 페이징 처리
@@ -190,6 +190,10 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         grid.columns.removeAt(grid.columns.length - 1);
                     }
                 }
+
+                // 값 초기화
+                params.storeCds = '';
+                params.prodCds = '';
 
                 // 기간선택 두 날짜 사이 모든날짜 구하기
                 // ajax 통신 설정
@@ -359,8 +363,8 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
             }
 
             // 페이징 처리
-            if (response.data.data.page && response.data.data.page.curr) {
-                var pagingInfo = response.data.data.page;
+            if (response.data.page && response.data.page.curr) {
+                var pagingInfo = response.data.page;
                 $scope._setPagingInfo('ctrlName', $scope.name);
                 $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
                 $scope._setPagingInfo('curr', pagingInfo.curr);
@@ -599,15 +603,15 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/sale/moms/prodSalePmixMoms/prodSalePmixMoms/getProdSalePmixMomsExcelList.sb", params, function (response) {
-            if (response.data.data.list.length <= 0) {
+        $.postJSON("/sale/moms/prodSalePmixMoms/prodSalePmixMoms/getProdSalePmixMomsExcelList.sb", params, function (response) {
+            if (response.data.list.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
 
             // <-- 그리드 생성 -->
-            var list = response.data.data.list;
-            var length = response.data.data.list.length;
+            var list = response.data.list;
+            var length = response.data.list.length;
             var grid = wijmo.Control.getControl("#wjGridExcelList");
 
             // rows, footer 초기화
@@ -622,6 +626,10 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         grid.columns.removeAt(grid.columns.length - 1);
                     }
                 }
+
+                // 값 초기화
+                params.storeCds = '';
+                params.prodCds = '';
 
                 // 기간선택 두 날짜 사이 모든날짜 구하기
                 // ajax 통신 설정

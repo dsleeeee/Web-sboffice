@@ -502,7 +502,7 @@ app.controller('dayProdStoreExcelCtrl', ['$scope', '$http', '$timeout', function
                         var params2 = data;
                         params2.resrceNm = "실패:" + menuNm;
                         params2.downloadFileCount = 0; // 다운로드 파일수
-                        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){});
+                        $.postJSON("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){});
 
                         $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
 

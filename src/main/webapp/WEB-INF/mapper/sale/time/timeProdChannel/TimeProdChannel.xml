@@ -141,11 +141,8 @@
                               </foreach>
                           </if>
                       </if>
-                      <if test='prodCds != null and prodCds != ""'>
-                          AND
-                          <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                              tmps2.PROD_CD = #{item}
-                          </foreach>
+                      <if test='prodCdQuery != null and prodCdQuery != ""'>
+                          AND tmps2.PROD_CD IN (${prodCdQuery})
                       </if>
                       <if test='momsTeam != null and momsTeam != ""'>
                          AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -357,12 +354,9 @@
                                 </foreach>
                             </if>
                         </if>
-                        <if test='prodCds != null and prodCds != ""'>
-                            AND
-                            <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                                tmps2.PROD_CD = #{item}
-                            </foreach>
-                        </if>
+                      <if test='prodCdQuery != null and prodCdQuery != ""'>
+                          AND tmps2.PROD_CD IN (${prodCdQuery})
+                      </if>
                         <if test='momsTeam != null and momsTeam != ""'>
                            AND tmsi.MOMS_TEAM = #{momsTeam}
                        </if>
@@ -570,11 +564,8 @@
                              </foreach>
                          </if>
                      </if>
-                     <if test='prodCds != null and prodCds != ""'>
-                         AND
-                         <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                             tmps2.PROD_CD = #{item}
-                         </foreach>
+                     <if test='prodCdQuery != null and prodCdQuery != ""'>
+                         AND tmps2.PROD_CD IN (${prodCdQuery})
                      </if>
                      <if test='momsTeam != null and momsTeam != ""'>
                         AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -783,12 +774,9 @@
                                </foreach>
                            </if>
                        </if>
-                       <if test='prodCds != null and prodCds != ""'>
-                           AND
-                           <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                               tmps2.PROD_CD = #{item}
-                           </foreach>
-                       </if>
+                     <if test='prodCdQuery != null and prodCdQuery != ""'>
+                         AND tmps2.PROD_CD IN (${prodCdQuery})
+                     </if>
                        <if test='momsTeam != null and momsTeam != ""'>
                           AND tmsi.MOMS_TEAM = #{momsTeam}
                       </if>

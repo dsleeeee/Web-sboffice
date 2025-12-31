@@ -313,10 +313,10 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst/getSaleAnalsMomsBstList.sb", params, function (response) {
+        $.postJSON("/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst/getSaleAnalsMomsBstList.sb", params, function (response) {
 
-            var list = response.data.data.list;
-            var length = response.data.data.list.length;
+            var list = response.data.list;
+            var length = response.data.list.length;
             var grid = wijmo.Control.getControl("#wjGridList");
             var columns = grid.columns;
 
@@ -388,6 +388,10 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
                         grid.columns.removeAt(grid.columns.length - 1);
                     }
                 }
+
+                // 값 초기화
+                params.storeCds = '';
+                params.prodCds = '';
 
                 // 기간선택 두 날짜 사이 모든날짜 구하기
                 // ajax 통신 설정
@@ -710,6 +714,10 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
                     }
                 });
             }
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = wijmo.Control.getControl("#wjGridList");
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

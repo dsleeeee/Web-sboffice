@@ -507,4 +507,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst.js?ver=20251223.01" charset="utf-8"></script>

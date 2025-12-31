@@ -105,6 +105,13 @@ public class GiftCalcVO extends PageVO {
     /** 상품권 번호 */
     private String giftSerNo;
 
+    /** 포스 번호 */
+    private String posNos;
+
+    /** 포스(멀티) 조회를 위한 쿼리 문자열*/
+    private String posNoQuery;
+
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -280,4 +287,20 @@ public class GiftCalcVO extends PageVO {
     public String getGiftSerNo() { return giftSerNo; }
 
     public void setGiftSerNo(String giftSerNo) { this.giftSerNo = giftSerNo; }
+
+    public String getPosNos() {
+        return posNos;
+    }
+
+    public void setPosNos(String posNos) {
+        this.posNos = posNos;
+    }
+
+    public String getPosNoQuery() {
+        return posNoQuery;
+    }
+
+    public void setPosNoQuery(String posNoQuery) {
+        this.posNoQuery = posNoQuery;
+    }
 }

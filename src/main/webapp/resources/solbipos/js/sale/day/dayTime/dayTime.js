@@ -252,10 +252,12 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/day/dayTime/dayTime/getDayTimeList.sb", params, function (){
+        $.postJSON("/sale/day/dayTime/dayTime/getDayTimeList.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
 
             // 선택한 시간대에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridList");
             var columns = grid.columns;
             var start = $scope.startTime*1;
             var end = $scope.endTime*1;
@@ -297,6 +299,10 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 }
             }
 
+        }, function (response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

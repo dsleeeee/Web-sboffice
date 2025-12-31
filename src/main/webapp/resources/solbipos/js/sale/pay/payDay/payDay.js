@@ -178,7 +178,11 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.momsStoreFg05 = $scope.momsStoreFg05;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/pay/payDay/payDay/getPayDayList.sb", params);
+    $.postJSON("/sale/pay/payDay/payDay/getPayDayList.sb", params, function (response){
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    });
   };
 
   // 확장조회 숨김/보임

@@ -318,7 +318,15 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/month/monthPos/monthPos/getMonthPosList.sb", params);
+    $.postJSON("/sale/month/monthPos/monthPos/getMonthPosList.sb", params, function (response) {
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
+    }, function (response) {
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
+    });
   };
 
   // 확장조회 숨김/보임

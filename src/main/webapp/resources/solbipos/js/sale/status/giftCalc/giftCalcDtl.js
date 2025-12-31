@@ -41,7 +41,11 @@ app.controller('giftCalcDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.searchGiftCalcDtl = function(data){
         var params = data;
 
-        $scope._inquiryMain("/sale/status/giftCalc/giftCalc/getGiftCalcDtlList.sb", params, function() {}, false);
+        $.postJSON("/sale/status/giftCalc/giftCalc/getGiftCalcDtlList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        });
     };
     // <-- //검색 호출 -->
 

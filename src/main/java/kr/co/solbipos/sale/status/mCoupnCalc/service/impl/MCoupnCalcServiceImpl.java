@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.mCoupnCalc.service.MCoupnCalcService;
 import kr.co.solbipos.sale.status.mCoupnCalc.service.MCoupnCalcVO;
+import kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,14 +72,12 @@ public class MCoupnCalcServiceImpl implements MCoupnCalcService {
         }
 
         // 포스번호 셋팅
-        if (mCoupnCalcVO.getPosNo() != null && !"".equals(mCoupnCalcVO.getPosNo())) {
-            String[] arrPosNo = mCoupnCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    mCoupnCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(mCoupnCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(mCoupnCalcVO.getPosNos(), 3900));
+            mCoupnCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
+
 
         return mCoupnCalcMapper.getMCoupnCalcList(mCoupnCalcVO);
     }
@@ -108,14 +107,12 @@ public class MCoupnCalcServiceImpl implements MCoupnCalcService {
         }
 
         // 포스번호 셋팅
-        if (mCoupnCalcVO.getPosNo() != null && !"".equals(mCoupnCalcVO.getPosNo())) {
-            String[] arrPosNo = mCoupnCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    mCoupnCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(mCoupnCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(mCoupnCalcVO.getPosNos(), 3900));
+            mCoupnCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
+
         return mCoupnCalcMapper.getMCoupnCalcExcelList(mCoupnCalcVO);
     }
 
@@ -141,13 +138,10 @@ public class MCoupnCalcServiceImpl implements MCoupnCalcService {
         }
 
         // 포스번호 셋팅
-        if (mCoupnCalcVO.getPosNo() != null && !"".equals(mCoupnCalcVO.getPosNo())) {
-            String[] arrPosNo = mCoupnCalcVO.getPosNo().split(",");
-            if (arrPosNo.length > 0) {
-                if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-                    mCoupnCalcVO.setArrPosNo(arrPosNo);
-                }
-            }
+        if(!StringUtil.getOrBlank(mCoupnCalcVO.getPosNos()).equals("")) {
+            ProdPosVO prodPosVO = new ProdPosVO();
+            prodPosVO.setArrSplitPosNo(CmmUtil.splitText(mCoupnCalcVO.getPosNos(), 3900));
+            mCoupnCalcVO.setPosNoQuery(popupMapper.getSearchMultiPosRtn(prodPosVO));
         }
 
         return mCoupnCalcMapper.getMCoupnCalcDtlList(mCoupnCalcVO);

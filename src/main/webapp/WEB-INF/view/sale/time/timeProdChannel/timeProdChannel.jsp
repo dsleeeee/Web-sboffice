@@ -691,4 +691,4 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20240813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20251229.01" charset="utf-8"></script>

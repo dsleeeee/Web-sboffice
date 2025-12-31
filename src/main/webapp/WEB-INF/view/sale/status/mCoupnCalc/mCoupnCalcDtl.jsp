@@ -55,4 +55,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20241112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20251224.01" charset="utf-8"></script>

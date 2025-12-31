@@ -86,6 +86,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     params.endDate = $scope.endDate;
                     params.storeCd = selectedRow.storeCd;
                     params.posNo = $scope.posNo;
+                    params.posNos = $scope.posNos;
                     params.saleFg = $scope.srchSaleFg;
                     params.momsTeam = selectedRow.momsTeam;
                     params.momsAcShop = selectedRow.momsAcShop;
@@ -212,6 +213,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#giftCalcStoreCd").val();
         params.posNo = $("#giftCalcSelectPosCd").val();
+        params.posNos = $("#giftCalcSelectPosCd").val();
         params.saleFg = $scope.saleFg;
         params.giftSerNo = $scope.giftSerNo;
 
@@ -244,13 +246,17 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         $scope.startDate = params.startDate;
         $scope.endDate = params.endDate;
         $scope.posNo = params.posNo;
+        $scope.posNos = params.posNos;
         $scope.srchGiftSerNo = params.giftSerNo;
         $scope.srchSaleFg = params.saleFg;
         $scope.srchStoreHqBrandCd = params.storeHqBrandCd;
 
-        $scope._inquiryMain("/sale/status/giftCalc/giftCalc/getGiftCalcList.sb", params, function() {
+        $.postJSON("/sale/status/giftCalc/giftCalc/getGiftCalcList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
             // <-- 그리드 visible -->
-            var grid = wijmo.Control.getControl("#wjGridGiftCalc");
             var columns = grid.columns;
 
             // 조회조건 '승인구분'에 따른 컴럼 show/hidden 처리
@@ -290,7 +296,11 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 }
             }
             // <-- //그리드 visible -->
-        }, false);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
     // <-- //검색 호출 -->
 
@@ -334,6 +344,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#giftCalcStoreCd").val();
         params.posNo = $("#giftCalcSelectPosCd").val();
+        params.posNos = $("#giftCalcSelectPosCd").val();
         params.saleFg = $scope.saleFg;
         params.giftSerNo = $scope.giftSerNo;
 
@@ -460,15 +471,17 @@ app.controller('giftCalcExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/giftCalc/giftCalc/getGiftCalcExcelList.sb", params, function (){
+        $.postJSON("/sale/status/giftCalc/giftCalc/getGiftCalcExcelList.sb", params, function (response){
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
 
-            if ($scope.excelFlex.rows.length <= 0) {
+            if (grid.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
 
             // <-- 그리드 visible -->
-            var grid = wijmo.Control.getControl("#wjGridGiftCalcExcel");
             var columns = grid.columns;
 
             // 조회조건 '승인구분'에 따른 컴럼 show/hidden 처리
@@ -523,6 +536,10 @@ app.controller('giftCalcExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                     }, 10);
                 });
             }, 10);
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.excelFlex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
     // <-- //검색 호출 -->

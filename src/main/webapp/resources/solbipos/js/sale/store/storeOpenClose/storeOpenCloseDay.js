@@ -251,7 +251,14 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
         params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayList.sb", params, function () {
+        $.postJSON("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 
@@ -449,8 +456,14 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
         params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayDtlList.sb", params, function () {
-
+        $.postJSON("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayDtlList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+        }, function(response) {
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 

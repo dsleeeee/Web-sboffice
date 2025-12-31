@@ -95,11 +95,8 @@
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
         WHERE 1=1
-        <if test='posNo != null and posNo != ""'>
-            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test='posNoQuery != null and posNoQuery != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN (${posNoQuery})
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}
@@ -233,8 +230,7 @@
             A.SALE_AMT,
             A.BILL_NO,
             A.SALE_DATE,
-            A.LINE_NO,
-            C.GIFT_SEQ
+            A.LINE_NO
             FROM TB_SL_SALE_PAY_TEMPORARY A,
             TB_CM_NMCODE B
             WHERE 1=1
@@ -250,11 +246,8 @@
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
         WHERE 1=1
-        <if test='posNo != null and posNo != ""'>
-            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test='posNoQuery != null and posNoQuery != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN (${posNoQuery})
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}
@@ -426,11 +419,8 @@
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
         WHERE 1=1
-        <if test='posNo != null and posNo != ""'>
-            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test='posNoQuery != null and posNoQuery != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN (${posNoQuery})
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}

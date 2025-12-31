@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.sale.prod.monthProdSaleRateMoms.service.MonthProdSaleRateMomsService;
 import kr.co.solbipos.sale.prod.monthProdSaleRateMoms.service.MonthProdSaleRateMomsVO;
 import kr.co.solbipos.sale.prod.monthProdSaleRateMoms.service.impl.MonthProdSaleRateMomsMapper;
@@ -60,9 +61,10 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
         }
 
         // 상품 array 값 세팅
-        if (monthProdSaleRateMomsVO.getProdCds() != null && !"".equals(monthProdSaleRateMomsVO.getProdCds())) {
-            String[] prodCdList = monthProdSaleRateMomsVO.getProdCds().split(",");
-            monthProdSaleRateMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(monthProdSaleRateMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(monthProdSaleRateMomsVO.getProdCds(), 3900));
+            monthProdSaleRateMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때
@@ -150,9 +152,10 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
         }
 
         // 상품 array 값 세팅
-        if (monthProdSaleRateMomsVO.getProdCds() != null && !"".equals(monthProdSaleRateMomsVO.getProdCds())) {
-            String[] prodCdList = monthProdSaleRateMomsVO.getProdCds().split(",");
-            monthProdSaleRateMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(monthProdSaleRateMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(monthProdSaleRateMomsVO.getProdCds(), 3900));
+            monthProdSaleRateMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때

@@ -46,6 +46,9 @@ public class ProdPosVO extends PageVO {
 
 	/** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String StoreCdQuery;
+
+	/** 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장코드 array */
+	private String arrSplitPosNo[];
     
 	public String getStoreCd() {
 		return storeCd;
@@ -157,5 +160,13 @@ public class ProdPosVO extends PageVO {
 	}
 	public void setStoreCdQuery(String storeCdQuery) {
 		StoreCdQuery = storeCdQuery;
+	}
+
+	public String[] getArrSplitPosNo() {
+		return arrSplitPosNo;
+	}
+
+	public void setArrSplitPosNo(String[] arrSplitPosNo) {
+		this.arrSplitPosNo = arrSplitPosNo;
 	}
 }

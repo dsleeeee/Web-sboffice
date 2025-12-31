@@ -112,8 +112,56 @@ app.controller('timeSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
 
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        // 가상로그인 대응한 session id 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function (){});
+        $.postJSON("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function(response) {
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            var list = response.data.list;
+            if (list.length === undefined || list.length === 0) {
+                $scope.data = new wijmo.collections.CollectionView([]);
+                if (true && response.message) {
+
+                    // 페이징 처리
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', 10);
+                    $scope._setPagingInfo('curr', 1);
+                    $scope._setPagingInfo('totCnt', 1);
+                    $scope._setPagingInfo('totalPage', 1);
+
+                    $scope._broadcast('drawPager');
+
+                    $scope._popMsg(response.message);
+                }
+                return false;
+            }
+            var data = new wijmo.collections.CollectionView(list);
+            data.trackChanges = true;
+            $scope.data = data;
+
+            // 페이징 처리
+            if (response.data.page && response.data.page.curr) {
+                var pagingInfo = response.data.page;
+                $scope._setPagingInfo('ctrlName', $scope.name);
+                $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                $scope._setPagingInfo('curr', pagingInfo.curr);
+                $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                $scope._broadcast('drawPager');
+            }
+        });
     };
     // <-- //검색 호출 -->
 
@@ -228,8 +276,8 @@ app.controller('timeSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($sc
             });
         }else{
             // 분할 엑셀다운로드 사용자 제한 체크
-            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
-                if (response.data.data.list === 0) {
+            $.postJSON('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
+                if (response.data.list === 0) {
                     $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
                     return;
                 } else {
@@ -313,10 +361,10 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
             data.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
             data.downloadNo = "8"; // 다운로드 화면구분번호
 
-            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
-                if (response.data.data.list === 0) {
+            $.postJSON('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
+                if (response.data.list === 0) {
                 } else {
-                    var msgCntChk = response.data.data.list; // 00:0명의 사용자 다운로드 중
+                    var msgCntChk = response.data.list; // 00:0명의 사용자 다운로드 중
                     if(msgCntChk.substr(0, 2) === "00") {
                         $scope.searchExcelDivisionList(data);
                     } else {
@@ -324,10 +372,12 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
                         var params2 = data;
                         params2.resrceNm = "실패:" + menuNm;
                         params2.downloadFileCount = 0; // 다운로드 파일수
-                        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){});
+                        $.postJSON("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){
+
+                        });
 
                         $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
-                        return;
+
                     }
                 }
             });
@@ -338,7 +388,11 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsExcelList.sb", params, function() {
+        $.postJSON("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsExcelList.sb", params, function(response) {
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -377,24 +431,24 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
         params.limit = 1;
         params.offset = 1;
 
-        $scope._postJSONQuery.withOutPopUp("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function(response){
+        $.postJSON("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function(response){
 
-            listSize = response.data.data.list[0].totCnt;
+            listSize = response.data.list[0].totCnt;
             totFileCnt = Math.ceil(listSize/100000); // 하나의 엑셀파일에 100000개씩 다운로드
 
             if(listSize === 0 || totFileCnt === 0){
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 $scope.excelUploadingPopup(false);
                 return false;
-            };
+            }
 
             // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
 
             // 엑셀다운로드 진행 사용자 저장 insert
             params.downloadFileCount = totFileCnt; // 다운로드 파일수
-            $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
-                var seq = response.data.data.list; // 순번
+            $.postJSON("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
+                var seq = response.data.list; // 순번
 
                 // 엑셀 분할 다운로드
                 function delay(x){
@@ -415,49 +469,19 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
 
                         // 엑셀다운로드 진행 사용자 저장 update
                         params.seq = seq;
-                        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb", params, function(response){
+                        $.postJSON("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb", params, function(response){
 
                             // ajax 통신 설정
-                            $http({
-                                method: 'POST', //방식
-                                // url: '/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb', /* 통신할 URL */
-                                url: '/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsExcelDivisionList.sb', /* 통신할 URL */
-                                params: params, /* 파라메터로 보낼 데이터 */
-                                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-                            }).then(function successCallback(response) {
-                                if ($scope._httpStatusCheck(response, true)) {
-                                    // this callback will be called asynchronously
-                                    // when the response is available
-                                    var list = response.data.data.list;
-                                    if (list.length === undefined || list.length === 0) {
-                                        $scope.data = new wijmo.collections.CollectionView([]);
-                                        $scope.excelUploadingPopup(false);
-                                        return false;
+                            $.postJSON("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsExcelDivisionList.sb", params, function(response) {
+
+                                    if(response.status === "FAIL") {
+                                        s_alert.pop(response.message);
+                                        $scope.excelFlex.itemsSource = new wijmo.collections.CollectionView([]);
+                                        return;
                                     }
 
-                                    var data = new wijmo.collections.CollectionView(list);
-                                    data.trackChanges = true;
-                                    $scope.data = data;
-                                }
-                            }, function errorCallback(response) {
-                                // 로딩팝업 hide
-                                $scope.excelUploadingPopup(false);
-                                // called asynchronously if an error occurs
-                                // or server returns response with an error status.
-                                if (response.data.message) {
-                                    $scope._popMsg(response.data.message);
-                                } else {
-                                    $scope._popMsg(messages['cmm.error']);
-                                }
-                                return false;
-                            }).then(function () {
-                                // 'complete' code here
-                                setTimeout(function() {
-                                    if ($scope.excelFlex.rows.length <= 0) {
-                                        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                        $scope.excelUploadingPopup(false);
-                                        return false;
-                                    }
+                                    $scope.excelFlex.itemsSource = response.data.list;
+                                    $scope.excelFlex.itemsSource.trackChanges = true;
 
                                     wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                                         includeColumnHeaders: true,
@@ -476,13 +500,15 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
                                         $scope.excelUploadingPopup(false);
                                     });
 
-                                }, 1000);
-                            });
-                            resolve(x);
-
+                                },
+                                function(result){
+                                    s_alert.pop(result.message);
+                                }
+                            );
                         });
+                        resolve(x);
                     });
-                };
+                }
 
                 async function getExcelFile(x) {
                     if(totFileCnt > x){

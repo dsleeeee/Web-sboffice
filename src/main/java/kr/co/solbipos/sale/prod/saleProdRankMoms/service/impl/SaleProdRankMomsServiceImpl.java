@@ -5,6 +5,7 @@ import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.saleProdRankMoms.service.SaleProdRankMomsService;
@@ -59,9 +60,10 @@ public class SaleProdRankMomsServiceImpl implements SaleProdRankMomsService {
         }
 
         // 상품 array 값 세팅
-        if (saleProdRankMomsVO.getProdCds() != null && !"".equals(saleProdRankMomsVO.getProdCds())) {
-            String[] prodCdList = saleProdRankMomsVO.getProdCds().split(",");
-            saleProdRankMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(saleProdRankMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(saleProdRankMomsVO.getProdCds(), 3900));
+            saleProdRankMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때
@@ -94,9 +96,10 @@ public class SaleProdRankMomsServiceImpl implements SaleProdRankMomsService {
         }
 
         // 상품 array 값 세팅
-        if (saleProdRankMomsVO.getProdCds() != null && !"".equals(saleProdRankMomsVO.getProdCds())) {
-            String[] prodCdList = saleProdRankMomsVO.getProdCds().split(",");
-            saleProdRankMomsVO.setProdCdList(prodCdList);
+        if(!StringUtil.getOrBlank(saleProdRankMomsVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(saleProdRankMomsVO.getProdCds(), 3900));
+            saleProdRankMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
         // 매장브랜드 '전체' 일때

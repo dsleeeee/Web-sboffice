@@ -256,11 +256,8 @@
                           </foreach>
                       </if>
                   </if>
-                  <if test='prodCds != null and prodCds != ""'>
-                      AND
-                      <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
-                          tmps2.PROD_CD = #{item}
-                      </foreach>
+                  <if test='prodCdQuery != null and prodCdQuery != ""'>
+                      AND tmps2.PROD_CD IN (${prodCdQuery})
                   </if>
                   <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
                       AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
@@ -546,10 +543,10 @@
     ,       PROD_OPTION
     ,       PROD_CD
     ,       PROD_NM
-    ,       TO_CHAR(STORE_HQ_BRAND_CD_LIST) AS STORE_HQ_BRAND_CD_LIST
-    ,       TO_CHAR(STORE_CD_LIST) AS STORE_CD_LIST
+    ,       STORE_HQ_BRAND_CD_LIST AS STORE_HQ_BRAND_CD_LIST
+    ,       STORE_CD_LIST AS STORE_CD_LIST
     ,       PROD_HQ_BRAND_CD
-    ,       TO_CHAR(PROD_CD_LIST) AS PROD_CD_LIST
+    ,       PROD_CD_LIST AS PROD_CD_LIST
     ,       MOMS_TEAM
     ,       MOMS_AC_SHOP
     ,       MOMS_AREA_FG
@@ -573,7 +570,7 @@
     ]]>
     AND     thsrm.REPORT_TYPE = '01'
       <if test='storeCds != null and storeCds != ""'>
-          AND TO_CHAR(thsrm.STORE_CD_LIST) = #{storeCds}
+          ${storeCdQuery}
       </if>
       <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
           AND TO_CHAR(thsrm.STORE_HQ_BRAND_CD_LIST) = #{storeHqBrandCd:CLOB} -- 매장브랜드 선택일때
@@ -627,7 +624,7 @@
           AND thsrm.PROD_HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
       </if>
       <if test='prodCds != null and prodCds != ""'>
-          AND TO_CHAR(thsrm.PROD_CD_LIST) = #{prodCds}
+          ${prodCdQuery}
       </if>
       ORDER BY thsrm.FROM_SALE_DATE DESC, thsrm.REQ_DATE, thsrm.REQ_TIME
   </select>
@@ -708,9 +705,9 @@
           -- 매장브랜드 전체일때
           #{userBrands:CLOB},
       </if>
-      #{storeCds:CLOB},
+      EMPTY_CLOB(),
       #{prodHqBrandCd}, -- 상품브랜드 선택일때
-      #{prodCds:CLOB},
+      EMPTY_CLOB(),
       #{momsTeam},
       #{momsAcShop},
       #{momsAreaFg},
@@ -731,6 +728,15 @@
       FROM 	TB_CM_DATEM
       WHERE 	YYYYMMDD LIKE #{dataCreateMonth}||'%'
   </insert>
+
+    <update id="getSaleDtlChannelSaveUpdate" parameterType="SaleDtlChannelVO">
+        UPDATE  TB_HQ_SALE_REPORT_MOMS
+        SET     PROD_CD_LIST = #{prodCds, jdbcType=CLOB}
+        ,       STORE_CD_LIST = #{storeCds, jdbcType=CLOB}
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+	    AND     REQ_DATE = #{reqDate}
+	    AND     REQ_TIME = #{reqTime}
+    </update>
 
   <!-- 기간별 매장-상품 매출 다운로드 탭 - 삭제 -->
   <!--
