@@ -82,9 +82,9 @@
                     GROUP BY    SUBSTR(SALE_DATE,0,6)
                 ) tsdt,
                 (	SELECT 	SUBSTR(SALE_DATE,0,6) AS SALE_YM,
-                            SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-                            SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                            SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                            SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+                            SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                            SUM(CASE WHEN DLVR_ORDER_FG = '3' OR DLVR_ORDER_FG = '4' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM 	TB_SL_DAILY_DTL_DLVR
                     WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
                     AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'

@@ -66,18 +66,22 @@
     -->
     <select id="getMobileOrderStatusDtlList" parameterType="mobileOrderStatusVO" resultType="DefaultMap">
         /* MobileOrderStatus.getMobileOrderStatusDtlList */
-        SELECT  POS_NO,
-                ORDER_NO,
-                ORDER_DTL_FG,
-                DLVR_PACK_FG,
-                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM 	TB_OD_ORDER_DTL
+        SELECT  A.POS_NO,
+                A.ORDER_NO,
+                A.ORDER_DTL_FG,
+                B.DLVR_ORDER_FG,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM 	TB_OD_ORDER_DTL A
+        ,       TB_OD_ORDER_HDR B
         WHERE   1=1
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND STORE_CD IN (${storeCdQuery})
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
-        AND 	SALE_DATE = #{saleDate}
-        AND     ORDER_NO = #{orderNo}
-        GROUP BY POS_NO, ORDER_NO, ORDER_DTL_FG, DLVR_PACK_FG
+        AND 	A.SALE_DATE = #{saleDate}
+        AND     A.ORDER_NO = #{orderNo}
+        AND     B.STORE_CD (+) = A.STORE_CD
+        AND     B.SALE_DATE (+) = A.SALE_DATE
+        AND     B.ORDER_NO (+) = A.ORDER_NO
+        GROUP BY A.POS_NO, A.ORDER_NO, A.ORDER_DTL_FG, B.DLVR_ORDER_FG
     </select>
 </mapper>

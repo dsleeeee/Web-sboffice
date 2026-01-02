@@ -93,7 +93,7 @@
         SELECT  tood.ORDER_SEQ,
                 tood.ORDER_DTL_NO,
                 tood.ORDER_DTL_FG,
-                tood.DLVR_PACK_FG,
+                tooh.DLVR_ORDER_FG,
                 tood.PROD_CD,
                 tmp.PROD_NM,
                 tood.SALE_UPRC,
@@ -107,10 +107,14 @@
                 tood.MEMBR_SAVE_POINT,
                 tood.MEMBR_USE_POINT
         FROM 	TB_OD_ORDER_DTL tood,
+        		TB_OD_ORDER_HDR tooh,
                 TB_MS_PRODUCT tmp
         WHERE 	tood.STORE_CD = #{storeCd}
         AND 	tood.SALE_DATE = #{saleDate}
         AND     tood.ORDER_NO = #{orderNo}
+        AND     tooh.STORE_CD (+) = tood.STORE_CD
+        AND     tooh.SALE_DATE (+) = tood.SALE_DATE
+        AND     tooh.ORDER_NO (+) = tood.ORDER_NO
         AND     tmp.STORE_CD (+) = tood.STORE_CD
         AND     tmp.PROD_CD (+) = tood.PROD_CD
         ORDER

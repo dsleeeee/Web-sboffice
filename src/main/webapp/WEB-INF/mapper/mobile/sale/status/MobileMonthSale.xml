@@ -459,10 +459,10 @@
     <select id="getMobileMonthSaleDlvrList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDlvrList */
         SELECT
-        DLVR_PACK_FG,
-        (CASE WHEN DLVR_PACK_FG = '1' THEN '내점'
-               WHEN DLVR_PACK_FG = '2' THEN '배달'
-               WHEN DLVR_PACK_FG = '3' THEN '포장'
+        DLVR_ORDER_FG,
+        (CASE WHEN DLVR_ORDER_FG = '1' THEN '내점'
+               WHEN DLVR_ORDER_FG = '2' THEN '배달'
+               WHEN DLVR_ORDER_FG = '3' THEN '포장'
                ELSE null END
         ) AS NM,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
@@ -475,7 +475,7 @@
             FROM
             (
                 SELECT
-                A.DLVR_PACK_FG,
+                A.DLVR_ORDER_FG,
                 A.REAL_SALE_AMT,
                 DECODE(A.SALE_CNT, 0, 0, NVL(ROUND(B.TOT_REAL_SALE_AMT / A.SALE_CNT), 0)) AS MONTH_AVR_SALE,
                 A.BILL_CNT,
@@ -483,7 +483,7 @@
                 FROM
                 (
                     SELECT
-                    tsmtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    DECODE(tsmtd.DLVR_ORDER_FG, '4', '3', tsmtd.DLVR_ORDER_FG) AS DLVR_ORDER_FG,
                     SUM(tsmtd.REAL_SALE_AMT) AS REAL_SALE_AMT,
                     COUNT(DISTINCT tsmtd.SALE_YM) AS SALE_CNT,
                     SUM(tsmtd.REAL_SALE_CNT) AS BILL_CNT
@@ -503,11 +503,11 @@
                             )
                     </if>
                     AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    GROUP BY tsmtd.DLVR_ORDER_FG
+                    GROUP BY DECODE(tsmtd.DLVR_ORDER_FG, '4', '3', tsmtd.DLVR_ORDER_FG)
                 ) A,
                 (
                     SELECT
-                    tsmtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    DECODE(tsmtd.DLVR_ORDER_FG, '4', '3', tsmtd.DLVR_ORDER_FG) AS DLVR_ORDER_FG,
                     SUM(tsmtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
                     FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
@@ -525,15 +525,15 @@
                             )
                     </if>
                     AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    GROUP BY tsmtd.DLVR_ORDER_FG
+                    GROUP BY DECODE(tsmtd.DLVR_ORDER_FG, '4', '3', tsmtd.DLVR_ORDER_FG)
                 ) B
                 WHERE 1=1
-                AND B.DLVR_PACK_FG = A.DLVR_PACK_FG
+                AND B.DLVR_ORDER_FG = A.DLVR_ORDER_FG
             )
             UNION ALL
             (
                 SELECT
-                LPAD(LEVEL, 1, 0) AS DLVR_PACK_FG,
+                LPAD(LEVEL, 1, 0) AS DLVR_ORDER_FG,
                 0 AS REAL_SALE_AMT,
                 0 AS MONTH_AVR_SALE,
                 0 AS BILL_CNT,
@@ -544,8 +544,8 @@
                 ]]>
             )
         )
-        GROUP BY DLVR_PACK_FG
-        ORDER BY DLVR_PACK_FG
+        GROUP BY DLVR_ORDER_FG
+        ORDER BY DLVR_ORDER_FG
     </select>
 
     <!-- 내점/배달/포장 - 차트조회 -->

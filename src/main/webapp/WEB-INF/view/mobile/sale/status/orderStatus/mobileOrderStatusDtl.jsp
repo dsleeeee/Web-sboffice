@@ -28,7 +28,7 @@
                         <wj-flex-grid-column header="<s:message code="mobile.orderStatus.posNo"/>"          binding="posNo" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mobile.orderStatus.orderNo"/>"        binding="orderNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mobile.orderStatus.orderFg"/>"        binding="orderDtlFg" width="50" align="center" is-read-only="true" data-map="orderFgDataMap"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="mobile.orderStatus.dlvrPackFg"/>"     binding="dlvrPackFg" width="50" align="center" is-read-only="true" data-map="dlvrOrderFgDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mobile.orderStatus.dlvrPackFg"/>"     binding="dlvrOrderFg" width="50" align="center" is-read-only="true" data-map="dlvrOrderFgDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mobile.orderStatus.realSaleAmt"/>"    binding="realSaleAmt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>

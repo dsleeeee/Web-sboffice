@@ -289,9 +289,9 @@
                     GROUP BY SALE_DATE
                 ) tsshp
         ,       (   SELECT	tssd.SALE_DATE
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '3' OR tssd.DLVR_ORDER_FG = '4' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM	TB_SL_DAILY_DTL_DLVR tssd
                     WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
                     <if test='storeCdQuery != null and storeCdQuery != ""'>
@@ -380,9 +380,9 @@
                     GROUP BY SALE_DATE
                 ) tsshp
         ,       (   SELECT	tssd.SALE_DATE
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
-                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '3' OR tssd.DLVR_ORDER_FG = '4' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM	TB_SL_DAILY_DTL_DLVR tssd
                     WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
                     <if test='storeCdQuery != null and storeCdQuery != ""'>
