@@ -362,10 +362,10 @@
     <select id="getMobileTodaySaleDlvrList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleDlvrList */
         SELECT
-        A.DLVR_PACK_FG,
-        (CASE WHEN A.DLVR_PACK_FG = '1' THEN '내점'
-               WHEN A.DLVR_PACK_FG = '2' THEN '배달'
-               WHEN A.DLVR_PACK_FG = '3' THEN '포장'
+        A.DLVR_ORDER_FG,
+        (CASE WHEN A.DLVR_ORDER_FG = '1' THEN '내점'
+               WHEN A.DLVR_ORDER_FG = '2' THEN '배달'
+               WHEN A.DLVR_ORDER_FG = '3' THEN '포장'
                ELSE null END
         ) AS NM,
         A.AMT_CNT,
@@ -374,7 +374,7 @@
         FROM
         (
             SELECT
-            DLVR_PACK_FG,
+            DLVR_ORDER_FG,
             SUM(AMT_CNT) AS AMT_CNT,
             SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
             FROM
@@ -383,7 +383,7 @@
                 FROM
                 (
                     SELECT
-                    tsdtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    DECODE(tsdtd.DLVR_ORDER_FG, '4', '3', tsdtd.DLVR_ORDER_FG) AS DLVR_ORDER_FG,
                     COUNT(tsdtd.SALE_DATE) AS AMT_CNT,
                     NVL(SUM(tsdtd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
                     FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
@@ -402,13 +402,13 @@
                             )
                     </if>
                     AND tsdtd.SALE_DATE = #{startDate}
-                    GROUP BY tsdtd.DLVR_ORDER_FG
-                    ORDER BY tsdtd.DLVR_ORDER_FG
+                    GROUP BY DECODE(tsdtd.DLVR_ORDER_FG, '4', '3', tsdtd.DLVR_ORDER_FG)
+                    ORDER BY DECODE(tsdtd.DLVR_ORDER_FG, '4', '3', tsdtd.DLVR_ORDER_FG)
                 )
                 UNION ALL
                 (
                     SELECT
-                    LPAD(LEVEL, 1, 0) AS DLVR_PACK_FG,
+                    LPAD(LEVEL, 1, 0) AS DLVR_ORDER_FG,
                     0 AS AMT_CNT,
                     0 AS REAL_SALE_AMT
                     FROM dual
@@ -417,8 +417,8 @@
                     ]]>
                 )
             )
-            GROUP BY DLVR_PACK_FG
-            ORDER BY DLVR_PACK_FG
+            GROUP BY DLVR_ORDER_FG
+            ORDER BY DLVR_ORDER_FG
         ) A,
         (
             SELECT

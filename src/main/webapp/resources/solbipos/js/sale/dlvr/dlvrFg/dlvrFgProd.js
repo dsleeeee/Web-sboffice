@@ -12,7 +12,7 @@ app.controller('dlvrFgProdCtrl', ['$scope', '$http', '$timeout', function ($scop
   $scope.endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
   // 콤보박스 데이터
-  $scope._setComboData("packFg", packFg);
+  $scope._setComboData("orderFg", packFg);
 
   if(hqOfficeCd === 'A0001'){ //배달경로(상품별-배달포장구분 hq/ms 113)
     $scope._setComboData("dlvrInFg", comboFgData);
@@ -89,7 +89,7 @@ app.controller('dlvrFgProdOrderFgCtrl', ['$scope', '$http', '$timeout', function
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
-    $scope.packFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
+    $scope.orderFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("dlvrFgProdOrderFgCtrl");
 
@@ -105,7 +105,7 @@ app.controller('dlvrFgProdOrderFgCtrl', ['$scope', '$http', '$timeout', function
 
     // 첫째줄 헤더 생성
     var dataItem          = {};
-    dataItem.dlvrPackFg   = messages["dlvrFg.dlvrFg"];
+    dataItem.dlvrOrderFg  = messages["dlvrFg.dlvrFg"];
     dataItem.totSaleAmt   = messages["dlvrFg.sale"];
     dataItem.totDcAmt     = messages["dlvrFg.sale"];
     dataItem.realSaleAmt  = messages["dlvrFg.sale"];
@@ -177,7 +177,7 @@ app.controller('dlvrFgProdOrderFgCtrl', ['$scope', '$http', '$timeout', function
     params.prodCd       = $scope.prodCd;
     params.prodNm       = $scope.prodNm;
     params.prodClassCd  = $scope.prodClassCd;
-    params.dlvrPackFg   = $scope.packFg;
+    params.dlvrOrderFg  = $scope.orderFg;
     params.dlvrInFg     = $scope.dlvrInFg;
     params.payCol       = payCol;
 
@@ -217,7 +217,7 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
-    $scope.packFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
+    $scope.orderFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("dlvrFgProdProdCtrl");
 
@@ -240,7 +240,7 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params = {};
-        params.dlvrPackFg = selectedRow.dlvrPackFg;
+        params.dlvrOrderFg = selectedRow.dlvrOrderFg;
         params.prodCd = selectedRow.prodCd;
         params.prodNm = selectedRow.prodNm;
         params.startDate = $scope.srchStartDate;
@@ -265,7 +265,7 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 첫째줄 헤더 생성
     var dataItem          = {};
-    dataItem.dlvrPackFg   = messages["dlvrFg.dlvrFg"];
+    dataItem.dlvrOrderFg  = messages["dlvrFg.dlvrFg"];
     dataItem.prodCd       = messages["dlvrFg.prodCd"];
     dataItem.prodNm       = messages["dlvrFg.prodNm"];
     dataItem.barCd        = messages["dlvrFg.barCd"];
@@ -341,7 +341,7 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
     params.prodCd       = $scope.prodCd;
     params.prodNm       = $scope.prodNm;
     params.prodClassCd  = $scope.prodClassCd;
-    params.dlvrPackFg   = $scope.packFg;
+    params.dlvrOrderFg  = $scope.orderFg;
     params.dlvrInFg     = $scope.dlvrInFg;
     params.payCol       = payCol;
 
@@ -385,7 +385,7 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 // 그리드 DataMap 설정
-    $scope.packFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
+    $scope.orderFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
 
     if(hqOfficeCd === 'A0001'){ //배달경로(상품별-배달포장구분 hq/ms 113)
       $scope.dlvrInFgDataMap = new wijmo.grid.DataMap(comboFgData, 'value', 'name');
@@ -415,7 +415,7 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params = {};
-        params.dlvrPackFg = selectedRow.dlvrPackFg;
+        params.dlvrOrderFg = selectedRow.dlvrOrderFg;
         params.dlvrInFg = selectedRow.dlvrInFg;
         params.prodCd = selectedRow.prodCd;
         params.prodNm = selectedRow.prodNm;
@@ -441,7 +441,7 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
 
     // 첫째줄 헤더 생성
     var dataItem          = {};
-    dataItem.dlvrPackFg   = messages["dlvrFg.dlvrFg"];
+    dataItem.dlvrOrderFg  = messages["dlvrFg.dlvrFg"];
     dataItem.dlvrInFg     = messages["dlvrFg.dlvrInFg"];
     dataItem.prodCd       = messages["dlvrFg.prodCd"];
     dataItem.prodNm       = messages["dlvrFg.prodNm"];
@@ -518,7 +518,7 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
     params.prodCd       = $scope.prodCd;
     params.prodNm       = $scope.prodNm;
     params.prodClassCd  = $scope.prodClassCd;
-    params.dlvrPackFg   = $scope.packFg;
+    params.dlvrOrderFg  = $scope.orderFg;
     params.dlvrInFg     = $scope.dlvrInFg;
     params.payCol       = payCol;
 

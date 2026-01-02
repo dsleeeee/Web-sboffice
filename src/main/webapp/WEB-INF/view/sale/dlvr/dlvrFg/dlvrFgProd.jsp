@@ -40,9 +40,9 @@
 			<td>
 				<div class="sb-select w100px fl mr5">
 					<wj-combo-box
-							id="packFg"
-							ng-model="packFg"
-							items-source="_getComboData('packFg')"
+							id="orderFg"
+							ng-model="orderFg"
+							items-source="_getComboData('orderFg')"
 							display-member-path="name"
 							selected-value-path="value"
 							is-editable="false"
@@ -120,7 +120,7 @@
 						item-formatter="_itemFormatter">
 
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrPackFg" data-map="packFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrOrderFg" data-map="orderFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.totSaleAmt"/>" binding="totSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.totDcAmt"/>" binding="totDcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
@@ -163,7 +163,7 @@
 						item-formatter="_itemFormatter">
 
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrPackFg" data-map="packFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrOrderFg" data-map="orderFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.prodNm"/>" binding="prodNm" width="80" is-read-only="true" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
@@ -204,7 +204,7 @@
 						is-read-only="false"
 						item-formatter="_itemFormatter">
 
-					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrPackFg" data-map="packFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrOrderFg" data-map="orderFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.dlvrInFg"/>" binding="dlvrInFg" data-map="dlvrInFgDataMap" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dlvrFg.prodNm"/>" binding="prodNm" width="80" is-read-only="true" ></wj-flex-grid-column>
@@ -240,7 +240,7 @@
 	var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgProd.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgProd.js?ver=20251229.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

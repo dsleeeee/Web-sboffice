@@ -42,7 +42,7 @@
                         <wj-flex-grid-column header="<s:message code="dlvrFg.saleDate"/>" 	binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrFg.posNo"/>" binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrFg.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrPackFg" data-map="packFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrFg.dlvrFg"/>" binding="dlvrOrderFg" data-map="orderFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrFg.dlvrInFg"/>" binding="dlvrInFg" data-map="dlvrInFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrFg.cookMemo"/>" binding="cookMemo" width="150" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrFg.saleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -69,4 +69,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgSaleDtlPop.js?ver=20210729.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgSaleDtlPop.js?ver=20251229.01" charset="utf-8"></script>

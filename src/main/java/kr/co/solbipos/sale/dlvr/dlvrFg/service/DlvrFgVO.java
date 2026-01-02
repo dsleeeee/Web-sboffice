@@ -70,6 +70,8 @@ public class DlvrFgVO extends PageVO {
     private String dlvrPackFg;
     /** 배달경로 */
     private String dlvrInFg;
+    /** 배달구분(변경, 251229) */
+    private String dlvrOrderFg;
 
     /** 상품분류 LEVEL */
     private String level;
@@ -226,6 +228,14 @@ public class DlvrFgVO extends PageVO {
 
     public void setDlvrInFg(String dlvrInFg) {
         this.dlvrInFg = dlvrInFg;
+    }
+
+    public String getDlvrOrderFg() {
+        return dlvrOrderFg;
+    }
+
+    public void setDlvrOrderFg(String dlvrOrderFg) {
+        this.dlvrOrderFg = dlvrOrderFg;
     }
 
     public String getLevel() {

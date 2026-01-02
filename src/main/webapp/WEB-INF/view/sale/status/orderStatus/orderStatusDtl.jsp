@@ -32,7 +32,7 @@
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.orderSeq"/>"          binding="orderSeq" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.orderDtlNo"/>"        binding="orderDtlNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.orderDtlFg"/>"        binding="orderDtlFg" data-map="orderFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="orderStatusDtl.dlvrPackFg"/>"        binding="dlvrPackFg" data-map="dlvrOrderFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="orderStatusDtl.dlvrPackFg"/>"        binding="dlvrOrderFg" data-map="dlvrOrderFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.prodCd"/>"            binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.prodNm"/>"            binding="prodNm" width="70" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.saleUprc"/>"          binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>

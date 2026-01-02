@@ -25,7 +25,7 @@ app.controller('dlvrFgSaleDtlPopCtrl', ['$scope', '$http', '$timeout', function 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.packFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
+        $scope.orderFgDataMap = new wijmo.grid.DataMap(packFg, 'value', 'name');
 
         if(hqOfficeCd === 'A0001'){ //배달경로(상품별-배달포장구분 hq/ms 113)
             $scope.dlvrInFgDataMap = new wijmo.grid.DataMap(comboFgData, 'value', 'name');
@@ -53,7 +53,7 @@ app.controller('dlvrFgSaleDtlPopCtrl', ['$scope', '$http', '$timeout', function 
         dataItem.saleDate = messages["dlvrFg.saleDate"];
         dataItem.posNo = messages["dlvrFg.posNo"];
         dataItem.billNo = messages["dlvrFg.billNo"];
-        dataItem.dlvrPackFg = messages["dlvrFg.dlvrFg"];
+        dataItem.dlvrOrderFg = messages["dlvrFg.dlvrFg"];
         dataItem.dlvrInFg = messages["dlvrFg.dlvrInFg"];
         dataItem.cookMemo = messages["dlvrFg.cookMemo"];
         dataItem.saleQty = messages["dlvrFg.saleQty"];
