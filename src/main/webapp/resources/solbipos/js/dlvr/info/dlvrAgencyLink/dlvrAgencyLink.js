@@ -113,13 +113,13 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
         }
 
         if (1 > chkCnt) {
-            $scope._popMsg(messages["dlvrAgencyLink.link.del.chk.msg1"]);
+            $scope._popMsg(messages["dlvrAgencyLink.link.del.chk.msg1"]); // 선택한 배달대행사가 없습니다.
             return false;
         }
 
 
         if (chkCnt > 1) {
-            $scope._popMsg(messages["dlvrAgencyLink.link.del.chk.msg2"]);
+            $scope._popMsg(messages["dlvrAgencyLink.link.del.chk.msg2"]); // 배달대행사는 1개만 선택하세요.
             return false;
         }
 
@@ -142,7 +142,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
         console.log(params);
 
-        // 와(과)<br>POS 연동을 해제하시겠습니까?
+        // 배달대행사를 해제하시겠습니까?
         $scope._popConfirm(params.riderName + messages["dlvrAgencyLink.link.clear.msg"], function () {
 
             $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/deleteAgencyLink.sb", params, function (response) {
@@ -291,10 +291,20 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                     $("#divRight").css("display", "");
                 }
 
-            } else {
+            } else { // data.status === "error" && data.status_code === 500 인 상태
                 $scope.useYnCombo.selectedValue = false;
                 $scope.useYnCombo.isDisabled = true;
-                $("#lblText").text("");
+
+                // 기존 주문 연동 활성화 콤보박스 선택값 갖고 있기(없음)
+                $scope.orgUseYn = "";
+
+                // 구독여부 상태값 갖고있기(없음)
+                $scope.paymentStatus = "";
+
+                // 배달앱 연동 정보 상태값 갖고있기(없음)
+                $scope.basePlatformInfo = null;
+
+                $("#lblText").text("※" + " " + messages['dlvrAgencyLink.status.save.msg1']); // ※ 오더킷 서비스 구독 상태를 확인해주세요.
                 $("#lblText").css('color', 'red');
                 // 배달대행사 연동 영역 hidden
                 $("#divInstructions").css("display", "none");

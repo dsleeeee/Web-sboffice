@@ -237,6 +237,8 @@ public class DlvrAgencyLinkController {
 
 
         dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+
+        //SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
         String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/status";
@@ -262,6 +264,8 @@ public class DlvrAgencyLinkController {
                                      HttpServletResponse response, Model model) {
 
         dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+
+        //SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
         String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/orderandrider";

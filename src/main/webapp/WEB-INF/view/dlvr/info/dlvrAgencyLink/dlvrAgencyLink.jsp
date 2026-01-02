@@ -128,7 +128,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20251202.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20260102.01" charset="utf-8"></script>
 
 <%-- 배달대행사 추가 팝업 --%>
 <c:import url="/WEB-INF/view/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.jsp">

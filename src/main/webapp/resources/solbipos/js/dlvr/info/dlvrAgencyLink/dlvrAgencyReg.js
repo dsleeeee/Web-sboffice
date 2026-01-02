@@ -108,16 +108,23 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
                 var comboArray = [];
                 var comboData = {};
 
+                // 배달대행사 이름순 정렬
+                list.sort((a, b) => a.agencyName.localeCompare(b.agencyName));
+
                 // 콤보 기본값 '선택' 추가
                 comboData.name = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
 
                 for (var i = 0; i < list.length; i++) {
-                    comboData = {};
-                    comboData.name = list[i].agencyName;
-                    comboData.value = list[i].agencyCode;
-                    comboArray.push(comboData);
+
+                    // 직접배달(DR01), 부릉(DR02) 제외
+                    if (list[i].agencyCode !== "DR01" && list[i].agencyCode !== "DR02") {
+                        comboData = {};
+                        comboData.name = list[i].agencyName;
+                        comboData.value = list[i].agencyCode;
+                        comboArray.push(comboData);
+                    }
                 }
 
                 $scope._setComboData("srchDlvrAgency", comboArray);
@@ -166,6 +173,9 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
 
                         var list2 = list[i].subAgencies;
 
+                        // 배달대행사 이름순 정렬
+                        list2.sort((a, b) => a.subAgencyName.localeCompare(b.subAgencyName));
+
                         for (var j = 0; j < list2.length; j++) {
 
                             comboData = {};
@@ -205,14 +215,14 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
 
         // 배달대행사를 선택하세요.
         if ($scope.srchDlvrAgencyCombo.selectedValue === "") {
-            $scope._popMsg(messages['dlvrAgencyLink.link.del.chk.msg1']);
+            $scope._popMsg(messages['dlvrAgencyLink.store.srch.chk.msg1']);
             return;
         }
 
         // 하위 배달대행사를 선택하세요.
         if (!$scope.srchSubAgencyCombo.isDisabled) {
             if ($scope.srchSubAgencyCombo.selectedValue === "") {
-                $scope._popMsg(messages['dlvrAgencyLink.store.srch.chk.msg']);
+                $scope._popMsg(messages['dlvrAgencyLink.store.srch.chk.msg2']);
                 return;
             }
         }
@@ -279,13 +289,13 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         }
 
         if (1 > chkCnt) {
-            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg1"]);
+            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg1"]); // 선택한 가맹점이 없습니다.
             return false;
         }
 
 
         if (chkCnt > 1) {
-            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg2"]);
+            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg2"]); // 가맹점은 1개만 선택하세요.
             return false;
         }
 
