@@ -385,6 +385,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // 잔여금액
         $scope.restSmsAmt();
 
+        $scope.showByte();
+
         var params = {};
 
         // $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
@@ -806,6 +808,14 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
+
+        // 우클릭 붙여넣기 시에도 바이트 계산
+        $("#messageContent").on('paste', function() {
+            setTimeout(function() {
+                $scope.showByte();
+                $scope.$apply();
+            }, 0);
+        });
 
         // 발신번호 사전등록 팝업 핸들러 추가
         $scope.wjSmsTelNoRegisterLayer.shown.addHandler(function (s) {

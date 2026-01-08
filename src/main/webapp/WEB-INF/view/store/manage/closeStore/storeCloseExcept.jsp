@@ -101,6 +101,9 @@
     </tbody>
   </table>
 
+  <div id="grid" class="w100">
+    <span class="s12 red">※ 제외([H0393])</span>
+  </div>
 
   <div id="gridRepresent" class="w50 fl mt10" style="width: 50%" ng-controller="storeCloseExceptCtrl">
     <%--위즈모 테이블--%>

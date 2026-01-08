@@ -23,21 +23,18 @@
   <%-- 탭 --%>
   <div>
     <ul class="subTab mt10">
-      <%-- 속성 --%>
-      <li><a id="sideMenuAttr" href="#" class="on" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
       <%-- 선택메뉴(세트) --%>
-      <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('C');"><s:message code="sideMenu.tab.selectMenu(set)" /></a></li>
+      <li><a id="sideMenuSelectMenu" href="#"  class="on" ng-click="changeTab('C');"><s:message code="sideMenu.tab.selectMenu(set)" /></a></li>
       <%-- 선택메뉴(싱글) --%>
       <li><a id="sideMenuSelectMenuSingle" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu(single)" /></a></li>
       <%-- 옵션메뉴(배달) --%>
       <%--<li><a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a></li>--%>
       <%-- 사이드메뉴관리 --%>
       <li><a id="sideMenuManage" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.manage" /></a></li>
+      <%-- 속성 --%>
+      <li><a id="sideMenuAttr" href="#" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
     </ul>
   </div>
-
-  <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuAttr.jsp">
-  </c:import>
 
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuSelectMenu.jsp">
   </c:import>
@@ -49,6 +46,9 @@
   </c:import>
 
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuManage.jsp">
+  </c:import>
+
+  <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuAttr.jsp">
   </c:import>
 
 </div>
@@ -87,7 +87,7 @@
   }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20251112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20260107.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:if test="${param.gubun ne 'sideMenu'}">

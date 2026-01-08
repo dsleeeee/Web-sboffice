@@ -193,6 +193,8 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         }
       }
     });
+    $scope._broadcast('sideMenuSelectGroupCtrl');
+
   };
 
   // <-- 검색 호출 -->

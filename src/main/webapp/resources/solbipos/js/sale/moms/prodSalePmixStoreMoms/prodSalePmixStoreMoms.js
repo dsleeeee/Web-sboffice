@@ -476,6 +476,11 @@ app.controller('prodSalePmixStoreMomsCtrl', ['$scope', '$http', '$timeout', func
             }
         }
 
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
         var params = {};
         params.dayGubun = $scope.srchDayGubunCombo.selectedValue;
         if (params.dayGubun === "day") {

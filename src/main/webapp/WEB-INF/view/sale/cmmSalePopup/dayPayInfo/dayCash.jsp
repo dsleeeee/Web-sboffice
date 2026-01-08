@@ -45,6 +45,7 @@
             <wj-flex-grid-column header="<s:message code="dayCash.apprDate"/>" binding="apprDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayCash.apprTime"/>" binding="apprTime" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayCash.vanNm"/>" binding="vanNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayCash.cupAmt"/>" binding="cupAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

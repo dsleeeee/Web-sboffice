@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NonTaxSale.xml
+    비과세매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.01.02     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.anals.nonTaxSale.service.impl.NonTaxSaleMapper">
+    <!-- 비과세매출 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getNonTaxSaleList" parameterType="NonTaxSaleVO" resultType="DefaultMap">
+        /* NonTaxSaleMapper.getNonTaxSaleList */
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+        SELECT  TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM
+        ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO
+        ,       STORE_CD
+        ,		STORE_NM
+        ,		COUPN_FG
+        ,		COUPN_NM
+        ,		SUM(SALE_AMT)   AS SALE_AMT
+        FROM    (
+        </if>
+                    SELECT  TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    ,       A.STORE_CD
+                    , 		B.STORE_NM
+                    ,       A.POS_NO
+                    , 		A.BILL_NO
+                    ,       A.MCOUPN_CD		AS COUPN_CD
+                    ,       CASE
+                                    WHEN A.MCOUPN_CD = '003' THEN '기프티쇼'
+                                    WHEN A.MCOUPN_CD = '006' THEN '즐거운'
+                                    WHEN A.MCOUPN_CD = '008' THEN '스마트콘'
+                                    WHEN A.MCOUPN_CD = '014' THEN '기프티콘'
+                            END				AS COUPN_NM
+                    ,		'E쿠폰'			AS COUPN_FG
+                    ,		'오프라인(POS)'	AS ONLINE_FG
+                    ,		'E쿠폰 할인'		AS POS_FG
+                    ,       A.SALE_AMT
+                    FROM 	TB_SL_SALE_PAY_MCOUPN A
+                    ,       TB_MS_STORE B
+                    WHERE  	B.STORE_CD      =   A.STORE_CD
+                    AND		A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND 	A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
+                    UNION ALL
+                    SELECT 	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    ,		A.STORE_CD
+                    ,		C.STORE_NM
+                    ,		A.POS_NO
+                    ,		A.BILL_NO
+                    ,		A.TEMPORARY_PAY_CD  AS COUPN_CD
+                    ,       CASE
+                                    WHEN A.TEMPORARY_PAY_CD = '47' THEN '기프티쇼'
+                                    WHEN A.TEMPORARY_PAY_CD = '48' THEN '즐거운'
+                                    WHEN A.TEMPORARY_PAY_CD = '57' THEN '스마트콘'
+                                    WHEN A.TEMPORARY_PAY_CD = '58' THEN '기프티콘'
+                                    ELSE '관리자 확인'
+                            END				    AS COUPN_NM
+                    ,		'E쿠폰'       AS COUPN_FG
+                    ,		'온라인(APP)'  AS ONLINE_FG
+                    ,		'가승인'       AS POS_FG
+                    ,       A.SALE_AMT
+                    FROM 	TB_SL_SALE_PAY_TEMPORARY A
+                    ,       TB_CM_NMCODE B
+                    ,		TB_MS_STORE C
+                    WHERE   B.NMCODE_CD         =   A.TEMPORARY_PAY_CD
+                    AND		C.STORE_CD		    =   A.STORE_CD
+                    AND		A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                    AND 	A.SALE_DATE         BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     B.NMCODE_GRP_CD     =   '111'
+                    AND		A.TEMPORARY_PAY_CD 	IN  ('47', '48', '57', '58')
+                    UNION ALL
+                    SELECT  TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    ,		A.STORE_CD
+                    ,		C.STORE_NM
+                    ,		A.POS_NO
+                    ,		A.BILL_NO
+                    ,		B.COUPN_CD
+                    ,		B.COUPN_NM
+                    ,		'제휴 할인'                     AS COUPN_FG
+                    ,		'오프라인(POS) + 온라인(APP)'    AS ONLINE_FG
+                    ,		CASE
+                                    WHEN A.PAY_CLASS_CD = '001' THEN '제휴사 할인'
+                                    WHEN A.PAY_CLASS_CD = '002' THEN '카드사 할인'
+                            END     AS POS_FG
+                    ,       A.DC_AMT
+                    FROM    (
+                                SELECT  B.PAY_CLASS_CD || B.COUPN_CD AS R_DC_REASON_CD
+                                ,		B.PAY_CLASS_CD
+                                ,       A.*
+                                FROM    TB_SL_SALE_DTL_DC A
+                                ,       TB_SL_SALE_PAY_COUPN B
+                                WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                                AND     B.PAY_CLASS_CD      IN  ('001', '002')
+                                AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                                AND     B.STORE_CD      (+) =   A.STORE_CD
+                                AND     B.SALE_DATE     (+) =   A.SALE_DATE
+                                AND     B.POS_NO        (+) =   A.POS_NO
+                                AND     B.BILL_NO       (+) =   A.BILL_NO
+                                AND     B.DC_AMT            >   0
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD IN (${storeCdQuery})
+                                </if>
+                            ) A
+                    ,       (
+                                SELECT  STORE_CD
+                                ,       PAY_CLASS_CD||COUPN_CD AS COUPN_CD
+                                ,       COUPN_NM
+                                FROM    TB_MS_COUPON
+                                WHERE   STORE_CD        IN  ( SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     PAY_CLASS_CD    IN  ('001', '002')
+                            ) B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                    AND     A.SALE_DATE         BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     A.DC_CD             IN   ('04','14')
+                    AND     B.STORE_CD          =   A.STORE_CD
+                    AND     B.COUPN_CD          =   A.R_DC_REASON_CD
+                    AND		C.STORE_CD 			=   A.STORE_CD
+                    UNION ALL
+                    SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    ,		A.STORE_CD
+                    ,		B.STORE_NM
+                    ,		A.POS_NO
+                    ,		A.BILL_NO
+                    ,		D.S_CLASS_CD    AS COUPN_CD
+                    ,		D.S_CLASS_NM    AS COUPN_NM
+                    ,		'채널사 할인쿠폰'  AS COUPN_FG
+                    ,		'오프라인(POS)'   AS ONLINE_FG
+                    ,		'가승인'          AS POS_FG
+                    ,		ABS(A.SALE_AMT) AS SALE_AMT
+                    FROM	TB_SL_SALE_DTL A
+                    ,		TB_MS_STORE B
+                    ,		TB_MS_PRODUCT C
+                    ,		TB_MS_PRODUCT_CLASS_V03 D
+                    WHERE 	B.STORE_CD 		=	A.STORE_CD
+                    AND		C.PROD_CD 		=	A.PROD_CD
+                    AND		C.STORE_CD 		=	A.STORE_CD
+                    AND		D.S_CLASS_CD    =	C.PROD_CLASS_CD
+                    AND		D.STORE_CD 		=	A.STORE_CD
+                    AND		A.HQ_OFFICE_CD	=   #{hqOfficeCd}
+                    AND		A.SALE_DATE 	BETWEEN #{startDate} AND #{endDate}
+                    AND 	D.M_CLASS_CD IN ( '00217' )
+                    AND     D.S_CLASS_CD IS NOT NULL
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+                    ORDER
+                    BY      SALE_DATE
+                    ,       STORE_CD
+                    ,       POS_NO
+                    ,       BILL_NO
+                    ,       COUPN_FG
+                    ,       ONLINE_FG
+                    ,       POS_FG
+                    ,       COUPN_NM
+                    </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+                )
+            GROUP
+            BY		STORE_CD
+            ,		STORE_NM
+            ,		COUPN_FG
+            ,		COUPN_NM
+            ORDER
+            BY      STORE_CD
+            ,       COUPN_FG
+            ,       COUPN_NM
+        </if>
+    </select>
+</mapper>

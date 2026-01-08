@@ -189,12 +189,13 @@
   var membrClassManageFg = ${membrClassManageFg};
 
   $(function(){
-    $("input:text[numberOnly]").on("keyup", function() {
+    $("input:text[numberOnly]").on("input", function() {
       $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+      $(this).trigger('change');
     });
   });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/postpaid.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/postpaid.js?ver=20260108.01" charset="utf-8"></script>
 
 <%-- 외상입금 팝업 --%>
 <%--<c:import url="/WEB-INF/view/membr/anals/postpaid/deposit.jsp">--%>

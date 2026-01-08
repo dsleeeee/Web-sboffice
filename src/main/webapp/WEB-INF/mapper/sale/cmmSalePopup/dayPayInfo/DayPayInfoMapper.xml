@@ -18,6 +18,7 @@
         ,       SUM(DECODE(tsspc.SALE_YN, 'Y', tsspc.APPR_AMT, 0)) AS APPR_AMT
         ,       SUM(DECODE(tsspc.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
         ,       SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.SALE_AMT, 0)) AS CANCEL_AMT
+        ,       SUM(tsspc.CUP_AMT)  AS CUP_AMT
         FROM    TB_SL_SALE_PAY_CARD tsspc
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
         ]]>
@@ -75,6 +76,7 @@
         ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
         ,       SUBSTR(tsspc.APPR_DT, 9, 14) AS APPR_TIME
         ,       tsspc.VAN_CD, tcvc.VAN_NM
+       ,        CUP_AMT
         FROM    TB_SL_SALE_PAY_CASH tsspc
         ,       TB_MS_CORNER tmc
         ,       TB_CM_VAN_CMPNY tcvc
@@ -304,6 +306,7 @@
         ,       SUM(DECODE(tsspm.SALE_YN, 'Y', tsspm.APPR_AMT, 0)) AS APPR_AMT
         ,       SUM(DECODE(tsspm.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
         ,       SUM(DECODE(tsspm.SALE_YN, 'N', tsspm.APPR_AMT, 0)) AS CANCEL_AMT
+        ,       SUM(tsspm.CUP_AMT)    AS CUP_AMT
         FROM    TB_SL_SALE_PAY_MPAY tsspm
         ,       TB_CM_NMCODE tcn
         WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
@@ -617,7 +620,7 @@
         ,       tsspgd.GIFT_UPRC
         ,       tsspgd.GIFT_QTY
         ,       tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY AS GIFT_TOT_AMT  -- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL)
-        ,       tsspgr.RTN_PAY_AMT
+        ,       NVL(tsspgr.RTN_PAY_AMT, 0)  AS RTN_PAY_AMT
         FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
         ,       TB_SL_SALE_PAY_GIFT_RTN tsspgr
         ,       TB_MS_GIFT tmg

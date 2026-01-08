@@ -19,16 +19,16 @@ var app = agrid.getApp();
 app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuCtrl', $scope, $http, false));
-  // 속성 탭
-  $scope.isAttrTab = false;
   // 선택메뉴 탭
-  $scope.isSelectMenuTab = true;
+  $scope.isSelectMenuTab = false;
   // 선택메뉴(싱글) 탭
   $scope.isSelectMenuSingleTab = true;
   // 옵션메뉴(배달) 탭
   $scope.isOptionMenuDlvrTab = true;
   // 사이드메뉴관리 탭
   $scope.isManageTab = true;
+  // 속성 탭
+  $scope.isAttrTab = true;
   // 탭변경
   $scope.changeTab = function(type){
     // 속성 탭
@@ -117,7 +117,6 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 탭 조회
   $scope.queryTab = function() {
-
 
     if (!$scope.isAttrTab) {
 

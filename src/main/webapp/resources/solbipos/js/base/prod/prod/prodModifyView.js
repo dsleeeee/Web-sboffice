@@ -1244,6 +1244,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
+        // 매핑코드 길이 체크
+        if(nvl($scope.prodModifyInfo.mapProdCd, '').getByteLengthForOracle() > 25){
+            $scope._popMsg(messages['prod.mapProdCd'] + "은 최대 25byte까지 입력 가능합니다. (한글 3byte 그외 1byte)");
+            return false;
+        }
+
         return true;
     };
 

@@ -119,7 +119,7 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
     //   }, 50)
     // });
     // 세금계산서 발행완료처리 팝업 핸들러 추가
-    $scope.depositLayer.shown.addHandler(function (s) {
+    $scope.taxBillDepositLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('taxBillDepositCtrl');
       }, 50)

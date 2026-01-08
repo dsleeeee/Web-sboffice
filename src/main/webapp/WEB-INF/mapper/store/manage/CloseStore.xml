@@ -68,6 +68,11 @@
                                     SELECT  STORE_CD
                                     FROM    TB_MS_STORE_CLOSE_EXCEPT
                                     )
+        AND		A.STORE_CD NOT IN	(
+                                        SELECT	STORE_CD
+                                        FROM 	TB_MS_STORE
+                                        WHERE	HQ_OFFICE_CD = 'H0393'  -- 맘스터치 하위매장 제외
+                                    )
         ]]>
         --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
         <if test='agencyCd != null and agencyCd !=""'>
@@ -126,6 +131,11 @@
                     AND     A.STORE_CD NOT IN (
                                                 SELECT  STORE_CD
                                                 FROM    TB_MS_STORE_CLOSE_EXCEPT
+                                                )
+                    AND     A.STORE_CD NOT IN   (
+                                                    SELECT  STORE_CD
+                                                    FROM 	TB_MS_STORE
+                                                    WHERE	HQ_OFFICE_CD = 'H0393'
                                                 )
                     ]]>
                     --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
@@ -186,6 +196,11 @@
         WHERE 	tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
         AND		tms.AGENCY_CD = tca.AGENCY_CD
         AND 	tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_MS_STORE_CLOSE_EXCEPT)
+        AND     tms.STORE_CD NOT IN (
+                                        SELECT	STORE_CD
+                                        FROM 	TB_MS_STORE
+                                        WHERE	HQ_OFFICE_CD = 'H0393'  -- 맘스터치 하위매장 제외
+                                    )
         <if test="vanCd != null and vanCd != ''">
             AND tms.VAN_CD = #{vanCd}
         </if>
@@ -238,6 +253,11 @@
         AND		tmsce.STORE_CD = tms.STORE_CD
         AND		tmsce.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
         AND		tms.AGENCY_CD = tca.AGENCY_CD
+        AND     tms.STORE_CD NOT IN (
+                                        SELECT	STORE_CD
+                                        FROM 	TB_MS_STORE
+                                        WHERE	HQ_OFFICE_CD = 'H0393'  -- 맘스터치 하위매장 제외
+                                    )
         <if test="vanCd != null and vanCd != ''">
             AND tms.VAN_CD = #{vanCd}
         </if>

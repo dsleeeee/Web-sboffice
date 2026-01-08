@@ -48,7 +48,7 @@
             <wj-flex-grid-column header="<s:message code="dayGift.giftUprc"/>" binding="giftUprc" width="90" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayGift.giftQty"/>" binding="giftQty" width="90" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayGift.giftTotAmt"/>" binding="giftTotAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayGift.rtnPayAmt"/>" binding="rtnPayAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayGift.rtnPayAmt"/>" binding="rtnPayAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

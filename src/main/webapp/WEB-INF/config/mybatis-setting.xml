@@ -1229,6 +1229,9 @@
     <typeAlias alias="monthMrpizzaVO" type="kr.co.solbipos.sale.month.monthMrpizza.service.MonthMrpizzaVO"/>
     <!-- 미스터피자 > 매출분석 > 일별시간대 -->
     <typeAlias alias="dayTimeMrpizzaVO" type="kr.co.solbipos.sale.day.dayTimeMrpizza.service.DayTimeMrpizzaVO"/>
+    <!-- 미스터피자 > 매출분석 > 비과세매출 -->
+    <typeAlias alias="nonTaxSaleVO" type="kr.co.solbipos.sale.anals.nonTaxSale.service.NonTaxSaleVO"/>
+
     <!-- 미스터피자 > 매장분석 > 매장-일별매출현황(채널별) -->
     <typeAlias alias="storeDayChannelMrpizzaVO" type="kr.co.solbipos.sale.store.storeDayChannelMrpizza.service.StoreDayChannelMrpizzaVO"/>
     <!-- 미스터피자 > 매장분석 > 매장-월별매출현황(채널별) -->
