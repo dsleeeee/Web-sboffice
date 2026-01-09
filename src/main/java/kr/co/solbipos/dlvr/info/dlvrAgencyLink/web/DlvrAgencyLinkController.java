@@ -70,7 +70,7 @@ public class DlvrAgencyLinkController {
 
     // [POS OMS API 정보]
     // (개발)
-    public static final String POS_OMS_API_URL = "https://api.kcp.onesell.co.kr:14000";
+    public static final String POS_OMS_API_URL = "https://test-api.orderkit.co.kr";
     public static final String SECRET_KEY = "Pu51+1YJD50Jp0/7ZDy94aJsh0HRZcfjKQf5bHiiZtWHerPuMSY1EEbVSVXz8P7JxOEt01DMXFw5ItGT3l9hLQ==";
     // (운영)
     //public static final String POS_OMS_API_URL = "https://api.orderkit.co.kr:14000";
@@ -236,10 +236,10 @@ public class DlvrAgencyLinkController {
                                 HttpServletResponse response, Model model) {
 
 
-        dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+        //dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
 
-        //SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
         String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/status";
 
@@ -263,10 +263,10 @@ public class DlvrAgencyLinkController {
     public Result saveOrderAndRider(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
 
-        dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+        //dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
 
-        //SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
         String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/orderandrider";
 

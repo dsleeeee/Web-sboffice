@@ -8,7 +8,7 @@
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <span><a href="#" class="btn01 first01" id="" ng-click="openWeb();">오더킷(Order kit) 관리자 웹 이동</a></span>
+        <button class="btn01 first01" id="btnOpenWeb" ng-click="openWeb();">오더킷(Order kit) 관리자 웹 이동</button>
     </div>
 
 </div>
@@ -18,14 +18,14 @@
     // jwtToken
     var jwtToken = "${jwtToken}";
 
-    // OMS웹뷰 새창 open
-    var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken; // 개발
-    //var url = "https://orderkit.co.kr/auth/pos?token=" + jwtToken; // 운영
-    window.open(url, 'newWindow');
+    // 오더킷(Order kit) 관리자 웹 이동
+    setTimeout(function() {
+        $("#btnOpenWeb").trigger('click');
+    }, 500);
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20251031.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20260107.01" charset="utf-8"></script>
 
 <style>
     /* 단순버튼 01 */
