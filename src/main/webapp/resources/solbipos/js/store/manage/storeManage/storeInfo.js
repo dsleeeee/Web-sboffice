@@ -78,6 +78,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setSysStatFgVal = function(s){
     if(s.selectedValue === "2"){
       $(".sysClosureDate").css("display", "");
+
+      // 매장상태구분 콤보박스 변경으로 이벤트가 발생했을 경우만 실행
+      // 매장상세팝업 오픈시에는 inSysStatFgPath = "" 값이 없어 실행 안되고 기존 폐점일자 정보가 셋팅됨
+      if(inSysStatFgPath === "comboChange") {
+        // 시스템 폐점일자 오늘날짜로 셋팅
+        sysClosureDate.value = getCurDate('-');
+      }
+
     } else {
       $(".sysClosureDate").css("display", "none");
     }
@@ -243,6 +251,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     }else{
       $("#lblVanFixFg").text("N");
     }
+
+    // 매장상태구분 콤보박스 변경 구분자 초기화
+    inSysStatFgPath = "";
 
     // 시스템 오픈일자 / 포스개점일자
     // $("#sysOpenDate").attr("disabled", false);
@@ -2358,6 +2369,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("input:checkbox[name='copyChk']").prop("checked", false);
     }
   };
+
+  // 매장상태구분 콤보박스 selected change event 구분하기
+  // 매장상태구분 변경 이벤트 - setSysStatFgVal(s,e)는 매장상세팝업 오픈 또는 매장상태구분 콤보박스 변경시 발생하는데,
+  // 폐점일자 = 오늘날짜 셋팅은 매장상태구분 콤보 변경시에만 적용되어야 하므로 구분자를 이용해 구별한다.
+  var inSysStatFgPath = "";
+  $scope.chgSysStatFg = function () {
+    // 구분자 셋팅(매장상태구분 콤보박스 변경 했다는 의미)
+    inSysStatFgPath = "comboChange";
+  }
 
 }]);
 // 터미널관리(밴더코드) 코드값으로 명칭 가져오기

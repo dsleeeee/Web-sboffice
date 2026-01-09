@@ -123,7 +123,8 @@
                                             selected-value-path="value"
                                             is-editable="false"
                                             initialized="_initComboBox(s)"
-                                            selected-index-changed="setSysStatFgVal(s,e)">
+                                            selected-index-changed="setSysStatFgVal(s,e)"
+                                            ng-click="chgSysStatFg()">
                                     </wj-combo-box>
                                 </div>
                                 <input type="hidden" id="hdSysStatFg" />
@@ -821,7 +822,7 @@
     var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20250709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20260109.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
