@@ -96,6 +96,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var msg = messages["storeManage.require.notSelectDemo"];
       if(s.selectedValue === "9"){
         $scope._popMsg(msg);
+
+        // 매장상태구분 콤보박스 변경 구분자 초기화(시스템 폐점일자 오늘날짜로 셋팅 방지)
+        inSysStatFgPath = "";
+
         s.selectedValue = $("#hdSysStatFg").val();
         return false;
       }
