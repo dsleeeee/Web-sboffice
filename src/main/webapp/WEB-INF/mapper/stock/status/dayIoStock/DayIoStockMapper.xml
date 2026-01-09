@@ -133,7 +133,7 @@
 						SELECT 	AST.HQ_OFFICE_CD
 						,		AST.PROD_CD
 						<if test='unitFg == "1"'>
-							,   SF_ZERO_TO_NULL(SUM(AST.DATE_QTY / TMP.PO_UNIT_QTY))             AS BASE_QTY /* 기초재고수량 */
+							,   SF_ZERO_TO_NULL(SUM(AST.DATE_QTY / THP.PO_UNIT_QTY))             AS BASE_QTY /* 기초재고수량 */
 							,   SF_ZERO_TO_NULL(SUM(AST.AVG_COST_UPRC))                          AS BASE_TOT /* 기초재고금액 */
 						</if>
 						<if test='unitFg == "0"'>
@@ -154,7 +154,7 @@
 						SELECT 	BST.HQ_OFFICE_CD
 						,		BST.PROD_CD
 						<if test='unitFg == "1"'>
-							,   SF_ZERO_TO_NULL(SUM(BST.DATE_QTY / TMP.PO_UNIT_QTY))             AS CLOSE_QTY /* 기초재고수량 */
+							,   SF_ZERO_TO_NULL(SUM(BST.DATE_QTY / THP.PO_UNIT_QTY))             AS CLOSE_QTY /* 기초재고수량 */
 							,   SF_ZERO_TO_NULL(SUM(BST.AVG_COST_UPRC))                          AS CLOSE_TOT /* 기초재고금액 */
 						</if>
 						<if test='unitFg == "0"'>
