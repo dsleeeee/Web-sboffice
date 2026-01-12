@@ -115,7 +115,7 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20251117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20260112.01" charset="utf-8"></script>
 
 <%-- 추가(상품포함) 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">

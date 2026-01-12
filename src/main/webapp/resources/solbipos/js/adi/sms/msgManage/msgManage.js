@@ -236,6 +236,15 @@ app.controller('msgManageCtrl', ['$scope', '$http', function ($scope, $http) {
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
+        // 우클릭 붙여넣기 시에도 바이트 계산
+        $("#msgManageMessageContent").on('paste', function() {
+            setTimeout(function() {
+                var scope = agrid.getScope('msgManageDtlCtrl');
+                scope.showByte();
+                scope.$apply();
+            }, 0);
+        });
+
         // 메세지관리 매장적용 팝업 핸들러 추가
         $scope.wjMsgManageStoreRegistLayer.shown.addHandler(function (s) {
             setTimeout(function() {
@@ -362,6 +371,9 @@ app.controller('msgManageDtlCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 저장
     $scope.msgSave = function () {
+
+        $scope.showByte();
+
         // 본사 메세지 수정 불가
         if(orgnFg == "STORE") {
             if (parseInt($("#lblMsgGrpCd").text()) < 81) {

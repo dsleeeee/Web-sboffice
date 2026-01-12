@@ -145,8 +145,8 @@
                     ,		D.S_CLASS_NM    AS COUPN_NM
                     ,		'채널사 할인쿠폰'  AS COUPN_FG
                     ,		'오프라인(POS)'   AS ONLINE_FG
-                    ,		'가승인'          AS POS_FG
-                    ,		ABS(A.SALE_AMT) AS SALE_AMT
+                    ,		'가승인'         AS POS_FG
+                    ,		A.SALE_AMT      AS SALE_AMT
                     FROM	TB_SL_SALE_DTL A
                     ,		TB_MS_STORE B
                     ,		TB_MS_PRODUCT C
