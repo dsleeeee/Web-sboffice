@@ -17,21 +17,24 @@ var app = agrid.getApp();
 var acceptedFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 // 완료구분
 var completedFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 // 취소구분
 var canceledFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 /**
@@ -70,14 +73,14 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
         $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList, 'value', 'name'); // 매장그룹4
         $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList, 'value', 'name'); // 매장그룹5
     };
-    
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("orderTimeTrackingCtrl", function (event, data) {
       $scope.srchOrderTimeTrackingList();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
-    
+
     //
     $scope.srchOrderTimeTrackingList = function () {
 
@@ -191,14 +194,14 @@ app.controller('orderTimeTrackingExcelCtrl', ['$scope', '$http', '$timeout', fun
         $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList, 'value', 'name'); // 매장그룹4
         $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList, 'value', 'name'); // 매장그룹5
     };
-    
+
     // 다른 컨트롤러의 orderTimeTrackingExcelCtrl 받기
     $scope.$on("orderTimeTrackingExcelCtrl", function (event, data) {
         $scope.srchOrderTimeTrackingExcelList(data);
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-    
+
     // 엑셀 다운로드
     $scope.srchOrderTimeTrackingExcelList = function (params) {
 

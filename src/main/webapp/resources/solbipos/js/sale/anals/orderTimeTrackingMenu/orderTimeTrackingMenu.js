@@ -17,21 +17,24 @@ var app = agrid.getApp();
 var acceptedFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 // 완료구분
 var completedFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 // 취소구분
 var canceledFg = [
     {"name": "포스", "value": "1"},
     {"name": "사장님앱", "value": "2"},
-    {"name": "채널사", "value": "3"}
+    {"name": "채널사", "value": "3"},
+    {"name": "테이블오더", "value": "4"}
 ];
 
 /**
