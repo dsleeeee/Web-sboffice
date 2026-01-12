@@ -20,7 +20,7 @@ var dayOptionComboData = [
 ];
 
 // 조회 쿨다운 설정
-var searchCooldown = 180000; // 3분
+var searchCooldown = 60000; // 1분
 var nextSearchTime = null;  // 다음 조회 가능 시간
 
 /**
