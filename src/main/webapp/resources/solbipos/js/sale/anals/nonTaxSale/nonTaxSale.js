@@ -20,7 +20,7 @@ var dayOptionComboData = [
 ];
 
 // 조회 쿨다운 설정
-var searchCooldown = 60000; // 1분
+var searchCooldown = 30000; // 30초
 var nextSearchTime = null;  // 다음 조회 가능 시간
 
 /**
@@ -59,12 +59,15 @@ app.controller('nonTaxSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 비과세매출 리스트 조회
     $scope.getNonTaxSaleList = function () {
+
         // 조회 쿨다운 체크
-        var currentTime = new Date().getTime();
-        if (nextSearchTime !== null && currentTime < nextSearchTime) {
-            var availableTimeStr = wijmo.Globalize.format(new Date(nextSearchTime), 'yyyy-MM-dd HH:mm:ss');
-            $scope._popMsg("시스템 안정성 확보를 위해 조회 대기중입니다. (사용가능 예상시간: " + availableTimeStr + ")(여러사용자 사용 시 초기화 될 수 있습니다.)");
-            return false;
+        if(orgnFg === "HQ") {
+            var currentTime = new Date().getTime();
+            if (nextSearchTime !== null && currentTime < nextSearchTime) {
+                var availableTimeStr = wijmo.Globalize.format(new Date(nextSearchTime), 'yyyy-MM-dd HH:mm:ss');
+                $scope._popMsg("시스템 안정성 확보를 위해 조회 대기중입니다. (사용가능 예상시간: " + availableTimeStr + ")");
+                return false;
+            }
         }
 
         var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));

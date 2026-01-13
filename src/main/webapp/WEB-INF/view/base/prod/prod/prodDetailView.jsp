@@ -1192,4 +1192,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20251117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20260113.01" charset="utf-8"></script>
