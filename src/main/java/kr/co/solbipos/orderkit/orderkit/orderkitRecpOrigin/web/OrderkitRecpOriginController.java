@@ -102,13 +102,26 @@ public class OrderkitRecpOriginController {
     public Result orderkitGoto(HttpServletRequest request, HttpServletResponse response, Model model, OrderkitRecpOriginVO orderkitRecpOriginVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String token = "";
 
-        // JWT 토큰 생성
-        String token = orderkitController.createJWT(sessionInfoVO);
-        LOGGER.info("Crate JWT Token: " + token);
+        if (orderkitRecpOriginVO.getRedirectUrl() != null && !orderkitRecpOriginVO.getRedirectUrl().equals("")) {
 
-        // JWT 토큰 파싱(확인용)
-        orderkitController.parseJWT(token);
+            // JWT 토큰 생성
+            token = orderkitController.createJWT2(sessionInfoVO, orderkitRecpOriginVO.getRedirectUrl());
+            LOGGER.info("createJWT2 JWT2 Token: " + token);
+
+            // JWT 토큰 파싱(확인용)
+            orderkitController.parseJWT2(token);
+
+        } else {
+
+            // JWT 토큰 생성
+            token = orderkitController.createJWT(sessionInfoVO);
+            LOGGER.info("Crate JWT Token: " + token);
+
+            // JWT 토큰 파싱(확인용)
+            orderkitController.parseJWT(token);
+        }
 
         return ReturnUtil.returnJson(Status.OK, token);
     }

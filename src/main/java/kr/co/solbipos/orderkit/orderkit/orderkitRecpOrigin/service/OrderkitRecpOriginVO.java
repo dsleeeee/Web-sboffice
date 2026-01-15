@@ -27,6 +27,8 @@ public class OrderkitRecpOriginVO extends CmmVO {
     private String storeCd;
     /** 출력물코드 */
     private String prtCd;
+    /** 오더킷 자동 로그인 시 페이지 이동 URL */
+    private String redirectUrl;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -50,5 +52,13 @@ public class OrderkitRecpOriginVO extends CmmVO {
 
     public void setPrtCd(String prtCd) {
         this.prtCd = prtCd;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 }

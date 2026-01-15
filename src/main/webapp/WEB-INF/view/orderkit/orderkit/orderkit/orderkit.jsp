@@ -8,15 +8,12 @@
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <button class="btn01 first01" id="btnOpenWeb" ng-click="openWeb();">오더킷(Order kit) 관리자 웹 이동</button>
+        <button class="btn01 first01" id="btnOpenWeb" ng-click="orderkitGoto();">오더킷(Order kit) 관리자 웹 이동</button>
     </div>
 
 </div>
 
 <script type="text/javascript">
-
-    // jwtToken
-    var jwtToken = "${jwtToken}";
 
     // 오더킷(Order kit) 관리자 웹 이동
     setTimeout(function() {
@@ -25,7 +22,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20260107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20260114.01" charset="utf-8"></script>
 
 <style>
     /* 단순버튼 01 */

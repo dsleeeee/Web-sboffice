@@ -118,8 +118,8 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
 
                 for (var i = 0; i < list.length; i++) {
 
-                    // 직접배달(DR01), 부릉(DR02) 제외
-                    if (list[i].agencyCode !== "DR01" && list[i].agencyCode !== "DR02") {
+                    // 직접배달(DIRECT), 부릉(VROONG) 제외
+                    if (list[i].agencyCode !== "DIRECT" && list[i].agencyCode !== "VROONG") {
                         comboData = {};
                         comboData.name = list[i].agencyName;
                         comboData.value = list[i].agencyCode;
@@ -232,9 +232,7 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
         params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
-        if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
-            params.isB2BContract = true;
-        } else {
+        if ($scope.srchDlvrAgencyCombo.selectedValue === "LOGIALL") { // 생각대로인 경우, B2B 본사 계약 false(맘스터치 때문에 들어간 기능인데 사용하지 않음)
             params.isB2BContract = false;
         }
 
@@ -307,23 +305,21 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
                 params.linkType = "005";
                 params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
 
-                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR06" || $scope.srchDlvrAgencyCombo.selectedValue === "DR07" || $scope.srchDlvrAgencyCombo.selectedValue === "DR22" ||
-                    $scope.srchDlvrAgencyCombo.selectedValue === "DR24" || $scope.srchDlvrAgencyCombo.selectedValue === "DR29") {
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "SPIDER" || $scope.srchDlvrAgencyCombo.selectedValue === "BEYOND" || $scope.srchDlvrAgencyCombo.selectedValue === "ZEN" ||
+                    $scope.srchDlvrAgencyCombo.selectedValue === "PLUS_N_SOFT" || $scope.srchDlvrAgencyCombo.selectedValue === "INTER") { // SPIDER, 비욘드, 젠딜리, 디스테이션, 인터딜리버리
                     params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
                 }
 
-                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR01" || $scope.srchDlvrAgencyCombo.selectedValue === "DR02" || $scope.srchDlvrAgencyCombo.selectedValue === "DR03") {
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "LOGIALL") { // 생각대로인 경우, B2B 본사 계약 false(맘스터치 때문에 들어간 기능인데 사용하지 않음)
+                    params.isB2BContract = false;
+                }
+
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "DIRECT" || $scope.srchDlvrAgencyCombo.selectedValue === "VROONG" || $scope.srchDlvrAgencyCombo.selectedValue === "BAROGO ") { // 직접배달, 부릉, 바로고
                     params.storeCode = "";
-                } else if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
+                } else if ($scope.srchDlvrAgencyCombo.selectedValue === "LOGIALL" && params.isB2BContract === true) {
                     params.storeCode = "";
                 } else {
                     params.storeCode = item.storeCode;
-                }
-
-                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
-                    params.isB2BContract = true;
-                } else {
-                    params.isB2BContract = false;
                 }
             }
         }

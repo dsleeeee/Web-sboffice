@@ -52,7 +52,7 @@
         <tbody>
         <tr class="brt">
             <th class="oh gr">
-                <%-- 유저 구독여부 안내 --%>
+                <%-- 유저 이용권상태 안내 --%>
                 <p class="s13 bk pdt5 pdb5" style="height: 25px;">
                     <label id="lblText"></label>
                 </p>
@@ -107,6 +107,7 @@
                         <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.dlvrAgency"/>" binding="riderName" width="200" align="left"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" width="100" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.linkDate"/>" binding="mappingDateTime" width="200" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="id" width="200" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -128,7 +129,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20260107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20260114.01" charset="utf-8"></script>
 
 <%-- 배달대행사 추가 팝업 --%>
 <c:import url="/WEB-INF/view/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.jsp">
