@@ -76,6 +76,16 @@ public class QrOrderKeyMapVO extends PageVO {
 
     private String regYn;
 
+    /** 내점, 배달, 포장 체크박스 */
+    private boolean saleTypeYnSin;
+    private boolean saleTypeYnDlv;
+    private boolean saleTypeYnPkg;
+
+    /** 내점, 배달, 포장 값 */
+    private String saleTypeYnSinVal;
+    private String saleTypeYnDlvVal;
+    private String saleTypeYnPkgVal;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -298,5 +308,53 @@ public class QrOrderKeyMapVO extends PageVO {
 
     public void setRegYn(String regYn) {
         this.regYn = regYn;
+    }
+
+    public boolean isSaleTypeYnSin() {
+        return saleTypeYnSin;
+    }
+
+    public void setSaleTypeYnSin(boolean saleTypeYnSin) {
+        this.saleTypeYnSin = saleTypeYnSin;
+    }
+
+    public boolean isSaleTypeYnDlv() {
+        return saleTypeYnDlv;
+    }
+
+    public void setSaleTypeYnDlv(boolean saleTypeYnDlv) {
+        this.saleTypeYnDlv = saleTypeYnDlv;
+    }
+
+    public boolean isSaleTypeYnPkg() {
+        return saleTypeYnPkg;
+    }
+
+    public void setSaleTypeYnPkg(boolean saleTypeYnPkg) {
+        this.saleTypeYnPkg = saleTypeYnPkg;
+    }
+
+    public String getSaleTypeYnSinVal() {
+        return saleTypeYnSinVal;
+    }
+
+    public void setSaleTypeYnSinVal(String saleTypeYnSinVal) {
+        this.saleTypeYnSinVal = saleTypeYnSinVal;
+    }
+
+    public String getSaleTypeYnDlvVal() {
+        return saleTypeYnDlvVal;
+    }
+
+    public void setSaleTypeYnDlvVal(String saleTypeYnDlvVal) {
+        this.saleTypeYnDlvVal = saleTypeYnDlvVal;
+    }
+
+    public String getSaleTypeYnPkgVal() {
+        return saleTypeYnPkgVal;
+    }
+
+    public void setSaleTypeYnPkgVal(String saleTypeYnPkgVal) {
+        this.saleTypeYnPkgVal = saleTypeYnPkgVal;
     }
 }

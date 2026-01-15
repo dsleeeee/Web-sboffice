@@ -317,6 +317,8 @@ public class QrOrderKeyMapController {
             int responseCode = connection.getResponseCode();
             System.out.println("HTTP 응답 코드: " + responseCode);
 
+            String responseBody = null;
+
             // 5. 응답 본문 읽기
             if (responseCode >= 200 && responseCode <= 299) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
@@ -325,7 +327,14 @@ public class QrOrderKeyMapController {
                     while ((responseLine = br.readLine()) != null) {
                         response.append(responseLine.trim());
                     }
-                    resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {
+                    responseBody = response.toString();
+
+                    // 204인 경우 body가 없으므로 JSON 강제 생성
+                    if (responseBody == null || responseBody.isEmpty()) {
+                        responseBody = "{\"status\":\"OK\",\"message\":\"정상 처리되었습니다.\",\"data\":{\"list\":null}}";
+                    }else{
+                    }
+                    resultMap = mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {
                     });
                     System.out.println("서버 응답: " + response.toString());
                 }
