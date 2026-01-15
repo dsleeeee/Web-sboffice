@@ -59,7 +59,7 @@
             <div class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="optionMenuDlvrSelectGroupCtrl">
                 <div class="updownSet oh mb5">
                     <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
-                    <button class="btn_skyblue" id="orderkitGoto" ng-click="orderkitGoto()" style="display: none;" <%--<c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>--%>>
+                    <button class="btn_skyblue" id="orderkitGoto" ng-click="orderkitGoto()" <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>
                         <s:message code="sideMenu.selectMenu.orderkitGoto" />
                     </button>
                 </div>

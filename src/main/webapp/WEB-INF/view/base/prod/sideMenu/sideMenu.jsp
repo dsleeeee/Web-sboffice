@@ -6,6 +6,7 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon" ng-controller="sideMenuCtrl" id="sideMenuView">
 
@@ -28,7 +29,9 @@
       <%-- 선택메뉴(싱글) --%>
       <li><a id="sideMenuSelectMenuSingle" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu(single)" /></a></li>
       <%-- 옵션메뉴(배달) --%>
-      <%--<li><a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a></li>--%>
+      <li <c:if test="${hqOfficeCd == 'H0393'}">style="display: none;"</c:if>>
+        <a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a>
+      </li>
       <%-- 사이드메뉴관리 --%>
       <li><a id="sideMenuManage" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.manage" /></a></li>
       <%-- 속성 --%>
