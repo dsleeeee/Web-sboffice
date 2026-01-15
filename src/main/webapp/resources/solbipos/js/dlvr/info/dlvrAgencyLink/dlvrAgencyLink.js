@@ -27,8 +27,8 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("useYn", useYnFg);
 
-    // 구독여부 상태값
-    $scope.paymentStatus = "";
+    // 이용권상태 상태값
+    $scope.subscriptionStatus = "";
 
     // 배달앱 연동 정보 상태값
     $scope.basePlatformInfo = null;
@@ -38,7 +38,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
     $scope.initGrid = function (s, e) {
 
-        // 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
+        // 유저 상태 조회(이용권상태, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
         $scope.getOmsUserStatus();
 
         // 그리드 데이터 형태에 따른 표기 변환
@@ -67,7 +67,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 배달대행사 연동 현황 조회
     $scope.searchStatus = function () {
 
-        if ($scope.paymentStatus !== "ACTIVE") {
+        if ($scope.subscriptionStatus !== "ACTIVE") {
             // 오더킷 서비스 구독 상태를 확인해주세요.
             $scope._popMsg(messages['dlvrAgencyLink.status.save.msg1']);
             return;
@@ -130,7 +130,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
             if (item.gChk) {
                 params.linkType = "006";
                 params.riderName = item.riderName;
-                params.mappingSequence = item.mappingDateTime;
+                params.mappingSequence = item.id;
 
             }
         }
@@ -168,7 +168,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 주문 중개 서비스 변경
     $scope.btnSave = function () {
 
-        if ($scope.paymentStatus !== "ACTIVE") {
+        if ($scope.subscriptionStatus !== "ACTIVE") {
             // 오더킷 서비스 구독 상태를 확인해주세요.
             $scope._popMsg(messages['dlvrAgencyLink.status.save.msg1']);
             return;
@@ -211,56 +211,55 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     $scope.orderkitGoto = function () {
 
         var params = {};
-        var url = "https://test.orderkit.co.kr/"; // 개발
-        //var url = "https://orderkit.co.kr/"; // 운영
+        var redirectUrl = "";
+        var url = "https://test.orderkit.co.kr"; // 개발
+        //var url = "https://orderkit.co.kr"; // 운영
 
-        $scope._postJSONQuery.withOutPopUp('/orderkit/orderkit/orderkitRecpOrigin/orderkitGoto.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getOmsUserStatus.sb", params, function (response) {
 
-            // jwtToken
-            var jwtToken = response.data.data;
+            var data = response.data.data.list;
 
-            if (response.data.status === 'OK') {
-                if (jwtToken.length > 0) {
+            if (data.status === "success" && data.status_code === 200) {
 
-                    // 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
-                    $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getOmsUserStatus.sb", params, function (response) {
-
-                        var data = response.data.data.list;
-
-                        if (data.status === "success" && data.status_code === 200) {
-
-                            if (data.data.paymentStatus == "SUSPENDED" || data.data.paymentStatus == "GRACE" || data.data.paymentStatus == "WITHDRAW") { // 사용중지, 유예, 탈퇴
-                                console.log("url : " + url + "auth/pos?token=" + jwtToken);
-                                window.open(url + "auth/pos?token=" + jwtToken, 'newWindow');
-                            } else if (data.data.paymentStatus == "UNPAID") { // 미결제
-                                console.log("url : " + url + "app/payment/pay?token=" + jwtToken);
-                                window.open(url + "app/payment/pay?token=" + jwtToken, 'newWindow');
-                            } else if (data.data.paymentStatus == "ACTIVE") { // 결제 완료
-                                if (data.data.base_platform_info === null) { // 배달앱 미연동
-                                    console.log("url : " + url + "app/menu/collect?token=" + jwtToken);
-                                    window.open(url + "app/menu/collect?token=" + jwtToken, 'newWindow');
-                                }
-                                if (data.data.base_platform_info !== null) { // 정상 연동
-                                    console.log("url : " + url + "app/dashboard?token=" + jwtToken);
-                                    window.open(url + "app/dashboard?token=" + jwtToken, 'newWindow');
-                                }
-                            } else {
-                                console.log("url : " + url + "auth/pos?token=" + jwtToken);
-                                window.open(url + "auth/pos?token=" + jwtToken, 'newWindow');
-                            }
-
-                        } else { // data.status === "error" && data.status_code === 500 인 상태, 비회원
-                            console.log("url : " + url + "auth/pos?token=" + jwtToken);
-                            window.open(url + "auth/pos?token=" + jwtToken, 'newWindow');
-                        }
-                    });
+                if (data.data.subscriptionStatus == "EXPIRED" || data.data.subscriptionStatus == "CANCELLED") { // 만료, 해지완료
+                    redirectUrl = "/app/dashboard";
+                } else if (data.data.subscriptionStatus == "UNPAID") { // 결제 이전
+                    redirectUrl = "/app/payment/pay";
+                } else if (data.data.subscriptionStatus == "ACTIVE" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL") { // 활성화, 유예, 해지요청
+                    if (data.data.base_platform_info === null) { // 배달앱 미연동
+                        redirectUrl = "/app/setting/platform";
+                    }
+                    if (data.data.base_platform_info !== null) { // 정상 연동
+                        redirectUrl = "/app/dashboard";
+                    }
+                } else {
+                    redirectUrl = ""
                 }
-            }
-        });
 
+            } else { // data.status === "error" && data.status_code === 500 인 상태
+                redirectUrl = ""
+            }
+
+            params.redirectUrl = redirectUrl;
+            $scope._postJSONQuery.withOutPopUp('/orderkit/orderkit/orderkitRecpOrigin/orderkitGoto.sb', params, function (response) {
+
+                // jwtToken
+                var jwtToken = response.data.data;
+
+                if (redirectUrl !== "") {
+                    console.log("url : " + url + "/auth/pos/url?token=" + jwtToken);
+                    window.open(url + "/auth/pos/url?token=" + jwtToken, 'newWindow');
+                } else {
+                    console.log("url : " + url + "/auth/pos?token=" + jwtToken);
+                    window.open(url + "/auth/pos?token=" + jwtToken, 'newWindow');
+                }
+
+            });
+
+        });
     };
 
-    // 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
+    // 유저 상태 조회(이용권상태, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
     $scope.getOmsUserStatus = function () {
 
         var params = {};
@@ -277,13 +276,13 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 // 기존 주문 연동 활성화 콤보박스 선택값 갖고 있기
                 $scope.orgUseYn = $scope.useYnCombo.selectedValue;
 
-                // 구독여부 상태값 갖고있기
-                $scope.paymentStatus = data.data.paymentStatus;
+                // 이용권상태 상태값 갖고있기
+                $scope.subscriptionStatus = data.data.subscriptionStatus;
 
                 // 배달앱 연동 정보 상태값 갖고있기
                 $scope.basePlatformInfo = data.data.base_platform_info;
 
-                if (data.data.paymentStatus == "UNPAID" || data.data.paymentStatus == "SUSPENDED" || data.data.paymentStatus == "GRACE" || data.data.paymentStatus == "WITHDRAW") {
+                if (data.data.subscriptionStatus == "UNPAID" || data.data.subscriptionStatus == "EXPIRED" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL" || data.data.subscriptionStatus == "CANCELLED") { // 결제 이전, 만료, 유예, 해지요청, 해지완료
 
                     // 주문 연동 활성화 변경 불가
                     $scope.useYnCombo.isDisabled = true;
@@ -298,7 +297,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                     $("#divRight").css("display", "none");
                 }
 
-                if (data.data.paymentStatus == "ACTIVE") {
+                if (data.data.subscriptionStatus == "ACTIVE") { // 활성화
 
                     if (data.data.base_platform_info === null) {
 
@@ -333,8 +332,8 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 // 기존 주문 연동 활성화 콤보박스 선택값 갖고 있기(없음)
                 $scope.orgUseYn = "";
 
-                // 구독여부 상태값 갖고있기(없음)
-                $scope.paymentStatus = "";
+                // 이용권상태 상태값 갖고있기(없음)
+                $scope.subscriptionStatus = "";
 
                 // 배달앱 연동 정보 상태값 갖고있기(없음)
                 $scope.basePlatformInfo = null;

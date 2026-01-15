@@ -48,7 +48,7 @@ public class OrderkitController {
     //private static final String SECRET_KEY_STRING = "iVYaGN2CufNIiZJO6/oG259M8fw2GP8bEfQG73dPGw7YKHzyp1dMHJqnW08YijB8BOeTFEzNoa9sWMl5CFTjIg=="; // 운영
     private static final String SECRET_KEY_STRING = "q7TgPmKtjGNMtzOfy4dsF/Ti3whTXeQZwaw84vnA9N8m8zvNU2QApYZquYZlq94uczwj9x12OSzAYiDjzEUaog=="; // 개발
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
-    private static final long EXPIRATION_TIME = 1800000; // 30분 (밀리초)
+    private static final long EXPIRATION_TIME = 30 * 1000; // 30초
 
     /**
      * Constructor Injection
@@ -60,7 +60,7 @@ public class OrderkitController {
     }
 
     /**
-     * 페이지 이동
+     * 페이지 이동 ([오더킷]-[오더킷]-[오더킷])
      *
      * @param request
      * @param response
@@ -69,23 +69,11 @@ public class OrderkitController {
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        // JWT 토큰 생성
-        String token = createJWT(sessionInfoVO);
-        LOGGER.info("Crate JWT Token: " + token);
-
-        // JWT 토큰 파싱(확인용)
-        parseJWT(token);
-
-        model.addAttribute("jwtToken", token);
-
         return "orderkit/orderkit/orderkit/orderkit";
     }
 
     // JWT 토큰 생성
     public String createJWT(SessionInfoVO sessionInfoVO) {
-
 
         Date now = new Date();
         Date expiration = new Date(now.getTime() + EXPIRATION_TIME);
@@ -153,6 +141,64 @@ public class OrderkitController {
         } catch (JwtException e) {
             // 서명 검증 실패, 토큰 만료 등 유효하지 않은 토큰일 경우 예외 발생
             LOGGER.error("JWT 파싱 또는 유효성 검증 실패: " + e.getMessage());
+        }
+    }
+
+    // JWT 토큰 생성 - 자동 로그인 및 페이지 이동
+    public String createJWT2(SessionInfoVO sessionInfoVO, String redirectUrl) {
+
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + EXPIRATION_TIME);
+        long now_unixTimestamp = now.getTime() / 1000;
+        long expiration_unixTimestamp = expiration.getTime() / 1000;
+
+        // 매장정보 조회
+        OrderkitVO orderkitVO = new OrderkitVO();
+        DefaultMap<Object> storeInfo = orderkitService.getStoreInfo(orderkitVO, sessionInfoVO);
+
+        return Jwts.builder()
+
+                // 헤더 설정
+                .setHeaderParam("typ", "JWT")
+                .setHeaderParam("alg", "HS256")
+
+                // 페이로드(클레임) 설정
+                .claim("posType", "SOLBI")
+                .claim("posShopId", storeInfo.getStr("storeCd"))
+                .claim("redirectUrl", redirectUrl)
+                .claim("iat", now_unixTimestamp)         // iat: 토큰 발행 시간
+                .claim("exp", expiration_unixTimestamp)  // exp: 토큰 만료 시간
+                .setIssuedAt(now)                           // iat: 토큰 발행 시간
+                .setExpiration(expiration)                  // exp: 토큰 만료 시간
+
+                // 서명 알고리즘 및 키 설정
+                //.signWith(SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+
+                .compact();
+    }
+
+    // JWT 토큰 파싱 - 자동 로그인 및 페이지 이동
+    public void parseJWT2(String token) {
+
+        try {
+
+            Jws<Claims> jws = Jwts.parser()
+                    .setSigningKey(SECRET_KEY) // 서명 검증을 위해 시크릿 키 설정
+                    .build()
+                    .parseSignedClaims(token); // 서명된 JWT 파싱
+
+            // 페이로드(클레임) 가져오기
+            Claims claims = jws.getPayload();
+            LOGGER.info("posType: " + claims.get("posType"));
+            LOGGER.info("posShopId: " + claims.get("posShopId"));
+            LOGGER.info("redirectUrl: " + claims.get("redirectUrl"));
+            LOGGER.info("iat: " + claims.get("iat"));
+            LOGGER.info("exp: " + claims.get("exp"));
+
+        } catch (JwtException e) {
+            // 서명 검증 실패, 토큰 만료 등 유효하지 않은 토큰일 경우 예외 발생
+            LOGGER.error("JWT2 파싱 또는 유효성 검증 실패: " + e.getMessage());
         }
     }
 }

@@ -221,7 +221,7 @@ public class DlvrAgencyLinkController {
     }
 
     /**
-     * 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
+     * 유저 상태 조회(이용권상태, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
      * @param dlvrAgencyLinkReqVO
      * @param request
      * @param response
