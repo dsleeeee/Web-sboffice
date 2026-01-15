@@ -63,4 +63,7 @@ public interface QrOrderKeyMapMapper {
 
     /** 개발/운영 URL 조회 */
     List<DefaultMap<Object>> getApiEnvNm(QrOrderKeyMapVO qrOrderKeyMapVO);
+
+    /** 상품 내점,배달,포장 여부 수정 */
+    int updateProductSaleType(QrOrderKeyMapVO qrOrderKeyMapVO);
 }

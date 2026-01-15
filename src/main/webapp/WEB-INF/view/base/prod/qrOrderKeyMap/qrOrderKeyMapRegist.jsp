@@ -105,9 +105,9 @@
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.tuKeyCd"/>" binding="tuKeyCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.prodNm"/>" binding="prodNm" width="180" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnSin"/>" binding="saleTypeYnSin" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnDlv"/>" binding="saleTypeYnDlv" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnPkg"/>" binding="saleTypeYnPkg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnSin"/>" binding="saleTypeYnSin" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnDlv"/>" binding="saleTypeYnDlv" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnPkg"/>" binding="saleTypeYnPkg" width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -271,9 +271,9 @@
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.prodNm"/>" binding="prodNm" width="175" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnSin"/>" binding="saleTypeYnSin" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnDlv"/>" binding="saleTypeYnDlv" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnPkg"/>" binding="saleTypeYnPkg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnSin"/>" binding="saleTypeYnSin" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnDlv"/>" binding="saleTypeYnDlv" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.saleTypeYnPkg"/>" binding="saleTypeYnPkg" width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.regYn"/>" binding="regYn" align="center" data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="qrOrderKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -304,7 +304,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20251203.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/qrOrderKeyMap/qrOrderKeyMapRegist.js?ver=20260114.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

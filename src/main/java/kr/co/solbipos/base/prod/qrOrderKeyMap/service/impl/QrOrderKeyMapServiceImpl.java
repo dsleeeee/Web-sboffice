@@ -152,7 +152,31 @@ public class QrOrderKeyMapServiceImpl implements QrOrderKeyMapService {
             qrOrderKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 16) + 1)));
 
             if ( qrOrderKeyMapVO.getStatus() == GridDataFg.UPDATE ) { // 수정
-                result += qrOrderKeyMapMapper.updateQrOrderKeyMap(qrOrderKeyMapVO);
+                // 내점
+                if(qrOrderKeyMapVO.isSaleTypeYnSin()){
+                    qrOrderKeyMapVO.setSaleTypeYnSinVal("Y");
+                }else{
+                    qrOrderKeyMapVO.setSaleTypeYnSinVal("N");
+                }
+                // 배달
+                if(qrOrderKeyMapVO.isSaleTypeYnDlv()){
+                    qrOrderKeyMapVO.setSaleTypeYnDlvVal("Y");
+                }else{
+                    qrOrderKeyMapVO.setSaleTypeYnDlvVal("N");
+                }
+                // 포장
+                if(qrOrderKeyMapVO.isSaleTypeYnPkg()){
+                    qrOrderKeyMapVO.setSaleTypeYnPkgVal("Y");
+                }else{
+                    qrOrderKeyMapVO.setSaleTypeYnPkgVal("N");
+                }
+
+                // 내점,배달,포장 변경 시 저장
+                result = qrOrderKeyMapMapper.updateProductSaleType(qrOrderKeyMapVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                result = qrOrderKeyMapMapper.updateQrOrderKeyMap(qrOrderKeyMapVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             } else if ( qrOrderKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += qrOrderKeyMapMapper.deleteQrOrderKeyMap(qrOrderKeyMapVO);
@@ -208,6 +232,29 @@ public class QrOrderKeyMapServiceImpl implements QrOrderKeyMapService {
             qrOrderKeyMapVO.setRegId(sessionInfoVO.getUserId());
             qrOrderKeyMapVO.setModDt(dt);
             qrOrderKeyMapVO.setModId(sessionInfoVO.getUserId());
+            
+            // 내점
+            if(qrOrderKeyMapVO.isSaleTypeYnSin()){
+                qrOrderKeyMapVO.setSaleTypeYnSinVal("Y");
+            }else{
+                qrOrderKeyMapVO.setSaleTypeYnSinVal("N");
+            }
+            // 배달
+            if(qrOrderKeyMapVO.isSaleTypeYnDlv()){
+                qrOrderKeyMapVO.setSaleTypeYnDlvVal("Y");
+            }else{
+                qrOrderKeyMapVO.setSaleTypeYnDlvVal("N");
+            }
+            // 포장
+            if(qrOrderKeyMapVO.isSaleTypeYnPkg()){
+                qrOrderKeyMapVO.setSaleTypeYnPkgVal("Y");
+            }else{
+                qrOrderKeyMapVO.setSaleTypeYnPkgVal("N");
+            }
+
+            // 내점,배달,포장 변경 시 저장
+            procCnt = qrOrderKeyMapMapper.updateProductSaleType(qrOrderKeyMapVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // QR오더 키 관련 코드 조회
             DefaultMap<String> keyValue = qrOrderKeyMapMapper.getQrOrderKeyMapCode(qrOrderKeyMapVO);
@@ -219,8 +266,9 @@ public class QrOrderKeyMapServiceImpl implements QrOrderKeyMapService {
             int indexNo = Integer.parseInt(String.valueOf(keyValue.get("indexNo")));
             qrOrderKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 16) + 1)));
 
-            int result = qrOrderKeyMapMapper.saveQrOrderKeyMap(qrOrderKeyMapVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // 키맵등록
+            procCnt = qrOrderKeyMapMapper.saveQrOrderKeyMap(qrOrderKeyMapVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
 

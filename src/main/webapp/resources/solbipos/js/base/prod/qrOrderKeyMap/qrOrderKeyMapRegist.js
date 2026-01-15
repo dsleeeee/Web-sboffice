@@ -335,12 +335,9 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
         $scope._postJSONQuery.withPopUp('/base/prod/qrOrderKeyMap/qrOrderKeyMap/getQRSynchronize.sb', params, function (response) {
 
             var data = response.data.data.list;
-
             if (data.status === 200) {
-
                 $scope._popMsg(data.message);
                 $scope._popMsg(data.data);
-
             }else{
                 $scope._popMsg(data.message);
             }
@@ -369,6 +366,18 @@ app.controller('qrOrderKeyMapCtrl', ['$scope', '$http', '$timeout', function ($s
                 }
             }
         });
+
+        // 그리드 값 변경 시 체크박스 체크
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "saleTypeYnSin" || col.binding === "saleTypeYnDlv" || col.binding === "saleTypeYnPkg" ) {
+                    item.gChk = true;
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
 
     $scope.$on("qrOrderKeyMapCtrl", function(event, data) {
@@ -385,7 +394,6 @@ app.controller('qrOrderKeyMapCtrl', ['$scope', '$http', '$timeout', function ($s
     // 키맵 조회
     $scope.searchKeyMap = function () {
 
-        console.log(0);
         var params = {};
         if(orgnFg === "STORE") {params.posNo = '97'}
         params.tuClsType = '01';
@@ -490,9 +498,12 @@ app.controller('qrOrderKeyMapCtrl', ['$scope', '$http', '$timeout', function ($s
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save('/base/prod/qrOrderKeyMap/qrOrderKeyMap/updateQrOrderKeyMap.sb', params, function() {
-
                 // 키맵 재조회
                 $scope.searchKeyMap();
+
+                // QR 동기화 호출
+                var qrOrderKeyMapRegistGrid = agrid.getScope("qrOrderKeyMapRegistCtrl");
+                qrOrderKeyMapRegistGrid.QRSynchronize();
 
             });
         });
@@ -547,9 +558,12 @@ app.controller('qrOrderKeyMapCtrl', ['$scope', '$http', '$timeout', function ($s
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save('/base/prod/qrOrderKeyMap/qrOrderKeyMap/updateQrOrderKeyMap.sb', params, function () {
-
                 // 키맵 재조회
                 $scope.searchKeyMap();
+
+                // QR 동기화 호출
+                var qrOrderKeyMapRegistGrid = agrid.getScope("qrOrderKeyMapRegistCtrl");
+                qrOrderKeyMapRegistGrid.QRSynchronize();
 
             });
         });
@@ -611,6 +625,18 @@ app.controller('qrOrderProdCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         $scope.regYnAllCombo.selectedIndex = 2;
         $scope.useYnAllCombo.selectedIndex = 1;
+
+        // 그리드 값 변경 시 체크박스 체크
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "saleTypeYnSin" || col.binding === "saleTypeYnDlv" || col.binding === "saleTypeYnPkg" ) {
+                    item.gChk = true;
+                }
+            }
+            s.collectionView.commitEdit();
+        });
 
     };
 
@@ -714,6 +740,10 @@ app.controller('qrOrderProdCtrl', ['$scope', '$http', '$timeout', function ($sco
                 // 키맵 재조회
                 var qrOrderKeyMapGrid = agrid.getScope("qrOrderKeyMapCtrl");
                 qrOrderKeyMapGrid._pageView('qrOrderKeyMapCtrl', 1);
+
+                // QR 동기화 호출
+                var qrOrderKeyMapRegistGrid = agrid.getScope("qrOrderKeyMapRegistCtrl");
+                qrOrderKeyMapRegistGrid.QRSynchronize();
             });
         });
     };

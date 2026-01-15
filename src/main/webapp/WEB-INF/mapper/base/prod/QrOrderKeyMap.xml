@@ -11,6 +11,13 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.qrOrderKeyMap.service.impl.QrOrderKeyMapMapper">
 
+    <!-- 내점,배달,포장 여부 ListMap -->
+    <resultMap id="prodSaleTypeListMap" type="DefaultMap">
+        <result column="SALE_TYPE_YN_SIN" property="saleTypeYnSin" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="SALE_TYPE_YN_DLV" property="saleTypeYnDlv" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="SALE_TYPE_YN_PKG" property="saleTypeYnPkg" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
     <!-- QR오더 카테고리 (분류) 조회 -->
     <!--
         TABLE    : TB_MS_KCPQR_CLS
@@ -193,7 +200,7 @@
         PARAM    : qrOrderKeyMapVO
         COMMENTS : QR오더 키를 가져온다.
     -->
-    <select id="getQrOrderKeyMap" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
+    <select id="getQrOrderKeyMap" parameterType="qrOrderKeyMapVO" resultMap="prodSaleTypeListMap">
         /* USE : QrOrderKeyMapMapper.getQrOrderKeyMap */
         SELECT	A.TU_KEY_CD
         ,		A.PROD_CD
@@ -221,9 +228,9 @@
         ,       B.REMARK
         ,       DECODE(NVL(B.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
 <!--        ,       (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = B.PROD_CD ) AS SALE_TIME - KIOSK 시간설정 - 주석처리(조회 시간) -->
-        ,       DECODE(NVL(C.SALE_TYPE_YN_SIN, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_SIN
-        ,       DECODE(NVL(C.SALE_TYPE_YN_DLV, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_DLV
-        ,       DECODE(NVL(C.SALE_TYPE_YN_PKG, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_PKG
+        ,       NVL(C.SALE_TYPE_YN_SIN, 'N')   AS SALE_TYPE_YN_SIN
+        ,       NVL(C.SALE_TYPE_YN_DLV, 'N')   AS SALE_TYPE_YN_DLV
+        ,       NVL(C.SALE_TYPE_YN_PKG, 'N')   AS SALE_TYPE_YN_PKG
         FROM	TB_MS_KCPQR_KEY A
         ,		TB_MS_PRODUCT B
         ,		TB_MS_PRODUCT_INFO C
@@ -286,7 +293,7 @@
         PARAM    : kioskKeyMapVO
         COMMENTS : 키맵으로 등록할 상품을 조회한다. ( 본사/매장 )
     -->
-    <select id="getQrOrderProdList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+    <select id="getQrOrderProdList" parameterType="qrOrderKeyMapVO" resultMap="prodSaleTypeListMap">
         /* USE : QrOrderKeyMapMapper.getQrOrderProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  tmp.PROD_CD
@@ -300,9 +307,9 @@
         ,       DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         ,       DECODE(NVL(tmp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상') AS SELFAPP_YN
 <!--        ,       (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME - KIOSK 시간설정 - 주석처리(조회시간) -->
-        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_SIN, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_SIN
-        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_DLV, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_DLV
-        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_PKG, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_PKG
+        ,       NVL(tmpi.SALE_TYPE_YN_SIN, 'N')   AS SALE_TYPE_YN_SIN
+        ,       NVL(tmpi.SALE_TYPE_YN_DLV, 'N')   AS SALE_TYPE_YN_DLV
+        ,       NVL(tmpi.SALE_TYPE_YN_PKG, 'N')   AS SALE_TYPE_YN_PKG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_PRODUCT tmp
         LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
@@ -456,4 +463,53 @@
         ,       FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL', 'ACCESS_TOKEN')    AS ACCESS_TOKEN
         FROM    DUAL
     </select>
+
+    <!-- 상품 내점,배달,포장 여부 수정 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_INFO
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : 상품 내점,배달,포장 여부를 수정한다
+    -->
+    <update id="updateProductSaleType" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.updateProductSaleType */
+        MERGE INTO TB_MS_PRODUCT_INFO
+        USING DUAL
+        ON  (
+                    STORE_CD = #{storeCd}
+                AND PROD_CD  = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     SALE_TYPE_YN_SIN    = #{saleTypeYnSinVal}
+        ,       SALE_TYPE_YN_DLV    = #{saleTypeYnDlvVal}
+        ,       SALE_TYPE_YN_PKG    = #{saleTypeYnPkgVal}
+        ,       MOD_DT              = #{modDt}
+        ,       MOD_ID              = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            STORE_CD
+        ,   PROD_CD
+        ,   SALE_TYPE_YN_SIN
+        ,   SALE_TYPE_YN_DLV
+        ,   SALE_TYPE_YN_PKG
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd}
+        ,   #{prodCd}
+        ,   #{saleTypeYnSinVal}
+        ,   #{saleTypeYnDlvVal}
+        ,   #{saleTypeYnPkgVal}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+
+    </update>
 </mapper>
