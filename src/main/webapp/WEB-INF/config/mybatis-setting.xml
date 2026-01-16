@@ -1008,6 +1008,9 @@
     <!-- 매출관리 > 매출분석 > 매장별매출분석2 -->
     <typeAlias alias="saleAnalsVO" type="kr.co.solbipos.sale.anals.store.saleAnals.service.SaleAnalsVO"/>
 
+    <!-- 매출관리 > 매출분석 > 온라인주문확인 -->
+    <typeAlias alias="onlineOrderVO" type="kr.co.solbipos.sale.anals.onlineOrder.service.OnlineOrderVO"/>
+
     <!-- 매출관리 > 승인현황 -->
     <typeAlias alias="apprCardVO" type="kr.co.solbipos.sale.status.appr.payMethod.card.service.ApprCardVO"/>
     <typeAlias alias="apprCashBillVO" type="kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO"/>

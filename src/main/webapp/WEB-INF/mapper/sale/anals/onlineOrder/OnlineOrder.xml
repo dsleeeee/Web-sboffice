@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    onlineOrder.xml
+    온라인주문확인
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.01.16     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.onlineOrder.service.impl.OnlineOrderMapper">
+
+    <!-- 온라인주문확인 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : nonSaleChargeVO
+        COMMENTS : 비매출 충전내역을 조회한다.
+    -->
+    <select id="getSearchOnlineOrderList" parameterType="onlineOrderVO" resultType="DefaultMap">
+        /* USE : OnlineOrderMapper.getSearchOnlineOrderList */
+        SELECT	A.STORE_CD
+        ,		D.STORE_NM
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.POS_NO
+        ,		A.BILL_NO
+        ,       TO_CHAR(TO_DATE(A.BILL_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS BILL_DT
+        ,		A.SALE_FG
+        ,		A.TOT_SALE_AMT
+        ,		A.TOT_DC_AMT
+        ,		A.REAL_SALE_AMT
+        ,		B.PICKUP_NO     AS SL_VORDER
+        ,		C.PICKUP_NO     AS RV_VORDER
+        FROM	TB_SL_SALE_HDR A
+        ,		TB_SL_SALE_PAY_VORDER B
+        ,		TB_RV_SALE_PAY_VORDER C
+        ,		TB_MS_STORE D
+        WHERE	B.STORE_CD 	(+)	=	A.STORE_CD
+        AND		B.SALE_DATE	(+)	=	A.SALE_DATE
+        AND		B.POS_NO 	(+)	=	A.POS_NO
+        AND		B.BILL_NO 	(+)	=	A.BILL_NO
+        AND		C.STORE_CD 	(+)	=	A.STORE_CD
+        AND		C.SALE_DATE	(+)	=	A.SALE_DATE
+        AND		C.POS_NO 	(+)	=	A.POS_NO
+        AND		C.BILL_NO 	(+)	=	A.BILL_NO
+        AND		D.STORE_CD 		=	A.STORE_CD
+        AND		A.STORE_CD 		=	#{storeCd}
+        AND		A.SALE_DATE		=	#{saleDate}
+        <if test='billNo != null and billNo != ""'>
+            AND A.BILL_NO LIKE '%'||#{billNo}||'%'
+        </if>
+        <if test='vorderNo != null and vorderNo != ""'>
+            AND (B.PICKUP_NO  = #{vorderNo} OR C.PICKUP_NO  = #{vorderNo})
+        </if>
+        ORDER
+        BY      A.POS_NO
+        ,       A.BILL_NO
+    </select>
+</mapper>
