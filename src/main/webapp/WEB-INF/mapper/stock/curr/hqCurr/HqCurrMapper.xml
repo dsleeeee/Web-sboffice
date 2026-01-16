@@ -538,4 +538,457 @@
         ORDER BY tsssc.PROD_CD
     </select>
 
+    <!-- 현재고현황 - 현재고수량현황 팝업 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchHqCurrQtyDtlList" parameterType="hqCurrVO" resultType="DefaultMap">
+        /* HqCurrMapper.getSearchHqCurrQtyDtlList*/
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT	IOSTOCK_DATE
+                ,		IOSTOCK_FG
+                ,		IOSTOCK_QTY
+                ,		SUM(REAL_IOSTOCK_QTY) OVER (ORDER BY ORDER_NO, IOSTOCK_DATE, IOSTOCK_CD, SLIP_NO)	AS ACC_IOSTOCK_QTY
+                FROM	(
+                            SELECT	'1'					        AS ORDER_NO
+                            ,		'조회기간 전'			        AS IOSTOCK_DATE
+                            ,		''					        AS IOSTOCK_FG
+                            ,		''					        AS IOSTOCK_CD
+                            <if test='unitFg == "0"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            <if test='unitFg == "1"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            ,		''					        AS SLIP_NO
+                            FROM	TB_ST_HQ_STOCK_DAILY A
+                            ,       TB_HQ_PRODUCT B
+                            WHERE	B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
+                            AND     B.PROD_CD       =   A.PROD_CD
+                            AND     A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+                            AND		A.PROD_CD		=	#{prodCd}
+                            AND     B.STOCK_PROD_YN =   'Y'
+                            AND     B.USE_YN        =   'Y'
+                            <![CDATA[
+                                AND		A.IOSTOCK_DATE 	<	#{startDate}
+                            ]]>
+                            UNION ALL
+                            SELECT	'2'
+                            ,		TO_CHAR(TO_DATE(IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IOSTOCK_DATE
+                            ,		IOSTOCK_FG
+                            ,		IOSTOCK_CD
+                            ,		IOSTOCK_QTY
+                            ,		REAL_IOSTOCK_QTY
+                            ,		SLIP_NO
+                            FROM	(
+                                        SELECT	A.INSTOCK_DATE	AS IOSTOCK_DATE
+                                        ,		DECODE(B.SLIP_FG, '1', '본사입고', '-1', '업체반출','')	AS IOSTOCK_FG
+                                        ,		DECODE(B.SLIP_FG, '1', '01', '-1', '02','')	            AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		ABS(B.IN_TOT_QTY)	AS IOSTOCK_QTY
+                                            ,		B.IN_TOT_QTY		AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		ABS(B.IN_TOT_QTY / B.PO_UNIT_QTY)	AS IOSTOCK_QTY
+                                            ,		B.IN_TOT_QTY / B.PO_UNIT_QTY		AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		B.SLIP_NO
+                                        FROM	TB_PO_HQ_VENDR_INSTOCK A
+                                        ,		TB_PO_HQ_VENDR_INSTOCK_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                        AND		B.SLIP_NO 		=	A.SLIP_NO
+                                        AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		A.INSTOCK_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	DECODE(A.SLIP_FG, '1', A.IN_DATE , '-1', A.OUT_DATE ,'')	AS IOSTOCK_DATE
+                                        ,		DECODE(B.SLIP_FG, '1', '본사출고', '-1', '본사반입','')		AS IOSTOCK_FG
+                                        ,		DECODE(B.SLIP_FG, '1', '03', '-1', '04','')					AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		DECODE(B.SLIP_FG, '1', ABS(B.IN_TOT_QTY) , '-1', ABS(B.OUT_TOT_QTY) ,'')	AS IOSTOCK_QTY
+                                            ,		DECODE(B.SLIP_FG, '1', (B.IN_TOT_QTY*-1) , '-1', (B.OUT_TOT_QTY*-1) ,'')	AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		DECODE(B.SLIP_FG, '1', ABS(B.IN_TOT_QTY / B.PO_UNIT_QTY) , '-1', ABS(B.OUT_TOT_QTY / B.PO_UNIT_QTY) ,'')	    AS IOSTOCK_QTY
+                                            ,		DECODE(B.SLIP_FG, '1', ((B.IN_TOT_QTY*-1) / B.PO_UNIT_QTY) , '-1', ((B.OUT_TOT_QTY*-1) / B.PO_UNIT_QTY) ,'')	AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		B.SLIP_NO
+                                        FROM	TB_PO_HQ_STORE_OUTSTOCK A
+                                        ,		TB_PO_HQ_STORE_OUTSTOCK_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                        AND		B.SLIP_NO 		=	A.SLIP_NO
+                                        AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.SLIP_KIND 	=	'0'
+                                        AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND		B.PROC_FG		IN  ('20', '30')
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		DECODE(A.SLIP_FG, '1', A.IN_DATE , '-1', A.OUT_DATE ,'') BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	MOVE_DATE
+                                        ,		DECODE(MOVE_NM, 'IN_TOT_QTY', '매장이입', 'OUT_TOT_QTY', '매장이출')	AS MOVE_NM
+                                        ,		DECODE(MOVE_NM, 'IN_TOT_QTY', '05', 'OUT_TOT_QTY', '06','')			AS IOSTOCK_CD
+                                        ,		ABS(TOT_QTY)    AS IOSTOCK_QTY
+                                        ,		TOT_QTY         AS REAL_IOSTOCK_QTY
+                                        ,		SLIP_NO
+                                        FROM	(
+                                                    SELECT	A.MOVE_DATE
+                                                    <if test='unitFg == "0"'>
+                                                        ,		B.IN_TOT_QTY
+                                                        ,		B.OUT_TOT_QTY  * -1 AS OUT_TOT_QTY
+                                                    </if>
+                                                    <if test='unitFg == "1"'>
+                                                        ,		(B.IN_TOT_QTY / B.PO_UNIT_QTY)          AS IN_TOT_QTY
+                                                        ,		(B.OUT_TOT_QTY  * -1) / B.PO_UNIT_QTY   AS OUT_TOT_QTY
+                                                    </if>
+                                                    ,		B.SLIP_NO
+                                                    FROM	TB_PO_STORE_MOVE A
+                                                    ,		TB_PO_STORE_MOVE_DTL B
+                                                    ,       TB_HQ_PRODUCT C
+                                                    WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                                    AND		B.SLIP_NO 		=	A.SLIP_NO
+                                                    AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                                    AND     C.PROD_CD       =   B.PROD_CD
+                                                    AND		A.PROC_FG 		=	'3'
+                                                    AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                                    AND		B.PROD_CD		=	#{prodCd}
+                                                    AND     C.STOCK_PROD_YN =   'Y'
+                                                    AND     C.USE_YN        =   'Y'
+                                                    AND		A.MOVE_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                                )
+                                        UNPIVOT	(
+                                                    TOT_QTY
+                                                    FOR	MOVE_NM IN (IN_TOT_QTY, OUT_TOT_QTY)
+                                                )
+                                        UNION ALL
+                                        SELECT	B.ADJ_DATE
+                                        ,		'재고조정'
+                                        ,		'07'
+                                        <if test='unitFg == "0"'>
+                                            ,		ABS(B.ADJ_QTY)
+                                            ,		B.ADJ_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		ABS(B.ADJ_QTY / B.PO_UNIT_QTY)
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)
+                                        FROM	TB_ST_HQ_ADJUST A
+                                        ,		TB_ST_HQ_ADJUST_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                        AND		B.ADJ_DATE 		=	A.ADJ_DATE
+                                        AND		B.SEQ_NO		=	A.SEQ_NO
+                                        AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		A.ADJ_DATE 		BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	B.DISUSE_DATE
+                                        ,		'재고폐기'
+                                        ,		'08'
+                                        <if test='unitFg == "0"'>
+                                            ,		ABS(B.DISUSE_QTY * -1)
+                                            ,		(B.DISUSE_QTY * -1)
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		ABS((B.DISUSE_QTY * -1) / B.PO_UNIT_QTY)
+                                            ,		(B.DISUSE_QTY * -1) / B.PO_UNIT_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)
+                                        FROM	TB_ST_HQ_DISUSE A
+                                        ,		TB_ST_HQ_DISUSE_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD	=	A.HQ_OFFICE_CD
+                                        AND		B.DISUSE_DATE 	=	A.DISUSE_DATE
+                                        AND		B.SEQ_NO 		=	A.SEQ_NO
+                                        AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		A.DISUSE_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                    )
+                            UNION ALL
+                            SELECT	'3'					        AS ORDER_NO
+                            ,		'조회기간 후'			        AS IOSTOCK_DATE
+                            ,		''					        AS IOSTOCK_FG
+                            ,		''					        AS IOSTOCK_CD
+                            <if test='unitFg == "0"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            <if test='unitFg == "1"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            ,		''					        AS SLIP_NO
+                            FROM	TB_ST_HQ_STOCK_DAILY A
+                            ,       TB_HQ_PRODUCT B
+                            WHERE	B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
+                            AND     B.PROD_CD       =   A.PROD_CD
+                            AND     A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+                            AND		A.PROD_CD		=	#{prodCd}
+                            AND		B.STOCK_PROD_YN =	'Y'
+                            AND		B.USE_YN	    =	'Y'
+                            <![CDATA[
+                                AND		A.IOSTOCK_DATE 	>	#{endDate}
+                            ]]>
+                        )
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT	IOSTOCK_DATE
+                ,		IOSTOCK_FG
+                ,		IOSTOCK_QTY
+                ,		SUM(REAL_IOSTOCK_QTY) OVER (ORDER BY ORDER_NO, IOSTOCK_DATE, IOSTOCK_CD, SLIP_NO)	AS ACC_IOSTOCK_QTY
+                FROM	(
+                            SELECT	'1'					        AS ORDER_NO
+                            ,		'조회기간 전'			        AS IOSTOCK_DATE
+                            ,		''					        AS IOSTOCK_FG
+                            ,		''					        AS IOSTOCK_CD
+                            <if test='unitFg == "0"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            <if test='unitFg == "1"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            ,		''					        AS SLIP_NO
+                            FROM	TB_ST_STORE_STOCK_DAILY A
+                            ,       TB_MS_PRODUCT B
+                            WHERE	B.STORE_CD      =   A.STORE_CD
+                            AND     B.PROD_CD       =   A.PROD_CD
+                            AND     A.STORE_CD 		=	#{storeCd}
+                            AND		A.PROD_CD		=	#{prodCd}
+                            AND 	B.STOCK_PROD_YN = 	'Y'
+                            AND 	B.USE_YN 		= 	'Y'
+                            <![CDATA[
+                                AND		A.IOSTOCK_DATE 	<	#{startDate}
+                            ]]>
+                            UNION ALL
+                            SELECT	'2'     AS ORDER_NO
+                            ,		TO_CHAR(TO_DATE(IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IOSTOCK_DATE
+                            ,		IOSTOCK_FG          AS IOSTOCK_FG
+                            ,		IOSTOCK_CD          AS IOSTOCK_CD
+                            ,		IOSTOCK_QTY
+                            ,		REAL_IOSTOCK_QTY
+                            ,		SLIP_NO
+                            FROM	(
+                                        SELECT	DECODE(A.SLIP_FG, '1', A.IN_DATE , '-1', A.OUT_DATE ,'')	AS IOSTOCK_DATE
+                                        ,		DECODE(B.SLIP_FG, '1', '매장입고', '-1', '매장반품','')		AS IOSTOCK_FG
+                                        ,		DECODE(B.SLIP_FG, '1', '01', '-1', '02','')					AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		DECODE(B.SLIP_FG, '1', B.IN_TOT_QTY , '-1', (B.OUT_TOT_QTY * -1) ,'')	    AS IOSTOCK_QTY
+                                            ,		DECODE(B.SLIP_FG, '1', (B.IN_TOT_QTY) , '-1', (B.OUT_TOT_QTY) ,'')	        AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		DECODE(B.SLIP_FG, '1', B.IN_TOT_QTY / B.PO_UNIT_QTY , '-1', (B.OUT_TOT_QTY * -1 / B.PO_UNIT_QTY) ,'')	    AS IOSTOCK_QTY
+                                            ,		DECODE(B.SLIP_FG, '1', ((B.IN_TOT_QTY) / B.PO_UNIT_QTY) , '-1', ((B.OUT_TOT_QTY) / B.PO_UNIT_QTY) ,'')	AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		B.SLIP_NO || B.SEQ  AS SLIP_NO
+                                        FROM	TB_PO_HQ_STORE_OUTSTOCK A
+                                        ,		TB_PO_HQ_STORE_OUTSTOCK_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                        AND		B.SLIP_NO 		=	A.SLIP_NO
+                                        AND		C.HQ_OFFICE_CD 	=	B.HQ_OFFICE_CD
+                                        AND		C.PROD_CD 		=	B.PROD_CD
+                                        AND		A.SLIP_KIND 	=	'0'
+                                        AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                        AND		B.STORE_CD 		=	#{storeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND		B.PROC_FG		IN  ('20', '30')
+                                        AND		C.STOCK_PROD_YN =	'Y'
+                                        AND		C.USE_YN	    =	'Y'
+                                        AND		DECODE(A.SLIP_FG, '1', A.IN_DATE , '-1', A.OUT_DATE ,'') BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	A.INSTOCK_DATE	AS IOSTOCK_DATE
+                                        ,		DECODE(B.SLIP_FG, '1', '사입입고', '-1', '사입반품','')	AS IOSTOCK_FG
+                                        ,		DECODE(B.SLIP_FG, '1', '03', '-1', '04','')	            AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		B.IN_TOT_QTY	    AS IOSTOCK_QTY
+                                            ,		B.IN_TOT_QTY		AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		B.IN_TOT_QTY / B.PO_UNIT_QTY	    AS IOSTOCK_QTY
+                                            ,		B.IN_TOT_QTY / B.PO_UNIT_QTY		AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		B.SLIP_NO
+                                        FROM	TB_PO_STORE_VENDR_INSTOCK A
+                                        ,		TB_PO_STORE_VENDR_INSTOCK_DTL B
+                                        ,       TB_MS_PRODUCT C
+                                        WHERE	B.STORE_CD 		=	A.STORE_CD
+                                        AND		B.SLIP_NO 		=	A.SLIP_NO
+                                        AND     C.STORE_CD      =   B.STORE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.STORE_CD 		=	#{storeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND		C.STOCK_PROD_YN =	'Y'
+                                        AND		C.USE_YN	    =	'Y'
+                                        AND		A.INSTOCK_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT  A.SALE_DATE     AS IOSTOCK_DATE
+                                        ,		'매장판매'       AS IOSTOCK_FG
+                                        ,		'05'            AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,       A.TOT_SALE_QTY 	        AS  IOSTOCK_QTY
+                                            ,       (A.TOT_SALE_QTY * -1) 	AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,       (A.TOT_SALE_QTY / B.PO_UNIT_QTY) 	    AS  IOSTOCK_QTY
+                                            ,       (A.TOT_SALE_QTY * -1) / B.PO_UNIT_QTY 	AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		''          AS SLIP_NO
+                                        FROM    TB_SL_DAILY_PROD A
+                                        , 		TB_MS_PRODUCT B
+                                        WHERE   A.STORE_CD 		= 	B.STORE_CD
+                                        AND 	A.PROD_CD 		= 	B.PROD_CD
+                                        AND		A.STORE_CD   	=   #{storeCd}
+                                        AND 	A.PROD_CD    	=   #{prodCd}   /* 상품코드 */
+                                        AND 	B.STOCK_PROD_YN = 	'Y'
+                                        AND 	B.USE_YN 		= 	'Y'
+                                        AND 	A.SALE_DATE  	BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	MOVE_DATE       AS IOSTOCK_DATE
+                                        ,		DECODE(MOVE_NM, 'IN_TOT_QTY', '매장이입', 'OUT_TOT_QTY', '매장이출')	AS IOSTOCK_FG
+                                        ,		DECODE(MOVE_NM, 'IN_TOT_QTY', '06', 'OUT_TOT_QTY', '07','')			AS IOSTOCK_CD
+                                        ,		ABS(TOT_QTY)    AS  IOSTOCK_QTY
+                                        ,		TOT_QTY         AS  REAL_IOSTOCK_QTY
+                                        ,		SLIP_NO
+                                        FROM	(
+                                                    SELECT	A.MOVE_DATE
+                                                    <if test='unitFg == "0"'>
+                                                        ,		DECODE(A.IN_STORE_CD, #{storeCd}, B.IN_TOT_QTY, '')	AS IN_TOT_QTY
+                                                        ,		DECODE(A.OUT_STORE_CD, #{storeCd}, B.OUT_TOT_QTY * -1, '') AS OUT_TOT_QTY
+                                                    </if>
+                                                    <if test='unitFg == "1"'>
+                                                        ,		DECODE(A.IN_STORE_CD, #{storeCd}, (B.IN_TOT_QTY / B.PO_UNIT_QTY) , '')	AS IN_TOT_QTY
+                                                        ,		DECODE(A.OUT_STORE_CD, #{storeCd}, (B.OUT_TOT_QTY * -1 / B.PO_UNIT_QTY), '') AS OUT_TOT_QTY
+                                                    </if>
+                                                    ,		B.SLIP_NO
+                                                    FROM	TB_PO_STORE_MOVE A
+                                                    ,		TB_PO_STORE_MOVE_DTL B
+                                                    ,		TB_HQ_PRODUCT C
+                                                    WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                                    AND		B.SLIP_NO 		=	A.SLIP_NO
+                                                    AND		C.HQ_OFFICE_CD 	=	B.HQ_OFFICE_CD
+                                                    AND		C.PROD_CD 		=	B.PROD_CD
+                                                    AND		(A.IN_STORE_CD 	=	#{storeCd} OR A.OUT_STORE_CD	=	#{storeCd})
+                                                    AND		A.PROC_FG 		=	'3'
+                                                    AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                                    AND		B.PROD_CD		=	#{prodCd}
+                                                    AND 	C.STOCK_PROD_YN = 	'Y'
+                                                    AND 	C.USE_YN 		= 	'Y'
+                                                    AND		A.MOVE_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                                )
+                                        UNPIVOT	(
+                                                    TOT_QTY
+                                                    FOR	MOVE_NM IN (IN_TOT_QTY, OUT_TOT_QTY)
+                                                )
+                                        UNION ALL
+                                        SELECT	B.ADJ_DATE      AS IOSTOCK_DATE
+                                        ,		'재고조정'       AS IOSTOCK_FG
+                                        ,		'08'            AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		B.ADJ_QTY       AS  IOSTOCK_QTY
+                                            ,		B.ADJ_QTY       AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY       AS  IOSTOCK_QTY
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY       AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)       AS SLIP_NO
+                                        FROM	TB_ST_STORE_ADJUST A
+                                        ,		TB_ST_STORE_ADJUST_DTL B
+                                        ,		TB_MS_PRODUCT C
+                                        WHERE	B.STORE_CD 		=	A.STORE_CD
+                                        AND		B.ADJ_DATE 		=	A.ADJ_DATE
+                                        AND		B.SEQ_NO		=	A.SEQ_NO
+                                        AND     C.STORE_CD      =   B.STORE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.STORE_CD 		= 	#{storeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND 	C.STOCK_PROD_YN = 	'Y'
+                                        AND 	C.USE_YN 		= 	'Y'
+                                        AND		A.ADJ_DATE 		BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	B.DISUSE_DATE    AS IOSTOCK_DATE
+                                        ,		'재고폐기'        AS IOSTOCK_FG
+                                        ,		'09'             AS IOSTOCK_CD
+                                        <if test='unitFg == "0"'>
+                                            ,		(B.DISUSE_QTY)         AS  IOSTOCK_QTY
+                                            ,		(B.DISUSE_QTY * -1)         AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		B.DISUSE_QTY / B.PO_UNIT_QTY                AS  IOSTOCK_QTY
+                                            ,		(B.DISUSE_QTY * -1) / B.PO_UNIT_QTY         AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)   AS SLIP_NO
+                                        FROM	TB_ST_STORE_DISUSE A
+                                        ,		TB_ST_STORE_DISUSE_DTL B
+                                        ,		TB_MS_PRODUCT C
+                                        WHERE	B.STORE_CD		=	A.STORE_CD
+                                        AND		B.DISUSE_DATE 	=	A.DISUSE_DATE
+                                        AND		B.SEQ_NO 		=	A.SEQ_NO
+                                        AND     C.STORE_CD      =   B.STORE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.STORE_CD 		= 	#{storeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND 	C.STOCK_PROD_YN = 	'Y'
+                                        AND 	C.USE_YN 		= 	'Y'
+                                        AND		A.DISUSE_DATE 	BETWEEN #{startDate} AND #{endDate}
+                                    )
+                            UNION ALL
+                            SELECT	'3'					        AS ORDER_NO
+                            ,		'조회기간 후'			        AS IOSTOCK_DATE
+                            ,		''					        AS IOSTOCK_FG
+                            ,		''					        AS IOSTOCK_CD
+                            <if test='unitFg == "0"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            <if test='unitFg == "1"'>
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS IOSTOCK_QTY
+                                ,		NVL(SUM(A.IOSTOCK_QTY / A.PO_UNIT_QTY),0)	AS REAL_IOSTOCK_QTY
+                            </if>
+                            ,		''					        AS SLIP_NO
+                            FROM	TB_ST_STORE_STOCK_DAILY A
+                            ,       TB_MS_PRODUCT B
+                            WHERE	B.STORE_CD      =   A.STORE_CD
+                            AND     B.PROD_CD       =   A.PROD_CD
+                            AND     A.STORE_CD 		=	#{storeCd}
+                            AND		A.PROD_CD		=	#{prodCd}
+                            AND 	B.STOCK_PROD_YN = 	'Y'
+                            AND 	B.USE_YN 		= 	'Y'
+                            <![CDATA[
+                                AND		A.IOSTOCK_DATE 	>	#{endDate}
+                            ]]>
+                        )
+            </when>
+        </choose>
+    </select>
 </mapper>

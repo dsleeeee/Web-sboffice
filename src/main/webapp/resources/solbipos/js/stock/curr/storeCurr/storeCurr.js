@@ -44,6 +44,28 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
         } else if (col.format === "dateTime") {
           e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
         }
+
+        if (col.binding === "currQty") { // 현재고
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+      }
+    });
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        if (col.binding === "currQty") { // 현재고 클릭
+          var params    = {};
+          params.storeCd    = selectedRow.storeCd;
+          params.storeNm    = selectedRow.storeNm;
+          params.prodCd     = selectedRow.prodCd;
+          params.prodNm     = selectedRow.prodNm;
+          $scope._broadcast('storeCurrDtlCtrl', params);
+        }
       }
     });
 

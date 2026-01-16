@@ -313,8 +313,14 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20260108.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 현재고현황 상세 팝업 --%>
+<c:import url="/WEB-INF/view/stock/curr/hqCurr/hqCurrQtyDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -206,7 +206,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20260114.01" charset="utf-8"></script>
 
 <%-- 현재고현황 상세 레이어 --%>
 <%--<c:import url="/WEB-INF/view/stock/curr/storeCurr/storeCurrDtl.jsp">--%>
@@ -217,3 +217,10 @@
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
+
+<%-- 매장현재고현황 상세 팝업 --%>
+<c:import url="/WEB-INF/view/stock/curr/storeCurr/storeCurrDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+

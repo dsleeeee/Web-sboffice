@@ -4,11 +4,13 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.stock.curr.hqCurr.service.HqCurrService;
 import kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service("hqCurrService")
@@ -80,6 +82,18 @@ public class HqCurrServiceImpl implements HqCurrService {
 			list = hqCurrMapper.getHqStoreCurrExcelList(hqCurrVO);
 		}
         return list;
+	}
+
+	/** 현재고현황 - 현재고수량현황 팝업 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getSearchHqCurrQtyDtlList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
+		hqCurrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		hqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+			hqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
+		}
+
+		return hqCurrMapper.getSearchHqCurrQtyDtlList(hqCurrVO);
 	}
 
 }

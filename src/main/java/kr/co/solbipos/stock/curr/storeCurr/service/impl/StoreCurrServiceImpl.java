@@ -49,4 +49,11 @@ public class StoreCurrServiceImpl implements StoreCurrService {
 
         return storeCurrMapper.getStoreCurrList(storeCurrVO);
     }
+
+    /** 매장현재고현황 - 매장현재고수량현황 팝업 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchStoreCurrDtlList(StoreCurrVO storeCurrVO, SessionInfoVO sessionInfoVO) {
+        storeCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return storeCurrMapper.getSearchStoreCurrDtlList(storeCurrVO);
+    }
 }

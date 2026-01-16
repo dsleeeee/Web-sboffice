@@ -26,4 +26,7 @@ public interface HqCurrMapper {
     
     /** 현재고현황 - 매장 현재고현황 엑셀 전체 리스트 조회 */
     List<DefaultMap<String>> getHqStoreCurrExcelList(HqCurrVO hqCurrVO);
+
+    /** 현재고현황 - 현재고수량현황 팝업 리스트 조회 */
+    List<DefaultMap<String>> getSearchHqCurrQtyDtlList(HqCurrVO hqCurrVO);
 }

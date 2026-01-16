@@ -15,4 +15,6 @@ public interface HqCurrService {
     /** 현재고현황 - 현재고현황 엑셀 전체 리스트 조회 */
     List<DefaultMap<String>> getHqCurrExcelList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO);
 
+    /** 현재고현황 - 현재고수량현황 팝업 리스트 조회 */
+    List<DefaultMap<String>> getSearchHqCurrQtyDtlList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO);
 }

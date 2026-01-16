@@ -103,4 +103,24 @@ public class StoreCurrController {
 
         return ReturnUtil.returnListJson(Status.OK, list, storeCurrVO);
     }
+
+    /**
+     * 매장현재고현황 - 매장현재고수량현황 팝업 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2026.01.14
+     */
+    @RequestMapping(value = "/storeCurrDtl/getSearchStoreCurrDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchStoreCurrDtlList(HttpServletRequest request, HttpServletResponse response, StoreCurrVO storeCurrVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeCurrService.getSearchStoreCurrDtlList(storeCurrVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeCurrVO);
+    }
 }
