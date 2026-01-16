@@ -294,7 +294,7 @@
 
         <div class="mt10 oh sb-select dkbr">
           <%-- 엑셀다운로드 --%>
-          <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+          <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downDivision"/></button>
         </div>
 
         <div class="w100 mt10">
@@ -435,4 +435,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/orderTimeTracking/orderTimeTracking.js?ver=20250922.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/orderTimeTracking/orderTimeTracking.js?ver=20260116.01" charset="utf-8"></script>

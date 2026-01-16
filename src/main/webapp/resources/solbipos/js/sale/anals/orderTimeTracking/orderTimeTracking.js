@@ -138,7 +138,6 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.storeCds   = $("#orderTimeTrackingStoreCd").val();
-        params.listScale = 500;
 
         if(orgnFg === "HQ"){
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
@@ -202,8 +201,151 @@ app.controller('orderTimeTrackingExcelCtrl', ['$scope', '$http', '$timeout', fun
         event.preventDefault();
     });
 
-    // 엑셀 다운로드
+    // 분할 엑셀 리스트 조회
     $scope.srchOrderTimeTrackingExcelList = function (params) {
+
+        // 다운로드 시작이면 작업내역 로딩 팝업 오픈
+        $scope.excelUploadingPopup(true);
+        $("#totalRows").html(0);
+
+        // 전체 데이터 수
+        var listSize = 0;
+        // 다운로드 되는 총 엑셀파일 수
+        var totFileCnt = 0;
+
+        // 전체 데이터 수 조회
+        params.limit = 1;
+        params.offset = 1;
+
+        $scope._postJSONQuery.withOutPopUp("/sale/anals/orderTimeTracking/orderTimeTracking/getOrderTimeTrackingList.sb", params, function (response) {
+
+            listSize = response.data.data.list[0].totCnt;
+            totFileCnt = Math.ceil(listSize / 20000); // 하나의 엑셀파일에 20000개씩 다운로드
+
+            if (listSize === 0 || totFileCnt === 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                $scope.excelUploadingPopup(false);
+                return false;
+            };
+
+            // 다운로드 될 전체 파일 갯수 셋팅
+            $("#totalRows").html(totFileCnt);
+
+            // 엑셀 다운로드
+            function delay(x) {
+                return new Promise(function (resolve, reject) {
+                    //setTimeout(function() {
+                    console.log("setTimeout  > i=" + x + " x=" + x);
+
+                    // 다운로드 진행중인 파일 숫자 변경
+                    $("#progressCnt").html(x + 1);
+
+                    // 페이징 20000개씩 지정해 분할 다운로드 진행
+                    params.limit = 20000 * (x + 1);
+                    params.offset = (20000 * (x + 1)) - 19999;
+
+                    // 가상로그인 대응한 session id 설정
+                    if (document.getElementsByName('sessionId')[0]) {
+                        params['sid'] = document.getElementsByName('sessionId')[0].value;
+                    }
+
+                    // ajax 통신 설정
+                    $http({
+                        method: 'POST', //방식
+                        url: '/sale/anals/orderTimeTracking/orderTimeTracking/getOrderTimeTrackingList.sb', /* 통신할 URL */
+                        params: params, /* 파라메터로 보낼 데이터 */
+                        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                    }).then(function successCallback(response) {
+                        if ($scope._httpStatusCheck(response, true)) {
+                            // this callback will be called asynchronously
+                            // when the response is available
+                            var list = response.data.data.list;
+                            if (list.length === undefined || list.length === 0) {
+                                $scope.data = new wijmo.collections.CollectionView([]);
+                                $scope.excelUploadingPopup(false);
+                                return false;
+                            }
+
+                            var data = new wijmo.collections.CollectionView(list);
+                            data.trackChanges = true;
+                            $scope.data = data;
+                        }
+                    }, function errorCallback(response) {
+                        // 로딩팝업 hide
+                        $scope.excelUploadingPopup(false);
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                        if (response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        } else {
+                            $scope._popMsg(messages['cmm.error']);
+                        }
+                        return false;
+                    }).then(function () {
+                        // 'complete' code here
+                        setTimeout(function () {
+                            if ($scope.excelFlex.rows.length <= 0) {
+                                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                $scope.excelUploadingPopup(false);
+                                return false;
+                            }
+
+                            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                                includeColumnHeaders: true,
+                                includeCellStyles: false,
+                                includeColumns: function (column) {
+                                    return column.visible;
+                                }
+                            }, messages["orderTimeTracking.orderTimeTracking"] + "_" + params.startDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                                $timeout(function () {
+                                    console.log("Export complete start. _" + (x + 1));
+                                    getExcelFile(x + 1);
+                                }, 500);
+                            }, function (reason) { // onError
+                                // User can catch the failure reason in this callback.
+                                console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                $scope.excelUploadingPopup(false);
+                            });
+                        }, 1000);
+                    });
+                    resolve();
+                    //}, 3000*x);
+                });
+            };
+
+            async function getExcelFile(x) {
+                if (totFileCnt > x) {
+                    await
+                    delay(x);
+                } else {
+                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                }
+            };
+
+            // 엑셀 분할 다운로드 시작
+            getExcelFile(0);
+
+        });
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 다운로드 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
+    };
+
+    // 엑셀 다운로드
+    /*$scope.srchOrderTimeTrackingExcelList = function (params) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/anals/orderTimeTracking/orderTimeTracking/getOrderTimeTrackingExcelList.sb", params, function() {
@@ -227,6 +369,6 @@ app.controller('orderTimeTrackingExcelCtrl', ['$scope', '$http', '$timeout', fun
             });
           }, 10);
         });
-    };
+    };*/
 
 }]);
