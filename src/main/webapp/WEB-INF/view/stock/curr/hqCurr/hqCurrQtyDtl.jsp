@@ -93,4 +93,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurrQtyDtl.js?ver=20200413.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurrQtyDtl.js?ver=20200413.02" charset="utf-8"></script>

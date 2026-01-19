@@ -50,13 +50,8 @@ app.controller('nonTaxSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("nonTaxSaleCtrl", function (event, data) {
 
-        if(orgnFg === 'HQ') {
-            // 비과세매출 조회 이용자 수 체크
-            $scope.getChkSearchCnt();
-        }else{
-            // 비과세매출 리스트 조회
-            $scope.getNonTaxSaleList();
-        }
+        // 비과세매출 조회 이용자 수 체크
+        $scope.getChkSearchCnt();
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -64,51 +59,6 @@ app.controller('nonTaxSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 비과세매출 조회 이용자 수 체크
     $scope.getChkSearchCnt = function () {
-        // 파라미터
-        var params = {};
-
-        // 엑셀다운로드 진행 사용자 현재 인원수 체크
-        // 다운로드 구분 (0:간소화화면, 1:상품매출분석, 3:미스터피자_간소화화면, 4:미스터피자_상품매출분석)
-        params.downloadFg = "6";
-        params.resrceCd = menuCd;
-        params.resrceNm = menuNm;
-        params.downloadUseFg = "0"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
-        params.downloadNo = "1"; // 다운로드 화면구분번호
-
-        $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', params, function (response) {
-            if (response.data.data.list === 0) {
-            } else {
-                var msgCntChk = response.data.data.list; // 00:0명의 사용자 다운로드 중
-                if(msgCntChk.substr(0, 2) === "00") {
-                    $scope.getInsertchkCnt(params);
-                } else {
-                    // 엑셀다운로드 진행 사용자 저장 insert
-                    var params2 = params;
-                    params2.resrceNm = "실패:" + menuNm;
-                    params2.downloadFileCount = 0; // 다운로드 파일수
-                    $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){});
-
-                    $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
-                    return;
-                }
-            }
-        });
-    };
-
-    // 비과세매출 조회 이용자 등록
-    $scope.getInsertchkCnt = function (data) {
-
-        var params = data;
-        params.downloadFileCount = 1;
-
-        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
-            $scope.getNonTaxSaleList();
-
-        });
-    };
-
-    // 비과세매출 조회
-    $scope.getNonTaxSaleList = function () {
 
         var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
@@ -119,10 +69,19 @@ app.controller('nonTaxSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 31일 제한
-        if (diffDay >= 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
-            return false;
+
+        if(orgnFg === 'STORE') {
+            // 조회일자 최대 6달 제한
+            if (diffDay >= 186) {
+                $scope._popMsg(messages['cmm.dateOver.6month.error']);
+                return false;
+            }
+        }else{
+            // 조회일자 최대 31일 제한
+            if (diffDay >= 31) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
         }
 
         // 파라미터
@@ -131,6 +90,58 @@ app.controller('nonTaxSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.storeCds = $("#nonTaxSaleStoreCd").val();
         params.dayOption = $scope.dayOption;
+
+        if(orgnFg === 'STORE') {
+            // 비과세매출 리스트 조회
+            $scope.getNonTaxSaleList(params);
+        }else {
+
+            // 엑셀다운로드 진행 사용자 현재 인원수 체크
+            // 다운로드 구분 (0:간소화화면, 1:상품매출분석, 3:미스터피자_간소화화면, 4:미스터피자_상품매출분석)
+            params.downloadFg = "6";
+            params.resrceCd = menuCd;
+            params.resrceNm = menuNm;
+            params.downloadUseFg = "0"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
+            params.downloadNo = "1"; // 다운로드 화면구분번호
+
+            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', params, function (response) {
+                if (response.data.data.list === 0) {
+                } else {
+                    var msgCntChk = response.data.data.list; // 00:0명의 사용자 다운로드 중
+                    if (msgCntChk.substr(0, 2) === "00") {
+                        $scope.getInsertchkCnt(params);
+                    } else {
+                        // 엑셀다운로드 진행 사용자 저장 insert
+                        var params2 = params;
+                        params2.resrceNm = "실패:" + menuNm;
+                        params2.downloadFileCount = 0; // 다운로드 파일수
+                        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
+                        });
+
+                        $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
+                        return;
+                    }
+                }
+            });
+        }
+    };
+
+    // 비과세매출 조회 이용자 등록
+    $scope.getInsertchkCnt = function (data) {
+
+        var params = data;
+        params.downloadFileCount = 1;
+
+        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
+            $scope.getNonTaxSaleList(params);
+
+        });
+    };
+
+    // 비과세매출 조회
+    $scope.getNonTaxSaleList = function (data) {
+
+        var params = data;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/anals/nonTaxSale/nonTaxSale/getNonTaxSaleList.sb", params, function (){

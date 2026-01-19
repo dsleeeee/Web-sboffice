@@ -124,4 +124,4 @@
   var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/nonTaxSale/nonTaxSale.js?ver=20260114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/nonTaxSale/nonTaxSale.js?ver=20260114.02" charset="utf-8"></script>

@@ -30,8 +30,8 @@
         ,		A.TOT_SALE_AMT
         ,		A.TOT_DC_AMT
         ,		A.REAL_SALE_AMT
-        ,		B.PICKUP_NO     AS SL_VORDER
-        ,		C.PICKUP_NO     AS RV_VORDER
+        ,		MAX(B.PICKUP_NO)    AS SL_VORDER
+        ,		MAX(C.PICKUP_NO)    AS RV_VORDER
         FROM	TB_SL_SALE_HDR A
         ,		TB_SL_SALE_PAY_VORDER B
         ,		TB_RV_SALE_PAY_VORDER C
@@ -53,6 +53,17 @@
         <if test='vorderNo != null and vorderNo != ""'>
             AND (B.PICKUP_NO  = #{vorderNo} OR C.PICKUP_NO  = #{vorderNo})
         </if>
+        GROUP
+        BY		A.STORE_CD
+        ,		D.STORE_NM
+        ,		A.SALE_DATE
+        ,		A.POS_NO
+        ,		A.BILL_NO
+        ,		A.BILL_DT
+        ,		A.SALE_FG
+        ,		A.TOT_SALE_AMT
+        ,		A.TOT_DC_AMT
+        ,		A.REAL_SALE_AMT
         ORDER
         BY      A.POS_NO
         ,       A.BILL_NO

@@ -702,6 +702,33 @@
                                         AND     C.USE_YN        =   'Y'
                                         AND		A.ADJ_DATE 		BETWEEN #{startDate} AND #{endDate}
                                         UNION ALL
+                                        SELECT	B.ACINS_DATE
+                                        ,		'재고조정'
+                                        ,		'07'
+                                        <if test='unitFg == "0"'>
+                                            ,		B.ADJ_QTY       AS IOSTOCK_QTY
+                                            ,		B.ADJ_QTY       AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY   AS IOSTOCK_QTY
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY   AS REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)
+                                        FROM	TB_ST_HQ_ACTUAL_INSPECTION A
+                                        ,		TB_ST_HQ_ACTUAL_INSPECTION_DTL B
+                                        ,       TB_HQ_PRODUCT C
+                                        WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                                        AND		B.ACINS_DATE 	=	A.ACINS_DATE
+                                        AND		B.SEQ_NO 		=	A.SEQ_NO
+                                        AND     C.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.HQ_OFFICE_CD 	= 	#{hqOfficeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		A.ACINS_DATE  	BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
                                         SELECT	B.DISUSE_DATE
                                         ,		'재고폐기'
                                         ,		'08'
@@ -853,12 +880,12 @@
                                         ,		'매장판매'       AS IOSTOCK_FG
                                         ,		'05'            AS IOSTOCK_CD
                                         <if test='unitFg == "0"'>
-                                            ,       A.TOT_SALE_QTY 	        AS  IOSTOCK_QTY
-                                            ,       (A.TOT_SALE_QTY * -1) 	AS  REAL_IOSTOCK_QTY
+                                            ,       A.TOT_SALE_QTY 	        AS IOSTOCK_QTY
+                                            ,       (A.TOT_SALE_QTY * -1) 	AS REAL_IOSTOCK_QTY
                                         </if>
                                         <if test='unitFg == "1"'>
-                                            ,       (A.TOT_SALE_QTY / B.PO_UNIT_QTY) 	    AS  IOSTOCK_QTY
-                                            ,       (A.TOT_SALE_QTY * -1) / B.PO_UNIT_QTY 	AS  REAL_IOSTOCK_QTY
+                                            ,       (A.TOT_SALE_QTY / B.PO_UNIT_QTY) 	    AS IOSTOCK_QTY
+                                            ,       (A.TOT_SALE_QTY * -1) / B.PO_UNIT_QTY 	AS REAL_IOSTOCK_QTY
                                         </if>
                                         ,		''          AS SLIP_NO
                                         FROM    TB_SL_DAILY_PROD A
@@ -934,6 +961,33 @@
                                         AND 	C.STOCK_PROD_YN = 	'Y'
                                         AND 	C.USE_YN 		= 	'Y'
                                         AND		A.ADJ_DATE 		BETWEEN #{startDate} AND #{endDate}
+                                        UNION ALL
+                                        SELECT	B.ACINS_DATE
+                                        ,		'재고조정'
+                                        ,		'08'
+                                        <if test='unitFg == "0"'>
+                                            ,		B.ADJ_QTY       AS  IOSTOCK_QTY
+                                            ,		B.ADJ_QTY       AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        <if test='unitFg == "1"'>
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY   AS  IOSTOCK_QTY
+                                            ,		B.ADJ_QTY / B.PO_UNIT_QTY   AS  REAL_IOSTOCK_QTY
+                                        </if>
+                                        ,		TO_CHAR(B.SEQ_NO)
+                                        FROM	TB_ST_STORE_ACTUAL_INSPECTION A
+                                        ,		TB_ST_STORE_ACTUAL_INSPECTION_DTL B
+                                        ,       TB_MS_PRODUCT C
+                                        WHERE	B.STORE_CD 	    =	A.STORE_CD
+                                        AND		B.ACINS_DATE 	=	A.ACINS_DATE
+                                        AND		B.SEQ_NO 		=	A.SEQ_NO
+                                        AND     C.STORE_CD      =   B.STORE_CD
+                                        AND     C.PROD_CD       =   B.PROD_CD
+                                        AND		A.PROC_FG 		=	'1'
+                                        AND		B.STORE_CD 	    = 	#{storeCd}
+                                        AND		B.PROD_CD		=	#{prodCd}
+                                        AND     C.STOCK_PROD_YN =   'Y'
+                                        AND     C.USE_YN        =   'Y'
+                                        AND		A.ACINS_DATE  	BETWEEN #{startDate} AND #{endDate}
                                         UNION ALL
                                         SELECT	B.DISUSE_DATE    AS IOSTOCK_DATE
                                         ,		'재고폐기'        AS IOSTOCK_FG

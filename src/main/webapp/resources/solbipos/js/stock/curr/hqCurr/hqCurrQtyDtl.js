@@ -68,10 +68,10 @@ app.controller('hqCurrQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
 
         // 조회일자 최대 6달(186일) 제한
-        // if (diffDay > 186) {
-        //     $scope._popMsg(messages['cmm.dateOver.6month.error']);
-        //     return false;
-        // }
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
 
         // 파라미터
         var params      = {};
