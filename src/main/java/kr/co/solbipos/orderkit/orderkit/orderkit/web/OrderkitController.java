@@ -95,6 +95,7 @@ public class OrderkitController {
                 .claim("businessNumber", storeInfo.getStr("bizNo"))
                 .claim("representativeName", storeInfo.getStr("ownerNm"))
                 .claim("phoneNumber", storeInfo.getStr("mpNo"))
+                .claim("shopTelNo", storeInfo.getStr("telNo"))
                 .claim("postNo", storeInfo.getStr("postNo"))
                 .claim("addressBase", storeInfo.getStr("addr"))
                 .claim("addressDetail", storeInfo.getStr("addrDtl"))
@@ -129,6 +130,7 @@ public class OrderkitController {
             LOGGER.info("businessNumber: " + claims.get("businessNumber"));
             LOGGER.info("representativeName: " + claims.get("representativeName"));
             LOGGER.info("phoneNumber: " + claims.get("phoneNumber"));
+            LOGGER.info("shopTelNo: " + claims.get("shopTelNo"));
             LOGGER.info("postNo: " + claims.get("postNo"));
             LOGGER.info("addressBase: " + claims.get("addressBase"));
             LOGGER.info("addressDetail: " + claims.get("addressDetail"));
