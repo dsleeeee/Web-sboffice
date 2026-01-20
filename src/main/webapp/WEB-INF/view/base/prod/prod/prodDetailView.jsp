@@ -1089,6 +1089,7 @@
                                 <label id="lblDisconDate" />
                             </td>
                         </tr>
+                    </c:if>
                         <tr>
                             <%-- 판매방식 --%>
                             <th><s:message code="prod.saleType"/></th>
@@ -1098,6 +1099,7 @@
                             <th></th>
                             <td></td>
                         </tr>
+                    <c:if test="${momsEnvstVal == '1'}">
                         <tr>
                             <%-- 판매채널 --%>
                             <th><s:message code="prod.saleChannel"/></th>
@@ -1192,4 +1194,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20260113.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20260120.01" charset="utf-8"></script>

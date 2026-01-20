@@ -59,4 +59,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/contentPop2.js?ver=20241106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/contentPop2.js?ver=20260120.01" charset="utf-8"></script>
