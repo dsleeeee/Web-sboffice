@@ -388,8 +388,8 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
        params.prodClassCd = $scope.prodClassCd;
        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
-       params.prodCd = $("#srchProdCd").val();
-       params.prodNm = $("#srchProdNm").val();
+       params.prodCd = $("#srchDtlProdCd").val();
+       params.prodNm = $("#srchDtlProdNm").val();
        params.prodCds = $("#saleDtlChannelSelectCd").val();
        params.dlvrInFgCol = dlvrInFgCol;
        params.listScale = 500; //-페이지 스케일 갯수
@@ -535,8 +535,8 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
        params.prodClassCd = $scope.prodClassCd;
        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
-       params.prodCd = $("#srchProdCd").val();
-       params.prodNm = $("#srchProdNm").val();
+       params.prodCd = $("#srchDtlProdCd").val();
+       params.prodNm = $("#srchDtlProdNm").val();
        params.prodCds = $("#saleDtlChannelSelectCd").val();
        params.dlvrInFgCol = dlvrInFgCol;
 

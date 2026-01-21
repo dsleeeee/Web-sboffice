@@ -170,7 +170,7 @@
                         ,		REAL_IOSTOCK_QTY
                         ,		SLIP_NO
                         FROM	(
-                                    SELECT	A.OUT_DATE	        AS IOSTOCK_DATE
+                                    SELECT	A.IN_DATE	        AS IOSTOCK_DATE
                                     ,		'매장입고'	        AS IOSTOCK_FG
                                     ,		'01'		        AS IOSTOCK_CD
                                     <if test='unitFg == "0"'>
@@ -197,9 +197,9 @@
                                     AND		B.SLIP_FG 		=	'1'
                                     AND		C.STOCK_PROD_YN =	'Y'
                                     AND		C.USE_YN	    =	'Y'
-                                    AND		A.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+                                    AND		A.IN_DATE BETWEEN #{startDate} AND #{endDate}
                                     UNION ALL
-                                    SELECT	DECODE(A.PROC_FG, '20', A.OUT_DATE , '30', A.IN_DATE ,'')	AS IOSTOCK_DATE
+                                    SELECT	A.OUT_DATE	AS IOSTOCK_DATE
                                     ,		'매장반품'		AS IOSTOCK_FG
                                     ,		'02'			AS IOSTOCK_CD
                                     <if test='unitFg == "0"'>
@@ -226,7 +226,7 @@
                                     AND		B.SLIP_FG 		=	'-1'
                                     AND		C.STOCK_PROD_YN =	'Y'
                                     AND		C.USE_YN	    =	'Y'
-                                    AND		DECODE(A.PROC_FG, '20', A.OUT_DATE , '30', A.IN_DATE ,'') BETWEEN #{startDate} AND #{endDate}
+                                    AND		A.OUT_DATE BETWEEN #{startDate} AND #{endDate}
                                     UNION ALL
                                     SELECT	A.INSTOCK_DATE	AS IOSTOCK_DATE
                                     ,		DECODE(B.SLIP_FG, '1', '사입입고', '-1', '사입반품','')	AS IOSTOCK_FG

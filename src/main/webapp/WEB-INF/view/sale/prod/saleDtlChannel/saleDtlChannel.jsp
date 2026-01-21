@@ -70,12 +70,12 @@
                     <%-- 상품코드 --%>
                     <th><s:message code="prodSaleRate.prodCd" /></th>
                     <td>
-                        <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
+                        <input type="text" id="srchDtlProdCd" ng-model="dtlProdCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                     <%-- 상품명 --%>
                     <th><s:message code="prodSaleRate.prodNm" /></th>
                     <td>
-                        <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
+                        <input type="text" id="srchDtlProdNm" ng-model="dtlProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                 </tr>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -578,4 +578,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannel.js?ver=20251229.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannel.js?ver=20260121.01" charset="utf-8"></script>
