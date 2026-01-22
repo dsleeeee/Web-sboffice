@@ -66,4 +66,7 @@ public interface QrOrderKeyMapMapper {
 
     /** 상품 내점,배달,포장 여부 수정 */
     int updateProductSaleType(QrOrderKeyMapVO qrOrderKeyMapVO);
+
+    /** API 호출 결과 저장 */
+    int saveApiLog(QrOrderKeyMapVO qrOrderKeyMapVO);
 }

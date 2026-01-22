@@ -10,10 +10,12 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.qrOrderKeyMap.service.QrOrderKeyMapService;
 import kr.co.solbipos.base.prod.qrOrderKeyMap.service.QrOrderKeyMapVO;
+import kr.co.solbipos.store.storeMoms.lsmStore.service.LsmStoreVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 /**
@@ -281,5 +283,22 @@ public class QrOrderKeyMapServiceImpl implements QrOrderKeyMapService {
         qrOrderKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return qrOrderKeyMapMapper.getApiEnvNm(qrOrderKeyMapVO);
+    }
+
+    /** API 호출 결과 저장 */
+    @Override
+    public int saveApiLog(QrOrderKeyMapVO qrOrderKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        qrOrderKeyMapVO.setRegDt(currentDt);
+        qrOrderKeyMapVO.setRegId(sessionInfoVO.getUserId());
+        qrOrderKeyMapVO.setModDt(currentDt);
+        qrOrderKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+        qrOrderKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        qrOrderKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return qrOrderKeyMapMapper.saveApiLog(qrOrderKeyMapVO);
     }
 }

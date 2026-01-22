@@ -42,8 +42,8 @@
                         </jsp:include>
                             <%--// 매장선택 모듈 사용시 include --%>
                     </td>
+                </c:if>
             </tr>
-            </c:if>
             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
                 <input type="hidden" id="onlineOrderStoreCd" value="${sessionInfo.storeCd}"/>
             </c:if>
@@ -107,4 +107,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/onlineOrder/onlineOrder.js?ver=20260116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/onlineOrder/onlineOrder.js?ver=20260121.01" charset="utf-8"></script>

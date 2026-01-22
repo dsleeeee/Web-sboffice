@@ -20,60 +20,88 @@ public class QrOrderKeyMapVO extends PageVO {
 
     private static final long serialVersionUID = 2160268323741874558L;
 
+    /** 본사코드 */
     private String hqOfficeCd;
 
+    /** 매장코드 */
     private String storeCd;
 
+    /** 소속구분 */
     private String orgnFg;
 
+    /** 용도구분 */
     private String clsFg;
 
+    /**  */
     private String indexNo;
 
+    /** 페이지수 */
     private String tuPage;
 
+    /** 카테고리 코드 */
     private String tuClsCd;
 
+    /** 키맵그룹(카테고리그룹) */
     private String tuClsType;
 
+    /** 포스번호 */
     private String posNo;
 
+    /** 카테고리명 */
     private String tuClsNm;
 
+    /** X값 */
     private String x;
 
+    /** Y값 */
     private String y;
 
+    /** 너비 */
     private String width;
 
+    /** 높이 */
     private String height;
 
+    /** 키오스크터치분류키설명 */
     private String clsMemo;
 
+    /** KIOSK 중분류 사용 */
     private String tuMClsFg;
 
+    /** 카테고리명(영문) */
     private String tuClsEnNm;
 
+    /** 카테고리명(중문) */
     private String tuClsCnNm;
 
+    /** 카테고리명(일문) */
     private String tuClsJpNm;
 
+    /** 바코드번호 */
     private String barCd;
 
+    /** 상품분류코드 */
     private String prodClassCd;
 
+    /** 상품유형구분 */
     private String prodTypeFg;
 
+    /** 키맵코드 */
     private String tuKeyCd;
 
+    /** 전체기간 여부 */
     private boolean chkDt;
 
+    /** 상품코드 */
     private String prodCd;
 
+    /** 상품명 */
     private String prodNm;
 
+    /** 사용여부 */
     private String useYn;
 
+    /** 등록여부 */
     private String regYn;
 
     /** 내점, 배달, 포장 체크박스 */
@@ -85,6 +113,21 @@ public class QrOrderKeyMapVO extends PageVO {
     private String saleTypeYnSinVal;
     private String saleTypeYnDlvVal;
     private String saleTypeYnPkgVal;
+
+    /** 연동구분 */
+    private String agencyFg;
+
+    /** 연동결과 */
+    private String agencyUseYn;
+
+    /** 응답값 */
+    private String lastResponse;
+
+    /** 응답일시 */
+    private String lastResponseDt;
+
+    /** 응답코드 */
+    private String lastStatusCode;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -356,5 +399,45 @@ public class QrOrderKeyMapVO extends PageVO {
 
     public void setSaleTypeYnPkgVal(String saleTypeYnPkgVal) {
         this.saleTypeYnPkgVal = saleTypeYnPkgVal;
+    }
+
+    public String getAgencyUseYn() {
+        return agencyUseYn;
+    }
+
+    public void setAgencyUseYn(String agencyUseYn) {
+        this.agencyUseYn = agencyUseYn;
+    }
+
+    public String getLastResponse() {
+        return lastResponse;
+    }
+
+    public void setLastResponse(String lastResponse) {
+        this.lastResponse = lastResponse;
+    }
+
+    public String getLastResponseDt() {
+        return lastResponseDt;
+    }
+
+    public void setLastResponseDt(String lastResponseDt) {
+        this.lastResponseDt = lastResponseDt;
+    }
+
+    public String getLastStatusCode() {
+        return lastStatusCode;
+    }
+
+    public void setLastStatusCode(String lastStatusCode) {
+        this.lastStatusCode = lastStatusCode;
+    }
+
+    public String getAgencyFg() {
+        return agencyFg;
+    }
+
+    public void setAgencyFg(String agencyFg) {
+        this.agencyFg = agencyFg;
     }
 }

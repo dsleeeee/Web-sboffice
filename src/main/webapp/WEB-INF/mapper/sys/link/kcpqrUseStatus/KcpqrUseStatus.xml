@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    KcpqrUseStatus.xml
+    KCPQR현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.01.21     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sys.link.kcpqrUseStatus.service.impl.KcpqrUseStatusMapper">
+
+    <!-- Clob -->
+    <resultMap id="KcpqrStatusMap" type="DefaultMap">
+        <result column="LAST_RESPONSE" property="lastResponse" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!--  KCPQR현황 - 조회 -->
+    <!--
+        TABLE    : TB_CM_API_STORE
+        PARAM    : KcpqrUseStatusVO
+        COMMENTS :
+    -->
+    <select id="getSearchKcpqrStatus" parameterType="KcpqrUseStatusVO" resultMap="KcpqrStatusMap">
+        /* USE : KcpqrUseStatusMapper.getSearchKcpqrStatus */
+        <choose>
+            <when test='srchFg != null and srchFg == "0"'>
+                SELECT	A.HQ_OFFICE_CD
+                ,		B.HQ_OFFICE_NM
+                ,		A.STORE_CD
+                ,		C.STORE_NM
+                ,		A.AGENCY_USE_YN
+                ,		A.LAST_RESPONSE
+                ,       TO_CHAR(TO_DATE(A.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LAST_RESPONSE_DT
+                ,		NVL(D.SALE_CNT, 0)  AS SALE_CNT
+                FROM	TB_CM_API_STORE A
+                ,		TB_HQ_OFFICE B
+                ,		TB_MS_STORE C
+                ,		(
+                            SELECT	STORE_CD
+                            ,		SUM(REAL_SALE_CNT) AS SALE_CNT
+                            FROM	TB_SL_DAILY_TOTAL_ORDAPP
+                            WHERE 	DLVR_IN_FG 	=	'17'
+                            AND		SALE_DATE 	BETWEEN TO_CHAR(TO_DATE(#{today}, 'YYYYMMDD') - 6, 'YYYYMMDD') AND #{today} -- 최근 7일
+                            GROUP
+                            BY		STORE_CD
+                        ) D
+                WHERE	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+                AND		C.STORE_CD 		=	A.STORE_CD
+                AND		D.STORE_CD 	(+)	=	A.STORE_CD
+                AND     A.AGENCY_FG     =   'KCPQR'
+                ORDER
+                BY 		A.HQ_OFFICE_CD
+                , 		A.STORE_CD
+            </when>
+            <when test='srchFg != null and srchFg == "1"'>
+                SELECT	LEVEL1		AS L_MENU_CD
+                ,		LEVEL1_NM	AS L_MENU_NM
+                ,		LEVEL2		AS M_MENU_CD
+                ,		LEVEL2_NM	AS M_MENU_NM
+                ,		LEVEL3		AS S_MENU_CD
+                ,		LEVEL3_NM	AS S_MENU_NM
+                ,		HQ_OFFICE_CD
+                ,		HQ_OFFICE_NM
+                ,		STORE_CD
+                ,		STORE_NM
+                ,		ORGN_FG
+                ,		USER_ID
+                ,		USER_NM
+                ,		SUM(USE_CNT) AS USE_CNT
+                FROM    (
+                            SELECT	REPLACE(SUBSTR(twri_P.PATH, 0, 7) ,'/','') AS LEVEL1
+                            ,		(SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
+                            ,		REPLACE(SUBSTR(twri_P.PATH, 8, 7) ,'/','') AS LEVEL2
+                            ,		(SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
+                            ,		REPLACE(SUBSTR(twri_P.PATH, 15, 7) ,'/','') AS LEVEL3
+                            ,		(SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
+                            ,		tce.HQ_OFFICE_CD
+                            ,		tce.HQ_OFFICE_NM
+                            ,		tce.STORE_CD
+                            ,		tce.STORE_NM
+                            ,		(
+                                        CASE
+                                            WHEN tce.ORGN_FG = 'H' THEN '본사'
+                                            WHEN tce.ORGN_FG = 'S' THEN '매장'
+                                            WHEN tce.ORGN_FG = 'M' THEN '관리자'
+                                            WHEN tce.ORGN_FG = 'A' THEN '총판'
+                                        ELSE null END
+                                    ) AS ORGN_FG
+                            ,		twmu.USER_ID
+                            ,		tce.USER_NM
+                            ,		COUNT(twmu.SEQ) AS USE_CNT
+                            FROM 	TB_WB_MENU_USE_HIST twmu
+                            ,		(
+                                        SELECT	RESRCE_CD
+                                        ,		SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
+                                        FROM 	TB_WB_RESRCE_INFO
+                                        WHERE 	1=1
+                                        START WITH P_RESRCE = '000000'
+                                        CONNECT BY P_RESRCE = PRIOR RESRCE_CD
+                                    ) twri_P
+                            ,		TB_WB_USER_INFO_DTL_V01 tce
+                            WHERE 	1=1
+                            AND 	twri_P.RESRCE_CD	(+) = 	twmu.RESRCE_CD
+                            AND 	tce.USER_ID 		(+) = 	twmu.USER_ID
+                            AND 	twmu.USE_DATE 			BETWEEN #{startDate} AND #{endDate}
+                            AND		twmu.RESRCE_CD 			= 	'006159'
+                            GROUP BY twri_P.PATH, tce.HQ_OFFICE_CD, tce.HQ_OFFICE_NM, tce.STORE_CD, tce.STORE_NM, tce.ORGN_FG, twmu.USER_ID, tce.USER_NM
+                            ORDER BY tce.HQ_OFFICE_CD, tce.STORE_CD, twmu.USER_ID
+                        )
+                WHERE 	1=1
+                GROUP
+                BY 		HQ_OFFICE_CD, HQ_OFFICE_NM, STORE_CD, STORE_NM, ORGN_FG, USER_ID, USER_NM
+                , 		LEVEL1, LEVEL1_NM, LEVEL2, LEVEL2_NM, LEVEL3, LEVEL3_NM
+                ORDER
+                BY 		HQ_OFFICE_CD
+                , 		STORE_CD
+                , 		ORGN_FG
+            </when>
+        </choose>
+    </select>
+</mapper>

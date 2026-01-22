@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
@@ -315,6 +316,9 @@ public class QrOrderKeyMapController {
 
             // 4. 응답 코드 확인
             int responseCode = connection.getResponseCode();
+            qrOrderKeyMapVO.setAgencyFg("KCPQR");
+            qrOrderKeyMapVO.setLastResponseDt(currentDateTimeString());
+            qrOrderKeyMapVO.setLastStatusCode(Integer.toString(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
 
             String responseBody = null;
@@ -337,6 +341,10 @@ public class QrOrderKeyMapController {
                     resultMap = mapper.readValue(responseBody, new TypeReference<Map<String, Object>>() {
                     });
                     System.out.println("서버 응답: " + response.toString());
+                    qrOrderKeyMapVO.setAgencyUseYn("Y");
+                    qrOrderKeyMapVO.setLastResponse(mapper.writeValueAsString(resultMap));
+                    // API 호출 결과 저장
+                    qrOrderKeyMapService.saveApiLog(qrOrderKeyMapVO, sessionInfoVO);
                 }
             } else {
                 // 에러 발생 시 에러 스트림을 읽음
@@ -349,6 +357,10 @@ public class QrOrderKeyMapController {
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {
                     });
                     System.out.println("에러 응답: " + errorResponse.toString());
+                    qrOrderKeyMapVO.setAgencyUseYn("N");
+                    qrOrderKeyMapVO.setLastResponse(mapper.writeValueAsString(resultMap));
+                    // API 호출 결과 저장
+                    qrOrderKeyMapService.saveApiLog(qrOrderKeyMapVO, sessionInfoVO);
                 }
             }
         } catch (Exception e) {

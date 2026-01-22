@@ -510,6 +510,59 @@
         ,   #{modDt}
         ,   #{modId}
         )
-
     </update>
+
+    <!-- API 호출 결과 저장 -->
+    <!--
+        TABLE    : TB_CM_API_STORE
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : API 호출 결과를 저장한다.
+    -->
+    <insert id="saveApiLog" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.saveApiLog */
+        MERGE INTO TB_CM_API_STORE A
+        USING DUAL
+        ON  (
+                    A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND A.STORE_CD      =   #{storeCd}
+                AND A.AGENCY_FG     =   #{agencyFg}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.AGENCY_USE_YN     =   #{agencyUseYn}
+        ,       A.LAST_RESPONSE     =   #{lastResponse}
+        ,       A.LAST_RESPONSE_DT  =   #{lastResponseDt}
+        ,       A.LAST_STATUS_CODE  =   #{lastStatusCode}
+        ,       A.MOD_DT            =   #{modDt}
+        ,       A.MOD_ID            =   #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       STORE_CD
+        ,       AGENCY_FG
+        ,       AGENCY_USE_YN
+        ,       LAST_RESPONSE
+        ,       LAST_RESPONSE_DT
+        ,       LAST_STATUS_CODE
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{storeCd}
+        ,       #{agencyFg}
+        ,       #{agencyUseYn}
+        ,       #{lastResponse}
+        ,       #{lastResponseDt}
+        ,       #{lastStatusCode}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
 </mapper>

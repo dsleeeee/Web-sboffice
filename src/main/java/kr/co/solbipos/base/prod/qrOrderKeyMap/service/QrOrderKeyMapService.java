@@ -4,6 +4,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * @Class Name  : QrOrderKeyMapService.java
  * @Description : 기초관리 > 상품관리2 > QR주문키맵관리
@@ -41,4 +43,7 @@ public interface QrOrderKeyMapService {
 
     /** 개발/운영 URL 조회 */
     List<DefaultMap<Object>> getApiEnvNm(QrOrderKeyMapVO qrOrderKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** API 호출 결과 저장 */
+    int saveApiLog(QrOrderKeyMapVO qrOrderKeyMapVO, SessionInfoVO sessionInfoVO);
 }

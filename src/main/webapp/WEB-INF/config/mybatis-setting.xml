@@ -262,6 +262,9 @@
     <!-- 시스템관리 > 연동 > OMS연동샘플 -->
     <typeAlias alias="omsLinkSampleVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO"/>
     <typeAlias alias="apiLinkVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO"/>
+
+    <!-- 시스템관리 > 연동 > KCPQR현황 -->
+    <typeAlias alias="kcpqrUseStatusVO" type="kr.co.solbipos.sys.link.kcpqrUseStatus.service.KcpqrUseStatusVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
