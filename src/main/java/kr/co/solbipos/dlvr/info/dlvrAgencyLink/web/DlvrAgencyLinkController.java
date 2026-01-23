@@ -11,6 +11,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkReqVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkService;
 import kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO;
+import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusService;
+import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,11 +81,13 @@ public class DlvrAgencyLinkController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final DlvrAgencyLinkService dlvrAgencyLinkService;
+    private final OrderkitStatusService orderkitStatusService;
     private final SessionService sessionService;
 
     @Autowired
-    public DlvrAgencyLinkController(DlvrAgencyLinkService dlvrAgencyLinkService, SessionService sessionService) {
+    public DlvrAgencyLinkController(DlvrAgencyLinkService dlvrAgencyLinkService, OrderkitStatusService orderkitStatusService, SessionService sessionService) {
         this.dlvrAgencyLinkService = dlvrAgencyLinkService;
+        this.orderkitStatusService = orderkitStatusService;
         this.sessionService = sessionService;
     }
 
@@ -235,9 +239,6 @@ public class DlvrAgencyLinkController {
     public Result getOmsUserStatus(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
 
-
-        //dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
@@ -262,8 +263,6 @@ public class DlvrAgencyLinkController {
     @ResponseBody
     public Result saveOrderAndRider(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
-
-        //dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
@@ -291,6 +290,10 @@ public class DlvrAgencyLinkController {
         // API 호출 로그 저장을 위한 셋팅
         ApiLinkVO apiLinkVO = new ApiLinkVO();
         apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
+
+        // 연동구분(OMS, QR, NAVER)별 연동 상태 저장을 위한 셋팅
+        // 매장별 주문연동활성화여부 파악
+        OrderkitStatusVO orderkitStatusVO = new OrderkitStatusVO();
 
         // 결과값 셋팅
         ObjectMapper mapper = new ObjectMapper();
@@ -327,6 +330,8 @@ public class DlvrAgencyLinkController {
             int responseCode = connection.getResponseCode();
             apiLinkVO.setResponseDt(currentDateTimeString());
             apiLinkVO.setStatusCode(String.valueOf(responseCode));
+            orderkitStatusVO.setLastResponseDt(currentDateTimeString());
+            orderkitStatusVO.setLastStatusCode(String.valueOf(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
 
             // 4. 응답 본문 읽기
@@ -338,6 +343,7 @@ public class DlvrAgencyLinkController {
                         response.append(responseLine.trim());
                     }
                     apiLinkVO.setResponse(response.toString());
+                    orderkitStatusVO.setLastResponse(response.toString());
                     resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>(){});
                     System.out.println("서버 응답: " + response.toString());
                 }
@@ -350,6 +356,7 @@ public class DlvrAgencyLinkController {
                         errorResponse.append(errorLine.trim());
                     }
                     apiLinkVO.setResponse(errorResponse.toString());
+                    orderkitStatusVO.setLastResponse(errorResponse.toString());
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>(){});
                     System.out.println("에러 응답: " + errorResponse.toString());
                 }
@@ -365,7 +372,24 @@ public class DlvrAgencyLinkController {
         // API 호출 로그 저장
         //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
 
-        //
+        // 연동구분(OMS, QR, NAVER)별 연동 상태 저장 */
+        if (apiType == "posOmsApi") {
+            if ("Y".equals(dlvrAgencyLinkReqVO.getApiStoreYn())) {
+                orderkitStatusVO.setAgencyFg("OMS");
+
+                // api 결과값에서 useOrderAndRider 확인
+                Map<String, Object> data = (Map<String, Object>) resultMap.get("data");
+                if (data != null) {
+                    if (data.get("useOrderAndRider").equals(true)) {
+                        orderkitStatusVO.setAgencyUseYn("Y");
+                    } else {
+                        orderkitStatusVO.setAgencyUseYn("N");
+                    }
+                    orderkitStatusService.insertAgencyStatus(orderkitStatusVO, sessionInfoVO);
+                }
+            }
+        }
+
         return resultMap;
     }
 
@@ -385,6 +409,10 @@ public class DlvrAgencyLinkController {
         // API 호출 로그 저장을 위한 셋팅
         ApiLinkVO apiLinkVO = new ApiLinkVO();
         apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
+
+        // 연동구분(OMS, QR, NAVER)별 연동 상태 저장을 위한 셋팅
+        // 매장별 주문연동활성화여부 파악
+        OrderkitStatusVO orderkitStatusVO = new OrderkitStatusVO();
 
         // 결과값 셋팅
         ObjectMapper mapper = new ObjectMapper();
@@ -431,6 +459,8 @@ public class DlvrAgencyLinkController {
             int responseCode = connection.getResponseCode();
             apiLinkVO.setResponseDt(currentDateTimeString());
             apiLinkVO.setStatusCode(String.valueOf(responseCode));
+            orderkitStatusVO.setLastResponseDt(currentDateTimeString());
+            orderkitStatusVO.setLastStatusCode(String.valueOf(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
 
             // 5. 응답 본문 읽기
@@ -442,6 +472,7 @@ public class DlvrAgencyLinkController {
                         response.append(responseLine.trim());
                     }
                     apiLinkVO.setResponse(response.toString());
+                    orderkitStatusVO.setLastResponse(response.toString());
                     resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("서버 응답: " + response.toString());
                 }
@@ -454,6 +485,7 @@ public class DlvrAgencyLinkController {
                         errorResponse.append(errorLine.trim());
                     }
                     apiLinkVO.setResponse(errorResponse.toString());
+                    orderkitStatusVO.setLastResponse(errorResponse.toString());
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("에러 응답: " + errorResponse.toString());
                 }
@@ -469,7 +501,24 @@ public class DlvrAgencyLinkController {
         // API 호출 로그 저장
         //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
 
-        //
+        // 연동구분(OMS, QR, NAVER)별 연동 상태 저장 */
+        if (apiType == "posOmsApi") {
+            if ("Y".equals(dlvrAgencyLinkReqVO.getApiStoreYn())) {
+                orderkitStatusVO.setAgencyFg("OMS");
+
+                // api 결과값에서 useOrderAndRider 확인
+                Map<String, Object> data = (Map<String, Object>) resultMap.get("data");
+                if (data != null) {
+                    if (data.get("useOrderAndRider").equals(true)) {
+                        orderkitStatusVO.setAgencyUseYn("Y");
+                    } else {
+                        orderkitStatusVO.setAgencyUseYn("N");
+                    }
+                    orderkitStatusService.insertAgencyStatus(orderkitStatusVO, sessionInfoVO);
+                }
+            }
+        }
+
         return resultMap;
     }
 

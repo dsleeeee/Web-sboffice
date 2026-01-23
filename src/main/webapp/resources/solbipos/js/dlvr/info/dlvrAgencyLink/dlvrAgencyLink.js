@@ -188,6 +188,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
         var params = {};
         params.use_orderandrider = $scope.useYnCombo.selectedValue;
+        params.apiStoreYn = "Y"; // 연동상태 저장여부
 
         $scope._postJSONQuery.withOutPopUp('/dlvr/manage/info/dlvrAgencyLink/saveOrderAndRider.sb', params, function (response) {
 
@@ -211,6 +212,8 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     $scope.orderkitGoto = function () {
 
         var params = {};
+        params.apiStoreYn = "N"; // 연동상태 저장여부
+
         var redirectUrl = "";
         var url = "https://test.orderkit.co.kr"; // 개발
         //var url = "https://orderkit.co.kr"; // 운영
@@ -263,6 +266,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     $scope.getOmsUserStatus = function () {
 
         var params = {};
+        params.apiStoreYn = "Y"; // 연동상태 저장여부
 
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getOmsUserStatus.sb", params, function (response) {
 

@@ -11,6 +11,10 @@
         <button class="btn01 first01" id="btnOpenWeb" ng-click="orderkitGoto();">오더킷(Order kit) 관리자 웹 이동</button>
     </div>
 
+    <div>
+        <img src="/resource/solbipos/css/img/orderkit/banner_260123@2x.png" alt="" style="width:100%; height: 100%;"/>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -22,7 +26,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20260114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkit/orderkit.js?ver=20260122.01" charset="utf-8"></script>
 
 <style>
     /* 단순버튼 01 */

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    OrderkitStatus.xml
+    오더킷현황 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.01.21      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.link.orderkitStatus.service.impl.OrderkitStatusMapper">
+
+    <!-- Clob -->
+    <resultMap id="OrderkitStatusMap" type="DefaultMap">
+        <result column="LAST_RESPONSE" property="lastResponse" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 사용자현황 조회 -->
+    <!--
+        TABLE    : TB_CM_API_STORE
+        PARAM    : orderkitStatusVO
+        COMMENTS : 사용자현황을 조회한다.
+    -->
+    <select id="getUserStatusList" parameterType="orderkitStatusVO" resultMap="OrderkitStatusMap">
+        /* USE : OrderkitStatusMapper.getUserStatusList */
+        SELECT  A.HQ_OFFICE_CD
+ 		,       B.HQ_OFFICE_NM
+        ,       A.STORE_CD
+        ,       C.STORE_NM
+        ,       A.AGENCY_FG
+        ,       A.AGENCY_USE_YN
+        ,       A.LAST_RESPONSE
+        ,       TO_CHAR(TO_DATE(A.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LAST_RESPONSE_DT
+        FROM    TB_CM_API_STORE A
+        ,       TB_HQ_OFFICE B
+        ,       TB_MS_STORE C
+        WHERE   A.AGENCY_FG = #{agencyFg}
+        AND     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND     A.STORE_CD = C.STORE_CD
+        AND     A.LAST_RESPONSE_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+    </select>
+
+    <!-- 접속현황 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : orderkitStatusVO
+        COMMENTS : 접속현황을 조회한다.
+    -->
+    <select id="getConnectStatusList" parameterType="orderkitStatusVO" resultType="DefaultMap">
+        /* USE : OrderkitStatusMapper.getConnectStatusList */
+        SELECT  LEVEL1,
+                LEVEL1_NM,
+                LEVEL2,
+                LEVEL2_NM,
+                LEVEL3,
+                LEVEL3_NM,
+                HQ_OFFICE_CD,
+                HQ_OFFICE_NM,
+                STORE_CD,
+                STORE_NM,
+                ORGN_FG,
+                USER_ID,
+                USER_NM,
+                SUM(USE_CNT) AS USE_CNT
+        FROM
+        (
+            SELECT  REPLACE(SUBSTR(twri_P.PATH, 0, 7) ,'/','') AS LEVEL1,
+                    (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM,
+                    REPLACE(SUBSTR(twri_P.PATH, 8, 7) ,'/','') AS LEVEL2,
+                    (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM,
+                    REPLACE(SUBSTR(twri_P.PATH, 15, 7) ,'/','') AS LEVEL3,
+                    (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(twri_P.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM,
+                    tce.HQ_OFFICE_CD,
+                    tce.HQ_OFFICE_NM,
+                    tce.STORE_CD,
+                    tce.STORE_NM,
+                    (CASE WHEN tce.ORGN_FG = 'H' THEN '본사'
+                    WHEN tce.ORGN_FG = 'S' THEN '매장'
+                    WHEN tce.ORGN_FG = 'M' THEN '관리자'
+                    WHEN tce.ORGN_FG = 'A' THEN '총판'
+                    ELSE null END
+                    ) AS ORGN_FG,
+                    twmu.USER_ID,
+                    tce.USER_NM,
+                    COUNT(twmu.SEQ) AS USE_CNT
+            FROM    TB_WB_MENU_USE_HIST twmu,
+                    (
+                        SELECT  RESRCE_CD,
+                                SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
+                        FROM    TB_WB_RESRCE_INFO
+                        WHERE 1=1
+                        START WITH P_RESRCE = '000000'
+                        CONNECT BY P_RESRCE = PRIOR RESRCE_CD
+                    ) twri_P,
+                    (
+                        (
+                            --본사
+                            SELECT  A.USER_ID,
+                                    'H' AS ORGN_FG,
+                                    A.HQ_OFFICE_CD AS ORGN_CD,
+                                    B.HQ_OFFICE_NM AS ORGN_NM,
+                                    A.EMP_NM AS USER_NM,
+                                    A.EMP_NO,
+                                    '' AS STORE_CD,
+                                    '' AS STORE_NM,
+                                    A.HQ_OFFICE_CD,
+                                    B.HQ_OFFICE_NM,
+                                    A.HQ_OFFICE_CD AS ORGN_GRP_CD,
+                                    B.HQ_OFFICE_NM AS ORGN_GRP_NM,
+                                    '' AS P_AGENCY_CD
+                            FROM    TB_HQ_EMPLOYEE A,
+                                    TB_HQ_OFFICE B
+                            WHERE   1=1
+                            AND     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                        )
+                        UNION ALL
+                        (
+                            --매장
+                            SELECT  A.USER_ID,
+                                    'S' AS ORGN_FG,
+                                    A.STORE_CD AS ORGN_CD,
+                                    B.STORE_NM AS ORGN_NM,
+                                    A.EMP_NM AS USER_NM,
+                                    A.EMP_NO,
+                                    A.STORE_CD AS STORE_CD,
+                                    B.STORE_NM AS STORE_NM,
+                                    C.HQ_OFFICE_CD,
+                                    C.HQ_OFFICE_NM,
+                                    DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
+                                    DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM,
+                                    '' AS P_AGENCY_CD
+                            FROM    TB_MS_EMPLOYEE A,
+                                    TB_MS_STORE B,
+                                    TB_HQ_OFFICE C
+                            WHERE   1=1
+                            AND     A.STORE_CD = B.STORE_CD
+                            AND     B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                        )
+                        UNION ALL
+                        (
+                            --관리자,총판
+                            SELECT  A.USER_ID,
+                                    DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
+                                    A.AGENCY_CD AS ORGN_CD,
+                                    B.AGENCY_NM AS ORGN_NM,
+                                    A.EMP_NM AS USER_NM,
+                                    A.EMP_NO,
+                                    '' AS STORE_CD,
+                                    '' AS STORE_NM,
+                                    '' AS HQ_OFFICE_CD,
+                                    '' AS HQ_OFFICE_NM,
+                                    A.AGENCY_CD AS ORGN_GRP_CD,
+                                    B.AGENCY_NM AS ORGN_GRP_NM,
+                                    B.P_AGENCY_CD AS P_AGENCY_CD
+                            FROM    TB_CM_EMPLOYEE A,
+                                    TB_CM_AGENCY B
+                            WHERE   1=1
+                            AND     A.AGENCY_CD = B.AGENCY_CD
+                        )
+                    ) tce
+            WHERE 1=1
+            AND   twri_P.RESRCE_CD (+)= twmu.RESRCE_CD
+            AND   tce.USER_ID (+)= twmu.USER_ID
+            AND   twmu.USE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP
+            BY    twri_P.PATH, tce.HQ_OFFICE_CD, tce.HQ_OFFICE_NM, tce.STORE_CD, tce.STORE_NM, tce.ORGN_FG, twmu.USER_ID,tce.USER_NM
+            ORDER
+            BY    tce.HQ_OFFICE_CD, tce.STORE_CD, twmu.USER_ID
+        )
+        WHERE  1=1
+        AND    LEVEL3 = #{resrceCd}
+        GROUP
+        BY     HQ_OFFICE_CD, HQ_OFFICE_NM, STORE_CD, STORE_NM, ORGN_FG, USER_ID, USER_NM, LEVEL1, LEVEL1_NM, LEVEL2, LEVEL2_NM, LEVEL3, LEVEL3_NM
+        ORDER
+        BY     HQ_OFFICE_CD, STORE_CD, ORGN_FG
+    </select>
+
+    <!-- 메뉴 리소스코드 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO
+        PARAM    : orderkitStatusVO
+        COMMENTS : 메뉴 리소스명으로 리소스코드를 조회한다.
+    -->
+    <select id="getMenuResrceCd" parameterType="orderkitStatusVO" resultType="String">
+        SELECT  RESRCE_CD
+        FROM    TB_WB_RESRCE_INFO
+        WHERE   RESRCE_NM = #{resrceNm}
+        AND     DISP_LEVEL = 3
+    </select>
+
+    <!-- 연동구분(OMS, QR, NAVER)별 연동 상태 저장 -->
+    <!--
+        TABLE    : TB_CM_API_STORE
+        PARAM    : orderkitStatusVO
+        COMMENTS : 매장의 연동구분(OMS, QR, NAVER)별 연동상태를 저장한다.
+    -->
+    <update id="insertAgencyStatus" parameterType="orderkitStatusVO">
+        MERGE INTO TB_CM_API_STORE A
+        USING DUAL ON
+        (
+            A.HQ_OFFICE_CD  = #{hqOfficeCd}
+            AND A.STORE_CD  = #{storeCd}
+            AND A.AGENCY_FG = #{agencyFg}
+        )
+        WHEN MATCHED THEN
+        UPDATE SET
+            A.AGENCY_USE_YN = #{agencyUseYn},
+            A.LAST_RESPONSE = #{lastResponse},
+            A.LAST_RESPONSE_DT = #{lastResponseDt},
+            A.LAST_STATUS_CODE = #{lastStatusCode},
+            A.MOD_DT = #{modDt},
+            A.MOD_ID = #{modId}
+       	WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.AGENCY_FG,
+            A.AGENCY_USE_YN,
+            A.LAST_RESPONSE,
+            A.LAST_RESPONSE_DT,
+            A.LAST_STATUS_CODE,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{agencyFg},
+            #{agencyUseYn},
+            #{lastResponse},
+            #{lastResponseDt},
+            #{lastStatusCode},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </update>
+
+</mapper>

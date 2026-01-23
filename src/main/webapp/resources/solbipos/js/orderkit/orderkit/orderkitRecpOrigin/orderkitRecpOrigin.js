@@ -49,6 +49,8 @@ app.controller('orderkitRecpOriginCtrl', ['$scope', '$http', '$timeout', functio
     $scope.orderkitGoto = function () {
 
         var params = {};
+        params.apiStoreYn = "N"; // 연동상태 저장여부
+
         var redirectUrl = "";
         var url = "https://test.orderkit.co.kr"; // 개발
         //var url = "https://orderkit.co.kr"; // 운영

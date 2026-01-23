@@ -40,6 +40,9 @@ public class DlvrAgencyLinkReqVO {
     private String pos_shop_id;
     private String use_orderandrider;
 
+    // 연동상태 저장여부
+    private String apiStoreYn;
+
     public String getShopName() {
         return shopName;
     }
@@ -166,5 +169,13 @@ public class DlvrAgencyLinkReqVO {
 
     public void setUse_orderandrider(String use_orderandrider) {
         this.use_orderandrider = use_orderandrider;
+    }
+
+    public String getApiStoreYn() {
+        return apiStoreYn;
+    }
+
+    public void setApiStoreYn(String apiStoreYn) {
+        this.apiStoreYn = apiStoreYn;
     }
 }
