@@ -328,6 +328,8 @@
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.acceptStatus"/>"   binding="acceptStatus"  width="100" align="center" is-read-only="true"  data-map="statusDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.empNo"/>"          binding="empNo"         width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.empNm"/>"          binding="empNm"         width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultCd"/>"     binding="changeResultCd"    width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultMsg"/>"    binding="changeResultMsg"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
