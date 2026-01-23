@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    orderAcceptHistory.xml
+    온라인주문-수신상태이력
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.01.22     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.orderAcceptHistory.service.impl.OrderAcceptHistoryMapper">
+
+    <!-- 온라인주문-수신상태이력 - 조회 -->
+    <!--
+        TABLE    : TB_PS_ORDER_ACCEPT_HISTORY
+        PARAM    : OrderAcceptHistoryVO
+        COMMENTS :
+    -->
+    <select id="getSearchOrderAcceptHistory" parameterType="OrderAcceptHistoryVO" resultType="DefaultMap">
+        /* USE : OrderAcceptHistoryMapper.getSearchOrderAcceptHistory */
+        SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		B.BRANCH_CD
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = 'H0393' AND BRANCH_CD = B.BRANCH_CD) AS BRANCH_NM
+        ,		A.HQ_OFFICE_CD
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,       (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND WHERE HQ_OFFICE_CD = B.HQ_OFFICE_CD AND HQ_BRAND_CD = B.HQ_BRAND_CD) AS BRAND_NM
+        ,		C.MOMS_TEAM
+        ,		C.MOMS_AC_SHOP
+        ,       TO_CHAR(TO_DATE(A.SYS_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS SYS_DATE
+        ,       A.DLVR_IN_FG
+        ,       TO_CHAR(TO_DATE(A.CHANGE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CHANGE_DT
+        ,		A.BEFORE_STATUS
+        ,		A.ACCEPT_STATUS
+        ,		A.EMP_NO
+        ,       (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) AS USER_NM
+        FROM	TB_PS_ORDER_ACCEPT_HISTORY	A
+        ,		TB_MS_STORE B
+        ,       TB_MS_STORE_INFO C
+        WHERE 	B.HQ_OFFICE_CD 	=	A.HQ_OFFICE_CD
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        AND    	C.STORE_CD 	(+) =	A.STORE_CD
+        AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND B.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND B.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND C.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND C.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND C.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND C.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND C.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND C.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND B.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND C.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND C.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND C.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND C.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND C.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        ORDER
+        BY      B.STORE_CD
+        ,       B.HQ_BRAND_CD
+        ,       C.MOMS_TEAM
+        ,       C.MOMS_AC_SHOP
+    </select>
+
+</mapper>
