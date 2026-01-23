@@ -128,7 +128,6 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
-                params.linkType = "006";
                 params.riderName = item.riderName;
                 params.mappingSequence = item.id;
 
@@ -136,7 +135,6 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
         }
 
         /*var params = {};
-        params.linkType = "006";
         params.riderName = "모아라인";
         params.mappingSequence = "20251105497150"; // 모아라인*/
 
