@@ -97,7 +97,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.getDlvrAgency = function () {
 
         var params = {};
-        params.linkType = "003";
 
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getDlvrAgency.sb", params, function (response) {
             var data = response.data.data.list;
@@ -157,7 +156,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         }
 
         var params = {};
-        params.linkType = "003";
 
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getDlvrAgency.sb", params, function (response) {
             var data = response.data.data.list;
@@ -228,7 +226,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         }
 
         var params = {};
-        params.linkType = "004";
         params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
         params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
@@ -302,7 +299,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
-                params.linkType = "005";
                 params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
 
                 if ($scope.srchDlvrAgencyCombo.selectedValue === "SPIDER" || $scope.srchDlvrAgencyCombo.selectedValue === "BEYOND" || $scope.srchDlvrAgencyCombo.selectedValue === "ZEN" ||

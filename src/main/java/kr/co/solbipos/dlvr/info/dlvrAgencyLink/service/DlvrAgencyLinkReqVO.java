@@ -1,5 +1,7 @@
 package kr.co.solbipos.dlvr.info.dlvrAgencyLink.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @Class Name : DlvrAgencyLinkReqVO.java
  * @Description : 배달관리 - 배달정보 - 배달대행사 연동
@@ -41,6 +43,7 @@ public class DlvrAgencyLinkReqVO {
     private String use_orderandrider;
 
     // 연동상태 저장여부
+    @JsonIgnore
     private String apiStoreYn;
 
     public String getShopName() {

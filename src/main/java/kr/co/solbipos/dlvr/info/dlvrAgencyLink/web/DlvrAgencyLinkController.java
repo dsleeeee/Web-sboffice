@@ -10,7 +10,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkReqVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkService;
-import kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO;
 import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusService;
 import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusVO;
 import org.slf4j.Logger;
@@ -287,10 +286,6 @@ public class DlvrAgencyLinkController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HttpURLConnection connection = null;
 
-        // API 호출 로그 저장을 위한 셋팅
-        ApiLinkVO apiLinkVO = new ApiLinkVO();
-        apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
-
         // 연동구분(OMS, QR, NAVER)별 연동 상태 저장을 위한 셋팅
         // 매장별 주문연동활성화여부 파악
         OrderkitStatusVO orderkitStatusVO = new OrderkitStatusVO();
@@ -307,11 +302,9 @@ public class DlvrAgencyLinkController {
             // 1. URL과 쿼리 파라미터 조합
             String fullUrl = buildUrlWithQueryParams(apiUrl, queryParams);
             URL url = new URL(fullUrl);
-            apiLinkVO.setUrl(fullUrl);
             System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
-            apiLinkVO.setRequestDt(currentDateTimeString());
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -324,12 +317,8 @@ public class DlvrAgencyLinkController {
                 connection.setRequestProperty("x-api-key", tokenOrKey);
             }
 
-            apiLinkVO.setRequestMethod(connection.getRequestMethod());
-
             // 3. 응답 코드 확인
             int responseCode = connection.getResponseCode();
-            apiLinkVO.setResponseDt(currentDateTimeString());
-            apiLinkVO.setStatusCode(String.valueOf(responseCode));
             orderkitStatusVO.setLastResponseDt(currentDateTimeString());
             orderkitStatusVO.setLastStatusCode(String.valueOf(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
@@ -342,7 +331,6 @@ public class DlvrAgencyLinkController {
                     while ((responseLine = br.readLine()) != null) {
                         response.append(responseLine.trim());
                     }
-                    apiLinkVO.setResponse(response.toString());
                     orderkitStatusVO.setLastResponse(response.toString());
                     resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>(){});
                     System.out.println("서버 응답: " + response.toString());
@@ -355,7 +343,6 @@ public class DlvrAgencyLinkController {
                     while ((errorLine = br.readLine()) != null) {
                         errorResponse.append(errorLine.trim());
                     }
-                    apiLinkVO.setResponse(errorResponse.toString());
                     orderkitStatusVO.setLastResponse(errorResponse.toString());
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>(){});
                     System.out.println("에러 응답: " + errorResponse.toString());
@@ -368,9 +355,6 @@ public class DlvrAgencyLinkController {
                 connection.disconnect();
             }
         }
-
-        // API 호출 로그 저장
-        //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
 
         // 연동구분(OMS, QR, NAVER)별 연동 상태 저장 */
         if (apiType == "posOmsApi") {
@@ -406,10 +390,6 @@ public class DlvrAgencyLinkController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HttpURLConnection connection = null;
 
-        // API 호출 로그 저장을 위한 셋팅
-        ApiLinkVO apiLinkVO = new ApiLinkVO();
-        apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
-
         // 연동구분(OMS, QR, NAVER)별 연동 상태 저장을 위한 셋팅
         // 매장별 주문연동활성화여부 파악
         OrderkitStatusVO orderkitStatusVO = new OrderkitStatusVO();
@@ -421,11 +401,9 @@ public class DlvrAgencyLinkController {
         try {
             // 1. URL 객체 생성
             URL url = new URL(apiUrl);
-            apiLinkVO.setUrl(apiUrl);
             System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
-            apiLinkVO.setRequestDt(currentDateTimeString());
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -439,15 +417,11 @@ public class DlvrAgencyLinkController {
             }
 
             connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
-            apiLinkVO.setRequestMethod(connection.getRequestMethod());
-
-            // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
-            dlvrAgencyLinkReqVO.setLinkType(null);
 
             // 3. 서버로 데이터 전송 (JSON payload)
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String jsonData = mapper.writeValueAsString(dlvrAgencyLinkReqVO);
-            apiLinkVO.setRequest(jsonData);
+            System.out.println("jsonData :" + jsonData);
 
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
@@ -457,8 +431,6 @@ public class DlvrAgencyLinkController {
 
             // 4. 응답 코드 확인
             int responseCode = connection.getResponseCode();
-            apiLinkVO.setResponseDt(currentDateTimeString());
-            apiLinkVO.setStatusCode(String.valueOf(responseCode));
             orderkitStatusVO.setLastResponseDt(currentDateTimeString());
             orderkitStatusVO.setLastStatusCode(String.valueOf(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
@@ -471,7 +443,6 @@ public class DlvrAgencyLinkController {
                     while ((responseLine = br.readLine()) != null) {
                         response.append(responseLine.trim());
                     }
-                    apiLinkVO.setResponse(response.toString());
                     orderkitStatusVO.setLastResponse(response.toString());
                     resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("서버 응답: " + response.toString());
@@ -484,7 +455,6 @@ public class DlvrAgencyLinkController {
                     while ((errorLine = br.readLine()) != null) {
                         errorResponse.append(errorLine.trim());
                     }
-                    apiLinkVO.setResponse(errorResponse.toString());
                     orderkitStatusVO.setLastResponse(errorResponse.toString());
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("에러 응답: " + errorResponse.toString());
@@ -497,9 +467,6 @@ public class DlvrAgencyLinkController {
                 connection.disconnect();
             }
         }
-
-        // API 호출 로그 저장
-        //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
 
         // 연동구분(OMS, QR, NAVER)별 연동 상태 저장 */
         if (apiType == "posOmsApi") {
@@ -533,13 +500,8 @@ public class DlvrAgencyLinkController {
      */
     public Map<String, Object> deleteRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String tokenOrKey, String apiType) {
 
-
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HttpURLConnection connection = null;
-
-        // API 호출 로그 저장을 위한 셋팅
-        ApiLinkVO apiLinkVO = new ApiLinkVO();
-        apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
 
         // 결과값 셋팅
         ObjectMapper mapper = new ObjectMapper();
@@ -548,11 +510,9 @@ public class DlvrAgencyLinkController {
         try {
             // 1. URL 객체 생성
             URL url = new URL(apiUrl);
-            apiLinkVO.setUrl(apiUrl);
             System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
-            apiLinkVO.setRequestDt(currentDateTimeString());
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("DELETE");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -566,15 +526,11 @@ public class DlvrAgencyLinkController {
             }
 
             connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
-            apiLinkVO.setRequestMethod(connection.getRequestMethod());
-
-            // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
-            dlvrAgencyLinkReqVO.setLinkType(null);
 
             // 3. 서버로 데이터 전송 (JSON payload)
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String jsonData = mapper.writeValueAsString(dlvrAgencyLinkReqVO);
-            apiLinkVO.setRequest(jsonData);
+            System.out.println("jsonData :" + jsonData);
 
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
@@ -584,8 +540,6 @@ public class DlvrAgencyLinkController {
 
             // 4. 응답 코드 확인
             int responseCode = connection.getResponseCode();
-            apiLinkVO.setResponseDt(currentDateTimeString());
-            apiLinkVO.setStatusCode(String.valueOf(responseCode));
             System.out.println("HTTP 응답 코드: " + responseCode);
 
             // 5. 응답 본문 읽기
@@ -600,7 +554,6 @@ public class DlvrAgencyLinkController {
                         response.append(responseLine.trim());
                     }
                     if (response.length() > 0) {
-                        apiLinkVO.setResponse(response.toString());
                         resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {});
                         System.out.println("서버 응답: " + response.toString());
                     }
@@ -613,7 +566,6 @@ public class DlvrAgencyLinkController {
                     while ((errorLine = br.readLine()) != null) {
                         errorResponse.append(errorLine.trim());
                     }
-                    apiLinkVO.setResponse(errorResponse.toString());
                     resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("에러 응답: " + errorResponse.toString());
                 }
@@ -625,9 +577,6 @@ public class DlvrAgencyLinkController {
                 connection.disconnect();
             }
         }
-
-        // API 호출 로그 저장
-        //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
 
         //
         return resultMap;
@@ -647,7 +596,7 @@ public class DlvrAgencyLinkController {
         Map<String, String> map = new HashMap<>();
         BeanInfo info = Introspector.getBeanInfo(vo.getClass());
         for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-            if(!pd.getName().equals("linkType")) { // 파라미터로 사용하지 않는 값 제외
+            if(!pd.getName().equals("apiStoreYn")) { // 파라미터로 사용하지 않는 값 제외
                 Method reader = pd.getReadMethod();
                 if (reader != null && !pd.getName().equals("class")) {
                     Object value = reader.invoke(vo);
