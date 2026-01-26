@@ -22,15 +22,6 @@
         </colgroup>
         <tbody>
         <tr>
-            <%-- 조회기간 --%>
-            <th><s:message code="orderkitStatus.srchDate"/></th>
-            <td>
-                <div class="sb-select">
-                    <span class="txtIn"><input id="srchStartDate" name="startDate" class="w110px"/></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchEndDate" name="endDate" class="w110px"/></span>
-                </div>
-            </td>
             <%-- 구분 --%>
             <th><s:message code="orderkitStatus.viewFg"/></th>
             <td>
@@ -42,8 +33,18 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            control="viewFgCombo">
+                            control="viewFgCombo"
+                            selected-index-changed="setSrchDate(s)">
                     </wj-combo-box>
+                </div>
+            </td>
+            <%-- 조회기간 --%>
+            <th id="thSrchDate"><s:message code="orderkitStatus.srchDate"/></th>
+            <td id="tdSrchDate">
+                <div class="sb-select">
+                    <span class="txtIn"><input id="srchStartDate" name="startDate" class="w110px"/></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"><input id="srchEndDate" name="endDate" class="w110px"/></span>
                 </div>
             </td>
         </tr>
@@ -105,4 +106,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/orderkitStatus/orderkitStatus.js?ver=20260121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/orderkitStatus/orderkitStatus.js?ver=20260126.01" charset="utf-8"></script>

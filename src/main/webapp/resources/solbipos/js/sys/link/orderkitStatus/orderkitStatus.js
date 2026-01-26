@@ -51,8 +51,6 @@ app.controller('orderkitStatusCtrl', ['$scope', '$http', function ($scope, $http
 
         var url = "/sys/link/orderkitStatus";
         var params = {};
-        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 
         if ($scope.viewFgCombo.selectedValue === "user") { // 사용자현황 조회
             url = url + "/getUserStatusList.sb";
@@ -63,6 +61,8 @@ app.controller('orderkitStatusCtrl', ['$scope', '$http', function ($scope, $http
         if ($scope.viewFgCombo.selectedValue === "connect") { // 접속현황 조회
             url = url + "/getConnectStatusList.sb";
             params.resrceNm = '오더킷';
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
             $("#wjGridUser").css("display", "none");
             $("#wjGridConnect").css("display", "");
         }
@@ -71,6 +71,17 @@ app.controller('orderkitStatusCtrl', ['$scope', '$http', function ($scope, $http
         $scope._inquiryMain(url, params, function () {
 
         });
-    }
+    };
+
+    // 조회기간 히든처리
+    $scope.setSrchDate = function (s) {
+        if (s.selectedValue === "user") {
+            $("#thSrchDate").css("display", "none");
+            $("#tdSrchDate").css("display", "none");
+        } else {
+            $("#thSrchDate").css("display", "");
+            $("#tdSrchDate").css("display", "");
+        }
+    };
 
 }]);

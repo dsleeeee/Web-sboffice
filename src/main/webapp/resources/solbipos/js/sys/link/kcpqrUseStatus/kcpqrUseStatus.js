@@ -79,4 +79,15 @@ app.controller('kcpqrStatusCtrl', ['$scope', '$http', '$timeout', function ($sco
         }, false);
     };
 
+    // 조회기간 히든처리
+    $scope.setSrchDate = function (s) {
+        if (s.selectedValue === "0") {
+            $("#thSrchDate").css("display", "none");
+            $("#tdSrchDate").css("display", "none");
+        } else {
+            $("#thSrchDate").css("display", "");
+            $("#tdSrchDate").css("display", "");
+        }
+    };
+
 }]);

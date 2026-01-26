@@ -38,7 +38,6 @@
         WHERE   A.AGENCY_FG = #{agencyFg}
         AND     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
         AND     A.STORE_CD = C.STORE_CD
-        AND     A.LAST_RESPONSE_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
     </select>
 
     <!-- 접속현황 조회 -->
