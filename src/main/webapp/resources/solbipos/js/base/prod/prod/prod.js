@@ -614,10 +614,10 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         } else if (data.data.subscriptionStatus == "UNPAID") { // 결제 이전
           redirectUrl = "/app/payment/pay";
         } else if (data.data.subscriptionStatus == "ACTIVE" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL") { // 활성화, 유예, 해지요청
-          if (data.data.base_platform_info === null) { // 배달앱 미연동
+          if (data.data.base_platform_info.platform === null) { // 배달앱 미연동
             redirectUrl = "/app/setting/platform";
           }
-          if (data.data.base_platform_info !== null) { // 정상 연동
+          if (data.data.base_platform_info.platform !== null) { // 정상 연동
             redirectUrl = "/app/dashboard";
           }
         } else {

@@ -171,4 +171,4 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/optionMenuDlvr.js?ver=20260122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/optionMenuDlvr.js?ver=20260126.01" charset="utf-8"></script>

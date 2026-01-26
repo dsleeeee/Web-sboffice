@@ -31,7 +31,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     $scope.subscriptionStatus = "";
 
     // 배달앱 연동 정보 상태값
-    $scope.basePlatformInfo = null;
+    $scope.platform = null;
 
     // 주문 중개 서비스 사용여부 콤보박스 선택값 변경 여부 확인을 위해
     $scope.orgUseYn = "";
@@ -67,7 +67,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 배달대행사 연동 현황 조회
     $scope.searchStatus = function () {
 
-        if ($scope.subscriptionStatus !== "ACTIVE") {
+        if ($scope.subscriptionStatus !== "ACTIVE" && $scope.subscriptionStatus !== "GRACE" && $scope.subscriptionStatus !== "REQ_CANCEL") {
             // 오더킷 서비스 구독 상태를 확인해주세요.
             $scope._popMsg(messages['dlvrAgencyLink.status.save.msg1']);
             return;
@@ -166,12 +166,12 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 주문 중개 서비스 변경
     $scope.btnSave = function () {
 
-        if ($scope.subscriptionStatus !== "ACTIVE") {
+        if ($scope.subscriptionStatus == "UNPAID" || $scope.subscriptionStatus == "EXPIRED" || $scope.subscriptionStatus == "CANCELLED" || $scope.subscriptionStatus == "") {
             // 오더킷 서비스 구독 상태를 확인해주세요.
             $scope._popMsg(messages['dlvrAgencyLink.status.save.msg1']);
             return;
         } else {
-            if ($scope.basePlatformInfo === null) {
+            if ($scope.platform === null) {
                 // 오더킷 배달앱 연동 상태를 확인해주세요.
                 $scope._popMsg(messages['dlvrAgencyLink.status.save.msg2']);
                 return;
@@ -227,10 +227,10 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 } else if (data.data.subscriptionStatus == "UNPAID") { // 결제 이전
                     redirectUrl = "/app/payment/pay";
                 } else if (data.data.subscriptionStatus == "ACTIVE" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL") { // 활성화, 유예, 해지요청
-                    if (data.data.base_platform_info === null) { // 배달앱 미연동
+                    if (data.data.base_platform_info.platform === null) { // 배달앱 미연동
                         redirectUrl = "/app/setting/platform";
                     }
-                    if (data.data.base_platform_info !== null) { // 정상 연동
+                    if (data.data.base_platform_info.platform !== null) { // 정상 연동
                         redirectUrl = "/app/dashboard";
                     }
                 } else {
@@ -282,9 +282,9 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 $scope.subscriptionStatus = data.data.subscriptionStatus;
 
                 // 배달앱 연동 정보 상태값 갖고있기
-                $scope.basePlatformInfo = data.data.base_platform_info;
+                $scope.platform = data.data.base_platform_info.platform;
 
-                if (data.data.subscriptionStatus == "UNPAID" || data.data.subscriptionStatus == "EXPIRED" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL" || data.data.subscriptionStatus == "CANCELLED") { // 결제 이전, 만료, 유예, 해지요청, 해지완료
+                if (data.data.subscriptionStatus == "UNPAID" || data.data.subscriptionStatus == "EXPIRED" || data.data.subscriptionStatus == "CANCELLED") { // 결제 이전, 만료, 해지완료
 
                     // 주문 연동 활성화 변경 불가
                     $scope.useYnCombo.isDisabled = true;
@@ -299,9 +299,9 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                     $("#divRight").css("display", "none");
                 }
 
-                if (data.data.subscriptionStatus == "ACTIVE") { // 활성화
+                if (data.data.subscriptionStatus == "ACTIVE" || data.data.subscriptionStatus == "GRACE" || data.data.subscriptionStatus == "REQ_CANCEL") { // 활성화, 유예, 해지요청
 
-                    if (data.data.base_platform_info === null) {
+                    if (data.data.base_platform_info.platform === null) {
 
                         // 주문 연동 활성화 변경 불가
                         $scope.useYnCombo.isDisabled = true;
@@ -311,7 +311,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                         $("#lblText").css('color', 'red');
                     }
 
-                    if (data.data.base_platform_info !== null) {
+                    if (data.data.base_platform_info.platform !== null) {
 
                         // 주문 연동 활성화 변경 가능
                         $scope.useYnCombo.isDisabled = false;
@@ -338,7 +338,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 $scope.subscriptionStatus = "";
 
                 // 배달앱 연동 정보 상태값 갖고있기(없음)
-                $scope.basePlatformInfo = null;
+                $scope.platform = null;
 
                 $("#lblText").text("※" + " " + messages['dlvrAgencyLink.status.save.msg1']); // ※ 오더킷 서비스 구독 상태를 확인해주세요.
                 $("#lblText").css('color', 'red');
