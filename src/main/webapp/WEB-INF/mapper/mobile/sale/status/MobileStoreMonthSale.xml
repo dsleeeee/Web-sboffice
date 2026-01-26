@@ -34,8 +34,8 @@
                 NVL(B.PACK_REAL_SALE_AMT, 0) AS PACK_REAL_SALE_AMT,
                 NVL(B.PACK_BILL_CNT, 0) AS PACK_BILL_CNT,
                 DECODE(B.PACK_BILL_CNT, 0, 0, NVL(ROUND(B.PACK_REAL_SALE_AMT / B.PACK_BILL_CNT), 0)) AS PACK_BILL_UPRC,
-                NVL(C.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
-                DECODE(C.TOT_GUEST_CNT, 0, 0, NVL(ROUND(A.TOT_REAL_SALE_AMT / C.TOT_GUEST_CNT), 0)) AS GUEST_UPRC,
+                NVL(A.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT,
+                DECODE(A.TOT_GUEST_CNT, 0, 0, NVL(ROUND(A.TOT_REAL_SALE_AMT / A.TOT_GUEST_CNT), 0)) AS GUEST_UPRC,
                 NVL(A.CARD_AMT, 0) AS CARD_AMT,
                 NVL(A.CASH_AMT, 0) AS CASH_AMT,
                 NVL(A.ETC_AMT, 0) AS ETC_AMT,
@@ -58,7 +58,8 @@
                         SUM(tsmt.DC_AMT_01) AS DC_AMT,
                         SUM(tsmt.DC_AMT_02) AS COUPN_DC_AMT,
                         SUM(tsmt.DC_AMT_03) + SUM(tsmt.DC_AMT_04) + SUM(tsmt.DC_AMT_05)
-                        + SUM(tsmt.DC_AMT_06) + SUM(tsmt.DC_AMT_07) + SUM(tsmt.DC_AMT_08) + SUM(tsmt.DC_AMT_09) + SUM(tsmt.DC_AMT_10) AS ETC_DC_AMT
+                        + SUM(tsmt.DC_AMT_06) + SUM(tsmt.DC_AMT_07) + SUM(tsmt.DC_AMT_08) + SUM(tsmt.DC_AMT_09) + SUM(tsmt.DC_AMT_10) AS ETC_DC_AMT,
+                        SUM(tsmt.TOT_GUEST_CNT) AS TOT_GUEST_CNT
                 FROM    TB_SL_MONTHLY_TOTAL tsmt
                 WHERE   tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
@@ -93,28 +94,6 @@
                 GROUP BY tsmdd.STORE_CD, tsmdd.SALE_YM
                 ) B,
                 (
-                SELECT  STORE_CD,
-                        SALE_YM,
-                        SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT
-                FROM    (
-                        SELECT  tssh.STORE_CD,
-                                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'YYYYMM') AS SALE_YM,
-                                SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-                        FROM    TB_SL_SALE_HDR tssh
-                        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND (
-                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                            )
-                        <if test='storeCdQuery != null and storeCdQuery != ""'>
-                            AND tssh.STORE_CD IN (${storeCdQuery})
-                        </if>
-                        AND     tssh.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
-                        GROUP BY tssh.STORE_CD, tssh.SALE_DATE
-                        )
-                GROUP BY STORE_CD, SALE_YM
-                ) C,
-                (
                 SELECT  STORE_CD, STORE_NM
                 FROM    TB_MS_STORE
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
@@ -128,8 +107,6 @@
                 ) E
         WHERE   B.STORE_CD (+)= A.STORE_CD
         AND     B.SALE_YM (+)= A.SALE_YM
-        AND     C.STORE_CD (+)= A.STORE_CD
-        AND     C.SALE_YM (+)= A.SALE_YM
         AND     E.STORE_CD = A.STORE_CD
         ORDER BY A.STORE_CD, E.STORE_NM, A.SALE_YM
     </select>
