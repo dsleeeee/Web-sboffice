@@ -11,7 +11,12 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
-      <s:message code="cmm.search"/></button>
+      <s:message code="cmm.search"/>
+    </button>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnOutStockEnvstInfo" ng-click="popOutStockEnvstInfo()">
+      <s:message code="outstockConfm.outStockEnvstInfo"/>
+    </button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -228,7 +233,7 @@
   var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20240725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20260123.01" charset="utf-8"></script>
 
 <%-- 출고확정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockConfm/outstockConfmDtl.jsp">
@@ -238,6 +243,12 @@
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 출고확정 상세 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/outstockConfm/outStockEnvstInfo.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
