@@ -335,4 +335,9 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._broadcast('outstockConfmSelectVendrCtrl');
   };
 
+  // 수발주설정정보 팝업
+  $scope.popOutStockEnvstInfo = function () {
+      $scope._broadcast("outStockEnvstInfoCtrl");
+  }
+
 }]);
