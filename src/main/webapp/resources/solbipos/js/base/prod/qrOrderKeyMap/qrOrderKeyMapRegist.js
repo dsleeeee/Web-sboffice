@@ -247,6 +247,7 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
                     // 카테고리분류 재조회
                     $scope.btnSearchCls();
                 }
+                $scope.QRSynchronize();
             });
         });
     };
@@ -323,6 +324,7 @@ app.controller('qrOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', functi
                     // 카테고리분류 재조회
                     $scope.btnSearchCls();
                 }
+                $scope.QRSynchronize();
             });
         });
     };
