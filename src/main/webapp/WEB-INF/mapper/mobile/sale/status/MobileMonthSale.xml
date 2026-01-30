@@ -136,11 +136,10 @@
                 FROM
                 (
                     /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. (05, 12) */
-                    SELECT
-                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, /*SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, */SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, /*SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,*/
-                    SUM(tsmt.PAY_AMT_06) AS PAY_AMT_06, SUM(tsmt.PAY_AMT_07) AS PAY_AMT_07, SUM(tsmt.PAY_AMT_08) AS PAY_AMT_08, SUM(tsmt.PAY_AMT_09) AS PAY_AMT_09, SUM(tsmt.PAY_AMT_10) AS PAY_AMT_10,
-                    SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, /*SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12,*/ SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
-                    SUM(tsmt.PAY_AMT_16) AS PAY_AMT_16, SUM(tsmt.PAY_AMT_17) AS PAY_AMT_17, SUM(tsmt.PAY_AMT_18) AS PAY_AMT_18, SUM(tsmt.PAY_AMT_19) AS PAY_AMT_19
+                    SELECT  SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, SUM(tsmt.NON_CASH_AMT) AS PAY_AMT_02, SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, /*SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,*/
+                            SUM(tsmt.PAY_AMT_06) AS PAY_AMT_06, SUM(tsmt.PAY_AMT_07) AS PAY_AMT_07, SUM(tsmt.PAY_AMT_08) AS PAY_AMT_08, SUM(tsmt.PAY_AMT_09) AS PAY_AMT_09, SUM(tsmt.PAY_AMT_10) AS PAY_AMT_10,
+                            SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, /*SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12,*/ SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
+                            SUM(tsmt.PAY_AMT_16) AS PAY_AMT_16, SUM(tsmt.PAY_AMT_17) AS PAY_AMT_17, SUM(tsmt.PAY_AMT_18) AS PAY_AMT_18, SUM(tsmt.PAY_AMT_19) AS PAY_AMT_19, SUM(tsmt.APPR_CASH_AMT) AS PAY_AMT_021
                     FROM TB_SL_MONTHLY_TOTAL tsmt
                     WHERE 1=1
                     AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -164,53 +163,12 @@
                     FOR COL_NM
                     IN
                     (
-                        PAY_AMT_01, /*PAY_AMT_02, */PAY_AMT_03, PAY_AMT_04,/* PAY_AMT_05,*/
+                        PAY_AMT_01, PAY_AMT_02, PAY_AMT_03, PAY_AMT_04,/* PAY_AMT_05,*/
                         PAY_AMT_06, PAY_AMT_07, PAY_AMT_08, PAY_AMT_09, PAY_AMT_10,
                         PAY_AMT_11, /*PAY_AMT_12, */PAY_AMT_13, PAY_AMT_14, PAY_AMT_15,
-                        PAY_AMT_16, PAY_AMT_17, PAY_AMT_18, PAY_AMT_19
+                        PAY_AMT_16, PAY_AMT_17, PAY_AMT_18, PAY_AMT_19, PAY_AMT_021
                     )
                 )
-            UNION
-            SELECT
-            'PAY_AMT_02' AS COL_NM,
-            SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS COL_VAL
-            FROM TB_SL_SALE_PAY_CASH tsspc
-            WHERE 1=1
-            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
-            <!-- 매장 -->
-            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsspc.STORE_CD IN (${storeCdQuery})
-                </if>
-            </if>
-            <if test='orgnFg != null and orgnFg == "H"'>
-                AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	tsspc.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
-            </if>
-            AND tsspc.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-            UNION
-            SELECT
-            'PAY_AMT_021' AS COL_NM,
-            SUM(tsspc.SALE_AMT) AS COL_VAL
-            FROM TB_SL_SALE_PAY_CASH tsspc
-            WHERE 1=1
-            AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
-            <!-- 매장 -->
-            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsspc.STORE_CD IN (${storeCdQuery})
-                </if>
-            </if>
-            <if test='orgnFg != null and orgnFg == "H"'>
-                AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	tsspc.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
-            </if>
-            AND tsspc.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-            AND tsspc.APPR_PROC_FG IN ('1','2','4')
             ) A,
             (
                 SELECT

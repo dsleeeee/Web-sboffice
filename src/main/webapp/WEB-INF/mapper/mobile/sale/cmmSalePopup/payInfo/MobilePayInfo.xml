@@ -76,7 +76,7 @@
         AND     tms.STORE_CD = tsspc.STORE_CD
         <if test='cashGubun != null and cashGubun == "021"'>
             <![CDATA[
-            AND tsspc.APPR_PROC_FG <> '3'
+            AND (tsspc.APPR_PROC_FG <> '3' OR tsspc.APPR_PROC_FG IS NULL)
             ]]>
         </if>
         <if test='cashGubun != null and cashGubun == "02"'>

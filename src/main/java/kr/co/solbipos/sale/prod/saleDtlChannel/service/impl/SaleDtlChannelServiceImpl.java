@@ -70,6 +70,12 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
             saleDtlChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
+        // 분류 array 값 세팅
+        if (saleDtlChannelVO.getProdClassCd() != null && !"".equals(saleDtlChannelVO.getProdClassCd())) {
+            String[] prodCdList = saleDtlChannelVO.getProdClassCd().split(",");
+            saleDtlChannelVO.setArrProdClassCd(prodCdList);
+        }
+
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             if (saleDtlChannelVO.getStoreHqBrandCd() == "" || saleDtlChannelVO.getStoreHqBrandCd() == null || saleDtlChannelVO.getProdHqBrandCd() == "" || saleDtlChannelVO.getProdHqBrandCd() == null) {

@@ -154,6 +154,9 @@ public class SaleDtlChannelVO extends PageVO {
     /** 상품(멀티) 조회를 위한 쿼리 문자열*/
     private String prodCdQuery;
 
+    /** 사이드상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -484,5 +487,13 @@ public class SaleDtlChannelVO extends PageVO {
 
     public void setProdCdQuery(String prodCdQuery) {
         this.prodCdQuery = prodCdQuery;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
     }
 }

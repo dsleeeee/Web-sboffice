@@ -227,16 +227,13 @@
                            ) tsdpsd
                   , 	   TB_MS_PRODUCT tmp
                   , 	   TB_MS_PRODUCT tmps2 -- 사이드
-                  ,        TB_MS_PRODUCT_CLASS_V02 tmpcv
+                  ,        TB_HQ_PRODUCT_CLASS_V02 tmpcv
                   WHERE 1=1
-                  <if test="prodClassCd != null and prodClassCd != ''">
-                      AND tmps2.PROD_CLASS_CD IN (
-                      SELECT PROD_CLASS_CD
-                      FROM   TB_MS_PRODUCT_CLASS
-                      WHERE STORE_CD = tmp.STORE_CD
-                      START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD =  tmp.STORE_CD
-                      CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
-                      )
+                  <if test="arrProdClassCd != null and arrProdClassCd != ''">
+                      AND tmps2.PROD_CLASS_CD IN
+                      <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                          #{item}
+                      </foreach>
                   </if>
                   <if test='prodCd != null and prodCd != ""'>
                       AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -269,7 +266,7 @@
                   AND   tmp.PROD_CD = tsdpsd.PROD_CD
                   AND   tmps2.STORE_CD = tsdpsd.STORE_CD
                   AND   tmps2.PROD_CD = tsdpsd.SIDE_PROD_CD
-                  AND   tmps2.STORE_CD = tmpcv.STORE_CD
+                  AND   tsdpsd.HQ_OFFICE_CD = tmpcv.HQ_OFFICE_CD
                   AND   tmps2.PROD_CD = tmpcv.PROD_CD
               ) A
         ORDER BY A.STORE_CD ASC, A.SALE_DATE, A.POS_NO, A.BILL_NO, A.SIDE_P_DTL_NO, A.BILL_DTL_NO
