@@ -20,9 +20,9 @@
 <script type="text/javascript">
 
     // 오더킷(Order kit) 관리자 웹 이동
-    setTimeout(function() {
+    /*setTimeout(function() {
         $("#btnOpenWeb").trigger('click');
-    }, 500);
+    }, 500);*/
 
 </script>
 
