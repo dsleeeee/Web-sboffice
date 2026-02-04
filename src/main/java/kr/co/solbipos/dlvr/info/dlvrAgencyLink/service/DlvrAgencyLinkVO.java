@@ -1,28 +1,25 @@
-package kr.co.solbipos.orderkit.orderkit.orderkit.service;
-
-import kr.co.solbipos.application.common.service.CmmVO;
+package kr.co.solbipos.dlvr.info.dlvrAgencyLink.service;
 
 /**
- * @Class Name  : OrderkitVO.java
- * @Description : 오더킷 > 오더킷 > 오더킷
+ * @Class Name : DlvrAgencyLinkVO.java
+ * @Description : 배달관리 - 배달정보 - 배달대행사 연동
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2025.10.30  이다솜      최초생성
+ * @ 2026.02.03  이다솜       최초생성
  *
  * @author 링크 개발실 개발1팀 이다솜
- * @since 2025.10.30
+ * @since 2026.02.03
  * @version 1.0
  *
  *  Copyright (C) by LYNK CORP. All right reserved.
  */
-public class OrderkitVO extends CmmVO {
 
-    private static final long serialVersionUID = 5654642190526274377L;
+public class DlvrAgencyLinkVO {
 
-    /** 본사코드 */
-    private String hqOfficeCd;
+    private static final long serialVersionUID = 684736301181965505L;
+
     /** 매장코드 */
     private String storeCd;
     /** api 정보 */
@@ -31,14 +28,6 @@ public class OrderkitVO extends CmmVO {
     private String apiUrl;
     /** api key */
     private String apiKey;
-
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
-    }
-
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
 
     public String getStoreCd() {
         return storeCd;

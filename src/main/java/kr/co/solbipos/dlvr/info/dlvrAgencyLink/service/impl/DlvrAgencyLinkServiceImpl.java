@@ -1,6 +1,9 @@
 package kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkService;
+import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +41,12 @@ public class DlvrAgencyLinkServiceImpl implements DlvrAgencyLinkService {
    public DlvrAgencyLinkServiceImpl(DlvrAgencyLinkMapper dlvrAgencyLinkMapper) {
        this.dlvrAgencyLinkMapper = dlvrAgencyLinkMapper;
    }
+
+    /** 개발/운영 Api URL 조회 */
+    @Override
+    public DefaultMap<Object> getApiUrl(DlvrAgencyLinkVO dlvrAgencyLinkVO, SessionInfoVO sessionInfoVO) {
+
+        dlvrAgencyLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        return dlvrAgencyLinkMapper.getApiUrl(dlvrAgencyLinkVO);
+    }
 }

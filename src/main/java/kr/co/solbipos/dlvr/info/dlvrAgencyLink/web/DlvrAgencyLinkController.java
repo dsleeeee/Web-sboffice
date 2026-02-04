@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkReqVO;
 import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkService;
+import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkVO;
 import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusService;
 import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusVO;
 import org.slf4j.Logger;
@@ -61,22 +63,6 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @RequestMapping(value = "/dlvr/manage/info/dlvrAgencyLink")
 public class DlvrAgencyLinkController {
 
-    // [OMS API 정보]
-    // (개발)
-    public static final String OMS_API_URL  = "https://testapi.orderpick.kr";
-    public static final String ACCESS_TOKEN  = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTkxMjM4NTU4MywianRpIjoiODVhNjM2ZTQtZTFlYS00MmRlLWJlNmUtMTFkMTg5ZjA4OGI2IiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiU09MQkkiLCJyaWRlciI6bnVsbCwicm9sZSI6bnVsbCwiaXNzdWVUYXJnZXQiOiJQT1NfU0VSVkVSIn0.JMsykAaMahWR229oyWFHD58iIT_fCemvVWEbRMvYeiMMQWyKVbuwXxyBb1gyJLI65k_1GZPQ9uPaDOTEpGjeyg";
-    // (운영)
-    //public static final String OMS_API_URL  = "https://api.orderpick.kr";
-    //public static final String ACCESS_TOKEN  = "";
-
-    // [POS OMS API 정보]
-    // (개발)
-    public static final String POS_OMS_API_URL = "https://test-api.orderkit.co.kr";
-    public static final String SECRET_KEY = "Pu51+1YJD50Jp0/7ZDy94aJsh0HRZcfjKQf5bHiiZtWHerPuMSY1EEbVSVXz8P7JxOEt01DMXFw5ItGT3l9hLQ==";
-    // (운영)
-    //public static final String POS_OMS_API_URL = "https://api.orderkit.co.kr:14000";
-    //public static final String SECRET_KEY = "Sg2V9TynJ1TZf4mvCz7eOPT1nqerG0zlS5GfzeCqIN+PZnxhOd3EUhvXRMKi9oA4y0Ewbije+yzp1fSkZyDE7g==";
-
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final DlvrAgencyLinkService dlvrAgencyLinkService;
@@ -120,9 +106,18 @@ public class DlvrAgencyLinkController {
     public Result getDlvrAgency(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
 
-        String apiFullUrl = OMS_API_URL + "/oms/v1/delivery-agencies";
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
+
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/oms/v1/delivery-agencies";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("accessToken"), "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -144,9 +139,16 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = OMS_API_URL + "/v1/shops/" + sessionInfoVO.getStoreCd() + "/rider";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/shops/" + sessionInfoVO.getStoreCd() + "/rider";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("accessToken"), "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -168,9 +170,16 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency/stores";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency/stores";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("accessToken"), "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -192,9 +201,16 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+
+        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("accessToken"), "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -216,9 +232,16 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object>resultMap = deleteRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+
+        Map<String, Object>resultMap = deleteRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("accessToken"), "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -241,9 +264,16 @@ public class DlvrAgencyLinkController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
-        String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/status";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("POS_OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, SECRET_KEY, "posOmsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/open/api/v1/oms_seller/status";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("secretKey"), "posOmsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -266,9 +296,16 @@ public class DlvrAgencyLinkController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
 
-        String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/orderandrider";
+        // 개발/운영 Api URL 조회
+        DlvrAgencyLinkVO dlvrAgencyLinkVO = new DlvrAgencyLinkVO();
+        dlvrAgencyLinkVO.setApiInfo("POS_OMS_API_URL");
+        dlvrAgencyLinkVO.setApiUrl("API_URL");
+        dlvrAgencyLinkVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = dlvrAgencyLinkService.getApiUrl(dlvrAgencyLinkVO, sessionInfoVO);
 
-        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, SECRET_KEY, "posOmsApi");
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/open/api/v1/oms_seller/orderandrider";
+
+        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, apiInfo.getStr("secretKey"), "posOmsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }

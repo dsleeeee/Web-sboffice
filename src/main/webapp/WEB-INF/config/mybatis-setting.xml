@@ -1364,6 +1364,7 @@
     <typeAlias alias="deliveryTelNoVO" type="kr.co.solbipos.dlvr.info.deliveryTelNo.service.DeliveryTelNoVO"/>
     <!-- 배달관리 > 배달정보 > 배달대행사 연동 -->
     <typeAlias alias="dlvrAgencyLinkReqVO" type="kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkReqVO"/>
+    <typeAlias alias="dlvrAgencyLinkVO" type="kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkVO"/>
 
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>
@@ -1415,6 +1416,8 @@
     <typeAlias alias="orderkitVO" type="kr.co.solbipos.orderkit.orderkit.orderkit.service.OrderkitVO"/>
     <!-- 오더킷 > 오더킷 > 원산지관리 -->
     <typeAlias alias="orderkitRecpOriginVO" type="kr.co.solbipos.orderkit.orderkit.orderkitRecpOrigin.service.OrderkitRecpOriginVO"/>
+    <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 연동 -->
+    <typeAlias alias="naverPlaceLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

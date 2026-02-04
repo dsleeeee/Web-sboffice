@@ -26,4 +26,7 @@ public interface OrderkitMapper {
 
     /** 매장정보 조회 */
     DefaultMap<Object> getStoreInfo(OrderkitVO orderkitVO);
+
+    /** 개발/운영 Api URL 조회 */
+    DefaultMap<Object> getApiUrl(OrderkitVO orderkitVO);
 }

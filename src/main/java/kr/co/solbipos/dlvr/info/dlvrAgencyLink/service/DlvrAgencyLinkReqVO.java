@@ -23,23 +23,39 @@ public class DlvrAgencyLinkReqVO {
     private static final long serialVersionUID = 2555999796764348528L;
 
     // OMS_API 용
+    /** 매장명 */
     private String shopName;
+    /** 사업자번호 */
     private String texNo;
+    /** 대표자명 */
     private String ceoName;
+    /** 우편번호 */
     private String postNo;
+    /** 주소 */
     private String addrBase;
+    /** 상세주소 */
     private String addrDetail;
+    /** POS사 정보코드 */
     private String posType;
+    /** POS사 매장ID*/
     private String posShopId;
+    /** 연동타입 */
     private String linkType;
+    /** 배달대행사 코드 */
     private String agencyCode;
+    /** 하위배달대행사 코드 */
     private String subAgencyCode;
+    /** 배달업체관리코드 */
     private String storeCode;
+    /** 생각대로(B2B)사용여부 */
     private String isB2BContract;
+    /** 매핑일련번호 */
     private String mappingSequence;
 
     // POS_OMS_API 용
+    /** 매장코드 */
     private String pos_shop_id;
+    /** 주문 연동 활성화 여부 */
     private String use_orderandrider;
 
     // 연동상태 저장여부

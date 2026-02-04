@@ -22,4 +22,8 @@ public interface OrderkitService {
 
     /** 매장정보 조회 */
     DefaultMap<Object> getStoreInfo(OrderkitVO orderkitVO, SessionInfoVO sessionInfoVO);
+
+    /** 개발/운영 Api URL 조회 */
+    DefaultMap<Object> getApiUrl(OrderkitVO orderkitVO, SessionInfoVO sessionInfoVO);
+
 }

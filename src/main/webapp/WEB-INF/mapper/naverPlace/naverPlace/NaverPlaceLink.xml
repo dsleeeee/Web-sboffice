@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NaverPlaceLink.xml
+    [네이버플레이스] - [네이버플레이스] - [네이버플레이스 연동] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.01.27
+-->
+<mapper namespace="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.impl.NaverPlaceLinkMapper">
+
+    <!-- 네.아.로 Unique ID 저장 -->
+    <!--
+        TABLE    :
+        PARAM    : naverPlaceLinkVO
+        COMMENTS : 네.아.로 Unique ID를 저장한다.
+    -->
+    <update id="saveNaverUniqueId" parameterType="naverPlaceLinkVO">
+        /* NaverPlaceLinkMapper.saveNaverUniqueId */
+        MERGE INTO TB_CM_NAVER_LINK
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND STORE_CD = #{storeCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET A.UNIQUE_ID = #{uniqueId},
+               A.LAST_RESPONSE_DT = #{lastResponseDt},
+               A.EMAIL_ADDR = #{emailAddr},
+               A.ETC01 = #{etc01},
+               A.ETC02 = #{etc02},
+               A.ETC03 = #{etc03},
+               A.ETC04 = #{etc04},
+               A.ETC05 = #{etc05},
+               A.ETC06 = #{etc06},
+               A.ETC07 = #{etc07},
+               A.ETC08 = #{etc08},
+               A.ETC09 = #{etc09},
+               A.ETC10 = #{etc10},
+               A.MOD_DT = #{modDt},
+               A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT (
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.UNIQUE_ID,
+            A.LAST_RESPONSE_DT,
+            A.EMAIL_ADDR,
+            A.ETC01,
+            A.ETC02,
+            A.ETC03,
+            A.ETC04,
+            A.ETC05,
+            A.ETC06,
+            A.ETC07,
+            A.ETC08,
+            A.ETC09,
+            A.ETC10,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+        )
+        VALUES (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{uniqueId},
+            #{lastResponseDt},
+            #{emailAddr},
+            #{etc01},
+            #{etc02},
+            #{etc03},
+            #{etc04},
+            #{etc05},
+            #{etc06},
+            #{etc07},
+            #{etc08},
+            #{etc09},
+            #{etc10},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </update>
+
+    <!-- 네이버 동의여부 저장 -->
+    <!--
+        TABLE    :
+        PARAM    : naverPlaceLinkVO
+        COMMENTS : 네이버 동의여부를 저장한다.
+    -->
+    <update id="saveNaverAgreement" parameterType="naverPlaceLinkVO">
+        /* NaverPlaceLinkMapper.saveNaverAgreement */
+        MERGE INTO TB_CM_NAVER_LINK_AGREEMENT
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND STORE_CD = #{storeCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET A.UNIQUE_ID = #{uniqueId},
+               A.LAST_RESPONSE_DT = #{lastResponseDt},
+               A.AGREEMENT_TYPE = #{agreementType},
+               A.MOD_DT = #{modDt},
+               A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT (
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.UNIQUE_ID,
+            A.LAST_RESPONSE_DT,
+            A.AGREEMENT_TYPE,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+        )
+        VALUES (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{uniqueId},
+            #{lastResponseDt},
+            #{agreementType},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </update>
+
+</mapper>

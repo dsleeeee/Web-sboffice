@@ -86,4 +86,19 @@
         )
     </insert>
 
+    <!-- 개발/운영 Api URL 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : apiLinkVO
+        COMMENTS : 개발/운영 Api URL을 조회한다.
+    -->
+    <select id="getApiUrl" parameterType="apiLinkVO" resultType="DefaultMap">
+        /* OmsLinkSampleMapper.getApiUrl */
+        SELECT API_URL
+        ,      ACCESS_TOKEN
+        FROM   TB_CM_API_LINK_INFO
+        WHERE  API_INFO = #{apiInfo}
+        AND    ETC01 = #{etc01}
+    </select>
+
 </mapper>

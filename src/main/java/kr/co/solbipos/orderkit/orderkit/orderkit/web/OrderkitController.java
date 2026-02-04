@@ -3,7 +3,6 @@ package kr.co.solbipos.orderkit.orderkit.orderkit.web;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.orderkit.orderkit.orderkit.service.OrderkitService;
 import kr.co.solbipos.orderkit.orderkit.orderkit.service.OrderkitVO;
@@ -40,22 +39,17 @@ import java.util.Date;
 @RequestMapping(value = "/orderkit/orderkit/orderkit")
 public class OrderkitController {
 
-    private final SessionService sessionService;
     private final OrderkitService orderkitService;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    //private static final String SECRET_KEY_STRING = "iVYaGN2CufNIiZJO6/oG259M8fw2GP8bEfQG73dPGw7YKHzyp1dMHJqnW08YijB8BOeTFEzNoa9sWMl5CFTjIg=="; // 운영
-    private static final String SECRET_KEY_STRING = "q7TgPmKtjGNMtzOfy4dsF/Ti3whTXeQZwaw84vnA9N8m8zvNU2QApYZquYZlq94uczwj9x12OSzAYiDjzEUaog=="; // 개발
-    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
     private static final long EXPIRATION_TIME = 30 * 1000; // 30초
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public OrderkitController(SessionService sessionService, OrderkitService orderkitService) {
-        this.sessionService = sessionService;
+    public OrderkitController(OrderkitService orderkitService) {
         this.orderkitService = orderkitService;
     }
 
@@ -73,18 +67,28 @@ public class OrderkitController {
     }
 
     // JWT 토큰 생성
-    public String createJWT(SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> createJWT(SessionInfoVO sessionInfoVO) {
 
         Date now = new Date();
         Date expiration = new Date(now.getTime() + EXPIRATION_TIME);
         long now_unixTimestamp = now.getTime() / 1000;
         long expiration_unixTimestamp = expiration.getTime() / 1000;
 
-        // 매장정보 조회
+        // 개발/운영 Api URL 조회
         OrderkitVO orderkitVO = new OrderkitVO();
+        orderkitVO.setApiInfo("ORDERKIT_OMS_WEB_URL");
+        orderkitVO.setApiUrl("API_URL");
+        orderkitVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = orderkitService.getApiUrl(orderkitVO, sessionInfoVO);
+
+        // secretKey 생성
+        Key secretKey = Keys.hmacShaKeyFor(apiInfo.getStr("secretKey").getBytes(StandardCharsets.UTF_8));
+
+        // 매장정보 조회
         DefaultMap<Object> storeInfo = orderkitService.getStoreInfo(orderkitVO, sessionInfoVO);
 
-        return Jwts.builder()
+        // 토큰 생성
+        String token = Jwts.builder()
 
                 // 헤더 설정
                 .setHeaderParam("typ", "JWT")
@@ -109,18 +113,35 @@ public class OrderkitController {
 
                 // 서명 알고리즘 및 키 설정
                 //.signWith(SECRET_KEY)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
 
                 .compact();
+
+        // return 값 셋팅
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+        resultMap.put("token", token);
+        resultMap.put("url", apiInfo.getStr("apiUrl"));
+
+        return resultMap;
     }
 
     // JWT 토큰 파싱
-    public void parseJWT(String token) {
+    public void parseJWT(SessionInfoVO sessionInfoVO, String token) {
+
+        // 개발/운영 Api URL 조회
+        OrderkitVO orderkitVO = new OrderkitVO();
+        orderkitVO.setApiInfo("ORDERKIT_OMS_WEB_URL");
+        orderkitVO.setApiUrl("API_URL");
+        orderkitVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = orderkitService.getApiUrl(orderkitVO, sessionInfoVO);
+
+        // secretKey 생성
+        Key secretKey = Keys.hmacShaKeyFor(apiInfo.getStr("secretKey").getBytes(StandardCharsets.UTF_8));
 
         try {
 
             Jws<Claims> jws = Jwts.parser()
-                    .setSigningKey(SECRET_KEY) // 서명 검증을 위해 시크릿 키 설정
+                    .setSigningKey(secretKey) // 서명 검증을 위해 시크릿 키 설정
                     .build()
                     .parseSignedClaims(token); // 서명된 JWT 파싱
 
@@ -147,18 +168,28 @@ public class OrderkitController {
     }
 
     // JWT 토큰 생성 - 자동 로그인 및 페이지 이동
-    public String createJWT2(SessionInfoVO sessionInfoVO, String redirectUrl) {
+    public DefaultMap<String> createJWT2(SessionInfoVO sessionInfoVO, String redirectUrl) {
 
         Date now = new Date();
         Date expiration = new Date(now.getTime() + EXPIRATION_TIME);
         long now_unixTimestamp = now.getTime() / 1000;
         long expiration_unixTimestamp = expiration.getTime() / 1000;
 
-        // 매장정보 조회
+        // 개발/운영 Api URL 조회
         OrderkitVO orderkitVO = new OrderkitVO();
+        orderkitVO.setApiInfo("ORDERKIT_OMS_WEB_URL");
+        orderkitVO.setApiUrl("API_URL");
+        orderkitVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = orderkitService.getApiUrl(orderkitVO, sessionInfoVO);
+
+        // secretKey 생성
+        Key secretKey = Keys.hmacShaKeyFor(apiInfo.getStr("secretKey").getBytes(StandardCharsets.UTF_8));
+
+        // 매장정보 조회
         DefaultMap<Object> storeInfo = orderkitService.getStoreInfo(orderkitVO, sessionInfoVO);
 
-        return Jwts.builder()
+        // 토큰 생성
+        String token = Jwts.builder()
 
                 // 헤더 설정
                 .setHeaderParam("typ", "JWT")
@@ -175,18 +206,35 @@ public class OrderkitController {
 
                 // 서명 알고리즘 및 키 설정
                 //.signWith(SECRET_KEY)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
 
                 .compact();
+
+        // return 값 셋팅
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+        resultMap.put("token", token);
+        resultMap.put("url", apiInfo.getStr("apiUrl"));
+
+        return resultMap;
     }
 
     // JWT 토큰 파싱 - 자동 로그인 및 페이지 이동
-    public void parseJWT2(String token) {
+    public void parseJWT2(SessionInfoVO sessionInfoVO, String token) {
+
+        // 개발/운영 Api URL 조회
+        OrderkitVO orderkitVO = new OrderkitVO();
+        orderkitVO.setApiInfo("ORDERKIT_OMS_WEB_URL");
+        orderkitVO.setApiUrl("API_URL");
+        orderkitVO.setApiKey("SECRET_KEY");
+        DefaultMap<Object> apiInfo = orderkitService.getApiUrl(orderkitVO, sessionInfoVO);
+
+        // secretKey 생성
+        Key secretKey = Keys.hmacShaKeyFor(apiInfo.getStr("secretKey").getBytes(StandardCharsets.UTF_8));
 
         try {
 
             Jws<Claims> jws = Jwts.parser()
-                    .setSigningKey(SECRET_KEY) // 서명 검증을 위해 시크릿 키 설정
+                    .setSigningKey(secretKey) // 서명 검증을 위해 시크릿 키 설정
                     .build()
                     .parseSignedClaims(token); // 서명된 JWT 파싱
 

@@ -32,4 +32,7 @@ public interface OmsLinkSampleMapper {
 
     /** API 호출 로그 저장 */
     int saveApiLog(ApiLinkVO apiLinkVO);
+
+    /** 개발/운영 Api URL 조회 */
+    DefaultMap<Object> getApiUrl(ApiLinkVO apiLinkVO);
 }

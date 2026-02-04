@@ -43,4 +43,13 @@ public class OrderkitServiceImpl implements OrderkitService {
         orderkitVO.setStoreCd(sessionInfoVO.getStoreCd());
         return orderkitMapper.getStoreInfo(orderkitVO);
     }
+
+    /** 개발/운영 Api URL 조회 */
+    @Override
+    public DefaultMap<Object> getApiUrl(OrderkitVO orderkitVO, SessionInfoVO sessionInfoVO) {
+
+        orderkitVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        orderkitVO.setStoreCd(sessionInfoVO.getStoreCd());
+        return orderkitMapper.getApiUrl(orderkitVO);
+    }
 }

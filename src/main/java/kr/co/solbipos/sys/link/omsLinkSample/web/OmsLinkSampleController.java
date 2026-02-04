@@ -121,14 +121,19 @@ public class OmsLinkSampleController {
         String apiUrl = "";      // api 주소
         String accessToken = ""; // accessToken 값
 
-        if (omsLinkSampleVO.getSearchType().equals("test")) { // 개발조회
-            apiUrl = "https://testapi.orderpick.kr";
-            accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTkxMjM4NTU4MywianRpIjoiODVhNjM2ZTQtZTFlYS00MmRlLWJlNmUtMTFkMTg5ZjA4OGI2IiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiU09MQkkiLCJyaWRlciI6bnVsbCwicm9sZSI6bnVsbCwiaXNzdWVUYXJnZXQiOiJQT1NfU0VSVkVSIn0.JMsykAaMahWR229oyWFHD58iIT_fCemvVWEbRMvYeiMMQWyKVbuwXxyBb1gyJLI65k_1GZPQ9uPaDOTEpGjeyg";
-
-        } else { // 운영조회
-            apiUrl = "https://api.orderpick.kr";
-            accessToken = "";
+        // 개발/운영 Api URL 조회
+        ApiLinkVO apiLinkVO = new ApiLinkVO();
+        if (omsLinkSampleVO.getSearchType().equals("test")) { // 개발
+            apiLinkVO.setApiInfo("OMS_API_URL");
+            apiLinkVO.setEtc01("개발");
+        } else { // 운영
+            apiLinkVO.setApiInfo("OMS_API_URL");
+            apiLinkVO.setEtc01("운영");
         }
+
+        DefaultMap<Object> apiInfo = omsLinkSampleService.getApiUrl(apiLinkVO);
+        apiUrl = apiInfo.getStr("apiUrl");
+        accessToken = apiInfo.getStr("accessToken");
 
         if (omsLinkSampleVO.getLinkType().equals("001")) { // 매장등록
             apiUrl += "/oms/v1/shops";

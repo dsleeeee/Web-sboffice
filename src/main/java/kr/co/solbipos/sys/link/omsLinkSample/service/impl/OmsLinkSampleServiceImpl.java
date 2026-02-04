@@ -65,4 +65,10 @@ public class OmsLinkSampleServiceImpl implements OmsLinkSampleService {
 
         return seq;
     }
+
+    /** 개발/운영 Api URL 조회 */
+    @Override
+    public DefaultMap<Object> getApiUrl(ApiLinkVO apiLinkVO) {
+        return omsLinkSampleMapper.getApiUrl(apiLinkVO);
+    }
 }

@@ -31,8 +31,6 @@ app.controller('orderkitCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.apiStoreYn = "N"; // 연동상태 저장여부
 
         var redirectUrl = "";
-        var url = "https://test.orderkit.co.kr"; // 개발
-        //var url = "https://orderkit.co.kr"; // 운영
 
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getOmsUserStatus.sb", params, function (response) {
 
@@ -63,7 +61,8 @@ app.controller('orderkitCtrl', ['$scope', '$http', '$timeout', function ($scope,
             $scope._postJSONQuery.withOutPopUp('/orderkit/orderkit/orderkitRecpOrigin/orderkitGoto.sb', params, function (response) {
 
                 // jwtToken
-                var jwtToken = response.data.data;
+                var jwtToken = response.data.data.token;
+                var url = response.data.data.url;
 
                 if (redirectUrl !== "") {
                     console.log("url : " + url + "/auth/pos/url?token=" + jwtToken);

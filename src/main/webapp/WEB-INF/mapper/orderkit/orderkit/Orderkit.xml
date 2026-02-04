@@ -37,4 +37,17 @@
            AND tms.STORE_CD = #{storeCd}
     </select>
 
+    <!-- 개발/운영 Api URL 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : orderkitVO
+        COMMENTS : 개발/운영 Api URL을 조회한다.
+    -->
+    <select id="getApiUrl" parameterType="orderkitVO" resultType="DefaultMap">
+        /* USE : OrderkitMapper.getApiUrl */
+        SELECT  FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiUrl}) AS ${apiUrl}
+        ,       FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiKey}) AS ${apiKey}
+        FROM    DUAL
+    </select>
+
 </mapper>

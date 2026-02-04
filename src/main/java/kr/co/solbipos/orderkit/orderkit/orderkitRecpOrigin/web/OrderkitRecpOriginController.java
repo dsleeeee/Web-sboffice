@@ -102,28 +102,28 @@ public class OrderkitRecpOriginController {
     public Result orderkitGoto(HttpServletRequest request, HttpServletResponse response, Model model, OrderkitRecpOriginVO orderkitRecpOriginVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String token = "";
+        DefaultMap<String> resultMap = new DefaultMap<String>();
 
         if (orderkitRecpOriginVO.getRedirectUrl() != null && !orderkitRecpOriginVO.getRedirectUrl().equals("")) {
 
             // JWT 토큰 생성
-            token = orderkitController.createJWT2(sessionInfoVO, orderkitRecpOriginVO.getRedirectUrl());
-            LOGGER.info("createJWT2 JWT2 Token: " + token);
+            resultMap = orderkitController.createJWT2(sessionInfoVO, orderkitRecpOriginVO.getRedirectUrl());
+            LOGGER.info("Crate JWT2 Token: " + resultMap.getStr("token"));
 
             // JWT 토큰 파싱(확인용)
-            orderkitController.parseJWT2(token);
+            orderkitController.parseJWT2(sessionInfoVO, resultMap.getStr("token"));
 
         } else {
 
             // JWT 토큰 생성
-            token = orderkitController.createJWT(sessionInfoVO);
-            LOGGER.info("Crate JWT Token: " + token);
+            resultMap = orderkitController.createJWT(sessionInfoVO);
+            LOGGER.info("Crate JWT Token: " + resultMap.getStr("token"));
 
             // JWT 토큰 파싱(확인용)
-            orderkitController.parseJWT(token);
+            orderkitController.parseJWT(sessionInfoVO, resultMap.getStr("token"));
         }
 
-        return ReturnUtil.returnJson(Status.OK, token);
+        return  ReturnUtil.returnJson(Status.OK, resultMap);
     }
 
 }

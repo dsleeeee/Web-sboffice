@@ -1,5 +1,7 @@
 package kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +23,8 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public class DlvrAgencyLinkMapper {
+public interface DlvrAgencyLinkMapper {
+
+    /** 개발/운영 Api URL 조회 */
+    DefaultMap<Object> getApiUrl(DlvrAgencyLinkVO dlvrAgencyLinkVO);
 }
