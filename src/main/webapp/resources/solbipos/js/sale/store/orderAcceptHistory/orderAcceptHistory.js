@@ -153,7 +153,7 @@ app.controller('orderAcceptHistoryCtrl', ['$scope', '$http', '$timeout', functio
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, messages["status.monyStatus"] + "_" + getToday() + '.xlsx', function () {
+            }, messages["orderAcceptHistory.orderAcceptHistory"] + "_" + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
