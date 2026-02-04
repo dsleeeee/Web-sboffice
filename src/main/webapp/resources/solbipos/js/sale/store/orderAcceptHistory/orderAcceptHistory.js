@@ -145,6 +145,10 @@ app.controller('orderAcceptHistoryCtrl', ['$scope', '$http', '$timeout', functio
             return false;
         }
 
+        var params       = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -153,7 +157,7 @@ app.controller('orderAcceptHistoryCtrl', ['$scope', '$http', '$timeout', functio
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, messages["orderAcceptHistory.orderAcceptHistory"] + "_" + getToday() + '.xlsx', function () {
+            }, messages["orderAcceptHistory.orderAcceptHistory"] + "_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
