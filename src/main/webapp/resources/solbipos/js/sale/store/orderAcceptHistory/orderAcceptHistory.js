@@ -25,6 +25,12 @@ var statusComboData = [
     {"name":"주문중지","value":"N"}
 ];
 
+// 주문수신처리타입구분
+var statusTypeFgComboData = [
+    {"name":"개점/마감","value":"0"},
+    {"name":"주문수신/중지","value":"1"}
+];
+
 
 app.controller('orderAcceptHistoryCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -57,6 +63,7 @@ app.controller('orderAcceptHistoryCtrl', ['$scope', '$http', '$timeout', functio
 
         $scope.dlvrInFgDataMap = new wijmo.grid.DataMap(dlvrInFgComboData, 'value', 'name'); // 배달앱경로
         $scope.statusDataMap = new wijmo.grid.DataMap(statusComboData, 'value', 'name'); //상태
+        $scope.statusTypeFgDataMap = new wijmo.grid.DataMap(statusTypeFgComboData, 'value', 'name'); //상태
     };
 
     // 다른 컨트롤러의 broadcast 받기

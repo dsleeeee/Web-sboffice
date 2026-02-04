@@ -313,14 +313,14 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.saleDate"/>"       binding="saleDate"      width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.yoil"/>"           binding="yoil"          width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.branchCd"/>"       binding="branchCd"      width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.branchNm"/>"       binding="branchNm"      width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.yoil"/>"           binding="yoil"          width="50"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.branchCd"/>"       binding="branchCd"      width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.branchNm"/>"       binding="branchNm"      width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.storeCd"/>"        binding="storeCd"       width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.storeNm"/>"        binding="storeNm"       width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.brandNm"/>"        binding="brandNm"       width="80"  align="center" is-read-only="true"  data-map="brandDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.momsTeam"/>"       binding="momsTeam"      width="80"  align="center" is-read-only="true"  data-map="momsTeamDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.acShop"/>"         binding="momsAcShop"    width="80"  align="center" is-read-only="true"  data-map="momsAcShopDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.momsTeam"/>"       binding="momsTeam"      width="60"  align="center" is-read-only="true"  data-map="momsTeamDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.acShop"/>"         binding="momsAcShop"    width="70"  align="center" is-read-only="true"  data-map="momsAcShopDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.sysDate"/>"        binding="sysDate"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.dlvrInFg"/>"       binding="dlvrInFg"      width="80"  align="center" is-read-only="true"  data-map="dlvrInFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeDt"/>"       binding="changeDt"      width="130" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -330,6 +330,7 @@
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.empNm"/>"          binding="userNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultCd"/>"     binding="changeResultCd"    width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultMsg"/>"    binding="changeResultMsg"   width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.statusTypeFg"/>"       binding="statusTypeFg"      width="140" align="center" is-read-only="true" data-map="statusTypeFgDataMap"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -358,5 +359,5 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/orderAcceptHistory/orderAcceptHistory.js?ver=20260204.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/orderAcceptHistory/orderAcceptHistory.js?ver=20260204.03" charset="utf-8"></script>
 
