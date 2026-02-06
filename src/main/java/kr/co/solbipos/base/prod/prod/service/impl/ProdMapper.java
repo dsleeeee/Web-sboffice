@@ -595,4 +595,52 @@ public interface ProdMapper {
 
     /** 동일 형태 매입처 등록여부 확인 */
     int getHdrInfoCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불 - (선입선출)재고-현재고 */
+    int getStHqStockCurInfoCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불 - (선입선출)재고-현재고 */
+    int getStStoreStockCurInfoCnt(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품 모바일쿠폰매핑정보 영구삭제 */
+    int deleteProdInfoMcoupnProd(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 상품 토핑상품매핑정보 영구삭제 */
+    int deleteProdInfoTopping(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 상품 사이드상품매핑정보 영구삭제 */
+    int deleteProdInfoSdselProdMapping(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 매장)상품 KCPQR_키맵 영구삭제 */
+    int deleteProdInfoKcpQrKey(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 상품_쿠폰정보 영구삭제 */
+    int deleteProdInfoHqCouponInfo(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 ERP맵핑상품 영구삭제 */
+    int deleteProdInfoHqErpProdMapping(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 상품특성정보 영구삭제 */
+    int deleteProdInfoHqProductSpec(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 쿠폰적용제외상품 영구삭제 */
+    int deleteProdInfoHqCouponProdExcept(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 사이드선택_상품 영구삭제 */
+    int deleteProdInfoHqProductBasicSdselProd(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 본사)상품 사이드선택_그룹 영구삭제 */
+    int deleteProdInfoHqProductBasicSdselGroup(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 상품_KCPQR_키맵 영구삭제 (전매장) */
+    int deleteProdInfoKcpQrKeyAllStore(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 모바일쿠폰매핑정보 영구삭제 (전매장) */
+    int deleteProdInfoMcoupnProdAllStore(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 토핑상품매핑정보 영구삭제 (전매장) */
+    int deleteProdInfoToppingAllStore(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 사이드상품매핑정보 영구삭제 (전매장) */
+    int deleteProdInfoSdselProdMappingAllStore(ProdVO prodVO1);
 }

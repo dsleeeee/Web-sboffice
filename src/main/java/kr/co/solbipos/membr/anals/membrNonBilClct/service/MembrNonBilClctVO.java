@@ -40,6 +40,8 @@ public class MembrNonBilClctVO extends PageVO {
     private String orgnFg;
     /** 사원번호 */
     private String empNo;
+    /** 조회일자 옵션 */
+    private String srchDateFg;
 
     public String getMembrOrgnCd() {
         return membrOrgnCd;
@@ -91,5 +93,13 @@ public class MembrNonBilClctVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getSrchDateFg() {
+        return srchDateFg;
+    }
+
+    public void setSrchDateFg(String srchDateFg) {
+        this.srchDateFg = srchDateFg;
     }
 }

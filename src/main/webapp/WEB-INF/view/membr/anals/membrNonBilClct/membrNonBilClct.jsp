@@ -32,7 +32,19 @@
                 <th><s:message code="cmm.search.date"/></th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startDate" name="startDate" class="w120px"/></span>
+                        <span class="txtIn w120px fl">
+                            <wj-combo-box
+                                    id="srchDateFg"
+                                    ng-model="dateFg"
+                                    items-source="_getComboData('dateFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="selectedIndexChanged(s, e)">
+                            </wj-combo-box>
+                        </span>
+                        <span class="txtIn ml5"> <input id="startDate" name="startDate" class="w120px"/></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endDate" name="endDate" class="w120px"/></span>
                     </div>
@@ -113,9 +125,9 @@
                         item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="membrNonBilClct.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrNonBilClct.regDt"/>" binding="saleDate" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="membrNonBilClct.postpaidAmt"/>" binding="postpaidAmt" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="membrNonBilClct.postpaidInAmt"/>" binding="postpaidInAmt" width="100" is-read-only="true" align="center"  aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="membrNonBilClct.postpaidInAmt"/>" binding="depositAmt" width="100" is-read-only="true" align="center"  aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -126,4 +138,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrNonBilClct/membrNonBilClct.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrNonBilClct/membrNonBilClct.js?ver=20260206.01" charset="utf-8"></script>

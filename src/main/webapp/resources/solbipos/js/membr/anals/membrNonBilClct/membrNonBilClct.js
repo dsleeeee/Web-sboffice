@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+var dateFg = [
+    {"name": "전체", "value": "0"},
+    {"name": "기간내", "value": "1"}
+];
+
 /**
  *  회원 미수금현황 그리드 생성
  */
@@ -25,8 +30,13 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
     var endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
+    $scope._setComboData("dateFgCombo", dateFg); // 매장브랜드
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        $scope.dateFg = "1";
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -114,6 +124,7 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
                     params.membrNo  = selectedRow.membrNo;
                     params.startDate = $scope.srchStartDate;
                     params.endDate = $scope.srchEndDate;
+                    params.srchDateFg = $scope.dateFg;
 
                     var storeScope = agrid.getScope('membrNonBilClctDetailCtrl');
                     storeScope._broadcast('membrNonBilClctDetailCtrl', params);
@@ -134,9 +145,12 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        params.srchDateFg = $scope.dateFg;
 
         $scope.srchStartDate = params.startDate;
         $scope.srchEndDate = params.endDate;
+
+        console.log(params);
 
         $scope._inquiryMain("/membr/anals/membrNonBilClct/membrNonBilClct/getMembrNonBilClctList.sb", params, function() {
             $scope.$apply(function() {
@@ -146,6 +160,17 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 조회일자 값 변경 이벤트 함수
+    $scope.selectedIndexChanged = function (s, e) {
+        if (s.selectedValue === "0") {
+            $("#startDate").attr("disabled", true);
+            $("#endDate").attr("disabled", true);
+        } else {
+            $("#startDate").attr("disabled", false);
+            $("#endDate").attr("disabled", false);
+        }
+    };
 
     // 선택 매장
     $scope.selectedStore;
@@ -228,6 +253,7 @@ app.controller('membrNonBilClctDetailCtrl', ['$scope', '$http','$timeout', funct
         params.membrNo = $scope.selectedStoreDetail.membrNo;
         params.startDate = $scope.selectedStoreDetail.startDate;
         params.endDate = $scope.selectedStoreDetail.endDate;
+        params.srchDateFg= $scope.selectedStoreDetail.srchDateFg;
 
         $scope._inquiryMain("/membr/anals/membrNonBilClct/membrNonBilClct/getMembrNonBilClctDetailList.sb", params, function() {}, false);
     };

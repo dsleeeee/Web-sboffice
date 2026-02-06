@@ -1859,6 +1859,7 @@
             PRC_CTRL_FG
             FROM TB_MS_PRODUCT
             WHERE 1=1
+            AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
             AND PROD_CD = #{prodCd}
             GROUP BY STORE_CD, PRC_CTRL_FG
         ) tmp
@@ -8578,5 +8579,383 @@
         AND     A.TRADE_FORM    = #{tradeForm}
     </select>
 
+    <!-- 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 본사수불 - (선입선출)재고-현재고 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR_FIFO
+        PARAM    : prodVO
+        COMMENTS : 상품삭제 전 데이터 확인 : 본사수불 - (선입선출)재고-현재고
+    -->
+    <select id="getStHqStockCurInfoCnt" parameterType="prodVO" resultType="int">
+        /* ProdMapper.getStHqStockCurInfoCnt */
+        SELECT  COUNT(1)
+        FROM    TB_ST_HQ_STOCK_CUR_FIFO
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND	    PROD_CD         =   #{prodCd}
+    </select>
 
+    <!-- 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 매장수불 - (선입선출)재고-현재고 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_CUR_FIFO
+        PARAM    : prodVO
+        COMMENTS : 상품삭제 전 데이터 확인 : 매장수불 - (선입선출)재고-현재고
+    -->
+    <select id="getStStoreStockCurInfoCnt" parameterType="prodVO" resultType="int">
+        /* ProdMapper.getStStoreStockCurInfoCnt */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  COUNT(1)
+                FROM    TB_ST_STORE_STOCK_CUR_FIFO
+                WHERE   STORE_CD    IN  (
+                                            SELECT  STORE_CD
+                                            FROM    TB_MS_STORE
+                                            WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        )
+                AND	    PROD_CD     =   #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  COUNT(1)
+                FROM    TB_ST_STORE_STOCK_CUR_FIFO
+                WHERE   STORE_CD    =   #{storeCd}
+                AND	    PROD_CD     =   #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품 삭제 팝업 - 상품 모바일쿠폰매핑정보 영구삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_MCOUPN_PROD_CD, TB_MS_PRODUCT_MCOUPN_PROD_CD
+        PARAM    : prodVO
+        COMMENTS : 상품 모바일쿠폰매핑정보 영구삭제
+    -->
+    <delete id="deleteProdInfoMcoupnProd" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoMcoupnProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_PRODUCT_MCOUPN_PROD_CD
+                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     PROD_CD         IN  (
+                                                SELECT  PROD_CD
+                                                FROM    TB_TMP_DEL_PRODUCT
+                                                WHERE   SESSION_ID      =   #{sessionId}
+                                                AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                            )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_PRODUCT_MCOUPN_PROD_CD
+                WHERE   STORE_CD    =   #{storeCd}
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_TMP_DEL_PRODUCT
+                                            WHERE   SESSION_ID      =   #{sessionId}
+                                            AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                            AND     STORE_CD        =   #{storeCd}
+                                            AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                        )
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 상품 토핑상품매핑정보 영구삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_TOPPING, TB_MS_PRODUCT_TOPPING
+        PARAM    : prodVO
+        COMMENTS : 상품 토핑상품매핑정보 영구삭제
+    -->
+    <delete id="deleteProdInfoTopping" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoTopping */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_PRODUCT_TOPPING
+                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     PROD_CD         IN  (
+                                                SELECT  PROD_CD
+                                                FROM    TB_TMP_DEL_PRODUCT
+                                                WHERE   SESSION_ID      =   #{sessionId}
+                                                AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                            )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_PRODUCT_TOPPING
+                WHERE   STORE_CD    =   #{storeCd}
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_TMP_DEL_PRODUCT
+                                            WHERE   SESSION_ID      =   #{sessionId}
+                                            AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                            AND     STORE_CD        =   #{storeCd}
+                                            AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                        )
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 상품 사이드상품매핑정보 영구삭제 -->
+    <!--
+        TABLE    : TB_HQ_SDSEL_PROD_MAPPING, TB_MS_SDSEL_PROD_MAPPING
+        PARAM    : prodVO
+        COMMENTS : 상품 사이드상품매핑정보 영구삭제
+    -->
+    <delete id="deleteProdInfoSdselProdMapping" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoSdselProdMapping */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_SDSEL_PROD_MAPPING
+                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     PROD_CD         IN  (
+                                                SELECT  PROD_CD
+                                                FROM    TB_TMP_DEL_PRODUCT
+                                                WHERE   SESSION_ID      =   #{sessionId}
+                                                AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                            )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_SDSEL_PROD_MAPPING
+                WHERE   STORE_CD    =   #{storeCd}
+                AND     PROD_CD     IN  (
+                                            SELECT  PROD_CD
+                                            FROM    TB_TMP_DEL_PRODUCT
+                                            WHERE   SESSION_ID      =   #{sessionId}
+                                            AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                            AND     STORE_CD        =   #{storeCd}
+                                            AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                        )
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (매장)KCPQR_키맵 영구삭제  -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (매장)KCPQR_키맵 영구삭제
+    -->
+    <delete id="deleteProdInfoKcpQrKey" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoKcpQrKey */
+        DELETE  TB_MS_KCPQR_KEY
+        WHERE   STORE_CD    =   #{storeCd}
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    TB_TMP_DEL_PRODUCT
+                                    WHERE   SESSION_ID      =   #{sessionId}
+                                    AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)상품_쿠폰정보 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_COUPON_INFO, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)상품_쿠폰정보 영구삭제
+    -->
+    <delete id="deleteProdInfoHqCouponInfo" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqCouponInfo */
+        DELETE  TB_HQ_COUPON_INFO
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     COUPN_PROD_CD   IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)ERP맵핑상품 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)ERP맵핑상품 영구삭제
+    -->
+    <delete id="deleteProdInfoHqErpProdMapping" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqErpProdMapping */
+        DELETE  TB_HQ_ERP_PROD_MAPPING
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     ERP_PROD_CD     IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)상품특성정보 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SPEC, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)상품특성정보 영구삭제
+    -->
+    <delete id="deleteProdInfoHqProductSpec" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqProductSpec */
+        DELETE  TB_HQ_PRODUCT_SPEC
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     PROD_CD         IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)쿠폰적용제외상품 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_EXCEPT, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)쿠폰적용제외상품 영구삭제
+    -->
+    <delete id="deleteProdInfoHqCouponProdExcept" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqCouponProdExcept */
+        DELETE  TB_HQ_COUPON_PROD_EXCEPT
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     PROD_CD         IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)사이드선택_상품 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)사이드선택_상품 영구삭제
+    -->
+    <delete id="deleteProdInfoHqProductBasicSdselProd" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqProductBasicSdselProd */
+        DELETE  TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     PROD_CD         IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - (본사)사이드선택_그룹 영구삭제  -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : (본사)사이드선택_그룹 영구삭제
+    -->
+    <delete id="deleteProdInfoHqProductBasicSdselGroup" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoHqProductBasicSdselGroup */
+        DELETE  TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     PROD_CD         IN  (
+                                        SELECT  PROD_CD
+                                        FROM    TB_TMP_DEL_PRODUCT
+                                        WHERE   SESSION_ID      =   #{sessionId}
+                                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                        AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                    )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 상품_KCPQR_키맵 영구삭제 (전매장) -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품_KCPQR_키맵 영구삭제 (전매장)
+    -->
+    <delete id="deleteProdInfoKcpQrKeyAllStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoKcpQrKeyAllStore */
+        DELETE  TB_MS_KCPQR_KEY
+        WHERE   STORE_CD    IN  (
+                                    SELECT  STORE_CD
+                                    FROM    TB_MS_STORE
+                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                )
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    TB_TMP_DEL_PRODUCT
+                                    WHERE   SESSION_ID      =   #{sessionId}
+                                    AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 모바일쿠폰매핑정보 영구삭제 (전매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_MCOUPN_PROD_CD, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 모바일쿠폰매핑정보 영구삭제 (전매장)
+    -->
+    <delete id="deleteProdInfoMcoupnProdAllStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoMcoupnProdAllStore */
+        DELETE  TB_MS_PRODUCT_MCOUPN_PROD_CD
+        WHERE   STORE_CD    IN  (
+                                    SELECT  STORE_CD
+                                    FROM    TB_MS_STORE
+                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                )
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    TB_TMP_DEL_PRODUCT
+                                    WHERE   SESSION_ID      =   #{sessionId}
+                                    AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 토핑상품매핑정보 영구삭제 (전매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_TOPPING, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 토핑상품매핑정보 영구삭제 (전매장)
+    -->
+    <delete id="deleteProdInfoToppingAllStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoToppingAllStore */
+        DELETE  TB_MS_PRODUCT_TOPPING
+        WHERE   STORE_CD    IN  (
+                                    SELECT  STORE_CD
+                                    FROM    TB_MS_STORE
+                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                )
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    TB_TMP_DEL_PRODUCT
+                                    WHERE   SESSION_ID      =   #{sessionId}
+                                    AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 사이드상품매핑정보 영구삭제 (전매장) -->
+    <!--
+        TABLE    : TB_MS_SDSEL_PROD_MAPPING, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 사이드상품매핑정보 영구삭제 (전매장)
+    -->
+    <delete id="deleteProdInfoSdselProdMappingAllStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoSdselProdMappingAllStore */
+        DELETE  TB_MS_SDSEL_PROD_MAPPING
+        WHERE   STORE_CD    IN  (
+                                    SELECT  STORE_CD
+                                    FROM    TB_MS_STORE
+                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                )
+        AND     PROD_CD     IN  (
+                                    SELECT  PROD_CD
+                                    FROM    TB_TMP_DEL_PRODUCT
+                                    WHERE   SESSION_ID      =   #{sessionId}
+                                    AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                    AND     DEL_TYPE_FG     =   #{delTypeFg}
+                                )
+    </delete>
 </mapper>

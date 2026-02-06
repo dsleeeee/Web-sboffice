@@ -18,76 +18,83 @@
     -->
     <select id="getMembrNonBilClctList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctList */
-        SELECT
-        tmmpb.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-        tmmpb.POSTPAID_AMT AS POSTPAID_AMT,
-        tmmpb.POSTPAID_IN_AMT AS POSTPAID_IN_AMT,
-        tmmpb.POSTPAID_BAL_AMT AS POSTPAID_BAL_AMT,
-        tmmpbdt.POSTPAID_AMT_DT AS POSTPAID_AMT_DT,
-        tmmpbdt.POSTPAID_IN_AMT_DT AS POSTPAID_IN_AMT_DT
-        FROM
-        (
-            SELECT
-            MEMBR_NO,
-            SUM(POSTPAID_AMT) AS POSTPAID_AMT,
-            SUM(POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
-            SUM(POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT
-            FROM TB_MB_MEMBER_PAID_BALANCE
-            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-                <![CDATA[
-                    AND STORE_CD = #{storeCd}
-                ]]>
-            </if>
-            <if test='orgnFg != null and orgnFg == "H"'>
-                AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
-            </if>
-            <if test='membrNo != null and membrNo != ""'>
-                <![CDATA[
-                    AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
-                ]]>
-            </if>
-            GROUP BY MEMBR_NO, HQ_OFFICE_CD
-        ) tmmpb,
-        TB_MB_MEMBER tmm,
-        (
-            SELECT
-            MEMBR_NO,
-            SUM(POSTPAID_AMT) AS POSTPAID_AMT_DT,
-            SUM(POSTPAID_IN_AMT) AS POSTPAID_IN_AMT_DT
-            FROM TB_MB_MEMBER_PAID_BALANCE
-            WHERE REG_DT BETWEEN #{startDate} AND #{endDate}
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-                <![CDATA[
-                    AND STORE_CD = #{storeCd}
-                ]]>
-            </if>
-            <if test='orgnFg != null and orgnFg == "H"'>
-                AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
-            </if>
-            <if test='membrNo != null and membrNo != ""'>
-                <![CDATA[
-                    AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
-                ]]>
-            </if>
-            GROUP BY MEMBR_NO, HQ_OFFICE_CD
-        ) tmmpbdt
-        WHERE 1=1
-        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND tmmpb.MEMBR_NO = tmm.MEMBR_NO
-        AND tmmpb.MEMBR_NO = tmmpbdt.MEMBR_NO
+        SELECT  tmmpb.MEMBR_NO
+        ,       SBPENC.D(tmm.MEMBR_NM)      AS MEMBR_NM
+        ,       tmmpb.POSTPAID_AMT          AS POSTPAID_AMT
+        ,       tmmpb.POSTPAID_IN_AMT       AS POSTPAID_IN_AMT
+        ,       tmmpb.POSTPAID_BAL_AMT      AS POSTPAID_BAL_AMT
+        ,       tmmpbdt.POSTPAID_AMT_DT     AS POSTPAID_AMT_DT
+        ,       tmmpbdt.POSTPAID_IN_AMT_DT  AS POSTPAID_IN_AMT_DT
+        FROM    (
+                    SELECT  A.MEMBR_NO
+                    ,       SUM(A.POSTPAID_AMT)       AS POSTPAID_AMT
+                    ,       SUM(A.POSTPAID_IN_AMT)    AS POSTPAID_IN_AMT
+                    ,       SUM(A.POSTPAID_BAL_AMT)   AS POSTPAID_BAL_AMT
+                    FROM    TB_MB_MEMBER_PAID_BALANCE A
+                    WHERE   1=1
+                    <if test='srchDateFg != null and srchDateFg != "0"'>
+                        AND EXISTS  (
+                                        SELECT  1
+                                        FROM    TB_MB_MEMBER_PAID_BALANCE B
+                                        WHERE   B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
+                                        AND     B.STORE_CD      =   A.STORE_CD
+                                        AND     B.MEMBR_NO      =   A.MEMBR_NO
+                                        AND     B.MOD_DT        BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                    )
+                    </if>
+                    AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND A.STORE_CD = #{storeCd}
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	A.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+                    <if test='membrNo != null and membrNo != ""'>
+                        AND A.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+                    </if>
+                    GROUP
+                    BY      A.MEMBR_NO
+                    ,       A.HQ_OFFICE_CD
+                ) tmmpb
+        ,       TB_MB_MEMBER tmm
+        ,       (
+                    SELECT  MEMBR_NO
+                    ,       SUM(POSTPAID_AMT)   AS POSTPAID_AMT_DT
+                    ,       SUM(DEPOSIT_AMT)    AS POSTPAID_IN_AMT_DT
+                    FROM    TB_MB_MEMBER_POSTPAID
+                    WHERE   1=1
+                    <if test='srchDateFg != null and srchDateFg != "0"'>
+                        AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    </if>
+                    AND     HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND STORE_CD = #{storeCd}
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+                    <if test='membrNo != null and membrNo != ""'>
+                        AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
+                    </if>
+                    GROUP
+                    BY      MEMBR_NO
+                    ,       HQ_OFFICE_CD
+                ) tmmpbdt
+        WHERE   1=1
+        AND     tmm.MEMBR_ORGN_CD   =   #{membrOrgnCd}
+        AND     tmmpb.MEMBR_NO      =   tmm.MEMBR_NO
+        AND     tmmpb.MEMBR_NO      =   tmmpbdt.MEMBR_NO
         <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
-        ORDER BY tmmpb.MEMBR_NO
+        ORDER
+        BY      tmmpb.MEMBR_NO
     </select>
 
     <!-- 회원 미수금현황 상세조회 -->
@@ -97,27 +104,28 @@
     -->
     <select id="getMembrNonBilClctDetailList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctDetailList */
-        SELECT
-        TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
-        tmmpb.POSTPAID_AMT,
-        tmmpb.POSTPAID_IN_AMT
-        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb
-        WHERE 1=1
-        AND tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT  TO_CHAR(TO_DATE(A.SALE_DATE , 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
+        ,       SUM(A.POSTPAID_AMT)     AS POSTPAID_AMT
+        ,       SUM(A.DEPOSIT_AMT)      AS DEPOSIT_AMT
+        FROM    TB_MB_MEMBER_POSTPAID A
+        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.MEMBR_NO      =   #{membrNo}
+        <if test='srchDateFg != null and srchDateFg != "0"'>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
         <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND tmmpb.STORE_CD = #{storeCd}
-            ]]>
+            AND A.STORE_CD = #{storeCd}
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR	tmmpb.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                OR	A.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
-        AND tmmpb.MEMBR_NO = #{membrNo}
-        AND tmmpb.REG_DT BETWEEN #{startDate} AND #{endDate}
-        ORDER BY tmmpb.REG_DT
+        GROUP
+        BY      A.SALE_DATE
+        ORDER
+        BY      A.SALE_DATE
     </select>
 
 </mapper>
