@@ -100,9 +100,7 @@
         </if>
         ORDER
         BY      B.STORE_CD
-        ,       B.HQ_BRAND_CD
-        ,       C.MOMS_TEAM
-        ,       C.MOMS_AC_SHOP
+        ,       A.CHANGE_DT
     </select>
 
 </mapper>
