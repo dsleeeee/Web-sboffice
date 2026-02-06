@@ -21,8 +21,8 @@ var dlvrInFgComboData = [
 
 // 상태
 var statusComboData = [
-    {"name":"주문수신","value":"Y"},
-    {"name":"주문중지","value":"N"}
+    {"name":"ON","value":"Y"},
+    {"name":"OFF","value":"N"}
 ];
 
 // 주문수신처리타입구분
