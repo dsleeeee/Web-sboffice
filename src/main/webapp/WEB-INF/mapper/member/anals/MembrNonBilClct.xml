@@ -32,16 +32,6 @@
                     ,       SUM(A.POSTPAID_BAL_AMT)   AS POSTPAID_BAL_AMT
                     FROM    TB_MB_MEMBER_PAID_BALANCE A
                     WHERE   1=1
-                    <if test='srchDateFg != null and srchDateFg != "0"'>
-                        AND EXISTS  (
-                                        SELECT  1
-                                        FROM    TB_MB_MEMBER_PAID_BALANCE B
-                                        WHERE   B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
-                                        AND     B.STORE_CD      =   A.STORE_CD
-                                        AND     B.MEMBR_NO      =   A.MEMBR_NO
-                                        AND     B.MOD_DT        BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
-                                    )
-                    </if>
                     AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     <if test='storeCd != null and storeCd != ""'>
                         AND A.STORE_CD = #{storeCd}
