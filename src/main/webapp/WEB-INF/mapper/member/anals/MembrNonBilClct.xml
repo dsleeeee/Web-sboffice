@@ -19,12 +19,12 @@
     <select id="getMembrNonBilClctList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctList */
         SELECT  tmmpb.MEMBR_NO
-        ,       SBPENC.D(tmm.MEMBR_NM)      AS MEMBR_NM
-        ,       tmmpb.POSTPAID_AMT          AS POSTPAID_AMT
-        ,       tmmpb.POSTPAID_IN_AMT       AS POSTPAID_IN_AMT
-        ,       tmmpb.POSTPAID_BAL_AMT      AS POSTPAID_BAL_AMT
-        ,       tmmpbdt.POSTPAID_AMT_DT     AS POSTPAID_AMT_DT
-        ,       tmmpbdt.POSTPAID_IN_AMT_DT  AS POSTPAID_IN_AMT_DT
+        ,       SBPENC.D(tmm.MEMBR_NM)              AS MEMBR_NM
+        ,       NVL(tmmpb.POSTPAID_AMT,0)           AS POSTPAID_AMT
+        ,       NVL(tmmpb.POSTPAID_IN_AMT,0)        AS POSTPAID_IN_AMT
+        ,       NVL(tmmpb.POSTPAID_BAL_AMT,0)       AS POSTPAID_BAL_AMT
+        ,       NVL(tmmpbdt.POSTPAID_AMT_DT,0)      AS POSTPAID_AMT_DT
+        ,       NVL(tmmpbdt.POSTPAID_IN_AMT_DT,0)   AS POSTPAID_IN_AMT_DT
         FROM    (
                     SELECT  A.MEMBR_NO
                     ,       SUM(A.POSTPAID_AMT)       AS POSTPAID_AMT
@@ -62,13 +62,11 @@
         ,       TB_MB_MEMBER tmm
         ,       (
                     SELECT  MEMBR_NO
-                    ,       SUM(POSTPAID_AMT)   AS POSTPAID_AMT_DT
-                    ,       SUM(DEPOSIT_AMT)    AS POSTPAID_IN_AMT_DT
+                    ,       SUM(CASE WHEN POSTPAID_FG IN ('3', '4') THEN POSTPAID_AMT ELSE 0 END)   AS POSTPAID_AMT_DT
+                    ,       SUM(CASE WHEN POSTPAID_FG IN ('1', '2') THEN POSTPAID_AMT ELSE 0 END)   AS POSTPAID_IN_AMT_DT
                     FROM    TB_MB_MEMBER_POSTPAID
                     WHERE   1=1
-                    <if test='srchDateFg != null and srchDateFg != "0"'>
-                        AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    </if>
+                    AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND     HQ_OFFICE_CD = #{hqOfficeCd}
                     <if test='storeCd != null and storeCd != ""'>
                         AND STORE_CD = #{storeCd}
@@ -89,7 +87,12 @@
         WHERE   1=1
         AND     tmm.MEMBR_ORGN_CD   =   #{membrOrgnCd}
         AND     tmmpb.MEMBR_NO      =   tmm.MEMBR_NO
+        <if test='srchDateFg != null and srchDateFg != "0"'>
         AND     tmmpb.MEMBR_NO      =   tmmpbdt.MEMBR_NO
+        </if>
+        <if test='srchDateFg != null and srchDateFg != "1"'>
+            AND     tmmpb.MEMBR_NO      =   tmmpbdt.MEMBR_NO (+)
+        </if>
         <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
@@ -105,8 +108,8 @@
     <select id="getMembrNonBilClctDetailList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctDetailList */
         SELECT  TO_CHAR(TO_DATE(A.SALE_DATE , 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
-        ,       SUM(A.POSTPAID_AMT)     AS POSTPAID_AMT
-        ,       SUM(A.DEPOSIT_AMT)      AS DEPOSIT_AMT
+        ,       SUM(CASE WHEN POSTPAID_FG IN ('3', '4') THEN POSTPAID_AMT ELSE 0 END)   AS POSTPAID_AMT
+        ,       SUM(CASE WHEN POSTPAID_FG IN ('1', '2') THEN POSTPAID_AMT ELSE 0 END)   AS POSTPAID_IN_AMT
         FROM    TB_MB_MEMBER_POSTPAID A
         WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     A.MEMBR_NO      =   #{membrNo}

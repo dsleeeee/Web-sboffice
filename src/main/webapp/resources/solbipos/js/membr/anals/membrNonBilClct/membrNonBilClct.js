@@ -161,17 +161,6 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
     };
     // <-- //검색 호출 -->
 
-    // 조회일자 값 변경 이벤트 함수
-    $scope.selectedIndexChanged = function (s, e) {
-        if (s.selectedValue === "0") {
-            $("#startDate").attr("disabled", true);
-            $("#endDate").attr("disabled", true);
-        } else {
-            $("#startDate").attr("disabled", false);
-            $("#endDate").attr("disabled", false);
-        }
-    };
-
     // 선택 매장
     $scope.selectedStore;
     $scope.setSelectedStore = function(store) {
