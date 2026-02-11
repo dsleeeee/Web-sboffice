@@ -2727,4 +2727,23 @@
         BY    tms.STORE_CD
     </select>
 
+    <!-- 프로모션 매장 등록 패키지 호출 -->
+    <!--
+        TABLE    :
+        0
+        PARAM    :
+        COMMENTS : 프로모션 매장 등록 패키지 호출
+    -->
+    <select id="saveStorePromotionH" statementType="CALLABLE" parameterType="promotionVO" resultType="String">
+        /* PromotionMapper.saveStorePromotionH */
+        {
+            CALL PKG_HQ_PROMO_H.SP_HQ_PROMO_H_IU
+            (
+                #{hqOfficeCd},
+                #{promotionCd},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>

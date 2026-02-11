@@ -117,9 +117,9 @@
         ,       tms.STORE_NM
         ,       tsspp.APPR_COMPANY_NM AS PAYCO_NM
         ,       SUM(DECODE(tsspp.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
-        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.SALE_AMT, 0)) AS APPR_AMT
         ,       SUM(DECODE(tsspp.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
-        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS CANCEL_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.SALE_AMT, 0)) AS CANCEL_AMT
         FROM    TB_SL_SALE_PAY_PAYCO tsspp
         ,       TB_MS_STORE tms
         WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -490,37 +490,41 @@
     -->
     <select id="getMobileGiftList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
         /* MobilePayInfoMapper.getMobileGiftList */
-        SELECT  tsspgd.STORE_CD
-        ,       tms.STORE_NM
-        ,       tcn.NMCODE_NM AS GIFT_PROC_FG_NM
-        ,       SUM(tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY) AS GIFT_TOT_AMT    <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
-        FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
-        ,       TB_CM_NMCODE tcn
-        ,       TB_MS_STORE tms
-        WHERE   tsspgd.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsspgd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND     tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
-        AND     tms.STORE_CD = tsspgd.STORE_CD
-        AND     tcn.NMCODE_GRP_CD          =   '048'
-        AND     tcn.NMCODE_CD              =   tsspgd.GIFT_PROC_FG
-        AND     tms.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        SELECT 	A.STORE_CD
+        ,		C.STORE_NM
+        ,		D.NMCODE_NM     AS GIFT_PROC_FG_NM
+        ,		SUM(A.SALE_AMT) AS GIFT_TOT_AMT
+        FROM 	TB_SL_SALE_PAY_GIFT A
+        ,		TB_SL_SALE_PAY_GIFT_DTL B
+        ,		TB_MS_STORE C
+        ,		TB_CM_NMCODE D
+        WHERE 	B.STORE_CD 		=	A.STORE_CD
+        AND 	B.SALE_DATE		=	A.SALE_DATE
+        AND 	B.POS_NO 		=	A.POS_NO
+        AND 	B.BILL_NO 		=	A.BILL_NO
+        AND 	B.LINE_NO 		=	A.LINE_NO
+        AND 	C.STORE_CD 		=	A.STORE_CD
+        AND     D.NMCODE_GRP_CD =   '048'
+        AND     D.NMCODE_CD     =   B.GIFT_PROC_FG
+        AND 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_DATE 	BETWEEN	#{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsspgd.STORE_CD IN (${storeCdQuery})
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
-                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR  tsspgd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-            )
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR  A.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
         </if>
         GROUP
-        BY      tsspgd.STORE_CD
-        ,       tms.STORE_NM
-        ,       tcn.NMCODE_NM
+        BY 		A.STORE_CD
+        ,		C.STORE_NM
+        ,		D.NMCODE_NM
         ORDER
-        BY      tsspgd.STORE_CD
-        ,       tms.STORE_NM
-        ,       tcn.NMCODE_NM
+        BY 		A.STORE_CD
+        ,		C.STORE_NM
+        ,		D.NMCODE_NM
     </select>
 
     <!-- 결제수단 식권 팝업 - 조회 -->
@@ -533,8 +537,8 @@
         SELECT  tsspfd.STORE_CD
         ,       tms.STORE_NM
         ,       tsspfd.SALE_YN
-        ,       SUM(tsspfd.FSTMP_UPRC * tsspfd.FSTMP_QTY) AS FSTMP_TOT_AMT
-        FROM    TB_SL_SALE_PAY_FSTMP_DTL tsspfd
+        ,       SUM(tsspfd.SALE_AMT) AS FSTMP_TOT_AMT
+        FROM    TB_SL_SALE_PAY_FSTMP tsspfd
         ,       TB_MS_STORE tms
         WHERE   tsspfd.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspfd.SALE_DATE BETWEEN #{startDate} AND #{endDate}

@@ -60,9 +60,10 @@
         <%--<div class="tblBr">--%>
         <table class="tblType01">
             <colgroup>
-                <col class="w33"/>
-                <col class="w33"/>
-                <col class="w33"/>
+                <col class="w25"/>
+                <col class="w25"/>
+                <col class="w25"/>
+                <col class="w25"/>
             </colgroup>
             <tbody>
             <tr>
@@ -78,6 +79,10 @@
                 <th class="tc br">
                     <s:message code="mobile.todaySale.billCnt"/>
                 </th>
+                <%-- 총매출액 --%>
+                <th class="tc br bl">
+                    <s:message code="mobile.todaySale.totSaleAmt"/>
+                </th>
             </tr>
             <tr>
                 <td class="tr br bl">
@@ -89,12 +94,11 @@
                 <td class="tr br">
                     <label id="lblBillCnt"></label>
                 </td>
+                <td class="tr br bl">
+                    <label id="lblTotSaleAmt"></label>
+                </td>
             </tr>
             <tr>
-                <%-- 총매출액 --%>
-                <th class="tc br bl">
-                    <s:message code="mobile.todaySale.totSaleAmt"/>
-                </th>
                 <%-- 총할인액 --%>
                 <th class="tc br">
                     <s:message code="mobile.todaySale.totDcAmt"/>
@@ -103,23 +107,30 @@
                 <th class="tc br">
                     <s:message code="mobile.todaySale.realSaleAmt"/>
                 </th>
+                <%-- 컵보증금액 --%>
+                <th class="tc br">
+                    <s:message code="mobile.todaySale.cupAmt"/>
+                </th>
+                <%-- 방문객수 --%>
+                <th class="tc br bl">
+                    <s:message code="mobile.todaySale.totGuestCnt"/>
+                </th>
             </tr>
             <tr>
-                <td class="tr br bl">
-                    <label id="lblTotSaleAmt"></label>
-                </td>
                 <td class="tr br">
                     <label id="lblTotDcAmt"></label>
                 </td>
                 <td class="tr br">
                     <label id="lblRealSaleAmt"></label>
                 </td>
+                <td class="tr br">
+                    <label id="lblCupAmt"></label>
+                </td>
+                <td class="tr br bl">
+                    <label id="lblTotGuestCnt"></label>
+                </td>
             </tr>
             <tr>
-                <%-- 방문객수 --%>
-                <th class="tc br bl">
-                    <s:message code="mobile.todaySale.totGuestCnt"/>
-                </th>
                 <%-- 객단가 --%>
                 <th class="tc br">
                     <s:message code="mobile.todaySale.guestUprc"/>
@@ -128,19 +139,6 @@
                 <th class="tc br">
                     <s:message code="mobile.todaySale.billUprc"/>
                 </th>
-            </tr>
-            <tr>
-                <td class="tr br bl">
-                    <label id="lblTotGuestCnt"></label>
-                </td>
-                <td class="tr br">
-                    <label id="lblGuestUprc"></label>
-                </td>
-                <td class="tr br">
-                    <label id="lblBillUprc"></label>
-                </td>
-            </tr>
-            <tr>
                 <%-- 카드매출 --%>
                 <th class="tc br bl">
                     <s:message code="mobile.todaySale.cardAmt"/>
@@ -149,23 +147,26 @@
                 <th class="tc br">
                     <s:message code="mobile.todaySale.cashAmt"/>
                 </th>
-                <%-- 기타매출 --%>
-                <th class="tc br">
-                    <s:message code="mobile.todaySale.etcAmt"/>
-                </th>
             </tr>
             <tr>
+                <td class="tr br">
+                    <label id="lblGuestUprc"></label>
+                </td>
+                <td class="tr br">
+                    <label id="lblBillUprc"></label>
+                </td>
                 <td class="tr br bl">
                     <label id="lblCardAmt"></label>
                 </td>
                 <td class="tr br">
                     <label id="lblCashAmt"></label>
                 </td>
-                <td class="tr br">
-                    <label id="lblEtcAmt"></label>
-                </td>
             </tr>
             <tr>
+                <%-- 기타매출 --%>
+                <th class="tc br">
+                    <s:message code="mobile.todaySale.etcAmt"/>
+                </th>
                 <%-- 일반할인 --%>
                 <th class="tc br bl">
                     <s:message code="mobile.todaySale.dcAmt"/>
@@ -180,6 +181,9 @@
                 </th>
             </tr>
             <tr>
+                <td class="tr br">
+                    <label id="lblEtcAmt"></label>
+                </td>
                 <td class="tr br bl">
                     <label id="lblDcAmt"></label>
                 </td>
@@ -397,7 +401,7 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20260211.01" charset="utf-8"></script>
 
 <%-- 결제수단 팝업 레이어 시작 --%>
 <%-- (모바일) 공통 결제수단 신용카드 팝업 --%>

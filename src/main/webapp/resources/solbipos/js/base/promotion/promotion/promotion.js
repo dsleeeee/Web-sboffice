@@ -408,6 +408,11 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 $("#promotionNm").val(info.promotionNm); // 프로모션명
                 $("#memo").val(info.memo); // 메모
                 $scope.useYnCombo.selectedValue = info.useYn; // 사용여부
+                if(orgnFg === "HQ"){
+                    if(info.useYn !== "" && info.useYn !== null) {
+                        $("#promotionUseYn").val(info.useYn);
+                    }
+                }
 
                 // 프로모션 종류별 입력값 셋팅
                 $scope.setForm(info.promoType);
@@ -1272,6 +1277,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#memo").val(""); // 메모
         $scope.useYnCombo.selectedIndex = 0; // 사용여부
         $scope.promotionTypeCombo.selectedIndex = 0; // 프로모션 종류
+        $("#promotionUseYn").val("");
 
         // ------------ 적용조건 ------------
         $("#lblFileNm").text("");
@@ -2498,6 +2504,12 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
             return false;
         }
 
+        var scope = agrid.getScope('promotionRegCtrl');
+        if(scope.useYnCombo.selectedValue !== $("#promotionUseYn").val()){
+            $scope._popMsg(messages["promotion.chk.change.useYn"]); // 기본정보의 '사용여부' 선택값이 바뀌었습니다. </br> '저장'버튼을 눌러 사용여부 먼저 저장 후 진행하세요.
+            return false;
+        }
+
         if(momsEnvstVal === '1') { // [1250 맘스터치] 환경설정값 '사용'인 경우, 맘스터치용 적용매장 추가 팝업 호출
             $scope.promotionMomsStoreRegLayer.show(true);
             $scope._broadcast('promotionMomsStoreRegCtrl');
@@ -2515,6 +2527,12 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
 
         if($scope.storeSelectExceptFgCombo.selectedValue !== $("#hdStoreSelectExceptFg").val()){
             $scope._popMsg(messages["promotion.chk.change.StoreSelectExceptFg"]); // 적용매장의 '매장등록구분' 선택값이 바뀌었습니다. </br> '저장' 버튼을 눌러 변경한 매장등록구분 먼저 저장 후 진행하세요.
+            return false;
+        }
+
+        var scope = agrid.getScope('promotionRegCtrl');
+        if(scope.useYnCombo.selectedValue !== $("#promotionUseYn").val()){
+            $scope._popMsg(messages["promotion.chk.change.useYn"]); // 기본정보의 '사용여부' 선택값이 바뀌었습니다. </br> '저장'버튼을 눌러 사용여부 먼저 저장 후 진행하세요.
             return false;
         }
 
@@ -2577,6 +2595,12 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
 
         if($scope.storeSelectExceptFgCombo.selectedValue !== $("#hdStoreSelectExceptFg").val()){
             $scope._popMsg(messages["promotion.chk.change.StoreSelectExceptFg"]); // 적용매장의 '매장등록구분' 선택값이 바뀌었습니다. </br> '저장' 버튼을 눌러 변경한 매장등록구분 먼저 저장 후 진행하세요.
+            return false;
+        }
+
+        var scope = agrid.getScope('promotionRegCtrl');
+        if(scope.useYnCombo.selectedValue !== $("#promotionUseYn").val()){
+            $scope._popMsg(messages["promotion.chk.change.useYn"]); // 기본정보의 '사용여부' 선택값이 바뀌었습니다. </br> '저장'버튼을 눌러 사용여부 먼저 저장 후 진행하세요.
             return false;
         }
 

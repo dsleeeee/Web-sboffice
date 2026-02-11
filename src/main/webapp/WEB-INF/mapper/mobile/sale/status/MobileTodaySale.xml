@@ -34,7 +34,8 @@
         SUM(ETC_AMT) AS ETC_AMT,
         SUM(DC_AMT) AS DC_AMT,
         SUM(COUPN_DC_AMT) AS COUPN_DC_AMT,
-        SUM(TOTAL_DC_AMT) AS TOTAL_DC_AMT
+        SUM(TOTAL_DC_AMT) AS TOTAL_DC_AMT,
+        SUM(CUP_AMT) AS CUP_AMT
         FROM
         (
             SELECT *
@@ -56,7 +57,8 @@
                 NVL(tsshp.ETC_AMT, 0) AS ETC_AMT,
                 NVL(tsshd.DC_AMT, 0) AS DC_AMT,
                 NVL(tsshd.COUPN_DC_AMT, 0) AS COUPN_DC_AMT,
-                NVL(tsshd.TOTAL_DC_AMT, 0) AS TOTAL_DC_AMT
+                NVL(tsshd.TOTAL_DC_AMT, 0) AS TOTAL_DC_AMT,
+                NVL(tssh.CUP_AMT,0) AS CUP_AMT
                 FROM
                 (
                     SELECT
@@ -68,7 +70,8 @@
                     SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
                     SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+                    SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+                    SUM(tssh.CUP_AMT) AS CUP_AMT
                     FROM TB_SL_SALE_HDR tssh
                     WHERE 1=1
                     AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -161,7 +164,8 @@
                 0 AS ETC_AMT,
                 0 AS DC_AMT,
                 0 AS COUPN_DC_AMT,
-                0 AS TOTAL_DC_AMT
+                0 AS TOTAL_DC_AMT,
+                0 AS CUP_AMT
                 FROM dual
             )
         )

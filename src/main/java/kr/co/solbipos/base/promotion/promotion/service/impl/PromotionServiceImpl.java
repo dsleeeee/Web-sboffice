@@ -127,6 +127,11 @@ public class PromotionServiceImpl implements PromotionService {
 
         }
 
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 패키지 호출
+            String pkgResult = promotionMapper.saveStorePromotionH(promotionVO);
+        }
+
         if(result > 0){
             return promotionCd;
         }else{

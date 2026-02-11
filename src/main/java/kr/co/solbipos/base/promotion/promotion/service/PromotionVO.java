@@ -227,6 +227,9 @@ public class PromotionVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 패키지 호출 실행결과 */
+    private String result;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -982,4 +985,12 @@ public class PromotionVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

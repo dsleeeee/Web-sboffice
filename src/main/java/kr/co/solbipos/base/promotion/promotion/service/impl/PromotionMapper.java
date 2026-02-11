@@ -149,4 +149,7 @@ public interface PromotionMapper {
 
     /** 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회 */
     List<DefaultMap<String>> getMomsStoreList(PromotionVO promotionVO);
+
+    /** 프로모션 매장 등록 패키지 호출 */
+    String saveStorePromotionH(PromotionVO promotionVO);
 }

@@ -155,6 +155,7 @@
                                 control="useYnCombo">
                         </wj-combo-box>
                     </div>
+                    <input type="hidden" id="promotionUseYn"/>
                 </td>
                 <%-- 프로모션 종류 --%>
                 <th><s:message code="promotion.promotionType" /></th>

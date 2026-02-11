@@ -33,6 +33,9 @@
                     FROM    TB_MB_MEMBER_PAID_BALANCE A
                     WHERE   1=1
                     AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    <![CDATA[
+                        AND     (POSTPAID_AMT <> 0 OR POSTPAID_IN_AMT <> 0)
+                    ]]>
                     <if test='storeCd != null and storeCd != ""'>
                         AND A.STORE_CD = #{storeCd}
                     </if>

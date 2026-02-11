@@ -66,6 +66,7 @@ app.controller('mobileTodaySaleTotalCtrl', ['$scope', '$http', '$timeout', funct
                 $("#lblDcAmt").text($scope.mobileTodaySale.dcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblCoupnDcAmt").text($scope.mobileTodaySale.coupnDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $("#lblTotalDcAmt").text($scope.mobileTodaySale.totalDcAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $("#lblCupAmt").text($scope.mobileTodaySale.cupAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
         });
     };
