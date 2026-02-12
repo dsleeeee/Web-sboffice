@@ -47,7 +47,10 @@ public class EnvstRemarkVO extends CmmVO {
     private String envstRemark;
     /**  */
     private String requiredYn;
-    
+    /** 환경설정세부명칭설명 */
+    private String envstDtlRemark;
+    /** 환경설정값코드 */
+    private String envstValCd;
     
     /**
      * @return the envstCd
@@ -202,5 +205,20 @@ public class EnvstRemarkVO extends CmmVO {
     public void setRequiredYn(String requiredYn) {
         this.requiredYn = requiredYn;
     }
-    
+
+    public String getEnvstDtlRemark() {
+        return envstDtlRemark;
+    }
+
+    public void setEnvstDtlRemark(String envstDtlRemark) {
+        this.envstDtlRemark = envstDtlRemark;
+    }
+
+    public String getEnvstValCd() {
+        return envstValCd;
+    }
+
+    public void setEnvstValCd(String envstValCd) {
+        this.envstValCd = envstValCd;
+    }
 }

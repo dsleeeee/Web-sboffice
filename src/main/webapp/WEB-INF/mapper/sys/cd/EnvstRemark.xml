@@ -108,5 +108,37 @@
             ENVST_CD = #{envstCd}
     </update>
 
+    <!-- 환경설정관리 - 세부명칭 조회 -->
+    <!--
+        TABLE    : ENVST_DTL_REMARK
+        PARAM    : envstRemarkVO
+        COMMENTS : 세부명칭 코드 목록을 조회한다.
+    -->
+    <select id="getSearchEnvstDtlInfo" parameterType="envstRemarkVO" resultType="DefaultMap">
+        /* USE : EnvstRemarkMapper.getSearchEnvstDtlInfo */
+        SELECT  A.ENVST_CD
+        ,       A.ENVST_VAL_CD
+        ,       A.ENVST_VAL_NM
+        ,       A.DEFLT_YN
+        ,       A.USE_YN
+        ,       A.ENVST_DTL_REMARK
+        FROM 	TB_CM_ENVST_DTL A
+        WHERE   A.ENVST_CD  =   #{envstCd}
+    </select>
 
+    <!-- 환경설정관리 - 세부명칭설명 저장 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : envstRemarkVO
+        COMMENTS : 세부명칭설명 수정한다.
+    -->
+    <update id="saveEnvstDtlRemark" parameterType="envstRemarkVO">
+        /* USE : EnvstRemarkMapper.saveEnvstDtlRemark */
+        UPDATE  TB_CM_ENVST_DTL
+        SET     ENVST_DTL_REMARK    = #{envstDtlRemark}
+        ,       MOD_DT              = #{modDt}
+        ,       MOD_ID              = #{modId}
+        WHERE   ENVST_CD        =   #{envstCd}
+        AND     ENVST_VAL_CD    =   #{envstValCd}
+    </update>
 </mapper>

@@ -36,4 +36,9 @@ public interface EnvstRemarkMapper {
     /** 대표명칭 코드 수정 */
     int saveEnvstRemark(EnvstRemarkVO envstRemarkVO);
 
+    /** 환경설정관리 - 세부명칭 조회 */
+    List<DefaultMap<String>> getSearchEnvstDtlInfo(EnvstRemarkVO envstRemarkVO);
+
+    /** 환경설정관리 - 세부명칭설명 저장 */
+    int saveEnvstDtlRemark(EnvstRemarkVO envstRemarkVO);
 }

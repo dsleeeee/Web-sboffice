@@ -65,5 +65,22 @@ public class EnvstRemarkServiceImpl implements EnvstRemarkService {
         return envstRemarkMapper.saveEnvstRemark(envstRemarkVO);
     }
 
+    /** 환경설정관리 - 세부명칭 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchEnvstDtlInfo(EnvstRemarkVO envstRemarkVO) {
+        return envstRemarkMapper.getSearchEnvstDtlInfo(envstRemarkVO);
+    }
+
+    /** 환경설정관리 - 세부명칭설명 저장 */
+    @Override
+    public int saveEnvstDtlRemark(EnvstRemarkVO envstRemarkVO, SessionInfoVO sessionInfoVO) {
+        String currentDt = currentDateTimeString();
+
+        envstRemarkVO.setModDt(currentDt);
+        envstRemarkVO.setModId(sessionInfoVO.getUserId());
+
+        return envstRemarkMapper.saveEnvstDtlRemark(envstRemarkVO);
+    }
+
 
 }

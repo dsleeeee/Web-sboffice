@@ -32,4 +32,9 @@ public interface EnvstRemarkService {
     /** 대표명칭 코드 저장 */
     int saveEnvstRemark(EnvstRemarkVO envstRemarkVO, SessionInfoVO sessionInfoVO);
 
+    /** 환경설정관리 - 세부명칭 조회 */
+    List<DefaultMap<String>> getSearchEnvstDtlInfo(EnvstRemarkVO envstRemarkVO);
+
+    /** 환경설정관리 - 세부명칭설명 저장 */
+    int saveEnvstDtlRemark(EnvstRemarkVO envstRemarkVO, SessionInfoVO sessionInfoVO);
 }

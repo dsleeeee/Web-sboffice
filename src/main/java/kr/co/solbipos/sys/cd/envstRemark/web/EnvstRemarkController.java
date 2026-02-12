@@ -116,4 +116,46 @@ public class EnvstRemarkController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 환경설정관리 - 세부명칭 조회
+     * @param   request
+     * @param   response
+     * @param   envstRemarkVO
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2026.02.11
+     */
+    @RequestMapping(value = "/envstRemark/envst/getSearchEnvstDtlInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchEnvstDtlInfo(HttpServletRequest request, HttpServletResponse response,
+                               EnvstRemarkVO envstRemarkVO, Model model) {
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 세부명칭 코드목록 조회
+        list = envstRemarkService.getSearchEnvstDtlInfo(envstRemarkVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, envstRemarkVO);
+
+    }
+
+    /**
+     * 환경설정관리 - 세부명칭설명 저장
+     * @param   request
+     * @param   envstRemarkVO
+     * @return  Result
+     * @author  김유승
+     * @since   2026.02.12
+     */
+    @RequestMapping(value = "/envstRemark/envst/saveEnvstDtlRemark.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveEnvstDtlRemark(@RequestBody EnvstRemarkVO envstRemarkVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = envstRemarkService.saveEnvstDtlRemark(envstRemarkVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

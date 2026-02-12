@@ -80,12 +80,14 @@
 
     <%-- 조회 --%>
     <div class="ml10 mt10 oh">
-      <div class="mt10"><span style="color:#ff0000;"><b><s:message code="systemCd.prefixInfo"/></b></span></div>
-      <div class="mt10"><span><s:message code="systemCd.prefix.0"/></span></div>
-      <div class="mt5"><span><s:message code="systemCd.prefix.1"/></span></div>
-      <div class="mt5"><span><s:message code="systemCd.prefix.2"/></span></div>
-      <div class="mt5"><span><s:message code="systemCd.prefix.3"/></span></div>
-      <div class="mt5"><span><s:message code="systemCd.prefix.4"/></span></div>
+      <div class="mt10 s14"><span style="color:#ff0000;"><b><s:message code="systemCd.prefixInfo"/></b></span></div>
+      <div class="mt10 s12">
+        <span><s:message code="systemCd.prefix.0"/></span>
+        <span><s:message code="systemCd.prefix.1"/></span>
+        <span><s:message code="systemCd.prefix.2"/></span>
+        <span><s:message code="systemCd.prefix.3"/></span>
+        <span><s:message code="systemCd.prefix.4"/></span>
+      </div>
     </div>
 
     <div id="gridRepresent" class="w60 fl mt10" style="width: 60%" ng-controller="representCtrl">
@@ -93,6 +95,10 @@
       <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='systemCd.grpGridNm' /></span>
+          <%-- 엑셀 다운로드 --%>
+          <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
+          </button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -156,6 +162,75 @@
     <%--//위즈모 테이블--%>
   </div>
 
+  <div class="subCon">
+    <div id="gridRepresentDtl" class="w60 fl mt10" style="width: 60%" ng-controller="representDtlCtrl">
+      <%--위즈모 테이블--%>
+      <div class="wj-TblWrapBr mr10 pd10 mb20" style="height: 380px;">
+        <div class="updownSet oh mb10">
+          <span class="fl bk lh30"><s:message code='envstRemark.envstDtlGrid' /></span>
+          <%-- 엑셀 다운로드 --%>
+          <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
+            <s:message code="cmm.excel.down" />
+          </button>
+        </div>
+        <%-- 개발시 높이 조절해서 사용--%>
+        <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+        <div class="wj-gridWrap" style="height:270px">
+          <div class="row">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    beginning-edit="changeEnvstFg(s,e)"
+                    ime-enabled="true">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.envstCd"/>"         binding="envstCd"         width="70"  align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.envstValCd"/>"      binding="envstValCd"      width="70"  align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.envstValNm"/>"      binding="envstValNm"      width="130" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.defltYn"/>"         binding="defltYn"         width="80"  align="center" data-map="defltYnDataMap" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.useYn"/>"           binding="useYn"           width="80"  align="center" data-map="useYnDataMap" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envstRemark.envstDtlRemark"/>"  binding="envstDtlRemark"  width="200" is-read-only="true" ></wj-flex-grid-column>
+
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="representDtlCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+          </div>
+        </div>
+      </div>
+      <%--//위즈모 테이블--%>
+    </div>
+  </div>
+
+  <div id="gridDetailDtl" class="w40 fr mt10" style="width: 40%" ng-controller="envstDtlRemarkCtrl">
+    <%--위즈모 테이블--%>
+    <div class="wj-TblWrapBr pd10 mb20" style="height: 380px;">
+      <div class="updownSet oh mb10">
+        <span class="fl bk lh30"><s:message code='envstRemark.envstDtlRemarkGrid' /></span>
+        <button class="btn_skyblue" id="btnSaveDetailDtl" style="display: none;" ng-click="dtlSave()">
+          <s:message code="cmm.save" />
+        </button>
+        <input type="text" id="envstDtlCd" ng-model="envstDtlCd" style="display: none">
+      </div>
+      <%-- 개발시 높이 조절해서 사용--%>
+      <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+      <div class="wj-gridWrap" style="height:270px;">
+        <textarea id="envstDtlRemark"  class="w100" cols="42" style="height:200px;resize: none;" ng-model="envstDtlRemark"></textarea>
+      </div>
+
+    </div>
+  </div>
+  <%--//위즈모 테이블--%>
+  </div>
+
 </div>
 
 <script type="text/javascript">
@@ -164,4 +239,4 @@ var envstGrpCdNm = ${envstGrpList};
 var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envstRemark/envstRemark.js?ver=20230303.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envstRemark/envstRemark.js?ver=20260212.01" charset="utf-8"></script>
