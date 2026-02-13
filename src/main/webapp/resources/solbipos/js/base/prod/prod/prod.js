@@ -123,6 +123,13 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         }
     }
   }
+
+  $(document).ready(function () {
+    if (hqOfficeCd !== 'H0393') {
+      $("#dlvrProdFgTh").css("display", "");
+      $("#dlvrProdFgTd").css("display", "");
+    }
+  });
   // $scope.btnShowFg = false; // 본사, 매장 모두 신규상품등록 가능하게 주석
   // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
   //   || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
