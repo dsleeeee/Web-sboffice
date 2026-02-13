@@ -70,6 +70,18 @@
                 <if test="orgProdFg != null and orgProdFg != ''">
                     AND	thpi.ORG_PROD_FG = #{orgProdFg}
                 </if>
+                <choose>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("Y")'>
+                        AND	thpi.ORG_PROD_FG = '30'
+                    </when>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("N")'>
+                        <![CDATA[
+                            AND	(thpi.ORG_PROD_FG <> '30' or thpi.ORG_PROD_FG IS NULL)
+                        ]]>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -162,6 +174,18 @@
                 <if test="orgProdFg != null and orgProdFg != ''">
                     AND	tmpi.ORG_PROD_FG = #{orgProdFg}
                 </if>
+                <choose>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("Y")'>
+                        AND	tmpi.ORG_PROD_FG = '30'
+                    </when>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("N")'>
+                        <![CDATA[
+                            AND	(tmpi.ORG_PROD_FG <> '30' or tmpi.ORG_PROD_FG IS NULL)
+                        ]]>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -265,6 +289,9 @@
                 LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
                     thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                     AND thpb.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
+                    thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpi.PROD_CD = thp.PROD_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -274,6 +301,21 @@
                         ]]>
                     </if>
                 </if>
+                <if test="orgProdFg != null and orgProdFg != ''">
+                    AND	thpi.ORG_PROD_FG = #{orgProdFg}
+                </if>
+                <choose>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("Y")'>
+                        AND	thpi.ORG_PROD_FG = '30'
+                    </when>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("N")'>
+                        <![CDATA[
+                            AND	(thpi.ORG_PROD_FG <> '30' or thpi.ORG_PROD_FG IS NULL)
+                        ]]>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
                 <if test="prodCd != null and prodCd != ''">
                     AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
@@ -341,6 +383,9 @@
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
                     tmpb.STORE_CD = tmp.STORE_CD
                     AND tmpb.PROD_CD = tmp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
+                    tmpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND tmpi.PROD_CD = thp.PROD_CD
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -350,6 +395,21 @@
                         ]]>
                     </if>
                 </if>
+                <if test="orgProdFg != null and orgProdFg != ''">
+                    AND	tmpi.ORG_PROD_FG = #{orgProdFg}
+                </if>
+                <choose>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("Y")'>
+                        AND	tmpi.ORG_PROD_FG = '30'
+                    </when>
+                    <when test='dlvrProdFg != null and dlvrProdFg.equals("N")'>
+                        <![CDATA[
+                            AND	(tmpi.ORG_PROD_FG <> '30' or tmpi.ORG_PROD_FG IS NULL)
+                        ]]>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
                 <if test="prodCd != null and prodCd != ''">
                     AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>

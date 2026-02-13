@@ -67,6 +67,14 @@ var vatIncldYnComboData = [
   {"name": "포함", "value": "Y"},
   {"name": "별도", "value": "N"}
 ];
+
+// 배달상품여부
+var dlvrProdFgComboData = [
+  {"name": "전체", "value": ""},
+  {"name": "사용", "value": "Y"},
+  {"name": "미사용", "value": "N"}
+];
+
 /* 상품상세 필수 END */
 
 /**
@@ -176,6 +184,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
   // 상품브랜드
   $scope._setComboData("srchProdHqBrand", userHqBrandCdComboList);
+  // 배달상품여부
+  $scope._setComboData('dlvrProdFgCombo', dlvrProdFgComboData);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -553,6 +563,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.prodClassCd = $("#prodProdClassMCd").val();
     params.barCd = $scope.barCd;
     params.useYn = $scope.useYn;
+    params.dlvrProdFg  = $scope.dlvrProdFg;
     //params.hqBrandNm = $scope.hqBrandNm;
 
     if(brandUseFg === "1" && orgnFg === "HQ"){

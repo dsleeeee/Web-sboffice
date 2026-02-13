@@ -97,6 +97,22 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <%-- 배달상품여부 --%>
+            <th><s:message code="prod.dlvrProdFg"/></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="dlvrProdFg"
+                            ng-model="dlvrProdFg"
+                            control="dlvrProdFgCombo"
+                            items-source="_getComboData('dlvrProdFgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
             <%-- 브랜드 --%>
             <%--<c:if test="${brandUseFg == '1'}">
                 <th><s:message code="prod.brandNm" /></th>
@@ -106,12 +122,10 @@
                 <th></th>
                 <td></td>
             </c:if>--%>
-            <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
-                <th></th>
-                <td></td>
-            </c:if>
-            <c:if test="${brandUseFg == '1'}">
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        </tr>
+        <c:if test="${brandUseFg == '1'}">
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <tr>
                     <%-- 상품브랜드 --%>
                     <th><s:message code="prod.prodHqBrand"/></th>
                     <td>
@@ -126,9 +140,9 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                </c:if>
+                </tr>
             </c:if>
-        </tr>
+        </c:if>
         </tbody>
     </table>
     <%--//searchTbl--%>
@@ -348,7 +362,7 @@
     var urlProdFg = "${urlProdFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20260203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20260213.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

@@ -144,6 +144,9 @@ public class ProdVO extends PageVO {
     /** 상품 등록 주체 구분 */
     private OrgnFg regOrgnFg;
 
+    /** 배달상품여부 */
+    private String dlvrProdFg;
+
     /**
      * workMode<br>
      * 1 : 상품정보수정<br>
@@ -2149,5 +2152,13 @@ public class ProdVO extends PageVO {
 
     public void setSelectFg(boolean selectFg) {
         this.selectFg = selectFg;
+    }
+
+    public String getDlvrProdFg() {
+        return dlvrProdFg;
+    }
+
+    public void setDlvrProdFg(String dlvrProdFg) {
+        this.dlvrProdFg = dlvrProdFg;
     }
 }
