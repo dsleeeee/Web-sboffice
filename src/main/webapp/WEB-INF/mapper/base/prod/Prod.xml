@@ -384,8 +384,8 @@
                     tmpb.STORE_CD = tmp.STORE_CD
                     AND tmpb.PROD_CD = tmp.PROD_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
-                    tmpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                    AND tmpi.PROD_CD = thp.PROD_CD
+                    tmpi.STORE_CD = tmp.STORE_CD
+                    AND tmpi.PROD_CD = tmp.PROD_CD
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
