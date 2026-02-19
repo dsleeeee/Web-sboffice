@@ -159,7 +159,7 @@
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
                         <if test='storeCdQuery != null and storeCdQuery != ""'>
-                            AND tsdp.STORE_CD IN (${storeCdQuery})
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
                         </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
