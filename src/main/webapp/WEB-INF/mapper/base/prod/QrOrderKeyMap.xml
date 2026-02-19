@@ -459,8 +459,8 @@
     -->
     <select id="getApiEnvNm" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
         /* USE : QrOrderKeyMapMapper.getApiEnvNm */
-        SELECT  FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL', 'API_URL')         AS API_URL
-        ,       FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL', 'ACCESS_TOKEN')    AS ACCESS_TOKEN
+        SELECT  FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL_WEB', 'API_URL')         AS API_URL
+        ,       FN_GET_API_URL(#{storeCd}, 'KCP_QR_URL_WEB', 'ACCESS_TOKEN')    AS ACCESS_TOKEN
         FROM    DUAL
     </select>
 
