@@ -11,25 +11,69 @@
 -->
 <mapper namespace="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.impl.NaverPlaceLinkMapper">
 
+    <!-- 네이버 로그인 state 값 저장 -->
+    <!--
+        TABLE    : TB_TMP_NAVER_STATE
+        PARAM    : naverPlaceLinkVO
+        COMMENTS : 네이버 로그인 state 값을 저장한다.
+    -->
+    <insert id="saveNaverState" parameterType="naverPlaceLinkVO">
+        /* NaverPlaceLinkMapper.saveNaverState */
+        INSERT INTO TB_TMP_NAVER_STATE
+        (
+            HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   USER_ID
+        ,   STATE
+        ,   REG_DT
+        ,   REG_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{userId}
+        ,   #{state}
+        ,   #{regDt}
+        ,   #{regId}
+        )
+    </insert>
+
+    <!-- 네이버 로그인 state 값으로 기존 세션정보 조회 -->
+    <!--
+        TABLE    : TB_TMP_NAVER_STATE
+        PARAM    : naverPlaceApiVO
+        COMMENTS : 네이버 로그인 state 값으로 기존 세션정보를 조회한다.
+    -->
+    <select id="getNaverState" parameterType="naverPlaceApiVO" resultType="DefaultMap">
+        /* NaverPlaceLinkMapper.getNaverState */
+        SELECT  HQ_OFFICE_CD
+        ,       STORE_CD
+        ,       USER_ID
+        ,       STATE
+        FROM    TB_TMP_NAVER_STATE
+        WHERE   STATE = #{state}
+    </select>
+
     <!-- 네.아.로 Unique ID 저장 -->
     <!--
-        TABLE    :
+        TABLE    : TB_CM_NAVER_LINK
         PARAM    : naverPlaceLinkVO
         COMMENTS : 네.아.로 Unique ID를 저장한다.
     -->
     <update id="saveNaverUniqueId" parameterType="naverPlaceLinkVO">
         /* NaverPlaceLinkMapper.saveNaverUniqueId */
-        MERGE INTO TB_CM_NAVER_LINK
+        MERGE INTO TB_CM_NAVER_LINK A
         USING DUAL
         ON (
-            HQ_OFFICE_CD = #{hqOfficeCd}
-            AND STORE_CD = #{storeCd}
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.STORE_CD     = #{storeCd}
         )
         WHEN MATCHED THEN
         UPDATE
            SET A.UNIQUE_ID = #{uniqueId},
                A.LAST_RESPONSE_DT = #{lastResponseDt},
-               A.EMAIL_ADDR = #{emailAddr},
+               A.MP_NO = #{mpNo},
                A.ETC01 = #{etc01},
                A.ETC02 = #{etc02},
                A.ETC03 = #{etc03},
@@ -48,7 +92,7 @@
             A.STORE_CD,
             A.UNIQUE_ID,
             A.LAST_RESPONSE_DT,
-            A.EMAIL_ADDR,
+            A.MP_NO,
             A.ETC01,
             A.ETC02,
             A.ETC03,
@@ -69,7 +113,7 @@
             #{storeCd},
             #{uniqueId},
             #{lastResponseDt},
-            #{emailAddr},
+            #{mpNo},
             #{etc01},
             #{etc02},
             #{etc03},
@@ -87,19 +131,33 @@
         )
     </update>
 
+    <!-- 네.아.로 Unique ID 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverPlaceLinkVO
+        COMMENTS : 네.아.로 Unique ID를 저장한다.
+    -->
+    <select id="getNaverUniqueId" parameterType="naverPlaceLinkVO" resultType="String">
+         /* NaverPlaceLinkMapper.getNaverUniqueId */
+        SELECT  UNIQUE_ID
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </select>
+
     <!-- 네이버 동의여부 저장 -->
     <!--
-        TABLE    :
+        TABLE    : TB_CM_NAVER_LINK_AGREEMENT
         PARAM    : naverPlaceLinkVO
         COMMENTS : 네이버 동의여부를 저장한다.
     -->
     <update id="saveNaverAgreement" parameterType="naverPlaceLinkVO">
         /* NaverPlaceLinkMapper.saveNaverAgreement */
-        MERGE INTO TB_CM_NAVER_LINK_AGREEMENT
+        MERGE INTO TB_CM_NAVER_LINK_AGREEMENT A
         USING DUAL
         ON (
-            HQ_OFFICE_CD = #{hqOfficeCd}
-            AND STORE_CD = #{storeCd}
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.STORE_CD = #{storeCd}
         )
         WHEN MATCHED THEN
         UPDATE

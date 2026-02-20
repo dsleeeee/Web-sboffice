@@ -1418,6 +1418,7 @@
     <typeAlias alias="orderkitRecpOriginVO" type="kr.co.solbipos.orderkit.orderkit.orderkitRecpOrigin.service.OrderkitRecpOriginVO"/>
     <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 연동 -->
     <typeAlias alias="naverPlaceLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO"/>
+    <typeAlias alias="naverPlaceApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

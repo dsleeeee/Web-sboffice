@@ -2,6 +2,7 @@ package kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service;
 
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,51 +24,72 @@ public interface NaverPlaceLinkService {
 
     /**
      * 인증 API Access Token 조회
+     *
+     * @return
+     */
+    Map<String, Object> getAccessToken();
+
+    /**
+     * 네이버 로그인 state 값 저장
+     *
      * @param naverPlaceLinkVO
      * @return
      */
-    Map<String, Object> getAccessToken(NaverPlaceLinkVO naverPlaceLinkVO);
+    int saveNaverState(NaverPlaceLinkVO naverPlaceLinkVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 네이버 로그인 성공 후, 네.아.로 Unique ID 저장
-     * @param naverPlaceLinkVO
-     * @param sessionInfoVO
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    int saveNaverUniqueId(NaverPlaceLinkVO naverPlaceLinkVO, SessionInfoVO sessionInfoVO);
+    int saveNaverUniqueId(NaverPlaceApiVO naverPlaceApiVO);
 
     /**
      * 동의여부확인 API 호출
-     * @param naverPlaceLinkVO
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    Map<String, Object> getAgreeYn(NaverPlaceLinkVO naverPlaceLinkVO);
+    Map<String, Object> getAgreeYn(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 업체목록조회 API 호출
-     * @param naverPlaceLinkVO
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    Map<String, Object> getPlaceList(NaverPlaceLinkVO naverPlaceLinkVO);
+    List<Map<String, Object>> getPlaceList(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 업체 수정/등록 API 호출
-     * @param naverPlaceLinkVO
+     * 업체 등록/수정 API 호출
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    Map<String, Object> savePlace(NaverPlaceLinkVO naverPlaceLinkVO);
+    Map<String, Object> savePlace(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 연동 추가 API
-     * @param naverPlaceLinkVO
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    Map<String, Object> mappingPlace(NaverPlaceLinkVO naverPlaceLinkVO);
+    Map<String, Object> mappingPlace(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 연동 해지 API
-     * @param naverPlaceLinkVO
+     *
+     * @param naverPlaceApiVO
      * @return
      */
-    Map<String, Object> unMappingPlace(NaverPlaceLinkVO naverPlaceLinkVO);
+    Map<String, Object> unMappingPlace(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
+
+    /** 업종 조회 API
+     *
+     * @param naverPlaceApiVO
+     * @param sessionInfoVO
+     * @return
+     */
+    List<Map<String, Object>> getBusinessCategory(NaverPlaceApiVO naverPlaceApiVO, SessionInfoVO sessionInfoVO);
 }

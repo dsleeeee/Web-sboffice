@@ -5,6 +5,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkService;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO;
 import org.slf4j.Logger;
@@ -12,16 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
-
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name  : NaverPlaceLinkController.java
@@ -72,43 +72,70 @@ public class NaverPlaceLinkController {
     /**
      * 인증 API Access Token 조회
      *
-     * @param naverPlaceLinkVO
      * @param request
      * @param response
      * @param model
      * @return
+     * @author 이다솜
+     * @since 2021.04.01
      */
     @RequestMapping(value = "/getAccessToken.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getAccessToken(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
+    public Result getAccessToken(HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.getAccessToken(naverPlaceLinkVO);
+        Map<String, Object> resultMap = naverPlaceLinkService.getAccessToken();
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
 
     /**
-     * 네이버 로그인 성공 후, 네.아.로 Unique ID 저장
+     * 네이버 로그인 state 값 저장
+     *
      * @param naverPlaceLinkVO
+     * @param request
+     * @param response
+     * @param model
      * @return
+     * @author 이다솜
+     * @since 2026.02.06
      */
-    @GetMapping(value = "/saveNaverUniqueId")
+    @RequestMapping(value = "/saveNaverState.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveNaverUniqueId(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
+    public Result saveNaverState(@RequestBody NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = naverPlaceLinkService.saveNaverUniqueId(naverPlaceLinkVO, sessionInfoVO);
+        int result = naverPlaceLinkService.saveNaverState(naverPlaceLinkVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, result);
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 네이버 로그인 성공 후, 네.아.로 Unique ID 저장
+     *
+     * @param
+     * @return
+     * @author 이다솜
+     * @since 2026.02.06
+     */
+    @RequestMapping(value = "/saveNaverUniqueId.sb", method = RequestMethod.GET)
+    public String viewPop(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        NaverPlaceApiVO naverPlaceApiVO = new NaverPlaceApiVO();
+        naverPlaceApiVO.setCode(request.getParameter("code"));
+        naverPlaceApiVO.setState(request.getParameter("state"));
+
+        int result = naverPlaceLinkService.saveNaverUniqueId(naverPlaceApiVO);
+
+        return "naverPlace/naverPlace/naverPlaceLink/naverPlacePop";
     }
 
     /**
      * 동의여부확인 API 호출
      *
-     * @param naverPlaceLinkVO
+     * @param naverPlaceApiVO
      * @param request
      * @param response
      * @param model
@@ -116,10 +143,12 @@ public class NaverPlaceLinkController {
      */
     @RequestMapping(value = "/getAgreeYn.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getAgreeYn(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
+    public Result getAgreeYn(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
                              HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.getAgreeYn(naverPlaceLinkVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> resultMap = naverPlaceLinkService.getAgreeYn(naverPlaceApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -127,7 +156,7 @@ public class NaverPlaceLinkController {
     /**
      * 업체목록조회 API 호출
      *
-     * @param naverPlaceLinkVO
+     * @param naverPlaceApiVO
      * @param request
      * @param response
      * @param model
@@ -135,18 +164,20 @@ public class NaverPlaceLinkController {
      */
     @RequestMapping(value = "/getPlaceList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getPlaceList(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
+    public Result getPlaceList(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.getPlaceList(naverPlaceLinkVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<Map<String, Object>> resultMap = naverPlaceLinkService.getPlaceList(naverPlaceApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
 
     /**
-     * 업체 수정/등록 API 호출
+     * 업체 등록/수정 API 호출
      *
-     * @param naverPlaceLinkVO
+     * @param naverPlaceApiVO
      * @param request
      * @param response
      * @param model
@@ -154,10 +185,12 @@ public class NaverPlaceLinkController {
      */
     @RequestMapping(value = "/savePlace.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result savePlace(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
-                                HttpServletResponse response, Model model) {
+    public Result savePlace(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.savePlace(naverPlaceLinkVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> resultMap = naverPlaceLinkService.savePlace(naverPlaceApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -165,7 +198,7 @@ public class NaverPlaceLinkController {
     /**
      * 연동 추가 API
      *
-     * @param naverPlaceLinkVO
+     * @param naverPlaceApiVO
      * @param request
      * @param response
      * @param model
@@ -173,10 +206,12 @@ public class NaverPlaceLinkController {
      */
     @RequestMapping(value = "/mappingPlace.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result mappingPlace(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
+    public Result mappingPlace(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.mappingPlace(naverPlaceLinkVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> resultMap = naverPlaceLinkService.mappingPlace(naverPlaceApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -184,7 +219,7 @@ public class NaverPlaceLinkController {
     /**
      * 연동 해지 API
      *
-     * @param naverPlaceLinkVO
+     * @param naverPlaceApiVO
      * @param request
      * @param response
      * @param model
@@ -192,11 +227,49 @@ public class NaverPlaceLinkController {
      */
     @RequestMapping(value = "/unMappingPlace.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result unMappingPlace(NaverPlaceLinkVO naverPlaceLinkVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+    public Result unMappingPlace(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlaceLinkService.unMappingPlace(naverPlaceLinkVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> resultMap = naverPlaceLinkService.unMappingPlace(naverPlaceApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
+
+    /**
+     * 업종 조회 API
+     *
+     * @param naverPlaceApiVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getBusinessCategory.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBusinessCategory(NaverPlaceApiVO naverPlaceApiVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<Map<String, Object>> resultMap = naverPlaceLinkService.getBusinessCategory(naverPlaceApiVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 팝업창 닫기용 화면
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/viewPop2.sb", method = RequestMethod.GET)
+    public String viewPop2(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "naverPlace/naverPlace/naverPlaceLink/naverPlacePop";
+    }
+
 }

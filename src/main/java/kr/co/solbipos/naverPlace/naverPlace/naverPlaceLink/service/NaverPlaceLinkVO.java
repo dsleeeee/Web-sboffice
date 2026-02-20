@@ -1,5 +1,7 @@
 package kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service;
 
+import kr.co.solbipos.application.common.service.PageVO;
+
 /**
  * @Class Name  : NaverPlaceLinkVO.java
  * @Description : 네이버플레이스 > 네이버플레이스 > 네이버플레이스 연동
@@ -15,52 +17,46 @@ package kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service;
  *
  *  Copyright (C) by LYNK CORP. All right reserved.
  */
-public class NaverPlaceLinkVO {
+public class NaverPlaceLinkVO extends PageVO {
 
     private static final long serialVersionUID = 6356311704414395872L;
 
+    /** 본사코드 */
     private String hqOfficeCd;
+    /** 매장코드 */
     private String storeCd;
-    private String code;
-    private String state;
-    private String projections;
+    /** 네이버 UNIQUE Id*/
     private String uniqueId;
-    private String accessToken;
-    private String page;
-
-    private String businessName;
-    private String phone;
-    private String address;
-    private String categoryId;
-    private String brandCategoryId;
-    private String registrationNumber;
-    private String placeId;
-    private String bizDays;
-    private String registrationCertificate;
-
+    /** 최종응답시간 */
     private String lastResponseDt;
-    private String emailAddr;
+    /** 이메일 주소 */
+    private String mpNo;
+    /** 동의목록 */
     private String agreementType;
+    /** etc01 */
     private String etc01;
+    /** etc02 */
     private String etc02;
+    /** etc03 */
     private String etc03;
+    /** etc04 */
     private String etc04;
+    /** etc05 */
     private String etc05;
+    /** etc06 */
     private String etc06;
+    /** etc07 */
     private String etc07;
+    /** etc08 */
     private String etc08;
+    /** etc09 */
     private String etc09;
+    /** etc10 */
     private String etc10;
-
-
-    /** 등록 일시 */
-    private String regDt;
-    /** 등록 아이디 */
-    private String regId;
-    /** 수정 일시 */
-    private String modDt;
-    /** 수정 아이디 */
-    private String modId;
+    /** 네이버로그인후 기존세션 확인을 위한 임의값 */
+    private String state;
+    /** 사용자아이디 */
+    private String userId;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -78,124 +74,12 @@ public class NaverPlaceLinkVO {
         this.storeCd = storeCd;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getProjections() {
-        return projections;
-    }
-
-    public void setProjections(String projections) {
-        this.projections = projections;
-    }
-
     public String getUniqueId() {
         return uniqueId;
     }
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
-    }
-
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getBrandCategoryId() {
-        return brandCategoryId;
-    }
-
-    public void setBrandCategoryId(String brandCategoryId) {
-        this.brandCategoryId = brandCategoryId;
-    }
-
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
-    public String getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-
-    public String getBizDays() {
-        return bizDays;
-    }
-
-    public void setBizDays(String bizDays) {
-        this.bizDays = bizDays;
-    }
-
-    public String getRegistrationCertificate() {
-        return registrationCertificate;
-    }
-
-    public void setRegistrationCertificate(String registrationCertificate) {
-        this.registrationCertificate = registrationCertificate;
     }
 
     public String getLastResponseDt() {
@@ -206,12 +90,12 @@ public class NaverPlaceLinkVO {
         this.lastResponseDt = lastResponseDt;
     }
 
-    public String getEmailAddr() {
-        return emailAddr;
+    public String getMpNo() {
+        return mpNo;
     }
 
-    public void setEmailAddr(String emailAddr) {
-        this.emailAddr = emailAddr;
+    public void setMpNo(String mpNo) {
+        this.mpNo = mpNo;
     }
 
     public String getAgreementType() {
@@ -302,35 +186,19 @@ public class NaverPlaceLinkVO {
         this.etc10 = etc10;
     }
 
-    public String getRegDt() {
-        return regDt;
+    public String getState() {
+        return state;
     }
 
-    public void setRegDt(String regDt) {
-        this.regDt = regDt;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public String getRegId() {
-        return regId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setRegId(String regId) {
-        this.regId = regId;
-    }
-
-    public String getModDt() {
-        return modDt;
-    }
-
-    public void setModDt(String modDt) {
-        this.modDt = modDt;
-    }
-
-    public String getModId() {
-        return modId;
-    }
-
-    public void setModId(String modId) {
-        this.modId = modId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -12,7 +12,7 @@
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <button class="btn01 first01" id="btn2" onclick="naverLoginPopup();">네이버 로그인</button>
+        <button class="btn01 first01" id="btn2" ng-click="btn2();">네이버 로그인</button>
     </div>
 
     <div style="margin-top:10px; text-align:center;">
@@ -20,7 +20,7 @@
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <button class="btn01 first01" id="btn4" onclick="naverTermsPopup();">동의여부화면 호출</button>
+        <button class="btn01 first01" id="btn4" ng-click="btn4();">동의화면 호출</button>
     </div>
 
     <div style="margin-top:10px; text-align:center;">
@@ -28,11 +28,11 @@
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <button class="btn01 first01" id="btn6" onclick="naverChgOwnerPopup();">플레이스 주인권한 변경 화면 호출</button>
+        <button class="btn01 first01" id="btn6" ng-click="btn6();">플레이스 주인권한 변경 화면 호출</button>
     </div>
 
     <div style="margin-top:10px; text-align:center;">
-        <button class="btn01 first01" id="btn7" ng-click="btn7();">업체 수정/등록 API 호출</button>
+        <button class="btn01 first01" id="btn7" ng-click="btn7();">업체 등록/수정 API 호출</button>
     </div>
 
     <div style="margin-top:10px; text-align:center;">
@@ -43,25 +43,14 @@
         <button class="btn01 first01" id="btn9" ng-click="btn9();">연동 해지 API</button>
     </div>
 
-
+    <div style="margin-top:10px; text-align:center;">
+        <button class="btn01 first01" id="btn10" ng-click="btn10();">업종 조회 API</button>
+    </div>
 </div>
 
 <script type="text/javascript">
 
-    // 네이버 로그인 팝업창
-    function naverLoginPopup() {
-        var clientId = "7GIne8NXVpOnxoKv9ecI";      // 발급받은 clientId
-        var redirectUrl = "http://" + window.location.host + "/NaverLoginCallback";
-        //var redirectUrl = "http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/saveNaverUniqueId.sb";
-        var popupUrl = 'https://nid.naver.com/oauth2.0/authorize?' +
-            'response_type=code' +                  // 인증과정에 대한 내부 구분값 code 로 전공 (고정값)
-            '&client_id=' + clientId +
-            '&state=' + generateState() +           // CORS를 방지하기 위한 특정 토큰값 (임의값 사용)
-            '&redirect_uri=' + redirectUrl;   // 어플케이션에서 등록했던 CallBack URL를 입력
-
-        window.open(popupUrl, "popup", "width=600, height=1000");
-    }
-
+    // state 값 생성 (네이버로그인후 기존세션 확인을 위한 임의값)
     function generateState() {
         const bytes = new Uint8Array(16);
         crypto.getRandomValues(bytes);
@@ -69,24 +58,9 @@
         const base64 = btoa(String.fromCharCode(...bytes));
         return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     }
-
-    // 네이버 동의여부화면 호출
-    function naverTermsPopup() {
-        var redirectUrl = "http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/view.sb";
-        var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=lynk_pos&to=" + redirectUrl;
-        window.open(popupUrl, "popup", "width=600, height=1000");
-    }
-
-    // 플레이스 주인권한 변경
-    function naverChgOwnerPopup() {
-        var redirectUrl = "http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/view.sb";
-        var popupUrl = "https://new.smartplace.naver.com/bizes/lookup?to=" + encodeURIComponent(redirectUrl);
-        window.open(popupUrl, "popup", "width=600, height=1000");
-    }
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlaceLink/naverPlaceLink.js?ver=20260126.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlaceLink/naverPlaceLink.js?ver=20260220.01" charset="utf-8"></script>
 
 <style>
     /* 단순버튼 01 */
