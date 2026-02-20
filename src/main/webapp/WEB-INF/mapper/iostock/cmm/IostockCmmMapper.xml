@@ -344,6 +344,8 @@
                 ,       thv.USE_YN
                 FROM    TB_HQ_VENDOR thv
                 WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                ORDER
+                BY      thv.VENDR_CD
                 ]]>
             </when>
             <!-- 가맹점 -->
@@ -354,6 +356,8 @@
                 ,       tmv.USE_YN
                 FROM    TB_MS_VENDOR tmv
                 WHERE   tmv.STORE_CD  = #{storeCd}
+                ORDER
+                BY      tmv.VENDR_CD
                 ]]>
             </when>
         </choose>

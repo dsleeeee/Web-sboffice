@@ -111,8 +111,9 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 				
 				s.columnHeaders.setCellData(i, "outTotQty"   , messages["outstockConfm.dtl.outUnitQty"      ] );      
 				s.columnHeaders.setCellData(i, "outAmt"      , messages["outstockConfm.dtl.outAmt"         ] );      
-				s.columnHeaders.setCellData(i, "outVat"      , messages["outstockConfm.dtl.outVat"         ] );      
-				s.columnHeaders.setCellData(i, "outTot"      , messages["outstockConfm.dtl.outTot"         ] );      
+				s.columnHeaders.setCellData(i, "outVat"      , messages["outstockConfm.dtl.outVat"         ] );
+                s.columnHeaders.setCellData(i, "totQty"      , messages["outstockConfm.dtl.totQty"         ] );
+                s.columnHeaders.setCellData(i, "outTot"      , messages["outstockConfm.dtl.outTot"         ] );
 				s.columnHeaders.setCellData(i, "remark"     , messages["outstockConfm.dtl.remark"        ] );      
 				s.columnHeaders.setCellData(i, "vatFg01"    , messages["outstockConfm.dtl.vatFg"         ] );      
 			}
@@ -176,6 +177,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    item.outAmt    = outAmt; // 금액
 	    item.outVat    = outVat; // VAT
 	    item.outTot    = outTot; // 합계
+        item.totQty    = totQty; // 합계수량
 	  };
   //$scope.calcAmt		--------------------------------------------------------------------------------------------------------------------------  
 

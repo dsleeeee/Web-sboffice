@@ -180,6 +180,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     item.mgrAmt    = mgrAmt; // 금액
     item.mgrVat    = mgrVat; // VAT
     item.mgrTot    = mgrTot; // 합계
+    item.totQty    = totQty; // 합계수량
   };
 
 //  $scope.calcAmt = function (item, idx) {

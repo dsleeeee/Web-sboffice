@@ -143,6 +143,6 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/days.js?ver=20240805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/days.js?ver=20260213.01" charset="utf-8"></script>
 
 

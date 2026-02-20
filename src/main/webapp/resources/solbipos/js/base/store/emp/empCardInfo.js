@@ -108,127 +108,130 @@ app.controller('empCardInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 저장 전 값 체크
     $scope.saveChkRow = function() {
 
-        // 사원카드번호 필수입력 체크
-        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
-            if( $scope.flex.collectionView.items[i].employeeCardNo === null  || $scope.flex.collectionView.items[i].employeeCardNo === '') {
-                $scope._popMsg(messages['empCardInfo.saveEmpCard.chk.msg']); // 사원카드번호를 입력해주세요.
-                return;
-            }
-        }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
 
-        var strEmpCardNo = ""; // 사원카드번호 중복체크를 위함.
-
-        // 데이터 자릿수 체크
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if(nvl($scope.flex.collectionView.itemsEdited[i].employeeCardNo, '').getByteLengthForOracle() > 30){
-                // 사원카드번호는 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empCardNo'] + "는 " + messages["cmm.max30Chk"] + "<br>(사원카드번호 : " + $scope.flex.collectionView.itemsEdited[i].employeeCardNo + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsEdited[i].employeeNo, '').getByteLengthForOracle() > 50){
-                // 사원번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(사원번호 : " + $scope.flex.collectionView.itemsEdited[i].employeeNo + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsEdited[i].employeeNm, '').getByteLengthForOracle() > 100){
-                // 사원이름은 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empNm'] + "은 " + messages["cmm.max100Chk"] + "<br>(사원이름 : " + $scope.flex.collectionView.itemsEdited[i].employeeNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsEdited[i].divNm, '').getByteLengthForOracle() > 60){
-                // 소속명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.divNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(소속명 : " + $scope.flex.collectionView.itemsEdited[i].divNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsEdited[i].deptNm, '').getByteLengthForOracle() > 60){
-                // 부서명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.deptNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(부서명 : " + $scope.flex.collectionView.itemsEdited[i].deptNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsEdited[i].positionNm, '').getByteLengthForOracle() > 30){
-                // 직위명은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.positionNm'] + "은 " + messages["cmm.max30Chk"] + "<br>(직위명 : " + $scope.flex.collectionView.itemsEdited[i].positionNm + ")");
-                return;
-            }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if(nvl($scope.flex.collectionView.itemsAdded[i].employeeCardNo, '').getByteLengthForOracle() > 30){
-                // 사원카드번호는 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empCardNo'] + "는 " + messages["cmm.max30Chk"] + "<br>(사원카드번호 : " + $scope.flex.collectionView.itemsAdded[i].employeeCardNo + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsAdded[i].employeeNo, '').getByteLengthForOracle() > 50){
-                // 사원번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(사원번호 : " + $scope.flex.collectionView.itemsAdded[i].employeeNo + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsAdded[i].employeeNm, '').getByteLengthForOracle() > 100){
-                // 사원이름은 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.empNm'] + "은 " + messages["cmm.max100Chk"] + "<br>(사원이름 : " + $scope.flex.collectionView.itemsAdded[i].employeeNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsAdded[i].divNm, '').getByteLengthForOracle() > 60){
-                // 소속명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.divNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(소속명 : " + $scope.flex.collectionView.itemsAdded[i].divNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsAdded[i].deptNm, '').getByteLengthForOracle() > 60){
-                // 부서명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.deptNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(부서명 : " + $scope.flex.collectionView.itemsAdded[i].deptNm + ")");
-                return;
-            }
-
-            if(nvl($scope.flex.collectionView.itemsAdded[i].positionNm, '').getByteLengthForOracle() > 30){
-                // 직위명은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
-                $scope._popMsg(messages['empCardInfo.positionNm'] + "은 " + messages["cmm.max30Chk"] + "<br>(직위명 : " + $scope.flex.collectionView.itemsAdded[i].positionNm + ")");
-                return;
-            }
-
-            // 사원카드번호 중복체크를 위함.
-            strEmpCardNo += $scope.flex.collectionView.itemsAdded[i].employeeCardNo + ",";
-        }
-
-        // 사원카드정보 수정만 했을때
-        if(strEmpCardNo === ""){
-            
-            // 저장
-            $scope.saveRow();
-
-        } else {
-
-            // 사원카드번호 중복체크
-            var params = {};
-            params.employeeCardNo = strEmpCardNo.substr(0, strEmpCardNo.length - 1);
-
-            $scope._postJSONQuery.withPopUp( "/base/store/emp/cardInfo/getChkEmpCardNo.sb", params, function(response){
-                var list = response.data.data.list;
-
-                if(list.length > 0) { //  중복
-
-                    var duplicateCardNo = "";
-                    for(var i=0; i< list.length; i++){
-                        duplicateCardNo += list[i].employeeCardNo + ", ";
-                    }
-
-                    $scope._popMsg(messages["empCardInfo.empCardNoDuplicate.msg"] + "<br>(" + duplicateCardNo.substr(0, duplicateCardNo.length - 2) + ")"); // 중복된 사원카드번호 입니다.
+            // 사원카드번호 필수입력 체크
+            for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+                if ($scope.flex.collectionView.items[i].employeeCardNo === null || $scope.flex.collectionView.items[i].employeeCardNo === '') {
+                    $scope._popMsg(messages['empCardInfo.saveEmpCard.chk.msg']); // 사원카드번호를 입력해주세요.
                     return;
-
-                }else{
-
-                    // 저장
-                    $scope.saveRow();
                 }
-            });
-        }
+            }
+
+            var strEmpCardNo = ""; // 사원카드번호 중복체크를 위함.
+
+            // 데이터 자릿수 체크
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                if (nvl($scope.flex.collectionView.itemsEdited[i].employeeCardNo, '').getByteLengthForOracle() > 30) {
+                    // 사원카드번호는 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empCardNo'] + "는 " + messages["cmm.max30Chk"] + "<br>(사원카드번호 : " + $scope.flex.collectionView.itemsEdited[i].employeeCardNo + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsEdited[i].employeeNo, '').getByteLengthForOracle() > 50) {
+                    // 사원번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(사원번호 : " + $scope.flex.collectionView.itemsEdited[i].employeeNo + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsEdited[i].employeeNm, '').getByteLengthForOracle() > 100) {
+                    // 사원이름은 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empNm'] + "은 " + messages["cmm.max100Chk"] + "<br>(사원이름 : " + $scope.flex.collectionView.itemsEdited[i].employeeNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsEdited[i].divNm, '').getByteLengthForOracle() > 60) {
+                    // 소속명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.divNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(소속명 : " + $scope.flex.collectionView.itemsEdited[i].divNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsEdited[i].deptNm, '').getByteLengthForOracle() > 60) {
+                    // 부서명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.deptNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(부서명 : " + $scope.flex.collectionView.itemsEdited[i].deptNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsEdited[i].positionNm, '').getByteLengthForOracle() > 30) {
+                    // 직위명은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.positionNm'] + "은 " + messages["cmm.max30Chk"] + "<br>(직위명 : " + $scope.flex.collectionView.itemsEdited[i].positionNm + ")");
+                    return;
+                }
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if (nvl($scope.flex.collectionView.itemsAdded[i].employeeCardNo, '').getByteLengthForOracle() > 30) {
+                    // 사원카드번호는 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empCardNo'] + "는 " + messages["cmm.max30Chk"] + "<br>(사원카드번호 : " + $scope.flex.collectionView.itemsAdded[i].employeeCardNo + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsAdded[i].employeeNo, '').getByteLengthForOracle() > 50) {
+                    // 사원번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(사원번호 : " + $scope.flex.collectionView.itemsAdded[i].employeeNo + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsAdded[i].employeeNm, '').getByteLengthForOracle() > 100) {
+                    // 사원이름은 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.empNm'] + "은 " + messages["cmm.max100Chk"] + "<br>(사원이름 : " + $scope.flex.collectionView.itemsAdded[i].employeeNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsAdded[i].divNm, '').getByteLengthForOracle() > 60) {
+                    // 소속명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.divNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(소속명 : " + $scope.flex.collectionView.itemsAdded[i].divNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsAdded[i].deptNm, '').getByteLengthForOracle() > 60) {
+                    // 부서명은 최대 60byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.deptNm'] + "은 " + messages["cmm.max60Chk"] + "<br>(부서명 : " + $scope.flex.collectionView.itemsAdded[i].deptNm + ")");
+                    return;
+                }
+
+                if (nvl($scope.flex.collectionView.itemsAdded[i].positionNm, '').getByteLengthForOracle() > 30) {
+                    // 직위명은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                    $scope._popMsg(messages['empCardInfo.positionNm'] + "은 " + messages["cmm.max30Chk"] + "<br>(직위명 : " + $scope.flex.collectionView.itemsAdded[i].positionNm + ")");
+                    return;
+                }
+
+                // 사원카드번호 중복체크를 위함.
+                strEmpCardNo += $scope.flex.collectionView.itemsAdded[i].employeeCardNo + ",";
+            }
+
+            // 사원카드정보 수정만 했을때
+            if (strEmpCardNo === "") {
+
+                // 저장
+                $scope.saveRow();
+
+            } else {
+
+                // 사원카드번호 중복체크
+                var params = {};
+                params.employeeCardNo = strEmpCardNo.substr(0, strEmpCardNo.length - 1);
+
+                $scope._postJSONQuery.withPopUp("/base/store/emp/cardInfo/getChkEmpCardNo.sb", params, function (response) {
+                    var list = response.data.data.list;
+
+                    if (list.length > 0) { //  중복
+
+                        var duplicateCardNo = "";
+                        for (var i = 0; i < list.length; i++) {
+                            duplicateCardNo += list[i].employeeCardNo + ", ";
+                        }
+
+                        $scope._popMsg(messages["empCardInfo.empCardNoDuplicate.msg"] + "<br>(" + duplicateCardNo.substr(0, duplicateCardNo.length - 2) + ")"); // 중복된 사원카드번호 입니다.
+                        return;
+
+                    } else {
+
+                        // 저장
+                        $scope.saveRow();
+                    }
+                });
+            }
+        });
     };
 
     // 저장

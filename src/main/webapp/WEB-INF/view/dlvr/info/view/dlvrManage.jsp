@@ -145,4 +145,4 @@
     <%--var dlvrFirstList = ${dlvrFirstList};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/view/dlvr.js?ver=2020062902.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/view/dlvr.js?ver=20260213.01" charset="utf-8"></script>

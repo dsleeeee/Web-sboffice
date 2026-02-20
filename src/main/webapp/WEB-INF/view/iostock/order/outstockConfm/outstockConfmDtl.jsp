@@ -191,6 +191,7 @@
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outUnitQty"/>" binding="outTotQty" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outAmt"/>" binding="outAmt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outVat"/>" binding="outVat" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.totQty"/>" binding="totQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outTot"/>" binding="outTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.remark"/>" binding="remark" width="150" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.vatFg"/>" binding="vatFg01" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -209,4 +210,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20240725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20260219.01" charset="utf-8"></script>

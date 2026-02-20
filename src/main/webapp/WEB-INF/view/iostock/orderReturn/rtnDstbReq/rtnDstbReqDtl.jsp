@@ -86,6 +86,7 @@
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.prevMdTotQty"/>" binding="prevMdTotQty" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.mdAmt"/>" binding="mdAmt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.mdVat"/>" binding="mdVat" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.totQty"/>" binding="totQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.mdTot"/>" binding="mdTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.remark"/>" binding="remark" width="150" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.vatFg"/>" binding="vatFg01" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -100,4 +101,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl.js?ver=20240709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl.js?ver=20260219.01" charset="utf-8"></script>

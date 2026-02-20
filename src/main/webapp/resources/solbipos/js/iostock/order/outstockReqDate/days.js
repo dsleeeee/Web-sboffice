@@ -208,32 +208,35 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 요청일 저장
   $scope.saveDays = function () {
-    var params = [];
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
 
-      // 시작시간
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeSun = $scope.flex.collectionView.itemsEdited[i].startHourSun + $scope.flex.collectionView.itemsEdited[i].startMsSun;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeMon = $scope.flex.collectionView.itemsEdited[i].startHourMon + $scope.flex.collectionView.itemsEdited[i].startMsMon;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeTue = $scope.flex.collectionView.itemsEdited[i].startHourTue + $scope.flex.collectionView.itemsEdited[i].startMsTue;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeWed = $scope.flex.collectionView.itemsEdited[i].startHourWed + $scope.flex.collectionView.itemsEdited[i].startMsWed;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeThu = $scope.flex.collectionView.itemsEdited[i].startHourThu + $scope.flex.collectionView.itemsEdited[i].startMsThu;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeFri = $scope.flex.collectionView.itemsEdited[i].startHourFri + $scope.flex.collectionView.itemsEdited[i].startMsFri;
-      $scope.flex.collectionView.itemsEdited[i].orderStartTimeSat = $scope.flex.collectionView.itemsEdited[i].startHourSat + $scope.flex.collectionView.itemsEdited[i].startMsSat;
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        $scope.flex.collectionView.itemsEdited[i].status = "U";
 
-      // 마감시간
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeSun   = $scope.flex.collectionView.itemsEdited[i].endHourSun + $scope.flex.collectionView.itemsEdited[i].endMsSun;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeMon   = $scope.flex.collectionView.itemsEdited[i].endHourMon + $scope.flex.collectionView.itemsEdited[i].endMsMon;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeTue   = $scope.flex.collectionView.itemsEdited[i].endHourTue + $scope.flex.collectionView.itemsEdited[i].endMsTue;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeWed   = $scope.flex.collectionView.itemsEdited[i].endHourWed + $scope.flex.collectionView.itemsEdited[i].endMsWed;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeThu   = $scope.flex.collectionView.itemsEdited[i].endHourThu + $scope.flex.collectionView.itemsEdited[i].endMsThu;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeFri   = $scope.flex.collectionView.itemsEdited[i].endHourFri + $scope.flex.collectionView.itemsEdited[i].endMsFri;
-      $scope.flex.collectionView.itemsEdited[i].orderEndTimeSat   = $scope.flex.collectionView.itemsEdited[i].endHourSat + $scope.flex.collectionView.itemsEdited[i].endMsSat;
+        // 시작시간
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeSun = $scope.flex.collectionView.itemsEdited[i].startHourSun + $scope.flex.collectionView.itemsEdited[i].startMsSun;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeMon = $scope.flex.collectionView.itemsEdited[i].startHourMon + $scope.flex.collectionView.itemsEdited[i].startMsMon;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeTue = $scope.flex.collectionView.itemsEdited[i].startHourTue + $scope.flex.collectionView.itemsEdited[i].startMsTue;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeWed = $scope.flex.collectionView.itemsEdited[i].startHourWed + $scope.flex.collectionView.itemsEdited[i].startMsWed;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeThu = $scope.flex.collectionView.itemsEdited[i].startHourThu + $scope.flex.collectionView.itemsEdited[i].startMsThu;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeFri = $scope.flex.collectionView.itemsEdited[i].startHourFri + $scope.flex.collectionView.itemsEdited[i].startMsFri;
+        $scope.flex.collectionView.itemsEdited[i].orderStartTimeSat = $scope.flex.collectionView.itemsEdited[i].startHourSat + $scope.flex.collectionView.itemsEdited[i].startMsSat;
 
-      params.push($scope.flex.collectionView.itemsEdited[i]);
-    }
-    $scope._save("/iostock/order/outstockReqDate/days/save.sb", params, function () {
-      $scope.searchDaysList()
+        // 마감시간
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeSun = $scope.flex.collectionView.itemsEdited[i].endHourSun + $scope.flex.collectionView.itemsEdited[i].endMsSun;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeMon = $scope.flex.collectionView.itemsEdited[i].endHourMon + $scope.flex.collectionView.itemsEdited[i].endMsMon;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeTue = $scope.flex.collectionView.itemsEdited[i].endHourTue + $scope.flex.collectionView.itemsEdited[i].endMsTue;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeWed = $scope.flex.collectionView.itemsEdited[i].endHourWed + $scope.flex.collectionView.itemsEdited[i].endMsWed;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeThu = $scope.flex.collectionView.itemsEdited[i].endHourThu + $scope.flex.collectionView.itemsEdited[i].endMsThu;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeFri = $scope.flex.collectionView.itemsEdited[i].endHourFri + $scope.flex.collectionView.itemsEdited[i].endMsFri;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTimeSat = $scope.flex.collectionView.itemsEdited[i].endHourSat + $scope.flex.collectionView.itemsEdited[i].endMsSat;
+
+        params.push($scope.flex.collectionView.itemsEdited[i]);
+      }
+      $scope._save("/iostock/order/outstockReqDate/days/save.sb", params, function () {
+        $scope.searchDaysList()
+      });
     });
   };
 

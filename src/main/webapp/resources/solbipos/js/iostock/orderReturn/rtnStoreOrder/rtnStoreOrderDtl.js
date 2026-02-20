@@ -83,6 +83,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 
         dataItem.orderAmt        	= messages["rtnStoreOrder.dtl.orderAmt"      ];	//금액
         dataItem.orderVat         	= messages["rtnStoreOrder.dtl.orderVat"      ];	//VAT
+        dataItem.totQty         	= messages["rtnStoreOrder.dtl.totQty"        ];	//합계수량
         dataItem.orderTot         	= messages["rtnStoreOrder.dtl.orderTot"      ];	//합계
         
         dataItem.poUnitFg       	= messages["rtnStoreOrder.dtl.poUnitFg"      ]; //반품단위
@@ -155,6 +156,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    item.orderAmt    = orderAmt; // 금액
 	    item.orderVat    = orderVat; // VAT
 	    item.orderTot    = orderTot; // 합계
+        item.totQty      = totQty; // 합계수량
 	  };
 
   // 다른 컨트롤러의 broadcast 받기

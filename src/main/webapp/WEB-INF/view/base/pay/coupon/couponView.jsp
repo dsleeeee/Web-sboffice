@@ -228,7 +228,7 @@
   var couponSeqChgVal = "${couponSeqChgVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20250523.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20260213.01" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">

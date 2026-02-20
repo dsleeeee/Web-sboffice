@@ -100,6 +100,7 @@
         ,       DECODE(NVL(suborder1.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG1
         ,       DECODE(NVL(suborder2.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG2
         ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG)) AS TOT_QTY
         FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_STORE tms

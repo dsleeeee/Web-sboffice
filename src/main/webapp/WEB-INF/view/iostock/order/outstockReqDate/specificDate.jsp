@@ -116,7 +116,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDate.js?ver=20240805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDate.js?ver=20260213.01" charset="utf-8"></script>
 
 <%-- 특정일 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockReqDate/specificDateRegist.jsp">

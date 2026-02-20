@@ -82,6 +82,7 @@
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderUnitQty"/>" 	binding="orderTotQty" 		width="0" 	align="right" 	is-read-only="true"  visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderAmt"/>" 		binding="orderAmt" 			width="60" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderVat"/>" 		binding="orderVat" 			width="60" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.totQty"/>" 		    binding="totQty" 			width="80" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderTot"/>" 		binding="orderTot" 			width="60" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poUnitFg"/>" 		binding="poUnitFg" 			width="60" 	align="center" 	is-read-only="true"  data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.poUnitQty"/>" 		binding="poUnitQty" 		width="50" 	align="right" 	is-read-only="true"></wj-flex-grid-column>
@@ -104,4 +105,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.js?ver=20250102.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.js?ver=20260219.01" charset="utf-8"></script>

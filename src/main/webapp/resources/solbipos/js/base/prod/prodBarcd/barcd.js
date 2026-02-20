@@ -296,104 +296,24 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
   // 바코드 삭제
   $scope.delete = function() {
-    var params = [];
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.itemsSource.removeAt(i);
-      }
-    }
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
-    }
-    console.log(params);
-    if (params.length > 0) {
-      $.postJSONArray("/base/prod/prodBarcd/chkBarCds.sb", params, function(result) {
-            $scope._save("/base/prod/prodBarcd/saveBarcd.sb", params,
-                function(){
-                  $scope._popMsg(messages["cmm.saveSucc"]);
-                  $scope.searchProdList();
-                }
-            );
-          },
-          function (result) {
-            $scope._popMsg(result.data[0]);
-            return false;
-          });
-    } else {
-      $scope._popMsg(messages["cmm.not.modify"]);
-    }
-  };
-
-  // 변경내역 저장
-  $scope.save = function(){
-    var params      = [];
-
-    if($scope.flex.columns[1].visible){ // 검증결과 컬럼이 보일때(엑셀업로드일때)
-
-      $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
-      $scope.progressCnt = 0; // 처리된 숫자
-
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        if($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40){
-          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.maxBarCd.msg"]);
-          return false;
-        }
-
-        var numberAlphabet = /[^A-za-z0-9]/g;
-        if(numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)){
-          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.inChkBarCd.msg"]);
-          return false;
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      var params = [];
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.itemsSource.removeAt(i);
         }
       }
 
-      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        if($scope.flex.collectionView.items[i].result === "검증성공"){
-          params.push($scope.flex.collectionView.items[i]);
-        }
+      for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+        $scope.flex.collectionView.itemsRemoved[i].status = "D";
+        params.push($scope.flex.collectionView.itemsRemoved[i]);
       }
-
-      $scope._popConfirm(messages["barcd.saveConfirm"], function() {  // 검증을 통과한 상품을 저장하시겠습니까?
-          // 저장
-          $scope.saveSave(params);
-      });
-    } else {  // 일반 저장일때
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        if($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40){
-          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.maxBarCd.msg"]);
-          return false;
-        }
-
-        var numberAlphabet = /[^A-za-z0-9]/g;
-        if(numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)){
-          $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.inChkBarCd.msg"]);
-          return false;
-        } else {
-          for(var j = 0; j < $scope.flex.collectionView.itemsEdited.length; j++){
-            if(i != j){
-              if($scope.flex.collectionView.itemsEdited[i].barCd === $scope.flex.collectionView.itemsEdited[j].barCd && $scope.flex.collectionView.itemsEdited[j].barCd.length !== 0){
-                $scope._popMsg(messages["barcd.chkBarCd.msg2"] + "["+ $scope.flex.collectionView.itemsEdited[i].barCd + "]");
-                return false;
-              }
-            }
-          }
-        }
-      }
-
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        $scope.flex.collectionView.itemsEdited[i].barCd = $scope.flex.collectionView.itemsEdited[i].barCd.trim().removeEnter();
-
-        if($scope.flex.collectionView.itemsEdited[i].barCd !== null && $scope.flex.collectionView.itemsEdited[i].barCd !== ""){
-          $scope.flex.collectionView.itemsEdited[i].status = "U";
-          params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-      }
-
+      console.log(params);
       if (params.length > 0) {
-        $.postJSONArray("/base/prod/prodBarcd/chkBarCds.sb", params, function(result) {
+        $.postJSONArray("/base/prod/prodBarcd/chkBarCds.sb", params, function (result) {
               $scope._save("/base/prod/prodBarcd/saveBarcd.sb", params,
-                  function(){
+                  function () {
                     $scope._popMsg(messages["cmm.saveSucc"]);
                     $scope.searchProdList();
                   }
@@ -406,7 +326,93 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       } else {
         $scope._popMsg(messages["cmm.not.modify"]);
       }
-    }
+    });
+  };
+
+  // 변경내역 저장
+  $scope.save = function(){
+
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
+
+      if ($scope.flex.columns[1].visible) { // 검증결과 컬럼이 보일때(엑셀업로드일때)
+
+        $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
+        $scope.progressCnt = 0; // 처리된 숫자
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          if ($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40) {
+            $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.maxBarCd.msg"]);
+            return false;
+          }
+
+          var numberAlphabet = /[^A-za-z0-9]/g;
+          if (numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)) {
+            $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + messages["barcd.inChkBarCd.msg"]);
+            return false;
+          }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+          if ($scope.flex.collectionView.items[i].result === "검증성공") {
+            params.push($scope.flex.collectionView.items[i]);
+          }
+        }
+
+        $scope._popConfirm(messages["barcd.saveConfirm"], function () {  // 검증을 통과한 상품을 저장하시겠습니까?
+          // 저장
+          $scope.saveSave(params);
+        });
+      } else {  // 일반 저장일때
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          if ($scope.flex.collectionView.itemsEdited[i].barCd.getByteLengthForOracle() > 40) {
+            $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.maxBarCd.msg"]);
+            return false;
+          }
+
+          var numberAlphabet = /[^A-za-z0-9]/g;
+          if (numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)) {
+            $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.inChkBarCd.msg"]);
+            return false;
+          } else {
+            for (var j = 0; j < $scope.flex.collectionView.itemsEdited.length; j++) {
+              if (i != j) {
+                if ($scope.flex.collectionView.itemsEdited[i].barCd === $scope.flex.collectionView.itemsEdited[j].barCd && $scope.flex.collectionView.itemsEdited[j].barCd.length !== 0) {
+                  $scope._popMsg(messages["barcd.chkBarCd.msg2"] + "[" + $scope.flex.collectionView.itemsEdited[i].barCd + "]");
+                  return false;
+                }
+              }
+            }
+          }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          $scope.flex.collectionView.itemsEdited[i].barCd = $scope.flex.collectionView.itemsEdited[i].barCd.trim().removeEnter();
+
+          if ($scope.flex.collectionView.itemsEdited[i].barCd !== null && $scope.flex.collectionView.itemsEdited[i].barCd !== "") {
+            $scope.flex.collectionView.itemsEdited[i].status = "U";
+            params.push($scope.flex.collectionView.itemsEdited[i]);
+          }
+        }
+
+        if (params.length > 0) {
+          $.postJSONArray("/base/prod/prodBarcd/chkBarCds.sb", params, function (result) {
+                $scope._save("/base/prod/prodBarcd/saveBarcd.sb", params,
+                    function () {
+                      $scope._popMsg(messages["cmm.saveSucc"]);
+                      $scope.searchProdList();
+                    }
+                );
+              },
+              function (result) {
+                $scope._popMsg(result.data[0]);
+                return false;
+              });
+        } else {
+          $scope._popMsg(messages["cmm.not.modify"]);
+        }
+      }
+    });
   };
 
     // 저장

@@ -137,6 +137,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
           dataItem.inTotQty       = messages["vendrInstock.reg.inTotQty"       ];	//총수량
           dataItem.inAmt          = messages["vendrInstock.reg.inAmt"          ];	//금액
           dataItem.inVat          = messages["vendrInstock.reg.inVat"          ];	//VAT
+          dataItem.totQty         = messages["vendrInstock.reg.totQty"          ];	//합계수량
           dataItem.inTot          = messages["vendrInstock.reg.inTot"          ];	//합계(VAT포함)
           dataItem.vatFg          = messages["vendrInstock.reg.vatFg"          ];	//상품부가세구분
           dataItem.vendrVatFg01   = messages["vendrInstock.reg.vendrVatFg01"   ];	//부가세포함여부
@@ -157,8 +158,8 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     var vat01        = parseInt(item.vatFg01);
     var vendrVatFg01 = parseInt(item.vendrVatFg01);
 
-    var unitQty = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
-    var etcQty  = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.inEtcQty, 0));
+    var unitQty = (parseInt(nvl(item.prevInUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
+    var etcQty  = parseInt(nvl(item.prevInEtcQty, 0)) + parseInt(nvl(item.inEtcQty, 0));
     var totQty  = parseInt(unitQty + etcQty);
     var tempAmt = Math.round(totQty * costUprc / poUnitQty);
     var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
@@ -169,6 +170,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     item.inAmt    = inAmt; // 금액
     item.inVat    = inVat; // VAT
     item.inTot    = inTot; // 합계
+    item.totQty   = totQty;
   };
   //$scope.calcAmt		--------------------------------------------------------------------------------------------------------------------------
 

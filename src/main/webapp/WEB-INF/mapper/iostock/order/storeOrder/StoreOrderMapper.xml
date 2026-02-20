@@ -75,6 +75,7 @@
         ,       tphso.ORDER_TOT*tphso.SLIP_FG AS PREV_ORDER_TOT
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       the.ENVST_VAL AS ENVST0011
+        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS TOT_QTY
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
         ,       TB_MS_PRODUCT tmp
         ,       TB_HQ_ENVST the

@@ -207,6 +207,7 @@
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTotQty"/>" binding="mgrTotQty" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrAmt"/>" binding="mgrAmt" width="65" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrVat"/>" binding="mgrVat" width="65" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.totQty"/>" binding="totQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTot"/>" binding="mgrTot" width="65" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.saleUprc"/>" binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poUnitFg"/>" binding="poUnitFg" width="65" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
@@ -274,7 +275,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20240909.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20260219.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

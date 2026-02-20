@@ -129,26 +129,29 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 특정일 저장
   $scope.saveSpecificDate = function () {
-    var params = [];
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
 
-      if($scope.flex.collectionView.itemsEdited[i].outstockReqYn === 'Y') {
-        $scope.flex.collectionView.itemsEdited[i].orderStartTime = $scope.flex.collectionView.itemsEdited[i].startHour + $scope.flex.collectionView.itemsEdited[i].startMs;
-        $scope.flex.collectionView.itemsEdited[i].orderEndTime = $scope.flex.collectionView.itemsEdited[i].endHour + $scope.flex.collectionView.itemsEdited[i].endMs;
-      }else{
-        $scope.flex.collectionView.itemsEdited[i].orderStartTime = null;
-        $scope.flex.collectionView.itemsEdited[i].orderEndTime = null;
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        $scope.flex.collectionView.itemsEdited[i].status = "U";
+
+        if ($scope.flex.collectionView.itemsEdited[i].outstockReqYn === 'Y') {
+          $scope.flex.collectionView.itemsEdited[i].orderStartTime = $scope.flex.collectionView.itemsEdited[i].startHour + $scope.flex.collectionView.itemsEdited[i].startMs;
+          $scope.flex.collectionView.itemsEdited[i].orderEndTime = $scope.flex.collectionView.itemsEdited[i].endHour + $scope.flex.collectionView.itemsEdited[i].endMs;
+        } else {
+          $scope.flex.collectionView.itemsEdited[i].orderStartTime = null;
+          $scope.flex.collectionView.itemsEdited[i].orderEndTime = null;
+        }
+        params.push($scope.flex.collectionView.itemsEdited[i]);
       }
-      params.push($scope.flex.collectionView.itemsEdited[i]);
-    }
-    $.postJSONArray("/iostock/order/outstockReqDate/specificDate/save.sb", params, function(result) {
-          s_alert.pop( messages["cmm.saveSucc"] );
-          $scope.searchspecificDateList();
-        },
-        function(result) {
-          s_alert.pop(result.data.msg);
-        });
+      $.postJSONArray("/iostock/order/outstockReqDate/specificDate/save.sb", params, function (result) {
+            s_alert.pop(messages["cmm.saveSucc"]);
+            $scope.searchspecificDateList();
+          },
+          function (result) {
+            s_alert.pop(result.data.msg);
+          });
+    });
 
   };
 

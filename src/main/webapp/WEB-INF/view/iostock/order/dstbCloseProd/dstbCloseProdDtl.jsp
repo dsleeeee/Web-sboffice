@@ -61,6 +61,7 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.confirmYn"/>"   binding="confirmYn"         width="70"  align="center"  is-read-only="false"                        format="checkBoxText"                       ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrAmt"/>"      binding="mgrAmt"            width="60"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                 aggregate="Sum" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrVat"/>"      binding="mgrVat"            width="60"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                 aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.totQty"/>"      binding="totQty"            width="80"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                 aggregate="Sum" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrTot"/>"      binding="mgrTot"            width="60"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                 aggregate="Sum" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.poUnitFg"/>"    binding="poUnitFg"          width="70"  align="center"  is-read-only="true"     data-map="poUnitFgMap"                                          ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.poUnitQty"/>"   binding="poUnitQty"         width="60"  align="right"   is-read-only="true"                                                                     ></wj-flex-grid-column>
@@ -83,4 +84,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdDtl.js?ver=20220722.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdDtl.js?ver=20260219.01" charset="utf-8"></script>

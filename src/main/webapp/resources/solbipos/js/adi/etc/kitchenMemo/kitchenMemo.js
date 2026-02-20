@@ -112,68 +112,79 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 주방메모 그리드 행 삭제
   $scope.delete = function(){
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-        // 매장통제시, 본사에서 등록한 것 삭제 불가능
-        if(orgnFg === 'STORE' && envstVal === '2' && item.regFg === "H"){
-          // s_alert.pop();
-          $scope._popMsg(messages['kitchenMemo.disable.delete']);
-        } else {
-          $scope.flex.collectionView.removeAt(i);
+
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      var params = new Array();
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          // 매장통제시, 본사에서 등록한 것 삭제 불가능
+          if (orgnFg === 'STORE' && envstVal === '2' && item.regFg === "H") {
+            // s_alert.pop();
+            $scope._popMsg(messages['kitchenMemo.disable.delete']);
+          }else {
+            item.status = 'D';
+            params.push(item);
+          }
         }
       }
-    }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "saveKitchenMemo.sb", params, function () {
+        $scope.getKitchenMemoList()
+      });
+
+    });
   };
 
   // 주방메모 저장
   $scope.save = function() {
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      if($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm !== ""){
-        // 주방메모 최대길이 체크
-        if (nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm, '') !== '' &&
-            nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
-          var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
-              ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].kitchnMemoNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
-          $scope._popMsg(msg);
+
+    // 저장하시겠습니까?
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if ($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm !== "") {
+          // 주방메모 최대길이 체크
+          if (nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm, '') !== '' &&
+              nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
+            var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
+                ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].kitchnMemoNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+          }
+          $scope.flex.collectionView.itemsEdited[i].status = "U";
+          params.push($scope.flex.collectionView.itemsEdited[i]);
+        } else {
+          $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
           return false;
         }
-        $scope.flex.collectionView.itemsEdited[i].status = "U";
-        params.push($scope.flex.collectionView.itemsEdited[i]);
-      } else {
-        $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
-        return false;
       }
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      if($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm !== ""){
-        // 주방메모 최대길이 체크
-        if (nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm, '') !== '' &&
-            nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
-          var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
-              ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].kitchnMemoNm.getByteLengthForOracle()  + messages["cmm.bateLengthInfo"];
-          $scope._popMsg(msg);
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if ($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm !== "") {
+          // 주방메모 최대길이 체크
+          if (nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm, '') !== '' &&
+              nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
+            var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
+                ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].kitchnMemoNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+          }
+          $scope.flex.collectionView.itemsAdded[i].status = "I";
+          params.push($scope.flex.collectionView.itemsAdded[i]);
+        } else {
+          $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
           return false;
         }
-        $scope.flex.collectionView.itemsAdded[i].status = "I";
-        params.push($scope.flex.collectionView.itemsAdded[i]);
-      } else {
-        $scope._popMsg(messages["kitchenMemo.kitchnMemoNm"] + messages["kitchenMemo.inputEnv"]);
-        return false;
       }
-    }
+      // console.log(params);
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
-    }
-
-    // console.log(params);
-
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "saveKitchenMemo.sb", params, function(){ $scope.getKitchenMemoList() });
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "saveKitchenMemo.sb", params, function () {
+        $scope.getKitchenMemoList()
+      });
+    });
   }
 
 }]);

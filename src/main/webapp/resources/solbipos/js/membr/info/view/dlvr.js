@@ -290,53 +290,56 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
     // 배달주소지 저장
     $scope.infoSave = function () {
-        console.log($scope.flex.collectionView);
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            console.log($scope.flex.collectionView);
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
 
-            // 주소 최대길이 체크
-            if(nvl($scope.flex.collectionView.itemsEdited[i].addr, '') !== '' &&
-                nvl($scope.flex.collectionView.itemsEdited[i].addr + '', '').getByteLengthForOracle() > 200){
-                var msg = messages["dlvr.membr.addr"] + messages["cmm.overLength"] + " 200 " +
-                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
-                $scope._popMsg(msg);
-                return false;
-            }
+                // 주소 최대길이 체크
+                if (nvl($scope.flex.collectionView.itemsEdited[i].addr, '') !== '' &&
+                    nvl($scope.flex.collectionView.itemsEdited[i].addr + '', '').getByteLengthForOracle() > 200) {
+                    var msg = messages["dlvr.membr.addr"] + messages["cmm.overLength"] + " 200 " +
+                        ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                    $scope._popMsg(msg);
+                    return false;
+                }
 
-            // 상세주소 최대길이 체크
-            if(nvl($scope.flex.collectionView.itemsEdited[i].addrDtl, '') !== '' &&
-                nvl($scope.flex.collectionView.itemsEdited[i].addrDtl + '', '').getByteLengthForOracle() > 200){
-                var msg = messages["dlvr.membr.areaDetail"] + messages["cmm.overLength"] + " 200 " +
-                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addrDtl.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
-                $scope._popMsg(msg);
-                return false;
+                // 상세주소 최대길이 체크
+                if (nvl($scope.flex.collectionView.itemsEdited[i].addrDtl, '') !== '' &&
+                    nvl($scope.flex.collectionView.itemsEdited[i].addrDtl + '', '').getByteLengthForOracle() > 200) {
+                    var msg = messages["dlvr.membr.areaDetail"] + messages["cmm.overLength"] + " 200 " +
+                        ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addrDtl.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                    $scope._popMsg(msg);
+                    return false;
+                }
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                params.push($scope.flex.collectionView.itemsEdited[i]);
             }
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvr.sb", params, function (result) {
-            if (result.status === "OK") {
-                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
-                $scope.searchDlvrList();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvr.sb", params, function (result) {
+                if (result.status === "OK") {
+                    $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                    $scope.searchDlvrList();
+                    $scope.$broadcast('loadingPopupInactive');
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                    actParams.contents = "배달주소지 [저장] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function (response) {
+                    });
+
+                } else {
+                    $scope.$broadcast('loadingPopupInactive');
+                    $scope._popMsg(result.status);
+                    return false;
+                }
+            }, function (err) {
                 $scope.$broadcast('loadingPopupInactive');
-
-                // 사용자 행위 기록
-                var actParams = {};
-                actParams.resrceCd = menuCd;
-                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
-                actParams.contents = "배달주소지 [저장] 버튼 클릭 시";
-
-                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
-                
-            } else {
-                $scope.$broadcast('loadingPopupInactive');
-                $scope._popMsg(result.status);
-                return false;
-            }
-        }, function (err) {
-            $scope.$broadcast('loadingPopupInactive');
-            $scope._popMsg(err.message);
+                $scope._popMsg(err.message);
+            });
         });
     };
 
@@ -491,56 +494,60 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 배달전화번호 저장
     $scope.infoSave = function () {
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            // 전화번호를 입력하세요.
-            var msg = messages["regist.tel"] + messages["cmm.require.text"];
-            if ($scope.flex.collectionView.itemsEdited[i].telNo === "") {
-                $scope._popMsg(msg);
-                return false;
-            }
 
-            var numChkexp = /[^0-9]/g;
-            if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].telNo)) {
-                $scope._popMsg(messages["regist.tel"]+messages["cmm.require.number"]); // 연락처는 숫자만 입력할 수 있습니다.
-                return false;
-            }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                // 전화번호를 입력하세요.
+                var msg = messages["regist.tel"] + messages["cmm.require.text"];
+                if ($scope.flex.collectionView.itemsEdited[i].telNo === "") {
+                    $scope._popMsg(msg);
+                    return false;
+                }
 
-            // 전화번호 최대길이 체크
-            if(nvl($scope.flex.collectionView.itemsEdited[i].telNo, '') !== '' &&
-                nvl($scope.flex.collectionView.itemsEdited[i].telNo + '', '').getByteLengthForOracle() > 15){
-                var msg = messages["dlvr.membr.phoneNumber"] + messages["cmm.overLength"] + " 15 " +
-                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].telNo.getByteLengthForOracle() +  messages["cmm.bateLengthInfo"];
-                $scope._popMsg(msg);
-                return false;
-            }
-            $scope.flex.collectionView.itemsEdited[i].shortNo = $scope.flex.collectionView.itemsEdited[i].telNo.substring($scope.flex.collectionView.itemsEdited[i].telNo.length-4, $scope.flex.collectionView.itemsEdited[i].telNo.length);
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].telNo)) {
+                    $scope._popMsg(messages["regist.tel"] + messages["cmm.require.number"]); // 연락처는 숫자만 입력할 수 있습니다.
+                    return false;
+                }
 
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvrTel.sb", params, function (result) {
-            if (result.status === "OK") {
-                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
-                $scope.searchDlvrTelList($scope.telData);
+                // 전화번호 최대길이 체크
+                if (nvl($scope.flex.collectionView.itemsEdited[i].telNo, '') !== '' &&
+                    nvl($scope.flex.collectionView.itemsEdited[i].telNo + '', '').getByteLengthForOracle() > 15) {
+                    var msg = messages["dlvr.membr.phoneNumber"] + messages["cmm.overLength"] + " 15 " +
+                        ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].telNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                    $scope._popMsg(msg);
+                    return false;
+                }
+                $scope.flex.collectionView.itemsEdited[i].shortNo = $scope.flex.collectionView.itemsEdited[i].telNo.substring($scope.flex.collectionView.itemsEdited[i].telNo.length - 4, $scope.flex.collectionView.itemsEdited[i].telNo.length);
+
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $.postJSONArray("/membr/info/dlvr/dlvr/saveDlvrTel.sb", params, function (result) {
+                if (result.status === "OK") {
+                    $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                    $scope.searchDlvrTelList($scope.telData);
+                    $scope.$broadcast('loadingPopupInactive');
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                    actParams.contents = "배달전화번호 [저장] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function (response) {
+                    });
+                } else {
+                    $scope.$broadcast('loadingPopupInactive');
+                    $scope._popMsg(result.status);
+                    return false;
+                }
+            }, function (err) {
                 $scope.$broadcast('loadingPopupInactive');
-                
-                // 사용자 행위 기록
-                var actParams = {};
-                actParams.resrceCd = menuCd;
-                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
-                actParams.contents = "배달전화번호 [저장] 버튼 클릭 시";
-
-                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
-            } else {
-                $scope.$broadcast('loadingPopupInactive');
-                $scope._popMsg(result.status);
-                return false;
-            }
-        }, function (err) {
-            $scope.$broadcast('loadingPopupInactive');
-            $scope._popMsg(err.message);
+                $scope._popMsg(err.message);
+            });
         });
     };
 

@@ -225,6 +225,7 @@
 	               ,      A.ORDER_AMT
 	               ,      A.ORDER_VAT
 	               ,      A.ORDER_TOT
+                   ,      A.ORDER_TOT_QTY   AS TOT_QTY
 	                FROM    (
 	                        SELECT  NVL(tphso.REQ_DATE, #{reqDate})  AS    REQ_DATE
 	                        ,       NVL(tphso.STORE_CD, #{storeCd})   AS   STORE_CD

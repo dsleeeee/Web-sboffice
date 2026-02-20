@@ -488,6 +488,7 @@
 				,		A.REMARK
 				,		A.ENVST0011
 				,		A.BARCD_CD
+                ,		A.OUT_TOT_QTY   AS TOT_QTY
 				FROM	(
 				        SELECT   tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, tphsod.SLIP_FG, tphso.SLIP_KIND, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
 				        ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG

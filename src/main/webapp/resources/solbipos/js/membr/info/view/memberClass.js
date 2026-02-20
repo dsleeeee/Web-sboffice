@@ -475,50 +475,53 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
 
     // 저장
     $scope.pointSave = function () {
-        // 파라미터 설정
-        var params = new Array();
-        var vScope = agrid.getScope('memberClassCtrl');
 
-        // 숫자영문.
-        var numengChkregexp2 = /[^A-za-z0-9]/g;
-        // 숫자
-        var numChkregexp2 = /[^0-9]/g;
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            var vScope = agrid.getScope('memberClassCtrl');
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            var item = $scope.flex.collectionView.itemsEdited[i];
+            // 숫자영문.
+            var numengChkregexp2 = /[^A-za-z0-9]/g;
+            // 숫자
+            var numChkregexp2 = /[^0-9]/g;
 
-            if(vScope.pointSaveFgCombo.selectedValue === "2") {
-                if (numChkregexp2.test(item.accRate)) {
-                    $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                var item = $scope.flex.collectionView.itemsEdited[i];
+
+                if (vScope.pointSaveFgCombo.selectedValue === "2") {
+                    if (numChkregexp2.test(item.accRate)) {
+                        $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
+                        return false;
+                    }
+                }
+
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                $scope.flex.collectionView.itemsAdded[i].status = "I";
+                var item = $scope.flex.collectionView.itemsAdded[i];
+                if (item.payCd === "선택" || item.payCd === null) {
+                    $scope._popMsg(messages["grade.membr.pay.code"] + messages["cmm.require.select"]);
                     return false;
                 }
-            }
 
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
-            var item = $scope.flex.collectionView.itemsAdded[i];
-            if (item.payCd === "선택" || item.payCd === null) {
-                $scope._popMsg(messages["grade.membr.pay.code"] + messages["cmm.require.select"]);
-                return false;
-            }
-
-            if(vScope.pointSaveFgCombo.selectedValue === "2") {
-                if (numChkregexp2.test(item.accRate)) {
-                    $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
-                    return false;
+                if (vScope.pointSaveFgCombo.selectedValue === "2") {
+                    if (numChkregexp2.test(item.accRate)) {
+                        $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
+                        return false;
+                    }
                 }
+
+                params.push($scope.flex.collectionView.itemsAdded[i]);
             }
 
-            params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $.postJSONArray("/membr/info/grade/grade/getMemberClassPointSave.sb", params, function (result) {
-            $scope._popMsg(messages["cmm.saveSucc"]);
-            // $scope.data = new wijmo.collections.CollectionView([]);
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $.postJSONArray("/membr/info/grade/grade/getMemberClassPointSave.sb", params, function (result) {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                // $scope.data = new wijmo.collections.CollectionView([]);
+            });
         });
     };
 

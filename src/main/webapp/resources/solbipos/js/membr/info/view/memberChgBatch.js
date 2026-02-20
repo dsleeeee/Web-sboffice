@@ -440,66 +440,69 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
 
     // 저장
     $scope.gridSave = function () {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
-            if($scope.flex.collectionView.items[i].gChk) {
-                if($scope.flex.collectionView.items[i].membrClassCd === null || $scope.flex.collectionView.items[i].membrClassCd === ""){
-                    $scope._popMsg(messages['regist.class.cd.msg']);
-                    return false;
-                }
-                // 단축번호 앞뒤 공백 및 엔터값 제거
-                if ($scope.flex.collectionView.items[i].shortNo !== "" && $scope.flex.collectionView.items[i].shortNo !== null) {
-                    $scope.flex.collectionView.items[i].shortNo = $scope.flex.collectionView.items[i].shortNo.trim().removeEnter();
-                    if ($scope.flex.collectionView.items[i].shortNo.length <= 0) {
-                        $scope.flex.collectionView.items[i].shortNo = null;
-                    }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
-                    var numChkexp = /[^0-9]/g;
-                    if($scope.flex.collectionView.items[i].shortNo.length > 4 || numChkexp.test($scope.flex.collectionView.items[i].shortNo)){
-                        $scope._popMsg(messages['regist.shortNo.msg']);
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    if ($scope.flex.collectionView.items[i].membrClassCd === null || $scope.flex.collectionView.items[i].membrClassCd === "") {
+                        $scope._popMsg(messages['regist.class.cd.msg']);
                         return false;
                     }
-                }else{
+                    // 단축번호 앞뒤 공백 및 엔터값 제거
+                    if ($scope.flex.collectionView.items[i].shortNo !== "" && $scope.flex.collectionView.items[i].shortNo !== null) {
+                        $scope.flex.collectionView.items[i].shortNo = $scope.flex.collectionView.items[i].shortNo.trim().removeEnter();
+                        if ($scope.flex.collectionView.items[i].shortNo.length <= 0) {
+                            $scope.flex.collectionView.items[i].shortNo = null;
+                        }
+
+                        var numChkexp = /[^0-9]/g;
+                        if ($scope.flex.collectionView.items[i].shortNo.length > 4 || numChkexp.test($scope.flex.collectionView.items[i].shortNo)) {
+                            $scope._popMsg(messages['regist.shortNo.msg']);
+                            return false;
+                        }
+                    } else {
                         $scope.flex.collectionView.items[i].shortNo = null;
+                    }
+
+                    if (nvl($scope.flex.collectionView.items[i].membrClassCd, '') !== nvl($scope.flex.collectionView.items[i].oldMembrClassCd, '')
+                        || nvl($scope.flex.collectionView.items[i].shortNo, '') !== nvl($scope.flex.collectionView.items[i].oldShortNo, '')
+                        || nvl($scope.flex.collectionView.items[i].emailRecvYn, '') !== nvl($scope.flex.collectionView.items[i].oldEmailRecvYn, '')
+                        || nvl($scope.flex.collectionView.items[i].smsRecvYn, '') !== nvl($scope.flex.collectionView.items[i].oldSmsRecvYn, '')
+                        || nvl($scope.flex.collectionView.items[i].useYn, '') !== nvl($scope.flex.collectionView.items[i].oldUseYn, '')) {
+
+                        $scope.flex.collectionView.items[i].status = "U";
+                        // $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
+                        params.push($scope.flex.collectionView.items[i]);
+                    }
                 }
 
-                if (nvl($scope.flex.collectionView.items[i].membrClassCd,'') !== nvl($scope.flex.collectionView.items[i].oldMembrClassCd,'')
-                    || nvl($scope.flex.collectionView.items[i].shortNo,'') !== nvl($scope.flex.collectionView.items[i].oldShortNo,'')
-                    || nvl($scope.flex.collectionView.items[i].emailRecvYn,'') !== nvl($scope.flex.collectionView.items[i].oldEmailRecvYn,'')
-                    || nvl($scope.flex.collectionView.items[i].smsRecvYn,'') !== nvl($scope.flex.collectionView.items[i].oldSmsRecvYn,'')
-                    || nvl($scope.flex.collectionView.items[i].useYn,'') !== nvl($scope.flex.collectionView.items[i].oldUseYn,'')) {
-
-                    $scope.flex.collectionView.items[i].status = "U";
-                    // $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
-                    params.push($scope.flex.collectionView.items[i]);
-                }
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             }
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        }
-
-        if (params.length <= 0) {
-            // 변경사항이 없습니다.
-            $scope._popMsg(messages['cmm.not.modify']);
-            return false;
-        }
-
-        $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
-            if (result.status === "OK") {
-                $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
-                $scope.getMemberChgBatchList();
-                $scope.$broadcast('loadingPopupInactive');
-
-            } else {
-                $scope.$broadcast('loadingPopupInactive');
-                $scope._popMsg(result.status);
+            if (params.length <= 0) {
+                // 변경사항이 없습니다.
+                $scope._popMsg(messages['cmm.not.modify']);
                 return false;
             }
-        }, function (err) {
-            $scope.$broadcast('loadingPopupInactive');
-            $scope._popMsg(err.message);
+
+            $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
+                if (result.status === "OK") {
+                    $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
+                    $scope.getMemberChgBatchList();
+                    $scope.$broadcast('loadingPopupInactive');
+
+                } else {
+                    $scope.$broadcast('loadingPopupInactive');
+                    $scope._popMsg(result.status);
+                    return false;
+                }
+            }, function (err) {
+                $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg(err.message);
+            });
         });
     };
 

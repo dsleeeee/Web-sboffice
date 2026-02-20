@@ -457,6 +457,7 @@
 	              , A.REMARK
 	              , A.ENVST0011
 	              , A.BARCD_CD
+                  , A.OUT_TOT_QTY   AS TOT_QTY
 			FROM(
 			        SELECT   tphsod.STORE_CD
 			        ,        tphsod.REQ_DATE

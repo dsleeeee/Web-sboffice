@@ -687,201 +687,204 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
     // 수정
     $scope.saveProdPrice2 = function(){
 
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                if(coercionFg === "0"){
-                    // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
-                    if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
-                        $scope._popMsg(messages["salePriceResve.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
-                        return false;
-                    }
-                }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
 
-                if (!$scope.isValidDate($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.startDate"] + " " + messages["member.excel.upload.invalid.date"]);
-                    return false;
-                }
-                if (!$scope.isValidDate($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.endDate"] + " " + messages["member.excel.upload.invalid.date"]);
-                    return false;
-                }
-                if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
-                    return false;
-                }
-                if(Number(now) >= Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
-                    $scope._popMsg(messages["salePriceResve.endDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
-                    return false;
-                }
-                if(Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', '')) > Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))){
-                    $scope._popMsg(messages["salePriceResve.resveDate"] + messages["salePriceResve.resveDate.chk.msg2"]);
-                    return false;
-                }
-            }
-        }
-
-        var numchkexp = /[^0-9]/; // 숫자가 아닌 값 체크
-        var numchkexp2 = /^-?[0-9]+$/;
-
-        // 파라미터 설정
-        var params = new Array();
-
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
-                    ($scope.flex.collectionView.items[i].orgEndDate !== $scope.flex.collectionView.items[i].endDate) ||
-                    ($scope.flex.collectionView.items[i].storeSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
-                    ($scope.flex.collectionView.items[i].storeStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
-                    ($scope.flex.collectionView.items[i].storeDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||
-                    ($scope.flex.collectionView.items[i].storePackSaleUprc !== $scope.flex.collectionView.items[i].packSaleUprc)) {
-
-                    // 변경판매가 - 필수 입력값 체크
-                    if ($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
-                        $scope._popMsg(messages["salePriceResve.saleUprcBlank"]);
-                        return false;
-                    }
-
-                    // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
-                    Number.isInteger = Number.isInteger || function(value) {
-                        return typeof value === "number" &&
-                            isFinite(value) &&
-                            Math.floor(value) === value;
-                    };
-
-                    // 변경판매가 - 소수점 입력 불가
-                    if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){
-                        $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
-                        return false;
-                    }
-
-                    // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
-                    if (/[^0-9]/g.test($scope.flex.collectionView.items[i].saleUprc)) {
-                        if((/^-[0-9]/g.test($scope.flex.collectionView.items[i].saleUprc) == false)){
-                            $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    if (coercionFg === "0") {
+                        // PRC_CTRL_FG 가격관리구분 H인 상품만 수정가능
+                        if ($scope.flex.collectionView.items[i].prcCtrlFg === "S") {
+                            $scope._popMsg(messages["salePriceResve.prcCtrlFgStoreBlank"]); // 가격관리구분이 '매장'인 상품은 수정할 수 없습니다.
                             return false;
                         }
                     }
 
-                    // 변경판매가 - 1000000000 이상 입력 불가
-                    if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){
-                        $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                    if (!$scope.isValidDate($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                        $scope._popMsg(messages["salePriceResve.startDate"] + " " + messages["member.excel.upload.invalid.date"]);
                         return false;
                     }
-                    // 변경판매가 - -1000000000 이하 입력 불가
-                    if($scope.flex.collectionView.items[i].saleUprc <= -1000000000){
-                        $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                    if (!$scope.isValidDate($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                        $scope._popMsg(messages["salePriceResve.endDate"] + " " + messages["member.excel.upload.invalid.date"]);
                         return false;
                     }
+                    if (Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                        $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
+                        return false;
+                    }
+                    if (Number(now) >= Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                        $scope._popMsg(messages["salePriceResve.endDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
+                        return false;
+                    }
+                    if (Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', '')) > Number($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                        $scope._popMsg(messages["salePriceResve.resveDate"] + messages["salePriceResve.resveDate.chk.msg2"]);
+                        return false;
+                    }
+                }
+            }
 
-                    // 내점/배달/포장 판매가 사용 시
-                    if(subPriceFg === "1") {
+            var numchkexp = /[^0-9]/; // 숫자가 아닌 값 체크
+            var numchkexp2 = /^-?[0-9]+$/;
 
-                        // 변경내점-판매가 입력했을 경우 체크
-                        if ($scope.flex.collectionView.items[i].stinSaleUprc !== "" && $scope.flex.collectionView.items[i].stinSaleUprc !== null) {
+            // 파라미터 설정
+            var params = new Array();
 
-                            // 변경내점-판매가 - 소수점 입력 불가
-                            if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false) {
-                                $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    if (($scope.flex.collectionView.items[i].orgStartDate !== $scope.flex.collectionView.items[i].startDate) ||
+                        ($scope.flex.collectionView.items[i].orgEndDate !== $scope.flex.collectionView.items[i].endDate) ||
+                        ($scope.flex.collectionView.items[i].storeSaleUprc !== $scope.flex.collectionView.items[i].saleUprc) ||
+                        ($scope.flex.collectionView.items[i].storeStinSaleUprc !== $scope.flex.collectionView.items[i].stinSaleUprc) ||
+                        ($scope.flex.collectionView.items[i].storeDlvrSaleUprc !== $scope.flex.collectionView.items[i].dlvrSaleUprc) ||
+                        ($scope.flex.collectionView.items[i].storePackSaleUprc !== $scope.flex.collectionView.items[i].packSaleUprc)) {
+
+                        // 변경판매가 - 필수 입력값 체크
+                        if ($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
+                            $scope._popMsg(messages["salePriceResve.saleUprcBlank"]);
+                            return false;
+                        }
+
+                        // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+                        Number.isInteger = Number.isInteger || function (value) {
+                            return typeof value === "number" &&
+                                isFinite(value) &&
+                                Math.floor(value) === value;
+                        };
+
+                        // 변경판매가 - 소수점 입력 불가
+                        if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false) {
+                            $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
+
+                        // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                        if (/[^0-9]/g.test($scope.flex.collectionView.items[i].saleUprc)) {
+                            if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].saleUprc) == false)) {
+                                $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
                                 return false;
                             }
+                        }
 
-                            // 변경내점-판매가 - 마이너스(-)외에 다른 문자 입력 불가
-                            if (/[^0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
-                                if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)) {
+                        // 변경판매가 - 1000000000 이상 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc >= 1000000000) {
+                            $scope._popMsg(messages["salePriceResve.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
+                        // 변경판매가 - -1000000000 이하 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc <= -1000000000) {
+                            $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
+
+                        // 내점/배달/포장 판매가 사용 시
+                        if (subPriceFg === "1") {
+
+                            // 변경내점-판매가 입력했을 경우 체크
+                            if ($scope.flex.collectionView.items[i].stinSaleUprc !== "" && $scope.flex.collectionView.items[i].stinSaleUprc !== null) {
+
+                                // 변경내점-판매가 - 소수점 입력 불가
+                                if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false) {
                                     $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
                                     return false;
                                 }
+
+                                // 변경내점-판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                                if (/[^0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
+                                    if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)) {
+                                        $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                        return false;
+                                    }
+                                }
+
+                                // 변경내점-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경내점-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].stinSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
                             }
 
-                            // 변경내점-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePriceResve.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                            // 변경내점-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].stinSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                        }
+                            // 변경배달-판매가 입력했을 경우 체크
+                            if ($scope.flex.collectionView.items[i].dlvrSaleUprc !== "" && $scope.flex.collectionView.items[i].dlvrSaleUprc !== null) {
 
-                        // 변경배달-판매가 입력했을 경우 체크
-                        if ($scope.flex.collectionView.items[i].dlvrSaleUprc !== "" && $scope.flex.collectionView.items[i].dlvrSaleUprc !== null) {
-
-                            // 변경배달-판매가 - 소수점 입력 불가
-                            if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false) {
-                                $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-
-                            // 변경배달-판매가 - 마이너스(-)외에 다른 문자 입력 불가
-                            if (/[^0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
-                                if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)) {
+                                // 변경배달-판매가 - 소수점 입력 불가
+                                if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false) {
                                     $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
                                     return false;
                                 }
-                            }
 
-                            // 변경배달-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                            // 변경배달-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].dlvrSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                        }
+                                // 변경배달-판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                                if (/[^0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
+                                    if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)) {
+                                        $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                                        return false;
+                                    }
+                                }
 
-                        // 변경포장-판매가 입력했을 경우 체크
-                        if ($scope.flex.collectionView.items[i].packSaleUprc !== "" && $scope.flex.collectionView.items[i].packSaleUprc !== null) {
-
-                            // 변경포장-판매가 - 소수점 입력 불가
-                            if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false) {
-                                $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-
-                            // 변경포장-판매가 - 마이너스(-)외에 다른 문자 입력 불가
-                            if (/[^0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc)) {
-                                if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc) == false)) {
-                                    $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                // 변경배달-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePriceResve.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경배달-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].dlvrSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
                                     return false;
                                 }
                             }
 
-                            // 변경포장-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
+                            // 변경포장-판매가 입력했을 경우 체크
+                            if ($scope.flex.collectionView.items[i].packSaleUprc !== "" && $scope.flex.collectionView.items[i].packSaleUprc !== null) {
+
+                                // 변경포장-판매가 - 소수점 입력 불가
+                                if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false) {
+                                    $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+
+                                // 변경포장-판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                                if (/[^0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc)) {
+                                    if ((/^-[0-9]/g.test($scope.flex.collectionView.items[i].packSaleUprc) == false)) {
+                                        $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                        return false;
+                                    }
+                                }
+
+                                // 변경포장-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePriceResve.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경포장-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].packSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
                             }
-                            // 변경포장-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].packSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
+
+                        } else {
+                            $scope.flex.collectionView.items[i].stinSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
+                            $scope.flex.collectionView.items[i].dlvrSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
+                            $scope.flex.collectionView.items[i].packSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
                         }
 
-                    }else{
-                        $scope.flex.collectionView.items[i].stinSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
-                        $scope.flex.collectionView.items[i].dlvrSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
-                        $scope.flex.collectionView.items[i].packSaleUprc = $scope.flex.collectionView.items[i].saleUprc;
+                        $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
+                        $scope.flex.collectionView.items[i].orgStartDate = $scope.flex.collectionView.items[i].orgStartDate.replaceAll('-', ''); // 키값
+                        $scope.flex.collectionView.items[i].startDate = $scope.flex.collectionView.items[i].startDate.replaceAll('-', '');
+                        $scope.flex.collectionView.items[i].endDate = $scope.flex.collectionView.items[i].endDate.replaceAll('-', '');
+                        params.push($scope.flex.collectionView.items[i]);
                     }
-
-                    $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
-                    $scope.flex.collectionView.items[i].orgStartDate = $scope.flex.collectionView.items[i].orgStartDate.replaceAll('-', ''); // 키값
-                    $scope.flex.collectionView.items[i].startDate = $scope.flex.collectionView.items[i].startDate.replaceAll('-', '');
-                    $scope.flex.collectionView.items[i].endDate = $scope.flex.collectionView.items[i].endDate.replaceAll('-', '');
-                    params.push($scope.flex.collectionView.items[i]);
                 }
             }
-        }
 
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/price/salePriceResve/storeSalePriceResve/modStoreProdSalePriceResve.sb', params, function(){
-            $scope.searchSalePriceList2();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/price/salePriceResve/storeSalePriceResve/modStoreProdSalePriceResve.sb', params, function () {
+                $scope.searchSalePriceList2();
+            });
         });
     };
 
