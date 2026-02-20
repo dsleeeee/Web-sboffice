@@ -165,41 +165,44 @@ app.controller('empTalkCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 대화관리 저장
     $scope.save = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
-            if ($scope.flex.collectionView.items[s].dispSeq !== num) {
-                $scope.flex.collectionView.items[s].dispSeq = num;
-                $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
-                $scope.flex.collectionView.items[s].status = "U";
-                $scope.flex.collectionView.commitEdit();
-            }
-        }
 
-        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-            $scope.flex.collectionView.itemsEdited[u].status = 'U';
-            if(nvl($scope.flex.collectionView.itemsEdited[u].empTextInfo, '').getByteLengthForOracle() > 60) {
-                var msg = messages["empTalk.empTextInfo"] + messages["cmm.overLength"] + " 60 " +
-                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[u].empTextInfo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
-                $scope._popMsg(msg);
-                return false;
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+                if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+                    $scope.flex.collectionView.items[s].dispSeq = num;
+                    $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+                    $scope.flex.collectionView.items[s].status = "U";
+                    $scope.flex.collectionView.commitEdit();
+                }
             }
-            params.push($scope.flex.collectionView.itemsEdited[u]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            $scope.flex.collectionView.itemsAdded[i].status = 'I';
-            if(nvl($scope.flex.collectionView.itemsAdded[i].empTextInfo, '').getByteLengthForOracle() > 60) {
-                var msg = messages["empTalk.empTextInfo"] + messages["cmm.overLength"] + " 60 " +
-                    ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].empTextInfo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
-                $scope._popMsg(msg);
-                return false;
-            }
-            params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/store/empTalk/empTalk/saveEmpTalk.sb", params, function(){
-            $scope.getEmpTalkList();
+            for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+                $scope.flex.collectionView.itemsEdited[u].status = 'U';
+                if (nvl($scope.flex.collectionView.itemsEdited[u].empTextInfo, '').getByteLengthForOracle() > 60) {
+                    var msg = messages["empTalk.empTextInfo"] + messages["cmm.overLength"] + " 60 " +
+                        ", 현재 : " + $scope.flex.collectionView.itemsEdited[u].empTextInfo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                    $scope._popMsg(msg);
+                    return false;
+                }
+                params.push($scope.flex.collectionView.itemsEdited[u]);
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                $scope.flex.collectionView.itemsAdded[i].status = 'I';
+                if (nvl($scope.flex.collectionView.itemsAdded[i].empTextInfo, '').getByteLengthForOracle() > 60) {
+                    var msg = messages["empTalk.empTextInfo"] + messages["cmm.overLength"] + " 60 " +
+                        ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].empTextInfo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                    $scope._popMsg(msg);
+                    return false;
+                }
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/store/empTalk/empTalk/saveEmpTalk.sb", params, function () {
+                $scope.getEmpTalkList();
+            });
         });
     }
 

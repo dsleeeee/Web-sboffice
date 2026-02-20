@@ -64,6 +64,7 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.confirmYn"/>"      binding="confirmYn"         width="80"  align="center"  is-read-only="false"                        format="checkBoxText"                       ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrAmt"/>"         binding="mgrAmt"            width="50"  align="right"   is-read-only="true"     data-type="Number"  format="n0" aggregate="Sum"                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrVat"/>"         binding="mgrVat"            width="50"  align="right"   is-read-only="true"     data-type="Number"  format="n0" aggregate="Sum"                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.totQty"/>"         binding="totQty"            width="80"  align="right"   is-read-only="true"     data-type="Number"  format="n0" aggregate="Sum"                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrTot"/>"         binding="mgrTot"            width="50"  align="right"   is-read-only="true"     data-type="Number"  format="n0" aggregate="Sum"                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.procFg"/>"         binding="procFg"            width="70"  align="center"  is-read-only="true"     data-map="procFgMap"                                            ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.remark"/>"         binding="remark"            width="150" align="left"    is-read-only="false"                                                    max-length=300  ></wj-flex-grid-column>
@@ -78,4 +79,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreDtl.js?ver=20220722.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreDtl.js?ver=20260219.01" charset="utf-8"></script>

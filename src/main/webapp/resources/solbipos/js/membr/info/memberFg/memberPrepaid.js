@@ -76,18 +76,21 @@ app.controller('memberPrepaidRegistCtrl', ['$scope', '$http', function ($scope, 
 
   // 선불회원 등록 해제
   $scope.regPostpaid = function() {
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.collectionView.items[i].useYn='N';
-        params.push($scope.flex.collectionView.items[i]);
-      }
-    }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/membr/info/memberFg/memberFg/regPrepaid.sb", params, function(){
-      $scope._broadcast('memberPrepaidCtrl');
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.collectionView.items[i].useYn = 'N';
+          params.push($scope.flex.collectionView.items[i]);
+        }
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/membr/info/memberFg/memberFg/regPrepaid.sb", params, function () {
+        $scope._broadcast('memberPrepaidCtrl');
+      });
     });
   };
 }]);
@@ -121,18 +124,21 @@ app.controller('memberPrepaidNoRegistCtrl', ['$scope', '$http', function ($scope
 
   // 선불회원 등록
   $scope.regPrepaid = function() {
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.collectionView.items[i].useYn='Y';
-        params.push($scope.flex.collectionView.items[i]);
-      }
-    }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/membr/info/memberFg/memberFg/regPrepaid.sb", params, function(){
-      $scope._broadcast('memberPrepaidCtrl');
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.collectionView.items[i].useYn = 'Y';
+          params.push($scope.flex.collectionView.items[i]);
+        }
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/membr/info/memberFg/memberFg/regPrepaid.sb", params, function () {
+        $scope._broadcast('memberPrepaidCtrl');
+      });
     });
   };
 }]);

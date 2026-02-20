@@ -276,48 +276,59 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 템플릿 그리드 삭제
   $scope.delete = function() {
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.itemsSource.removeAt(i);
-      }
-    }
+
+      $scope._popConfirm(messages["cmm.choo.delete"], function() {
+          var params = new Array();
+          for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+              var item = $scope.flex.collectionView.items[i];
+              if(item.gChk) {
+                  item.status = 'D';
+                  params.push(item);
+              }
+          }
+
+          // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+          $scope._save("/base/output/posTemplate/template/saveList.sb", params, function () {
+              // 저장 후 재조회
+              $scope._broadcast('templateCtrl');
+          });
+      });
   };
   // 템플릿 그리드 저장
   $scope.save = function() {
-    // 파라미터 설정
-    var params = [];
-    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[u]);
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
-    }
-    for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-      $scope.flex.collectionView.itemsRemoved[d].status = "D";
-      params.push($scope.flex.collectionView.itemsRemoved[d]);
-    }
 
-    for (var i = 0; i < params.length; i++) {
-        var item = params[i];
+      $scope._popConfirm(messages["cmm.choo.save"], function() {
+          // 파라미터 설정
+          var params = [];
+          for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+              $scope.flex.collectionView.itemsEdited[u].status = "U";
+              params.push($scope.flex.collectionView.itemsEdited[u]);
+          }
+          for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+              $scope.flex.collectionView.itemsAdded[i].status = "I";
+              params.push($scope.flex.collectionView.itemsAdded[i]);
+          }
 
-        if (item.templtNm === "") {
-            $scope._popMsg(messages["posTemplate.templtNm"] + messages["cmm.require.text"]);  // 템플릿명(을)를 입력하세요.
-            return false;
-        }
+          for (var i = 0; i < params.length; i++) {
+              var item = params[i];
 
-        if (nvl(item.templtNm + '', '').getByteLengthForOracle() > 50) {
-            $scope._popMsg(messages["posTemplate.templtNm"] +  messages["cmm.overLength"] + " 50 ");  // 템플릿명의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
-            return false;
-        }
-    }
+              if (item.templtNm === "") {
+                  $scope._popMsg(messages["posTemplate.templtNm"] + messages["cmm.require.text"]);  // 템플릿명(을)를 입력하세요.
+                  return false;
+              }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/base/output/posTemplate/template/saveList.sb", params, function(){
-      // 저장 후 재조회
-      $scope._broadcast('templateCtrl');
-    });
+              if (nvl(item.templtNm + '', '').getByteLengthForOracle() > 50) {
+                  $scope._popMsg(messages["posTemplate.templtNm"] + messages["cmm.overLength"] + " 50 ");  // 템플릿명의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
+                  return false;
+              }
+          }
+
+          // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+          $scope._save("/base/output/posTemplate/template/saveList.sb", params, function () {
+              // 저장 후 재조회
+              $scope._broadcast('templateCtrl');
+          });
+      });
   };
   // 템플릿 편집 저장버튼
   $scope.saveEditTemplate = function() {

@@ -151,4 +151,4 @@ var baseUrl      = "${baseUrl}";
 var mappingFg = "${mappingFg}";
 var mappingCd   = ${ccu.getCommCodeExcpAll("801")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20230309.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20260213.01" charset="utf-8"></script>

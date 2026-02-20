@@ -122,7 +122,7 @@
     userHqBrandCdComboList2[0].value = 0;
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20230110.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20260212.03" charset="utf-8"></script>
 
 <%-- 알레르기-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/foodAllergy/foodAllergyProd.jsp">

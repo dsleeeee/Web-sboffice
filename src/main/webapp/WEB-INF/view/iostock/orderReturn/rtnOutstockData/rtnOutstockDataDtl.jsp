@@ -46,6 +46,7 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.dstbEtcQty"/>" binding="dstbEtcQty" width="65" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.dstbAmt"/>" binding="dstbAmt" width="50" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.dstbVat"/>" binding="dstbVat" width="50" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.totQty"/>" binding="totQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.dstbTot"/>" binding="dstbTot" width="50" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtl.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
 
@@ -58,4 +59,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl.js?ver=20240709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl.js?ver=20260219.01" charset="utf-8"></script>

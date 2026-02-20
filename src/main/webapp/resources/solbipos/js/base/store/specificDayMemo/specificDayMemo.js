@@ -146,22 +146,24 @@ app.controller('specificDayMemoCtrl', ['$scope', '$http', function ($scope, $htt
 
     // 저장
     $scope.save = function (){
-        // 파라미터 설정
-        var params = [];
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk) {
-                if(item.specificDayMemo === undefined || item.specificDayMemo === ""){
-                    $scope._popMsg(messages["specificDayMemo.specificDayMemo.null"]);
-                    return false;
-                } else {
-                    params.push(item);
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = [];
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.gChk) {
+                    if (item.specificDayMemo === undefined || item.specificDayMemo === "") {
+                        $scope._popMsg(messages["specificDayMemo.specificDayMemo.null"]);
+                        return false;
+                    } else {
+                        params.push(item);
+                    }
                 }
             }
-        }
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/store/specificDayMemo/specificDayMemo/getSpecificDayMemoSave.sb', params, function() {
-            $scope.searchSpecificDayMemo();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/store/specificDayMemo/specificDayMemo/getSpecificDayMemoSave.sb', params, function () {
+                $scope.searchSpecificDayMemo();
+            });
         });
     }
 }]);

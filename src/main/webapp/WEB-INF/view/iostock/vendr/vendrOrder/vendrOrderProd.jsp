@@ -45,6 +45,7 @@
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.prevOrderTotQty"/>" binding="prevOrderTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderAmt"/>" binding="orderAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderVat"/>" binding="orderVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.totQty"/>" binding="totQty" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -55,7 +56,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderProd.js?ver=20181224.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderProd.js?ver=20260219.01" charset="utf-8"></script>
 
 <%-- 상품 등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderProdReg.jsp">

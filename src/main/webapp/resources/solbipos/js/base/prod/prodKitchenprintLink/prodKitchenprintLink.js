@@ -179,31 +179,33 @@ app.controller('prodKitchenprintLinkedCtrl', ['$scope', '$http', function ($scop
   }
 
   $scope.unlinkPrint = function(){
-    var params = [];
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-        var param = {};
-        param.storeCd = $scope.flex.collectionView.items[i].storeCd;
-        param.prterNo = $scope.flex.collectionView.items[i].prterNo;
-        param.prodCd = $("#prodCd").text();
-        params.push(param);
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      var params = [];
+      for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          var param = {};
+          param.storeCd = $scope.flex.collectionView.items[i].storeCd;
+          param.prterNo = $scope.flex.collectionView.items[i].prterNo;
+          param.prodCd = $("#prodCd").text();
+          params.push(param);
+        }
       }
-    }
-    if (params.length <= 0) {
-      $scope._popMsg(messages["cmm.not.modify"]);
-      return false;
-    }
-    $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintLinked/unlink.sb", params, function(result) {
-          $scope._popMsg(messages['cmm.saveSucc']);
-          // 연결된 프린터
-          $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
-          // 안연결된 프린터
-          $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
-      },
-       function(result) {
-        s_alert.pop(result.message);
-      });
+      if (params.length <= 0) {
+        $scope._popMsg(messages["cmm.not.modify"]);
+        return false;
+      }
+      $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintLinked/unlink.sb", params, function (result) {
+            $scope._popMsg(messages['cmm.saveSucc']);
+            // 연결된 프린터
+            $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
+            // 안연결된 프린터
+            $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
+          },
+          function (result) {
+            s_alert.pop(result.message);
+          });
+    });
   };
 }]);
 
@@ -233,31 +235,33 @@ app.controller('prodKitchenprintUnlinkCtrl', ['$scope', '$http', function ($scop
   };
 
   $scope.linkedPrint = function(){
-    var params = [];
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-        var param = {};
-        param.storeCd = $scope.flex.collectionView.items[i].storeCd;
-        param.prterNo = $scope.flex.collectionView.items[i].prterNo;
-        param.prodCd = $("#prodCd").text();
-        params.push(param);
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
+      for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          var param = {};
+          param.storeCd = $scope.flex.collectionView.items[i].storeCd;
+          param.prterNo = $scope.flex.collectionView.items[i].prterNo;
+          param.prodCd = $("#prodCd").text();
+          params.push(param);
+        }
       }
-    }
-    if (params.length <= 0) {
-      $scope._popMsg(messages["cmm.not.modify"]);
-      return false;
-    }
-    $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintUnlink/linked.sb", params, function(result) {
-          $scope._popMsg(messages['cmm.saveSucc']);
+      if (params.length <= 0) {
+        $scope._popMsg(messages["cmm.not.modify"]);
+        return false;
+      }
+      $.postJSONArray("/base/prod/prodKitchenprintLink/prodKitchenprintUnlink/linked.sb", params, function (result) {
+            $scope._popMsg(messages['cmm.saveSucc']);
 
-          // 연결된 프린터
-          $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
-          // 안연결된 프린터
-          $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
-        },
-        function(result) {
-          s_alert.pop(result.message);
-        });
+            // 연결된 프린터
+            $scope._broadcast('prodKitchenprintLinkedCtrl', $("#prodCd").text());
+            // 안연결된 프린터
+            $scope._broadcast('prodKitchenprintUnlinkCtrl', $("#prodCd").text());
+          },
+          function (result) {
+            s_alert.pop(result.message);
+          });
+    });
   };
 }]);

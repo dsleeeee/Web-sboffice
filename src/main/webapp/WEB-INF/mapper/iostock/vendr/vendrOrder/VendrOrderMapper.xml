@@ -244,6 +244,7 @@
                 ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 ,       thn.NMCODE_NM AS PO_UNIT_FG_NM
+                ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT_QTY , 0, NULL, tphvod.ORDER_TOT_QTY *tphvod.SLIP_FG)) AS TOT_QTY
                 FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_PRODUCT thp
                 ,       TB_HQ_VENDOR thv
@@ -276,6 +277,7 @@
                 ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
                 ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
+                ,       TO_NUMBER(DECODE(tpsvod.ORDER_TOT_QTY , 0, NULL, tpsvod.ORDER_TOT_QTY *tpsvod.SLIP_FG)) AS TOT_QTY
                 FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
                 ,       TB_MS_PRODUCT tmp
                 ,       TB_MS_VENDOR tmv
@@ -369,6 +371,7 @@
                 ,       TO_NUMBER(DECODE(tphvod.ORDER_AMT    ,  0, NULL, tphvod.ORDER_AMT*tphvod.SLIP_FG     )) AS ORDER_AMT
                 ,       TO_NUMBER(DECODE(tphvod.ORDER_VAT    ,  0, NULL, tphvod.ORDER_VAT*tphvod.SLIP_FG     )) AS ORDER_VAT
                 ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT    ,  0, NULL, tphvod.ORDER_TOT*tphvod.SLIP_FG     )) AS ORDER_TOT
+                ,       TO_NUMBER(DECODE(tphvod.ORDER_TOT_QTY,  0, NULL, tphvod.ORDER_TOT_QTY*tphvod.SLIP_FG )) AS TOT_QTY
                 ]]>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 <![CDATA[
@@ -449,6 +452,7 @@
                 ,       TO_NUMBER(DECODE(tpsvod.ORDER_AMT    ,  0, NULL, tpsvod.ORDER_AMT*tpsvod.SLIP_FG     )) AS ORDER_AMT
                 ,       TO_NUMBER(DECODE(tpsvod.ORDER_VAT    ,  0, NULL, tpsvod.ORDER_VAT*tpsvod.SLIP_FG     )) AS ORDER_VAT
                 ,       TO_NUMBER(DECODE(tpsvod.ORDER_TOT    ,  0, NULL, tpsvod.ORDER_TOT*tpsvod.SLIP_FG     )) AS ORDER_TOT
+                ,       TO_NUMBER(DECODE(tpsvod.ORDER_TOT_QTY,  0, NULL, tpsvod.ORDER_TOT_QTY*tpsvod.SLIP_FG )) AS TOT_QTY
                 ]]>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 <![CDATA[

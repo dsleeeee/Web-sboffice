@@ -76,29 +76,32 @@ app.controller('memberPostpaidRegistCtrl', ['$scope', '$http', function ($scope,
 
   // 후불회원 등록 해제
   $scope.regPrepaid = function() {
-    // 체크
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk) {
-        // 매출처구분 (1: 매출처)
-        if ($scope.flex.collectionView.items[i].customerFg == 1) {
-          $scope._popMsg(messages["memberFg.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
-          return;
+
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 체크
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk) {
+          // 매출처구분 (1: 매출처)
+          if ($scope.flex.collectionView.items[i].customerFg == 1) {
+            $scope._popMsg(messages["memberFg.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
+            return;
+          }
         }
       }
-    }
 
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.collectionView.items[i].useYn='N';
-        params.push($scope.flex.collectionView.items[i]);
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.collectionView.items[i].useYn = 'N';
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
-    }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/membr/info/memberFg/memberFg/regPostpaid.sb", params, function(){
-      $scope._broadcast('memberPostpaidCtrl');
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/membr/info/memberFg/memberFg/regPostpaid.sb", params, function () {
+        $scope._broadcast('memberPostpaidCtrl');
+      });
     });
   };
 }]);
@@ -132,18 +135,21 @@ app.controller('memberPostpaidNoRegistCtrl', ['$scope', '$http', function ($scop
 
   // 후불회원 등록
   $scope.regPostpaid = function() {
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.collectionView.items[i].useYn='Y';
-        params.push($scope.flex.collectionView.items[i]);
-      }
-    }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/membr/info/memberFg/memberFg/regPostpaid.sb", params, function(){
-      $scope._broadcast('memberPostpaidCtrl');
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.collectionView.items[i].useYn = 'Y';
+          params.push($scope.flex.collectionView.items[i]);
+        }
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/membr/info/memberFg/memberFg/regPostpaid.sb", params, function () {
+        $scope._broadcast('memberPostpaidCtrl');
+      });
     });
   };
 }]);

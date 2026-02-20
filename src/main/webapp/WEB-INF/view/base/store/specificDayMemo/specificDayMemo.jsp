@@ -119,4 +119,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/specificDayMemo/specificDayMemo.js?ver=20220720.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/specificDayMemo/specificDayMemo.js?ver=20260212.01" charset="utf-8"></script>

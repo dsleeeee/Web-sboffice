@@ -103,6 +103,7 @@
         ,       'N' AS CONFIRM_YN
         ,       tphsd.PROC_FG
         ,       tphsd.REMARK
+        ,       TO_NUMBER(DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ), 0, NULL, DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG)) AS TOT_QTY
         FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
         ,       TB_MS_PRODUCT tmp
         ,       (   SELECT  PROD_CD, CURR_QTY

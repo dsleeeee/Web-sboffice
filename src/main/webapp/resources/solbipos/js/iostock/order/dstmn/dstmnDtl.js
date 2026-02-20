@@ -124,6 +124,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
           dataItem.outAmt         = messages["outstockConfm.dtl.outAmt"        ];  //금액
           dataItem.outVat         = messages["outstockConfm.dtl.outVat"        ];  //VAT
+          dataItem.totQty         = messages["outstockConfm.dtl.totQty"        ];  //합계수량
           dataItem.outTot         = messages["outstockConfm.dtl.outTot"        ];  //합계
           dataItem.remark         = messages["outstockConfm.dtl.remark"        ];  //비고
           dataItem.vatFg01        = messages["outstockConfm.dtl.vatFg"         ];  //상품부가세구분

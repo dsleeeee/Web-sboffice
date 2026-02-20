@@ -120,38 +120,41 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
 
   // 저장
   $scope.save = function () {
-    var params = [];
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
 
-/*
-      if(item.maxOrderAmtYn === true && item.limitLoanAmt === null){
-        $scope._popMsg(messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
-        return false;
-      }
-      if (item.limitLoanAmt !== null && item.maxOrderAmt === null) {
-        $scope._popMsg(messages["loan.maxOrderAmt"]+" "+messages["cmm.require.text"]); // 1회주문한도액을 입력해주세요.
-        return false;
-      }
-      if ((     item.maxOrderAmtYn  !== null
-          ||    item.maxOrderAmt    !== null
-          ||    item.orderCloseYn   !== null
-          )
-         &&     item.limitLoanAmt === null) {
-        $scope._popMsg("[" + item.storeCd + "] " + item.storeNm + ": " + messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
-        return false;
-      }
-*/
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        var item = $scope.flex.collectionView.itemsEdited[i];
 
-      if(item.limitLoanAmt !== null) {
-        item.status = "U";
-        params.push(item);
-      }
-    }
+        /*
+              if(item.maxOrderAmtYn === true && item.limitLoanAmt === null){
+                $scope._popMsg(messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
+                return false;
+              }
+              if (item.limitLoanAmt !== null && item.maxOrderAmt === null) {
+                $scope._popMsg(messages["loan.maxOrderAmt"]+" "+messages["cmm.require.text"]); // 1회주문한도액을 입력해주세요.
+                return false;
+              }
+              if ((     item.maxOrderAmtYn  !== null
+                  ||    item.maxOrderAmt    !== null
+                  ||    item.orderCloseYn   !== null
+                  )
+                 &&     item.limitLoanAmt === null) {
+                $scope._popMsg("[" + item.storeCd + "] " + item.storeNm + ": " + messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
+                return false;
+              }
+        */
 
-    $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", params, function () {
-      $scope.searchStoreLoanManage();
+        if (item.limitLoanAmt !== null) {
+          item.status = "U";
+          params.push(item);
+        }
+      }
+
+      $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", params, function () {
+        $scope.searchStoreLoanManage();
+      });
     });
   };
 

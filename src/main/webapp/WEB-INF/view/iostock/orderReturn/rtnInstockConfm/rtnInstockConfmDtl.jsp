@@ -156,6 +156,7 @@
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTotQty"    />"   binding="inTotQty"    width="0"   align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inAmt"       />"   binding="inAmt"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inVat"       />"   binding="inVat"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.totQty"       />"  binding="totQty"      width="80"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTot"       />"   binding="inTot"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />"   binding="remark"      width="150" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.vatFg"       />"   binding="vatFg01"     width="70"  align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
@@ -189,4 +190,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl.js?ver=20260220.01" charset="utf-8"></script>

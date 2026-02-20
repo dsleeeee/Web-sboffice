@@ -144,6 +144,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     item.mgrAmt    = mgrAmt; // 금액
     item.mgrVat    = mgrVat; // VAT
     item.mgrTot    = mgrTot; // 합계
+    item.totQty    = totQty; // 합계수량
   };
 
 

@@ -222,54 +222,59 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 쿠폰분류 그리드 저장
   $scope.save = function() {
-    // 파라미터 설정
-    var params = new Array();
-    var orgChk = 0;
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      if($scope.flex.collectionView.itemsEdited[i].payClassNm == undefined || $scope.flex.collectionView.itemsEdited[i].payClassNm.length == 0){
-        $scope._popMsg(messages["coupon.require.payClassNm"]);
-        return false;
-      }
-      if($scope.maxChk($scope.flex.collectionView.itemsEdited[i].payClassNm)){
-        if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd > 799)) { //본사이거나 매장일때는 권종구분코드가 799이상인거만 수정가능
-          $scope.flex.collectionView.itemsEdited[i].status = "U";
-          $scope.flex.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
-          params.push($scope.flex.collectionView.itemsEdited[i]);
-        } else if ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd <= 799 && orgChk == 0){
-          orgChk = 1;
+
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      var orgChk = 0;
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if ($scope.flex.collectionView.itemsEdited[i].payClassNm == undefined || $scope.flex.collectionView.itemsEdited[i].payClassNm.length == 0) {
+          $scope._popMsg(messages["coupon.require.payClassNm"]);
+          return false;
         }
-      } else {
-        $scope._popMsg(messages["coupon.payClassNm"] + " " + messages["coupon.maxChk"]);
-        return false;
+        if ($scope.maxChk($scope.flex.collectionView.itemsEdited[i].payClassNm)) {
+          if ((orgnFg != null && orgnFg == "HQ") || ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd > 799)) { //본사이거나 매장일때는 권종구분코드가 799이상인거만 수정가능
+            $scope.flex.collectionView.itemsEdited[i].status = "U";
+            $scope.flex.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
+            params.push($scope.flex.collectionView.itemsEdited[i]);
+          } else if ((orgnFg != null && orgnFg == "STORE") && $scope.flex.collectionView.itemsEdited[i].payClassCd <= 799 && orgChk == 0) {
+            orgChk = 1;
+          }
+        } else {
+          $scope._popMsg(messages["coupon.payClassNm"] + " " + messages["coupon.maxChk"]);
+          return false;
+        }
       }
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      if($scope.flex.collectionView.itemsAdded[i].payClassNm == undefined || $scope.flex.collectionView.itemsAdded[i].payClassNm.length == 0){
-        $scope._popMsg(messages["coupon.require.payClassNm"]);
-        return false;
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if ($scope.flex.collectionView.itemsAdded[i].payClassNm == undefined || $scope.flex.collectionView.itemsAdded[i].payClassNm.length == 0) {
+          $scope._popMsg(messages["coupon.require.payClassNm"]);
+          return false;
+        }
+        if ($scope.maxChk($scope.flex.collectionView.itemsAdded[i].payClassNm)) {
+          $scope.flex.collectionView.itemsAdded[i].status = "I";
+          $scope.flex.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
+          params.push($scope.flex.collectionView.itemsAdded[i]);
+        } else {
+          $scope._popMsg(messages["coupon.payClassNm"] + " " + messages["coupon.maxChk"]);
+          return false;
+        }
       }
-      if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].payClassNm)) {
-        $scope.flex.collectionView.itemsAdded[i].status = "I";
-        $scope.flex.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
-        params.push($scope.flex.collectionView.itemsAdded[i]);
-      } else {
-        $scope._popMsg(messages["coupon.payClassNm"] + " " + messages["coupon.maxChk"]);
-        return false;
+      for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+        $scope.flex.collectionView.itemsRemoved[i].status = "D";
+        $scope.flex.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
+        params.push($scope.flex.collectionView.itemsRemoved[i]);
       }
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      $scope.flex.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
-    }
-    if(orgChk==1){
-      s_alert.pop(messages["coupon.payClassCd.edited"]);
-      if (params.length == 0){
-        return false;
+      if (orgChk == 1) {
+        s_alert.pop(messages["coupon.payClassCd.edited"]);
+        if (params.length == 0) {
+          return false;
+        }
       }
-    }
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveCouponClassList.sb", params, function(){ $scope.allSearch() });
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "class/saveCouponClassList.sb", params, function () {
+        $scope.allSearch()
+      });
+    });
   };
 
   // 분류 매장 적용
@@ -581,18 +586,23 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 쿠폰 그리드 행 삭제
   $scope.del = function(){
-    // 파라미터 설정
-    var params = new Array();
 
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      if($scope.flex.collectionView.items[i].gChk) {
-        $scope.flex.collectionView.items[i].status = "D";
-        params.push($scope.flex.collectionView.items[i]);
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 파라미터 설정
+      var params = new Array();
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        if ($scope.flex.collectionView.items[i].gChk) {
+          $scope.flex.collectionView.items[i].status = "D";
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
-    }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.searchCoupon(); });
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "class/saveCouponList.sb", params, function () {
+        $scope.searchCoupon();
+      });
+    });
   };
 
   $scope.maxChk = function (val){
@@ -623,56 +633,61 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 쿠폰 저장
   $scope.save = function() {
-    // 파라미터 설정
-    var params = new Array();
 
-    // dispSeq 재설정
-    for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
-      if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+
+      // dispSeq 재설정
+      for (var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+        if ($scope.flex.collectionView.items[s].dispSeq !== num) {
           $scope.flex.collectionView.items[s].dispSeq = num;
           $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
           $scope.flex.collectionView.items[s].status = "U";
           $scope.flex.collectionView.commitEdit();
+        }
       }
-    }
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      if($scope.flex.collectionView.itemsEdited[i].coupnNm == undefined || $scope.flex.collectionView.itemsEdited[i].coupnNm.length == 0){
-        $scope._popMsg(messages["coupon.require.coupnNm"]);
-        return false;
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if ($scope.flex.collectionView.itemsEdited[i].coupnNm == undefined || $scope.flex.collectionView.itemsEdited[i].coupnNm.length == 0) {
+          $scope._popMsg(messages["coupon.require.coupnNm"]);
+          return false;
+        }
+        if ($scope.maxChk($scope.flex.collectionView.itemsEdited[i].coupnNm)) {
+          $scope.flex.collectionView.itemsEdited[i].status = "U";
+          $scope.flex.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
+          params.push($scope.flex.collectionView.itemsEdited[i]);
+        } else {
+          $scope._popMsg(messages["coupon.coupnNm"] + " " + messages["coupon.maxChk"]);
+          return false;
+        }
       }
-      if($scope.maxChk($scope.flex.collectionView.itemsEdited[i].coupnNm)) {
-        $scope.flex.collectionView.itemsEdited[i].status = "U";
-        $scope.flex.collectionView.itemsEdited[i].coupnEnvstVal = coupnEnvstVal;
-        params.push($scope.flex.collectionView.itemsEdited[i]);
-      } else {
-        $scope._popMsg(messages["coupon.coupnNm"] + " " + messages["coupon.maxChk"]);
-        return false;
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if ($scope.flex.collectionView.itemsAdded[i].coupnNm == undefined || $scope.flex.collectionView.itemsAdded[i].coupnNm.length == 0) {
+          $scope._popMsg(messages["coupon.require.coupnNm"]);
+          return false;
+        }
+        if ($scope.maxChk($scope.flex.collectionView.itemsAdded[i].coupnNm)) {
+          $scope.flex.collectionView.itemsAdded[i].status = "I";
+          $scope.flex.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
+          params.push($scope.flex.collectionView.itemsAdded[i]);
+        } else {
+          $scope._popMsg(messages["coupon.coupnNm"] + " " + messages["coupon.maxChk"]);
+          return false;
+        }
       }
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      if($scope.flex.collectionView.itemsAdded[i].coupnNm == undefined || $scope.flex.collectionView.itemsAdded[i].coupnNm.length == 0){
-        $scope._popMsg(messages["coupon.require.coupnNm"]);
-        return false;
-      }
-      if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].coupnNm)) {
-        $scope.flex.collectionView.itemsAdded[i].status = "I";
-        $scope.flex.collectionView.itemsAdded[i].coupnEnvstVal = coupnEnvstVal;
-        params.push($scope.flex.collectionView.itemsAdded[i]);
-      } else {
-        $scope._popMsg(messages["coupon.coupnNm"] + " " + messages["coupon.maxChk"]);
-        return false;
-      }
-    }
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      $scope.flex.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
-    }
+      for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+        $scope.flex.collectionView.itemsRemoved[i].status = "D";
+        $scope.flex.collectionView.itemsRemoved[i].coupnEnvstVal = coupnEnvstVal;
+        params.push($scope.flex.collectionView.itemsRemoved[i]);
+      }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.searchCoupon(); });
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "class/saveCouponList.sb", params, function () {
+        $scope.searchCoupon();
+      });
+    });
   };
 
   // 화면 ready 된 후 설정

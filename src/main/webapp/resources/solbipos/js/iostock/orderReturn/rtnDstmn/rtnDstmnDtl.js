@@ -142,6 +142,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    item.outAmt    = outAmt; // 금액
 	    item.outVat    = outVat; // VAT
 	    item.outTot    = outTot; // 합계
+	  	item.totQty    = totQty; // 합계수량
 	  };
 	  
 	  $scope.newCalcAmt = function (item, idx) {
@@ -189,6 +190,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        item.orderAmt    = orderAmt; // 금액
 	        item.orderVat    = orderVat; // VAT
 	        item.orderTot    = orderTot; // 합계
+		  	item.totQty    	 = totQty; // 합계수량
 		        
 		    //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - END
 

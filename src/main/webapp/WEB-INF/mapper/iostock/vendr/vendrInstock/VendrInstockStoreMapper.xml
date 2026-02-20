@@ -147,6 +147,7 @@
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS TOT_QTY
         FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_VENDOR tmv
@@ -195,7 +196,6 @@
         /* USE : VendrInstockStoreMapper.getVendrInstockProdRegList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-
 				SELECT  A.PROD_CD
 				,		A.PROD_NM
 				,		A.VAT_FG01
@@ -211,6 +211,7 @@
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
+				,		A.PREV_IN_TOT_QTY   AS TOT_QTY
 				]]>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 <![CDATA[

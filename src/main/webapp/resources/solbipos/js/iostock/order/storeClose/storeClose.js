@@ -121,13 +121,16 @@ app.controller('storeCloseDtlCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 저장
   $scope.saveStoreClose = function () {
-    var params = [];
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
-      params.push($scope.flex.collectionView.itemsEdited[i]);
-    }
-    $scope._save("/iostock/order/storeClose/storeClose/save.sb", params, function () {
-      $scope.saveStoreCloseCallback();
+
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      var params = [];
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        $scope.flex.collectionView.itemsEdited[i].status = "U";
+        params.push($scope.flex.collectionView.itemsEdited[i]);
+      }
+      $scope._save("/iostock/order/storeClose/storeClose/save.sb", params, function () {
+        $scope.saveStoreCloseCallback();
+      });
     });
   };
 

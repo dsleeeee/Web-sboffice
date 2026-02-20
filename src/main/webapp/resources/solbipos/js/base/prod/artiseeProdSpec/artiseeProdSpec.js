@@ -205,65 +205,68 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
     // <-- 저장 -->
     $scope.save = function() {
 
-        if($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["cmm.empty.data"]);
-            return false;
-        }
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
 
-        var params = new Array();
-        var arr = [];
-        var arr2 = [];
-        var inputProdCd = "";
-
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            arr[i] = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
-        }
-
-        arr.forEach(function(element){
-            if(!arr2.includes(element)){
-                arr2.push(element);
-            }else{
-                inputProdCd += element + ",";
+            if ($scope.flex.rows.length <= 0) {
+                $scope._popMsg(messages["cmm.empty.data"]);
+                return false;
             }
-        });
 
-        if(inputProdCd !== ""){
-            $scope._popMsg(messages["artiseeProdSpec.prodCdDuplicate.msg"] + "<br>(" + inputProdCd.substr(0, inputProdCd.length - 1) + ")"); // 중복된 상품코드입니다.
-            return false;
-        }
+            var params = new Array();
+            var arr = [];
+            var arr2 = [];
+            var inputProdCd = "";
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if ($scope.flex.collectionView.itemsAdded[i].gChk === true) {
-                $scope.flex.collectionView.itemsAdded[i].prodCd = $scope.flex.collectionView.itemsAdded[i].prodCd.trim().removeEnter();
-                if($scope.flex.collectionView.itemsAdded[i].prodCd !== null && $scope.flex.collectionView.itemsAdded[i].prodCd !== ""){
-                    params.push($scope.flex.collectionView.itemsAdded[i]);
-                }else{
-                    $scope._popMsg(messages["artiseeProdSpec.prodCdChk.msg"]); // 상품코드를 입력하세요.
-                    return false;
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                arr[i] = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
+            }
+
+            arr.forEach(function (element) {
+                if (!arr2.includes(element)) {
+                    arr2.push(element);
+                } else {
+                    inputProdCd += element + ",";
+                }
+            });
+
+            if (inputProdCd !== "") {
+                $scope._popMsg(messages["artiseeProdSpec.prodCdDuplicate.msg"] + "<br>(" + inputProdCd.substr(0, inputProdCd.length - 1) + ")"); // 중복된 상품코드입니다.
+                return false;
+            }
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if ($scope.flex.collectionView.itemsAdded[i].gChk === true) {
+                    $scope.flex.collectionView.itemsAdded[i].prodCd = $scope.flex.collectionView.itemsAdded[i].prodCd.trim().removeEnter();
+                    if ($scope.flex.collectionView.itemsAdded[i].prodCd !== null && $scope.flex.collectionView.itemsAdded[i].prodCd !== "") {
+                        params.push($scope.flex.collectionView.itemsAdded[i]);
+                    } else {
+                        $scope._popMsg(messages["artiseeProdSpec.prodCdChk.msg"]); // 상품코드를 입력하세요.
+                        return false;
+                    }
                 }
             }
-        }
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if ($scope.flex.collectionView.itemsEdited[i].gChk === true) {
-                params.push($scope.flex.collectionView.itemsEdited[i]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                if ($scope.flex.collectionView.itemsEdited[i].gChk === true) {
+                    params.push($scope.flex.collectionView.itemsEdited[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
-            $scope.$apply(function() {
-                // 특성
-                var scope = agrid.getScope('artiseeProdSpecCtrl');
-                scope.searchArtiseeProdSpec();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function () {
+                $scope.$apply(function () {
+                    // 특성
+                    var scope = agrid.getScope('artiseeProdSpecCtrl');
+                    scope.searchArtiseeProdSpec();
 
-                // 적용 상품
-                $scope.searchArtiseeProdSpecProd();
+                    // 적용 상품
+                    $scope.searchArtiseeProdSpecProd();
 
-                // 미적용 상품
-                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-                // storeScope2._gridDataInit();
-                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                    // 미적용 상품
+                    var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                    // storeScope2._gridDataInit();
+                    storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                });
             });
         });
     };
@@ -272,29 +275,32 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 
     // <-- 삭제 -->
     $scope.del = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].specCd = $scope.selectedProd.specCd;
-                params.push($scope.flex.collectionView.items[i]);
+
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].specCd = $scope.selectedProd.specCd;
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveDelete.sb", params, function(){
-            $scope.$apply(function() {
-                // 특성
-                var scope = agrid.getScope('artiseeProdSpecCtrl');
-                scope.searchArtiseeProdSpec();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveDelete.sb", params, function () {
+                $scope.$apply(function () {
+                    // 특성
+                    var scope = agrid.getScope('artiseeProdSpecCtrl');
+                    scope.searchArtiseeProdSpec();
 
-                // 적용 상품
-                $scope.searchArtiseeProdSpecProd();
+                    // 적용 상품
+                    $scope.searchArtiseeProdSpecProd();
 
-                // 미적용 상품
-                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-                // storeScope2._gridDataInit();
-                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                    // 미적용 상품
+                    var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                    // storeScope2._gridDataInit();
+                    storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                });
             });
         });
     };
@@ -407,31 +413,34 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
 
     // <-- 추가 -->
     $scope.add = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].specCd = $scope.selectedNoProd.specCd;
-                params.push($scope.flex.collectionView.items[i]);
+
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].specCd = $scope.selectedNoProd.specCd;
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
-            $scope.$apply(function() {
-                // 특성
-                var scope = agrid.getScope('artiseeProdSpecCtrl');
-                scope.searchArtiseeProdSpec();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function () {
+                $scope.$apply(function () {
+                    // 특성
+                    var scope = agrid.getScope('artiseeProdSpecCtrl');
+                    scope.searchArtiseeProdSpec();
 
-                // 적용 상품
-                var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
-                // storeScope._gridDataInit();
-                storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedNoProd());
+                    // 적용 상품
+                    var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
+                    // storeScope._gridDataInit();
+                    storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedNoProd());
 
-                // 미적용 상품
-                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-                // storeScope2._gridDataInit();
-                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedNoProd());
+                    // 미적용 상품
+                    var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                    // storeScope2._gridDataInit();
+                    storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedNoProd());
+                });
             });
         });
     };

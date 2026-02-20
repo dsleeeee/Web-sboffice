@@ -123,6 +123,7 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
     item.inAmt    = inAmt; // 금액
     item.inVat    = inVat; // VAT
     item.inTot    = inTot; // 합계
+    item.totQty   = totQty; // 합계수량
   };
 
 

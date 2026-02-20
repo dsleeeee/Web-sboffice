@@ -87,6 +87,7 @@ app.controller('dstbCloseStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     item.mgrAmt    = mgrAmt; // 금액
     item.mgrVat    = mgrVat; // VAT
     item.mgrTot    = mgrTot; // 합계
+    item.totQty    = totQty; // 합계수량
   };
 
   // 다른 컨트롤러의 broadcast 받기

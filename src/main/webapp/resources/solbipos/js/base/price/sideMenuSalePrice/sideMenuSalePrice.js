@@ -109,43 +109,45 @@ app.controller('sideMenuSalePriceCtrl', ['$scope', '$http', function ($scope, $h
     // 가격저장
     $scope.saveAddProdUprc = function (){
 
-        // 파라미터 설정
-        var params = new Array();
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
 
-        var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
-        var numchkexp2 = /^-[0-9]/g;
+            var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
+            var numchkexp2 = /^-[0-9]/g;
 
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                // 기존판매가와 변경판매가의 금액이 다른 경우
-                if($scope.flex.collectionView.items[i].addProdUprc !== $scope.flex.collectionView.items[i].saleUprc){
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    // 기존판매가와 변경판매가의 금액이 다른 경우
+                    if ($scope.flex.collectionView.items[i].addProdUprc !== $scope.flex.collectionView.items[i].saleUprc) {
 
-                    // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
-                    if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
-                        if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
-                            $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                        // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                        if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+                            if ((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)) {
+                                $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                                return false;
+                            }
+                        }
+
+                        // 수정상품단가 100000000 이상 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc >= 100000000) {
+                            $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
                             return false;
                         }
-                    }
+                        // 수정상품단가 -100000000 이하 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc <= -100000000) {
+                            $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
+                            return false;
+                        }
 
-                    // 수정상품단가 100000000 이상 입력 불가
-                    if($scope.flex.collectionView.items[i].saleUprc >= 100000000){
-                        $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
-                        return false;
+                        params.push($scope.flex.collectionView.items[i]);
                     }
-                    // 수정상품단가 -100000000 이하 입력 불가
-                    if ($scope.flex.collectionView.items[i].saleUprc <= -100000000) {
-                        $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
-                        return false;
-                    }
-
-                    params.push($scope.flex.collectionView.items[i]);
                 }
             }
-        }
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/price/sideMenuSalePrice/sideMenuSalePrice/saveSideMenuSalePrice.sb', params, function(){
-            $scope.searchSideMenuList();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/price/sideMenuSalePrice/sideMenuSalePrice/saveSideMenuSalePrice.sb', params, function () {
+                $scope.searchSideMenuList();
+            });
         });
     };
 

@@ -113,4 +113,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeClose/storeClose.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeClose/storeClose.js?ver=20260213.01" charset="utf-8"></script>

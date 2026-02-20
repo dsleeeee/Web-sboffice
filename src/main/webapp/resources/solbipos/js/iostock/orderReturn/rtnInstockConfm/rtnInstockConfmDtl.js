@@ -109,6 +109,7 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
 			s.columnHeaders.setCellData(i, "inTotQty"   , messages["instockConfm.dtl.inTotQty"      ] );
 			s.columnHeaders.setCellData(i, "inAmt"      , messages["instockConfm.dtl.inAmt"         ] );
 			s.columnHeaders.setCellData(i, "inVat"      , messages["instockConfm.dtl.inVat"         ] );
+            s.columnHeaders.setCellData(i, "totQty"     , messages["instockConfm.dtl.totQty"        ] );
 			s.columnHeaders.setCellData(i, "inTot"      , messages["instockConfm.dtl.inTot"         ] );
 			s.columnHeaders.setCellData(i, "remark"     , messages["instockConfm.dtl.remark"        ] );
 			s.columnHeaders.setCellData(i, "vatFg01"    , messages["instockConfm.dtl.vatFg"         ] );
@@ -152,6 +153,7 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
       item.inAmt      = inAmt;    //금액
       item.inVat      = inVat;    //VAT
       item.inTot      = inTot;    //합계
+      item.totQty     = totQty    //합계수량
   };
 
   // 다른 컨트롤러의 broadcast 받기

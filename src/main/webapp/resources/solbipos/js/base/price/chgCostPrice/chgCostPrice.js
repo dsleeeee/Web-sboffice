@@ -116,67 +116,70 @@ app.controller('chgCostPriceCtrl', ['$scope', '$http','$timeout', function ($sco
             return false;
         }
 
-        // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
-        Number.isInteger = Number.isInteger || function (value) {
-            return typeof value === "number" &&
-                isFinite(value) &&
-                Math.floor(value) === value;
-        };
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
 
-        var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
-        var numchkexp2 = /^-[0-9]/g;
+            // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+            Number.isInteger = Number.isInteger || function (value) {
+                return typeof value === "number" &&
+                    isFinite(value) &&
+                    Math.floor(value) === value;
+            };
 
-        // 파라미터 설정
-        var params = new Array();
+            var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
+            var numchkexp2 = /^-[0-9]/g;
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                if ($scope.flex.collectionView.items[i].bCostUprc !== $scope.flex.collectionView.items[i].costUprc) {
+            // 파라미터 설정
+            var params = new Array();
 
-                    // 변경원가 - 필수 입력값 체크
-                    if ($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {
-                        $scope._popMsg(messages["chgCostPrice.costUprcBlank"]); // 원가를 입력하세요.
-                        return false;
-                    }
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    if ($scope.flex.collectionView.items[i].bCostUprc !== $scope.flex.collectionView.items[i].costUprc) {
 
-                    // 변경원가 - 소수점 입력 불가
-                    if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].costUprc)) == false) {
-                        $scope._popMsg(messages["chgCostPrice.costUprcInChk"]); // 변경원가는 숫자만(정수9자리) 입력해주세요.
-                        return false;
-                    }
+                        // 변경원가 - 필수 입력값 체크
+                        if ($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {
+                            $scope._popMsg(messages["chgCostPrice.costUprcBlank"]); // 원가를 입력하세요.
+                            return false;
+                        }
 
-                    // 변경원가 - 마이너스(-)외에 다른 문자 입력 불가
-                    if (numchkexp.test($scope.flex.collectionView.items[i].costUprc)) {
-                        if ((numchkexp2.test($scope.flex.collectionView.items[i].costUprc) == false)) {
+                        // 변경원가 - 소수점 입력 불가
+                        if (Number.isInteger(parseFloat($scope.flex.collectionView.items[i].costUprc)) == false) {
                             $scope._popMsg(messages["chgCostPrice.costUprcInChk"]); // 변경원가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
+
+                        // 변경원가 - 마이너스(-)외에 다른 문자 입력 불가
+                        if (numchkexp.test($scope.flex.collectionView.items[i].costUprc)) {
+                            if ((numchkexp2.test($scope.flex.collectionView.items[i].costUprc) == false)) {
+                                $scope._popMsg(messages["chgCostPrice.costUprcInChk"]); // 변경원가는 숫자만(정수9자리) 입력해주세요.
+                                return false;
+                            }
+                        }
+
+                        // 변경공급가 - 1000000000 이상 입력 불가
+                        if ($scope.flex.collectionView.items[i].costUprc >= 1000000000) {
+                            $scope._popMsg(messages["chgCostPrice.costUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
+
+                        $scope.flex.collectionView.items[i].costUprcType = $scope.costUprcTypeCombo.selectedValue;
+
+                        if ($scope.costUprcTypeCombo.selectedValue === "1") { // 상품 수불 원가 변경시, 수불년월 포함
+                            $scope.flex.collectionView.items[i].iostockYm = wijmo.Globalize.format(iostockYm.value, 'yyyyMM');
+                            $scope.flex.collectionView.items[i].storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
+                        }
+
+                        params.push($scope.flex.collectionView.items[i]);
                     }
-
-                    // 변경공급가 - 1000000000 이상 입력 불가
-                    if ($scope.flex.collectionView.items[i].costUprc >= 1000000000) {
-                        $scope._popMsg(messages["chgCostPrice.costUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
-                        return false;
-                    }
-
-                    $scope.flex.collectionView.items[i].costUprcType = $scope.costUprcTypeCombo.selectedValue;
-
-                    if($scope.costUprcTypeCombo.selectedValue === "1"){ // 상품 수불 원가 변경시, 수불년월 포함
-                        $scope.flex.collectionView.items[i].iostockYm = wijmo.Globalize.format(iostockYm.value, 'yyyyMM');
-                        $scope.flex.collectionView.items[i].storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
-                    }
-
-                    params.push($scope.flex.collectionView.items[i]);
                 }
             }
-        }
 
-        // console.log('params',params)
+            // console.log('params',params)
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/price/chgCostPrice/saveCostPrice.sb', params, function () {
-            // 조회
-            $scope.searchCostPriceList();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/price/chgCostPrice/saveCostPrice.sb', params, function () {
+                // 조회
+                $scope.searchCostPriceList();
+            });
         });
     };
 

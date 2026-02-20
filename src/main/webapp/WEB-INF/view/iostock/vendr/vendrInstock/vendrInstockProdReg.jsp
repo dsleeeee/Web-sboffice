@@ -126,24 +126,27 @@
             ime-enabled="true">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodCd"/>" 		binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodNm"/>" 		binding="prodNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.lastCostUprc"/>" binding="lastCostUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitFg"/>" 	binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitQty"/>" 	binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>"		binding="prevInUnitQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>"		binding="prevInEtcQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.costUprc"/>" 	binding="costUprc" width="110" align="right" is-read-only="false" max-length=8></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>" 		binding="inUnitQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>" 		binding="inEtcQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInTotQty"/>" binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTotQty"/>" 	binding="inTotQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inAmt"/>" 		binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inVat"/>" 		binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" 		binding="inTot" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vatFg"/>" 		binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>"binding="splyUprc" width="70" align="right" is-read-only="false" visible="{{storeSplyChk}}" max-length=8></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodCd"/>" 		  binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prodNm"/>" 		  binding="prodNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.lastCostUprc"/>"   binding="lastCostUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitFg"/>" 	  binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.poUnitQty"/>" 	  binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>"		  binding="prevInUnitQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>"		  binding="prevInEtcQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.costUprc"/>" 	  binding="costUprc" width="110" align="right" is-read-only="false" max-length=8></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>" 		  binding="inUnitQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>" 		  binding="inEtcQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInTotQty"/>"   binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTotQty"/>" 	  binding="inTotQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInUnitQty"/>"  binding="prevInUnitQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInEtcQty"/>"   binding="prevInEtcQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inAmt"/>" 		  binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inVat"/>" 		  binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.totQty"/>" 	      binding="totQty" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" 		  binding="inTot" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vatFg"/>" 		  binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vendrVatFg01"/>"   binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>"  binding="splyUprc" width="70" align="right" is-read-only="false" visible="{{storeSplyChk}}" max-length=8></wj-flex-grid-column>
 					
           </wj-flex-grid>
         </div>
@@ -160,7 +163,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20181224.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20260220.08" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

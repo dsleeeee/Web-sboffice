@@ -287,9 +287,9 @@ app.controller('cdMomsDetailCtrl', ['$scope', '$http', function ($scope, $http) 
 
     $scope.searchDetailCtrl = function(){
         var params = {};
-        params.nmcodeGrpCd = $("#s_nmcodeCd").val(data.nmcodeCd);
-        params.nmcodeItem1 = $("#s_nmcodeCd").val(data.nmcodeItem1);
-        params.nmcodeItem2 = $("#s_nmcodeCd").val(data.nmcodeItem2);
+        params.nmcodeGrpCd = $("#s_nmcodeCd").val();
+        params.nmcodeItem1 = $("#s_nmcodeItem1").val();
+        params.nmcodeItem2 = $("#s_nmcodeItem2").val();
 
         // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
         $scope._inquirySub("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsList.sb", params, function() {
@@ -311,12 +311,12 @@ app.controller('cdMomsDetailCtrl', ['$scope', '$http', function ($scope, $http) 
             }
         });
 
-        $("#s_nmcodeCd").val(data.nmcodeCd);
-        $("#s_nmcodeItem1").val(data.nmcodeItem1);
-        $("#s_nmcodeItem2").val(data.nmcodeItem2);
+        // $("#s_nmcodeCd").val(data.nmcodeCd);
+        // $("#s_nmcodeItem1").val(data.nmcodeItem1);
+        // $("#s_nmcodeItem2").val(data.nmcodeItem2);
 
         // 기능수행 종료 : 반드시 추가
-        event.preventDefault();
+        // event.preventDefault();
     };
 
     // 세부명칭 그리드 행 추가
@@ -334,72 +334,84 @@ app.controller('cdMomsDetailCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 세부명칭 그리드 저장
     $scope.save = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            var item = $scope.flex.collectionView.itemsAdded[i];
-            if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
-                $scope._popMsg(messages["cdMoms.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
-                return false;
-            }
 
-            if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
-                $scope._popMsg(messages["cdMoms.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
-                return false;
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                params.push($scope.flex.collectionView.itemsEdited[i]);
             }
-
-            if(item.nmcodeCd.length != $("#s_nmcodeItem2").val()){
-                $scope._popMsg(messages["cdMoms.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
-                return false;
-            }
-
-            var check_nmcodeCd_cnt = 0;
-            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                if($scope.flex.collectionView.items[j].nmcodeCd == item.nmcodeCd) {
-                    check_nmcodeCd_cnt++;
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                var item = $scope.flex.collectionView.itemsAdded[i];
+                if (item.nmcodeCd === undefined || item.nmcodeCd.length === 0) {
+                    $scope._popMsg(messages["cdMoms.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
+                    return false;
                 }
-            }
-            if(check_nmcodeCd_cnt > 1){
-                $scope._popMsg(messages["cdMoms.detail.require.nmcodeCdChk"]+' ('+item.nmcodeCd+')'); // 코드중복 확인
-                return false;
-            }
 
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
-            params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsSave.sb", params, function(){ $scope.allSearch() });
+                if (item.nmcodeNm === undefined || item.nmcodeNm.length === 0) {
+                    $scope._popMsg(messages["cdMoms.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
+                    return false;
+                }
 
-        // 재조회
-        $scope.allSearch = function () {
-            $scope.searchDetailCtrl();
-        };
+                if (item.nmcodeCd.length != $("#s_nmcodeItem2").val()) {
+                    $scope._popMsg(messages["cdMoms.detail.require.nmcodeCdLengthChk"] + ' (' + $("#s_nmcodeItem2").val() + ')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
+                    return false;
+                }
+
+                var check_nmcodeCd_cnt = 0;
+                for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                    if ($scope.flex.collectionView.items[j].nmcodeCd == item.nmcodeCd) {
+                        check_nmcodeCd_cnt++;
+                    }
+                }
+                if (check_nmcodeCd_cnt > 1) {
+                    $scope._popMsg(messages["cdMoms.detail.require.nmcodeCdChk"] + ' (' + item.nmcodeCd + ')'); // 코드중복 확인
+                    return false;
+                }
+
+                $scope.flex.collectionView.itemsAdded[i].status = "I";
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsSave.sb", params, function () {
+                $scope.allSearch()
+            });
+
+        });
+    };
+
+    // 재조회
+    $scope.allSearch = function () {
+        $scope.searchDetailCtrl();
     };
 
     // 세부명칭 그리드 행 삭제
     $scope.deleteRow = function() {
-        $scope._popConfirm(messages["cdMoms.detail.require.delConfirm"], function() {
-            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-                var item = $scope.flex.collectionView.items[i];
-                if(item.gChk) {
-                    if (item.nmcodeGrpCd == "093" && (item.nmcodeCd == "1" || item.nmcodeCd == "2"))
-                    {
-                        $scope._popMsg(messages["cdMoms.detail.require.chk.093.1"]); // 093 발주단위 기본값 0 낱개 1 박스 는 삭제할 수 없습니다.
-                        return false;
+
+            $scope._popConfirm(messages["cdMoms.detail.require.delConfirm"], function () {
+                var params = new Array();
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if(item.gChk) {
+                        if (item.nmcodeGrpCd == "093" && (item.nmcodeCd == "1" || item.nmcodeCd == "2")){
+                            $scope._popMsg(messages["cd.detail.require.chk.093.1"]); // 093 발주단위 기본값 0 낱개 1 박스 는 삭제할 수 없습니다.
+                            return false;
+                        }else {
+                            item.status = 'D';
+                            params.push(item);
+                        }
                     }
-                    $scope.flex.collectionView.removeAt(i);
                 }
-            }
-            $scope.save();
-        });
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._save("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsSave.sb", params, function () {
+                    $scope.allSearch()
+                });
+            });
     }
 
 }]);

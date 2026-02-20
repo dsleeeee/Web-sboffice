@@ -134,6 +134,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     item.orderAmt    = orderAmt; // 금액
     item.orderVat    = orderVat; // VAT
     item.orderTot    = orderTot; // 합계
+    item.totQty      = totQty; // 합계수량
   };
 
   // 다른 컨트롤러의 broadcast 받기

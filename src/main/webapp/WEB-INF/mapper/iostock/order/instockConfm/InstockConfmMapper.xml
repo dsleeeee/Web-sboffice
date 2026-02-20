@@ -197,7 +197,8 @@
 		                    A.IN_TOT,
 		                    A.REMARK,
 		                    A.ENVST0011,
-		                    A.BARCD_CD
+		                    A.BARCD_CD,
+		                    (A.IN_UNIT_QTY * A.PO_UNIT_QTY) + A.IN_ETC_QTY  AS TOT_QTY
 		            FROM    (
 		                        SELECT  A.HQ_OFFICE_CD,
 		                                A.SLIP_NO,

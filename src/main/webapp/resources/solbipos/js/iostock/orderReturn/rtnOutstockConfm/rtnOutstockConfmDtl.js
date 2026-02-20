@@ -105,8 +105,9 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
 			
 			s.columnHeaders.setCellData(i, "outTotQty"   , messages["rtnOutstockConfm.dtl.outUnitQty"      ] );      
 			s.columnHeaders.setCellData(i, "outAmt"      , messages["rtnOutstockConfm.dtl.outAmt"         ] );      
-			s.columnHeaders.setCellData(i, "outVat"      , messages["rtnOutstockConfm.dtl.outVat"         ] );      
-			s.columnHeaders.setCellData(i, "outTot"      , messages["rtnOutstockConfm.dtl.outTot"         ] );      
+			s.columnHeaders.setCellData(i, "outVat"      , messages["rtnOutstockConfm.dtl.outVat"         ] );
+            s.columnHeaders.setCellData(i, "totQty"      , messages["rtnOutstockConfm.dtl.totQty"         ] );
+            s.columnHeaders.setCellData(i, "outTot"      , messages["rtnOutstockConfm.dtl.outTot"         ] );
 			s.columnHeaders.setCellData(i, "remark"     , messages["rtnOutstockConfm.dtl.remark"        ] );      
 			s.columnHeaders.setCellData(i, "vatFg01"    , messages["rtnOutstockConfm.dtl.vatFg"         ] );      
 		}
@@ -149,6 +150,7 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     item.outAmt    = outAmt; // 금액
     item.outVat    = outVat; // VAT
     item.outTot    = outTot; // 합계
+    item.totQty    = totQty; // 합계수량
   };
 
   // 다른 컨트롤러의 broadcast 받기

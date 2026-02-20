@@ -79,6 +79,7 @@
         ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_AMT ,tphsd.MGR_AMT )*tphsd.SLIP_FG AS DSTB_AMT
         ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_VAT ,tphsd.MGR_VAT )*tphsd.SLIP_FG AS DSTB_VAT
         ,       DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT ,tphsd.MGR_TOT )*tphsd.SLIP_FG AS DSTB_TOT
+        ,       DECODE(DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY ),0,NULL,DECODE(tphsd.PROC_FG,'00',tphsd.MD_TOT_QTY ,tphsd.MGR_TOT_QTY )*tphsd.SLIP_FG) AS TOT_QTY
         FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
         ,       TB_MS_PRODUCT tmp
         WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}

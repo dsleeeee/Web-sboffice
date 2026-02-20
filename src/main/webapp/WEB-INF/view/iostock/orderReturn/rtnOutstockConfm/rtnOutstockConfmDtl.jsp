@@ -162,6 +162,7 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTotQty"/>" binding="outTotQty" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outAmt"/>" 	 binding="outAmt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outVat"/>" 	 binding="outVat" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.totQty"/>" 	 binding="totQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTot"/>" 	 binding="outTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.remark"/>" 	 binding="remark" width="150" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.vatFg"/>" 	 binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -193,7 +194,7 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20220906.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20260219.01" charset="utf-8"></script>
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">

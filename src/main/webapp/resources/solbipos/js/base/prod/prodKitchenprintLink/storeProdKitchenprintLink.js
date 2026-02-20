@@ -177,32 +177,34 @@ app.controller('storeProdKitchenprintLinkProdCtrl', ['$scope', '$http', function
 
     // 삭제
     $scope.del = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].status = "D";
-                $scope.flex.collectionView.items[i].storeCd = $scope.selectedProd.storeCd;
-                $scope.flex.collectionView.items[i].prterNo = $scope.selectedProd.prterNo;
-                params.push($scope.flex.collectionView.items[i]);
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].status = "D";
+                    $scope.flex.collectionView.items[i].storeCd = $scope.selectedProd.storeCd;
+                    $scope.flex.collectionView.items[i].prterNo = $scope.selectedProd.prterNo;
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/prodKitchenprintLink/storeProdKitchenprintLink/getStoreProdKitchenprintLinkSave.sb", params, function(){
-            $scope.$apply(function() {
-                // 매장 조회
-                var scope = agrid.getScope('storeProdKitchenprintLinkCtrl');
-                scope.searchStoreProdKitchenprintLink();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/prodKitchenprintLink/storeProdKitchenprintLink/getStoreProdKitchenprintLinkSave.sb", params, function () {
+                $scope.$apply(function () {
+                    // 매장 조회
+                    var scope = agrid.getScope('storeProdKitchenprintLinkCtrl');
+                    scope.searchStoreProdKitchenprintLink();
 
-                // 등록 상품
-                var storeScope = agrid.getScope('storeProdKitchenprintLinkProdCtrl');
-                storeScope._broadcast('storeProdKitchenprintLinkProdCtrl', $scope.getSelectedProd());
+                    // 등록 상품
+                    var storeScope = agrid.getScope('storeProdKitchenprintLinkProdCtrl');
+                    storeScope._broadcast('storeProdKitchenprintLinkProdCtrl', $scope.getSelectedProd());
 
-                // 미등록 상품
-                var storeScope2 = agrid.getScope('storeProdKitchenprintLinkNoProdCtrl');
-                storeScope2._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
-                storeScope2._broadcast('storeProdKitchenprintLinkNoProdCtrl', $scope.getSelectedProd());
+                    // 미등록 상품
+                    var storeScope2 = agrid.getScope('storeProdKitchenprintLinkNoProdCtrl');
+                    storeScope2._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+                    storeScope2._broadcast('storeProdKitchenprintLinkNoProdCtrl', $scope.getSelectedProd());
+                });
             });
         });
     };
@@ -288,31 +290,34 @@ app.controller('storeProdKitchenprintLinkNoProdCtrl', ['$scope', '$http', functi
 
     // 저장
     $scope.save = function() {
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if ($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].status = "I";
-                $scope.flex.collectionView.items[i].storeCd = $scope.selectedNoProd.storeCd;
-                $scope.flex.collectionView.items[i].prterNo = $scope.selectedNoProd.prterNo;
-                params.push($scope.flex.collectionView.items[i]);
+
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if ($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].status = "I";
+                    $scope.flex.collectionView.items[i].storeCd = $scope.selectedNoProd.storeCd;
+                    $scope.flex.collectionView.items[i].prterNo = $scope.selectedNoProd.prterNo;
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/prodKitchenprintLink/storeProdKitchenprintLink/getStoreProdKitchenprintLinkSave.sb", params, function(){
-            $scope.$apply(function() {
-                // 매장 조회
-                var scope = agrid.getScope('storeProdKitchenprintLinkCtrl');
-                scope.searchStoreProdKitchenprintLink();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/prodKitchenprintLink/storeProdKitchenprintLink/getStoreProdKitchenprintLinkSave.sb", params, function () {
+                $scope.$apply(function () {
+                    // 매장 조회
+                    var scope = agrid.getScope('storeProdKitchenprintLinkCtrl');
+                    scope.searchStoreProdKitchenprintLink();
 
-                // 등록 상품
-                var storeScope = agrid.getScope('storeProdKitchenprintLinkProdCtrl');
-                storeScope._broadcast('storeProdKitchenprintLinkProdCtrl', $scope.getSelectedNoProd());
+                    // 등록 상품
+                    var storeScope = agrid.getScope('storeProdKitchenprintLinkProdCtrl');
+                    storeScope._broadcast('storeProdKitchenprintLinkProdCtrl', $scope.getSelectedNoProd());
 
-                // 미등록 상품
-                var storeScope2 = agrid.getScope('storeProdKitchenprintLinkNoProdCtrl');
-                storeScope2._broadcast('storeProdKitchenprintLinkNoProdCtrl', $scope.getSelectedNoProd());
+                    // 미등록 상품
+                    var storeScope2 = agrid.getScope('storeProdKitchenprintLinkNoProdCtrl');
+                    storeScope2._broadcast('storeProdKitchenprintLinkNoProdCtrl', $scope.getSelectedNoProd());
+                });
             });
         });
     };
