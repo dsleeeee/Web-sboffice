@@ -487,7 +487,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20250430.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20260223.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

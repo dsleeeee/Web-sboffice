@@ -185,7 +185,6 @@
                     selection-mode="Row"
                     items-source="data"
                     item-formatter="_itemFormatter"
-                    beginning-edit="changeEnvstFg(s,e)"
                     ime-enabled="true">
 
               <!-- define columns -->
@@ -239,4 +238,4 @@ var envstGrpCdNm = ${envstGrpList};
 var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envstRemark/envstRemark.js?ver=20260212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envstRemark/envstRemark.js?ver=20260223.01" charset="utf-8"></script>

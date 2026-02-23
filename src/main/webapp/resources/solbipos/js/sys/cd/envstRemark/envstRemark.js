@@ -110,7 +110,12 @@ app.controller('representCtrl', ['$scope', '$http', '$timeout', function ($scope
       $("#envstRemark").val("");
 
       $scope.flex.collectionView.commitEdit();
-      $scope._broadcast('representDtlCtrl');
+
+      var scope = agrid.getScope('representDtlCtrl')
+      scope._gridDataInit();
+      $timeout(function() {
+        scope.flex.refresh();  // 그리드 새로 고침을 다시 실행
+      }, 0);
 
     });
     // 기능수행 종료 : 반드시 추가
@@ -320,8 +325,6 @@ app.controller('envstDtlRemarkCtrl', ['$scope', '$http', function ($scope, $http
     $("#envstDtlRemark").val(data.envstDtlRemark);
     $("#btnSaveDetailDtl").show();
 
-    $scope.envstDtlRemark = data.envstDtlRemark;
-
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -332,7 +335,7 @@ app.controller('envstDtlRemarkCtrl', ['$scope', '$http', function ($scope, $http
     var params = {};
     params.envstCd = $("#envstCd").val();
     params.envstValCd = $("#envstDtlCd").val();
-    params.envstDtlRemark = $scope.envstDtlRemark;
+    params.envstDtlRemark = $("#envstDtlRemark").val();
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._postJSONSave.withPopUp("/sys/cd/envstRemark/envstRemark/envst/saveEnvstDtlRemark.sb", params, function(response){
