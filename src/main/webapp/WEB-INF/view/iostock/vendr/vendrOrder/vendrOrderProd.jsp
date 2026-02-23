@@ -46,7 +46,7 @@
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderAmt"/>" binding="orderAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderVat"/>" binding="orderVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.totQty"/>" binding="totQty" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrOrder.prod.orderTot"/>" binding="orderTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrOrder.prod.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 

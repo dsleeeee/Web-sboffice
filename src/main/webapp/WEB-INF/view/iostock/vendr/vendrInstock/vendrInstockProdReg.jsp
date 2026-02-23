@@ -143,7 +143,7 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inAmt"/>" 		  binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inVat"/>" 		  binding="inVat" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.totQty"/>" 	      binding="totQty" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" 		  binding="inTot" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTot"/>" 		  binding="inTot" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vatFg"/>" 		  binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vendrVatFg01"/>"   binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>"  binding="splyUprc" width="70" align="right" is-read-only="false" visible="{{storeSplyChk}}" max-length=8></wj-flex-grid-column>
