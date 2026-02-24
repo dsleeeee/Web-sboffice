@@ -151,7 +151,7 @@ app.controller('salePriceResveAddCtrl', ['$scope', '$http', function ($scope, $h
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 var item = $scope.flex.collectionView.items[i];
 
-                if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000"){
+                if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000" || item.prodCd === "0AADDAMT0000"){
                     item.gChk = false;
                     rows[i].isReadOnly = true;
                 }

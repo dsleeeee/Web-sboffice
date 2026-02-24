@@ -276,7 +276,7 @@ app.controller('prodctrl2', ['$scope', '$http', '$timeout', function ($scope, $h
                 var item = $scope.flex.collectionView.items[i];
 
                 // 주문앱 미등록상품, 배달비는 체크박스 선택 불가(삭제불가)
-                if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000"){
+                if(item.prodCd === "0000000000000" || item.prodCd === "0A0000DLVFEE" || item.prodCd === "0ADLVFEE0000" || item.prodCd === "0AADDAMT0000"){
                     item.gChk = false;
                     rows[i].isReadOnly = true;
                 }
@@ -344,7 +344,7 @@ app.controller('prodctrl2', ['$scope', '$http', '$timeout', function ($scope, $h
             if ($scope.flex.collectionView.items[i].gChk) {
 
                 // 주문앱 미등록상품, 배달비는 체크박스 선택 불가(삭제불가)
-                if($scope.flex.collectionView.items[i].prodCd === "0000000000000" || $scope.flex.collectionView.items[i].prodCd === "0A0000DLVFEE" || $scope.flex.collectionView.items[i].prodCd === "0ADLVFEE0000"){
+                if($scope.flex.collectionView.items[i].prodCd === "0000000000000" || $scope.flex.collectionView.items[i].prodCd === "0A0000DLVFEE" || $scope.flex.collectionView.items[i].prodCd === "0ADLVFEE0000" || $scope.flex.collectionView.items[i].prodCd === "0AADDAMT0000"){
                     continue;
                 }
 

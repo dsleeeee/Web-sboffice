@@ -51,7 +51,7 @@ var bundleFgComboData = [
     {"name": "단품/세트", "value": "0"},
     {"name": "S/R", "value": "1"},
     {"name": "한마리/반마리", "value": "2"},
-    {"name": "Regular/Max", "value": "3"},
+    {"name": "레귤러/맥스", "value": "3"},
     {"name": "ICE/HOT", "value": "4"},
     {"name": "M/L", "value": "5"}
 ];
