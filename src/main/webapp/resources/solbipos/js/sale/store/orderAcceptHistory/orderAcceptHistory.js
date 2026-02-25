@@ -16,7 +16,7 @@ var app = agrid.getApp();
 // 배달앱경로
 var dlvrInFgComboData = [
     {"name":"자사앱","value":"9"},
-    {"name":"자사앱 외","value":"A"}
+    {"name":"온라인","value":"A"}
 ];
 
 // 상태

@@ -330,7 +330,7 @@
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.empNm"/>"          binding="userNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultCd"/>"     binding="changeResultCd"    width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderAcceptHistory.changeResultMsg"/>"    binding="changeResultMsg"   width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.statusTypeFg"/>"       binding="statusTypeFg"      width="140" align="center" is-read-only="true" data-map="statusTypeFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderAcceptHistory.statusTypeFg"/>"       binding="statusTypeFg"      width="140" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -359,5 +359,5 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/orderAcceptHistory/orderAcceptHistory.js?ver=20260206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/orderAcceptHistory/orderAcceptHistory.js?ver=20260225.01" charset="utf-8"></script>
 
