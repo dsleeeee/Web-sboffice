@@ -51,7 +51,7 @@ var bundleFgComboData = [
     {"name": "단품/세트", "value": "0"},
     {"name": "S/R", "value": "1"},
     {"name": "한마리/반마리", "value": "2"},
-    {"name": "레귤러/맥스", "value": "3"},
+    {"name": "Regular/Max", "value": "3"},
     {"name": "ICE/HOT", "value": "4"},
     {"name": "M/L", "value": "5"}
 ];
@@ -387,7 +387,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         var url = "/base/prod/prod/prod/getBrandList2.sb";
         var params = {};
-        
+
         // 상품코드
         params['prodCd'] = prodCd;
 
@@ -1016,7 +1016,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#prodModifySaleUprc").focus();
             return false;
         }
-        
+
         // 내점/배달/포장 판매가 사용 시
         if(subPriceFg === "1") {
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
@@ -1632,7 +1632,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#_prcCtrlFg").attr("disabled", true);
             $("#trCorner").css("display", "");
         }
-        
+
         // KIOSK 시간설정 초기화
         resetKioskTimeHtml();
 
