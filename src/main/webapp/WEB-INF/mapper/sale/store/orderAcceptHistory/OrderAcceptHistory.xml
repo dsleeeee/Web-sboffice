@@ -38,7 +38,13 @@
         ,       (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE EMP_NO = A.EMP_NO AND STORE_CD = A.STORE_CD) AS USER_NM
         ,       A.CHANGE_RESULT_MSG
         ,       A.CHANGE_RESULT_CD
-        ,       A.STATUS_TYPE_FG
+        ,       CASE
+                    WHEN A.DLVR_IN_FG = 'A' AND A.ACCEPT_STATUS = 'Y' THEN '온라인 주문수신'
+                    WHEN A.DLVR_IN_FG = 'A' AND A.ACCEPT_STATUS = 'N' THEN '온라인 주문중지'
+                    WHEN A.DLVR_IN_FG = '9' AND A.ACCEPT_STATUS = 'Y' THEN '자사앱 주문수신'
+                    WHEN A.DLVR_IN_FG = '9' AND A.ACCEPT_STATUS = 'N' THEN '자사앱 주문중지'
+                    ELSE ''
+                END AS STATUS_TYPE_FG
         FROM	TB_PS_ORDER_ACCEPT_HISTORY	A
         ,		TB_MS_STORE B
         ,       TB_MS_STORE_INFO C
