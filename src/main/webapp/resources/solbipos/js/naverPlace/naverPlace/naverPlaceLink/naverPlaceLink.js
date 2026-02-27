@@ -79,7 +79,7 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
         //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
         var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
 
-        var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
+        var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=pos_lynk&to=" + redirectURL; // service=lynk_pos,mybiz,booking
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
         if (!popup) {
