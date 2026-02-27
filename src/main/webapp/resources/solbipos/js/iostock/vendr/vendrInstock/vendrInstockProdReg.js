@@ -151,7 +151,8 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
   $scope.calcAmt = function (item) {
     /** 수량이 없는 경우 계산하지 않음.
         null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
-    if (nvl(item.inUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.inEtcQty, null) === null)) return false;
+    if (nvl(item.inUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.inEtcQty, null) === null)
+        && nvl(item.prevInUnitQty, null) === null && nvl(item.prevInEtcQty, null) === null) return false;
 
     var costUprc     = parseFloat(item.costUprc);
     var poUnitQty    = parseInt(item.poUnitQty);
@@ -231,6 +232,8 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
+
+      $scope.calcAmt(item);
 
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
       if (item.prevInTotQty === null && item.inTotQty === 0) {

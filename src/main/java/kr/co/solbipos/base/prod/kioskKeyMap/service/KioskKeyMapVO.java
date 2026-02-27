@@ -179,6 +179,15 @@ public class KioskKeyMapVO extends PageVO {
 
     private String pageFg;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 상품코드 */
+    private String prodCds;
+
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -707,5 +716,29 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setPageFg(String pageFg) {
         this.pageFg = pageFg;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getProdCds() {
+        return prodCds;
+    }
+
+    public void setProdCds(String prodCds) {
+        this.prodCds = prodCds;
+    }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
     }
 }

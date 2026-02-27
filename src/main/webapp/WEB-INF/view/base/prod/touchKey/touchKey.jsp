@@ -230,6 +230,7 @@
                         <wj-flex-grid-column header="<s:message code="touchKey.grid.groupProdNm"/>" binding="groupProdNm" width="100"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="" binding="mappingFg" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -594,7 +595,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20250916.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20260227.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

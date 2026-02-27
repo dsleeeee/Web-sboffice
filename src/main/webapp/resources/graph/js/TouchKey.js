@@ -729,6 +729,46 @@ Sidebar.prototype.makeDragSource = function () {
   var sidebar = this;
   var grid = this.grid;
 
+
+  // 아티제 LYNK상품 매핑여부 체크
+  var dropProdChk = function (graph, evt, cell, x, y) {
+    var parent = graph.getDefaultParent();
+    var model = graph.getModel();
+
+    // Drop 할 때 오브젝트 생성
+    var pt = graph.getPointForEvent(evt);
+
+    var scope = agrid.getScope('touchKeyCtrl')
+
+    // Grid에서 선택된 데이터 대상
+    for (var selected = 0; selected < grid.selectedItems.length; selected++) {
+      // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
+      var pos = graph.findPosition(pt);
+
+      if (pos == null) {
+        mxEvent.consume(evt);
+        return;
+      }
+      // Drop 된 포지션과 다음 포지션에 터치키 생성
+      var rows = grid.selectedRows[selected];
+      var item = rows.dataItem;
+
+      if (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS001') {
+        if (item.mappingFg === 'N') {
+          scope._popConfirm(messages["touchKey.msg.prodMappingFg"], function () {
+            dropEvent(graph, evt, cell, x, y);
+          });
+        } else {
+          //드래그 이벤트 생성
+          dropEvent(graph, evt, cell, x, y);
+        }
+      }else{
+        //드래그 이벤트 생성
+        dropEvent(graph, evt, cell, x, y);
+      }
+    }
+  };
+
   //드래그 이벤트 생성
   var dropEvent = function (graph, evt, cell, x, y) {
 
@@ -743,6 +783,7 @@ Sidebar.prototype.makeDragSource = function () {
 
       // 마우스 포인터 위치를 기준으로 Drop 가능한 위치 찾기
       var pos = graph.findPosition(pt);
+
       if (pos == null) {
         mxEvent.consume(evt);
         return;
@@ -750,6 +791,7 @@ Sidebar.prototype.makeDragSource = function () {
       // Drop 된 포지션과 다음 포지션에 터치키 생성
       var rows = grid.selectedRows[selected];
       var item = rows.dataItem;
+
       // 업데이트 시작
       model.beginUpdate();
       // 스타일코드
@@ -848,7 +890,7 @@ Sidebar.prototype.makeDragSource = function () {
   previewElt.style.height = graph.touchKeyInfo.y + 'px';
 
   //DnD 처리
-  var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropEvent, previewElt, -(graph.touchKeyInfo.x / 2), -(graph.touchKeyInfo.y / 2));
+  var ds = mxUtils.makeDraggable(grid.cells.hostElement, graph, dropProdChk, previewElt, -(graph.touchKeyInfo.x / 2), -(graph.touchKeyInfo.y / 2));
   ds.highlightDropTargets = true;
 
 };

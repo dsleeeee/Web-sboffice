@@ -103,7 +103,7 @@
 	       </wj-combo-box>
 	     </span>
 	     --%>
-        <%-- 최종원가를 발주원가로 세팅 --%>
+        <%-- 최종원가를 원가단가로 세팅 --%>
         <button type="button" class="btn_skyblue ml5" id="btnLastCostToCostUprc" ng-click="setLastCostToCostUprc()">
           <s:message code="vendrInstock.reg.lastCostToCostUprc"/></button>
         <%-- 저장 --%>
@@ -163,7 +163,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20260220.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20260224.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

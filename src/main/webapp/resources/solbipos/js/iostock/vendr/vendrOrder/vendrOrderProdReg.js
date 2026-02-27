@@ -121,7 +121,8 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
   $scope.calcAmt = function (item) {
     /** 수량이 없는 경우 계산하지 않음.
         null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
-    if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
+    if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)
+      && nvl(item.prevOrderUnitQty, null) === null && nvl(item.prevOrderEtcQty, null) === null) return false;
 
     var costUprc     = parseFloat(item.costUprc);
     var poUnitQty    = parseInt(item.poUnitQty);
@@ -199,10 +200,16 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
+      // orderTotQty 값이 없을 시 calcAmt 재호출
+      if(item.orderTotQty === undefined || item.orderTotQty === null ){
+        $scope.calcAmt(item);
+      }
+
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
       if (item.prevOrderTotQty === null && (item.orderTotQty === 0 || item.orderTotQty === undefined)) {
         continue;
       }
+
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
         $scope._popMsg(messages["vendrOrder.reg.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
         return false;
@@ -465,7 +472,7 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
     $scope.wjVendrOrderProdRegLayer.shown.addHandler(function () {
       setTimeout(function() {
         var params = {};
-        $scope._save("/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS/delete.sb", params, false);
+        $scope._postJSONSave.withOutPopUp("/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS/delete.sb", params, false);
       }, 50);
     });
 

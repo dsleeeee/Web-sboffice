@@ -6436,4 +6436,25 @@
           AND     NMCODE_GRP_CD   = '229'
     </delete>
 
+    <!-- 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크키맵 매장복사 - 매장 카테고리 하위 중분류 갯수를 파악한다.
+    -->
+    <select id="getChkProdMappingFg" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getChkProdMappingFg */
+        SELECT  A.PROD_CD
+        ,		A.PROD_NM
+        FROM    TB_HQ_PRODUCT A
+        ,       TB_HQ_ERP_PROD_MAPPING B
+        WHERE   B.HQ_OFFICE_CD      (+)	=   A.HQ_OFFICE_CD
+        AND     B.MAPPING_STRING    (+)	LIKE A.PROD_CD || '%'
+        AND     A.HQ_OFFICE_CD          =   #{hqOfficeCd}
+        AND     A.PROD_CD               LIKE 'LYNK%'
+        AND 	A.PROD_CD 	            IN   (${prodCdQuery})
+        AND     A.USE_YN                =   'Y'
+        AND     B.MAPPING_STRING IS NULL
+    </select>
+
 </mapper>

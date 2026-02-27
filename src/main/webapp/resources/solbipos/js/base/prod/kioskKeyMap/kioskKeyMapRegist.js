@@ -1772,17 +1772,48 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
                 }
             }
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMap.sb", params, function(){
+            // A0001 본사/매장 LYNK상품 매핑여부 체크
+            if (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS001') {
+                $scope._postJSONSave.withOutPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getChkProdMappingFg.sb", params, function (response) {
+                    var list = response.data.data;
 
-                // 상품 재조회
-                $scope.searchProd()
+                    if(list.length > 0){
 
-                // 키맵 재조회
-                var kioskKeyMapGrid = agrid.getScope("kioskKeyMapCtrl");
-                kioskKeyMapGrid._pageView('kioskKeyMapCtrl', 1);
+                        var prodInfos = "";
 
-            });
+                        for(var i=0; i<list.length; i++){
+                            prodInfos += "<p>" + (i+1) + ". [" + list[i].prodCd + "] " + list[i].prodNm + "</p>";
+                        }
+
+                        // 매핑정보가 없는 LYNK 상품 입니다 등록 하시겠습니까?
+                        $scope._popConfirm(messages["kioskKeyMap.msg.prodMappingFg"] + prodInfos, function() {
+                            $scope.regProdSave(params);
+                        });
+                    }else{
+                        $scope.regProdSave(params);
+                    }
+                });
+            }else{
+                $scope.regProdSave(params);
+            }
+
+        });
+    }
+
+    $scope.regProdSave = function (data) {
+
+        var params = data;
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMap.sb", params, function(){
+
+            // 상품 재조회
+            $scope.searchProd()
+
+            // 키맵 재조회
+            var kioskKeyMapGrid = agrid.getScope("kioskKeyMapCtrl");
+            kioskKeyMapGrid._pageView('kioskKeyMapCtrl', 1);
+
         });
     }
 }]);

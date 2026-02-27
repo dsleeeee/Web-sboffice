@@ -1154,7 +1154,7 @@
               <th><s:message code="prod.nuTotWt"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuTotWt" name="nuTotWt" class="sb-input w100" ng-model="prodModifyInfo.nuTotWt"/>
+                  <input type="text" doubleOnly id="_nuTotWt" name="nuTotWt" class="sb-input w100" ng-model="prodModifyInfo.nuTotWt"/>
                 </div>
                 <div class="sb-select w20 fr">
                     (g)
@@ -1164,7 +1164,7 @@
               <th><s:message code="prod.nuKcal"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuKcal" name="nuKcal" class="sb-input w100" ng-model="prodModifyInfo.nuKcal"/>
+                  <input type="text" doubleOnly id="_nuKcal" name="nuKcal" class="sb-input w100" ng-model="prodModifyInfo.nuKcal"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (kcal)
@@ -1176,7 +1176,7 @@
               <th><s:message code="prod.nuProtein"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuProtein" name="nuProtein" class="sb-input w100" ng-model="prodModifyInfo.nuProtein"/>
+                  <input type="text" doubleOnly id="_nuProtein" name="nuProtein" class="sb-input w100" ng-model="prodModifyInfo.nuProtein"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (g)
@@ -1186,7 +1186,7 @@
               <th><s:message code="prod.nuSodium"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuSodium" name="nuSodium" class="sb-input w100" ng-model="prodModifyInfo.nuSodium"/>
+                  <input type="text" doubleOnly id="_nuSodium" name="nuSodium" class="sb-input w100" ng-model="prodModifyInfo.nuSodium"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (mg)
@@ -1198,7 +1198,7 @@
               <th><s:message code="prod.nuSugars"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuSugars" name="nuSugars" class="sb-input w100" ng-model="prodModifyInfo.nuSugars"/>
+                  <input type="text" doubleOnly id="_nuSugars" name="nuSugars" class="sb-input w100" ng-model="prodModifyInfo.nuSugars"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (g)
@@ -1208,7 +1208,7 @@
               <th><s:message code="prod.nuSatFat"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuSatFat" name="nuSatFat" class="sb-input w100" ng-model="prodModifyInfo.nuSatFat"/>
+                  <input type="text" doubleOnly id="_nuSatFat" name="nuSatFat" class="sb-input w100" ng-model="prodModifyInfo.nuSatFat"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (g)
@@ -1220,7 +1220,7 @@
               <th><s:message code="prod.nuCaffeine"/></th>
               <td>
                 <div class="sb-select w80 fl">
-                  <input type="text" id="_nuCaffeine" name="nuCaffeine" class="sb-input w100" ng-model="prodModifyInfo.nuCaffeine"/>
+                  <input type="text" doubleOnly id="_nuCaffeine" name="nuCaffeine" class="sb-input w100" ng-model="prodModifyInfo.nuCaffeine"/>
                 </div>
                 <div class="sb-select w20 fr">
                   (mg)
@@ -1622,8 +1622,48 @@
   }
 
   $(function(){
-    $("input:text[numberOnly]").on("keyup", function() {
-      $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+    $("input:text[numberOnly]").on("keyup paste", function() {
+      var value = this.value;
+
+      // 숫자와 -만 남기기
+      value = value.replace(/[^0-9-]/g, "");
+
+      // -를 모두 제거하고, 맨 앞에 있으면 붙이기
+      var isNegative = value.charAt(0) === "-";
+      value = value.replace(/-/g, ""); // 나머지 - 제거
+
+      if (isNegative) {
+        value = "-" + value;
+      }
+
+      this.value = value;
+    });
+    $("input:text[doubleOnly]").on("keyup paste", function() {
+      var value = this.value;
+
+      // 숫자, - , . 만 남기기
+      value = value.replace(/[^0-9\.-]/g, "");
+
+      // -를 모두 제거하고, 맨 앞에 있으면 붙이기
+      var isNegative = value.charAt(0) === "-";
+      value = value.replace(/-/g, ""); // 나머지 - 제거
+
+      if (isNegative) {
+        value = "-" + value;
+      }
+
+      // .이 여러 개면 첫 번째만 남기고 제거
+      var parts = value.split(".");
+      if (parts.length > 2) {
+        value = parts.shift() + "." + parts.join("");
+      }
+
+      // .가 맨 앞이면 제거
+      if (value.startsWith(".")) {
+        value = value.substring(1);
+      }
+
+      this.value = value;
     });
     $("input:text[numberAlphabet]").on("keyup", function() {
       $(this).val($(this).val().replace(/[^A-za-z0-9]/g,""));
@@ -1724,7 +1764,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260226.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

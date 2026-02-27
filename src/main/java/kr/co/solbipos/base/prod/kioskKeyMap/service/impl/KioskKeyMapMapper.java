@@ -305,4 +305,7 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크키맵 삭제 팝업 - 매장수정허용분류 삭제 */
     int deleteKioskKeyLsm(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크 */
+    List<DefaultMap<String>> getChkProdMappingFg(KioskKeyMapVO kioskKeyMapVO);
 }

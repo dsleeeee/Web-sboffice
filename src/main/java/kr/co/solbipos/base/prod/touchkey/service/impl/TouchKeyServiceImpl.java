@@ -347,6 +347,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         tcParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         tcParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tcParams.setStoreCd(sessionInfoVO.getStoreCd());
+        tcParams.setRegId(sessionInfoVO.getUserId());
         tcParams.setTukeyGrpCd(tukeyGrpCd);
         String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
 

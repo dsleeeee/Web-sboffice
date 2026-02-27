@@ -28,6 +28,9 @@
        </wj-combo-box>
      </span>
       --%>
+    <ul class="txtSty3" ng-if="btnProdSaveFg">
+      <li class="red fl"><s:message code="vendrInstock.prod.txt1"/></li>
+    </ul>
     <%-- 발주내역으로 등록 --%>
     <button type="button" class="btn_skyblue ml5" id="btnOrderInfoRegist" ng-click="orderInfoRegist()" ng-if="btnOrderInfoRegistIfFg">
       <s:message code="vendrInstock.prod.orderInfoRegist"/></button>
@@ -76,7 +79,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20260219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProd.js?ver=20260224.01" charset="utf-8"></script>
 
 <%-- 상품 추가/변경 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockProdReg.jsp">

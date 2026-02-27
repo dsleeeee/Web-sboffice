@@ -177,10 +177,12 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
             }
             $scope.btnAddProdIfFg  = true;
             $scope.btnProdSaveIfFg = true;
+            $scope.btnProdSaveFg   = true;
           } else {
             $scope.btnOrderInfoRegistIfFg = false;
             $scope.btnAddProdIfFg         = false;
             $scope.btnProdSaveIfFg        = false;
+            $scope.btnProdSaveFg          = false;
           }
         }
       }

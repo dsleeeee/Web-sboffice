@@ -502,9 +502,9 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                     //int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
                     //int orderTotQty  = ((poUnitQty * Math.abs(orderUnitQty)) + orderEtcQty) * slipFg;
                     int orderTotQty  = ((poUnitQty * orderUnitQty) + orderEtcQty);
-                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : prevAmt	+	Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
-                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : prevVat	+	Math.abs(vendrInstockVO.getInVat()))    * slipFg;
-                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : prevTot	+	Math.abs(vendrInstockVO.getInTot()))    * slipFg;
+                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
+                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
+                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
 
 
 //                    int orderUnitQty = (unitQty + Integer.valueOf(etcQty) / poUnitQty) * slipFg;

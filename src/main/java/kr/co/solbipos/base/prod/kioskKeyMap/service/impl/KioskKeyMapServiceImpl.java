@@ -4,22 +4,22 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
-import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
-import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.tools.StandardLocation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +48,15 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     private final KioskKeyMapMapper kioskKeyMapMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public KioskKeyMapServiceImpl(KioskKeyMapMapper kioskKeyMapMapper,  MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public KioskKeyMapServiceImpl(KioskKeyMapMapper kioskKeyMapMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil, PopupMapper popupMapper) {
 
         this.kioskKeyMapMapper = kioskKeyMapMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.popupMapper = popupMapper;
     }
 
     /** 키오스크용 포스 조회 */
@@ -1470,5 +1472,36 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
 
         return procCnt;
+    }
+
+    /** 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크 */
+    @Override
+    public List<DefaultMap<String>> getChkProdMappingFg(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        String prodCds = "";
+
+        for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+            prodCds += kioskKeyMapVO.getProdCd() + ",";
+        }
+
+        if (prodCds.length() > 0) {
+            prodCds = prodCds.substring(0, prodCds.length() - 1);
+        }
+
+        KioskKeyMapVO chkKioskKeyMapVO = new KioskKeyMapVO();
+        chkKioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        chkKioskKeyMapVO.setSessionId(sessionInfoVO.getSessionId());
+        chkKioskKeyMapVO.setProdCds(prodCds);
+
+        // 상품 array 값 세팅
+        if(!StringUtil.getOrBlank(chkKioskKeyMapVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(chkKioskKeyMapVO.getProdCds(), 3900));
+            chkKioskKeyMapVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        return kioskKeyMapMapper.getChkProdMappingFg(chkKioskKeyMapVO);
     }
 }

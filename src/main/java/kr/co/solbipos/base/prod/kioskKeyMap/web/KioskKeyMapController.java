@@ -11,6 +11,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.dlvrProdMulti.service.DlvrProdMultiVO;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
@@ -1620,5 +1621,28 @@ public class KioskKeyMapController {
         }
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크
+     *
+     * @param   kioskKeyMapVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @author 김유승
+     * @since   2026.02.24
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getChkProdMappingFg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkProdMappingFg(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskKeyMapService.getChkProdMappingFg(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, list);
     }
 }

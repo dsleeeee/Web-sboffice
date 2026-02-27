@@ -36,7 +36,11 @@
                     NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
                     'N' AS TOUCHKEY_USED,
                     (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
-                    thp.REMARK
+                    thp.REMARK,
+                    CASE
+                        WHEN thp.PROD_CD LIKE 'LYNK%' AND (SELECT COUNT(*) FROM TB_HQ_ERP_PROD_MAPPING B WHERE B.HQ_OFFICE_CD (+) = thp.HQ_OFFICE_CD AND B.MAPPING_STRING (+) LIKE thp.PROD_CD || '%') = 0 THEN 'N'
+                        ELSE 'Y'
+                    END AS MAPPING_FG
                 FROM
                     TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_CLASS thpc ON
@@ -81,7 +85,11 @@
                     NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
                     'N' AS TOUCHKEY_USED,
                     (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
-                    tmp.REMARK
+                    tmp.REMARK,
+                    CASE
+                        WHEN tmp.PROD_CD LIKE 'LYNK%' AND (SELECT COUNT(*) FROM TB_HQ_ERP_PROD_MAPPING B WHERE B.HQ_OFFICE_CD (+) = #{hqOfficeCd} AND B.MAPPING_STRING (+) LIKE tmp.PROD_CD || '%') = 0 THEN 'N'
+                        ELSE 'Y'
+                    END AS MAPPING_FG
                 FROM
                     TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_CLASS tmpc ON
@@ -900,28 +908,28 @@
                 ,       thtkc.MOD_DT
                 ,       thtkc.MOD_ID
                 )
-                SELECT  #{hqOfficeCd}
-                ,       TUKEY_GRP_CD
-                ,       TUKEY_CLASS_CD
-                ,       TUKEY_CLASS_NM
-                ,       PAGE_NO
-                ,       PAGE_ROWS
-                ,       X
-                ,       Y
-                ,       WIDTH
-                ,       HEIGHT
-                ,       STYLE_CD
-                ,       FONT_SIZE
-                ,       FONT_COLOR
-                ,       FILL_COLOR
-                ,       IMG_NM
+                VALUES
+                (
+                        #{hqOfficeCd}
+                ,       #{tukeyGrpCd}
+                ,       'G0002'
+                ,       '메뉴'
+                ,       1
+                ,       (SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0041')
+                ,       0
+                ,       0
+                ,       99
+                ,       60
+                ,       '02'
+                ,       ''
+                ,       ''
+                ,       ''
+                ,       ''
                 ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
                 ,       #{regId}
                 ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
                 ,       #{regId}
-                FROM    TB_MS_TOUCH_KEY_CLASS
-                WHERE   STORE_CD        =   '0000000'
-                AND     TUKEY_GRP_CD    =   '01'
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -948,29 +956,29 @@
                 ,       tmtkc.MOD_DT
                 ,       tmtkc.MOD_ID
                 )
-                SELECT  #{storeCd}
-                ,       TUKEY_GRP_CD
-                ,       TUKEY_CLASS_CD
-                ,       TUKEY_CLASS_NM
-                ,       PAGE_NO
-                ,       PAGE_ROWS
-                ,       X
-                ,       Y
-                ,       WIDTH
-                ,       HEIGHT
-                ,       STYLE_CD
-                ,       FONT_SIZE
-                ,       FONT_COLOR
-                ,       FILL_COLOR
-                ,       IMG_NM
-                ,       IN_FG
+                VALUES
+                (
+                        #{storeCd}
+                ,       #{tukeyGrpCd}
+                ,       'G0002'
+                ,       '메뉴'
+                ,       1
+                ,       (SELECT ENVST_VAL FROM TB_MS_STORE_ENVST WHERE STORE_CD = #{storeCd} AND ENVST_CD = '1041')
+                ,       0
+                ,       0
+                ,       99
+                ,       60
+                ,       '02'
+                ,       ''
+                ,       ''
+                ,       ''
+                ,       ''
+                ,       'S'
                 ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
                 ,       #{regId}
                 ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')
                 ,       #{regId}
-                FROM    TB_MS_TOUCH_KEY_CLASS
-                WHERE   STORE_CD        =   '0000000'
-                AND     TUKEY_GRP_CD    =   '01'
+                )
             </when>
         </choose>
     </insert>
