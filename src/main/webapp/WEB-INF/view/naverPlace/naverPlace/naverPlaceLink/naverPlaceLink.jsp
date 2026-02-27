@@ -60,7 +60,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlaceLink/naverPlaceLink.js?ver=20260220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlaceLink/naverPlaceLink.js?ver=20260227.01" charset="utf-8"></script>
 
 <style>
     /* 단순버튼 01 */

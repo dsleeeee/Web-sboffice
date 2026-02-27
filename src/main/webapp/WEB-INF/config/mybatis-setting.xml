@@ -1419,6 +1419,9 @@
     <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 연동 -->
     <typeAlias alias="naverPlaceLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO"/>
     <typeAlias alias="naverPlaceApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO"/>
+    <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 플러스 연동 -->
+    <typeAlias alias="naverPlacePlusLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkVO"/>
+    <typeAlias alias="naverPlacePlusApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

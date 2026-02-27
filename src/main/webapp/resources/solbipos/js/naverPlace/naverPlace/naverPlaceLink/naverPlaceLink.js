@@ -76,10 +76,11 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 네이버 동의화면 호출
     $scope.btn4 = function () {
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/viewPop2.sb");
-        var redirectURL = encodeURIComponent("https://blog.naver.com");
+        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
+        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
+
         var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
-        var popup = window.open(popupUrl, "popup", "width=600, height=1000");
+        var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
         if (!popup) {
             alert("팝업 차단을 해제해주세요.");
@@ -126,10 +127,11 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 플레이스 주인권한 변경
     $scope.btn6 = function () {
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/viewPop2.sb");
-        var redirectURL = encodeURIComponent("https://blog.naver.com");
+        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
+        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
+
         var popupUrl = "https://new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
-        var popup = window.open(popupUrl, "popup", "width=600, height=1000");
+        var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
         if (!popup) {
             alert("팝업 차단을 해제해주세요.");
@@ -185,6 +187,7 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
     // 연동 추가 API
     $scope.btn8 = function () {
         var params = {};
+        params.placeId = "2001019628";
         $scope._postJSONQuery.withOutPopUp("/naverPlace/naverPlace/naverPlaceLink/mappingPlace.sb", params, function (response) {
             var data = response.data.data.list;
         });
@@ -193,6 +196,7 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
     // 연동 해지 API
     $scope.btn9 = function () {
         var params = {};
+        params.placeId = "2001019628";
         $scope._postJSONQuery.withOutPopUp("/naverPlace/naverPlace/naverPlaceLink/unMappingPlace.sb", params, function (response) {
             var data = response.data.data.list;
         });
