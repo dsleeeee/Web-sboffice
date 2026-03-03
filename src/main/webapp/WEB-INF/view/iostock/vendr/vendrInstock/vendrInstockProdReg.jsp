@@ -79,7 +79,6 @@
       <div class="mt20 tr">
         <ul class="txtSty3">
           <li class="red fl"><s:message code="vendrInstock.reg.txt1"/></li>
-          <li class="red fl"><s:message code="vendrInstock.reg.txt2"/></li>
         </ul>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <span class="chk pdb5 txtIn" style="top: 0px;">
