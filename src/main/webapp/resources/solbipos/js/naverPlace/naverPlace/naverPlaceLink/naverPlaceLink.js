@@ -76,10 +76,8 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 네이버 동의화면 호출
     $scope.btn4 = function () {
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
         var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
-
-        var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=pos_lynk&to=" + redirectURL; // service=lynk_pos,mybiz,booking
+        var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
         if (!popup) {
@@ -127,10 +125,8 @@ app.controller('naverPlaceLinkCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 플레이스 주인권한 변경
     $scope.btn6 = function () {
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
         var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
-
-        var popupUrl = "https://new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
+        var popupUrl = "https://test-new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
         if (!popup) {

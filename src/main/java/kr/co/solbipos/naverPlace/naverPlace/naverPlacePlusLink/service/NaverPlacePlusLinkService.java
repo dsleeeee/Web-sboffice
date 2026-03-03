@@ -45,7 +45,7 @@ public interface NaverPlacePlusLinkService {
      * @param naverPlacePlusApiVO
      * @return
      */
-    int saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO);
+    String saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO);
 
     /**
      * 네이버 플레이스 연동매장 조회

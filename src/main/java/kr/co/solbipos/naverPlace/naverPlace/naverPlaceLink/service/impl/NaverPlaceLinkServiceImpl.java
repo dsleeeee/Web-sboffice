@@ -58,7 +58,7 @@ public class NaverPlaceLinkServiceImpl implements NaverPlaceLinkService {
 
     // [연동 API 관련 정보]
     // (개발)
-    public static final String LINK_URL = "https://test-agency-api.pbp.naver.com"; //https://test-api.pbp.naver.com";
+    public static final String LINK_URL = "https://test-api.pbp.naver.com"; //"https://test-agency-api.pbp.naver.com";
     // (운영)
     //public static final String LINK_URL = "https://api.pbp.naver.com";
 
