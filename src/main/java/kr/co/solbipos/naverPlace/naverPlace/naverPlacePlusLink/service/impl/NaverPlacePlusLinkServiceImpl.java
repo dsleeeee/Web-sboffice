@@ -63,7 +63,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
 
     // [연동 API 관련 정보]
     // (개발)
-    public static final String LINK_URL = "https://test-agency-api.pbp.naver.com"; //https://test-api.pbp.naver.com";
+    public static final String LINK_URL = "https://test-api.pbp.naver.com"; //"https://test-agency-api.pbp.naver.com";
     // (운영)
     //public static final String LINK_URL = "https://api.pbp.naver.com";
 
@@ -190,7 +190,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
      * @return
      */
     @Override
-    public int saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO) {
+    public String saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO) {
 
         // 1. [네이버 회원 프로필 조회 API] 사용을 위한 Access Token 조회
         String accessToken = "";
@@ -230,7 +230,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         }
 
         // 2. [네이버 회원 프로필 조회 API] 조회(회원 프로필에 Unique ID 있음)
-        int procCnt = 0;
+        String uniqueId = "";
         apiUrl = "https://openapi.naver.com/v1/nid/me";
         String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
 
@@ -264,14 +264,15 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
                 naverPlacePlusLinkVO.setModDt(dt);
                 naverPlacePlusLinkVO.setModId(result.getStr("userId"));
 
-                procCnt = naverPlacePlusLinkMapper.saveNaverUniqueId(naverPlacePlusLinkVO);
+                naverPlacePlusLinkMapper.saveNaverUniqueId(naverPlacePlusLinkVO);
+                uniqueId = naverPlacePlusLinkVO.getUniqueId();
             }
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return procCnt;
+        return uniqueId;
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders) {

@@ -7,25 +7,22 @@
     <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
 </head>
 <body>
-    <div id="divWrap" class="wrap" style="display: none;">
-        <h2 class="page-title">네이버 플레이스+에 연동하실 매장을 선택 해주세요.</h2>
-        <div class="top-actions">
+<div id="divWrap" class="wrap" style="display: none;">
+    <h2 class="page-title">네이버 플레이스+에 연동하실 매장을 선택 해주세요.</h2>
+    <div class="top-actions">
             <span class="desc">
               찾으시는 매장이 없는 경우, 업체찾기를 통해 확인 하시거나 신규로 등록 해주세요.
             </span>
-            <div class="btn-group">
-                <button class="btn btn-green" id="btnSearch" onclick="btnSearch();">업체 찾기</button>
-                <button class="btn btn-green" id="btnReg" onclick="btnReg();">신규 등록 +</button>
-            </div>
-        </div>
-        <%-- 업체 목록 --%>
-        <div id="divStoreList" class="store-list"></div>
-        <div id="divPaging" class="pagination">
-            <button class="page-btn">&laquo;</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">&raquo;</button>
+        <div class="btn-group">
+            <button class="btn btn-green" id="btnSearch" onclick="btnSearch();">업체 찾기</button>
+            <button class="btn btn-green" id="btnReg" onclick="btnReg();">신규 등록 +</button>
         </div>
     </div>
+    <%-- 업체 목록 --%>
+    <div id="divStoreList" class="store-list"></div>
+    <div id="divPaging" class="pagination">
+    </div>
+</div>
 </body>
 </html>
 
@@ -37,7 +34,7 @@
     // 이전 화면(연동 단계 파악)
     var prePage = "${prePage}";
 
-    //
+    // uniqueId
     var uniqueId = "${uniqueId}";
 
     if (prePage == "login") {
@@ -45,11 +42,8 @@
         //
         document.getElementById('divWrap').style.display = "none";
 
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
-        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb");
-        //var redirectURL = encodeURIComponent("https://new.smartplace.naver.com/bizes");
-
-        var popupUrl = "https://new.smartplace.naver.com/embed/terms?service=pos_lynk&to=" + redirectURL;  // service=lynk_pos,mybiz,booking
+        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
     } else if (prePage == "agree") {
@@ -66,20 +60,21 @@
         document.getElementById('divWrap').style.display = "none";
     }
 
-    //
+    // 업체 찾기
     function btnSearch() {
-        //var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlaceLink/viewPop2.sb");
-        var redirectURL = encodeURIComponent("https://blog.naver.com");
-        var popupUrl = "https://new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
+        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var popupUrl = "https://test-new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
-    //
+    // 신규 등록
     function btnReg() {
-
+        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var popupUrl = "https://test-new.smartplace.naver.com/bizes/new?to=" + redirectURL;
+        var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
-    //
+    // 연동 매장 조회
     function getList(pageNo) {
 
         // 업체 목록 조회 API 호출
@@ -104,8 +99,7 @@
                     if (arr.length > 0) {
                         for (var i = 0; i < arr.length; i++) {
 
-                            if (i < arr.length - 1){
-
+                            if (i < arr.length - 1) {
                                 innerHtml += "<div class=\"store-card\">";
                                 innerHtml += "<div class=\"thumb\" img src=\"" + arr[i].businessImage + "\"></div>";
                                 innerHtml += "<div class=\"store-info\">";
@@ -116,17 +110,15 @@
                                 innerHtml += "<button class=\"btn btn-blue\">연동하기</button>";
                                 innerHtml += "</div>";
 
-                            }else{
-
+                            } else {
                                 // 페이징
                                 var totalPages = Math.ceil(arr[i].totCnt / 10);
-
                                 if (totalPages > 0) {
-                                    innerHtmlPaging += "<button class=\"page-btn\">&laquo;</button>";
+                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(0)\">&laquo;</button>";
                                     for (var j = 1; j <= totalPages; j++) {
-                                        innerHtmlPaging += "<button class=\"page-btn active\" onClick=\"getList(" + (j-1) + ")\">" + j + "</button>";
+                                        innerHtmlPaging += "<button class=\"page-btn " + (pageNo + 1 === j ? "active" : "") + "\" onClick=\"getList(" + (j - 1) + ")\">" + j + "</button>";
                                     }
-                                    innerHtmlPaging += "<button class=\"page-btn\">&raquo;</button>";
+                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(" + (totalPages - 1) + ")\">&raquo;</button>";
                                 }
                             }
                         }
@@ -141,6 +133,11 @@
                 }
             }
         });
+    }
+
+    // 연동 하기
+    function linkStore(placeId) {
+
     }
 
 </script>

@@ -146,7 +146,10 @@ public class NaverPlacePlusLinkController {
         naverPlacePlusApiVO.setCode(request.getParameter("code"));
         naverPlacePlusApiVO.setState(request.getParameter("state"));
 
-        int result = naverPlacePlusLinkService.saveNaverUniqueId(naverPlacePlusApiVO);
+        String uniqueId = naverPlacePlusLinkService.saveNaverUniqueId(naverPlacePlusApiVO);
+
+        // 네.아.로 Unique ID
+        model.addAttribute("uniqueId", uniqueId);
 
         // 연동 단계 파악을 위한 화면 정보 셋팅
         model.addAttribute("prePage", "login");
@@ -225,7 +228,7 @@ public class NaverPlacePlusLinkController {
     @RequestMapping(value = "/naverPlacePlusPop.sb", method = RequestMethod.GET)
     public String naverPlacePlusPop(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        //
+        // 네.아.로 Unique ID
         model.addAttribute("uniqueId", request.getParameter("uniqueId"));
 
         // 연동 단계 파악을 위한 화면 정보 셋팅
