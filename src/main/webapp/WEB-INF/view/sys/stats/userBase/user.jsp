@@ -38,4 +38,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userBase/user.js?ver=20200528.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userBase/user.js?ver=20260227.01" charset="utf-8"></script>

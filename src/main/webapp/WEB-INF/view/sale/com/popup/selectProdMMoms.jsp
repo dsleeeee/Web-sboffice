@@ -148,6 +148,24 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+      // header template 사용하지 않고 클릭 이벤트 구현
+      s.hostElement.addEventListener('click', function(evt){
+        var ht = s.hitTest(evt);
+        // 1. 헤더 패널인지 확인
+        if(ht.panel === s.columnHeaders && ht.col === 0){
+
+          // 2. 실제 클릭이 체크박스인지 확인
+          if(evt.target.tagName === 'INPUT' && evt.target.type === 'checkbox'){
+            $scope.$apply(function(){
+              // 3️⃣ 체크 여부 확인
+              var isChecked = evt.target.checked;
+              $scope.toggleAllFiltered(isChecked);
+            });
+          }
+        }
+      });
+
       // 상품브랜드
       var params = {};
       $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
@@ -198,20 +216,40 @@
           grid.rows[i].visible = true;
           grid.rows[i].dataItem.visible = true;
         }
-        if($("#filterProdNm").val() !==undefined && $("#filterProdNm").val() !== null && $("#filterProdNm").val() !== ""){
+        if($("#filterProdNm").val() !== undefined && $("#filterProdNm").val() !== null && $("#filterProdNm").val() !== ""){
           for (var i = 0; i < grid.rows.length; i++) {
             if (grid.rows[i].dataItem.prodNm.indexOf($("#filterProdNm").val()) === -1) {
               grid.rows[i].visible = false;
-              grid.rows[i].dataItem.gChk = false;
               grid.rows[i].dataItem.visible = false;
             }else{
               grid.rows[i].dataItem.visible = true;
             }
           }
+          $scope.allChkFg = true;
+        }else{
+          $scope.allChkFg = false;
         }
         grid.refresh();
       }
     };
+
+    $scope.toggleAllFiltered = function (isChecked) {
+      if(isChecked){
+        if($scope.allChkFg){
+          var grid = wijmo.Control.getControl("#wjGridProdM");
+
+          if(grid.rows.length > 0){
+            for (var i = 0; i < grid.rows.length; i++) {
+              if (grid.rows[i].dataItem.visible) {
+                grid.rows[i].dataItem.gChk = true;
+              }else{
+                grid.rows[i].dataItem.gChk = false;
+              }
+            }
+          }
+        }
+      }
+    }
 
     $scope.searchProd = function () {
       // 파라미터
@@ -244,7 +282,7 @@
       var cnt        = 0;
 
       for (var i = 0; i < flex.length; i++) {
-        if (flex[i].gChk && (flex[i].visible === undefined || flex[i].visible)) {
+        if (flex[i].gChk) {
           if (cnt == 0) {
             strProdCd = flex[i].prodCd;
             strProdNm = flex[i].prodNm;

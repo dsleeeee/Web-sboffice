@@ -77,16 +77,32 @@ app.controller('userBaseCtrl', ['$scope', '$http', function ($scope, $http) {
                     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
                     params.resrceNm = $("#srchResrceNm").val();
                     params.level = $scope.level;
+                    // 조회조건 값 입력
+                    params.hqOfficeCd   = $scope.hqOfficeCd;
+                    params.hqOfficeNm   = $scope.hqOfficeNm;
+                    params.storeCd      = $scope.storeCd;
+                    params.storeNm      = $scope.storeNm;
+                    params.userId       = $scope.userId;
+                    params.userNm       = $scope.userNm;
 
-                    // 값이 있으면 링크 효과
-                    if (nvl(selectedRow[("userId")], '') !== '') {
-                        params.userId = selectedRow.userId;
-                    }
+                    // 그리드에 값이 있으면 그리드 값으로 적용
                     if (nvl(selectedRow[("hqOfficeCd")], '') !== '') {
                         params.hqOfficeCd = selectedRow.hqOfficeCd;
                     }
+                    if (nvl(selectedRow[("hqOfficeNm")], '') !== '') {
+                        params.hqOfficeNm = selectedRow.hqOfficeNm;
+                    }
                     if (nvl(selectedRow[("storeCd")], '') !== '') {
                         params.storeCd = selectedRow.storeCd;
+                    }
+                    if (nvl(selectedRow[("storeNm")], '') !== '') {
+                        params.storeNm = selectedRow.storeNm;
+                    }
+                    if (nvl(selectedRow[("userId")], '') !== '') {
+                        params.userId = selectedRow.userId;
+                    }
+                    if (nvl(selectedRow[("userNm")], '') !== '') {
+                        params.userNm = selectedRow.userNm;
                     }
 
                     var storeScope = agrid.getScope('userCtrl');
@@ -118,8 +134,10 @@ app.controller('userBaseCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('userCtrl');
                 storeScope._gridDataInit();
+                storeScope.setSelectedUser();
                 var storeScope2 = agrid.getScope('useMenuCtrl');
                 storeScope2._gridDataInit();
+                storeScope2.setSelectedUseMenu();
             });
 
             // 선택한 분류에 따른 리스트 항목 visible

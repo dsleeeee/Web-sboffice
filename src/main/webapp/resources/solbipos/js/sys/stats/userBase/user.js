@@ -52,8 +52,11 @@ app.controller('userCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = $scope.selectedUser.endDate;
         params.resrceNm = $scope.selectedUser.resrceNm;
         params.userId = $scope.selectedUser.userId;
+        params.userNm = $scope.selectedUser.userNm;
         params.hqOfficeCd = $scope.selectedUser.hqOfficeCd;
+        params.hqOfficeNm = $scope.selectedUser.hqOfficeNm;
         params.storeCd = $scope.selectedUser.storeCd;
+        params.storeNm = $scope.selectedUser.storeNm;
         params.level = $scope.selectedUser.level;
 
         $scope._inquiryMain("/sys/stats/userBase/user/getUserList.sb", params, function() {}, false);

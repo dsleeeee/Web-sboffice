@@ -554,6 +554,24 @@ readonly/>
             // 그리드 DataMap 설정
             $scope.sysStatFgDataMap = new wijmo.grid.DataMap(popSysStatFgComboData, 'value', 'name'); // 매장상태구분
 
+
+            // header template 사용하지 않고 클릭 이벤트 구현
+            s.hostElement.addEventListener('click', function(evt){
+                var ht = s.hitTest(evt);
+                // 1. 헤더 패널인지 확인
+                if(ht.panel === s.columnHeaders && ht.col === 0){
+
+                    // 2. 실제 클릭이 체크박스인지 확인
+                    if(evt.target.tagName === 'INPUT' && evt.target.type === 'checkbox'){
+                        $scope.$apply(function(){
+                            // 3️⃣ 체크 여부 확인
+                            var isChecked = evt.target.checked;
+                            $scope.toggleAllFiltered(isChecked);
+                        });
+                    }
+                }
+            });
+
             // 선택한 테이블에 따른 리스트 항목 visible
             var grid = wijmo.Control.getControl("#wjGridStore${param.targetId}");
             var columns = grid.columns;
@@ -954,15 +972,35 @@ readonly/>
                         if (grid.rows[i].dataItem.storeNm.indexOf($scope.filterStoreNm) === -1) {
                             grid.rows[i].visible = false;
                             grid.rows[i].dataItem.visible = false;
-                            grid.rows[i].dataItem.gChk = false;
                         }else{
                             grid.rows[i].dataItem.visible = true;
                         }
                     }
+                    $scope.allChkFg = true;
+                }else{
+                    $scope.allChkFg = false;
                 }
                 grid.refresh();
             }
         };
+
+        $scope.toggleAllFiltered = function (isChecked) {
+            if(isChecked){
+                if($scope.allChkFg){
+                    var grid = wijmo.Control.getControl("#wjGridStore" + targetId);
+
+                    if(grid.rows.length > 0){
+                        for (var i = 0; i < grid.rows.length; i++) {
+                            if (grid.rows[i].dataItem.visible) {
+                                grid.rows[i].dataItem.gChk = true;
+                            }else{
+                                grid.rows[i].dataItem.gChk = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         $scope.searchStore = function () {
             // 파라미터
@@ -1014,7 +1052,7 @@ readonly/>
             var cnt        = 0;
 
             for (var i = 0; i < flex.length; i++) {
-                if (flex[i].gChk && (flex[i].visible === undefined || flex[i].visible)) {
+                if (flex[i].gChk) {
                     if (cnt == 0) {
                         strStoreCd = flex[i].storeCd;
                         strStoreNm = flex[i].storeNm;

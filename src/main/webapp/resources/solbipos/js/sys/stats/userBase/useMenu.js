@@ -43,8 +43,11 @@ app.controller('useMenuCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = $scope.selectedUseMenu.endDate;
         params.resrceNm = $scope.selectedUseMenu.resrceNm;
         params.userId = $scope.selectedUseMenu.userId;
+        params.userNm = $scope.selectedUseMenu.userNm;
         params.hqOfficeCd = $scope.selectedUseMenu.hqOfficeCd;
+        params.hqOfficeNm = $scope.selectedUseMenu.hqOfficeNm;
         params.storeCd = $scope.selectedUseMenu.storeCd;
+        params.storeNm = $scope.selectedUseMenu.storeNm;
         params.level = $scope.selectedUseMenu.level;
 
         $scope._inquiryMain("/sys/stats/userBase/useMenu/getUseMenuList.sb", params, function() {}, false);
