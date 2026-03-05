@@ -77,10 +77,15 @@ public class AuthServiceImpl implements AuthService {
 
         String inputPw = params.getUserPwd();
 
+        System.out.println("result.getUserId(): "+result.getUserId());
+        System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
+        System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
+
         /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node */
-        if("momse09686".equals(result.getUserId()) && "node".equals(result.getBrwsrInfo())) {
+        if("momse09686".equals(result.getUserId()) && "node".equals(params.getBrwsrInfo())) {
             System.out.println("result.getUserId(): "+result.getUserId());
             System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
+            System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
             result.setLoginResult(LoginResult.PASSWORD_ERROR);
             return result;
         }
@@ -88,6 +93,7 @@ public class AuthServiceImpl implements AuthService {
         if("kjsun11177".equals(result.getUserId())) {
             System.out.println("result.getUserId(): "+result.getUserId());
             System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
+            System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
             result.setLoginResult(LoginResult.PASSWORD_ERROR);
             return result;
         }
