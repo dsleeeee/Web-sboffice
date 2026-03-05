@@ -249,6 +249,11 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
 
                 list.forEach(item => {
                     item.gChk = false; // 체크박스 선택을 위해 추가
+
+                    // 예치금 없을 경우 '-'로 표시
+                    if (item.deposit === null || item.deposit === "") {
+                        item.deposit = '-';
+                    }
                 });
 
                 console.log(list);

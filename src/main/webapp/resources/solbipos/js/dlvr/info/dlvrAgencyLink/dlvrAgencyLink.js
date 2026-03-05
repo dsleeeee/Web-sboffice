@@ -90,6 +90,12 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
                 var grid = wijmo.Control.getControl("#wjGridMain");
                 grid.itemsSource = new wijmo.collections.CollectionView(list);
                 grid.collectionView.trackChanges = true;
+
+                if (1 > list.length) {
+                    // 조회 결과가 없습니다.
+                    $scope._popMsg(messages['cmm.search.result.empty']);
+                    return;
+                }
             }
         });
     };
@@ -202,6 +208,14 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
                 // 기존 주문 연동 활성화 콤보박스 선택값 갖고 있기
                 $scope.orgUseYn = $scope.useYnCombo.selectedValue;
+
+            } else {
+                if (data.success === false && data.code === "BUSINESS_ERROR") {
+
+                    // 오더킷 사용중지 계정입니다.\n관리자에게 문의해 주세요.
+                    $scope._popMsg(data.message);
+                    return;
+                }
             }
         });
     };
