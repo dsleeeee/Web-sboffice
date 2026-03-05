@@ -259,6 +259,8 @@
     <typeAlias alias="adminMediaVO" type="kr.co.solbipos.sys.admin.adminMedia.service.AdminMediaVO"/>
     <!-- 시스템관리 > 관리자기능 > 제우스데이터연동 -->
     <typeAlias alias="zeusDataConnectVO" type="kr.co.solbipos.sys.admin.zeusDataConnect.service.ZeusDataConnectVO"/>
+    <!-- 시스템관리 > 관리자기능 > POS로그수집관리 -->
+    <typeAlias alias="posLogCollectMgmtVO" type="kr.co.solbipos.sys.admin.posLogCollectMgmt.service.PosLogCollectMgmtVO"/>
     <!-- 시스템관리 > 연동 > OMS연동샘플 -->
     <typeAlias alias="omsLinkSampleVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO"/>
     <typeAlias alias="apiLinkVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO"/>
@@ -1177,6 +1179,8 @@
     <typeAlias alias="storeLangUseVO" type="kr.co.solbipos.sale.store.storeLangUse.service.StoreLangUseVO"/>
     <!-- 맘스터치 > 매장분석 > 온라인주문-수신상태이력 -->
     <typeAlias alias="orderAcceptHistoryVO" type="kr.co.solbipos.sale.store.orderAcceptHistory.service.OrderAcceptHistoryVO"/>
+    <!-- 맘스터치 > 매장분석 > 매장품절현황 -->
+    <typeAlias alias="storeSoldOutHistoryVO" type="kr.co.solbipos.sale.store.storeSoldOutHistory.service.StoreSoldOutHistoryVO"/>
 
     <!-- 맘스터치 > 매출분석2 > 가승인-상품권결제차액 -->
     <typeAlias alias="payTemporaryVO" type="kr.co.solbipos.sale.status.payTemporary.service.PayTemporaryVO"/>

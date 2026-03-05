@@ -1597,6 +1597,16 @@ FormatLayout.prototype.initElements = function() {
 
             	    if (fileCheck(file)) {
 
+                        var msg;
+                        if (nvl(file.name, '') !== '' &&
+                            nvl(file.name + '', '').getByteLengthForOracle() > 30) {
+                            msg = messages["tableLayout.cellImg"] + " " + messages["tableLayout.fileNm"] + messages["cmm.overLength"] + " 30 " +
+                                ", 현재 : " + file.name.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                            alert(msg)
+                            $("#btnCellBgFile").val("");
+                            return false;
+                        }
+
             	    	// ajax로 전달할 폼 객체
             	        var formData = new FormData();
             	        // 폼 객체에 파일추가, append("변수명", 값)
@@ -1673,6 +1683,8 @@ FormatLayout.prototype.initElements = function() {
                 graph.refresh();
             }
         }
+
+    	$("#btnCellBgFile").val("");
     });
 
     // 테이블 정렬 옵션(왼쪽/가운데/오른쪽, 상단/중단/하단)
@@ -1825,8 +1837,8 @@ FormatLayout.prototype.save = function() {
 
 	        var msg;
             if (nvl(file.name, '') !== '' &&
-                nvl(file.name + '', '').getByteLengthForOracle() > 50) {
-                msg = messages["tableLayout.bgImg"] + messages["cmm.overLength"] + " 50 " +
+                nvl(file.name + '', '').getByteLengthForOracle() > 30) {
+                msg = messages["tableLayout.bgImg"] + " " + messages["tableLayout.fileNm"] + messages["cmm.overLength"] + " 30 " +
                     ", 현재 : " + file.name.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
                 alert(msg)
                 return false;

@@ -188,31 +188,11 @@
                 ORDER BY tce.HQ_OFFICE_CD, tce.STORE_CD, twmu.USER_ID
             )
             WHERE 1=1
-            <choose>
-                <when test='resrceNm != null and resrceNm != ""'>
-                    <!-- 대분류 -->
-                    <if test='level == "1"'>
-                        <![CDATA[
-                            AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        ]]>
-                    </if>
-                    <!-- 중분류 -->
-                    <if test='level == "2"'>
-                        <![CDATA[
-                            AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                            OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                        ]]>
-                    </if>
-                    <!-- 소분류 -->
-                    <if test='level == "3"'>
-                        <![CDATA[
-                            AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                            OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                            OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
-                        ]]>
-                    </if>
-                </when>
-            </choose>
+            <if test='resrceNm != null and resrceNm != ""'>
+                AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
+                OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
+                OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
+            </if>
         )
         WHERE 1=1
         <choose>
@@ -224,6 +204,7 @@
                         ORDER BY HQ_OFFICE_CD
                     ]]>
                 </if>
+
                 <!-- 중분류 -->
                 <if test='level == "2"'>
                     <![CDATA[
@@ -360,9 +341,19 @@
                     AND twmu.USER_ID LIKE '%'||#{userId}||'%'
                 ]]>
             </if>
+            <if test='userNm != null and userNm != ""'>
+                <![CDATA[
+                    AND tce.USER_NM LIKE '%'||#{userNm}||'%'
+                ]]>
+            </if>
             <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                 <![CDATA[
                     AND tce.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+                ]]>
+            </if>
+            <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+                <![CDATA[
+                    AND tce.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
                 ]]>
             </if>
             <if test='storeCd != null and storeCd != ""'>
@@ -370,33 +361,18 @@
                     AND tce.STORE_CD LIKE '%'||#{storeCd}||'%'
                 ]]>
             </if>
+            <if test='storeNm != null and storeNm != ""'>
+                <![CDATA[
+                    AND tce.STORE_NM LIKE '%'||#{storeNm}||'%'
+                ]]>
+            </if>
         )
         WHERE 1=1
-        <choose>
-            <when test='resrceNm != null and resrceNm != ""'>
-                <!-- 대분류 -->
-                <if test='level == "1"'>
-                    <![CDATA[
-                       AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 중분류 -->
-                <if test='level == "2"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 소분류 -->
-                <if test='level == "3"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-            </when>
-        </choose>
+        <if test='resrceNm != null and resrceNm != ""'>
+            AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
+            OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
+            OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
+        </if>
         ORDER BY USE_DATE
     </select>
 
@@ -516,9 +492,19 @@
                     AND twmu.USER_ID LIKE '%'||#{userId}||'%'
                 ]]>
             </if>
+            <if test='userNm != null and userNm != ""'>
+                <![CDATA[
+                    AND tce.USER_NM LIKE '%'||#{userNm}||'%'
+                ]]>
+            </if>
             <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                 <![CDATA[
                     AND tce.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+                ]]>
+            </if>
+            <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+                <![CDATA[
+                    AND tce.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
                 ]]>
             </if>
             <if test='storeCd != null and storeCd != ""'>
@@ -526,34 +512,19 @@
                     AND tce.STORE_CD LIKE '%'||#{storeCd}||'%'
                 ]]>
             </if>
+            <if test='storeNm != null and storeNm != ""'>
+                <![CDATA[
+                    AND tce.STORE_NM LIKE '%'||#{storeNm}||'%'
+                ]]>
+            </if>
             GROUP BY twri_P.PATH
         )
         WHERE 1=1
-        <choose>
-            <when test='resrceNm != null and resrceNm != ""'>
-                <!-- 대분류 -->
-                <if test='level == "1"'>
-                    <![CDATA[
-                       AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 중분류 -->
-                <if test='level == "2"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 소분류 -->
-                <if test='level == "3"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-            </when>
-        </choose>
+        <if test='resrceNm != null and resrceNm != ""'>
+            AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
+            OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
+            OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
+        </if>
          ORDER BY LEVEL1_NM, LEVEL2_NM, LEVEL3_NM
     </select>
 
