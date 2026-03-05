@@ -8,7 +8,7 @@
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="dlvrAgencyLink.dlvrAgency.reg"/>
-            <a href="#" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close" ng-click="btnClose()"></a>
         </div>
 
         <%-- body --%>
@@ -80,7 +80,7 @@
                     <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeCd"/>" binding="storeCode" align="center" width="100" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeNm"/>" binding="storeName" align="left" width="150" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.addr"/>" binding="address" width="300" align="left" is-read-only="true" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" align="right" width="100" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" align="center" width="100" is-read-only="true" ></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -96,4 +96,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.js?ver=20260123.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.js?ver=20260305.02" charset="utf-8"></script>
