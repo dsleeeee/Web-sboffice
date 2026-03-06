@@ -8,14 +8,14 @@
 </head>
 <body>
 <div id="divWrap" class="wrap" style="display: none;">
-    <h2 class="page-title">네이버 플레이스+에 연동하실 매장을 선택 해주세요.</h2>
+    <h2 class="page-title"><s:message code="naverPlacePlusLink.info1" /></h2>
     <div class="top-actions">
             <span class="desc">
-              찾으시는 매장이 없는 경우, 업체찾기를 통해 확인 하시거나 신규로 등록 해주세요.
+              <s:message code="naverPlacePlusLink.info2" />
             </span>
         <div class="btn-group">
-            <button class="btn btn-green" id="btnSearch" onclick="btnSearch();">업체 찾기</button>
-            <button class="btn btn-green" id="btnReg" onclick="btnReg();">신규 등록 +</button>
+            <button class="btn btn-green" id="btnSearch" onclick="btnSearch();"><s:message code="naverPlacePlusLink.searchStore" /></button>
+            <button class="btn btn-green" id="btnReg" onclick="btnReg();"><s:message code="naverPlacePlusLink.regStore" /></button>
         </div>
     </div>
     <%-- 업체 목록 --%>
@@ -27,9 +27,7 @@
 </html>
 
 <script type="text/javascript">
-
-    // 네이버 로그인 팝업창 닫기
-    //window.open('about:blank', '_self').self.close();
+    //console.log("userId : " + sessionStorage.getItem("userId"));
 
     // 이전 화면(연동 단계 파악)
     var prePage = "${prePage}";
@@ -39,24 +37,24 @@
 
     if (prePage == "login") {
 
-        //
+        // 연동 매장 리스트 div hidden
         document.getElementById('divWrap').style.display = "none";
 
+        // 약관동의 팝업 후
         var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
     } else if (prePage == "agree") {
 
-        //
+        // 연동 매장 리스트 div show
         document.getElementById('divWrap').style.display = "block";
 
-        // 조회
-        getList(0);
+        // 매장 조회
+        getStoreList(0);
 
     } else {
-
-        //
+        // 연동 매장 리스트 div hidden
         document.getElementById('divWrap').style.display = "none";
     }
 
@@ -75,11 +73,11 @@
     }
 
     // 연동 매장 조회
-    function getList(pageNo) {
+    function getStoreList(page) {
 
         // 업체 목록 조회 API 호출
         var params = {};
-        params.page = (1 > pageNo ? 0 : pageNo);
+        params.page = (1 > page ? 0 : page);
         params.uniqueId = uniqueId;
 
         $.ajax({
@@ -90,7 +88,7 @@
             url: '/naverPlace/naverPlace/naverPlacePlusLink/getPlaceList.sb',
             data: params,
             success: function (data) {
-                console.log(JSON.stringify(data));
+                //console.log(JSON.stringify(data));
                 if (data.status === "OK") {
                     var arr = data.data.list;
                     var innerHtml = "";
@@ -98,8 +96,8 @@
 
                     if (arr.length > 0) {
                         for (var i = 0; i < arr.length; i++) {
-
                             if (i < arr.length - 1) {
+                                // 매장 리스트
                                 innerHtml += "<div class=\"store-card\">";
                                 innerHtml += "<div class=\"thumb\" img src=\"" + arr[i].businessImage + "\"></div>";
                                 innerHtml += "<div class=\"store-info\">";
@@ -107,7 +105,7 @@
                                 innerHtml += "<p>" + arr[i].address + "</p>";
                                 innerHtml += "<p>" + arr[i].phone + "</p>";
                                 innerHtml += "</div>";
-                                innerHtml += "<button class=\"btn btn-blue\">연동하기</button>";
+                                innerHtml += "<button class=\"btn btn-blue\" onClick=\"mappingStore('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.searchStore" /></button>";
                                 innerHtml += "</div>";
 
                             } else {
@@ -116,7 +114,7 @@
                                 if (totalPages > 0) {
                                     innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(0)\">&laquo;</button>";
                                     for (var j = 1; j <= totalPages; j++) {
-                                        innerHtmlPaging += "<button class=\"page-btn " + (pageNo + 1 === j ? "active" : "") + "\" onClick=\"getList(" + (j - 1) + ")\">" + j + "</button>";
+                                        innerHtmlPaging += "<button class=\"page-btn " + (page + 1 === j ? "active" : "") + "\" onClick=\"getList(" + (j - 1) + ")\">" + j + "</button>";
                                     }
                                     innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(" + (totalPages - 1) + ")\">&raquo;</button>";
                                 }
@@ -124,7 +122,7 @@
                         }
                     } else {
                         innerHtml += "<div class=\"store-card-none\">";
-                        innerHtml += "<span class=\"desc\">등록된 매장이 없습니다.</br>신규 등록을 진행해 주세요.</span>";
+                        innerHtml += "<span class=\"desc\"><s:message code="naverPlacePlusLink.info3" /></span>";
                         innerHtml += "</div>";
                     }
 
@@ -136,10 +134,35 @@
     }
 
     // 연동 하기
-    function linkStore(placeId) {
+    function mappingStore(placeId, businessName) {
 
+        var params = {};
+        params.userId = sessionStorage.getItem("userId");
+        params.uniqueId = uniqueId;
+        params.placeId = placeId;
+        params.businessName = businessName;
+
+        $.ajax({
+            type: 'POST',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            url: '/naverPlace/naverPlace/naverPlacePlusLink/mappingPlace.sb',
+            data: params,
+            success: function (data) {
+                console.log(JSON.stringify(data));
+                if (data.status === "OK") {
+
+                    // 부모창 재조회
+                    const bc = new BroadcastChannel('refresh_channel');
+                    bc.postMessage('refresh');
+
+                    // 닫기
+                    window.close();
+                }
+            }
+        });
     }
-
 </script>
 
 <style>

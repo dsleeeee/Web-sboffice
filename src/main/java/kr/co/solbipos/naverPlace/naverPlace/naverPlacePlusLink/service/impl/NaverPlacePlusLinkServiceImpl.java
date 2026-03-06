@@ -27,6 +27,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -436,6 +438,41 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     }
 
     /**
+     * 연동 추가 API 호출
+     *
+     * @param naverPlacePlusApiVO
+     * @return
+     */
+    @Override
+    public Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO) {
+
+        String apiFullUrl = LINK_URL + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+
+        Map<String, Object> resultMap = postRequest(naverPlacePlusApiVO, apiFullUrl);
+
+        // 연동일자 변환
+        ZonedDateTime zdt = ZonedDateTime.parse(resultMap.get("regDateTime").toString());
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String regDateTime = zdt.format(outputFormatter);
+
+        // 연동 매장 정보 저장
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        String dt = currentDateTimeString();
+        naverPlacePlusLinkVO.setUniqueId(naverPlacePlusApiVO.getUniqueId());
+        naverPlacePlusLinkVO.setNaverStoreNm(naverPlacePlusApiVO.getBusinessName());
+        naverPlacePlusLinkVO.setNaverPlaceId(resultMap.get("placeId").toString());
+        naverPlacePlusLinkVO.setNaverLinkDt(regDateTime);
+        naverPlacePlusLinkVO.setModDt(dt);
+        naverPlacePlusLinkVO.setModId(naverPlacePlusApiVO.getUserId());
+
+        naverPlacePlusLinkMapper.updateNaverStore(naverPlacePlusLinkVO);
+
+        return resultMap;
+    }
+
+    /**
      * 연동 해지 API 호출
      *
      * @param naverPlacePlusApiVO
@@ -458,16 +495,14 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         Map<String, Object> resultMap = deleteRequest(naverPlacePlusApiVO, apiFullUrl);
 
         // 연동 매장 정보 삭제
-        /*String dt = currentDateTimeString();
+        String dt = currentDateTimeString();
         naverPlacePlusLinkVO.setNaverStoreNm(null);
         naverPlacePlusLinkVO.setNaverPlaceId(null);
         naverPlacePlusLinkVO.setNaverLinkDt(null);
-        naverPlacePlusLinkVO.setRegDt(dt);
-        naverPlacePlusLinkVO.setRegId(sessionInfoVO.getUserId());
         naverPlacePlusLinkVO.setModDt(dt);
         naverPlacePlusLinkVO.setModId(sessionInfoVO.getUserId());
 
-        naverPlacePlusLinkMapper.updateNaverStore(naverPlacePlusLinkVO);*/
+        naverPlacePlusLinkMapper.updateNaverStore(naverPlacePlusLinkVO);
 
         return resultMap;
     }
@@ -577,13 +612,10 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + naverPlacePlusApiVO.getAccessToken());
+            connection.setRequestProperty("X-Naver-Unique-Id", naverPlacePlusApiVO.getUniqueId());
+            connection.setRequestProperty("X-Naver-Client-Id", CLIENT_ID);
+            connection.setRequestProperty("X-Naver-Client-Secret", CLIENT_SECRET);
 
-            // 업종 조회 API는 사용 안함
-            if (apiUrl.indexOf("/v1/custom/pos/place-businesses") > 0) {
-                connection.setRequestProperty("X-Naver-Unique-Id", naverPlacePlusApiVO.getUniqueId());
-                connection.setRequestProperty("X-Naver-Client-Id", CLIENT_ID);
-                connection.setRequestProperty("X-Naver-Client-Secret", CLIENT_SECRET);
-            }
 
             // 3. 응답 코드 확인
             int responseCode = connection.getResponseCode();
@@ -626,6 +658,88 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         HashMap<String, Object> m = new HashMap<>();
         m.put("totCnt", connection.getHeaderField("X-Total-Count"));
         resultMap.add(m);
+
+        return resultMap;
+    }
+
+    /**
+     * post 호출
+     *
+     * @param naverPlacePlusApiVO
+     * @param apiUrl
+     * @return
+     */
+    public Map<String, Object> postRequest(@RequestBody NaverPlacePlusApiVO naverPlacePlusApiVO, String apiUrl) {
+
+        HttpURLConnection connection = null;
+
+        // 결과값 셋팅
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        try {
+            // 1. URL 객체 생성
+            URL url = new URL(apiUrl);
+            System.out.println("post 호출 URL: " + url);
+
+            // 2. HttpURLConnection 객체 생성 및 설정
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + naverPlacePlusApiVO.getAccessToken());
+            connection.setRequestProperty("X-Naver-Unique-Id", naverPlacePlusApiVO.getUniqueId());
+            connection.setRequestProperty("X-Naver-Client-Id", CLIENT_ID);
+            connection.setRequestProperty("X-Naver-Client-Secret", CLIENT_SECRET);
+            connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
+
+            // 3. 서버로 데이터 전송 (JSON payload)
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String jsonData = mapper.writeValueAsString(naverPlacePlusApiVO);
+            System.out.println("jsonData :" + jsonData);
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+                os.flush();
+            }
+
+            // 4. 응답 코드 확인
+            int responseCode = connection.getResponseCode();
+            System.out.println("HTTP 응답 코드: " + responseCode);
+
+            // 5. 응답 본문 읽기
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {
+                    });
+                    System.out.println("서버 응답: " + response.toString());
+                }
+            } else {
+                // 에러 발생 시 에러 스트림을 읽음
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine = null;
+                    while ((errorLine = br.readLine()) != null) {
+                        errorResponse.append(errorLine.trim());
+                    }
+                    resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {
+                    });
+                    System.out.println("에러 응답: " + errorResponse.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
 
         return resultMap;
     }

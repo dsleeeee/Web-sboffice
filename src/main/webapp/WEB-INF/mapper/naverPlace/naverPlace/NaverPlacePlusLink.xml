@@ -221,8 +221,16 @@
         ,      NAVER_LINK_DT = #{naverLinkDt}
         ,      MOD_DT = #{modDt}
         ,      MOD_ID = #{modId}
-        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-        AND    STORE_CD = #{storeCd}
+        WHERE  1=1
+        <choose>
+            <when test="uniqueId != null and uniqueId != ''">
+                AND   UNIQUE_ID = #{uniqueId}
+            </when>
+            <otherwise>
+                AND   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND   STORE_CD = #{storeCd}
+            </otherwise>
+        </choose>
     </update>
 
 </mapper>

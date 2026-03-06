@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkService;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkVO;
@@ -81,28 +80,29 @@ public class NaverPlacePlusLinkController {
         String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
         model.addAttribute("uniqueId", uniqueId);
 
-        if (uniqueId != null) {
-            if (uniqueId != "") {
-                // 동의여부 API 호출
-                resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+        if (uniqueId != null && uniqueId != "") {
 
-                // 연동정보 조회
-                DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+            // 동의여부확인 API 호출
+            resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
 
-                if (result != null && result.size() > 0 && !result.isEmpty()) {
-                    if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
-                        // 실제 연동이 됐는지 연동 조회 API 호출
-                        naverPlacePlusApiVO.setProjections(""); // 초기화
-                        naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
-                        resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
-                    }
+            // 연동 매장 정보 조회(DB)
+            DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+
+            if (result != null && result.size() > 0 && !result.isEmpty()) {
+                if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+
+                    // 진짜 연동이 되어있는지 연동 조회 API 호출
+                    naverPlacePlusApiVO.setProjections(""); // 초기화
+                    naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
+                    resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
+                    resultMap2.put("storeNm", result.getStr("naverStoreNm"));
                 }
             }
         }
 
         model.addAttribute("agreeYn", convertToJson(resultMap));
         model.addAttribute("linkYn", convertToJson(resultMap2));
-        LOGGER.info("동의여부 API: " + resultMap);
+        LOGGER.info("동의여부확인 API: " + resultMap);
         LOGGER.info("연동 조회 API: " + resultMap2);
 
         return "naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink";
@@ -192,6 +192,25 @@ public class NaverPlacePlusLinkController {
                                HttpServletResponse response, Model model) {
 
         List<Map<String, Object>> resultMap = naverPlacePlusLinkService.getPlaceList(naverPlacePlusApiVO);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 연동 추가 API
+     *
+     * @param naverPlacePlusApiVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/mappingPlace.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        Map<String, Object> resultMap = naverPlacePlusLinkService.mappingPlace(naverPlacePlusApiVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }

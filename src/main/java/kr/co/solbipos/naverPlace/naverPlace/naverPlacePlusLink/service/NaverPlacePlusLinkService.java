@@ -2,7 +2,6 @@ package kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO;
 
 import java.util.List;
 import java.util.Map;
@@ -90,11 +89,18 @@ public interface NaverPlacePlusLinkService {
     Map<String, Object> getNaverLinkYn(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO);
 
     /**
+     * 연동 추가 API
+     *
+     * @param naverPlacePlusApiVO
+     * @return
+     */
+    Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO);
+
+    /**
      * 연동 해지 API
      *
      * @param naverPlacePlusApiVO
      * @return
      */
     Map<String, Object> unMappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO);
-
 }

@@ -1,16 +1,17 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div class="subCon" ng-controller="naverPlacePlusLinkCtrl">
     <div class="searchBar">
-        <a href="#" class="open fl">네이버플레이스 플러스 연동</a>
+        <a href="#" class="open fl"><s:message code="naverPlacePlusLink.naverPlacePlusLink" /></a>
     </div>
 
     <div id="divLinkN">
         <div class="mt10" style="text-align:center;">
             <img src="/resource/solbipos/css/img/orderkit/banner_260123@2x.png" alt="" style="width:100%; height: 100%;"/>
-            <button class="action-btn1 mt30" id="btn1" ng-click="btn1();">네이버 스마트 플레이스 연동</button>
+            <button class="action-btn1 mt30" id="btn1" ng-click="btn1();"><s:message code="naverPlacePlusLink.naverPlacePlusLink" /></button>
         </div>
     </div>
 
@@ -23,27 +24,30 @@
             </h3>
             <div class="bottom-container">
                 <div class="card-item">
-                    <p class="description">연동 정보 <img src="/resource/solbipos/css/img/info.png" alt="" style="width: 15px;"></p>
+                    <p class="description"><s:message code="naverPlacePlusLink.linkInfo" /> <img src="/resource/solbipos/css/img/info.png" alt="" style="width: 15px;"></p>
                     <table class="w100 mt30">
                         <colgroup>
                             <col class="w30"/>
                             <col class=""/>
                         </colgroup>
                         <tbody>
+                        <%--매장 명--%>
                         <tr class="pdt10">
-                            <td class="description" style="text-align: right">매장 명</td>
+                            <td class="description" style="text-align: right"><s:message code="naverPlacePlusLink.storeNm" /></td>
                             <td class="pd5">
                                 <input type="text" class="inSty2 w80" style="border-radius: 0.6em;" readonly="readonly" id="txtStoreNm">
                             </td>
                         </tr>
+                        <%--플레이스 아이디--%>
                         <tr class="pd10">
-                            <td class="description" style="text-align: right">플레이스 아이디</td>
+                            <td class="description" style="text-align: right"><s:message code="naverPlacePlusLink.placeId" /></td>
                             <td class="pd5">
                                 <input type="text" class="inSty2 w80" style="border-radius: 0.6em;" readonly="readonly" id="txtPlaceId">
                             </td>
                         </tr>
+                        <%--연동 일시--%>
                         <tr class="pd10">
-                            <td class="description" style="text-align: right">연동 일시</td>
+                            <td class="description" style="text-align: right"><s:message code="naverPlacePlusLink.linkDt" /></td>
                             <td class="pd5">
                                 <input type="text" class="inSty2 w80" style="border-radius: 0.6em;" readonly="readonly" id="txtLinkDt">
                             </td>
@@ -52,13 +56,17 @@
                     </table>
                 </div>
             </div>
-            <button class="action-btn2" id="btn2" ng-click="btn2();">네이버 스마트 플레이스 연동 해지</button>
+            <button class="action-btn2" id="btn2" ng-click="btn2();"><s:message code="naverPlacePlusLink.withdraw" /></button>
         </div>
     </div>
 
 </div>
 
 <script type="text/javascript">
+
+    // 사용자 ID
+    var userId = "${userId}";
+    sessionStorage.setItem("userId", userId);
 
     // 네.아.로 uniqueId
     var uniqueId = "${uniqueId}";
@@ -78,7 +86,7 @@
         linkStep = 1;
 
         if (agreeYn != null && agreeYn != undefined) {
-            if (agreeYn.ownerMemberStatus == "REGULAR") {
+            if (agreeYn.ownerMemberStatus == "REGULAR" && agreeYn.isJoinedMember == true) {
                 var arr = agreeYn.agreedPlacePrivacyAgreementTypes;
                 for (var i = 0; i < arr.length; i++) {
                     if (arr[i] === "SMARTPLACE_INTEGRATED_TERMS") {
@@ -103,8 +111,9 @@
         $("#divLinkN").css("display", "none");
         $("#divLinkY").css("display", "");
         // 정보 셋팅
+        $("#txtStoreNm").val(linkYn.storeNm);
         $("#txtPlaceId").val(linkYn.placeId);
-        $("#txtLinkDt").val(linkYn.regDateTime);
+        $("#txtLinkDt").val((linkYn.regDateTime).replace('T', ' ').split('.')[0]);
     }
 
     // state 값 생성 (네이버로그인후 기존세션 확인을 위한 임의값)
@@ -115,6 +124,12 @@
         const base64 = btoa(String.fromCharCode(...bytes));
         return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     }
+
+    // 연동 후 재조회
+    const bc = new BroadcastChannel('refresh_channel');
+    bc.onmessage = (event) => {
+        if (event.data === 'refresh') location.reload();
+    };
 
     /*agreeYn = {
         "ownerMemberStatus": "REGULAR",
@@ -131,11 +146,11 @@
 
     /*{"ownerMemberStatus":"NONMEMBER","isJoinedMember":false,"isWithdrawing":false}*/
 
-    alert("연동단계 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
+    //alert("연동단계 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260302.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260306.02" charset="utf-8"></script>
 
 <style>
     /* 텍스트 스타일 */

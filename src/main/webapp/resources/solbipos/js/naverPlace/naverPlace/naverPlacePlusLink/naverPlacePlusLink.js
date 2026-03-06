@@ -74,7 +74,8 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
     // 연동 해지
     $scope.btn2 = function () {
 
-        $scope._popConfirm("연동을 해지하시겠습니까?", function () {
+        // 연동을 해지하시겠습니까?
+        $scope._popConfirm(messages["naverPlacePlusLink.withdraw.confirm"], function () {
 
             // 연동 해지 API 호출
             var params = {};
@@ -85,7 +86,8 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
                     // 재조회
                     location.reload();
                 } else {
-                    $scope._popMsg("연동 해지 도중 문제가 발생하였습니다.</br>JSON.stringify(data)");
+                    // 연동 해지 도중 문제가 발생하였습니다.
+                    $scope._popMsg( messages["naverPlacePlusLink.withdraw.error"] + "</br>JSON.stringify(data)");
                 }
             });
         });

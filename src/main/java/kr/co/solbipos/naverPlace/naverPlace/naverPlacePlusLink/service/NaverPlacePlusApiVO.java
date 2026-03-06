@@ -55,6 +55,8 @@ public class NaverPlacePlusApiVO {
     private String categoryIds;
     /**  검색하고자 하는 brandCategoryId 목록 */
     private String brandCategoryIds;
+    /** 사용자 아이디 */
+    private String userId;
 
     public String getCode() {
         return code;
@@ -198,5 +200,13 @@ public class NaverPlacePlusApiVO {
 
     public void setBrandCategoryIds(String brandCategoryIds) {
         this.brandCategoryIds = brandCategoryIds;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
