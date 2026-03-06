@@ -112,11 +112,11 @@
                                 // 페이징
                                 var totalPages = Math.ceil(arr[i].totCnt / 10);
                                 if (totalPages > 0) {
-                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(0)\">&laquo;</button>";
+                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(0)\">〈〈</button>";
                                     for (var j = 1; j <= totalPages; j++) {
                                         innerHtmlPaging += "<button class=\"page-btn " + (page + 1 === j ? "active" : "") + "\" onClick=\"getList(" + (j - 1) + ")\">" + j + "</button>";
                                     }
-                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(" + (totalPages - 1) + ")\">&raquo;</button>";
+                                    innerHtmlPaging += "<button class=\"page-btn\" onClick=\"getList(" + (totalPages - 1) + ")\">〉〉</button>";
                                 }
                             }
                         }
@@ -314,11 +314,12 @@
 
     .page-btn {
         width: 34px;
-        height: 34px;
+        height: 31px;
         border-radius: 4px;
         border: 1px solid #ddd;
         background: #fff;
         cursor: pointer;
+        color: #BBBDC0;
     }
 
     .page-btn.active {
