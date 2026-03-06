@@ -452,18 +452,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         });
     };
 
-    $('#prodModifySaleUprc').on('propertychange change keyup paste input', function() {
-        if($scope.saleUprcApply){
+    $(document).on("propertychange change keyup paste input", "#prodModifySaleUprc", function () {
+
+        if(!$scope.saleUprcApply) return;
+
+        var saleUprc = this.value;
+
+        $scope.$applyAsync(function () {
             var prodInfo = $scope.getProdModifyInfo();
-            var saleUprc = $(this).val();
-            if(saleUprc == prodInfo.saleUprc) {
-                return;
-            }
+
             prodInfo.stinSaleUprc = saleUprc;
             prodInfo.packSaleUprc = saleUprc;
             prodInfo.dlvrSaleUprc = saleUprc;
-            $scope.setProdModifyInfo(prodInfo);
-        };
+        });
+
     });
 
     // 상품코드 중복체크
@@ -1017,6 +1019,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
 
+        console.log($scope.prodModifyInfo.prodTipYn);
+        // 봉사료포함여부 값 확인 - 봉사료포함여부에 값 잘못 들어가서 추가
+        if($scope.prodModifyInfo.prodTipYn !== "Y" && $scope.prodModifyInfo.prodTipYn !== "N"){
+            $scope._popMsg(messages['prod.chkProdTipYn']);
+            return false;
+        }
+
         // 내점/배달/포장 판매가 사용 시
         if(subPriceFg === "1") {
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
@@ -1368,6 +1377,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
 
+        console.log(vParams.prodTipYn);
+        // 봉사료포함여부 값 확인 - 봉사료포함여부에 값 잘못 들어가서 추가
+        if(vParams.prodTipYn !== "Y" && vParams.prodTipYn !== "N"){
+            $scope._popMsg(messages['prod.chkProdTipYn']);
+            return false;
+        }
+
         // 내점/배달/포장 판매가 사용 시
         if(subPriceFg === "1") {
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
@@ -1569,8 +1585,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         } else {
             // 숫자만 입력
             var numChkexp = /^-?\d+(\.\d*)?$/;
-            console.log(vParams.nuTotWt);
-            console.log(String(vParams.nuTotWt).split('.'));
             if (!numChkexp.test(nvl(vParams.nuTotWt.toString(), 0)) || String(vParams.nuTotWt).split('.').length -1 > 1) {
                 $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
                 return false;

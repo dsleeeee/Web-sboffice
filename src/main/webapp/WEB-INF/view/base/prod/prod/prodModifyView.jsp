@@ -1637,6 +1637,14 @@
       }
 
       this.value = value;
+
+      var scope = angular.element(this).scope();
+      var model = $(this).attr("ng-model");
+      if (scope && model) {
+        scope.$applyAsync(function () {
+          scope.$eval(model + " = '" + value + "'");
+        });
+      }
     });
     $("input:text[doubleOnly]").on("keyup paste", function() {
       var value = this.value;
@@ -1664,6 +1672,14 @@
       }
 
       this.value = value;
+
+      var scope = angular.element(this).scope();
+      var model = $(this).attr("ng-model");
+      if (scope && model) {
+        scope.$applyAsync(function () {
+          scope.$eval(model + " = '" + value + "'");
+        });
+      }
     });
     $("input:text[numberAlphabet]").on("keyup", function() {
       $(this).val($(this).val().replace(/[^A-za-z0-9]/g,""));
@@ -1764,7 +1780,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260226.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260306.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
