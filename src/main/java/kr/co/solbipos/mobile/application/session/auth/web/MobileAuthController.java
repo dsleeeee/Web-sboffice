@@ -236,6 +236,36 @@ public class MobileAuthController {
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
 
+        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
+        System.out.println("request.getHeader params.getUserId(): "+params.getUserId());
+        System.out.println("request.getHeader getClientIp: "+getClientIp(request));
+        System.out.println("request.getHeader User-Agent: "+request.getHeader("User-Agent"));
+        System.out.println("request.getHeader Sec-Fetch-Site: "+request.getHeader("Sec-Fetch-Site"));
+        System.out.println("request.getHeader Accept: "+request.getHeader("Accept"));
+        System.out.println("request.getHeader referer: "+request.getHeader("referer"));
+
+        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node */
+        if(     ("momse09686".equals(params.getUserId()) && "node".equals(params.getBrwsrInfo()))
+          ||    ("momse09686".equals(params.getUserId()) && "Mozilla/5.0".equals(params.getBrwsrInfo()))
+//          ||    ("momse09686".equals(params.getUserId()) && "".equals(request.getHeader("Sec-Fetch-Site")))
+//          ||    ("momse09686".equals(params.getUserId()) && request.getHeader("Sec-Fetch-Site") == null)
+          ||    ("momse09686".equals(params.getUserId()) && "".equals(request.getHeader("Accept")))
+          ||    ("momse09686".equals(params.getUserId()) && request.getHeader("Accept") == null)
+          ||    ("momse09686".equals(params.getUserId()) && "".equals(request.getHeader("referer")))
+          ||    ("momse09686".equals(params.getUserId()) && request.getHeader("referer") == null)
+          ||    ("momse09686".equals(params.getUserId()) && "".equals(request.getHeader("referer")))
+          ||    ("momse09686".equals(params.getUserId()) && request.getHeader("referer") == null)
+          ||    ("momse09686".equals(params.getUserId()) && !request.getHeader("referer").contains("/auth/login.sb"))
+          ) {
+            System.out.println("request.getHeader referer: "+"redirect:/login");
+            return "redirect:/login";
+        }
+        /** 임시 로그인 제어(브라우저외 접근 제어) kjsun11177*/
+        if("kjsun11177".equals(params.getUserId())) {
+            return "redirect:/login";
+        }
+        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
+
         // 로그인 시도
         SessionInfoVO result = mobileAuthService.login(params);
         // 로그인 결과값
