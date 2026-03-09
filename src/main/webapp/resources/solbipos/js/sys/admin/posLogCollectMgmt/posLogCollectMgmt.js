@@ -39,6 +39,12 @@ var sendYnComboData = [
     {"name": "미전송", "value": "N"}
 ];
 
+// 결과 DropBoxDataMap
+var resultCdComboData = [
+    {"name": "성공", "value": "0000"},
+    {"name": "실패", "value": "9999"}
+];
+
 /**
  * POS로그수집관리 조회 그리드 생성
  */
@@ -61,6 +67,7 @@ app.controller('posLogCollectMgmtCtrl', ['$scope', '$http', '$timeout', function
         $scope.dbBackupComboDataMap = new wijmo.grid.DataMap(dbBackupComboData, 'value', 'name'); // DB백업 포함여부
         $scope.smartOrderComboDataMap = new wijmo.grid.DataMap(smartOrderComboData, 'value', 'name'); // 스마트오더 수집여부
         $scope.sendYnComboDataMap = new wijmo.grid.DataMap(sendYnComboData, 'value', 'name'); // 열람구분
+        $scope.resultCdComboDataMap = new wijmo.grid.DataMap(resultCdComboData, 'value', 'name'); // 결과코드
 
     };
 

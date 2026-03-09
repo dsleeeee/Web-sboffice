@@ -38,6 +38,14 @@
         ,		A.SEND_DT
         ,		TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS REG_DT
         ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 C WHERE C.USER_ID = A.REG_ID) AS REG_NM
+        ,       A.STATUS
+        ,       A.RESULT_CD
+        ,       A.RESULT_MSG
+        ,       A.DATA
+        ,       A.ROW_COUNT
+        ,       A.FILE_SIZE
+        ,		TO_CHAR(TO_DATE(A.PROCESSED_AT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS PROCESSED_AT
+        ,       A.ERROR_MESSAGE
         FROM 	TB_MS_POS_LOG_COLLECTION_MANAGEMENT A
         ,		TB_MS_STORE B
         WHERE 	B.STORE_CD  =   A.STORE_CD

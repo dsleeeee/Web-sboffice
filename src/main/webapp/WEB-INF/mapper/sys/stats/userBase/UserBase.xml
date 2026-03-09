@@ -137,8 +137,8 @@
                         A.EMP_NO,
                         '' AS STORE_CD,
                         '' AS STORE_NM,
-                        '' AS HQ_OFFICE_CD,
-                        '' AS HQ_OFFICE_NM,
+                        B.AGENCY_CD AS HQ_OFFICE_CD,
+                        B.AGENCY_NM AS HQ_OFFICE_NM,
                         A.AGENCY_CD AS ORGN_GRP_CD,
                         B.AGENCY_NM AS ORGN_GRP_NM,
                         B.P_AGENCY_CD AS P_AGENCY_CD
@@ -319,8 +319,8 @@
                     A.EMP_NO,
                     '' AS STORE_CD,
                     '' AS STORE_NM,
-                    '' AS HQ_OFFICE_CD,
-                    '' AS HQ_OFFICE_NM,
+                    B.AGENCY_CD AS HQ_OFFICE_CD,
+                    B.AGENCY_NM AS HQ_OFFICE_NM,
                     A.AGENCY_CD AS ORGN_GRP_CD,
                     B.AGENCY_NM AS ORGN_GRP_NM,
                     B.P_AGENCY_CD AS P_AGENCY_CD
@@ -470,8 +470,8 @@
                     A.EMP_NO,
                     '' AS STORE_CD,
                     '' AS STORE_NM,
-                    '' AS HQ_OFFICE_CD,
-                    '' AS HQ_OFFICE_NM,
+                    B.AGENCY_CD AS HQ_OFFICE_CD,
+                    B.AGENCY_NM AS HQ_OFFICE_NM,
                     A.AGENCY_CD AS ORGN_GRP_CD,
                     B.AGENCY_NM AS ORGN_GRP_NM,
                     B.P_AGENCY_CD AS P_AGENCY_CD

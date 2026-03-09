@@ -91,25 +91,33 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeCd"/>"     binding="storeCd"       align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeNm"/>"     binding="storeNm"       align="center"  width="120" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.saleDate"/>"    binding="saleDate"      align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.posNo"/>"       binding="posNo"         align="center"  width="70"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.seq"/>"         binding="seq"           align="center"  width="60"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.commandId"/>"   binding="commandId"     align="center"  width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.commandType"/>" binding="commandType"   align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.logType"/>"     binding="logType"       align="center"  width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.startDate"/>"   binding="startDate"     align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.endDate"/>"     binding="endDate"       align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sql"/>"         binding="sql"           align="left"    width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.dbBackup"/>"    binding="dbBackup"      align="center"  width="90"  is-read-only="true" data-map="dbBackupComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.smartOrder"/>"  binding="smartOrder"    align="center"  width="130" is-read-only="true" data-map="smartOrderComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.vcatPath"/>"    binding="vcatPath"      align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.remark"/>"      binding="remark"        align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sendYn"/>"      binding="sendYn"        align="center"  width="70"  is-read-only="true" data-map="sendYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sendDt"/>"      binding="sendDt"        align="center"  width="130" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.regDt"/>"       binding="regDt"         align="center"  width="130" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.regNm"/>"       binding="regNm"         align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeCd"/>"         binding="storeCd"       align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeNm"/>"         binding="storeNm"       align="center"  width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.saleDate"/>"        binding="saleDate"      align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.posNo"/>"           binding="posNo"         align="center"  width="70"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.seq"/>"             binding="seq"           align="center"  width="60"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.commandId"/>"       binding="commandId"     align="center"  width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.commandType"/>"     binding="commandType"   align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.logType"/>"         binding="logType"       align="center"  width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.startDate"/>"       binding="startDate"     align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.endDate"/>"         binding="endDate"       align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sql"/>"             binding="sql"           align="left"    width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.dbBackup"/>"        binding="dbBackup"      align="center"  width="90"  is-read-only="true" data-map="dbBackupComboDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.smartOrder"/>"      binding="smartOrder"    align="center"  width="130" is-read-only="true" data-map="smartOrderComboDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.vcatPath"/>"        binding="vcatPath"      align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.remark"/>"          binding="remark"        align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sendYn"/>"          binding="sendYn"        align="center"  width="70"  is-read-only="true" data-map="sendYnComboDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.sendDt"/>"          binding="sendDt"        align="center"  width="130" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.regDt"/>"           binding="regDt"         align="center"  width="130" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.regNm"/>"           binding="regNm"         align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.status"/>"          binding="status"        align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.resultCd"/>"        binding="resultCd"      align="center"  width="80"  is-read-only="true" data-map="resultCdComboDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.resultMsg"/>"       binding="resultMsg"     align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.data"/>"            binding="data"          align="left"    width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.rowCount"/>"        binding="rowCount"      align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.fileSize"/>"        binding="fileSize"      align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.processedAt"/>"     binding="processedAt"   align="center"  width="130" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.errorMessage"/>"    binding="errorMessage"  align="left"    width="120" is-read-only="true"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -118,7 +126,7 @@
 <script type="text/javascript">
     var userId = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260304.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260309.01" charset="utf-8"></script>
 <%-- POS로그수집등록 팝업 --%>
 <c:import url="/WEB-INF/view/sys/admin/posLogCollectMgmt/posLogRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
