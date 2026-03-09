@@ -41,7 +41,8 @@
         document.getElementById('divWrap').style.display = "none";
 
         // 약관동의 팝업 후
-        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
@@ -60,14 +61,16 @@
 
     // 업체 찾기
     function btnSearch() {
-        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var popupUrl = "https://test-new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
     // 신규 등록
     function btnReg() {
-        var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var popupUrl = "https://test-new.smartplace.naver.com/bizes/new?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
@@ -105,7 +108,7 @@
                                 innerHtml += "<p>" + arr[i].address + "</p>";
                                 innerHtml += "<p>" + arr[i].phone + "</p>";
                                 innerHtml += "</div>";
-                                innerHtml += "<button class=\"btn btn-blue\" onClick=\"mappingStore('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.searchStore" /></button>";
+                                innerHtml += "<button class=\"btn btn-blue\" onClick=\"mappingStore('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.link" /></button>";
                                 innerHtml += "</div>";
 
                             } else {

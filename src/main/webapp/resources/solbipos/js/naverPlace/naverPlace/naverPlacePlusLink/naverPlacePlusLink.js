@@ -56,7 +56,8 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
 
         // 네.아.로 로그인 완료, 동의 미완료
         if(linkStep === 1){
-            var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+            //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+            var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
             var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
             var popup = window.open(popupUrl, "popup", "width=750, height=1000");
         }
