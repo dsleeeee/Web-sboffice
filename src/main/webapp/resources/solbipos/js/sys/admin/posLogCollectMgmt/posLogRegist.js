@@ -229,7 +229,7 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                 smsParams.subject = "[대량적용알림]POS로그수집등록";
                 smsParams.smsMsg = "POS로그수집등록을 시작하였습니다. 사용자 : " + userId + ", 적용수 : " + params.length;
                 smsParams.msgFg = "S01_0001"; // [전송구분] S01_0001:테스트용, S01_0002:터치키/키오스크 매장적용 시
-                smsParams.nmcodeItem1 = "터치키/키오스크 매장적용";
+                smsParams.nmcodeItem1 = "POS로그수집등록";
                 $scope._postJSONSave.withOutPopUp("/base/prod/touchKey/touchKey/notiSmsSend.sb", smsParams, function () {
                 });
             }
@@ -283,15 +283,13 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     $scope._gridDataInit();
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
-                    // 검증결과 조회
-                    var scope = agrid.getScope('searchStoreCtrl');
-                    scope.searchStoreList();
-                    // 재조회
+                    // 조회
                     var scope2 = agrid.getScope('posLogCollectMgmtCtrl');
                     scope2.getSearchPosLogList();
 
                     // 입력 칸 초기화
                     $scope.reset();
+                    $scope.posLogRegistLayer.hide();
                 }
             }
         }, function errorCallback(response) {

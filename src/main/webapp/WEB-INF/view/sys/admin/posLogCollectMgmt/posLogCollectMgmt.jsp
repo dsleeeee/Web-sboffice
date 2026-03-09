@@ -91,6 +91,8 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.hqOfficeCd"/>"      binding="hqOfficeCd"    align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.hqOfficeNm"/>"      binding="hqOfficeNm"    align="center"  width="120" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeCd"/>"         binding="storeCd"       align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.storeNm"/>"         binding="storeNm"       align="center"  width="120" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="posLogCollectMgmt.saleDate"/>"        binding="saleDate"      align="center"  width="80"  is-read-only="true"></wj-flex-grid-column>

@@ -19,7 +19,9 @@
     -->
     <select id="getSearchPosLogList" parameterType="posLogCollectMgmtVO" resultType="DefaultMap">
         /* USE : PosLogCollectMgmtMapper.getSearchPosLogList */
-        SELECT 	A.STORE_CD
+        SELECT 	C.HQ_OFFICE_CD
+        ,       C.HQ_OFFICE_NM
+        ,       A.STORE_CD
         ,		B.STORE_NM
         ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,		A.POS_NO
@@ -48,8 +50,10 @@
         ,       A.ERROR_MESSAGE
         FROM 	TB_MS_POS_LOG_COLLECTION_MANAGEMENT A
         ,		TB_MS_STORE B
-        WHERE 	B.STORE_CD  =   A.STORE_CD
-        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ,		TB_HQ_OFFICE C
+        WHERE 	B.STORE_CD  	=  	A.STORE_CD
+        AND 	C.HQ_OFFICE_CD 	=	B.HQ_OFFICE_CD
+        AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
         <if test="commandType != null and commandType !=''">
             AND A.COMMAND_TYPE = #{commandType}
         </if>
