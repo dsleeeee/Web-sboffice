@@ -31,7 +31,7 @@
         ,		A.LOG_TYPE
         ,		TO_CHAR(TO_DATE(A.DATE_FROM, 'yyyymmdd'), 'yyyy-mm-dd')         AS START_DATE
         ,		TO_CHAR(TO_DATE(A.DATE_TO, 'yyyymmdd'), 'yyyy-mm-dd')           AS END_DATE
-        ,		SBPENC.D(A.SQL)     AS SQL
+        ,		A.SQL     AS SQL
         ,		A.INCLUDE_DB_BACKUP AS DB_BACKUP
         ,		A.SMART_ORDER_YN    AS SMART_ORDER
         ,		A.VCAT_PATH
@@ -166,7 +166,7 @@
         ,       #{logType}
         ,       #{dateFrom}
         ,       #{dateTo}
-        ,       SBPENC.E(#{sql})
+        ,       #{sql}
         ,       #{includeDbBackup}
         ,       #{smartOrderYn}
         ,       #{vcatPath}

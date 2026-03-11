@@ -190,6 +190,11 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
             }
         }
 
+        if(nvl($scope.sql, '').getByteLengthForOracle() > 4000){
+            $scope._popMsg(messages['posLogCollectMgmt.sql'] + "은 4000" + messages["verManage.byte"] + "제한(확인: "+nvl($scope.sql, '').getByteLengthForOracle()+ messages["verManage.byte"] +")");
+            return false;
+        }
+
         if(!$scope.remark || !$scope.remark.trim()){
             $scope._popMsg(messages["posLogCollectMgmt.msg.remark"]); // 사유 작성하여 주십시오.
             return false;
