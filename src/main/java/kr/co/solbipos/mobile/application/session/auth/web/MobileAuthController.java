@@ -236,37 +236,6 @@ public class MobileAuthController {
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
 
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
-        System.out.println("request.getHeader params.getUserId(): "+params.getUserId());
-        System.out.println("request.getHeader getClientIp: "+getClientIp(request));
-        System.out.println("request.getHeader User-Agent: "+request.getHeader("User-Agent"));
-        System.out.println("request.getHeader Sec-Fetch-Site: "+request.getHeader("Sec-Fetch-Site"));
-        System.out.println("request.getHeader Accept: "+request.getHeader("Accept"));
-        System.out.println("request.getHeader referer: "+request.getHeader("referer"));
-
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node */
-        if(     ("momse09686".equals(params.getUserId()))
-          &&    (   "node".equals(params.getBrwsrInfo())
-                ||  "Mozilla/5.0".equals(params.getBrwsrInfo())
-//                ||  "".equals(request.getHeader("Sec-Fetch-Site"))
-//                ||  request.getHeader("Sec-Fetch-Site") == null
-                ||  "".equals(request.getHeader("Accept"))
-                ||  request.getHeader("Accept") == null
-                ||  "".equals(request.getHeader("referer"))
-                ||  request.getHeader("referer") == null
-                ||  !request.getHeader("referer").contains("/auth/login.sb")
-                ||  !request.getHeader("Accept").contains("text/html")
-                )
-          ) {
-            System.out.println("request.getHeader referer: "+"redirect:/login");
-            return "redirect:/login";
-        }
-        /** 임시 로그인 제어(브라우저외 접근 제어) kjsun11177*/
-        if("kjsun11177".equals(params.getUserId())) {
-            return "redirect:/login";
-        }
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
-
         // 로그인 시도
         SessionInfoVO result = mobileAuthService.login(params);
         // 로그인 결과값
