@@ -81,27 +81,6 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
         System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
 
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node */
-        if(     ("momse09686".equals(result.getUserId()) && "node".equals(params.getBrwsrInfo()))
-          ||    ("momse09686".equals(result.getUserId()) && "Mozilla/5.0".equals(params.getBrwsrInfo()))
-        ) {
-            System.out.println("result.getUserId(): "+result.getUserId());
-            System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
-            System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
-            result.setLoginResult(LoginResult.PASSWORD_ERROR);
-            return result;
-        }
-        /** 임시 로그인 제어(브라우저외 접근 제어) kjsun11177*/
-        if("kjsun11177".equals(result.getUserId())) {
-            System.out.println("result.getUserId(): "+result.getUserId());
-            System.out.println("result.getBrwsrInfo(): "+result.getBrwsrInfo());
-            System.out.println("params.getBrwsrInfo(): "+params.getBrwsrInfo());
-            result.setLoginResult(LoginResult.PASSWORD_ERROR);
-            return result;
-        }
-        /** 임시 로그인 제어(브라우저외 접근 제어) momse09686, node 기능 적용 완료 후 제거 예정*/
-
         /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
             result.setLoginResult(LoginResult.NOT_EXISTS_ID);
