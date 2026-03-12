@@ -2,52 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    OrderkitStatus.xml
-    오더킷현황 sql
+    NaverPlaceStatus.xml
+    네이버플레이스현황 sql
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       이다솜     2026.01.21      최초작성
+    1       이다솜     2026.03.11      최초작성
 -->
-<mapper namespace="kr.co.solbipos.sys.link.orderkitStatus.service.impl.OrderkitStatusMapper">
-
-    <!-- Clob -->
-    <resultMap id="OrderkitStatusMap" type="DefaultMap">
-        <result column="LAST_RESPONSE" property="lastResponse" javaType="java.lang.String"/>
-    </resultMap>
+<mapper namespace="kr.co.solbipos.sys.link.naverPlaceStatus.service.impl.NaverPlaceStatusMapper">
 
     <!-- 사용자현황 조회 -->
     <!--
-        TABLE    : TB_CM_API_STORE
-        PARAM    : orderkitStatusVO
+        TABLE    : TB_CM_NAVER_LINK, TB_CM_NAVER_LINK_AGREEMENT
+        PARAM    : naverPlaceStatusVO
         COMMENTS : 사용자현황을 조회한다.
     -->
-    <select id="getUserStatusList" parameterType="orderkitStatusVO" resultMap="OrderkitStatusMap">
-        /* USE : OrderkitStatusMapper.getUserStatusList */
+    <select id="getUserStatusList" parameterType="naverPlaceStatusVO" resultType="DefaultMap">
+    /* USE : NaverPlaceStatusMapper.getUserStatusList */
         SELECT  A.HQ_OFFICE_CD
- 		,       B.HQ_OFFICE_NM
+ 		,       C.HQ_OFFICE_NM
         ,       A.STORE_CD
-        ,       C.STORE_NM
-        ,       A.AGENCY_FG
-        ,       A.AGENCY_USE_YN
-        ,       A.LAST_RESPONSE
+        ,       D.STORE_NM
+        ,       A.UNIQUE_ID
         ,       TO_CHAR(TO_DATE(A.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LAST_RESPONSE_DT
-        FROM    TB_CM_API_STORE A
-        ,       TB_HQ_OFFICE B
-        ,       TB_MS_STORE C
-        WHERE   A.AGENCY_FG = #{agencyFg}
-        AND     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-        AND     A.STORE_CD = C.STORE_CD
+        ,       A.MP_NO
+        ,       A.ETC01
+        ,       A.ETC02
+        ,       A.ETC03
+        ,       A.ETC04
+        ,       A.ETC05
+        ,       A.ETC06
+        ,       A.ETC07
+        ,       A.ETC08
+        ,       A.ETC09
+        ,       A.ETC10
+        ,       A.NAVER_STORE_NM
+        ,       A.NAVER_PLACE_ID
+        ,       TO_CHAR(TO_DATE(A.NAVER_LINK_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS NAVER_LINK_DT
+        ,       TO_CHAR(TO_DATE(B.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS AGREEMENT_LAST_RESPONSE_DT
+        ,       B.AGREEMENT_TYPE
+        FROM    TB_CM_NAVER_LINK A
+        ,       TB_CM_NAVER_LINK_AGREEMENT B
+        ,       TB_HQ_OFFICE C
+        ,       TB_MS_STORE D
+        WHERE   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND     A.STORE_CD = B.STORE_CD
+        AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+        AND     A.STORE_CD = D.STORE_CD
     </select>
 
     <!-- 접속현황 조회 -->
     <!--
         TABLE    :
-        PARAM    : orderkitStatusVO
+        PARAM    : naverPlaceStatusVO
         COMMENTS : 접속현황을 조회한다.
     -->
-    <select id="getConnectStatusList" parameterType="orderkitStatusVO" resultType="DefaultMap">
-        /* USE : OrderkitStatusMapper.getConnectStatusList */
+    <select id="getConnectStatusList" parameterType="naverPlaceStatusVO" resultType="DefaultMap">
+        /* USE : NaverPlaceStatusMapper.getConnectStatusList */
         SELECT  LEVEL1,
                 LEVEL1_NM,
                 LEVEL2,
@@ -178,67 +189,15 @@
     <!-- 메뉴 리소스코드 조회 -->
     <!--
         TABLE    : TB_WB_RESRCE_INFO
-        PARAM    : orderkitStatusVO
+        PARAM    : naverPlaceStatusVO
         COMMENTS : 메뉴 리소스명으로 리소스코드를 조회한다.
     -->
-    <select id="getMenuResrceCd" parameterType="orderkitStatusVO" resultType="String">
-        /* USE : OrderkitStatusMapper.getMenuResrceCd */
+    <select id="getMenuResrceCd" parameterType="naverPlaceStatusVO" resultType="String">
+        /* USE : NaverPlaceStatusMapper.getMenuResrceCd */
         SELECT  RESRCE_CD
         FROM    TB_WB_RESRCE_INFO
         WHERE   RESRCE_NM = #{resrceNm}
         AND     DISP_LEVEL = 3
     </select>
-
-    <!-- 연동구분(OMS, QR, NAVER)별 연동 상태 저장 -->
-    <!--
-        TABLE    : TB_CM_API_STORE
-        PARAM    : orderkitStatusVO
-        COMMENTS : 매장의 연동구분(OMS, QR, NAVER)별 연동상태를 저장한다.
-    -->
-    <update id="insertAgencyStatus" parameterType="orderkitStatusVO">
-        /* USE : OrderkitStatusMapper.insertAgencyStatus */
-        MERGE INTO TB_CM_API_STORE A
-        USING DUAL ON
-        (
-            A.HQ_OFFICE_CD  = #{hqOfficeCd}
-            AND A.STORE_CD  = #{storeCd}
-            AND A.AGENCY_FG = #{agencyFg}
-        )
-        WHEN MATCHED THEN
-        UPDATE SET
-            A.AGENCY_USE_YN = #{agencyUseYn},
-            A.LAST_RESPONSE = #{lastResponse},
-            A.LAST_RESPONSE_DT = #{lastResponseDt},
-            A.LAST_STATUS_CODE = #{lastStatusCode},
-            A.MOD_DT = #{modDt},
-            A.MOD_ID = #{modId}
-       	WHEN NOT MATCHED THEN
-        INSERT
-        (
-            A.HQ_OFFICE_CD,
-            A.STORE_CD,
-            A.AGENCY_FG,
-            A.AGENCY_USE_YN,
-            A.LAST_RESPONSE,
-            A.LAST_RESPONSE_DT,
-            A.LAST_STATUS_CODE,
-            A.REG_DT,
-            A.REG_ID,
-            A.MOD_DT,
-            A.MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{storeCd},
-            #{agencyFg},
-            #{agencyUseYn},
-            #{lastResponse},
-            #{lastResponseDt},
-            #{lastStatusCode},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
-    </update>
 
 </mapper>
