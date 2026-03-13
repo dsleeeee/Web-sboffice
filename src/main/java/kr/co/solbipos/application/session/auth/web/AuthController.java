@@ -172,6 +172,7 @@ public class AuthController {
         String ip = request.getRemoteAddr();
         String failUrl = "";
 
+        // 로그인 시도 횟수 확인 (userId, IP) 기준
         Long count = isLoginAllowed(userId, ip);
         String currentDt = DateUtil.currentDateTimeString();
         String token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
@@ -192,6 +193,7 @@ public class AuthController {
             LOGGER.info(userId + "," + currentDt + ",처리여부:" + "제한");
             LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
 
+            // 특정 아이디만 세션 삭제
             if(userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
                 // 세션 삭제 여부 확인
                 sessionService.deleteSessionInfo(request);
@@ -217,9 +219,8 @@ public class AuthController {
             LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
         }
 
+        // 토큰 보유여부 확인
         if(token == null || token.isEmpty()) {
-            failUrl = "/auth/login.sb?userId=" + result.getUserId();
-
             LOGGER.info("----------" + userId + "세션 토큰 값 오류 START----------");
             LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
             LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
@@ -232,7 +233,9 @@ public class AuthController {
             LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
             LOGGER.info("----------" + userId + "세션 토큰 값 오류 END----------");
 
+            // 특정 아이디만 세션 삭제
             if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                failUrl = "/auth/login.sb?userId=" + result.getUserId();
                 result.setLoginResult(LoginResult.TOKEN_ERROR);
                 authService.loginHist(result);
                 throw new AuthenticationException(messageService.get("login.fail"), failUrl);
@@ -251,6 +254,7 @@ public class AuthController {
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
 
+            // VO객체 세션값 셋팅
             result.setLoginChkToken(token);
 
             // 메인 페이지로
