@@ -170,6 +170,8 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
         $scope._popMsg(messages["storeEmp.userIdOnlyEnvNumChar.msg"]);
       } else if(result === "USER_ID_DUPLICATE"){
         $scope._popMsg(messages["storeEmp.userId.duplicate.msg"]);
+      } else if(result === "DISABLED_USER_ID"){
+        $scope._popMsg(messages["storeEmp.disabledUserId.msg"]);
       } else {
         $scope._popMsg(messages["storeEmp.userId.notDuplicate.msg"]);
       }

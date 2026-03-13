@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
@@ -232,6 +233,8 @@ public class VirtualLoginController {
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
+        String sessionToken = sessionInfoVO.getLoginChkToken();
+
         // 기존세션 이용하여 권한조회
         int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
 
@@ -322,6 +325,10 @@ public class VirtualLoginController {
                         cmmMenuService.getStoreCdList( sessionInfoVO.getOrgnCd() );
                 sessionInfoVO.setArrStoreCdList( storeCdList );
             }
+
+            // 토큰 생성
+            sessionInfoVO.setLoginChkToken(sessionToken);
+
             // 레디스에 세션 Set
             sessionService.setSessionInfo(sessionInfoVO);
             // 세션 담기

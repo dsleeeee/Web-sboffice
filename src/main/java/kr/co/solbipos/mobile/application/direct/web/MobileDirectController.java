@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -102,6 +103,11 @@ public class MobileDirectController {
 
             // 로그인 시도
             SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
+
+            // 토큰 생성
+            String token = UUID.randomUUID().toString();
+            request.getSession().setAttribute("LOGIN_CHK_TOKEN", token);
+            posSi.setLoginChkToken(token);
 
             // 세션 생성
             sessionService.setSessionInfo(request, response, posSi);

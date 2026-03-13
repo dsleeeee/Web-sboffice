@@ -145,6 +145,7 @@
                         <wj-flex-grid-column header="<s:message code="userWebHist.level2Nm"/>" binding="level2Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.level3Nm"/>" binding="level3Nm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.loginIp"/>" binding="loginIp" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.brwsrInfo"/>" binding="brwsrInfo" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

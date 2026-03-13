@@ -128,4 +128,7 @@ public interface HqEmpMapper {
 
     /** 권한 전체 삭제 */
     int removeMobileAuthAll(HqEmpMenuVO hqEmpMenuVO);
+
+    /** 등록 불가 계정 확인 */
+    int getChkDisabledUserId(HqEmpVO hqEmpVO);
 }

@@ -33,6 +33,8 @@ public class MenuUseHistVO extends CmmVO {
     private String loginIp;
     /** 버추얼로그인 사용자 아이디 */
     private String vUserId;
+    /** 브라우저 정보 */
+    private String brwsrInfo;
 
     /**
      * @return the seq
@@ -117,5 +119,13 @@ public class MenuUseHistVO extends CmmVO {
      */
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
+    }
+
+    public String getBrwsrInfo() {
+        return brwsrInfo;
+    }
+
+    public void setBrwsrInfo(String brwsrInfo) {
+        this.brwsrInfo = brwsrInfo;
     }
 }

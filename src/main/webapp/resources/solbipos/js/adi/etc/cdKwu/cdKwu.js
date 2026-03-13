@@ -201,7 +201,7 @@ app.controller('cdKwuDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
-        // 대표명칭 그리드 에디팅 방지
+        // 세부명칭 그리드 에디팅 방지
         s.beginningEdit.addHandler(function (sender, elements) {
             var col = sender.columns[elements.col];
             if (col.binding === "nmcodeCd") {
@@ -214,6 +214,17 @@ app.controller('cdKwuDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             if (dataItemChk.nmcodeGrpCd == "093" && (dataItemChk.nmcodeCd == "1" || dataItemChk.nmcodeCd == "2"))
             {
                 if (col.binding === "gChk" || col.binding === "nmcodeNm" || col.binding === "nmcodeItem1" || col.binding === "nmcodeItem2") {
+                    elements.cancel = true;
+                }
+            }
+        });
+
+        // 세부명칭 그리드 붙여넣기 방지
+        s.pastingCell.addHandler(function (sender, elements) {
+            var col = sender.columns[elements.col];
+            if (col.binding === "nmcodeCd") {
+                var dataItem = s.rows[elements.row].dataItem;
+                if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
                 }
             }

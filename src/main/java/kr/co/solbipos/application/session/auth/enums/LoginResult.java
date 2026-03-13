@@ -34,6 +34,10 @@ public enum LoginResult implements CodeEnum {
     , DORMANT_ACCOUNT("DA")
     /** 계정 사용 중지 */
     , NOT_WEB_USE_ID("NWUI")
+    /** 토큰 없거나 다름 */
+    , TOKEN_ERROR("NOT1")
+    /** 초당 3회 초과 */
+    , MANY_ATTEMPTS("NOT2")
     ;
     
   private String code;

@@ -55,6 +55,7 @@ import javax.servlet.http.HttpSession;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.UUID;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -178,6 +179,8 @@ public class SimpleMemberJoinController {
 
         String returnUrl = "";
 
+        System.out.println("포스로그인 접속" + request.getParameter("url"));
+
         //if(!isEmpty(sessionInfoVO.getHwAuthKey())) {
         if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
             LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
@@ -187,6 +190,12 @@ public class SimpleMemberJoinController {
 
             // 로그인 시도
             SessionInfoVO posSi = authService.posLogin(sessionInfoVO);
+
+            // 토큰 생성
+            String token = UUID.randomUUID().toString();
+            request.getSession().setAttribute("LOGIN_CHK_TOKEN", token);
+            posSi.setLoginChkToken(token);
+
             // 세션 생성
             sessionService.setSessionInfo(request, response, posSi);
 

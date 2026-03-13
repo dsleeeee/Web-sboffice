@@ -1172,4 +1172,17 @@
                                         AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
                                 )
     </delete>
+
+    <!-- 등록 불가 계정 확인   -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : 등록 불가 계정 확인
+    -->
+    <select id="getChkDisabledUserId" parameterType="hqEmpVO" resultType="Integer">
+        /* USE : HqEmpMapper.getChkDisabledUserId */
+        SELECT	COUNT(*)
+        FROM	TB_CM_NMCODE A
+        WHERE 	A.NMCODE_GRP_CD	=	'997'
+        AND 	(UPPER(A.NMCODE_NM)	=	UPPER(#{userId}) OR #{userId} LIKE 'admin%')
+    </select>
 </mapper>

@@ -197,6 +197,11 @@ public class HqEmpServiceImpl implements HqEmpService {
             return CmmUtil.checkUserId(hqEmpVO.getUserId());
         }
 
+        // 등록 불가 계정 확인
+        if(hqEmpMapper.getChkDisabledUserId(hqEmpVO) > 0){
+            return EmpResult.DISABLED_USER_ID;
+        }
+
         if( hqEmpMapper.getHqUserIdCnt(hqEmpVO) < 1) {
             return EmpResult.SUCCESS;
         }

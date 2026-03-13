@@ -91,6 +91,11 @@ public class StoreEmpServiceImpl implements StoreEmpService {
             return CmmUtil.checkUserId(storeEmpVO.getUserId());
         }
 
+        // 등록 불가 계정 확인
+        if(storeEmpMapper.getChkDisabledUserId(storeEmpVO) > 0){
+            return EmpResult.DISABLED_USER_ID;
+        }
+
         if( storeEmpMapper.getStoreUserIdCnt(storeEmpVO) < 1) {
             return EmpResult.SUCCESS;
         }

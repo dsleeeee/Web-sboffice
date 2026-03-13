@@ -270,6 +270,8 @@
                     s_alert.pop(messages["storeEmp.userIdOnlyEnvNumChar.msg"]);
                 } else if(rResult === "USER_ID_DUPLICATE"){
                     s_alert.pop(messages["storeEmp.userId.duplicate.msg"]);
+                } else if(rResult === "DISABLED_USER_ID"){
+                    s_alert.pop(messages["storeEmp.disabledUserId.msg"]);
                 } else {
                     s_alert.pop(messages["storeEmp.userId.notDuplicate.msg"]);
                 }

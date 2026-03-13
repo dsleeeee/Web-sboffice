@@ -82,6 +82,16 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
+    // 대표명칭 그리드 붙여넣기 방지
+    s.pastingCell.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "nmcodeCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
     // 대표명칭 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
       var ht = s.hitTest(e);
@@ -124,13 +134,46 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = [];
+
+    var arr = [];
+
+    for (var a = 0; a < $scope.flex.collectionView.items.length; a++) {
+      var item = $scope.flex.collectionView.items[a];
+
+      if(nvl(item.nmcodeCd, '').getByteLengthForOracle() > 4){
+        var msg = messages["cd.grpGridNm"] + " " + messages["cd.nmcodeCd"] + messages["cmm.overLength"] + " 4 "  +
+            ", 현재 : " + item.nmcodeCd.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+        $scope._popMsg(msg); // 현재 대표명칭 코드의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
+        return false;
+      }
+
+      if (arr.indexOf(item.nmcodeCd) !== -1) {
+        $scope._popMsg(messages["cd.detail.require.nmcodeCdChk"]); // 코드가 중복되었습니다.
+        return false;
+      } else {
+        arr.push(item.nmcodeCd);
+      }
+    }
+
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[u]);
     }
+
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
+      var item = $scope.flex.collectionView.itemsAdded[i];
+      if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
+        $scope._popMsg(messages["cd.represent.require.nmcodeCd"]); // 대표명칭의 코드를 입력해주세요
+        return false;
+      }
+
+      if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
+        $scope._popMsg(messages["cd.represent.require.nmcodeNm"]); // 대표명칭의 코드명을 입력해주세요
+        return false;
+      }
+
+      item.status = "I";
+      params.push(item);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){
@@ -167,6 +210,29 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
+
+    // 세부명칭 그리드 에디팅 방지
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "nmcodeCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
+
+    // 세부명칭 그리드 붙여넣기 방지
+    s.pastingCell.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "nmcodeCd") {
+        var dataItem = s.rows[elements.row].dataItem;
+        if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+          elements.cancel = true;
+        }
+      }
+    });
+
   };
   // 세부명칭 그리드 초기화
   $scope.$on("init", function() {
@@ -203,13 +269,45 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = [];
+
+    var arr = [];
+
+    for (var a = 0; a < $scope.flex.collectionView.items.length; a++) {
+      var item = $scope.flex.collectionView.items[a];
+
+      if(nvl(item.nmcodeCd, '').getByteLengthForOracle() > 4){
+        var msg = messages["cd.gridNm"] + " " + messages["cd.nmcodeCd"] + messages["cmm.overLength"] + " 4 "  +
+            ", 현재 : " + item.nmcodeCd.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+        $scope._popMsg(msg); // 현재 세부명칭 코드의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 :
+        return false;
+      }
+
+      if (arr.indexOf(item.nmcodeCd) !== -1) {
+        $scope._popMsg(messages["cd.detail.require.nmcodeCdChk"]); // 코드가 중복되었습니다.
+        return false;
+      } else {
+        arr.push(item.nmcodeCd);
+      }
+    }
+
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      $scope.flex.collectionView.itemsAdded[i].status = "I";
-      params.push($scope.flex.collectionView.itemsAdded[i]);
+      var item = $scope.flex.collectionView.itemsAdded[i];
+      if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
+        $scope._popMsg(messages["cd.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
+        return false;
+      }
+
+      if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
+        $scope._popMsg(messages["cd.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
+        return false;
+      }
+
+      item.status = "I";
+      params.push(item);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function() {

@@ -176,4 +176,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=2018111301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/systemCd/systemCd.js?ver=20260306.01" charset="utf-8"></script>

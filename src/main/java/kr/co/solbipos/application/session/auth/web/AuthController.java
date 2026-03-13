@@ -4,6 +4,7 @@ import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
@@ -25,9 +26,14 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 /**
  * @Class Name : AuthController.java
  * @Description : 어플리케이션 > 세션 > 인증
@@ -50,6 +56,8 @@ public class AuthController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private final RedisConnectionFactory redisConnectionFactory;
+
     @Autowired
     AuthService authService;
     @Autowired
@@ -58,6 +66,11 @@ public class AuthController {
     MessageService messageService;
 
     final String MAIN_PAGE_URL = "main.sb";
+
+    @Autowired
+    public AuthController(RedisConnectionFactory redisConnectionFactory) {
+        this.redisConnectionFactory = redisConnectionFactory;
+    }
 
     /**
      * <pre>
@@ -106,24 +119,27 @@ public class AuthController {
 
         model.addAttribute("userId", userId);
         model.addAttribute("type", isEmpty(type) ? "" : type);
+        // 토큰 생성, 셋팅
+        String token = UUID.randomUUID().toString();
+        request.getSession().setAttribute("LOGIN_CHK_TOKEN", token);
         return "login/login:Login";
     }
 
     /**
-      * <pre>
-      * 사용자 웹 로그인
-      * </pre>
-      * @param params
-      * @param bindingResult
-      * @param request
-      * @param response
-      * @param model
-      * @return
-      */
+     * <pre>
+     * 사용자 웹 로그인
+     * </pre>
+     * @param params
+     * @param bindingResult
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
     public String loginProcess(@Validated(Login.class) SessionInfoVO params,
-            BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
-            Model model) {
+                               BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+                               Model model) {
 
         StopWatch sw = new StopWatch();
         sw.start();
@@ -151,6 +167,78 @@ public class AuthController {
         // 로그인 결과값
         LoginResult code = result.getLoginResult();
 
+        // 접속정보 가져오기
+        String userId = result.getUserId();
+        String ip = request.getRemoteAddr();
+        String failUrl = "";
+
+        Long count = isLoginAllowed(userId, ip);
+        String currentDt = DateUtil.currentDateTimeString();
+        String token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
+
+        // 로그인 시도 제한 체크
+        if (count > 3) {
+            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 START----------");
+            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
+            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
+            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
+            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
+            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
+            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
+            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
+            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
+            LOGGER.info(userId + "," + currentDt + ",초당접속횟수:" + count);
+            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
+            LOGGER.info(userId + "," + currentDt + ",처리여부:" + "제한");
+            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
+
+            if(userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                // 세션 삭제 여부 확인
+                sessionService.deleteSessionInfo(request);
+                // 제한 초과 처리
+                failUrl = "/auth/login.sb?userId=" + result.getUserId();
+                result.setLoginResult(LoginResult.MANY_ATTEMPTS);
+                authService.loginHist(result);
+                throw new AuthenticationException(messageService.get("login.fail"), failUrl);
+            }
+        }else{
+            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 START----------");
+            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
+            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
+            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
+            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
+            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
+            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
+            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
+            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
+            LOGGER.info(userId + "," + currentDt + ",초당접속횟수:" + count);
+            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
+            LOGGER.info(userId + "," + currentDt + ",처리여부:" + "성공");
+            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
+        }
+
+        if(token == null || token.isEmpty()) {
+            failUrl = "/auth/login.sb?userId=" + result.getUserId();
+
+            LOGGER.info("----------" + userId + "세션 토큰 값 오류 START----------");
+            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
+            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
+            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
+            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
+            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
+            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
+            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
+            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
+            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
+            LOGGER.info("----------" + userId + "세션 토큰 값 오류 END----------");
+
+            if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                result.setLoginResult(LoginResult.TOKEN_ERROR);
+                authService.loginHist(result);
+                throw new AuthenticationException(messageService.get("login.fail"), failUrl);
+            }
+        }
+
         /**
          * TODO 로그인 시도 결과로 이동 경로<br>
          * 1. 성공 : 메인 페이지로 이동<br>
@@ -159,9 +247,12 @@ public class AuthController {
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
         String returnUrl = MAIN_PAGE_URL;
-        String failUrl = "/auth/login.sb?userId=" + result.getUserId();
+        failUrl = "/auth/login.sb?userId=" + result.getUserId();
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
+
+            result.setLoginChkToken(token);
+
             // 메인 페이지로
             // 세션 생성
             sessionService.setSessionInfo(request, response, result);
@@ -241,14 +332,14 @@ public class AuthController {
     }
 
     /**
-      * <pre>
-      * 사용자 로그아웃
-      * </pre>
-      * @param request
-      * @param response
-      * @param model
-      * @return
-      */
+     * <pre>
+     * 사용자 로그아웃
+     * </pre>
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "logout.sb", method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
 
@@ -282,6 +373,68 @@ public class AuthController {
     @RequestMapping(value = "logdenied.sb", method = RequestMethod.GET)
     public String denied(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "denied";
+    }
+
+    /**
+     * 로그인 시도 허용 여부 체크 (아이디 + IP 기준)
+     * 1초에 3회 초과 시 false 반환
+     *
+     * @param userId 사용자 아이디
+     * @param ip     접속 IP
+     * @return true: 로그인 허용, false: 제한 초과
+     */
+    public long isLoginAllowed(String userId, String ip) {
+
+        String key = "login:limit:" + userId + ":" + ip;
+
+        RedisConnection conn = null;
+
+        try {
+
+            // Redis 연결 가져오기
+            conn = redisConnectionFactory.getConnection();
+
+            // Redis key를 UTF-8 bytes로 변환
+            byte[] redisKey = key.getBytes(StandardCharsets.UTF_8);
+
+            // INCR 명령으로 로그인 시도 카운트 증가
+            Long count = conn.incr(redisKey);
+
+            // 첫 번째 시도라면 TTL 1초 설정
+            if (count == 1) {
+                conn.expire(redisKey, 1);
+            }
+
+            // 3회 초과 시 false 반환
+            return count;
+
+        } finally {
+            // Redis 연결 닫기
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
+    /**
+     * 로그인 성공 시 rate-limit 초기화
+     * Redis에 저장된 로그인 시도 카운트 삭제
+     *
+     * @param userId 사용자 아이디
+     * @param ip     접속 IP
+     */
+    public void clearLoginLimit(String userId, String ip) {
+        String key = "login:limit:" + userId + ":" + ip;
+        RedisConnection conn = null;
+        try {
+            conn = redisConnectionFactory.getConnection();
+            byte[] redisKey = key.getBytes(StandardCharsets.UTF_8);
+            conn.del(redisKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) conn.close();
+        }
     }
 }
 

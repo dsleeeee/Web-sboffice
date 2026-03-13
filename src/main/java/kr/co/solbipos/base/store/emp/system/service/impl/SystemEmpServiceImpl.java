@@ -197,6 +197,11 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             return CmmUtil.checkUserId(systemEmpVO.getUserId());
         }
 
+        // 등록 불가 계정 확인
+        if(systemEmpMapper.getChkDisabledUserId(systemEmpVO) > 0){
+            return EmpResult.DISABLED_USER_ID;
+        }
+
         if( systemEmpMapper.getSystemUserIdCnt(systemEmpVO) < 1) {
             return EmpResult.SUCCESS;
         }

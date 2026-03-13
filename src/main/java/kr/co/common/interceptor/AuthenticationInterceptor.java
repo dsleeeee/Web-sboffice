@@ -8,9 +8,12 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.common.service.ResrceInfoVO;
+import kr.co.solbipos.application.session.auth.enums.LoginResult;
+import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
@@ -51,15 +54,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     private final SessionService sessionService;
     private final CmmMenuService cmmMenuService;
     private final MessageService messageService;
+    private final AuthService authService;
 
     String ROOT_PATH = "/";
 
     /** Constructor Injection */
     @Autowired
-    public AuthenticationInterceptor(SessionService sessionService, CmmMenuService cmmMenuService, MessageService messageService) {
+    public AuthenticationInterceptor(SessionService sessionService, CmmMenuService cmmMenuService, MessageService messageService, AuthService authService) {
         this.sessionService = sessionService;
         this.cmmMenuService = cmmMenuService;
         this.messageService = messageService;
+        this.authService = authService;
     }
 
     /**
@@ -80,6 +85,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        boolean isTokenValid = true;
+
         // 세션 상태
         boolean isSessionValid = true;
         // 세션 객체가 없는 경우
@@ -95,6 +102,45 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
             System.out.println("session status 4: " + sessionInfoVO.getUserId());
             System.out.println("session status 5: " + sessionInfoVO.getMenuData());
+
+            System.out.println("session status 6:" + request.getSession().getAttribute("LOGIN_CHK_TOKEN"));
+            System.out.println("session status 7:" + sessionInfoVO.getLoginChkToken());
+
+            String currentDt = DateUtil.currentDateTimeString();
+            // 토큰 없거나 틀린 경우 -- 세션 초기화는 차후 진행 예정 --
+            if(sessionInfoVO.getLoginChkToken() == null){
+//                isSessionValid = false;
+//                isTokenValid = false;
+                LOGGER.info("----------" + sessionInfoVO.getUserId() + "sessionInfoVO 토큰 값 Null(Interceptor) START----------");
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",사용자ID :" + sessionInfoVO.getUserId());
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",접속IP:" + sessionInfoVO.getLoginIp());
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",본사코드:" + sessionInfoVO.getHqOfficeCd());
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",매장코드:" + sessionInfoVO.getStoreCd());
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",referer:" + request.getHeader("referer"));
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",VO객체 토큰정보:" + sessionInfoVO.getLoginChkToken());
+                LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",세션토큰정보:" + request.getSession().getAttribute("LOGIN_CHK_TOKEN"));
+                LOGGER.info("----------" + sessionInfoVO.getUserId() + "sessionInfoVO 토큰 값 Null(Interceptor) END----------");
+            }else{
+                if(!sessionInfoVO.getLoginChkToken().equals(request.getSession().getAttribute("LOGIN_CHK_TOKEN"))){
+//                    isSessionValid = false;
+//                    isTokenValid = false;
+                    LOGGER.info("----------" + sessionInfoVO.getUserId() + "세션 토큰 값과 sessionInfoVO 토큰 값 비교 오류(Interceptor) START----------");
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",사용자ID :" + sessionInfoVO.getUserId());
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",접속IP:" + sessionInfoVO.getLoginIp());
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",본사코드:" + sessionInfoVO.getHqOfficeCd());
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",매장코드:" + sessionInfoVO.getStoreCd());
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",referer:" + request.getHeader("referer"));
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",VO객체 토큰정보:" + sessionInfoVO.getLoginChkToken());
+                    LOGGER.info(sessionInfoVO.getUserId() + "," + currentDt + ",세션토큰정보:" + request.getSession().getAttribute("LOGIN_CHK_TOKEN"));
+                    LOGGER.info("----------" + sessionInfoVO.getUserId() + "세션 토큰 값과 sessionInfoVO 토큰 값 비교 오류(Interceptor) END----------");
+                }
+            }
         }
 
         //
@@ -122,6 +168,19 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             LOGGER.info("AuthenticationInterceptor :: isValidSession :: deleteSessionInfo");
             // 세션 삭제
             sessionService.deleteSessionInfo(request);
+
+            //  세션 초기화는 차후 진행 예정
+//            if(!isTokenValid){
+//                String msg = messageService.get("cmm.session.expire");
+//                String msg1 = messageService.get("cmm.move.login");
+//
+//                sessionInfoVO.setLoginResult(LoginResult.TOKEN_ERROR);
+//                authService.loginHist(sessionInfoVO);
+//                // 로그 기록
+//                LOGGER.info("AuthenticationInterceptor :: isJsonRequest :: " + msg);
+//                throw new JsonException(Status.SESSION_EXFIRE, msg + msg1, ROOT_PATH.equals("/") ? ROOT_PATH : ROOT_PATH + "auth/login.sb");
+//            }
+
             // Json 호출인지 판단하여 별도 메시지 리턴
             if (WebUtil.isJsonRequest(request)) {
                 String msg = messageService.get("cmm.session.expire");

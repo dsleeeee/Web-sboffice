@@ -169,4 +169,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdMoms/cdMoms.js?ver=20260213.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdMoms/cdMoms.js?ver=20260306.01" charset="utf-8"></script>

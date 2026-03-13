@@ -119,7 +119,8 @@
             USE_DATE,
             USE_DT,
             LOGIN_IP,
-            V_USER_ID
+            V_USER_ID,
+            BRWSR_INFO
         ) VALUES (
             SQ_WB_MENU_HIST.NEXTVAL,
             #{userId},
@@ -127,7 +128,8 @@
             #{useDate},
             #{useDt},
             #{loginIp},
-            #{vUserId}
+            #{vUserId},
+            #{brwsrInfo}
         )
     </insert>
 

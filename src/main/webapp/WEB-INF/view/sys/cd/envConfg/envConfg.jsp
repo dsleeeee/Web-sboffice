@@ -200,8 +200,9 @@
 </div>
 
 <script type="text/javascript">
-    var envstFgNm = ${ccu.getCommCode("003")};
+    var envstFgNmAll = ${ccu.getCommCode("003")};
+    var envstFgNm = ${ccu.getCommCodeExcpAll("003")};
     var envstGrpCdNm = ${envstGrpList};
     var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=20241022.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/envConfg/envConfg.js?ver=20260306.01" charset="utf-8"></script>

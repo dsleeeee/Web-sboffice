@@ -59,4 +59,6 @@ public interface SystemEmpMapper {
     /** 현재 패스워드 조회 */
     String getSystemEmpPassword(SystemEmpVO systemEmpVO);
 
+    /** 등록 불가 계정 확인 */
+    int getChkDisabledUserId(SystemEmpVO systemEmpVO);
 }

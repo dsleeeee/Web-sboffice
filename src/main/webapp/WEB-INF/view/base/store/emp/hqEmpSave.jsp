@@ -521,7 +521,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20240325.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20260312.01" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">

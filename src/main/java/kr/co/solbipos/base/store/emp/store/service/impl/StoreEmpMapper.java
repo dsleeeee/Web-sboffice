@@ -104,5 +104,6 @@ public interface StoreEmpMapper {
     /** 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회  */
     List<DefaultMap<String>> exceptMobileMenu(StoreEmpMenuVO storeEmpMenuVO);
 
-
+    /** 등록 불가 계정 확인 */
+    int getChkDisabledUserId(StoreEmpVO storeEmpVO);
 }

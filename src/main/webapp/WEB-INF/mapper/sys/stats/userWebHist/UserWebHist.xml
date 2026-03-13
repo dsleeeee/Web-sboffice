@@ -42,7 +42,8 @@
                 ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
                 ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
                 ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
-                , A.LOGIN_IP
+                ,  A.LOGIN_IP
+                ,  A.BRWSR_INFO
         FROM
             (
                 (
@@ -54,7 +55,8 @@
                             LOGIN_ORGN AS LOGIN_ORGN,
                             V_USER_ID AS V_USER_ID,
                             '' AS RESRCE_CD,
-                            LOGIN_IP
+                            LOGIN_IP,
+                            BRWSR_INFO
                     FROM TB_WB_LOGIN_HIST
                     WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
                 )
@@ -68,7 +70,8 @@
                             '' AS LOGIN_ORGN,
                             V_USER_ID,
                             RESRCE_CD AS RESRCE_CD,
-                            LOGIN_IP
+                            LOGIN_IP,
+                            BRWSR_INFO
                     FROM TB_WB_MENU_USE_HIST
                     WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
                 )

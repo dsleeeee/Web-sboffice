@@ -52,7 +52,9 @@ public enum EmpResult implements CodeEnum {
     /** 아이디는 영어 소문자와 숫자만 가능합니다. */
     USER_ID_ONLY_ENG_NUM_CHAR("USER_ID_ONLY_ENG_NUM_CHAR"),
     /** 사원번호 정책이 맞지 않음 */
-    EMP_NO_REGEXP("EMP_NO_REGEXP")
+    EMP_NO_REGEXP("EMP_NO_REGEXP"),
+    /** 사원번호 정책이 맞지 않음 */
+    DISABLED_USER_ID("DISABLED_USER_ID")
     ;
 
     private String code;

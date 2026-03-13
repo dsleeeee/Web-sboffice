@@ -181,6 +181,9 @@ public class SessionInfoVO extends CmmVO {
     /** 화면 이동 제한 아이디 - 비밀번호 성공여부*/
     private String pageAccessChkPwdYn;
 
+    /** 로그인 확인용 토큰 */
+    private String loginChkToken;
+
 	/**
      * @return the sessionId
      */
@@ -719,5 +722,68 @@ public class SessionInfoVO extends CmmVO {
 
     public void setPageAccessChkPwdYn(String pageAccessChkPwdYn) {
         this.pageAccessChkPwdYn = pageAccessChkPwdYn;
+    }
+
+    public String getLoginChkToken() {
+        return loginChkToken;
+    }
+
+    public void setLoginChkToken(String loginChkToken) {
+        this.loginChkToken = loginChkToken;
+    }
+
+    @Override
+    public String toString() {
+        return "SessionInfoVO{" +
+                "sessionId='" + sessionId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", userPwd='" + userPwd + '\'' +
+                ", userNm='" + userNm + '\'' +
+                ", authGrpCd='" + authGrpCd + '\'' +
+                ", arrStoreCdList=" + arrStoreCdList +
+                ", orgnFg=" + orgnFg +
+                ", orgnGrpCd='" + orgnGrpCd + '\'' +
+                ", orgnGrpNm='" + orgnGrpNm + '\'' +
+                ", orgnCd='" + orgnCd + '\'' +
+                ", orgnNm='" + orgnNm + '\'' +
+                ", storeCd='" + storeCd + '\'' +
+                ", storeNm='" + storeNm + '\'' +
+                ", hqOfficeCd='" + hqOfficeCd + '\'' +
+                ", hqOfficeNm='" + hqOfficeNm + '\'' +
+                ", empNo='" + empNo + '\'' +
+                ", lastLoginDt='" + lastLoginDt + '\'' +
+                ", lastPwdChgDt='" + lastPwdChgDt + '\'' +
+                ", loginFailCnt=" + loginFailCnt +
+                ", userStatFg=" + userStatFg +
+                ", useYn='" + useYn + '\'' +
+                ", loginIp='" + loginIp + '\'' +
+                ", brwsrInfo='" + brwsrInfo + '\'' +
+                ", loginResult=" + loginResult +
+                ", chk=" + chk +
+                ", chkLoginAuto=" + chkLoginAuto +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", menuData=" + menuData +
+                ", menuTreeData=" + menuTreeData +
+                ", bkmkMenuData=" + bkmkMenuData +
+                ", bkmkMenuTreeData=" + bkmkMenuTreeData +
+                ", fixedMenuData=" + fixedMenuData +
+                ", historyMenuData=" + historyMenuData +
+                ", currentMenu=" + currentMenu +
+                ", vUserId='" + vUserId + '\'' +
+                ", vLogindIds=" + vLogindIds +
+                ", logoImg='" + logoImg + '\'' +
+                ", hwAuthKey='" + hwAuthKey + '\'' +
+                ", pAgencyCd='" + pAgencyCd + '\'' +
+                ", areaFg='" + areaFg + '\'' +
+                ", loginFg='" + loginFg + '\'' +
+                ", loginAutoSerial='" + loginAutoSerial + '\'' +
+                ", resrceCd='" + resrceCd + '\'' +
+                ", optResrceCd='" + optResrceCd + '\'' +
+                ", webUseYn='" + webUseYn + '\'' +
+                ", orgnFgCode='" + orgnFgCode + '\'' +
+                ", pageAccessChkPwdYn='" + pageAccessChkPwdYn + '\'' +
+                ", loginChkToken='" + loginChkToken + '\'' +
+                '}';
     }
 }
