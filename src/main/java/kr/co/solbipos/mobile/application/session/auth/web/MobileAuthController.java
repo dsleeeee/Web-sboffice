@@ -127,53 +127,63 @@ public class MobileAuthController {
                 // 접속정보 가져오기
                 String chkUserId = result.getUserId();
                 String ip = request.getRemoteAddr();
-                String failUrl = "";
+                String failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
 
                 // 로그인 시도 횟수 확인 (userId, IP) 기준
                 Long count = isLoginAllowed(chkUserId, ip);
                 String currentDt = DateUtil.currentDateTimeString();
                 token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
+                StringBuilder log = new StringBuilder();
 
                 // 로그인 시도 제한 체크
                 if (count > 3) {
-                    LOGGER.info("----------" + chkUserId + "로그인 시도 제한 체크 START----------");
-                    LOGGER.info(chkUserId + "," + currentDt + ",사용자ID :" + chkUserId);
-                    LOGGER.info(chkUserId + "," + currentDt + ",접속IP:" + result.getLoginIp());
-                    LOGGER.info(chkUserId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
-                    LOGGER.info(chkUserId + "," + currentDt + ",매장코드:" + result.getStoreCd());
-                    LOGGER.info(chkUserId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",referer:" + request.getHeader("referer"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",초당접속횟수:" + count);
-                    LOGGER.info(chkUserId + "," + currentDt + ",토큰정보:" + token);
-                    LOGGER.info(chkUserId + "," + currentDt + ",처리여부:" + "제한");
-                    LOGGER.info("----------" + chkUserId + "로그인 시도 제한 체크 END----------");
+
+                    log.append("\n----------").append(userId).append(" 로그인 시도 제한 (count > 3) START----------\n")
+                            .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",처리여부:제한\n")
+                            .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                            .append("----------").append(userId).append(" 로그인 시도 제한 (count > 3) END----------");
 
                     // 특정 아이디만 세션 삭제
                     if(chkUserId.equals("momse08053") || chkUserId.equals("momse10160") || chkUserId.equals("momse09686") || chkUserId.equals("kjsun11177") || chkUserId.equals("ds053") || chkUserId.equals("ds00501")) {
                         // 세션 삭제 여부 확인
                         sessionService.deleteSessionInfo(request);
                         // 제한 초과 처리
-                        failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
                         result.setLoginResult(LoginResult.MANY_ATTEMPTS);
                         authService.loginHist(result);
                         throw new AuthenticationException(messageService.get("login.fail"), failUrl);
                     }
                 }else{
-                    LOGGER.info("----------" + chkUserId + "로그인 시도 제한 체크 START----------");
-                    LOGGER.info(chkUserId + "," + currentDt + ",사용자ID :" + chkUserId);
-                    LOGGER.info(chkUserId + "," + currentDt + ",접속IP:" + result.getLoginIp());
-                    LOGGER.info(chkUserId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
-                    LOGGER.info(chkUserId + "," + currentDt + ",매장코드:" + result.getStoreCd());
-                    LOGGER.info(chkUserId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",referer:" + request.getHeader("referer"));
-                    LOGGER.info(chkUserId + "," + currentDt + ",초당접속횟수:" + count);
-                    LOGGER.info(chkUserId + "," + currentDt + ",토큰정보:" + token);
-                    LOGGER.info(chkUserId + "," + currentDt + ",처리여부:" + "성공");
-                    LOGGER.info("----------" + chkUserId + "로그인 시도 제한 체크 END----------");
+
+                    log.append("\n----------").append(userId).append(" 로그인 시도 성공 START----------\n")
+                            .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",처리여부:성공\n")
+                            .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                            .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                            .append("----------").append(userId).append(" 로그인 시도 성공 END----------");
+
+                    LOGGER.info(log.toString());
                 }
 
                 // 로그인 결과값이 성공이 아니면, 자동로그인 Serial 쿠키, 세션 로그아웃 처리
@@ -196,7 +206,6 @@ public class MobileAuthController {
                  * 2-2. 패스워드 변경 페이지로 이동<br>
                  */
                 String returnUrl = MAIN_PAGE_URL;
-                failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
                 // 로그인 성공
                 if (code == LoginResult.SUCCESS) {
 
@@ -316,75 +325,118 @@ public class MobileAuthController {
         // 접속정보 가져오기
         String userId = result.getUserId();
         String ip = request.getRemoteAddr();
-        String failUrl = "";
+        String failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
 
         // 로그인 시도 횟수 확인 (userId, IP) 기준
         Long count = isLoginAllowed(userId, ip);
         String currentDt = DateUtil.currentDateTimeString();
         String token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
+        StringBuilder log = new StringBuilder();
 
         // 로그인 시도 제한 체크
         if (count > 3) {
-            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 START----------");
-            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
-            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
-            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
-            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
-            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
-            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
-            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
-            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
-            LOGGER.info(userId + "," + currentDt + ",초당접속횟수:" + count);
-            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
-            LOGGER.info(userId + "," + currentDt + ",처리여부:" + "제한");
-            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
+            log.append("\n----------").append(userId).append(" 로그인 시도 제한 (count > 3) START----------\n")
+                    .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",처리여부:제한\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                    .append("----------").append(userId).append(" 로그인 시도 제한 (count > 3) END----------");
+
+            LOGGER.info(log.toString());
 
             if(userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.equals("test0013")) {
                 // 세션 삭제 여부 확인
                 sessionService.deleteSessionInfo(request);
                 // 제한 초과 처리
-                failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
                 result.setLoginResult(LoginResult.MANY_ATTEMPTS);
                 authService.loginHist(result);
                 throw new AuthenticationException(messageService.get("login.fail"), failUrl);
             }
-        }else{
-            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 START----------");
-            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
-            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
-            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
-            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
-            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
-            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
-            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
-            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
-            LOGGER.info(userId + "," + currentDt + ",초당접속횟수:" + count);
-            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
-            LOGGER.info(userId + "," + currentDt + ",처리여부:" + "성공");
-            LOGGER.info("----------" + userId + "로그인 시도 제한 체크 END----------");
-        }
+        }else if(token == null || token.isEmpty()){
 
-        // 토큰 보유여부 확인
-        if(token == null || token.isEmpty()) {
-            LOGGER.info("----------" + userId + "세션 토큰 값 오류 START----------");
-            LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
-            LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
-            LOGGER.info(userId + "," + currentDt + ",본사코드:" + result.getHqOfficeCd());
-            LOGGER.info(userId + "," + currentDt + ",매장코드:" + result.getStoreCd());
-            LOGGER.info(userId + "," + currentDt + ",User-Agent:" + request.getHeader("User-Agent"));
-            LOGGER.info(userId + "," + currentDt + ",Sec-Fetch-Site:" + request.getHeader("Sec-Fetch-Site"));
-            LOGGER.info(userId + "," + currentDt + ",Accept:" + request.getHeader("Accept"));
-            LOGGER.info(userId + "," + currentDt + ",referer:" + request.getHeader("referer"));
-            LOGGER.info(userId + "," + currentDt + ",토큰정보:" + token);
-            LOGGER.info("----------" + userId + "세션 토큰 값 오류 END----------");
+            // 토큰 보유 여부 확인
+            log.append("\n----------").append(userId).append(" 세션 토큰 값 없음 START----------\n")
+                    .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                    .append("----------").append(userId).append(" 세션 토큰 값 없음 END----------");
+
+            LOGGER.info(log.toString());
 
             // 특정 아이디만 세션 삭제
             if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
-                failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
                 result.setLoginResult(LoginResult.TOKEN_ERROR);
                 authService.loginHist(result);
                 throw new AuthenticationException(messageService.get("login.fail"), failUrl);
             }
+        }else if("".equals(request.getHeader("User-Agent")) ||request.getHeader("User-Agent") == null || request.getHeader("User-Agent").contains("python")
+                || request.getHeader("User-Agent").contains("curl") || request.getHeader("User-Agent").contains("wget")
+                || request.getHeader("User-Agent").contains("bot") || request.getHeader("User-Agent").contains("node")
+                ||  "".equals(request.getHeader("Accept")) || request.getHeader("Accept") == null
+                ||  !request.getHeader("Accept").contains("text/html") || "".equals(request.getHeader("referer"))
+                ||  request.getHeader("referer") == null || !request.getHeader("referer").contains("/auth/login.sb")){
+
+            // 브라우저 확인
+            log.append("\n----------").append(userId).append(" 브라우저 이상 START----------\n")
+                    .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                    .append("----------").append(userId).append(" 브라우저 이상 END----------");
+
+            LOGGER.info(log.toString());
+            // 특정 아이디만 세션 삭제
+            if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                result.setLoginResult(LoginResult.CHK_BROWSER);
+                authService.loginHist(result);
+                throw new AuthenticationException(messageService.get("login.fail"), failUrl);
+            }
+        }else{
+            log.append("\n----------").append(userId).append(" 로그인 시도 성공 START----------\n")
+                    .append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",접속IP:").append(result.getLoginIp()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",본사코드:").append(result.getHqOfficeCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",매장코드:").append(result.getStoreCd()).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",처리여부:성공\n")
+                    .append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                    .append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                    .append("----------").append(userId).append(" 로그인 시도 성공 END----------");
+
+            LOGGER.info(log.toString());
         }
 
         /**
@@ -395,7 +447,6 @@ public class MobileAuthController {
          * 2-2. 패스워드 변경 페이지로 이동<br>
          */
         String returnUrl = MAIN_PAGE_URL;
-        failUrl = "/mobile/auth/login.sb?userId=" + result.getUserId();
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
 

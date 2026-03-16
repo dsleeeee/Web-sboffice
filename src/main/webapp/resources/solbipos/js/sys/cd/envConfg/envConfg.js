@@ -221,8 +221,39 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-            $scope.flex.collectionView.itemsEdited[u].status = "U";
-            params.push($scope.flex.collectionView.itemsEdited[u]);
+            var item = $scope.flex.collectionView.itemsEdited[u];
+
+            if(item.envstCd === undefined || item.envstCd.length === 0){
+                $scope._popMsg(messages["cd.represent.require.nmcodeCd"]); // 대표명칭의 코드를 입력해주세요
+                return false;
+            }
+            if(item.envstNm === undefined || item.envstNm.length === 0){
+                $scope._popMsg(messages["cd.represent.require.nmcodeNm"]); // 대표명칭의 코드명을 입력해주세요
+                return false;
+            }
+            if(item.envstFg === undefined || item.envstFg === null || item.envstFg.length === 0){
+                $scope._popMsg(messages["envConfg.require.envstFgNm"]); // 설정구분을 선택해주세요.
+                return false;
+            }
+            if(item.envstGrpCdNm === undefined || item.envstFg === null || item.envstGrpCdNm.length === 0){
+                $scope._popMsg(messages["envConfg.require.envstGrpCdNm"]); // 환경그룹을 선택해주세요.
+                return false;
+            }
+            if(item.dirctInYn === undefined || item.dirctInYn === null || item.dirctInYn.length === 0){
+                $scope._popMsg(messages["envConfg.require.dirctInYn"]); // 직접입력을 선택해주세요.
+                return false;
+            }
+            if(item.targtFg === undefined || item.targtFg === null || item.targtFg.length === 0){
+                $scope._popMsg(messages["envConfg.require.targtFg"]); // 대상구분을 선택해주세요.
+                return false;
+            }
+            if(item.useYn === undefined || item.useYn === null || item.useYn.length === 0){
+                $scope._popMsg(messages["envConfg.require.useYn"]); // 사용여부를 선택해주세요.
+                return false;
+            }
+
+            item.status = "U";
+            params.push(item);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
@@ -243,8 +274,16 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["envConfg.require.envstGrpCdNm"]); // 환경그룹을 선택해주세요.
                 return false;
             }
+            if(item.dirctInYn === undefined || item.dirctInYn === null || item.dirctInYn.length === 0){
+                $scope._popMsg(messages["envConfg.require.dirctInYn"]); // 직접입력을 선택해주세요.
+                return false;
+            }
             if(item.targtFg === undefined || item.targtFg === null || item.targtFg.length === 0){
                 $scope._popMsg(messages["envConfg.require.targtFg"]); // 대상구분을 선택해주세요.
+                return false;
+            }
+            if(item.useYn === undefined || item.useYn === null || item.useYn.length === 0){
+                $scope._popMsg(messages["envConfg.require.useYn"]); // 사용여부를 선택해주세요.
                 return false;
             }
 
@@ -414,11 +453,6 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
             var item = $scope.flex.collectionView.itemsAdded[i];
             if(item.envstValCd === undefined || item.envstValCd.length === 0){
                 $scope._popMsg(messages["cd.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
-                return false;
-            }
-
-            if(item.envstValNm === undefined || item.envstValNm.length === 0){
-                $scope._popMsg(messages["cd.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
                 return false;
             }
 

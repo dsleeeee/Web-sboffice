@@ -38,6 +38,8 @@ public enum LoginResult implements CodeEnum {
     , TOKEN_ERROR("NOT1")
     /** 초당 3회 초과 */
     , MANY_ATTEMPTS("NOT2")
+    /** 브라우저 이상 */
+    , CHK_BROWSER("NOT3")
     ;
     
   private String code;
