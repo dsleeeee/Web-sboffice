@@ -324,7 +324,7 @@ public class MobileAuthController {
         String token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
 
         // 로그인 시도 제한 체크
-        if (count > 2) {
+        if (count > 3) {
             LOGGER.info("----------" + userId + "로그인 시도 제한 체크 START----------");
             LOGGER.info(userId + "," + currentDt + ",사용자ID :" + userId);
             LOGGER.info(userId + "," + currentDt + ",접속IP:" + result.getLoginIp());
