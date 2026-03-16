@@ -33,8 +33,8 @@
                     ,       A.PROD_CD
                     ,       C.PROD_NM
                     ,       A.SOLD_OUT_DT   AS PROC_DT
-                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.PROC_DT ELSE '' END AS SOLD_OUT_Y
-                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.PROC_DT ELSE '' END AS SOLD_OUT_N
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_Y
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_N
                     FROM    TB_LG_PRODUCT_SOLD_OUT_HISTORY A
                     ,       TB_MS_STORE B
                     ,       TB_MS_PRODUCT C
@@ -45,7 +45,7 @@
                     AND     C.PROD_CD       =   A.PROD_CD
                     AND    	D.STORE_CD 	(+) =	A.STORE_CD
                     AND     A.STORE_CD      IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND     A.PROC_DT       BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                    AND     A.SYS_DATE      BETWEEN #{startDate}    AND #{endDate}
                     AND     A.SOLD_OUT_FG   =   '1'
                     <if test='storeCdQuery != null and storeCdQuery != ""'>
                         AND A.STORE_CD IN (${storeCdQuery})
@@ -147,8 +147,8 @@
                     ,       A.PROD_CD
                     ,       C.PROD_NM
                     ,       A.SOLD_OUT_DT   AS PROC_DT
-                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.PROC_DT ELSE '' END AS SOLD_OUT_Y
-                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.PROC_DT ELSE '' END AS SOLD_OUT_N
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_Y
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_N
                     FROM    TB_LG_PRODUCT_SOLD_OUT_HISTORY A
                     ,       TB_MS_STORE B
                     ,       TB_MS_PRODUCT C
@@ -159,7 +159,7 @@
                     AND     C.PROD_CD       =   A.PROD_CD
                     AND    	D.STORE_CD 	(+) =	A.STORE_CD
                     AND     A.STORE_CD      IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND     A.PROC_DT       BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                    AND     A.SYS_DATE      BETWEEN #{startDate}    AND #{endDate}
                     AND     A.SOLD_OUT_FG   =   '1'
                     <if test='storeCdQuery != null and storeCdQuery != ""'>
                         AND A.STORE_CD IN (${storeCdQuery})
