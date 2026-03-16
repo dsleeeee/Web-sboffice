@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkService;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +45,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ 2026.01.27  이다솜      최초생성
  * @since 2026.01.27
  */
-@Service("NaverPlaceLinkService")
+@Service("naverPlaceLinkService")
 @Transactional
 public class NaverPlaceLinkServiceImpl implements NaverPlaceLinkService {
 
@@ -70,6 +71,7 @@ public class NaverPlaceLinkServiceImpl implements NaverPlaceLinkService {
     /**
      * Constructor Injection
      */
+    @Autowired
     public NaverPlaceLinkServiceImpl(NaverPlaceLinkMapper naverPlaceLinkMapper) {
         this.naverPlaceLinkMapper = naverPlaceLinkMapper;
     }

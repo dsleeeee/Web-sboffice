@@ -28,6 +28,8 @@
 
 <script type="text/javascript">
     //console.log("userId : " + sessionStorage.getItem("userId"));
+    //console.log("storeCd : " + sessionStorage.getItem("storeCd"));
+    //console.log("popUrl : " + sessionStorage.getItem("popUrl"));
 
     // 이전 화면(연동 단계 파악)
     var prePage = "${prePage}";
@@ -43,7 +45,7 @@
         // 약관동의 팝업 후
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = "https://test-new.smartplace.naver.com/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
+        var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
 
     } else if (prePage == "agree") {
@@ -63,7 +65,7 @@
     function btnSearch() {
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = "https://test-new.smartplace.naver.com/bizes/lookup?to=" + redirectURL;
+        var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/lookup?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
@@ -71,7 +73,7 @@
     function btnReg() {
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = "https://test-new.smartplace.naver.com/bizes/new?to=" + redirectURL;
+        var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/new?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
@@ -81,6 +83,7 @@
         // 업체 목록 조회 API 호출
         var params = {};
         params.page = (1 > page ? 0 : page);
+        params.storeCd = sessionStorage.getItem("storeCd");
         params.uniqueId = uniqueId;
 
         $.ajax({
@@ -141,6 +144,7 @@
 
         var params = {};
         params.userId = sessionStorage.getItem("userId");
+        params.storeCd = sessionStorage.getItem("storeCd");
         params.uniqueId = uniqueId;
         params.placeId = placeId;
         params.businessName = businessName;

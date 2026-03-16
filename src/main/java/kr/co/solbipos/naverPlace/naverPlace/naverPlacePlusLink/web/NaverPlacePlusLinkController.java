@@ -76,6 +76,14 @@ public class NaverPlacePlusLinkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         Map<String, Object> resultMap2 = new HashMap<String, Object>();
 
+        // 개발/운영 Api URL 조회
+        naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_POP_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkService.getApiUrl(naverPlacePlusLinkVO);
+        model.addAttribute("popUrl", apiInfo.getStr("apiUrl"));
+
         // 네.아.로 Unique ID 조회
         String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
         model.addAttribute("uniqueId", uniqueId);
@@ -106,6 +114,57 @@ public class NaverPlacePlusLinkController {
         LOGGER.info("연동 조회 API: " + resultMap2);
 
         return "naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink";
+    }
+
+    /**
+     * 상태 체크
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getStatus.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStatus(HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        NaverPlacePlusApiVO naverPlacePlusApiVO = new NaverPlacePlusApiVO();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap2 = new HashMap<String, Object>();
+
+        // 네.아.로 Unique ID 조회
+        String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
+        model.addAttribute("uniqueId", uniqueId);
+
+        if (uniqueId != null && uniqueId != "") {
+
+            // 동의여부확인 API 호출
+            resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+
+            // 연동 매장 정보 조회(DB)
+            DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+
+            if (result != null && result.size() > 0 && !result.isEmpty()) {
+                if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+
+                    // 진짜 연동이 되어있는지 연동 조회 API 호출
+                    naverPlacePlusApiVO.setProjections(""); // 초기화
+                    naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
+                    resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
+                    resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+                }
+            }
+        }
+
+        // return 값 셋팅
+        DefaultMap<String> resultMap3 = new DefaultMap<String>();
+        resultMap3.put("uniqueId", uniqueId);
+        resultMap3.put("agreeYn", convertToJson(resultMap));
+        resultMap3.put("linkYn", convertToJson(resultMap2));
+
+        return  ReturnUtil.returnJson(Status.OK, resultMap3);
     }
 
     /**
@@ -165,7 +224,7 @@ public class NaverPlacePlusLinkController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/getAgreeYn.sb", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/getAgreeYn.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getAgreeYn(NaverPlacePlusApiVO naverPlacePlusApiVO, HttpServletRequest request,
                              HttpServletResponse response, Model model) {
@@ -175,7 +234,7 @@ public class NaverPlacePlusLinkController {
         Map<String, Object> resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
-    }
+    }*/
 
     /**
      * 업체목록조회 API 호출

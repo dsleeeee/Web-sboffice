@@ -57,6 +57,8 @@ public class NaverPlacePlusApiVO {
     private String brandCategoryIds;
     /** 사용자 아이디 */
     private String userId;
+    /** 매장 코드 */
+    private String storeCd;
 
     public String getCode() {
         return code;
@@ -208,5 +210,13 @@ public class NaverPlacePlusApiVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 }

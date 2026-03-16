@@ -24,11 +24,19 @@ import java.util.Map;
 public interface NaverPlacePlusLinkService {
 
     /**
+     * 개발/운영 Api URL 조회
+     *
+     * @param naverPlacePlusLinkVO
+     * @return
+     */
+    DefaultMap<Object> getApiUrl(NaverPlacePlusLinkVO naverPlacePlusLinkVO);
+
+    /**
      * 인증 API Access Token 조회
      *
      * @return
      */
-    Map<String, Object> getAccessToken();
+    Map<String, Object> getAccessToken(String storeCd);
 
     /**
      * 네이버 로그인 state 값 저장

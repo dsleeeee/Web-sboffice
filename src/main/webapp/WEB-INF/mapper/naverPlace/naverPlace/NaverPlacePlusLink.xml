@@ -233,4 +233,17 @@
         </choose>
     </update>
 
+    <!-- 개발/운영 Api URL 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : naverPlacePlusLinkVO
+        COMMENTS : 개발/운영 Api URL을 조회한다.
+    -->
+    <select id="getApiUrl" parameterType="naverPlacePlusLinkVO" resultType="DefaultMap">
+        /* USE : NaverPlacePlusLinkMapper.getApiUrl */
+        SELECT  FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiUrl}) AS ${apiUrl}
+        ,       FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiKey}) AS ${apiKey}
+        FROM    DUAL
+    </select>
+
 </mapper>

@@ -1,18 +1,15 @@
 package kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.impl;
 
-import ch.qos.logback.classic.spi.LoggerRemoteView;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.media.jfxmedia.logging.Logger;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceApiVO;
-import kr.co.solbipos.naverPlace.naverPlace.naverPlaceLink.service.NaverPlaceLinkVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkService;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,23 +48,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by LYNK CORP. All right reserved.
  */
-@Service("NaverPlacePlusLinkService")
+@Service("naverPlacePlusLinkService")
 @Transactional
 public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService {
-
-    // [인증 API 관련 정보]
-    // (개발)
-    public static final String AUTH_URL = "https://test-api.newsmartplace.naver.com";
-    public static final String REFRESH_TOKEN = "xB9vX2mK5pL8rS1tU4vW7xY0zA3bC6dE9fG2hJ5kL8nN1pQ4rS7tU0vW3xY6zA9bC2dF5gH8jK1mP4qR7sT0uV3wX6yZ9aB2cE5fG8hJ1kL4nN6pQ9rS2tavx5vW8xdd";
-    // (운영)
-    //public static final String AUTH_URL = "https://api.newsmartplace.naver.com";
-    //public static final String REFRESH_TOKEN = "";
-
-    // [연동 API 관련 정보]
-    // (개발)
-    public static final String LINK_URL = "https://test-agency-api.pbp.naver.com"; //"https://test-api.pbp.naver.com";
-    // (운영)
-    //public static final String LINK_URL = "https://api.pbp.naver.com";
 
     public static final String CLIENT_ID = "nEMag45FNxJsZUnX9ywM";  // 애플리케이션 클라이언트 아이디값
     public static final String CLIENT_SECRET = "wgHGb82SR1";        // 애플리케이션 클라이언트 시크릿값
@@ -77,8 +60,20 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     /**
      * Constructor Injection
      */
+    @Autowired
     public NaverPlacePlusLinkServiceImpl(NaverPlacePlusLinkMapper naverPlacePlusLinkMapper) {
         this.naverPlacePlusLinkMapper = naverPlacePlusLinkMapper;
+    }
+
+    /**
+     * 개발/운영 Api URL 조회
+     *
+     * @param naverPlacePlusLinkVO
+     * @return
+     */
+    @Override
+    public DefaultMap<Object> getApiUrl(NaverPlacePlusLinkVO naverPlacePlusLinkVO) {
+        return naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
     }
 
     /**
@@ -87,7 +82,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
      * @return
      */
     @Override
-    public Map<String, Object> getAccessToken() {
+    public Map<String, Object> getAccessToken(String storeCd) {
 
         HttpURLConnection connection = null;
 
@@ -95,7 +90,16 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> resultMap = null;
 
-        String apiUrl = AUTH_URL + "/auth/v1/token?grant_type=agency_refresh_token&refresh_token=" + REFRESH_TOKEN;
+        // 개발/운영 Api URL 조회
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        naverPlacePlusLinkVO.setStoreCd(storeCd);
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_AUTH_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
+
+        // url setting
+        String apiUrl = apiInfo.getStr("apiUrl") + "/auth/v1/token?grant_type=agency_refresh_token&refresh_token=" + apiInfo.getStr("accessToken");
 
         try {
             // 1. URL 객체 생성
@@ -364,15 +368,22 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public Map<String, Object> getAgreeYn(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
-        String apiFullUrl = LINK_URL + "/v1/pbp-owner-member/agency-target-summary";
-
         // 네.아.로 Unique ID 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
         naverPlacePlusLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
         String uniqueId = naverPlacePlusLinkMapper.getNaverUniqueId(naverPlacePlusLinkVO);
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+        // 개발/운영 Api URL 조회
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
+
+        // url setting
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/pbp-owner-member/agency-target-summary";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
         naverPlacePlusApiVO.setUniqueId(uniqueId);
         naverPlacePlusApiVO.setProjections("AGREED_PLACE_PRIVACY_AGREEMENTS,MY_BIZ_AGREEMENT"); // 스마플 개인정보 약관 동의 목록
 
@@ -402,9 +413,18 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public List<Map<String, Object>> getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO) {
 
-        String apiFullUrl = LINK_URL + "/v1/custom/pos/place-businesses";
+        // 개발/운영 Api URL 조회
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        naverPlacePlusLinkVO.setStoreCd(naverPlacePlusApiVO.getStoreCd());
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+        // url setting
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(naverPlacePlusApiVO.getStoreCd()).get("token").toString());
 
         List<Map<String, Object>> resultMap = getListRequest(naverPlacePlusApiVO, apiFullUrl);
 
@@ -421,15 +441,22 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public Map<String, Object> getNaverLinkYn(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
-        String apiFullUrl = LINK_URL + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
-
         // 네.아.로 Unique ID 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
         naverPlacePlusLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
         String uniqueId = naverPlacePlusLinkMapper.getNaverUniqueId(naverPlacePlusLinkVO);
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+        // 개발/운영 Api URL 조회
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
+
+        // url setting
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
         naverPlacePlusApiVO.setUniqueId(uniqueId);
 
         Map<String, Object> resultMap = getRequest(naverPlacePlusApiVO, apiFullUrl);
@@ -446,9 +473,18 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO) {
 
-        String apiFullUrl = LINK_URL + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
+        // 개발/운영 Api URL 조회
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        naverPlacePlusLinkVO.setStoreCd(naverPlacePlusApiVO.getStoreCd());
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+        // url setting
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(naverPlacePlusApiVO.getStoreCd()).get("token").toString());
 
         Map<String, Object> resultMap = postRequest(naverPlacePlusApiVO, apiFullUrl);
 
@@ -458,7 +494,6 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         String regDateTime = zdt.format(outputFormatter);
 
         // 연동 매장 정보 저장
-        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
         String dt = currentDateTimeString();
         naverPlacePlusLinkVO.setUniqueId(naverPlacePlusApiVO.getUniqueId());
         naverPlacePlusLinkVO.setNaverStoreNm(naverPlacePlusApiVO.getBusinessName());
@@ -481,15 +516,22 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public Map<String, Object> unMappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
-        String apiFullUrl = LINK_URL + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
-
         // 네.아.로 Unique ID 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
         naverPlacePlusLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
         String uniqueId = naverPlacePlusLinkMapper.getNaverUniqueId(naverPlacePlusLinkVO);
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken().get("token").toString());
+        // 개발/운영 Api URL 조회
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkMapper.getApiUrl(naverPlacePlusLinkVO);
+
+        // url setting
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
+
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
         naverPlacePlusApiVO.setUniqueId(uniqueId);
 
         Map<String, Object> resultMap = deleteRequest(naverPlacePlusApiVO, apiFullUrl);
@@ -846,7 +888,8 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         Map<String, String> map = new HashMap<>();
         BeanInfo info = Introspector.getBeanInfo(vo.getClass());
         for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-            if (!pd.getName().equals("accessToken") && !pd.getName().equals("uniqueId")) { // 파라미터로 사용하지 않는 값 제외
+            if (!pd.getName().equals("accessToken") && !pd.getName().equals("uniqueId") &&
+                    !pd.getName().equals("placeId") && !pd.getName().equals("storeCd")) { // 파라미터로 사용하지 않는 값 제외
                 Method reader = pd.getReadMethod();
                 if (reader != null && !pd.getName().equals("class")) {
                     Object value = reader.invoke(vo);
