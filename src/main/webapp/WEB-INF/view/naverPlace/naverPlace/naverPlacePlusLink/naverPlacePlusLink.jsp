@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 
 <div class="subCon" ng-controller="naverPlacePlusLinkCtrl">
     <div class="searchBar">
@@ -66,8 +67,10 @@
 
     // 사용자 ID
     var userId = "${userId}";
-    sessionStorage.setItem("userId", userId);
-
+    // 매장코드
+    var storeCd = "${storeCd}";
+    // 팝업 Url
+    var popUrl = "${popUrl}";
     // 네.아.로 uniqueId
     var uniqueId = "${uniqueId}";
     // 약관동의 여부
@@ -77,12 +80,16 @@
     // 연동 단계
     var linkStep = 0;
 
+    sessionStorage.setItem("userId", userId);
+    sessionStorage.setItem("storeCd", storeCd);
+    sessionStorage.setItem("popUrl", popUrl);
+
     // 연동 단계 파악
     // 0 : 네.아.로 로그인 미완료
     // 1 : 네.아.로 로그인 완료, 동의 미완료
     // 2 : 동의 완료, 매장연동 미완료
     // 3 : 매장연동 완료
-    if (uniqueId != "") {
+    if (uniqueId != "" && uniqueId != null) {
         linkStep = 1;
 
         if (agreeYn != null && agreeYn != undefined) {
@@ -146,11 +153,11 @@
 
     /*{"ownerMemberStatus":"NONMEMBER","isJoinedMember":false,"isWithdrawing":false}*/
 
-    //alert("연동단계 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
+    console.log("연동단계1 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260309.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260316.01" charset="utf-8"></script>
 
 <style>
     /* 텍스트 스타일 */

@@ -26,6 +26,14 @@ import org.springframework.stereotype.Repository;
 public interface NaverPlacePlusLinkMapper {
 
     /**
+     * 개발/운영 Api URL 조회
+     *
+     * @param naverPlacePlusLinkVO
+     * @return
+     */
+    DefaultMap<Object> getApiUrl(NaverPlacePlusLinkVO naverPlacePlusLinkVO);
+
+    /**
      * 네이버 로그인 state 값 저장
      *
      * @param naverPlacePlusLinkVO

@@ -63,6 +63,12 @@ public class NaverPlacePlusLinkVO extends PageVO {
     private String naverPlaceId;
     /** 네이버 연동 일시 */
     private String naverLinkDt;
+    /** api 정보 */
+    private String apiInfo;
+    /** api url */
+    private String apiUrl;
+    /** api key */
+    private String apiKey;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -230,5 +236,29 @@ public class NaverPlacePlusLinkVO extends PageVO {
 
     public void setNaverLinkDt(String naverLinkDt) {
         this.naverLinkDt = naverLinkDt;
+    }
+
+    public String getApiInfo() {
+        return apiInfo;
+    }
+
+    public void setApiInfo(String apiInfo) {
+        this.apiInfo = apiInfo;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
