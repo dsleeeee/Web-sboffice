@@ -87,10 +87,10 @@ app.controller('orderkitRecpOriginCtrl', ['$scope', '$http', '$timeout', functio
 
                 if (redirectUrl !== "") {
                     console.log("url : " + url + "/auth/pos/url?token=" + jwtToken);
-                    window.open(url + "/auth/pos/url?token=" + jwtToken, 'newWindow');
+                    window.open(url + "/auth/pos/url?token=" + jwtToken, '_blank');
                 } else {
                     console.log("url : " + url + "/auth/pos?token=" + jwtToken);
-                    window.open(url + "/auth/pos?token=" + jwtToken, 'newWindow');
+                    window.open(url + "/auth/pos?token=" + jwtToken, '_blank');
                 }
 
             });

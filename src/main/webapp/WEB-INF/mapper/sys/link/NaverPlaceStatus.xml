@@ -45,8 +45,8 @@
         ,       TB_CM_NAVER_LINK_AGREEMENT B
         ,       TB_HQ_OFFICE C
         ,       TB_MS_STORE D
-        WHERE   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-        AND     A.STORE_CD = B.STORE_CD
+        WHERE   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD(+)
+        AND     A.STORE_CD = B.STORE_CD(+)
         AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
         AND     A.STORE_CD = D.STORE_CD
     </select>

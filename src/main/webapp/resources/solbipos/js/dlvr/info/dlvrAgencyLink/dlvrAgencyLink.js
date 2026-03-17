@@ -262,10 +262,10 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
                 if (redirectUrl !== "") {
                     console.log("url : " + url + "/auth/pos/url?token=" + jwtToken);
-                    window.open(url + "/auth/pos/url?token=" + jwtToken, 'newWindow');
+                    window.open(url + "/auth/pos/url?token=" + jwtToken, '_blank');
                 } else {
                     console.log("url : " + url + "/auth/pos?token=" + jwtToken);
-                    window.open(url + "/auth/pos?token=" + jwtToken, 'newWindow');
+                    window.open(url + "/auth/pos?token=" + jwtToken, '_blank');
                 }
 
             });
