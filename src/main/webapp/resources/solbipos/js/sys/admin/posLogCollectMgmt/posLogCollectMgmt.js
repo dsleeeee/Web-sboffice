@@ -45,6 +45,20 @@ var resultCdComboData = [
     {"name": "실패", "value": "9999"}
 ];
 
+// 스마트오더 수집여부 DropBoxDataMap
+var sendYnAllComboData = [
+    {"name": "전체", "value": ""},
+    {"name": "전송", "value": "Y"},
+    {"name": "미전송", "value": "N"}
+];
+
+// 결과 DropBoxDataMap
+var resultCdAllComboData = [
+    {"name": "전체", "value": ""},
+    {"name": "성공", "value": "0000"},
+    {"name": "실패", "value": "9999"}
+];
+
 /**
  * POS로그수집관리 조회 그리드 생성
  */
@@ -59,6 +73,8 @@ app.controller('posLogCollectMgmtCtrl', ['$scope', '$http', '$timeout', function
 
     // 명령타입 콤보박스 셋팅
     $scope._setComboData("commandTypeComboData", commandTypeComboData);
+    $scope._setComboData("sendYnComboData", sendYnAllComboData);
+    $scope._setComboData("resultCdComboData", resultCdAllComboData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -100,6 +116,8 @@ app.controller('posLogCollectMgmtCtrl', ['$scope', '$http', '$timeout', function
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd'); //조회기간
         params.commandType = $scope.commandTypeCombo.selectedValue;
+        params.sendYn = $scope.sendYnCombo.selectedValue;
+        params.resultCd = $scope.resultCdCombo.selectedValue;
 
         // POS로그수집관리 리스트 조회
         $scope._inquiryMain("/sys/admin/posLogCollectMgmt/posLogCollectMgmt/getSearchPosLogList.sb", params);
