@@ -153,7 +153,9 @@
                     NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
                     NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
                     NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
-                    USE_YN = #{useYn}
+                    USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND NMCODE_GRP_CD = #{nmcodeGrpCd}
@@ -167,7 +169,9 @@
                     NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
                     NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
                     NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
-                    USE_YN = #{useYn}
+                    USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND NMCODE_GRP_CD = #{nmcodeGrpCd}

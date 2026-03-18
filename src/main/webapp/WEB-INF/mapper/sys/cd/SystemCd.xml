@@ -87,14 +87,15 @@
             NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
             NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
             USE_TARGET_FG = #{useTargetFg},
-            USE_SYSTEM_FG = #{useSystemFg}
+            USE_SYSTEM_FG = #{useSystemFg},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
             <if test="nmcodeGrpCd == '0000'">
             , USE_COL_NM = #{useColNm,jdbcType=VARCHAR}
             </if>
         WHERE
             NMCODE_GRP_CD = #{nmcodeGrpCd}
             AND NMCODE_CD = #{nmcodeCd}
-
     </update>
 
     <!-- 코드목록 생성 -->

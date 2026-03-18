@@ -26,44 +26,76 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <tr>
-            <%-- 조회일자 --%>
-            <th><s:message code="cmm.search.date"/></th>
-            <td>
-                <div class="sb-select">
-                    <span class="txtIn"><input id="srchStartDate" ng-model="startDate"class="w110px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchEndDate"ng-model="endDate" class="w110px"></span>
-                </div>
-            </td>
-            <%-- 명령타입 --%>
-            <th><s:message code="posLogCollectMgmt.commandType"/></th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="commandType"
-                            ng-model="commandType"
-                            items-source="_getComboData('commandTypeComboData')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            control="commandTypeCombo">
-                    </wj-combo-box>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <%-- 매장코드 --%>
-            <th><s:message code="posLogCollectMgmt.storeCd" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="storeCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();" />
-            </td>
-            <%-- 매장명 --%>
-            <th><s:message code="posLogCollectMgmt.storeNm" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="storeNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
-            </td>
-        </tr>
+            <tr>
+                <%-- 조회일자 --%>
+                <th><s:message code="cmm.search.date"/></th>
+                <td>
+                    <div class="sb-select">
+                        <span class="txtIn"><input id="srchStartDate" ng-model="startDate"class="w110px"></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="srchEndDate"ng-model="endDate" class="w110px"></span>
+                    </div>
+                </td>
+                <%-- 명령타입 --%>
+                <th><s:message code="posLogCollectMgmt.commandType"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="commandType"
+                                ng-model="commandType"
+                                items-source="_getComboData('commandTypeComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="commandTypeCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 매장코드 --%>
+                <th><s:message code="posLogCollectMgmt.storeCd" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="storeCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();" />
+                </td>
+                <%-- 매장명 --%>
+                <th><s:message code="posLogCollectMgmt.storeNm" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="storeNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
+                </td>
+            </tr>
+            <tr>
+                <%-- 전송구분 --%>
+                <th><s:message code="posLogCollectMgmt.sendYn"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="sendYn"
+                                ng-model="sendYn"
+                                items-source="_getComboData('sendYnComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="sendYnCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 결과 --%>
+                <th><s:message code="posLogCollectMgmt.resultCd"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="resultCd"
+                                ng-model="resultCd"
+                                items-source="_getComboData('resultCdComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="resultCdCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -128,7 +160,7 @@
 <script type="text/javascript">
     var userId = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260309.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260316.01" charset="utf-8"></script>
 <%-- POS로그수집등록 팝업 --%>
 <c:import url="/WEB-INF/view/sys/admin/posLogCollectMgmt/posLogRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

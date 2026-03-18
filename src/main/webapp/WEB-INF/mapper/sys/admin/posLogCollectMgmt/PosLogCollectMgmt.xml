@@ -57,6 +57,12 @@
         <if test="commandType != null and commandType !=''">
             AND A.COMMAND_TYPE = #{commandType}
         </if>
+        <if test="sendYn != null and sendYn !=''">
+            AND A.SEND_YN = #{sendYn}
+        </if>
+        <if test="resultCd != null and resultCd !=''">
+            AND A.RESULT_CD = #{resultCd}
+        </if>
         <if test="storeCd != null and storeCd !=''">
             AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>

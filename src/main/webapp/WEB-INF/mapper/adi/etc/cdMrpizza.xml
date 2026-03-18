@@ -227,6 +227,8 @@
                 ,       NMCODE_ITEM_1   = #{nmcodeItem1,jdbcType=VARCHAR}
                 ,       NMCODE_ITEM_2   = #{nmcodeItem2,jdbcType=VARCHAR}
                 ,       USE_YN          = #{useYn}
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
                 WHERE   1=1
                 AND     HQ_OFFICE_CD    = #{hqOfficeCd}
                 AND     NMCODE_GRP_CD   = #{nmcodeGrpCd}
@@ -239,6 +241,8 @@
                 ,       NMCODE_ITEM_1   = #{nmcodeItem1,jdbcType=VARCHAR}
                 ,       NMCODE_ITEM_2   = #{nmcodeItem2,jdbcType=VARCHAR}
                 ,       USE_YN          = #{useYn}
+                ,       MOD_DT          = #{modDt}
+                ,       MOD_ID          = #{modId}
                 WHERE 1=1
                 AND     STORE_CD        = #{storeCd}
                 AND     NMCODE_GRP_CD   = #{nmcodeGrpCd}

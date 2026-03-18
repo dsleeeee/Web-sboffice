@@ -83,7 +83,7 @@
             </colgroup>
             <tbody>
             <tr>
-              <th><s:message code="outstockReqDate.prodNm" /></th>
+              <th><s:message code="cmm.prod" /></th>
               <td>
                 <input type="text" id="filterProdNm" ng-model="filterProdNm"/>
               </td>
@@ -209,16 +209,21 @@
 
     $scope.searchFilter = function (){
       var grid = wijmo.Control.getControl("#wjGridProdM");
+      var filter = $("#filterProdNm").val();
 
       if(grid.rows.length > 0){
 
+        // 그리드 전체 visible true 처리(초기화)
         for (var i = 0; i < grid.rows.length; i++) {
           grid.rows[i].visible = true;
           grid.rows[i].dataItem.visible = true;
         }
-        if($("#filterProdNm").val() !== undefined && $("#filterProdNm").val() !== null && $("#filterProdNm").val() !== ""){
+
+        if(filter !== undefined && filter !== null && filter !== ""){
           for (var i = 0; i < grid.rows.length; i++) {
-            if (grid.rows[i].dataItem.prodNm.indexOf($("#filterProdNm").val()) === -1) {
+            // 상품코드 or 상품명 으로 조회
+            if (grid.rows[i].dataItem.prodNm.indexOf(filter) === -1 && grid.rows[i].dataItem.prodCd.indexOf(filter) === -1) {
+              // 없을 시 visible false 처리
               grid.rows[i].visible = false;
               grid.rows[i].dataItem.visible = false;
             }else{
@@ -233,13 +238,16 @@
       }
     };
 
+    // 전체체크 시
     $scope.toggleAllFiltered = function (isChecked) {
       if(isChecked){
+        // 필터 클릭 상태일 시
         if($scope.allChkFg){
           var grid = wijmo.Control.getControl("#wjGridProdM");
 
           if(grid.rows.length > 0){
             for (var i = 0; i < grid.rows.length; i++) {
+              // 그리드 visible true인 값만 체크
               if (grid.rows[i].dataItem.visible) {
                 grid.rows[i].dataItem.gChk = true;
               }else{

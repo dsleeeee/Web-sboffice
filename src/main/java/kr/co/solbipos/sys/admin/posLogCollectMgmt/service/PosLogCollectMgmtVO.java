@@ -68,6 +68,12 @@ public class PosLogCollectMgmtVO extends PageVO {
     /** 순번 */
     private String seq;
 
+    /** 전송구분 */
+    private String sendYn;
+
+    /** 결과 */
+    private String resultCd;
+
     public String getCommandType() {
         return commandType;
     }
@@ -194,5 +200,21 @@ public class PosLogCollectMgmtVO extends PageVO {
 
     public void setSeq(String seq) {
         this.seq = seq;
+    }
+
+    public String getSendYn() {
+        return sendYn;
+    }
+
+    public void setSendYn(String sendYn) {
+        this.sendYn = sendYn;
+    }
+
+    public String getResultCd() {
+        return resultCd;
+    }
+
+    public void setResultCd(String resultCd) {
+        this.resultCd = resultCd;
     }
 }
