@@ -10,12 +10,12 @@
 <div id="divWrap" class="wrap" style="display: none;">
     <h2 class="page-title"><s:message code="naverPlacePlusLink.info1" /></h2>
     <div class="top-actions">
-            <span class="desc">
-              <s:message code="naverPlacePlusLink.info2" />
-            </span>
+        <span class="desc">
+          <s:message code="naverPlacePlusLink.info2" />
+        </span>
         <div class="btn-group">
             <button class="btn btn-green" id="btnSearch" onclick="btnSearch();"><s:message code="naverPlacePlusLink.searchStore" /></button>
-            <button class="btn btn-green" id="btnReg" onclick="btnReg();"><s:message code="naverPlacePlusLink.regStore" /></button>
+            <%--<button class="btn btn-green" id="btnReg" onclick="btnReg();"><s:message code="naverPlacePlusLink.regStore" /></button>--%>
         </div>
     </div>
     <%-- 업체 목록 --%>
@@ -105,11 +105,25 @@
                             if (i < arr.length - 1) {
                                 // 매장 리스트
                                 innerHtml += "<div class=\"store-card\">";
-                                innerHtml += "<div class=\"thumb\" img src=\"" + arr[i].businessImage + "\"></div>";
+                                if (arr[i].businessImage != null) {
+                                    if (arr[i].businessImage.thumbnail != null) {
+                                        innerHtml += "<div class=\"thumb\"><img src=\"" + arr[i].businessImage.thumbnail + "\" alt=\"\" width=\"70px\" height=\"70px\"/></div>";
+                                    } else {
+                                        innerHtml += "<div class=\"thumb\"></div>";
+                                    }
+                                } else {
+                                    innerHtml += "<div class=\"thumb\"></div>";
+                                }
                                 innerHtml += "<div class=\"store-info\">";
                                 innerHtml += "<h3>" + arr[i].businessName + "</h3>";
                                 innerHtml += "<p>" + arr[i].address + "</p>";
-                                innerHtml += "<p>" + arr[i].phone + "</p>";
+
+                                if (arr[i].phone != null) {
+                                    innerHtml += "<p>" + arr[i].phone + "</p>";
+                                } else {
+                                    innerHtml += "<p></p>";
+                                }
+
                                 innerHtml += "</div>";
                                 innerHtml += "<button class=\"btn btn-blue\" onClick=\"mappingStore('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.link" /></button>";
                                 innerHtml += "</div>";
@@ -214,7 +228,7 @@
         gap: 10px;
 
         /* 원하는 크기로 고정 */
-        width: 200px;
+        width: 90px;
         height: 40px;
 
         /* 핵심: 부모가 좁아져도 버튼 크기가 줄어들지 않게 함 */
