@@ -26,6 +26,7 @@ public class TodayDtlServiceImpl implements TodayDtlService {
     /** 당일매출상세현황 - 결제수단 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPayColList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO) {
+        todayDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return todayDtlMapper.getPayColList(todayDtlVO);
     }
 

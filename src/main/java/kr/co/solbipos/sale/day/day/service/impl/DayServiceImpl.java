@@ -33,11 +33,13 @@ public class DayServiceImpl implements DayService {
     /** 일자별 - 결제수단 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPayColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dayMapper.getPayColList(dayVO);
     }
     /** 일자별 - 결제수단 컬럼 리스트 조회(현금영수증 포함) */
     @Override
     public List<DefaultMap<String>> getPayColAddList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dayMapper.getPayColAddList(dayVO);
     }
 

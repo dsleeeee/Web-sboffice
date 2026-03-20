@@ -247,6 +247,11 @@
                                                     CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
                                                 )
                 </if>
+                AND (
+                ( ((SELECT COUNT(PROD_CD) FROM TB_HQ_SEARCH_UPLOAD_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (thp.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_SEARCH_UPLOAD_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(PROD_CD) FROM TB_HQ_SEARCH_UPLOAD_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
+                )
                 ORDER BY thp.PROD_CD
             </when>
             <!-- 매장 -->
@@ -796,4 +801,80 @@
         ORDER BY the.EMP_NO
     </select>
 
+    <!-- 업로드상품 공통 - 업로드상품 텍스트박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSelectUploadProdText" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* IostockCmmMapper.getSelectUploadProdText */
+        SELECT  NVL(COUNT(A.PROD_CD), '0') AS PROD_CNT
+        FROM    TB_HQ_SEARCH_UPLOAD_PROD A
+        WHERE   1=1
+        AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.USER_ID       =   #{userId}
+    </select>
+
+    <!-- 업로드상품 공통 - 업로드상품 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSelectUploadProdList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.getSelectUploadProdList */
+        SELECT  A.PROD_CD
+        ,       B.PROD_NM
+        FROM    TB_HQ_SEARCH_UPLOAD_PROD A
+        ,       TB_HQ_PRODUCT B
+        WHERE   1=1
+        AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+        AND     B.PROD_CD       (+) =   A.PROD_CD
+        AND     A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     A.USER_ID           =   #{userId}
+        ORDER
+        BY      A.PROD_CD
+    </select>
+
+    <!-- 업로드상품 공통 - 검증결과 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSelectUploadProdExcelUploadDeleteAll" parameterType="iostockCmmVO">
+        /* IostockCmmMapper.getSelectUploadProdExcelUploadDeleteAll */
+        DELETE  TB_HQ_SEARCH_UPLOAD_PROD
+        WHERE   1=1
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     USER_ID = #{userId}
+    </delete>
+
+
+    <!-- 업로드상품 공통 - 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSelectUploadProdExcelUploadSave" parameterType="iostockCmmVO">
+        /* IostockCmmMapper.getSelectUploadProdExcelUploadSave */
+        INSERT INTO TB_HQ_SEARCH_UPLOAD_PROD
+        (
+                HQ_OFFICE_CD
+        ,       USER_ID
+        ,       PROD_CD
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{userId}
+        ,       #{prodCd}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
 </mapper>

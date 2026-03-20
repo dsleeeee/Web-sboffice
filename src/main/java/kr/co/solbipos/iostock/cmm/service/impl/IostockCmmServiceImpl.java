@@ -85,6 +85,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
 
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(iostockCmmVO.getOrgnFg() == OrgnFg.STORE.getCode()){
             iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -270,5 +271,65 @@ public class IostockCmmServiceImpl implements IostockCmmService {
             resultList = iostockCmmMapper.selectEmpList(iostockCmmVO);
         }
         return resultList;
+    }
+
+    /** 업로드상품 공통 - 업로드상품 텍스트박스 조회 */
+    @Override
+    public DefaultMap<Object> getSelectUploadProdText(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        return iostockCmmMapper.getSelectUploadProdText(iostockCmmVO);
+    }
+
+    /** 업로드상품 공통 - 업로드상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectUploadProdList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+
+            resultList = iostockCmmMapper.getSelectUploadProdList(iostockCmmVO);
+        }
+
+        return resultList;
+    }
+
+    /** 업로드상품 공통 - 검증결과 전체 삭제 */
+    @Override
+    public int getSelectUploadProdExcelUploadDeleteAll(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt += iostockCmmMapper.getSelectUploadProdExcelUploadDeleteAll(iostockCmmVO);
+
+        return procCnt;
+    }
+
+    /** 업로드상품 공통 - 검증결과 저장 */
+    @Override
+    public int getSelectUploadProdExcelUploadSave(IostockCmmVO[] iostockCmmVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(IostockCmmVO iostockCmmVO : iostockCmmVOs) {
+            iostockCmmVO.setRegDt(currentDt);
+            iostockCmmVO.setRegId(sessionInfoVO.getUserId());
+            iostockCmmVO.setModDt(currentDt);
+            iostockCmmVO.setModId(sessionInfoVO.getUserId());
+
+            iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+            procCnt += iostockCmmMapper.getSelectUploadProdExcelUploadSave(iostockCmmVO);
+        }
+
+        return procCnt;
     }
 }

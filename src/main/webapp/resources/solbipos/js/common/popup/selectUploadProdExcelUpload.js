@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : selectUploadStoreExcelUpload.js
- * 설  명 : 공용 업로드매장 팝업 - 엑셀업로드 팝업 JavaScript
+ * 파일명 : selectUploadProdExcelUpload.js
+ * 설  명 : 공용 업로드상품 팝업 - 엑셀업로드 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -16,23 +16,23 @@ var app = agrid.getApp();
 /**
  *  엑셀업로드 팝업 조회 그리드 생성
  */
-app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('selectUploadProdExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('selectUploadStoreExcelUploadCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('selectUploadProdExcelUploadCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
         $scope.colHeaderBind = {};
-        for (var i = 0; i < $scope.selectUploadStoreExcelUploadFlex.columns.length; i++) {
-            var col = $scope.selectUploadStoreExcelUploadFlex.columns[i];
+        for (var i = 0; i < $scope.selectUploadProdExcelUploadFlex.columns.length; i++) {
+            var col = $scope.selectUploadProdExcelUploadFlex.columns[i];
             $scope.colHeaderBind[col.header] = col.binding;
         }
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("selectUploadStoreExcelUploadCtrl", function(event, data) {
+    $scope.$on("selectUploadProdExcelUploadCtrl", function(event, data) {
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -48,7 +48,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/common/popup/selectStore/getSelectUploadStoreExcelUploadDeleteAll.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/iostock/cmm/iostockCmm/getSelectUploadProdExcelUploadDeleteAll.sb", params, function(){
             // 엑셀 업로드
             $scope.excelUpload();
         });
@@ -61,8 +61,8 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 선택한 파일이 있으면
-        if ($('#selectUploadStoreExcelUploadFile')[0].files[0]) {
-            var file          = $('#selectUploadStoreExcelUploadFile')[0].files[0];
+        if ($('#selectUploadProdExcelUploadFile')[0].files[0]) {
+            var file          = $('#selectUploadProdExcelUploadFile')[0].files[0];
             var fileName      = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -71,8 +71,8 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
                 $timeout(function () {
-                    var flex = $scope.selectUploadStoreExcelUploadFlex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#selectUploadStoreExcelUploadFile')[0].files[0], {includeColumnHeaders: true}
+                    var flex = $scope.selectUploadProdExcelUploadFlex;
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#selectUploadProdExcelUploadFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
@@ -82,7 +82,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
                     );
                 }, 10);
             } else {
-                $("#selectUploadStoreExcelUploadFile").val('');
+                $("#selectUploadProdExcelUploadFile").val('');
                 $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
@@ -93,7 +93,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
     $scope.excelUploadToJsonConvert = function () {
         var jsonData  = [];
         var item      = {};
-        var rowLength = $scope.selectUploadStoreExcelUploadFlex.rows.length;
+        var rowLength = $scope.selectUploadProdExcelUploadFlex.rows.length;
 
         if (rowLength == 0) {
             $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
@@ -104,18 +104,16 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
         for (var r = 0; r < rowLength; r++) {
             item = {};
 
-            for (var c = 0; c < $scope.selectUploadStoreExcelUploadFlex.columns.length; c++) {
-                // alert($scope.selectUploadStoreExcelUploadFlex.columns[c].header); // 매장코드 / null
-                // alert($scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false)); // 00001 / 매장코드
-                // alert($scope.colHeaderBind[$scope.selectUploadStoreExcelUploadFlex.columns[c].header]); // storeCd / undefined
+            for (var c = 0; c < $scope.selectUploadProdExcelUploadFlex.columns.length; c++) {
+                // alert($scope.selectUploadProdExcelUploadFlex.columns[c].header); // 매장코드 / null
+                // alert($scope.selectUploadProdExcelUploadFlex.getCellData(r, c, false)); // 00001 / 매장코드
+                // alert($scope.colHeaderBind[$scope.selectUploadProdExcelUploadFlex.columns[c].header]); // storeCd / undefined
 
                 // 빈 로우 추가 업로드시 오류
-                if ($scope.selectUploadStoreExcelUploadFlex.columns[c].header !== null) {
-                    if ($scope.selectUploadStoreExcelUploadFlex.columns[c].header !== null && nvl($scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false), null) !== null) {
-                        var colBinding = $scope.colHeaderBind[$scope.selectUploadStoreExcelUploadFlex.columns[c].header.replaceAll('\'', '').replaceAll(' ', '')];
-                        var cellValue  = $scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false) + '';
-                        item[colBinding] = cellValue.replaceAll('\'', '');
-                    }
+                if ($scope.selectUploadProdExcelUploadFlex.columns[c].header !== null && nvl($scope.selectUploadProdExcelUploadFlex.getCellData(r, c, false), null) !== null) {
+                    var colBinding = $scope.colHeaderBind[$scope.selectUploadProdExcelUploadFlex.columns[c].header.replaceAll('\'', '').replaceAll(' ', '')];
+                    var cellValue  = $scope.selectUploadProdExcelUploadFlex.getCellData(r, c, false) + '';
+                    item[colBinding] = cellValue.replaceAll('\'', '');
                 }
             }
 
@@ -172,7 +170,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/common/popup/selectStore/getSelectUploadStoreExcelUploadSave.sb', /* 통신할 URL */
+            url    : '/iostock/cmm/iostockCmm/getSelectUploadProdExcelUploadSave.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
@@ -181,8 +179,8 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
                     // 저장기능 수행후 재조회
-                    var scope = agrid.getScope($("#selectUploadStoreExcelUploadTargetId").text() + 'Ctrl');
-                    scope.searchStoreUpload();
+                    var scope = agrid.getScope($("#selectUploadProdExcelUploadTargetId").text() + 'Ctrl');
+                    scope.searchProdUpload();
                 }
             }
         }, function errorCallback(response) {

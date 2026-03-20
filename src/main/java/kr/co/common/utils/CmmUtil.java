@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -526,5 +526,27 @@ public class CmmUtil {
              }
         }
         return str.split("【】》》");
+    }
+
+    /**
+     *  로그인 시 아이디 체크
+     */
+    public static boolean isBlockedId(String id){
+
+        Set<String> blockedIds = Stream.of("admin", "administrator", "root", "test", "guest", "user", "manager", "system", "superadmin", "master"
+                , "CTXSYS", "tomcat", "Dba", "HR", "MDSYS", "Mon_user", "OE", "OLAPDBA", "OLAPSYS", "ORACLE", "ORDPLUGINS", "ORDSYS"
+                , "OUTLN", "PM", "PlAdmin", "PortalAdmin", "QS", "QS_ADM", "QS_CBADM", "QS_CS", "QS_ES", "QS_OS", "QS_WS", "RMAN", "SCOTT"
+                , "SH", "SYS", "SYSTEM", "WKSYS", "both", "dbo", "demo", "distributor_admin", "entldbdbo", "entldbreader", "jagadmin", "missys"
+                , "pkiuser", "pso", "repl_publisher", "repl_subscriber", "role1", "sybmail", "DBSNMP", "Administrator", "Guest"
+                , "accountAdmin01", "accountUser", "adm", "admin", "admin1", "admin123", "appAdmin", "dasusr1", "db2admin", "db2fenc1"
+                , "db2inst1", "evnt", "gold", "guest", "manneger", "master", "mongouser", "mysql", "probe", "reportsUser", "root"
+                , "root123", "sa", "test", "test1", "testuser", "user"
+        ).map(String::toLowerCase).collect(Collectors.toSet());
+
+        if (blockedIds.contains(id.toLowerCase())) {
+            return true;
+        }else{
+            return false;
+        }
     }
 }

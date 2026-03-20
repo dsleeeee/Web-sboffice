@@ -96,6 +96,20 @@
                 </div>
               </td>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+              <tr>
+                  <%-- 업로드매장 --%>
+                <th><s:message code="selectProdMMoms.uploadProd" /></th>
+                <td>
+                  <input type="text" id="popUploadProd" ng-model="popUploadProd" readonly/>
+                </td>
+                <td colspan="2">
+                  <jsp:include page="/WEB-INF/view/common/popup/selectUploadProd.jsp" flush="true">
+                    <jsp:param name="targetId" value="${param.targetId}SelectUploadProd"/>
+                  </jsp:include>
+                </td>
+              </tr>
+            </c:if>
             </tbody>
           </table>
 
@@ -199,6 +213,9 @@
         }
         $scope.srchPopProdHqBrandCombo.selectedIndex = 0;
       });
+
+      // 업로드매장 텍스트박스 조회
+      $scope.selectUploadProdText();
 
       if ($scope.searchFg == "N") {
         $scope.searchProd();
@@ -358,6 +375,27 @@
     $scope.delProdClass = function(){
       $scope.popProdClassCd = "";
       $scope.popProdClassNm = "";
+    };
+
+    // 업로드매장 팝업
+    $scope.selectUploadProdShow = function () {
+      $scope._broadcast(targetId + 'SelectUploadProdCtrl');
+    };
+
+    // 업로드매장 텍스트박스 조회
+    $scope.selectUploadProdText = function () {
+      var params = {};
+
+      $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/getSelectUploadProdText.sb', params, function (response) {
+        var textList = response.data.data.result;
+        $scope.textList = textList;
+
+        if(textList.prodCnt < 1) {
+          $scope.popUploadProd = "업로드된 상품 없음";
+        } else {
+          $scope.popUploadProd = "상품 " + textList.prodCnt + "건";
+        }
+      });
     };
 
   }]);

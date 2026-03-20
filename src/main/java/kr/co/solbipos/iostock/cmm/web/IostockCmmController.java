@@ -8,6 +8,7 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -455,5 +456,98 @@ public class IostockCmmController {
         List<DefaultMap<String>> list = iostockCmmService.selectEmpList(iostockCmmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 업로드상품 공통 - 업로드상품 텍스트박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김유승
+     * @since   2026. 03. 18.
+     */
+    @RequestMapping(value = "/getSelectUploadProdText.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadProdText(IostockCmmVO iostockCmmVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = iostockCmmService.getSelectUploadProdText(iostockCmmVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 업로드상품 공통 - 업로드상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김유승
+     * @since   2026. 03. 18.
+     */
+    @RequestMapping(value = "/getSelectUploadProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadProdList(HttpServletRequest request, HttpServletResponse response,
+                                        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.getSelectUploadProdList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 업로드상품 공통 - 검증결과 전체 삭제
+     *
+     * @param   iostockCmmVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2026. 03. 18.
+     */
+    @RequestMapping(value = "/getSelectUploadProdExcelUploadDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadProdExcelUploadDeleteAll(@RequestBody IostockCmmVO iostockCmmVO, HttpServletRequest request,
+                                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = iostockCmmService.getSelectUploadProdExcelUploadDeleteAll(iostockCmmVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 업로드상품 공통 - 검증결과 저장
+     *
+     * @param   iostockCmmVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2026. 03. 18.
+     */
+    @RequestMapping(value = "/getSelectUploadProdExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadProdExcelUploadSave(@RequestBody IostockCmmVO[] iostockCmmVOs, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = iostockCmmService.getSelectUploadProdExcelUploadSave(iostockCmmVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

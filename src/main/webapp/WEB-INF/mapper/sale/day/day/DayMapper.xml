@@ -12,14 +12,24 @@
     -->
     <select id="getPayColList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getPayColList */
-        <![CDATA[
-        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
-        FROM    TB_CM_NMCODE tcn
-        WHERE   tcn.NMCODE_GRP_CD   =   '024'
-        AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
-        ORDER
-        BY      tcn.NMCODE_CD
-        ]]>
+        <choose>
+        <when test='hqOfficeCd != null and hqOfficeCd == "H0393"'>
+            SELECT  tcn.NMCODE_CD AS PAY_CD, DECODE(tcn.NMCODE_CD,'06','선불카드',tcn.NMCODE_NM) AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM    TB_CM_NMCODE tcn
+            WHERE   tcn.NMCODE_GRP_CD   =   '024'
+            AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+            ORDER
+            BY      tcn.NMCODE_CD
+        </when>
+        <otherwise>
+            SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM    TB_CM_NMCODE tcn
+            WHERE   tcn.NMCODE_GRP_CD   =   '024'
+            AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+            ORDER
+            BY      tcn.NMCODE_CD
+        </otherwise>
+        </choose>
     </select>
     <!-- 일자별 - 결제수단 컬럼 리스트 조회(현금영수증 포함) -->
     <!--
@@ -29,28 +39,56 @@
     -->
     <select id="getPayColAddList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getPayColAddList */
-        SELECT
-        PAY_CD,
-        PAY_NM,
-        PAY_METHOD
-        FROM
-        (
+        <choose>
+        <when test='hqOfficeCd != null and hqOfficeCd == "H0393"'>
+            SELECT
+            PAY_CD,
+            PAY_NM,
+            PAY_METHOD
+            FROM
+            (
+                SELECT  tcn.NMCODE_CD AS PAY_CD, DECODE(tcn.NMCODE_CD,'06','선불카드',tcn.NMCODE_NM) AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+                FROM    TB_CM_NMCODE tcn
+                WHERE   tcn.NMCODE_GRP_CD   =   '024'
+                AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+                ORDER
+                BY      tcn.NMCODE_CD
+            )
+            UNION ALL
+            (
+                SELECT
+                '021' AS PAY_CD,
+                '현금영수증' AS PAY_NM,
+                'CASH_BILL' AS PAY_METHOD
+                FROM dual
+            )
+            ORDER BY PAY_CD
+        </when>
+        <otherwise>
+            SELECT
+            PAY_CD,
+            PAY_NM,
+            PAY_METHOD
+            FROM
+            (
             SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
             FROM    TB_CM_NMCODE tcn
             WHERE   tcn.NMCODE_GRP_CD   =   '024'
             AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
             ORDER
             BY      tcn.NMCODE_CD
-        )
-        UNION ALL
-        (
+            )
+            UNION ALL
+            (
             SELECT
             '021' AS PAY_CD,
             '현금영수증' AS PAY_NM,
             'CASH_BILL' AS PAY_METHOD
             FROM dual
-        )
-        ORDER BY PAY_CD
+            )
+            ORDER BY PAY_CD
+        </otherwise>
+        </choose>
     </select>
 
     <!-- 일자별 - 모바일페이상세 컬럼 리스트 조회 -->

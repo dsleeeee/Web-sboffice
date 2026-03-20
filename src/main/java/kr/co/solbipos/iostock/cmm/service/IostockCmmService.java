@@ -48,4 +48,16 @@ public interface IostockCmmService {
 
     /** 선택상품 공통 - 사원 리스트 조회 */
     List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 업로드상품 공통 - 업로드상품 텍스트박스 조회 */
+    DefaultMap<Object> getSelectUploadProdText(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 업로드상품 공통 - 업로드상품 리스트 조회 */
+    List<DefaultMap<String>> getSelectUploadProdList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 업로드상품 공통 - 검증결과 전체 삭제 */
+    int getSelectUploadProdExcelUploadDeleteAll(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 업로드상품 공통 - 검증결과 저장 */
+    int getSelectUploadProdExcelUploadSave(IostockCmmVO[] iostockCmmVOs, SessionInfoVO sessionInfoVO);
 }
