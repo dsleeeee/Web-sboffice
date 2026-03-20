@@ -331,20 +331,6 @@ app.controller('storeSoldOutHistoryCtrl', ['$scope', '$http', '$timeout', functi
             $("#tblSearchAddShow").hide();
         }
     };
-
-    $scope.remark1 = function (){
-        $scope.saleAmtFgRemarkPopupLayer.show();
-        $scope._broadcast('saleAmtFgRemarkPopupCtrl');
-    };
-    $scope.remark2 = function (){
-        $scope._popMsg("구성상품 금액은 세트상품으로 집계");
-    };
-    $scope.remark3 = function (){
-        $scope.saleAmtFgRemark3PopupLayer.show();
-        $scope._broadcast('saleAmtFgRemarkPopupCtrl3');
-        // 기능수행 종료 : 반드시 추가
-        event.preventDefault();
-    };
 }]);
 
 
