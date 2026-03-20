@@ -225,6 +225,7 @@
         <choose>
             <when test="uniqueId != null and uniqueId != ''">
                 AND   UNIQUE_ID = #{uniqueId}
+                AND   STORE_CD = #{storeCd}
             </when>
             <otherwise>
                 AND   HQ_OFFICE_CD = #{hqOfficeCd}
