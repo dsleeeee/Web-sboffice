@@ -70,7 +70,8 @@
             AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER
-        BY      A.STORE_CD
+        BY      C.HQ_OFFICE_CD
+        ,       A.STORE_CD
         ,       A.SALE_DATE
         ,       A.POS_NO
         ,       A.SEQ
