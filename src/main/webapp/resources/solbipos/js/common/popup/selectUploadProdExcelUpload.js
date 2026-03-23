@@ -113,7 +113,9 @@ app.controller('selectUploadProdExcelUploadCtrl', ['$scope', '$http', '$timeout'
                 if ($scope.selectUploadProdExcelUploadFlex.columns[c].header !== null && nvl($scope.selectUploadProdExcelUploadFlex.getCellData(r, c, false), null) !== null) {
                     var colBinding = $scope.colHeaderBind[$scope.selectUploadProdExcelUploadFlex.columns[c].header.replaceAll('\'', '').replaceAll(' ', '')];
                     var cellValue  = $scope.selectUploadProdExcelUploadFlex.getCellData(r, c, false) + '';
-                    item[colBinding] = cellValue.replaceAll('\'', '');
+                    if (colBinding === "prodCd") {
+                        item[colBinding] = cellValue.replaceAll('\'', '');
+                    }
                 }
             }
 

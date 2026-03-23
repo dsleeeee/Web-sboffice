@@ -114,7 +114,9 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
                     if ($scope.selectUploadStoreExcelUploadFlex.columns[c].header !== null && nvl($scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false), null) !== null) {
                         var colBinding = $scope.colHeaderBind[$scope.selectUploadStoreExcelUploadFlex.columns[c].header.replaceAll('\'', '').replaceAll(' ', '')];
                         var cellValue  = $scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false) + '';
-                        item[colBinding] = cellValue.replaceAll('\'', '');
+                        if (colBinding === "storeCd") {
+                            item[colBinding] = cellValue.replaceAll('\'', '');
+                        }
                     }
                 }
             }

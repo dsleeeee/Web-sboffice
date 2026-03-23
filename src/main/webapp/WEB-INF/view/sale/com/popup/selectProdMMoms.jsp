@@ -116,7 +116,7 @@
         <%--위즈모 테이블--%>
         <div class="theGrid mt10" style="height: 400px;">
           <wj-flex-grid
-            id="wjGridProdM"
+            id="wjGridProdM${param.targetId}"
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
@@ -208,7 +208,7 @@
                     eval('$scope.'+closeFunc[i]+'()');
                 }
             }else{
-                eval('$scope.${param.closeFunc}()');                            
+                eval('$scope.${param.closeFunc}()');
             }
         }
         $scope.srchPopProdHqBrandCombo.selectedIndex = 0;
@@ -224,9 +224,10 @@
       event.preventDefault();
     });
 
+    // 필터 클릭 시
     $scope.searchFilter = function (){
-      var grid = wijmo.Control.getControl("#wjGridProdM");
-      var filter = $("#filterProdNm").val();
+      var grid = wijmo.Control.getControl("#wjGridProdM" + targetId);
+      var filter = $scope.filterProdNm;
 
       if(grid.rows.length > 0){
 
@@ -260,7 +261,7 @@
       if(isChecked){
         // 필터 클릭 상태일 시
         if($scope.allChkFg){
-          var grid = wijmo.Control.getControl("#wjGridProdM");
+          var grid = wijmo.Control.getControl("#wjGridProdM" + targetId);
 
           if(grid.rows.length > 0){
             for (var i = 0; i < grid.rows.length; i++) {
@@ -320,7 +321,7 @@
       $("#" + targetId + "Cd").val(arrProdCd.join());
       $("#" + targetPosId + "Cd").val("");
       $("#" + targetPosId + "Name").val(messages["cmm.all"]);
-      
+
       $("#" + targetCornerId + "Cd").val("");
       $("#" + targetCornerId + "Name").val(messages["cmm.all"]);
 
