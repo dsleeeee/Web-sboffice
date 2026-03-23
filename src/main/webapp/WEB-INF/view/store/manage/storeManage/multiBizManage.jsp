@@ -99,4 +99,4 @@
     var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/multiBizManage.js?ver=20250401.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/multiBizManage.js?ver=20260323.03" charset="utf-8"></script>

@@ -28,6 +28,7 @@ var mcoupnList = new Array();
 var paperVoucherList = new Array();
 var taxRefundList = new Array();
 var sktList = new Array();
+var IAurora = new Array();
 var cornerFgList = [];
 var cornerFgListDataMap = [];
 
@@ -46,6 +47,8 @@ for (var i in vandorList) {
         taxRefundList.push(vandorList[i].name);
     } else if (vandorList[i].vanFg === '08') {
         sktList.push(vandorList[i].name);
+    } else if (vandorList[i].vanFg === '09') {
+        IAurora.push(vandorList[i].name);
     }
 }
 
@@ -263,6 +266,9 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                         break;
                     case '08':
                         col.dataMap = sktList;
+                        break;
+                    case '09':
+                        col.dataMap = IAurora;
                         break;
                 }
             }
@@ -694,7 +700,7 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.checked = function (item){
         item.gChk = true;
     };
-    
+
     // 콤보박스 데이터 초기화
     $scope.resetCombobox = function () {
         $scope.cornerFgArr = [];

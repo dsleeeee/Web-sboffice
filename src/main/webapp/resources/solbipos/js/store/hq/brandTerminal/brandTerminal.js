@@ -22,6 +22,7 @@ var mcoupnList  = new Array();
 var paperVoucherList  = new Array();
 var taxRefundList  = new Array();
 var sktList = new Array();
+var IAurora = new Array();
 
 for(var i in vandorList) {
   if(vandorList[i].vanFg === '01'){
@@ -38,6 +39,8 @@ for(var i in vandorList) {
     taxRefundList.push(vandorList[i].name);
   } else if(vandorList[i].vanFg === '08'){
     sktList.push(vandorList[i].name);
+  } else if (vandorList[i].vanFg === '09') {
+    IAurora.push(vandorList[i].name);
   }
 }
 /**********************************************************************
@@ -271,6 +274,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             break;
           case '08':
             col.dataMap = sktList;
+            break;
+          case '09':
+            col.dataMap = IAurora;
             break;
         }
       }

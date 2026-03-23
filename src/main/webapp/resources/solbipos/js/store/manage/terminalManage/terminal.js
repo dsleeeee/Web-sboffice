@@ -28,6 +28,7 @@ var mcoupnList = new Array();
 var paperVoucherList = new Array();
 var taxRefundList = new Array();
 var sktList = new Array();
+var IAurora = new Array();
 var cornerFgList = [];
 var cornerFgListDataMap = [];
 
@@ -46,6 +47,8 @@ for (var i in vandorList) {
         taxRefundList.push(vandorList[i].name);
     } else if (vandorList[i].vanFg === '08') {
         sktList.push(vandorList[i].name);
+    } else if (vandorList[i].vanFg === '09') {
+        IAurora.push(vandorList[i].name);
     }
 }
 /**********************************************************************
@@ -406,7 +409,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
                         // 터미널 환경설정 변경
                         $scope.changeTerminalPos(params);
                     }else{
-                        // 다중 사업자 값 없을 시 포스별 승인으로 변경 
+                        // 다중 사업자 값 없을 시 포스별 승인으로 변경
 
                         // [매장정보]탭 터미널정보 입력 안내 팝업 오픈
                         $scope.storeTerminalExampleLayer.show(true);
@@ -732,6 +735,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                         break;
                     case '08':
                         col.dataMap = sktList;
+                        break;
+                    case '09':
+                        col.dataMap = IAurora;
                         break;
                 }
             }
@@ -1224,6 +1230,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                         break;
                     case '08':
                         col.dataMap = sktList;
+                        break;
+                    case '09':
+                        col.dataMap = IAurora;
                         break;
                 }
             }
