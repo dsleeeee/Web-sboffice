@@ -41,7 +41,8 @@ app.controller('searchStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
+        var nScope = agrid.getScope("regPosLogCtrl");
+        nScope.reset();
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -55,6 +56,7 @@ app.controller('searchStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var params        = {};
         params.listScale = 500;
+
         $scope._inquiryMain("/sys/admin/posLogCollectMgmt/posLogCollectMgmt/getSearchStoreList.sb", params, function () {
             // paging 영역 보이도록
             var vCtrlPager = document.getElementById('searchStoreCtrlPager');
@@ -69,11 +71,36 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('regPosLogCtrl', $scope, $http, true));
 
-    // 콤보박스 셋팅
-    $scope._setComboData("regCommandTypeComboData", regCommandTypeComboData); // 명령타입
-    $scope._setComboData("regLogTypeComboData", regLogTypeComboData); // 로그타입
-    $scope._setComboData("regDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
-    $scope._setComboData("regSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
+    // DB_SELECT 콤보박스 셋팅
+    $scope._setComboData("dbSelectCommandTypeComboData", [
+        {"name": "DB_SELECT", "value": "DB_SELECT"}
+    ]);
+    $scope._setComboData("dbSelectLogTypeComboData", [
+        {"name": "선택없음", "value": ""}
+    ]);
+    $scope._setComboData("dbSelectDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
+    $scope._setComboData("dbSelectSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
+
+    // DB_TABLE 콤보박스 셋팅
+    $scope._setComboData("dbTableCommandTypeComboData", [
+        {"name": "DB_TABLE", "value": "DB_TABLE"}
+    ]);
+    $scope._setComboData("dbTableLogTypeComboData", [
+        {"name": "FULL", "value": "FULL"},
+        {"name": "선택", "value": "SELECT"}
+    ]);
+    $scope._setComboData("dbTableDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
+    $scope._setComboData("dbTableSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
+
+    // LOG_FILE 콤보박스 셋팅
+    $scope._setComboData("logFileCommandTypeComboData", [
+        {"name": "LOG_FILE", "value": "LOG_FILE"}
+    ]);
+    $scope._setComboData("logFileLogTypeComboData", [
+        {"name": "선택", "value": "SELECT"}
+    ]);
+    $scope._setComboData("logFileDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
+    $scope._setComboData("logFileSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -85,73 +112,55 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // 초기화
     $scope.reset = function () {
-        $scope.sql = '';
-        $scope.vcatPath = '';
-        $scope.remark = '';
-        $scope.regCommandTypeCombo.selectedIndex = 0;
-        $scope.regLogTypeCombo.selectedIndex = 0;
-        $scope.regDbBackupCombo.selectedIndex = 0;
-        $scope.regSmartOrderCombo.selectedIndex = 0;
+
+        var scope = agrid.getScope('searchStoreCtrl');
+
+        // 상단 검색조건 초기화
+        scope.hqOfficeCd   = '';
+        scope.hqOfficeNm   = '';
+        scope.storeCd      = '';
+        scope.storeNm      = '';
+
+        $("#regHqOfficeCd").val("");
+        $("#regHqOfficeNm").val("");
+        $("#regStoreCd").val("");
+        $("#regStoreNm").val("");
+
+        // 하단 입력정보 데이터 초기화
+        $scope.sql              = '';
+        $scope.dbSelectVcatPath = '';
+        $scope.dbSelectRemark   = '';
+        $scope.dbTableVcatPath  = '';
+        $scope.dbTableRemark    = '';
+        $scope.logFileVcatPath  = '';
+        $scope.logFileRemark    = '';
+        $scope.dbTableLogTypeCombo.selectedIndex        = 0;
+        $scope.dbSelectDbBackupCombo.selectedIndex      = 1;
+        $scope.dbSelectSmartOrderCombo.selectedIndex    = 1;
+        $scope.dbTableDbBackupCombo.selectedIndex       = 1;
+        $scope.dbTableSmartOrderCombo.selectedIndex     = 1;
+        $scope.logFileDbBackupCombo.selectedIndex       = 1;
+        $scope.logFileSmartOrderCombo.selectedIndex     = 1;
         var todayStr = getToday();
-        $scope.dateFromCombo.value = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
-        $scope.dateToCombo.value = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.dbSelectSrchDateFromCombo.value  = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.dbSelectSrchDateToCombo.value    = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.dbTableSrchDateFromCombo.value   = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.dbTableSrchDateToCombo.value     = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.logFileSrchDateFromCombo.value   = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
+        $scope.logFileSrchDateToCombo.value     = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
         $('input[name="tableLogTypeFg"]').prop('checked', false);
         $('input[name="logFileTypeFg"]').prop('checked', false);
-    };
-
-    // 명령타입 변경 시
-    $scope.changeCommandType = function(s) {
-        var filteredData = [];
-
-        if (s.selectedValue === "DB_SELECT") {
-            // 선택없음만
-            filteredData = regLogTypeComboData.filter(function (item) {
-                return item.value === "";
-            });
-
-            $scope.showSqlDiv = true;
-            $scope.showTableLogTypeFg = false;
-            $scope.showLogFileTypeFg = false;
-
-        } else if (s.selectedValue === "DB_TABLE") {
-            // FULL + 선택
-            filteredData = regLogTypeComboData.filter(function (item) {
-                return item.value === "FULL" || item.value === "SELECT";
-            });
-
-            $scope.showSqlDiv = false;
-            $scope.showTableLogTypeFg = false;
-            $scope.showLogFileTypeFg = false;
-
-        } else if (s.selectedValue === "LOG_FILE") {
-            // 선택만
-            filteredData = regLogTypeComboData.filter(function (item) {
-                return item.value === "SELECT";
-            });
-            $scope.showSqlDiv = false;
-            $scope.showTableLogTypeFg = false;
-            $scope.showLogFileTypeFg = true;
-        }
-
-        // 콤보 데이터 다시 세팅
-        $scope._setComboData("regLogTypeComboData", filteredData);
-
-        // 선택값 초기화 (안전하게)
-        $scope.regLogType = "";
-        $scope.sql = '';
-        $scope.vcat = '';
-        $scope.remark = '';
+        $('input[name="commandType"]').prop('checked', false);
     };
 
     // 로그타입 변경 시
-    $scope.changeLogType = function(s) {
+    $scope.changeDbTableLogType = function(s) {
 
-        if($scope.regCommandTypeCombo.selectedValue === "DB_TABLE" && s.selectedValue === "SELECT"){
+        if(s.selectedValue === "SELECT"){
                 $scope.showTableLogTypeFg = true;
         } else{
             $scope.showTableLogTypeFg = false;
         }
-
     };
 
     // 등록
@@ -160,48 +169,57 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.stepCnt = 50;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
-        var logType = '';
+        var dbTableLogType = '';
+        var logFileLogType = '';
 
-        // 명령타입이 DB_TABLE/LOG_FILE일 때 로그타입 체크여부 확인
-        if($scope.regCommandTypeCombo.selectedValue === "DB_TABLE"){
-            if($scope.regLogTypeCombo.selectedValue === "SELECT") {
-                if ($('input[name="tableLogTypeFg"]:checked').length <= 0) {
-                    $scope._popMsg(messages["posLogCollectMgmt.msg.tableLogTypeSelect"]); // OD,SL,RV 선택하여주십시오
+        // 명령타입 체크여부 확인
+        if ($('input[name="commandType"]:checked').length > 0) {
+            // DB_SELECT 체크 시
+            if ($('#dbSelect').is(':checked')) {
+                if (!$scope.sql || !$scope.sql.trim()) {
+                    $scope._popMsg(messages["posLogCollectMgmt.msg.sql"]); //SQL을 작성하여 주십시오.
+                    return false;
+                }
+                if(nvl($scope.sql, '').getByteLengthForOracle() > 4000){
+                    $scope._popMsg(messages['posLogCollectMgmt.sql'] + "은 4000" + messages["verManage.byte"] + "제한(확인: "+nvl($scope.sql, '').getByteLengthForOracle()+ messages["verManage.byte"] +")");
+                    return false;
+                }
+            }
+            // DB_TABLE 체크 시
+            if ($('#dbTable').is(':checked')) {
+                if ($scope.dbTableLogTypeCombo.selectedValue === "SELECT") {
+                    if ($('input[name="tableLogTypeFg"]:checked').length <= 0) {
+                        $scope._popMsg(messages["posLogCollectMgmt.msg.tableLogTypeSelect"]); // OD,SL,RV 선택하여주십시오
+                        return false;
+                    } else {
+                        dbTableLogType = $('input[name="tableLogTypeFg"]:checked').map(function () {
+                            return this.value;
+                        }).get().join(",");
+                    }
+                } else {
+                    dbTableLogType = $scope.dbTableLogTypeCombo.selectedValue;
+                }
+            }
+            // LOG_FILE 체크 시
+            if ($('#logFile').is(':checked')) {
+                if ($('input[name="logFileTypeFg"]:checked').length <= 0) {
+                    $scope._popMsg(messages["posLogCollectMgmt.msg.logFileTypeFgSelect"]); // POS,VCAT,PaycoVCAT,PaycoVMEM,PaycoVORDER 선택하여주십시오
                     return false;
                 } else {
-                    logType = $('input[name="tableLogTypeFg"]:checked').map(function () {
+                    logFileLogType = $('input[name="logFileTypeFg"]:checked').map(function () {
                         return this.value;
                     }).get().join(",");
                 }
-            }else{
-                logType = $scope.regLogTypeCombo.selectedValue;
             }
-        }else if($scope.regCommandTypeCombo.selectedValue === "LOG_FILE"){
-            if ($('input[name="logFileTypeFg"]:checked').length <= 0) {
-                $scope._popMsg(messages["posLogCollectMgmt.msg.logFileTypeFgSelect"]); // POS,VCAT,PaycoVCAT,PaycoVMEM,PaycoVORDER 선택하여주십시오
-                return false;
-            }else{
-                logType = $('input[name="logFileTypeFg"]:checked').map(function () {return this.value;}).get().join(",");
-            }
-        }else if($scope.regCommandTypeCombo.selectedValue === "DB_SELECT"){
-            if (!$scope.sql || !$scope.sql.trim()) {
-                $scope._popMsg(messages["posLogCollectMgmt.msg.sql"]); //SQL을 작성하여 주십시오.
-                return false;
-            }
-        }
-
-        if(nvl($scope.sql, '').getByteLengthForOracle() > 4000){
-            $scope._popMsg(messages['posLogCollectMgmt.sql'] + "은 4000" + messages["verManage.byte"] + "제한(확인: "+nvl($scope.sql, '').getByteLengthForOracle()+ messages["verManage.byte"] +")");
+        }else {
+            $scope._popMsg(messages["posLogCollectMgmt.msg.commandType"]); // 명령타입을 선택하여 주십시오
             return false;
         }
 
-        if(!$scope.remark || !$scope.remark.trim()){
-            $scope._popMsg(messages["posLogCollectMgmt.msg.remark"]); // 사유 작성하여 주십시오.
-            return false;
-        }
 
         var scope = agrid.getScope('searchStoreCtrl');
 
+        // 매장 그리드 확인
         if (scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
             return false;
@@ -210,20 +228,53 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         var params = [];
         for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
             var item = scope.flex.collectionView.items[i];
-            if(item.gChk) {
-                item.commandType        = $scope.regCommandTypeCombo.selectedValue;
-                item.logType            = logType;
-                item.dateFrom           = wijmo.Globalize.format($scope.dateFromCombo.value, 'yyyyMMdd');
-                item.dateTo             = wijmo.Globalize.format($scope.dateToCombo.value, 'yyyyMMdd');
-                item.sql                = $scope.sql;
-                item.includeDbBackup    = $scope.regDbBackupCombo.selectedValue;
-                item.smartOrderYn       = $scope.regSmartOrderCombo.selectedValue;
-                item.vcatPath           = $scope.vcatPath;
-                item.remark             = $scope.remark;
-                params.push(item);
+            if (item.gChk) {
+                // DB_SELECT 체크 시
+                if ($('#dbSelect').is(':checked')) {
+                    var newItem = angular.copy(item);
+                    newItem.commandType = "DB_SELECT"
+                    newItem.logType = "";
+                    newItem.dateFrom = wijmo.Globalize.format($scope.dbSelectSrchDateFrom.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.dbSelectSrchDateTo.value, 'yyyyMMdd');
+                    newItem.sql = $scope.sql;
+                    newItem.includeDbBackup = $scope.dbSelectDbBackupCombo.selectedValue;
+                    newItem.smartOrderYn = $scope.dbSelectSmartOrderCombo.selectedValue;
+                    newItem.vcatPath = $scope.dbSelectVcatPath;
+                    newItem.remark = $scope.dbSelectRemark;
+                    params.push(newItem);
+                }
+                // DB_TABLE 체크 시
+                if ($('#dbTable').is(':checked')) {
+                    var newItem = angular.copy(item);
+                    newItem.commandType = "DB_TABLE"
+                    newItem.logType = dbTableLogType;
+                    newItem.dateFrom = wijmo.Globalize.format($scope.dbTableSrchDateFrom.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.dbTableSrchDateTo.value, 'yyyyMMdd');
+                    newItem.sql = "";
+                    newItem.includeDbBackup = $scope.dbTableDbBackupCombo.selectedValue;
+                    newItem.smartOrderYn = $scope.dbTableSmartOrderCombo.selectedValue;
+                    newItem.vcatPath = $scope.dbTableVcatPath;
+                    newItem.remark = $scope.dbTableRemark;
+                    params.push(newItem);
+                }
+                // LOG_FILE 체크 시
+                if ($('#logFile').is(':checked')) {
+                    var newItem = angular.copy(item);
+                    newItem.commandType = "LOG_FILE"
+                    newItem.logType = logFileLogType;
+                    newItem.dateFrom = wijmo.Globalize.format($scope.logFileSrchDateFrom.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.logFileSrchDateTo.value, 'yyyyMMdd');
+                    newItem.sql = "";
+                    newItem.includeDbBackup = $scope.logFileDbBackupCombo.selectedValue;
+                    newItem.smartOrderYn = $scope.logFileSmartOrderCombo.selectedValue;
+                    newItem.vcatPath = $scope.logFileVcatPath;
+                    newItem.remark = $scope.logFileRemark;
+                    params.push(newItem);
+                }
             }
         }
 
+        // 체크된 데이터 없을 시
         if (params.length <= 0) {
             $scope._popMsg(messages["cmm.not.select"]);
             return false;

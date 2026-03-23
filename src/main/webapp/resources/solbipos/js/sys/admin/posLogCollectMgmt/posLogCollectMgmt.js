@@ -134,11 +134,6 @@ app.controller('posLogCollectMgmtCtrl', ['$scope', '$http', '$timeout', function
             vCtrlPager.style.visibility='hidden'
             var nScope = agrid.getScope("regPosLogCtrl");
             nScope.reset();
-
-            $("#regHqOfficeCd").val("");
-            $("#regHqOfficeNm").val("");
-            $("#regStoreCd").val("");
-            $("#regStoreNm").val("");
         });
     }
 

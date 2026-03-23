@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="posLogRegistLayer" control="posLogRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;overflow-y:auto;">
+<wj-popup id="posLogRegistLayer" control="posLogRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;overflow-y:auto;">
     <div class="wj-dialog wj-dialog-columns title">
 
         <%-- header --%>
@@ -111,19 +111,18 @@
                             <tr>
                                 <%-- 명령타입 --%>
                                 <th>
-                                    <s:message code="posLogCollectMgmt.commandType"/>
+                                    <input type="checkbox" class="fr" id="dbSelect" value="DB_SELECT" name="commandType"><label for="dbSelect" class="ml5 mr5"></label>
                                 </th>
                                 <td>
                                     <div class="sb-select">
                                         <wj-combo-box
-                                                id="regCommandType"
-                                                ng-model="regCommandType"
-                                                items-source="_getComboData('regCommandTypeComboData')"
+                                                id="dbSelectCommandType"
+                                                ng-model="dbSelectCommandType"
+                                                items-source="_getComboData('dbSelectCommandTypeComboData')"
                                                 display-member-path="name"
                                                 selected-value-path="value"
                                                 is-editable="false"
-                                                control="regCommandTypeCombo"
-                                                text-changed="changeCommandType(s)">
+                                                control="dbSelectCommandTypeCombo">
                                         </wj-combo-box>
                                     </div>
                                 </td>
@@ -136,28 +135,15 @@
                                 <td>
                                     <div class="sb-select">
                                         <wj-combo-box
-                                                id="regLogType"
-                                                ng-model="regLogType"
-                                                items-source="_getComboData('regLogTypeComboData')"
+                                                id="dbSelectLogType"
+                                                ng-model="dbSelectLogType"
+                                                items-source="_getComboData('dbSelectLogTypeComboData')"
                                                 display-member-path="name"
                                                 selected-value-path="value"
                                                 is-editable="false"
-                                                control="regLogTypeCombo"
-                                                text-changed="changeLogType(s)">
+                                                control="dbSelectLogTypeCombo">
                                         </wj-combo-box>
                                     </div>
-                                </td>
-                                <td colspan="3" ng-show="showTableLogTypeFg">
-                                    <input type="checkbox" id="od" value="OD" name="tableLogTypeFg"><label for="od" class="ml5 mr5"><s:message code='posLogCollectMgmt.od' /></label>
-                                    <input type="checkbox" id="sl" value="SL" name="tableLogTypeFg"><label for="sl" class="ml5 mr5"><s:message code='posLogCollectMgmt.sl' /></label>
-                                    <input type="checkbox" id="rv" value="RV" name="tableLogTypeFg"><label for="rv" class="ml5 mr5"><s:message code='posLogCollectMgmt.rv' /></label>
-                                </td>
-                                <td colspan="3" ng-show="showLogFileTypeFg">
-                                    <input type="checkbox" id="pos"         value="POS"         name="logFileTypeFg"><label for="pos"         class="ml5 mr5"><s:message code='posLogCollectMgmt.pos' /></label>
-                                    <input type="checkbox" id="vcat"        value="VCAT"        name="logFileTypeFg"><label for="vcat"        class="ml5 mr5"><s:message code='posLogCollectMgmt.vcat' /></label>
-                                    <input type="checkbox" id="paycoVcat"   value="PaycoVCAT"   name="logFileTypeFg"><label for="paycoVcat"   class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVcat' /></label>
-                                    <input type="checkbox" id="paycoVmem"   value="PaycoVMEM"   name="logFileTypeFg"><label for="paycoVmem"   class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVmem' /></label>
-                                    <input type="checkbox" id="paycoVorder" value="PaycoVORDER" name="logFileTypeFg"><label for="paycoVorder" class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVorder' /></label>
                                 </td>
                             </tr>
                             <tr>
@@ -169,10 +155,10 @@
                                     <div class="sb-select">
                                         <span class="txtIn w110px">
                                             <wj-input-date
-                                                    id="srchDateFrom"
-                                                    value="dateFrom"
-                                                    ng-model="dateFrom"
-                                                    control="dateFromCombo"
+                                                    id="dbSelectSrchDateFrom"
+                                                    value="dbSelectSrchDateFrom"
+                                                    ng-model="dbSelectSrchDateFrom"
+                                                    control="dbSelectSrchDateFromCombo"
                                                     min="2000-01-01"
                                                     max="2099-12-31"
                                                     initialized="_initDateBox(s)">
@@ -181,10 +167,10 @@
                                         <span class="rg">~</span>
                                         <span class="txtIn w110px">
                                             <wj-input-date
-                                                    id="srchDateTo"
-                                                    value="dateTo"
-                                                    ng-model="dateTo"
-                                                    control="dateToCombo"
+                                                    id="dbSelectSrchDateTo"
+                                                    value="dbSelectSrchDateTo"
+                                                    ng-model="dbSelectSrchDateTo"
+                                                    control="dbSelectSrchDateToCombo"
                                                     min="2000-01-01"
                                                     max="2099-12-31"
                                                     initialized="_initDateBox(s)">
@@ -196,7 +182,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="sqlDiv" ng-show="showSqlDiv">
+                <div id="sqlDiv">
                     <h3 class="h3_tbl"><s:message code="posLogCollectMgmt.sql"/></h3>
                     <div class="tblBr">
                         <table class="tblType01">
@@ -229,13 +215,13 @@
                                 <td>
                                     <div class="sb-select">
                                         <wj-combo-box
-                                                id="regDbBackup"
-                                                ng-model="regDbBackup"
-                                                items-source="_getComboData('regDbBackupComboData')"
+                                                id="dbSelectDbBackup"
+                                                ng-model="dbSelectDbBackup"
+                                                items-source="_getComboData('dbSelectDbBackupComboData')"
                                                 display-member-path="name"
                                                 selected-value-path="value"
                                                 is-editable="false"
-                                                control="regDbBackupCombo">
+                                                control="dbSelectDbBackupCombo">
                                         </wj-combo-box>
                                     </div>
                                 </td>
@@ -246,13 +232,13 @@
                                 <td>
                                     <div class="sb-select">
                                         <wj-combo-box
-                                                id="regSmartOrder"
-                                                ng-model="regSmartOrder"
-                                                items-source="_getComboData('regSmartOrderComboData')"
+                                                id="dbSelectSmartOrder"
+                                                ng-model="dbSelectSmartOrder"
+                                                items-source="_getComboData('dbSelectSmartOrderComboData')"
                                                 display-member-path="name"
                                                 selected-value-path="value"
                                                 is-editable="false"
-                                                control="regSmartOrderCombo">
+                                                control="dbSelectSmartOrderCombo">
                                         </wj-combo-box>
                                     </div>
                                 </td>
@@ -263,7 +249,7 @@
                                     <s:message code="posLogCollectMgmt.vcatPath"/>
                                 </th>
                                 <td colspan="3">
-                                    <input type="text" id="vcatPath" ng-model="vcatPath" />
+                                    <input type="text" id="dbSelectVcatPath" ng-model="dbSelectVcatPath" />
                                 </td>
                             </tr>
                             <tr>
@@ -272,9 +258,320 @@
                                     <s:message code="posLogCollectMgmt.remark"/>
                                 </th>
                                 <td colspan="3">
-                                    <input type="text" id="remark" ng-model="remark" />
+                                    <input type="text" id="dbSelectRemark" ng-model="dbSelectRemark" />
                                 </td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oh tblBr" style="border-top:1px solid #e8e8e8">
+                    <table class="tblType01" >
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- 명령타입 --%>
+                            <th>
+                                <input type="checkbox" class="fr" id="dbTable" value="DB_TABLE" name="commandType"><label for="dbTable" class="ml5 mr5"></label>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="dbTableCommandType"
+                                            ng-model="dbTableCommandType"
+                                            items-source="_getComboData('dbTableCommandTypeComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="dbTableCommandTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 로그타입 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.logType"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="dbTableLogType"
+                                            ng-model="dbTableLogType"
+                                            items-source="_getComboData('dbTableLogTypeComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="dbTableLogTypeCombo"
+                                            text-changed="changeDbTableLogType(s)">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <td colspan="3" ng-show="showTableLogTypeFg">
+                                <input type="checkbox" id="od" value="OD" name="tableLogTypeFg"><label for="od" class="ml5 mr5"><s:message code='posLogCollectMgmt.od' /></label>
+                                <input type="checkbox" id="sl" value="SL" name="tableLogTypeFg"><label for="sl" class="ml5 mr5"><s:message code='posLogCollectMgmt.sl' /></label>
+                                <input type="checkbox" id="rv" value="RV" name="tableLogTypeFg"><label for="rv" class="ml5 mr5"><s:message code='posLogCollectMgmt.rv' /></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 기간 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.periodDay"/>
+                            </th>
+                            <td colspan="3">
+                                <div class="sb-select">
+                                        <span class="txtIn w110px">
+                                            <wj-input-date
+                                                    id="dbTableSrchDateFrom"
+                                                    value="dbTableSrchDateFrom"
+                                                    ng-model="dbTableSrchDateFrom"
+                                                    control="dbTableSrchDateFromCombo"
+                                                    min="2000-01-01"
+                                                    max="2099-12-31"
+                                                    initialized="_initDateBox(s)">
+                                            </wj-input-date>
+                                        </span>
+                                        <span class="rg">~</span>
+                                        <span class="txtIn w110px">
+                                            <wj-input-date
+                                                    id="dbTableSrchDateTo"
+                                                    value="dbTableSrchDateTo"
+                                                    ng-model="dbTableSrchDateTo"
+                                                    control="dbTableSrchDateToCombo"
+                                                    min="2000-01-01"
+                                                    max="2099-12-31"
+                                                    initialized="_initDateBox(s)">
+                                            </wj-input-date>
+                                        </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oh tblBr">
+                    <table class="tblType01" >
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- DB백업 포함여부 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.dbBackupYn"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="dbTableDbBackup"
+                                            ng-model="dbTableDbBackup"
+                                            items-source="_getComboData('dbTableDbBackupComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="dbTableDbBackupCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- 스마트오더 수집여부 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.smartOrder"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="dbTableSmartOrder"
+                                            ng-model="dbTableSmartOrder"
+                                            items-source="_getComboData('dbTableSmartOrderComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="dbTableSmartOrderCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- VCAT 경로 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.vcatPath"/>
+                            </th>
+                            <td colspan="3">
+                                <input type="text" id="dbTableVcatPath" ng-model="dbTableVcatPath" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 사유 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.remark"/>
+                            </th>
+                            <td colspan="3">
+                                <input type="text" id="dbTableRemark" ng-model="dbTableRemark" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oh tblBr" style="border-top:1px solid #e8e8e8">
+                    <table class="tblType01" >
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- 명령타입 --%>
+                            <th>
+                                <input type="checkbox" class="fr" id="logFile" value="LOG_FILE" name="commandType"><label for="logFile" class="ml5 mr5"></label>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="logFileCommandType"
+                                            ng-model="logFileCommandType"
+                                            items-source="_getComboData('logFileCommandTypeComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="logFileCommandTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 로그타입 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.logType"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="logFileLogType"
+                                            ng-model="logFileLogType"
+                                            items-source="_getComboData('logFileLogTypeComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="logFileLogTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <td colspan="3">
+                                <input type="checkbox" id="pos"         value="POS"         name="logFileTypeFg"><label for="pos"         class="ml5 mr5"><s:message code='posLogCollectMgmt.pos' /></label>
+                                <input type="checkbox" id="vcat"        value="VCAT"        name="logFileTypeFg"><label for="vcat"        class="ml5 mr5"><s:message code='posLogCollectMgmt.vcat' /></label>
+                                <input type="checkbox" id="paycoVcat"   value="PaycoVCAT"   name="logFileTypeFg"><label for="paycoVcat"   class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVcat' /></label>
+                                <input type="checkbox" id="paycoVmem"   value="PaycoVMEM"   name="logFileTypeFg"><label for="paycoVmem"   class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVmem' /></label>
+                                <input type="checkbox" id="paycoVorder" value="PaycoVORDER" name="logFileTypeFg"><label for="paycoVorder" class="ml5 mr5"><s:message code='posLogCollectMgmt.paycoVorder' /></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 기간 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.periodDay"/>
+                            </th>
+                            <td colspan="3">
+                                <div class="sb-select">
+                                        <span class="txtIn w110px">
+                                            <wj-input-date
+                                                    id="logFileSrchDateFrom"
+                                                    value="logFileSrchDateFrom"
+                                                    ng-model="logFileSrchDateFrom"
+                                                    control="logFileSrchDateFromCombo"
+                                                    min="2000-01-01"
+                                                    max="2099-12-31"
+                                                    initialized="_initDateBox(s)">
+                                            </wj-input-date>
+                                        </span>
+                                    <span class="rg">~</span>
+                                    <span class="txtIn w110px">
+                                            <wj-input-date
+                                                    id="logFileSrchDateTo"
+                                                    value="logFileSrchDateTo"
+                                                    ng-model="logFileSrchDateTo"
+                                                    control="logFileSrchDateToCombo"
+                                                    min="2000-01-01"
+                                                    max="2099-12-31"
+                                                    initialized="_initDateBox(s)">
+                                            </wj-input-date>
+                                        </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oh tblBr">
+                    <table class="tblType01" >
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- DB백업 포함여부 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.dbBackupYn"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="logFileDbBackup"
+                                            ng-model="logFileDbBackup"
+                                            items-source="_getComboData('logFileDbBackupComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="logFileDbBackupCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- 스마트오더 수집여부 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.smartOrder"/>
+                            </th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="logFileSmartOrder"
+                                            ng-model="logFileSmartOrder"
+                                            items-source="_getComboData('logFileSmartOrderComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="logFileSmartOrderCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- VCAT 경로 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.vcatPath"/>
+                            </th>
+                            <td colspan="3">
+                                <input type="text" id="logFileVcatPath" ng-model="logFileVcatPath" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 사유 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.remark"/>
+                            </th>
+                            <td colspan="3">
+                                <input type="text" id="logFileRemark" ng-model="logFileRemark" />
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -287,4 +584,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260311.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260320.01" charset="utf-8"></script>

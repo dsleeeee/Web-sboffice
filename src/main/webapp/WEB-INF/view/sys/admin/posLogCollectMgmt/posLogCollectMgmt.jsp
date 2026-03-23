@@ -160,7 +160,7 @@
 <script type="text/javascript">
     var userId = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260320.01" charset="utf-8"></script>
 <%-- POS로그수집등록 팝업 --%>
 <c:import url="/WEB-INF/view/sys/admin/posLogCollectMgmt/posLogRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
