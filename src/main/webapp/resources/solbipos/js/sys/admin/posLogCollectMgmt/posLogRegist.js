@@ -78,8 +78,6 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._setComboData("dbSelectLogTypeComboData", [
         {"name": "선택없음", "value": ""}
     ]);
-    $scope._setComboData("dbSelectDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
-    $scope._setComboData("dbSelectSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
 
     // DB_TABLE 콤보박스 셋팅
     $scope._setComboData("dbTableCommandTypeComboData", [
@@ -89,8 +87,6 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         {"name": "FULL", "value": "FULL"},
         {"name": "선택", "value": "SELECT"}
     ]);
-    $scope._setComboData("dbTableDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
-    $scope._setComboData("dbTableSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
 
     // LOG_FILE 콤보박스 셋팅
     $scope._setComboData("logFileCommandTypeComboData", [
@@ -99,7 +95,6 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._setComboData("logFileLogTypeComboData", [
         {"name": "선택", "value": "SELECT"}
     ]);
-    $scope._setComboData("logFileDbBackupComboData", regDbBackupComboData); // DB백업 포함여부
     $scope._setComboData("logFileSmartOrderComboData", regSmartOrderComboData); // 스마트오더 사용여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -127,23 +122,12 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         $("#regStoreNm").val("");
 
         // 하단 입력정보 데이터 초기화
+        $scope.remark           = '';
         $scope.sql              = '';
-        $scope.dbSelectVcatPath = '';
-        $scope.dbSelectRemark   = '';
-        $scope.dbTableVcatPath  = '';
-        $scope.dbTableRemark    = '';
         $scope.logFileVcatPath  = '';
-        $scope.logFileRemark    = '';
         $scope.dbTableLogTypeCombo.selectedIndex        = 0;
-        $scope.dbSelectDbBackupCombo.selectedIndex      = 1;
-        $scope.dbSelectSmartOrderCombo.selectedIndex    = 1;
-        $scope.dbTableDbBackupCombo.selectedIndex       = 1;
-        $scope.dbTableSmartOrderCombo.selectedIndex     = 1;
-        $scope.logFileDbBackupCombo.selectedIndex       = 1;
         $scope.logFileSmartOrderCombo.selectedIndex     = 1;
         var todayStr = getToday();
-        $scope.dbSelectSrchDateFromCombo.value  = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
-        $scope.dbSelectSrchDateToCombo.value    = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
         $scope.dbTableSrchDateFromCombo.value   = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
         $scope.dbTableSrchDateToCombo.value     = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
         $scope.logFileSrchDateFromCombo.value   = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
@@ -234,13 +218,13 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     var newItem = angular.copy(item);
                     newItem.commandType = "DB_SELECT"
                     newItem.logType = "";
-                    newItem.dateFrom = wijmo.Globalize.format($scope.dbSelectSrchDateFrom.value, 'yyyyMMdd');
-                    newItem.dateTo = wijmo.Globalize.format($scope.dbSelectSrchDateTo.value, 'yyyyMMdd');
+                    newItem.dateFrom = "";
+                    newItem.dateTo = "";
                     newItem.sql = $scope.sql;
-                    newItem.includeDbBackup = $scope.dbSelectDbBackupCombo.selectedValue;
-                    newItem.smartOrderYn = $scope.dbSelectSmartOrderCombo.selectedValue;
-                    newItem.vcatPath = $scope.dbSelectVcatPath;
-                    newItem.remark = $scope.dbSelectRemark;
+                    newItem.includeDbBackup = "";
+                    newItem.smartOrderYn = "";
+                    newItem.vcatPath = "";
+                    newItem.remark = $scope.remark;
                     params.push(newItem);
                 }
                 // DB_TABLE 체크 시
@@ -248,13 +232,13 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     var newItem = angular.copy(item);
                     newItem.commandType = "DB_TABLE"
                     newItem.logType = dbTableLogType;
-                    newItem.dateFrom = wijmo.Globalize.format($scope.dbTableSrchDateFrom.value, 'yyyyMMdd');
-                    newItem.dateTo = wijmo.Globalize.format($scope.dbTableSrchDateTo.value, 'yyyyMMdd');
+                    newItem.dateFrom = wijmo.Globalize.format($scope.dbTableSrchDateFromCombo.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.dbTableSrchDateFromCombo.value, 'yyyyMMdd');
                     newItem.sql = "";
-                    newItem.includeDbBackup = $scope.dbTableDbBackupCombo.selectedValue;
-                    newItem.smartOrderYn = $scope.dbTableSmartOrderCombo.selectedValue;
-                    newItem.vcatPath = $scope.dbTableVcatPath;
-                    newItem.remark = $scope.dbTableRemark;
+                    newItem.includeDbBackup = "";
+                    newItem.smartOrderYn = "";
+                    newItem.vcatPath = "";
+                    newItem.remark = $scope.remark;
                     params.push(newItem);
                 }
                 // LOG_FILE 체크 시
@@ -262,13 +246,13 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     var newItem = angular.copy(item);
                     newItem.commandType = "LOG_FILE"
                     newItem.logType = logFileLogType;
-                    newItem.dateFrom = wijmo.Globalize.format($scope.logFileSrchDateFrom.value, 'yyyyMMdd');
-                    newItem.dateTo = wijmo.Globalize.format($scope.logFileSrchDateTo.value, 'yyyyMMdd');
+                    newItem.dateFrom = wijmo.Globalize.format($scope.logFileSrchDateFromCombo.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.logFileSrchDateFromCombo.value, 'yyyyMMdd');
                     newItem.sql = "";
-                    newItem.includeDbBackup = $scope.logFileDbBackupCombo.selectedValue;
+                    newItem.includeDbBackup = "";
                     newItem.smartOrderYn = $scope.logFileSmartOrderCombo.selectedValue;
                     newItem.vcatPath = $scope.logFileVcatPath;
-                    newItem.remark = $scope.logFileRemark;
+                    newItem.remark = $scope.remark;
                     params.push(newItem);
                 }
             }

@@ -103,6 +103,25 @@
                     <table class="tblType01" >
                         <colgroup>
                             <col class="w15" />
+                            <col class="w85" />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <%-- 사유 --%>
+                            <th>
+                                <s:message code="posLogCollectMgmt.remark"/>
+                            </th>
+                            <td>
+                                <input type="text" id="remark" ng-model="remark" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oh tblBr" style="border-top:1px solid #e8e8e8">
+                    <table class="tblType01" >
+                        <colgroup>
+                            <col class="w15" />
                             <col class="w35" />
                             <col class="w15" />
                             <col class="w35" />
@@ -146,39 +165,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <%-- 기간 --%>
-                                <th>
-                                    <s:message code="posLogCollectMgmt.periodDay"/>
-                                </th>
-                                <td colspan="3">
-                                    <div class="sb-select">
-                                        <span class="txtIn w110px">
-                                            <wj-input-date
-                                                    id="dbSelectSrchDateFrom"
-                                                    value="dbSelectSrchDateFrom"
-                                                    ng-model="dbSelectSrchDateFrom"
-                                                    control="dbSelectSrchDateFromCombo"
-                                                    min="2000-01-01"
-                                                    max="2099-12-31"
-                                                    initialized="_initDateBox(s)">
-                                            </wj-input-date>
-                                        </span>
-                                        <span class="rg">~</span>
-                                        <span class="txtIn w110px">
-                                            <wj-input-date
-                                                    id="dbSelectSrchDateTo"
-                                                    value="dbSelectSrchDateTo"
-                                                    ng-model="dbSelectSrchDateTo"
-                                                    control="dbSelectSrchDateToCombo"
-                                                    min="2000-01-01"
-                                                    max="2099-12-31"
-                                                    initialized="_initDateBox(s)">
-                                            </wj-input-date>
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -197,72 +183,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="oh tblBr">
-                    <table class="tblType01" >
-                        <colgroup>
-                            <col class="w15" />
-                            <col class="w35" />
-                            <col class="w15" />
-                            <col class="w35" />
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <%-- DB백업 포함여부 --%>
-                                <th>
-                                    <s:message code="posLogCollectMgmt.dbBackupYn"/>
-                                </th>
-                                <td>
-                                    <div class="sb-select">
-                                        <wj-combo-box
-                                                id="dbSelectDbBackup"
-                                                ng-model="dbSelectDbBackup"
-                                                items-source="_getComboData('dbSelectDbBackupComboData')"
-                                                display-member-path="name"
-                                                selected-value-path="value"
-                                                is-editable="false"
-                                                control="dbSelectDbBackupCombo">
-                                        </wj-combo-box>
-                                    </div>
-                                </td>
-                                <%-- 스마트오더 수집여부 --%>
-                                <th>
-                                    <s:message code="posLogCollectMgmt.smartOrder"/>
-                                </th>
-                                <td>
-                                    <div class="sb-select">
-                                        <wj-combo-box
-                                                id="dbSelectSmartOrder"
-                                                ng-model="dbSelectSmartOrder"
-                                                items-source="_getComboData('dbSelectSmartOrderComboData')"
-                                                display-member-path="name"
-                                                selected-value-path="value"
-                                                is-editable="false"
-                                                control="dbSelectSmartOrderCombo">
-                                        </wj-combo-box>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <%-- VCAT 경로 --%>
-                                <th>
-                                    <s:message code="posLogCollectMgmt.vcatPath"/>
-                                </th>
-                                <td colspan="3">
-                                    <input type="text" id="dbSelectVcatPath" ng-model="dbSelectVcatPath" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <%-- 사유 --%>
-                                <th>
-                                    <s:message code="posLogCollectMgmt.remark"/>
-                                </th>
-                                <td colspan="3">
-                                    <input type="text" id="dbSelectRemark" ng-model="dbSelectRemark" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
                 <div class="oh tblBr" style="border-top:1px solid #e8e8e8">
                     <table class="tblType01" >
@@ -348,72 +268,6 @@
                                             </wj-input-date>
                                         </span>
                                 </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="oh tblBr">
-                    <table class="tblType01" >
-                        <colgroup>
-                            <col class="w15" />
-                            <col class="w35" />
-                            <col class="w15" />
-                            <col class="w35" />
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <%-- DB백업 포함여부 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.dbBackupYn"/>
-                            </th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="dbTableDbBackup"
-                                            ng-model="dbTableDbBackup"
-                                            items-source="_getComboData('dbTableDbBackupComboData')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="dbTableDbBackupCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
-                            <%-- 스마트오더 수집여부 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.smartOrder"/>
-                            </th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="dbTableSmartOrder"
-                                            ng-model="dbTableSmartOrder"
-                                            items-source="_getComboData('dbTableSmartOrderComboData')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="dbTableSmartOrderCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <%-- VCAT 경로 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.vcatPath"/>
-                            </th>
-                            <td colspan="3">
-                                <input type="text" id="dbTableVcatPath" ng-model="dbTableVcatPath" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <%-- 사유 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.remark"/>
-                            </th>
-                            <td colspan="3">
-                                <input type="text" id="dbTableRemark" ng-model="dbTableRemark" />
                             </td>
                         </tr>
                         </tbody>
@@ -519,23 +373,6 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <%-- DB백업 포함여부 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.dbBackupYn"/>
-                            </th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="logFileDbBackup"
-                                            ng-model="logFileDbBackup"
-                                            items-source="_getComboData('logFileDbBackupComboData')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="logFileDbBackupCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
                             <%-- 스마트오더 수집여부 --%>
                             <th>
                                 <s:message code="posLogCollectMgmt.smartOrder"/>
@@ -563,15 +400,6 @@
                                 <input type="text" id="logFileVcatPath" ng-model="logFileVcatPath" />
                             </td>
                         </tr>
-                        <tr>
-                            <%-- 사유 --%>
-                            <th>
-                                <s:message code="posLogCollectMgmt.remark"/>
-                            </th>
-                            <td colspan="3">
-                                <input type="text" id="logFileRemark" ng-model="logFileRemark" />
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -584,4 +412,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260320.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260324.01" charset="utf-8"></script>
