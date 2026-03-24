@@ -124,7 +124,7 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         // 하단 입력정보 데이터 초기화
         $scope.remark           = '';
         $scope.sql              = '';
-        $scope.logFileVcatPath  = '';
+        $scope.logFileVcatPath  = 'C:\\NHNKCPSecureVCAT\\Log';
         $scope.dbTableLogTypeCombo.selectedIndex        = 0;
         $scope.logFileSmartOrderCombo.selectedIndex     = 1;
         var todayStr = getToday();
