@@ -873,8 +873,8 @@ public class MobileAuthController {
         String nowDate = new SimpleDateFormat("yyyyMMdd").format(date);
 
         // 생성 파일 경로
-        String fileName = "D:\\log_test\\QUERYTIME_" + nowDate + ".OUT"; // TEST
-//        String fileName = catalinaBase + "/logs/LOGIN_CHK_LOG_" + nowDate + ".OUT";
+//        String fileName = "D:\\log_test\\QUERYTIME_" + nowDate + ".OUT"; // TEST
+        String fileName = catalinaBase + "/logs/LOGIN_CHK_LOG_" + nowDate + ".OUT";
 
         try {
 
