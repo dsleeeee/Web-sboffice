@@ -1695,7 +1695,7 @@ public class ProdServiceImpl implements ProdService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodVO1.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prodVO1.setSessionId(sessionInfoVO.getUserId());
+        prodVO1.setSessionId(sessionInfoVO.getSessionId());
 
         // 임시 상품삭제테이블 초기화
         prodMapper.deleteAllTmpDelProduct(prodVO1);
@@ -1712,7 +1712,7 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setRegId(sessionInfoVO.getUserId());
             prodVO.setModDt(dt);
             prodVO.setModId(sessionInfoVO.getUserId());
-            prodVO.setSessionId(sessionInfoVO.getUserId());
+            prodVO.setSessionId(sessionInfoVO.getSessionId());
             prodVO.setSeq(++iSeq);
 
             // 1. 삭제 전 데이터 확인
@@ -2021,7 +2021,7 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setRegId(sessionInfoVO.getUserId());
         prodVO.setModDt(dt);
         prodVO.setModId(sessionInfoVO.getUserId());
-        prodVO.setSessionId(sessionInfoVO.getUserId());
+        prodVO.setSessionId(sessionInfoVO.getSessionId());
         prodVO.setUserId(sessionInfoVO.getUserId());
 
         // 임시 상품삭제테이블 초기화

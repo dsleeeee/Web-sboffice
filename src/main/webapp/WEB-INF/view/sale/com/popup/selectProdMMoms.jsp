@@ -5,12 +5,13 @@
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
-       class="sb-input fl mr5"
+       class="sb-input fl"
        style="cursor:pointer; width:200px;"
        value=<s:message code="cmm.all"/>
        ng-click="<c:out value="${param.targetId}"/>Show()"
        readonly/>
-
+<input type="hidden" id="<c:out value="${param.targetId}Check"/>"/>
+<button type="button" class="btn_skyblue fl" id="<c:out value="${param.targetId}"/>btnCancelProdCd" style="margin-left: 5px;" onclick="delProd('<c:out value="${param.targetId}"/>')"><s:message code="cmm.selectCancel"/></button>
 <wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -151,7 +152,15 @@
   // 상품브랜드 콤보박스 항목 저장시 쓰려고
   var momsHqBrandCdComboList;
 
-  /** 매장선택 controller */
+  // 상품선택 초기화
+  function delProd(targetId){
+    $("#" + targetId+ "Cd").val("");
+    $("#" + targetId + "Nm").val(messages["cmm.all"]);
+    // 선택취소 클릭 시 값 저장
+    $("#" + targetId + "Check").val('Cancel');
+  }
+
+  /** 상품선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
     var targetId = '${param.targetId}';
     var targetCornerId = '${param.targetCornerId}';
@@ -220,6 +229,21 @@
       if ($scope.searchFg == "N") {
         $scope.searchProd();
       }
+
+      // 화면에서 선택취소 클릭 후 진입 시
+      if($("#" + targetId + "Check").val() === 'Cancel'){
+        var grid = wijmo.Control.getControl("#wjGridProdM" + targetId);
+
+        if(grid.rows.length > 0){
+
+          for (var i = 0; i < grid.rows.length; i++) {
+            grid.rows[i].dataItem.gChk = false;
+          }
+          grid.refresh();
+        }
+        $("#" + targetId + "Check").val('');
+      }
+
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });

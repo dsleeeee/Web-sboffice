@@ -200,7 +200,7 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
             dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
             dlvrProdMultiVO.setModDt(currentDt);
             dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
-            dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
 
             // 임시테이블 저장 전
             if(i == 1) {
@@ -226,7 +226,7 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
             dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
 
-        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
 
         return dlvrProdMultiMapper.chkDlvrProdMulti(dlvrProdMultiVO);
     }
@@ -252,7 +252,7 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
         dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
         dlvrProdMultiVO.setModDt(currentDt);
         dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
-        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
 
         // 명칭 중복 체크
         dlvrProdMultiNm = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChk(dlvrProdMultiVO);
@@ -272,7 +272,7 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
-        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
 
         // D = 매핑값 적용 I = 매핑값 추가 S = 화면 저장
         if(dlvrProdMultiVO.getMappFg() != null){
@@ -305,7 +305,7 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
         dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
         dlvrProdMultiVO.setModDt(currentDt);
         dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
-        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
 
         // D = 매핑값 적용 I = 매핑값 추가 S = 화면 저장
         if(dlvrProdMultiVO.getMappFg() != null){

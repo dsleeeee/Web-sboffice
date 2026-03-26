@@ -107,7 +107,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
     public int getStoreExcelUploadCheckDeleteAll(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
         storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
 
         result += storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);
 
@@ -122,7 +122,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         for(StoreBatchChangeVO storeBatchChangeVO : storeBatchChangeVOs) {
 
             storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
 
             result += storeBatchChangeMapper.getStoreExcelUploadCheckDelete(storeBatchChangeVO);
         }
@@ -144,7 +144,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
             storeBatchChangeVO.setModDt(currentDt);
             storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
             storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             storeBatchChangeVO.setSeq(i);
 
@@ -246,7 +246,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
     @Override
     public List<DefaultMap<String>> getStoreExcelUploadCheckList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO) {
 
-        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
         storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return storeBatchChangeMapper.getStoreExcelUploadCheckList(storeBatchChangeVO);
@@ -263,7 +263,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         storeBatchChangeVO.setModDt(currentDt);
         storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
         storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
 
@@ -293,7 +293,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
     /** 검증결과 조회 */
     @Override
     public List<DefaultMap<String>> getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO) {
-        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
         storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return storeBatchChangeMapper.getTmpStoreList(storeBatchChangeVO);
@@ -313,7 +313,7 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
             storeBatchChangeVO.setModDt(currentDt);
             storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            storeBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
             storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             storeBatchChangeVO.setSeq(i);
 

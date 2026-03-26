@@ -409,7 +409,7 @@ public class MobileAuthController {
         if (CmmUtil.isBlockedId(params.getUserId())) {
             // 세션 삭제
             sessionService.deleteSessionInfo(request);
-            throw new AuthenticationException(messageService.get("login.fail"), "/error/409.sb");
+            throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
         }
 
 

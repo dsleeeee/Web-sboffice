@@ -929,7 +929,7 @@
         DELETE
         TB_TMP_EXCEL_BARCD
         WHERE 1=1
-        AND SESSION_ID = #{regId}
+        AND SESSION_ID = #{sessionId}
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
@@ -957,7 +957,7 @@
              BARCD_NEW,
              RESULT
         ) VALUES (
-            #{regId},
+            #{sessionId},
             #{seq},
             #{hqOfficeCd},
             #{storeCd},
@@ -980,7 +980,7 @@
                 ( SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = tteb.PROD_CD) AS BARCD_OLD
             FROM    TB_TMP_EXCEL_BARCD tteb,
                     TB_HQ_PRODUCT thp
-            WHERE   tteb.SESSION_ID = #{regId}
+            WHERE   tteb.SESSION_ID = #{sessionId}
             AND     tteb.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tteb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
             AND     tteb.PROD_CD = thp.PROD_CD
@@ -996,7 +996,7 @@
                         tmp.REG_FG
                 FROM    TB_TMP_EXCEL_BARCD tteb,
                         TB_MS_PRODUCT tmp
-                WHERE   tteb.SESSION_ID = #{regId}
+                WHERE   tteb.SESSION_ID = #{sessionId}
                 AND     tteb.STORE_CD = #{storeCd}
                 AND     tteb.STORE_CD = tmp.STORE_CD
                 AND     tteb.PROD_CD = tmp.PROD_CD
@@ -1036,7 +1036,7 @@
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD
-                        WHERE   SESSION_ID = #{regId}
+                        WHERE   SESSION_ID = #{sessionId}
                         AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     </if>
@@ -1066,7 +1066,7 @@
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD tteb, TB_MS_PRODUCT tmp
-                        WHERE   tteb.SESSION_ID = #{regId}
+                        WHERE   tteb.SESSION_ID = #{sessionId}
                         AND     tteb.BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	tteb.PROD_CD != #{prodCd}
                         AND     tteb.PROD_CD = tmp.PROD_CD
@@ -1092,7 +1092,7 @@
                         UNION ALL
                         SELECT  COUNT(*) AS CNT_BAR
                         FROM    TB_TMP_EXCEL_BARCD
-                        WHERE   SESSION_ID = #{regId}
+                        WHERE   SESSION_ID = #{sessionId}
                         AND     BARCD_NEW = REPLACE(REPLACE(REPLACE(#{barCd}, CHR(10), NULL), CHR(13), NULL), ' ', '')
                         AND 	PROD_CD != #{prodCd}
                     </if>

@@ -113,7 +113,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
 
         int result = 0;
         empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
 
         result += empBatchChangeMapper.getEmpExcelUploadCheckDeleteAll(empBatchChangeVO);
 
@@ -128,7 +128,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
 
         for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
 
             result += empBatchChangeMapper.getEmpExcelUploadCheckDelete(empBatchChangeVO);
         }
@@ -151,7 +151,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
             empBatchChangeVO.setModDt(currentDt);
             empBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             empBatchChangeVO.setSeq(i);
 
@@ -253,7 +253,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
     @Override
     public List<DefaultMap<String>> getEmpExcelUploadCheckList(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO) {
 
-        empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
         empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return empBatchChangeMapper.getEmpExcelUploadCheckList(empBatchChangeVO);
@@ -273,7 +273,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
             empBatchChangeVO.setModDt(currentDt);
             empBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
            // 저장
@@ -355,7 +355,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
             empBatchChangeVO.setModDt(currentDt);
             empBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setSessionId(sessionInfoVO.getSessionId());
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             empBatchChangeVO.setSeq(i);
 

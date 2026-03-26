@@ -101,7 +101,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             simpleProdVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        simpleProdVO.setSessionId(sessionInfoVO.getUserId());
+        simpleProdVO.setSessionId(sessionInfoVO.getSessionId());
 
         // 검증결과 삭제
         procCnt = simpleProdMapper.getSimpleProdCheckDeleteAll(simpleProdVO);
@@ -131,7 +131,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             simpleProdVO.setModDt(currentDt);
             simpleProdVO.setModId(sessionInfoVO.getUserId());
 
-            simpleProdVO.setSessionId(sessionInfoVO.getUserId());
+            simpleProdVO.setSessionId(sessionInfoVO.getSessionId());
             simpleProdVO.setSeq(i);
 
             // 바코드 중복체크
@@ -266,7 +266,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             simpleProdVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        simpleProdVO.setSessionId(sessionInfoVO.getUserId());
+        simpleProdVO.setSessionId(sessionInfoVO.getSessionId());
 
         return simpleProdMapper.getSimpleProdList(simpleProdVO);
     }
@@ -287,7 +287,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 simpleProdVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
-            simpleProdVO.setSessionId(sessionInfoVO.getUserId());
+            simpleProdVO.setSessionId(sessionInfoVO.getSessionId());
 
             // 검증결과 성공인것만 저장
             if(("검증성공").equals(simpleProdVO.getResult())) {

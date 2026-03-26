@@ -114,7 +114,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
             lsmStoreVO.setModDt(currentDt);
             lsmStoreVO.setModId(sessionInfoVO.getUserId());
             lsmStoreVO.setClsFg("K"); // K: KIOSK
-            lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+            lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
             lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             //임시 테이블 삭제
@@ -144,7 +144,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public int getDeleteKioskKey(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getDeleteKioskKey(lsmStoreVO);
     }
 
@@ -152,7 +152,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public int getKioskKeyCnt(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getKioskKeyCnt(lsmStoreVO);
     }
 
@@ -167,7 +167,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
         lsmStoreVO.setRegId(sessionInfoVO.getUserId());
         lsmStoreVO.setModDt(currentDt);
         lsmStoreVO.setModId(sessionInfoVO.getUserId());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
 
         return lsmStoreMapper.getInsertKioskKey(lsmStoreVO);
     }
@@ -185,7 +185,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
             lsmStoreVO.setRegId(sessionInfoVO.getUserId());
             lsmStoreVO.setModDt(currentDt);
             lsmStoreVO.setModId(sessionInfoVO.getUserId());
-            lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+            lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
             lsmStoreVO.setInFg(InFg.STORE);
             lsmStoreVO.setStyleCd("01");
 
@@ -208,7 +208,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public int getDeleteTukey(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getDeleteTukey(lsmStoreVO);
     }
 
@@ -216,7 +216,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public int getTukeyCnt(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getTukeyCnt(lsmStoreVO);
     }
 
@@ -226,7 +226,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
 
         int result = 0;
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
 
         String currentDt = currentDateTimeString();
 
@@ -263,7 +263,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public String getKioskChkUseYn(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getKioskChkUseYn(lsmStoreVO);
     }
 
@@ -271,7 +271,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public String getKioskChkProdCnt(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getKioskChkProdCnt(lsmStoreVO);
     }
 
@@ -279,7 +279,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public String getTukeyChkUseYn(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getTukeyChkUseYn(lsmStoreVO);
     }
 
@@ -287,7 +287,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
     @Override
     public String getTukeyChkProdCnt(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getTukeyChkProdCnt(lsmStoreVO);
     }
 

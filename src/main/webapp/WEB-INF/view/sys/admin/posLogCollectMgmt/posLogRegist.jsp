@@ -412,4 +412,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260324.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogRegist.js?ver=20260325.01" charset="utf-8"></script>

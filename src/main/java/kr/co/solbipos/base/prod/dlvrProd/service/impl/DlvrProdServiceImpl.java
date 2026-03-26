@@ -256,7 +256,7 @@ public class DlvrProdServiceImpl implements DlvrProdService {
             dlvrProdVO.setModDt(currentDt);
             dlvrProdVO.setModId(sessionInfoVO.getUserId());
 
-            dlvrProdVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrProdVO.setSessionId(sessionInfoVO.getSessionId());
             dlvrProdVO.setSeq(i);
 
             // 임시테이블 저장 전
