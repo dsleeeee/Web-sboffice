@@ -1968,7 +1968,7 @@ public class StoreManageServiceImpl implements StoreManageService {
 
         storeEnvVO2.setStoreCd(storeEnvVO.getStoreCd());
         storeEnvVO2.setEnvstVal(storeEnvVO.getEnvstVal());
-        storeEnvVO2.setSessionId(sessionInfoVO.getUserId());
+        storeEnvVO2.setSessionId(sessionInfoVO.getSessionId());
         storeEnvVO2.setRegDt(dt);
         storeEnvVO2.setRegId(sessionInfoVO.getUserId());
         storeEnvVO2.setModDt(dt);

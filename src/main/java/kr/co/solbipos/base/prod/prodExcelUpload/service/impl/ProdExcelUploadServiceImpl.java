@@ -97,7 +97,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         // 검증결과 삭제
         procCnt = prodExcelUploadMapper.getProdExcelUploadCheckDeleteAll(prodExcelUploadVO);
@@ -115,7 +115,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         return prodExcelUploadMapper.getProdExcelUploadCheckList(prodExcelUploadVO);
     }
@@ -228,7 +228,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setModDt(currentDt);
             prodExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
-            prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+            prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
             prodExcelUploadVO.setSeq(prodExcelUploadVO.getProgressCnt() + i); // seq 중복방지를 위해 (진행 갯수 + i)로 계산
 
             prodExcelUploadVO.setResult("검증전");
@@ -423,7 +423,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setModDt(currentDt);
             prodExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
-            prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+            prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
             prodExcelUploadVO.setSeq(prodExcelUploadVO.getProgressCnt() + i); // seq 중복방지를 위해 (진행 갯수 + i)로 계산
 
 
@@ -490,7 +490,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 simpleProdVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
-            simpleProdVO.setSessionId(sessionInfoVO.getUserId());
+            simpleProdVO.setSessionId(sessionInfoVO.getSessionId());
 
             // 바코드 중복체크
             // 값이 있을때만
@@ -815,7 +815,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                     prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
                 }
-                prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+                prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
                 // 검증결과 삭제
                 procCnt = prodExcelUploadMapper.getProdExcelUploadCheckDelete(prodExcelUploadVO);
@@ -834,7 +834,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         return prodExcelUploadMapper.getMasterChk(prodExcelUploadVO);
     }
@@ -847,7 +847,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         return prodExcelUploadMapper.getProdClassCdInsertList(prodExcelUploadVO);
     }
@@ -900,7 +900,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             prodExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        prodExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         return prodExcelUploadMapper.getVendrCdInsertList(prodExcelUploadVO);
     }

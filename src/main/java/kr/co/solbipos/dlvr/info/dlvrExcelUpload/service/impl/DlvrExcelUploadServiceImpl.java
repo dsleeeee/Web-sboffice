@@ -43,7 +43,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
     public int getDlvrExcelUploadDeleteAll(DlvrExcelUploadVO dlvrExcelUploadVO, SessionInfoVO sessionInfoVO) {
         dlvrExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
         return dlvrExcelUploadMapper.getDlvrExcelUploadDeleteAll(dlvrExcelUploadVO);
     }
 
@@ -63,7 +63,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
             dlvrExcelUploadVO.setModDt(currentDt);
             dlvrExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
-            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
             dlvrExcelUploadVO.setSeq(dlvrExcelUploadVO.getProgressCnt() + i); // seq 중복방지를 위해 (진행 갯수 + i)로 계산
 
             dlvrExcelUploadVO.setResult("검증전");
@@ -96,7 +96,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
         dlvrExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
         return dlvrExcelUploadMapper.getDlvrExcelUploadCheckList(dlvrExcelUploadVO);
     }
@@ -113,7 +113,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
 
                 dlvrExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 dlvrExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-                dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+                dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
                 // 검증결과 삭제
                 resultCnt += dlvrExcelUploadMapper.getDlvrExcelUploadCheckDelete(dlvrExcelUploadVO);
@@ -128,7 +128,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
 
         dlvrExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrExcelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+        dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
         dlvrExcelUploadVO.setSeq(0);
         dlvrExcelUploadVO.setDeleteFg("검증성공");
         return dlvrExcelUploadMapper.getDlvrExcelUploadCheckDelete(dlvrExcelUploadVO);
@@ -150,7 +150,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
             dlvrExcelUploadVO.setModDt(currentDt);
             dlvrExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
-            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
             if (dlvrExcelUploadVO.getResult() == null || dlvrExcelUploadVO.getResult() == "") {
                 dlvrExcelUploadVO.setResult("검증성공");
@@ -196,7 +196,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
             dlvrExcelUploadVO.setModDt(currentDt);
             dlvrExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
-            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrExcelUploadVO.setSessionId(sessionInfoVO.getSessionId());
 
             if (dlvrExcelUploadVO.getResult() != null && dlvrExcelUploadVO.getResult().equals("검증성공")) {
                 resultCnt += dlvrExcelUploadMapper.getDeliveryTelNoSave(dlvrExcelUploadVO);

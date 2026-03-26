@@ -65,6 +65,13 @@
                 </td>
             </tr>
             <tr>
+                <%-- 포스번호 --%>
+                <th><s:message code="posLogCollectMgmt.posNo" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="posNo" ng-model="posNo" onkeyup="fnNxBtnSearch();" />
+                </td>
+            </tr>
+            <tr>
                 <%-- 전송구분 --%>
                 <th><s:message code="posLogCollectMgmt.sendYn"/></th>
                 <td>
@@ -160,7 +167,7 @@
 <script type="text/javascript">
     var userId = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260320.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posLogCollectMgmt/posLogCollectMgmt.js?ver=20260325.01" charset="utf-8"></script>
 <%-- POS로그수집등록 팝업 --%>
 <c:import url="/WEB-INF/view/sys/admin/posLogCollectMgmt/posLogRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

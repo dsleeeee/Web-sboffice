@@ -85,7 +85,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
 
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
-        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+        iostockCmmVO.setUserId(sessionInfoVO.getSessionId());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(iostockCmmVO.getOrgnFg() == OrgnFg.STORE.getCode()){
             iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -278,7 +278,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     public DefaultMap<Object> getSelectUploadProdText(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
 
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+        iostockCmmVO.setUserId(sessionInfoVO.getSessionId());
 
         return iostockCmmMapper.getSelectUploadProdText(iostockCmmVO);
     }
@@ -287,7 +287,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     @Override
     public List<DefaultMap<String>> getSelectUploadProdList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+        iostockCmmVO.setUserId(sessionInfoVO.getSessionId());
 
         List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
 
@@ -305,7 +305,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         int procCnt = 0;
 
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+        iostockCmmVO.setUserId(sessionInfoVO.getSessionId());
 
         procCnt += iostockCmmMapper.getSelectUploadProdExcelUploadDeleteAll(iostockCmmVO);
 
@@ -325,7 +325,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
             iostockCmmVO.setModId(sessionInfoVO.getUserId());
 
             iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+            iostockCmmVO.setUserId(sessionInfoVO.getSessionId());
 
             procCnt += iostockCmmMapper.getSelectUploadProdExcelUploadSave(iostockCmmVO);
         }

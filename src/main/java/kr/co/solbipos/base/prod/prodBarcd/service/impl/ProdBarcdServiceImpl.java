@@ -221,7 +221,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             prodBarcdVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
-        prodBarcdVO.setRegId(sessionInfoVO.getUserId());
+        prodBarcdVO.setSessionId(sessionInfoVO.getSessionId());
 
         result = prodBarcdMapper.getExcelUploadCheckDeleteAll(prodBarcdVO);
 
@@ -248,6 +248,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setModDt(currentDt);
             prodBarcdVO.setModId(sessionInfoVO.getUserId());
             prodBarcdVO.setSeq(i);
+            prodBarcdVO.setSessionId(sessionInfoVO.getSessionId());
 
             if(prodBarcdVO.getProdCd() != null && prodBarcdVO.getProdCd().length() >= 1 && prodBarcdVO.getBarCd() != null && prodBarcdVO.getBarCd().length() >= 1){
 
@@ -281,7 +282,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
         prodBarcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prodBarcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodBarcdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        prodBarcdVO.setRegId(sessionInfoVO.getUserId());
+        prodBarcdVO.setSessionId(sessionInfoVO.getSessionId());
         return prodBarcdMapper.getExcelList(prodBarcdVO);
     }
 
@@ -302,6 +303,7 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
             prodBarcdVO.setRegId(sessionInfoVO.getUserId());
             prodBarcdVO.setModDt(currentDt);
             prodBarcdVO.setModId(sessionInfoVO.getUserId());
+            prodBarcdVO.setSessionId(sessionInfoVO.getSessionId());
 
             List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 

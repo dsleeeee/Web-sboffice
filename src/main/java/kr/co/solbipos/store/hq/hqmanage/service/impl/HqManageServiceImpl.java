@@ -611,7 +611,7 @@ public class HqManageServiceImpl implements HqManageService{
 
         hqEnvstVO2.setHqOfficeCd(hqEnvstVO.getHqOfficeCd());
         hqEnvstVO2.setEnvstVal(hqEnvstVO.getEnvstVal());
-        hqEnvstVO2.setSessionId(sessionInfoVO.getUserId());
+        hqEnvstVO2.setSessionId(sessionInfoVO.getSessionId());
         hqEnvstVO2.setRegDt(dt);
         hqEnvstVO2.setRegId(sessionInfoVO.getUserId());
         hqEnvstVO2.setModDt(dt);

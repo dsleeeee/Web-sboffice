@@ -214,6 +214,9 @@ public class ProdBarcdVO extends PageVO {
     /** 사용자 아이디 */
     private String userId;
 
+    /** 세션 아이디 */
+    private String sessionId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1038,5 +1041,13 @@ public class ProdBarcdVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

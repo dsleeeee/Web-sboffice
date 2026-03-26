@@ -125,7 +125,7 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.remark           = '';
         $scope.sql              = '';
         $scope.logFileVcatPath  = 'C:\\NHNKCPSecureVCAT\\Log';
-        $scope.dbTableLogTypeCombo.selectedIndex        = 0;
+        $scope.dbTableLogTypeCombo.selectedIndex        = 1;
         $scope.logFileSmartOrderCombo.selectedIndex     = 1;
         var todayStr = getToday();
         $scope.dbTableSrchDateFromCombo.value   = todayStr.substring(0,4) + '-' + todayStr.substring(4,6) + '-' + todayStr.substring(6,8);
@@ -171,6 +171,15 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
             }
             // DB_TABLE 체크 시
             if ($('#dbTable').is(':checked')) {
+                var startDt = new Date(wijmo.Globalize.format($scope.dbTableSrchDateFromCombo.value, 'yyyy-MM-dd'));
+                var endDt = new Date(wijmo.Globalize.format($scope.dbTableSrchDateToCombo.value, 'yyyy-MM-dd'));
+
+                // 시작일자가 종료일자보다 빠른지 확인
+                if(startDt.getTime() > endDt.getTime()){
+                    $scope._popMsg(messages['posLogCollectMgmt.dbTable'] + "의 " + messages['cmm.dateChk.error']);
+                    return false;
+                }
+
                 if ($scope.dbTableLogTypeCombo.selectedValue === "SELECT") {
                     if ($('input[name="tableLogTypeFg"]:checked').length <= 0) {
                         $scope._popMsg(messages["posLogCollectMgmt.msg.tableLogTypeSelect"]); // OD,SL,RV 선택하여주십시오
@@ -186,6 +195,16 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
             }
             // LOG_FILE 체크 시
             if ($('#logFile').is(':checked')) {
+
+                var startDt = new Date(wijmo.Globalize.format($scope.logFileSrchDateFromCombo.value, 'yyyy-MM-dd'));
+                var endDt = new Date(wijmo.Globalize.format($scope.logFileSrchDateToCombo.value, 'yyyy-MM-dd'));
+
+                // 시작일자가 종료일자보다 빠른지 확인
+                if(startDt.getTime() > endDt.getTime()){
+                    $scope._popMsg(messages['posLogCollectMgmt.logFile'] + "의 " + messages['cmm.dateChk.error']);
+                    return false;
+                }
+
                 if ($('input[name="logFileTypeFg"]:checked').length <= 0) {
                     $scope._popMsg(messages["posLogCollectMgmt.msg.logFileTypeFgSelect"]); // POS,VCAT,PaycoVCAT,PaycoVMEM,PaycoVORDER 선택하여주십시오
                     return false;
@@ -233,7 +252,7 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     newItem.commandType = "DB_TABLE"
                     newItem.logType = dbTableLogType;
                     newItem.dateFrom = wijmo.Globalize.format($scope.dbTableSrchDateFromCombo.value, 'yyyyMMdd');
-                    newItem.dateTo = wijmo.Globalize.format($scope.dbTableSrchDateFromCombo.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.dbTableSrchDateToCombo.value, 'yyyyMMdd');
                     newItem.sql = "";
                     newItem.includeDbBackup = "";
                     newItem.smartOrderYn = "";
@@ -247,7 +266,7 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     newItem.commandType = "LOG_FILE"
                     newItem.logType = logFileLogType;
                     newItem.dateFrom = wijmo.Globalize.format($scope.logFileSrchDateFromCombo.value, 'yyyyMMdd');
-                    newItem.dateTo = wijmo.Globalize.format($scope.logFileSrchDateFromCombo.value, 'yyyyMMdd');
+                    newItem.dateTo = wijmo.Globalize.format($scope.logFileSrchDateToCombo.value, 'yyyyMMdd');
                     newItem.sql = "";
                     newItem.includeDbBackup = "";
                     newItem.smartOrderYn = $scope.logFileSmartOrderCombo.selectedValue;
