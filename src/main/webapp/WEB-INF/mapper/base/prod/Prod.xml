@@ -5667,6 +5667,7 @@
         TABLE    : TB_ST_STORE_STOCK_CUR
         PARAM    : prodVO
         COMMENTS : 매장수불) 현재고 중 삭제하려는 상품이 있는지 확인
+        임시수정 : 재고가 생성되지 않아서 판매여부 로직 변경(TB_SL_MONTHLY_PROD) 상품 판매 이력 테이블 생성 예정
     -->
     <select id="getStStoreStockCurCnt" parameterType="prodVO" resultType="int">
         /* ProdMapper.getStStoreStockCurCnt */
@@ -5674,20 +5675,26 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT COUNT(1)
-                FROM TB_ST_STORE_STOCK_CUR
+                FROM TB_SL_MONTHLY_PROD
                 WHERE STORE_CD IN (
                                     SELECT STORE_CD
                                       FROM TB_MS_STORE
                                      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                                    )
                 AND	PROD_CD = #{prodCd}
+                <![CDATA[
+                AND   ROWNUM < 2
+                ]]>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT COUNT(1)
-                FROM TB_ST_STORE_STOCK_CUR
+                FROM TB_SL_MONTHLY_PROD
                 WHERE STORE_CD = #{storeCd}
                 AND	PROD_CD = #{prodCd}
+                <![CDATA[
+                AND   ROWNUM < 2
+                ]]>
             </when>
         </choose>
     </select>
