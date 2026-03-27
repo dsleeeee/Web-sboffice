@@ -49,7 +49,7 @@ public class SelectStoreServiceImpl implements SelectStoreService {
         selectStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         selectStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
-        selectStoreVO.setUserId(sessionInfoVO.getSessionId());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
         // 매장브랜드가 '전체' 일때
         if (selectStoreVO.getStoreHqBrandCd() == "" || selectStoreVO.getStoreHqBrandCd() == null) {
             // 사용자별 브랜드 array 값 세팅
@@ -160,7 +160,7 @@ public class SelectStoreServiceImpl implements SelectStoreService {
     public List<DefaultMap<String>> getSelectUploadStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
 
         selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        selectStoreVO.setUserId(sessionInfoVO.getSessionId());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
 
         List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
 
@@ -186,7 +186,7 @@ public class SelectStoreServiceImpl implements SelectStoreService {
             selectStoreVO.setModId(sessionInfoVO.getUserId());
 
             selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            selectStoreVO.setUserId(sessionInfoVO.getSessionId());
+            selectStoreVO.setUserId(sessionInfoVO.getUserId());
 
             procCnt += selectStoreMapper.getSelectUploadStoreExcelUploadSave(selectStoreVO);
         }
@@ -201,7 +201,7 @@ public class SelectStoreServiceImpl implements SelectStoreService {
         int procCnt = 0;
 
         selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        selectStoreVO.setUserId(sessionInfoVO.getSessionId());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
 
         procCnt += selectStoreMapper.getSelectUploadStoreExcelUploadDeleteAll(selectStoreVO);
 
@@ -213,7 +213,7 @@ public class SelectStoreServiceImpl implements SelectStoreService {
     public DefaultMap<Object> getSelectUploadStoreText(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
 
         selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        selectStoreVO.setUserId(sessionInfoVO.getSessionId());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
 
         return selectStoreMapper.getSelectUploadStoreText(selectStoreVO);
     }
