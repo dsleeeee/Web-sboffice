@@ -69,7 +69,7 @@ app.controller('dlvrExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckDeleteAll.sb", params, function(){});
+        $scope._postJSONSave.withOutPopUp("/dlvr/manage/info/dlvrExcelUpload/getDlvrExcelUploadDeleteAll.sb", params, function(){});
     };
 
     // <-- 양식다운로드 -->
