@@ -105,9 +105,9 @@
                             if (i < arr.length - 1) {
                                 // 매장 리스트
                                 innerHtml += "<div class=\"store-card\">";
-                                if (arr[i].businessImage != null) {
-                                    if (arr[i].businessImage.thumbnail != null) {
-                                        innerHtml += "<div class=\"thumb\"><img src=\"" + arr[i].businessImage.thumbnail + "\" alt=\"\" width=\"70px\" height=\"70px\"/></div>";
+                                if (arr[i].businessImage.primary != null) {
+                                    if (arr[i].businessImage.primary.url != null) {
+                                        innerHtml += "<div class=\"thumb\"><img src=\"" + decodeURIComponent(arr[i].businessImage.primary.url) + "\" alt=\"\" width=\"70px\" height=\"70px\"/></div>";
                                     } else {
                                         innerHtml += "<div class=\"thumb\"></div>";
                                     }

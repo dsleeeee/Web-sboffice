@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MCoupnHistory.xml
+    모바일쿠폰이력조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.03.24     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.mCoupnHistory.service.impl.MCoupnHistoryMapper">
+
+    <!-- 모바일쿠폰이력조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MCOUPN
+        PARAM    : mCoupnHistoryVO
+        COMMENTS : 모바일쿠폰 사용이력을 조회한다.
+    -->
+    <select id="getMCoupnHistory" parameterType="mCoupnHistoryVO" resultType="DefaultMap">
+        /* USE : MCoupnHistoryMapper.getMCoupnHistory */
+        SELECT  *
+        FROM    (
+                    SELECT '1' AS BILL_TYPE
+                    , A.HQ_OFFICE_CD
+                    , A.HQ_BRAND_CD
+                    , A.STORE_CD
+                    , B.STORE_NM
+                    , TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    , A.POS_NO
+                    , A.BILL_NO
+                    , A.LINE_NO
+                    , A.LINE_SEQ_NO
+                    , A.REG_SEQ
+                    , A.SALE_YN
+                    , A.SALE_FG
+                    , A.SALE_AMT
+                    , A.TAX_AMT
+                    , A.VAT_AMT
+                    , A.TIP_AMT
+                    , A.NO_TAX_AMT
+                    , A.MCOUPN_CD
+                    , A.MCOUPN_TERMNL_NO
+                    , A.MCOUPN_TYPE_FG
+                    , A.MCOUPN_BARCD_NO
+                    , A.MCOUPN_UPRC
+                    , A.MCOUPN_REMAIN_AMT
+                    , A.APPR_UNIQUE_NO
+                    , TO_CHAR(TO_DATE(A.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+                    , A.APPR_NO
+                    , A.APPR_MSG
+                    , A.CORNR_CD
+                    , A.APPR_LOG_NO
+                    , A.CASH_BILL_APPR_PROC_FG
+                    , A.CASH_BILL_CARD_NO
+                    , TO_CHAR(TO_DATE(A.CASH_BILL_APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS CASH_BILL_APPR_DT
+                    , A.CASH_BILL_APPR_NO
+                    , A.CASH_BILL_APPR_LOG_NO
+                    , A.ORG_BILL_NO
+                    , TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+                    , A.REG_ID
+                    , TO_CHAR(TO_DATE(A.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                    , A.MOD_ID
+                    , A.APPR_PROC_FG
+                    , A.CUP_AMT
+                    , DECODE(C.RTN_REASON_NM, '', C.RTN_REASON_NM, '(판매) ' || C.RTN_REASON_NM) AS RTN_REASON_NM
+                    FROM TB_RV_SALE_PAY_MCOUPN A
+                    , TB_MS_STORE B
+                    , TB_RV_SALE_HDR C
+                    WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                    AND A.STORE_CD = B.STORE_CD
+                    AND A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                    AND A.STORE_CD = C.STORE_CD
+                    AND A.SALE_DATE = C.SALE_DATE
+                    AND A.POS_NO = C.POS_NO
+                    AND A.BILL_NO = C.BILL_NO
+                    AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='mCoupnBarcdNo != null and mCoupnBarcdNo != ""'>
+                        AND A.MCOUPN_BARCD_NO LIKE '%' || #{mCoupnBarcdNo} || '%'
+                    </if>
+                    <if test='apprNo != null and apprNo != ""'>
+                        AND A.APPR_NO LIKE '%' || #{apprNo} || '%'
+                    </if>
+                    <if test='mCoupnCd != null and mCoupnCd != ""'>
+                        AND A.MCOUPN_CD = #{mCoupnCd}
+                    </if>
+                    UNION
+                    SELECT '2' AS BILL_TYPE
+                    , A.HQ_OFFICE_CD
+                    , A.HQ_BRAND_CD
+                    , A.STORE_CD
+                    , B.STORE_NM
+                    , TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                    , A.POS_NO
+                    , A.BILL_NO
+                    , A.LINE_NO
+                    , A.LINE_SEQ_NO
+                    , A.REG_SEQ
+                    , A.SALE_YN
+                    , A.SALE_FG
+                    , A.SALE_AMT
+                    , A.TAX_AMT
+                    , A.VAT_AMT
+                    , A.TIP_AMT
+                    , A.NO_TAX_AMT
+                    , A.MCOUPN_CD
+                    , A.MCOUPN_TERMNL_NO
+                    , A.MCOUPN_TYPE_FG
+                    , A.MCOUPN_BARCD_NO
+                    , A.MCOUPN_UPRC
+                    , A.MCOUPN_REMAIN_AMT
+                    , A.APPR_UNIQUE_NO
+                    , TO_CHAR(TO_DATE(A.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+                    , A.APPR_NO
+                    , A.APPR_MSG
+                    , A.CORNR_CD
+                    , A.APPR_LOG_NO
+                    , A.CASH_BILL_APPR_PROC_FG
+                    , A.CASH_BILL_CARD_NO
+                    , TO_CHAR(TO_DATE(A.CASH_BILL_APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS CASH_BILL_APPR_DT
+                    , A.CASH_BILL_APPR_NO
+                    , A.CASH_BILL_APPR_LOG_NO
+                    , A.ORG_BILL_NO
+                    , TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+                    , A.REG_ID
+                    , TO_CHAR(TO_DATE(A.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                    , A.MOD_ID
+                    , A.APPR_PROC_FG
+                    , A.CUP_AMT
+                    , DECODE(C.RTN_REASON_NM, '', C.RTN_REASON_NM, '(예약) ' || C.RTN_REASON_NM) AS RTN_REASON_NM
+                    FROM TB_SL_SALE_PAY_MCOUPN A
+                    , TB_MS_STORE B
+                    , TB_SL_SALE_HDR C
+                    WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                    AND A.STORE_CD = B.STORE_CD
+                    AND A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                    AND A.STORE_CD = C.STORE_CD
+                    AND A.SALE_DATE = C.SALE_DATE
+                    AND A.POS_NO = C.POS_NO
+                    AND A.BILL_NO = C.BILL_NO
+                    AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='mCoupnBarcdNo != null and mCoupnBarcdNo != ""'>
+                        AND A.MCOUPN_BARCD_NO LIKE '%' || #{mCoupnBarcdNo} || '%'
+                    </if>
+                    <if test='apprNo != null and apprNo != ""'>
+                        AND A.APPR_NO LIKE '%' || #{apprNo} || '%'
+                    </if>
+                    <if test='mCoupnCd != null and mCoupnCd != ""'>
+                        AND A.MCOUPN_CD = #{mCoupnCd}
+                    </if>
+                 )
+        WHERE 1=1
+        <if test='billType != null and billType != ""'>
+            AND BILL_TYPE = #{billType}
+        </if>
+        ORDER BY BILL_TYPE, STORE_CD, SALE_DATE, POS_NO, BILL_NO
+    </select>
+</mapper>
