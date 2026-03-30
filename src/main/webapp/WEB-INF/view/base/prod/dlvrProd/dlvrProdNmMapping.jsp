@@ -44,29 +44,9 @@
                             initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </span>
-                    <span class="txtIn w110px">
-                      <wj-input-date
-                              id="srchTimeStartDate"
-                              value="startDate"
-                              ng-model="startDate"
-                              control="startDateCombo"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </span>
+                    <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn w110px">
-                      <wj-input-date
-                              id="srchTimeEndDate"
-                              value="endDate"
-                              ng-model="endDate"
-                              control="endDateCombo"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </span>
+                    <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
                     <span class="chk ml10">
                       <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                       <label for="chkDt">
