@@ -160,6 +160,7 @@ public class SessionServiceImpl implements SessionService {
                 Integer userIdCnt = cmmMenuService.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
                 if(userIdCnt > 0) { sessionTimeOutMin = 720; }
                 System.out.println("setSessionInfo 아이디 / 타임아웃(분) : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+                System.out.println("setSessionInfo sessionId, kjs_check: " + sessionInfoVO.getUserId() + " / " + sessionId);
 
                 redisCustomTemplate.set( redisCustomTemplate.makeKey( sessionId ), sessionInfoVO,
                         sessionTimeOutMin, TimeUnit.MINUTES );
@@ -188,6 +189,7 @@ public class SessionServiceImpl implements SessionService {
                     Integer userIdCnt = cmmMenuService.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
                     if(userIdCnt > 0) { sessionTimeOutMin = 720; }
                     System.out.println("getSessionInfo 아이디 / 타임아웃(분) : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+                    System.out.println("getSessionInfo sessionId, kjs_check: " + sessionInfoVO.getUserId() + " / " + sessionId);
 
                     // 세션 타임 연장
                     redisCustomTemplate.expire( redisCustomTemplate.makeKey( sessionId ),
