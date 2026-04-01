@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="subCon" ng-controller="naverPlacePlusLinkCtrl">
     <div class="searchBar">
@@ -69,6 +70,8 @@
     var userId = "${userId}";
     // 매장코드
     var storeCd = "${storeCd}";
+    // 본사코드
+    var hqOfficeCd = "${hqOfficeCd}";
     // 팝업 Url
     var popUrl = "${popUrl}";
     // 네.아.로 uniqueId
@@ -82,6 +85,7 @@
 
     sessionStorage.setItem("userId", userId);
     sessionStorage.setItem("storeCd", storeCd);
+    sessionStorage.setItem("hqOfficeCd", hqOfficeCd);
     sessionStorage.setItem("popUrl", popUrl);
 
     // 연동 단계 파악
@@ -95,14 +99,24 @@
         if (agreeYn != null && agreeYn != undefined) {
             if (agreeYn.ownerMemberStatus == "REGULAR" && agreeYn.isJoinedMember == true) {
                 var arr = agreeYn.agreedPlacePrivacyAgreementTypes;
+                var cnt = 0;
+
+                // 동의 항목 파악
                 for (var i = 0; i < arr.length; i++) {
                     if (arr[i] === "SMARTPLACE_INTEGRATED_TERMS") {
-                        linkStep = 2;
+                        cnt++;
+                    }
+                    if (arr[i] === "SMARTPLACE_BUSINESS_TERMS") {
+                        cnt++;
+                    }
+                }
 
-                        if (linkYn != null && linkYn != undefined) {
-                            if (linkYn.placeId != null && linkYn.placeId != undefined && linkYn.placeId != "") {
-                                linkStep = 3;
-                            }
+                if (cnt => 2) {
+                    linkStep = 2;
+
+                    if (linkYn != null && linkYn != undefined) {
+                        if (linkYn.placeId != null && linkYn.placeId != undefined && linkYn.placeId != "") {
+                            linkStep = 3;
                         }
                     }
                 }
@@ -157,7 +171,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260330.01" charset="utf-8"></script>
 
 <style>
     /* 텍스트 스타일 */

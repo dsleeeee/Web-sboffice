@@ -43,7 +43,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
@@ -76,7 +76,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>

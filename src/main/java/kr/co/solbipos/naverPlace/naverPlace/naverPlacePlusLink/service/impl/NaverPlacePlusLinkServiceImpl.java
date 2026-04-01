@@ -368,10 +368,25 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
     @Override
     public Map<String, Object> getAgreeYn(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
+        // 세션정보 또는 파라미터에서 받아온 정보 사용
+        String sHqOfficeCd = "";
+        String sStoreCd = "";
+        String sUserId = "";
+
+        if(sessionInfoVO.getStoreCd() != null && sessionInfoVO.getStoreCd() != "") {
+            sHqOfficeCd = sessionInfoVO.getHqOfficeCd();
+            sStoreCd = sessionInfoVO.getStoreCd();
+            sUserId = sessionInfoVO.getUserId();
+        }else{
+            sHqOfficeCd = naverPlacePlusApiVO.getHqOfficeCd();
+            sStoreCd = naverPlacePlusApiVO.getStoreCd();
+            sUserId = naverPlacePlusApiVO.getUserId();
+        }
+
         // 네.아.로 Unique ID 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
-        naverPlacePlusLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        naverPlacePlusLinkVO.setHqOfficeCd(sHqOfficeCd);
+        naverPlacePlusLinkVO.setStoreCd(sStoreCd);
         String uniqueId = naverPlacePlusLinkMapper.getNaverUniqueId(naverPlacePlusLinkVO);
 
         // 개발/운영 Api URL 조회
@@ -383,7 +398,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         // url setting
         String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/pbp-owner-member/agency-target-summary";
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sStoreCd).get("token").toString());
         naverPlacePlusApiVO.setUniqueId(uniqueId);
         naverPlacePlusApiVO.setProjections("AGREED_PLACE_PRIVACY_AGREEMENTS,MY_BIZ_AGREEMENT"); // 스마플 개인정보 약관 동의 목록
 
@@ -395,9 +410,9 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         naverPlacePlusLinkVO.setLastResponseDt(dt);
         naverPlacePlusLinkVO.setAgreementType((String.valueOf(resultMap)));
         naverPlacePlusLinkVO.setRegDt(dt);
-        naverPlacePlusLinkVO.setRegId(sessionInfoVO.getUserId());
+        naverPlacePlusLinkVO.setRegId(sUserId);
         naverPlacePlusLinkVO.setModDt(dt);
-        naverPlacePlusLinkVO.setModId(sessionInfoVO.getUserId());
+        naverPlacePlusLinkVO.setModId(sUserId);
 
         naverPlacePlusLinkMapper.saveNaverAgreement(naverPlacePlusLinkVO);
 

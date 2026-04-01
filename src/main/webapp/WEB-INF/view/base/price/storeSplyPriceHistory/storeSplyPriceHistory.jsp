@@ -133,7 +133,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.saleB"/>" binding="bSplyUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.sale"/>" binding="aSplyUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
@@ -170,7 +170,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.saleB"/>" binding="bSplyUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeSplyPriceHistory.sale"/>" binding="aSplyUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>

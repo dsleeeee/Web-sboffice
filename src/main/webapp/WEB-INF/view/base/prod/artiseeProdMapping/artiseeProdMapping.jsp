@@ -166,14 +166,14 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingCd"/>" binding="mappingCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodNm"/>" binding="prodNm" width="80" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.grpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.grpNm"/>" binding="sdselGrpNm" width="60" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingInfo"/>" binding="mappingInfo" width="300" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingString"/>" binding="mappingString" width="200" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingStringNm"/>" binding="mappingStringNm" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="105" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="105" is-read-only="true" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdNm"/>" binding="erpProdNm" width="105" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -315,7 +315,7 @@
                             id="wjGridProd">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -342,7 +342,7 @@
                             id="wjGridProdExcel">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>

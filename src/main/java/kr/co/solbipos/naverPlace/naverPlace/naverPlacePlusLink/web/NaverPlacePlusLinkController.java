@@ -224,7 +224,7 @@ public class NaverPlacePlusLinkController {
      * @param model
      * @return
      */
-    /*@RequestMapping(value = "/getAgreeYn.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAgreeYn.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getAgreeYn(NaverPlacePlusApiVO naverPlacePlusApiVO, HttpServletRequest request,
                              HttpServletResponse response, Model model) {
@@ -234,7 +234,7 @@ public class NaverPlacePlusLinkController {
         Map<String, Object> resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
-    }*/
+    }
 
     /**
      * 업체목록조회 API 호출
