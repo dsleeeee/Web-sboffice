@@ -147,7 +147,7 @@
             twri.RESRCE_NM,
             twri.URL,
             tcn.NMCODE_ITEM_2 AS ICON_NM,
-            FN_GET_MENU_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
+            FN_GET_MENU_LOGIN_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
         FROM
             TB_WB_RESRCE_INFO twri
         INNER JOIN (
@@ -1321,7 +1321,7 @@
             twri.RESRCE_NM,
             twri.URL,
             tcn.NMCODE_ITEM_2 AS ICON_NM,
-            FN_GET_MENU_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
+            FN_GET_MENU_LOGIN_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
         FROM
             TB_WB_RESRCE_INFO twri
         INNER JOIN (
