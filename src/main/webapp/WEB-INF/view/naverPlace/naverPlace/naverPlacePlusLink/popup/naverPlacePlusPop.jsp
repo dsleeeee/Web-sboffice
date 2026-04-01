@@ -29,6 +29,7 @@
 <script type="text/javascript">
     //console.log("userId : " + sessionStorage.getItem("userId"));
     //console.log("storeCd : " + sessionStorage.getItem("storeCd"));
+    //console.log("hqOfficeCd : " + sessionStorage.getItem("hqOfficeCd"));
     //console.log("popUrl : " + sessionStorage.getItem("popUrl"));
 
     // 이전 화면(연동 단계 파악)
@@ -39,14 +40,60 @@
 
     if (prePage == "login") {
 
-        // 연동 매장 리스트 div hidden
-        document.getElementById('divWrap').style.display = "none";
+        // 동의여부확인 API 호출
+        /*var params = {};
+        params.hqOfficeCd = sessionStorage.getItem("hqOfficeCd");
+        params.storeCd = sessionStorage.getItem("storeCd");
+        params.userId = sessionStorage.getItem("userId");
 
-        // 약관동의 팝업 후
-        //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
-        var popup = window.open(popupUrl, "popup", "width=750, height=1000");
+        $.ajax({
+            type: 'POST',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            url: '/naverPlace/naverPlace/naverPlacePlusLink/getAgreeYn.sb',
+            data: params,
+            success: function (data) {
+                //console.log(JSON.stringify(data));
+                if (data.status === "OK") {
+                    var vAgreeYn = data.data.list;
+                    if (vAgreeYn != null && vAgreeYn != undefined) {
+                        if (vAgreeYn.ownerMemberStatus == "REGULAR" && vAgreeYn.isJoinedMember == true) {
+                            var arr = vAgreeYn.agreedPlacePrivacyAgreementTypes;
+                            var cnt = 0;
+
+                            // 동의 항목 파악
+                            for (var i = 0; i < arr.length; i++) {
+                                if (arr[i] === "SMARTPLACE_INTEGRATED_TERMS") {
+                                    cnt++;
+                                }
+                                if (arr[i] === "SMARTPLACE_BUSINESS_TERMS") {
+                                    cnt++;
+                                }
+                            }
+
+                            if (cnt => 2) {
+                                // 연동 매장 리스트 div show
+                                document.getElementById('divWrap').style.display = "block";
+                                // 매장 조회
+                                getStoreList(0);
+                            } else {
+                                // 약관동의 팝업 이동
+                                goAgreePop();
+                            }
+                        } else {
+                            // 약관동의 팝업 이동
+                            goAgreePop();
+                        }
+                    } else {
+                        // 약관동의 팝업 이동
+                        goAgreePop();
+                    }
+                }
+            }
+        });*/
+
+        goAgreePop();
 
     } else if (prePage == "agree") {
 
@@ -59,6 +106,19 @@
     } else {
         // 연동 매장 리스트 div hidden
         document.getElementById('divWrap').style.display = "none";
+    }
+
+    // 약관동의 팝업 이동
+    function goAgreePop() {
+
+        // 연동 매장 리스트 div hidden
+        document.getElementById('divWrap').style.display = "none";
+
+        // 약관동의 팝업 후
+        //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+        var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
+        var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
     // 업체 찾기

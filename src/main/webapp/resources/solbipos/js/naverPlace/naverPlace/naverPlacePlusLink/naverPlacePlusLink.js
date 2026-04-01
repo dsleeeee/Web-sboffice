@@ -52,14 +52,24 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
                 if (agreeYn != null && agreeYn != undefined) {
                     if (agreeYn.ownerMemberStatus == "REGULAR" && agreeYn.isJoinedMember == true) {
                         var arr = agreeYn.agreedPlacePrivacyAgreementTypes;
+                        var cnt = 0;
+
+                        // 동의 항목 파악
                         for (var i = 0; i < arr.length; i++) {
                             if (arr[i] === "SMARTPLACE_INTEGRATED_TERMS") {
-                                linkStep = 2;
+                                cnt++;
+                            }
+                            if (arr[i] === "SMARTPLACE_BUSINESS_TERMS") {
+                                cnt++;
+                            }
+                        }
 
-                                if (linkYn != null && linkYn != undefined) {
-                                    if (linkYn.placeId != null && linkYn.placeId != undefined && linkYn.placeId != "") {
-                                        linkStep = 3;
-                                    }
+                        if (cnt => 2) {
+                            linkStep = 2;
+
+                            if (linkYn != null && linkYn != undefined) {
+                                if (linkYn.placeId != null && linkYn.placeId != undefined && linkYn.placeId != "") {
+                                    linkStep = 3;
                                 }
                             }
                         }

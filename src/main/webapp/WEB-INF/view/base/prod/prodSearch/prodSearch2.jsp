@@ -523,7 +523,7 @@
                 <c:if test="${momsEnvstVal == '0'}">
                     <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" width="100" is-read-only="true" align="center" data-map="regFgDataMap"></wj-flex-grid-column>
 
                 <c:if test="${subPriceFg == '1'}">
@@ -677,7 +677,7 @@
                 <c:if test="${momsEnvstVal == '0'}">
                     <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" width="100" is-read-only="true" align="center" data-map="regFgDataMap"></wj-flex-grid-column>
 
                 <c:if test="${subPriceFg == '1'}">
