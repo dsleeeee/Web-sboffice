@@ -237,7 +237,7 @@
                                             WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
                                             AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
                                             AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -253,7 +253,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                             AND     B.STORE_CD          =   A.ORGN_CD
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -269,7 +269,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'C'
                                             AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
                                                 /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
@@ -374,7 +374,7 @@
                                                 ,       TB_HQ_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'H'
                                                 AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
-                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND	    B.USER_ID           =   #{userId}
                                                 AND     B.EMP_NO			=   #{empNo}
                                             </if>
                                             <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
@@ -531,7 +531,7 @@
                                                 ,       TB_MS_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                                 AND     B.STORE_CD      =   A.ORGN_CD
-                                                AND	    B.STORE_CD		=   #{storeCd}
+                                                AND	    B.USER_ID           =   #{userId}
                                                 AND     B.EMP_NO        =	#{empNo}
                                             </if>
                                         ) twae
@@ -602,7 +602,7 @@
                                             WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
                                             AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
                                             AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -618,7 +618,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                             AND     B.STORE_CD          =   A.ORGN_CD
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -634,7 +634,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'C'
                                             AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
                                             /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
@@ -739,7 +739,7 @@
                                                 ,       TB_HQ_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'H'
                                                 AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
-                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND	    B.USER_ID           =   #{userId}
                                                 AND     B.EMP_NO			=   #{empNo}
                                             </if>
                                             <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
@@ -896,7 +896,7 @@
                                                 ,       TB_MS_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                                 AND     B.STORE_CD      =   A.ORGN_CD
-                                                AND     B.STORE_CD		=   #{storeCd}
+                                                AND	    B.USER_ID           =   #{userId}
                                                 AND     B.EMP_NO   =	#{empNo}
                                             </if>
                                         ) twae
@@ -971,7 +971,7 @@
                                             WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
                                             AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
                                             AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -987,7 +987,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                             AND     B.STORE_CD          =   A.ORGN_CD
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             UNION
                                             SELECT  B.USER_ID
@@ -1003,7 +1003,7 @@
                                             ,       TB_MS_EMPLOYEE B
                                             WHERE   A.AUTHOR_PRODC_FG   =   'C'
                                             AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
-                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND	    B.USER_ID           =   #{userId}
                                             AND     B.EMP_NO            =   #{empNo}
                                             <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
                                                 /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
@@ -1108,7 +1108,7 @@
                                                 ,       TB_HQ_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'H'
                                                 AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
-                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND	    B.USER_ID           =   #{userId}
                                                 AND     B.EMP_NO			=   #{empNo}
                                             </if>
                                             <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
@@ -1265,7 +1265,7 @@
                                                 ,       TB_MS_EMPLOYEE B
                                                 WHERE   A.AUTHOR_PRODC_FG   =   'S'
                                                 AND     B.STORE_CD      =   A.ORGN_CD
-                                                AND	    B.STORE_CD		=   #{storeCd}
+                                                AND	    B.USER_ID       =   #{userId}
                                                 AND     B.EMP_NO        =	#{empNo}
                                             </if>
                                         ) twae
