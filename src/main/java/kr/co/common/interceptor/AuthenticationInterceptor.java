@@ -480,6 +480,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         ResrceInfoVO resrceInfoVO = new ResrceInfoVO();
         resrceInfoVO.setUrl(url);
         resrceInfoVO.setUserId(sessionInfoVO.getUserId());
+        resrceInfoVO.setUserIp(sessionInfoVO.getLoginIp());
 
         if ("N".equals(cmmMenuService.userMenuChkYn(resrceInfoVO))) {
             LOGGER.info("userMenuChkYn URL : " + url);

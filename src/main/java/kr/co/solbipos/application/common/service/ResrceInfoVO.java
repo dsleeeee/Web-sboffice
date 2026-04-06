@@ -59,7 +59,9 @@ public class ResrceInfoVO extends CmmVO {
     private String authOrgn;
     /** 사용자 아이디 */
     private String userId;
-    
+    /** 사용자 접속 아이피 */
+    private String userIp;
+
     /**
      * @return the resrceCd
      */
@@ -219,5 +221,13 @@ public class ResrceInfoVO extends CmmVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserIp() {
+        return userIp;
+    }
+
+    public void setUserIp(String userIp) {
+        this.userIp = userIp;
     }
 }
