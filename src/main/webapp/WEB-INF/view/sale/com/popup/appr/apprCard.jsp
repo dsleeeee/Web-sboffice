@@ -50,7 +50,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.instCnt"/>" 	binding="instCnt" 		width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.exDate"/>" 		binding="exDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprDt"/>" 		binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprNo"/>" 		binding="apprNo" 		width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprNo"/>" 		binding="apprNo" 		width="70" 	align="center" is-read-only="true" format="d"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprAmt"/>" 	binding="apprAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>

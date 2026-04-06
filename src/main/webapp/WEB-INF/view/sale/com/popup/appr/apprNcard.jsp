@@ -48,7 +48,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.instCntNm"/>" 	binding="instCntNm" 	width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.instCnt"/>" 	binding="instCnt" 		width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprDt"/>" 	binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprNo"/>" 	binding="apprNo" 		width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprNo"/>" 	binding="apprNo" 		width="70" 	align="center" is-read-only="true" format="d"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprAmt"/>" 	binding="apprAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>

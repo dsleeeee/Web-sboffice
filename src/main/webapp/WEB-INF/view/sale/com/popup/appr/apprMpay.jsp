@@ -44,7 +44,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.pointNm"/>" 	binding="pointNm" 		width="130" 	align="right"  is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.pointAmt"/>" 	binding="pointAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.apprDt"/>" 		binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.apprNo"/>" 		binding="apprNo" 		width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.apprNo"/>" 		binding="apprNo" 		width="70" 	align="center" is-read-only="true" format="d"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mpay.apprAmt"/>" 	binding="apprAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
