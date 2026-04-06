@@ -192,7 +192,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/mCoupnHistory/mCoupnHistory.js?ver=20260327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/mCoupnHistory/mCoupnHistory.js?ver=20260406.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

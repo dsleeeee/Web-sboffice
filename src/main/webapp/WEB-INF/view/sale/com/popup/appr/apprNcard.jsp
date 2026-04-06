@@ -48,7 +48,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.instCntNm"/>" 	binding="instCntNm" 	width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.instCnt"/>" 	binding="instCnt" 		width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprDt"/>" 	binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprNo"/>" 	binding="apprNo" 		width="70" 	align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprNo"/>" 	binding="apprNo" 		width="70" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprAmt"/>" 	binding="apprAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
@@ -60,4 +60,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprNcard.js?ver=20210415.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprNcard.js?ver=20260406.01" charset="utf-8"></script>

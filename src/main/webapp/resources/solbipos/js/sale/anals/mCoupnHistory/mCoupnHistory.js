@@ -186,7 +186,7 @@ app.controller('mCoupnHistoryCtrl', ['$scope', '$http', '$timeout', function ($s
 function saveFormatItem(args) {
     let p = args.panel, row = args.row, col = args.col, xlsxCell = args.xlsxCell, cell, color;
     if (p.cellType === wijmo.grid.CellType.Cell) {
-        if (p.columns[col].binding === 'mcoupnBarcdNo' || p.columns[col].binding === 'apprUniqueNo' || p.columns[col].binding === 'apprNo') {
+        if (p.columns[col].binding === 'mcoupnBarcdNo' || p.columns[col].binding === 'apprUniqueNo' || p.columns[col].binding === 'apprNo' || p.columns[col].binding === 'cashBillApprNo') {
             if (xlsxCell.value) {
                 xlsxCell.style.format = "@"
             }
