@@ -158,9 +158,14 @@ public class TodayGnrlzController {
 
         for(int i=0; i < list.size(); i++) {
             // 맘스터치 결제수단 '식권' -> '식권대장' 으로 변경표기 (20240909)
+            // 맘스터치 결제수단 'VMEM 전자상품권' -> '선불카드' 로 변경표기 (20260402)
             if(sessionInfoVO.getHqOfficeCd().equals("DS021") || sessionInfoVO.getHqOfficeCd().equals("DS034") || sessionInfoVO.getHqOfficeCd().equals("H0393")){
                 if(list.get(i).getStr("payCd").equals("14")){
                     list.get(i).put("payNm", "식권대장");
+                }
+
+                if(list.get(i).getStr("payCd").equals("06")){
+                    list.get(i).put("payNm", "선불카드");
                 }
             }
         }

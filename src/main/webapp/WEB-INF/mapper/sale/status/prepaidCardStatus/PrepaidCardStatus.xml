@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PrepaidCardStatus.xml
+    맘스터치 > 매출분석2 > 선불카드현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.04.02     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.prepaidCardStatus.service.impl.PrepaidCardStatusMapper">
+
+    <!-- 선불카드 충전 현황 - 조회 -->
+    <!--
+        TABLE    : TB_NS_NONSALE_HDR
+        PARAM    : prepaidCardStatusVO
+        COMMENTS : 선불카드 충전 현황 리스트를 조회한다.
+    -->
+    <select id="getPrepaidCardChargeStatus" parameterType="prepaidCardStatusVO" resultType="DefaultMap">
+        /* PrepaidCardStatusMapper.getPrepaidCardChargeStatus */
+        <!-- 본사 -->
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <if test='orgnFg == "H"'>
+            SELECT  tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+            ,       tnnh.STORE_CD
+            ,       tms.STORE_NM
+            ,       tms.HQ_BRAND_CD AS BRAND_CD
+            ,       tmsi.MOMS_TEAM
+            ,       tmsi.MOMS_AC_SHOP
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM    TB_NS_NONSALE_HDR tnnh
+            ,       TB_MS_STORE tms
+            ,       TB_MS_STORE_INFO tmsi
+            WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tnnh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tnnh.SALE_YN = #{saleYn}
+            </if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tnnh.STORE_CD IN (${storeCdQuery})
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+            </if>
+            <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+            </if>
+            <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+            </if>
+            <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+            </if>
+            <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+            </if>
+            AND     tnnh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND     tnnh.STORE_CD = tms.STORE_CD
+            AND     tnnh.STORE_CD = tmsi.STORE_CD(+)
+            GROUP
+            BY      tms.HQ_OFFICE_CD
+            ,       tms.HQ_BRAND_CD
+            ,       tms.BRANCH_CD
+            ,       tnnh.STORE_CD
+            ,       tms.STORE_NM
+            ,       tmsi.MOMS_TEAM
+            ,       tmsi.MOMS_AC_SHOP
+            ORDER
+            BY      tnnh.STORE_CD
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            SELECT  tnnh.STORE_CD
+            ,       TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM    TB_NS_NONSALE_HDR tnnh
+            WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tnnh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tnnh.SALE_YN = #{saleYn}
+            </if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tnnh.STORE_CD IN (${storeCdQuery})
+            </if>
+            GROUP
+            BY      tnnh.STORE_CD
+            ,       tnnh.SALE_DATE
+            ORDER
+            BY      tnnh.STORE_CD
+            ,       tnnh.SALE_DATE DESC
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 선불카드 사용 현황 - 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VCHARGE
+        PARAM    : prepaidCardStatusVO
+        COMMENTS : 선불카드 사용 현황 리스트를 조회한다.
+    -->
+    <select id="getPrepaidCardUseStatus" parameterType="prepaidCardStatusVO" resultType="DefaultMap">
+        /* PrepaidCardStatusMapper.getPrepaidCardUseStatus */
+        <!-- 본사 -->
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <if test='orgnFg == "H"'>
+            SELECT  tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+            ,       tsspv.STORE_CD
+            ,       tms.STORE_NM
+            ,       tms.HQ_BRAND_CD AS BRAND_CD
+            ,       tmsi.MOMS_TEAM
+            ,       tmsi.MOMS_AC_SHOP
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS USE_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM    TB_SL_SALE_PAY_VCHARGE tsspv
+            ,       TB_MS_STORE tms
+            ,       TB_MS_STORE_INFO tmsi
+            WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tsspv.SALE_YN = #{saleYn}
+            </if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tsspv.STORE_CD IN (${storeCdQuery})
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+            </if>
+            <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+            </if>
+            <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+            </if>
+            <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+            </if>
+            <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+            </if>
+            AND     tsspv.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND     tsspv.STORE_CD = tms.STORE_CD
+            AND     tsspv.STORE_CD = tmsi.STORE_CD(+)
+            GROUP
+            BY      tms.HQ_OFFICE_CD
+            ,       tms.HQ_BRAND_CD
+            ,       tms.BRANCH_CD
+            ,       tsspv.STORE_CD
+            ,       tms.STORE_NM
+            ,       tmsi.MOMS_TEAM
+            ,       tmsi.MOMS_AC_SHOP
+            ORDER
+            BY      tsspv.STORE_CD
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            SELECT  tsspv.STORE_CD
+            ,       TO_CHAR(TO_DATE(tsspv.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS USE_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM    TB_SL_SALE_PAY_VCHARGE tsspv
+            WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tsspv.SALE_YN = #{saleYn}
+            </if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tsspv.STORE_CD IN (${storeCdQuery})
+            </if>
+            GROUP
+            BY      tsspv.STORE_CD
+            ,       tsspv.SALE_DATE
+            ORDER
+            BY      tsspv.STORE_CD
+            ,       tsspv.SALE_DATE DESC
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 선불카드 충전 현황 - 상세 조회 -->
+    <!--
+        TABLE    : TB_NS_NONSALE_HDR
+        PARAM    : prepaidCardStatusVO
+        COMMENTS : 선불카드 충전 현황 상세를 조회한다.
+    -->
+    <select id="getPrepaidCardChargeStatusDtl" parameterType="prepaidCardStatusVO" resultType="DefaultMap">
+        /* PrepaidCardStatusMapper.getPrepaidCardChargeStatusDtl */
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            SELECT  tnnh.STORE_CD
+            ,       tms.STORE_NM
+            ,       TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       tnnh.POS_NO
+            <!--, tnnh.CARD_NO -->
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            <!--, tnnh.REMAIN_AMT -->
+            FROM    TB_NS_NONSALE_HDR tnnh
+            ,       TB_MS_STORE tms
+            WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tnnh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tnnh.SALE_YN = #{saleYn}
+            </if>
+            AND     tnnh.STORE_CD = #{storeCd}
+            AND     tnnh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND     tnnh.STORE_CD = tms.STORE_CD
+            GROUP
+            BY      tnnh.STORE_CD
+            ,       tms.STORE_NM
+            ,		tnnh.SALE_DATE
+            ,       tnnh.POS_NO
+            <!-- ,       tnnh.CARD_NO -->
+            <!--, tnnh.REMAIN_AMT -->
+            <!--, tsspv.REG_DT -->
+            ORDER
+            BY      tnnh.STORE_CD
+            ,		tnnh.SALE_DATE
+            <!-- ,       tnnh.CARD_NO -->
+            <!-- ,       tnnh.REG_DT-->
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            SELECT  TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            <!--, tnnh.CARD_NO -->
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            <!--, tnnh.REMAIN_AMT -->
+            FROM    TB_NS_NONSALE_HDR tnnh
+            WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tnnh.SALE_DATE = #{saleDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tnnh.SALE_YN = #{saleYn}
+            </if>
+            AND     tnnh.STORE_CD = #{storeCd}
+            GROUP
+            BY      tnnh.SALE_DATE
+            <!-- ,       tnnh.CARD_NO -->
+            <!-- ,       tnnh.REMAIN_AMT-->
+            <!-- ,       tnnh.REG_DT-->
+            ORDER
+            BY      tnnh.SALE_DATE
+            <!-- ,       tnnh.CARD_NO -->
+            <!-- ,       tnnh.REG_DT-->
+        </if>
+    </select>
+
+    <!-- 선불카드 사용 현황 - 상세 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VCHARGE
+        PARAM    : prepaidCardStatusVO
+        COMMENTS : 선불카드 사용 현황 상세를 조회한다.
+    -->
+    <select id="getPrepaidCardUseStatusDtl" parameterType="prepaidCardStatusVO" resultType="DefaultMap">
+        /* PrepaidCardStatusMapper.getPrepaidCardUseStatusDtl */
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            SELECT  tsspv.STORE_CD
+            ,       tms.STORE_NM
+            ,       TO_CHAR(TO_DATE(tsspv.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       tsspv.POS_NO
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS USE_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
+            ,       tsspv.VCHARGE_REMAIN_AMT
+            FROM    TB_SL_SALE_PAY_VCHARGE tsspv
+            ,       TB_MS_STORE tms
+            WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tsspv.SALE_YN = #{saleYn}
+            </if>
+            AND     tsspv.STORE_CD = #{storeCd}
+            AND     tsspv.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND     tsspv.STORE_CD = tms.STORE_CD
+            GROUP
+            BY      tsspv.STORE_CD
+            ,       tms.STORE_NM
+            ,		tsspv.SALE_DATE
+            ,       tsspv.POS_NO
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       tsspv.VCHARGE_REMAIN_AMT
+            ,       tsspv.REG_DT
+            ORDER
+            BY      tsspv.STORE_CD
+            ,		tsspv.SALE_DATE
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       tsspv.REG_DT
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            SELECT  TO_CHAR(TO_DATE(tsspv.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS USE_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
+            ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
+            ,       tsspv.VCHARGE_REMAIN_AMT
+            FROM    TB_SL_SALE_PAY_VCHARGE tsspv
+            WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     tsspv.SALE_DATE = #{saleDate}
+            <if test='saleYn != null and saleYn != ""'>
+                AND tsspv.SALE_YN = #{saleYn}
+            </if>
+            AND     tsspv.STORE_CD = #{storeCd}
+            GROUP
+            BY      tsspv.SALE_DATE
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       tsspv.VCHARGE_REMAIN_AMT
+            ,       tsspv.REG_DT
+            ORDER
+            BY      tsspv.SALE_DATE
+            ,       tsspv.VCHARGE_CARD_NO
+            ,       tsspv.REG_DT
+        </if>
+    </select>
+
+</mapper>
