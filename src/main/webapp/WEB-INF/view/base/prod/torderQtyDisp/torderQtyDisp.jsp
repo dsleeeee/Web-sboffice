@@ -473,7 +473,7 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.prodNm"/>" binding="prodNm" width="170" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="torderQtyDisp.ordQtyDispFg"/>" binding="ordQtyDispFg" data-map="ordQtyDispFgDataMap" width="110" align="center"></wj-flex-grid-column>
                 <c:if test="${brandUseFg == '1'}">

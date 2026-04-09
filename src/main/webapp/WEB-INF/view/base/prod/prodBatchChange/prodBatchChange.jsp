@@ -382,10 +382,10 @@
                     <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
                         <wj-flex-grid-column header="<s:message code="prodBatchChange.regFg"/>" binding="regFg" data-map="regFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCd"/>" binding="pathNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="90" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.pointSaveYn"/>" binding="pointSaveYn" data-map="pointSaveYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.mapProdCd"/>" binding="mapProdCd" width="90" align="center"></wj-flex-grid-column>
@@ -433,10 +433,10 @@
                 <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.regFg"/>" binding="regFg" data-map="regFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.prodClassCd"/>" binding="pathNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.pointSaveYn"/>" binding="pointSaveYn" data-map="pointSaveYnDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.mapProdCd"/>" binding="mapProdCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>

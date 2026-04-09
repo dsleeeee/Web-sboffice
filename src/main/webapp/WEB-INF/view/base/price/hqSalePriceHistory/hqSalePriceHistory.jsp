@@ -92,7 +92,7 @@
               item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodCd"/>"   binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodCd"/>"   binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodNm"/>"   binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.saleB"/>"    binding="bSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.sale"/>"     binding="saleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
@@ -137,7 +137,7 @@
                 item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodCd"/>"   binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodCd"/>"   binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.prodNm"/>"   binding="prodNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.saleB"/>"    binding="bSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="hqSalePriceHistory.sale"/>"     binding="saleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>

@@ -112,7 +112,7 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.saleB"/>" binding="bCostUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.sale"/>" binding="aCostUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
@@ -147,7 +147,7 @@
                 item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.saleB"/>" binding="bCostUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="chgCostPriceHistory.sale"/>" binding="aCostUprc" is-read-only="true" width="80" align="right"></wj-flex-grid-column>

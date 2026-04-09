@@ -100,7 +100,7 @@
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.expandYn"/>" binding="expandYn" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.mappingYn"/>" binding="mappingYn" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
           </c:if>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdUprc"/>" binding="addProdUprc" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -152,7 +152,7 @@
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.expandYn"/>" binding="expandYn" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.mappingYn"/>" binding="mappingYn" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
           </c:if>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdUprc"/>" binding="addProdUprc" width="85" align="right" is-read-only="true"></wj-flex-grid-column>

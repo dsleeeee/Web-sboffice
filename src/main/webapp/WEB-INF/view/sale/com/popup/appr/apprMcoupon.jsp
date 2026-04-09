@@ -48,7 +48,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.cashBillCardNo"/>" 	binding="cashBillCardNo" 	width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.cashBillApprDt"/>" 	binding="cashBillApprDt" 	width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.apprDt"/>" 	binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.apprNo"/>" 	binding="apprNo" 		width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.apprNo"/>" 	binding="apprNo" 		width="150" 	align="center" is-read-only="true" format="@"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.mcoupn.apprAmt"/>" 	binding="apprAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
@@ -60,4 +60,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprMcoupon.js?ver=20260406.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprMcoupon.js?ver=20260409.01" charset="utf-8"></script>

@@ -124,7 +124,6 @@ app.controller('saleApprCashCtrl', ['$scope', '$http', '$timeout', function ($sc
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                 includeColumnHeaders: true,
                 includeCellStyles: true,
-                formatItem: saveFormatItem,
                 includeColumns: function (column) {
                     return column.visible;
                 }
@@ -137,14 +136,3 @@ app.controller('saleApprCashCtrl', ['$scope', '$http', '$timeout', function ($sc
     };
 
 }]);
-
-function saveFormatItem(args) {
-    let p = args.panel, row = args.row, col = args.col, xlsxCell = args.xlsxCell, cell, color;
-    if (p.cellType === wijmo.grid.CellType.Cell) {
-        if (p.columns[col].binding === 'apprNo') {
-            if (xlsxCell.value) {
-                xlsxCell.style.format = "@"
-            }
-        }
-    }
-};

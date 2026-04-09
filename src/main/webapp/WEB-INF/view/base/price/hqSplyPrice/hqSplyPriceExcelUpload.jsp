@@ -42,7 +42,7 @@
                     ime-enabled="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/><s:message code="hqSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="hqSplyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
@@ -105,7 +105,7 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSplyPrice.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/><s:message code="hqSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSplyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
@@ -139,7 +139,7 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSplyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>

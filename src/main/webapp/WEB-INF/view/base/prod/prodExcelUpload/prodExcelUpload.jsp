@@ -186,7 +186,7 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.brandNm"/>" binding="hqBrandCd" data-map="brandDataMap" width="85" align="center" <c:if test="${brandUseFg == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
                     <c:if test="${prodNoEnvFg == 'MANUAL'}">
-                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="70" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodCd"/>" binding="prodCd" width="70" align="center" format="@"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodNm"/>" binding="prodNm" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prodClassCd"/>" binding="prodClassCd" data-map="prodClassCdDataMap" width="150" align="center"></wj-flex-grid-column>

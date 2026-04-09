@@ -29,7 +29,7 @@
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.classCd"/>" binding="tukeyClassCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.classNm"/>" binding="tukeyClassNm" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.pageNo"/>" binding="pageNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.layer.prodCd"/>" binding="prodCd" width="90" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.prodCd"/>" binding="prodCd" width="90" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.prodNm"/>" binding="prodNm" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.prodInfo"/>" binding="prodInfo" data-map="prodInfoDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>

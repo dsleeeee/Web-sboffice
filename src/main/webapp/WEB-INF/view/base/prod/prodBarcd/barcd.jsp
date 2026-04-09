@@ -196,10 +196,10 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.result"/>" binding="result" width="80" is-read-only="true" align="center" visible = "false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="barcd.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="barcd.barcdOld"/>" binding="barcdOld" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="barcd.barcdNew"/>" binding="barCd" width="*" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.barcdOld"/>" binding="barcdOld" width="*" is-read-only="true" format="@"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.barcdNew"/>" binding="barCd" width="*" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.regFg"/>" binding="regFg" width="*" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -232,10 +232,10 @@
                     item-formatter="_itemFormatter"
                     ime-enabled="true">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="barcd.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="barcd.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="barcd.barcdOld"/>" binding="barcdOld" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="barcd.barcdNew"/>" binding="barcd" width="*" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.barcdOld"/>" binding="barcdOld" width="*" is-read-only="true" format="@"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="barcd.barcdNew"/>" binding="barcd" width="*" format="@"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <%--//엑셀 리스트--%>

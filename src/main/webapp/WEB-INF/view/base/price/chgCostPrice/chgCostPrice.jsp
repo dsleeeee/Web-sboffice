@@ -188,7 +188,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="chgCostPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="chgCostPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.saleUprc"/> " binding="saleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.splyUprc"/> " binding="splyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
@@ -226,7 +226,7 @@
                     id="wjGridExcelList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="chgCostPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="chgCostPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.saleUprc"/> " binding="saleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="chgCostPrice.splyUprc"/> " binding="splyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>

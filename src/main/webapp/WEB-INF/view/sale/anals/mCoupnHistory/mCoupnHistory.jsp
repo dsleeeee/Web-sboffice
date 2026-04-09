@@ -130,19 +130,19 @@
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnCd"/>" binding="mcoupnCd" data-map="mcoupnCdDataMap" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnTerminlNo"/>" binding="mcoupnTermnlNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnTypeFg"/>" binding="mcoupnTypeFg" data-map="mcoupnTypeFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="150" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnUprc"/>" binding="mcoupnUprc" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.mCoupnRemainAmt"/>" binding="mcoupnRemainAmt" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprUniqueNo"/>" binding="apprUniqueNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprUniqueNo"/>" binding="apprUniqueNo" width="150" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprDt"/>" binding="apprDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprNo"/>" binding="apprNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprNo"/>" binding="apprNo" width="150" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprMsg"/>" binding="apprMsg" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.cornrCd"/>" binding="cornrCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.apprLogNo"/>" binding="apprLogNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillApprProcFg"/>" binding="cashBillApprProcFg" data-map="cashBillApprProcFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillCardNo"/>" binding="cashBillCardNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillApprDt"/>" binding="cashBillApprDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillApprNo"/>" binding="cashBillApprNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillApprNo"/>" binding="cashBillApprNo" width="130" align="center" is-read-only="true" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.cashBillApprLogNo"/>" binding="cashBillApprLogNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.orgBillNo"/>" binding="orgBillNo" width="160" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mCoupnHistory.regDt"/>" binding="regDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -192,7 +192,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/mCoupnHistory/mCoupnHistory.js?ver=20260406.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/mCoupnHistory/mCoupnHistory.js?ver=20260409.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

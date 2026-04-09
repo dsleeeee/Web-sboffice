@@ -206,7 +206,7 @@
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
                     <%-- 배달앱 구분코드 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
@@ -238,7 +238,7 @@
                         ime-enabled="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.useYn"/>" binding="useYn" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <%-- 배달앱 구분코드 컬럼 생성--%>

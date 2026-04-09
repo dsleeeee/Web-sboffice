@@ -217,7 +217,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.store"/> " binding="storeSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
@@ -255,7 +255,7 @@
                     id="wjGridExcelList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.store"/> " binding="storeSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>

@@ -57,7 +57,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeSplyPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPrice.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPrice.hq"/><s:message code="storeSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSplyPrice.store"/><s:message code="storeSplyPrice.saleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
@@ -104,7 +104,7 @@
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.result"/>" binding="result" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.hq"/><s:message code="storeSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.store"/><s:message code="storeSplyPrice.saleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
@@ -141,7 +141,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSplyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSplyPrice.store"/><s:message code="storeSplyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>

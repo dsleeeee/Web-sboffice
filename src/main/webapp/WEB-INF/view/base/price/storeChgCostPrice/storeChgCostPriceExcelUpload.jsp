@@ -94,7 +94,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.hq"/><s:message code="storeChgCostPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeChgCostPrice.store"/><s:message code="storeChgCostPrice.saleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
@@ -140,7 +140,7 @@
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.result"/>" binding="result" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="120" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.hq"/><s:message code="storeChgCostPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.store"/><s:message code="storeChgCostPrice.saleUprc"/>" binding="storeSaleUprc" is-read-only="true" width="90" align="right"></wj-flex-grid-column>
@@ -176,7 +176,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeChgCostPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeChgCostPrice.store"/><s:message code="storeChgCostPrice.change.costPrice"/>" binding="costUprc" width="100" align="right"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
