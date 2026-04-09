@@ -612,7 +612,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
                 if ($("#marketingSmsSendTitle").val() != "") {
                     // 최대길이 체크
-                    if (nvl($("#marketingSmsSendTitle").val(), '').getByteLengthForOracle() > 40) {
+                    if (nvl($("#marketingSmsSendTitle").val(), '').getByteLengthForOracle() > 32) {
                         $scope._popMsg(messages["marketingSmsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
                         return false;
                     }
@@ -830,7 +830,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             if (reserveYn == "1") {
                 params.sendDate = reserveDate; // 전송일시
             }
-            params.title = $("#marketingSmsSendTitle").val(); // 제목
+            params.title = "(광고)" + $("#marketingSmsSendTitle").val(); // 제목
             params.content = content; // 내용
             params.msgType = msgType; // 메세지타입
             params.cstNo = ""; // 회원번호
@@ -872,7 +872,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     if (reserveYn == "1") {
                         $scope.flexMarketingSmsSend.collectionView.items[i].sendDate = reserveDate; // 전송일시
                     }
-                    $scope.flexMarketingSmsSend.collectionView.items[i].title = $("#marketingSmsSendTitle").val(); // 제목
+                    $scope.flexMarketingSmsSend.collectionView.items[i].title = "(광고)" + $("#marketingSmsSendTitle").val(); // 제목
                     $scope.flexMarketingSmsSend.collectionView.items[i].content = content; // 내용
                     $scope.flexMarketingSmsSend.collectionView.items[i].msgType = msgType; // 메세지타입
                     $scope.flexMarketingSmsSend.collectionView.items[i].cstNo = ""; // 회원번호
