@@ -357,7 +357,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeSaleArea/storeSaleArea.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeSaleArea/storeSaleArea.js?ver=20260327.01" charset="utf-8"></script>
 
 <%-- NAVER Maps API --%>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=67szg2cbo7"></script>

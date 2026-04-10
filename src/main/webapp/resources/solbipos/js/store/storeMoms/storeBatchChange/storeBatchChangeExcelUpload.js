@@ -315,6 +315,16 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                                 if(listSize <= ((x+1) * 10)){
                                     $scope._popMsg(messages['cmm.saveSucc']);
                                     $scope.excelUploadingPopup(false);
+
+                                    $scope.deleteTmpStoreList();
+
+                                    // 사용자 행위 기록
+                                    var actParams = {};
+                                    actParams.resrceCd = menuCd;
+                                    actParams.pathNm = "맘스터치-매장관리-매장정보일괄변경-엑셀업로드 탭";
+                                    actParams.contents = "[저장] 버튼 클릭 시";
+
+                                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                                     return false;
                                 }
                             }else if(response.data.status === 'SERVER_ERROR'){

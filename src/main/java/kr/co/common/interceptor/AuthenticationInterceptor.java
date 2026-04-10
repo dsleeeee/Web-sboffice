@@ -27,6 +27,10 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -91,8 +95,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         boolean isSessionValid = true;
         // 세션 객체가 없는 경우
         if ( sessionInfoVO == null ) {
-            isSessionValid = false;
-            System.out.println("session status null 1");
+//            isSessionValid = false;
+//            System.out.println("session status null 1");
+            sessionInfoVO = new SessionInfoVO();
+
+            request.getSession().setAttribute("sessionInfoVO", sessionInfoVO);
         } else {
             // 세션 객체는 있지만 필수값들이 없는 경우
             if ( sessionInfoVO.getUserId() == null && sessionInfoVO.getMenuData() == null ) {
@@ -389,6 +396,44 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         resrceInfoVO.setDispLevel(Long.valueOf(dispLevel));
 
         if(cmmMenuService.menuResrceChk(resrceInfoVO) < 1){
+
+            StringBuilder log = new StringBuilder();
+            String currentDt = DateUtil.currentDateTimeString();
+
+            System.out.println("세션정보" + sessionInfoVO.toString());
+            System.out.println("유알엘" + url);
+
+            // 메뉴 접근 여부 확인
+            if (sessionInfoVO.getAccessMenuData() != null && !sessionInfoVO.getAccessMenuData().isEmpty() && sessionInfoVO.getCurrentMenu() != null) {
+                ResrceInfoBaseVO lastMenu = sessionInfoVO.getAccessMenuData().get(sessionInfoVO.getAccessMenuData().size() - 1);
+
+                if (lastMenu.getResrceCd().equals(sessionInfoVO.getCurrentMenu().getResrceCd())) {
+                    // 같음
+                } else {
+                    // 다름
+                    log.append("----------최근접속메뉴와 현재메뉴 불일치 START----------\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",lastHistoryMenu:").append(lastMenu.getResrceCd()).append("\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",currentMenu:").append(sessionInfoVO.getCurrentMenu().getResrceCd()).append("\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                            .append("----------최근접속메뉴와 현재메뉴 불일치 END----------\n");
+                }
+            }else{
+                // 없음
+                log.append("----------메뉴 접근 없이 조회 START----------\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",lastHistoryMenu:").append("없음").append("\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",currentMenu:").append("없음").append("\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                        .append("----------메뉴 접근 없이 조회 END----------\n");
+            }
+
+            makeLoginLog(log);
+
             LOGGER.info("Event URL : " + url);
             LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
             return true;
@@ -489,6 +534,42 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    /**
+     * 로그를 입력받아 로그 파일에 출력
+     *
+     * @param log     로그
+     */
+    public void makeLoginLog(StringBuilder log) {
+
+        String catalinaBase = System.getProperty("catalina.base");
+        // 오늘 날짜
+        Date date = new Date();
+        String nowDate = new SimpleDateFormat("yyyyMMdd").format(date);
+
+        // 생성 파일 경로
+        String fileName = "D:\\log_test\\QUERYTIME_" + nowDate + ".OUT"; // TEST
+//        String fileName = catalinaBase + "/logs/LOGIN_CHK_LOG_" + nowDate + ".OUT";
+
+        try {
+
+            // 파일 객체 생성
+            File file = new File(fileName);
+
+            // true 지정시 파일의 기존 내용에 이어서 작성
+            FileWriter fw = new FileWriter(file, true);
+
+            // 파일안에 문자열 쓰기
+            fw.write(log.toString());
+            fw.flush();
+
+            // 객체 닫기
+            fw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

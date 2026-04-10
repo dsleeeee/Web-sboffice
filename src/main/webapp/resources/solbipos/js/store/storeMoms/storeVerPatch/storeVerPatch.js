@@ -238,10 +238,19 @@ app.controller('storeVerPatchCtrl', ['$scope', '$http', '$timeout', function ($s
 
         console.log(params);
 
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/store/storeMoms/storeVerPatch/storeVerPatch/getStoreVerPatchList.sb", params, function (){
 
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/store/storeMoms/storeVerPatch/storeVerPatch/getStoreVerPatchList.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
+
     };
 
     // 확장조회 숨김/보임

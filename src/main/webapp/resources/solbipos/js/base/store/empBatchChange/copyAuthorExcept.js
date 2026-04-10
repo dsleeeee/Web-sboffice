@@ -120,11 +120,25 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params, function (){
+
+        });
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
             $("#orgEmpNo").val("");
             $("#orgEmp").text(messages["empBatchChange.original.emp"] + " : ");
 
-            var grid = agrid.getScope('copyAuthorExcept2Ctrl');
-            grid._gridDataInit();
+            var grid2 = agrid.getScope('copyAuthorExcept2Ctrl');
+            grid2._gridDataInit();
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 
@@ -220,7 +234,16 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params);
+        $.postJSON("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
 
     // 복사

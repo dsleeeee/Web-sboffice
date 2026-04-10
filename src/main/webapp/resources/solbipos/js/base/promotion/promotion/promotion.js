@@ -188,7 +188,17 @@ app.controller('promotionCtrl', ['$scope', '$http','$timeout', function ($scope,
             params.promotionDate = wijmo.Globalize.format($scope.promotionDate.value, 'yyyyMMdd');
         }
 
-        $scope._inquirySub("/base/promotion/promotion/list.sb", params, function () {});
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/promotion/promotion/list.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
 
     // 행사일 검색조건 사용/미사용 체크박스
@@ -329,6 +339,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         var params = {};
         params.promotionCd = data.promotionCd;
         params.beneSeq = "1";
+        console.log(0);
 
         $.postJSON("/base/promotion/promotion/detail.sb", params, function(result) {
 

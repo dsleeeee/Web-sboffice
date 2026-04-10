@@ -92,13 +92,21 @@ app.controller('cdMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         var params = {};
         params.nmcodeGrpCd = "000";
         params.useYn = $scope.useYnFg;
+        params.nmcodeCd = $scope.nmcodeCd;
+        params.nmcodeNm = $scope.nmcodeNm;
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsList.sb", params, function() {
-            // 대표명칭 그리드 버튼 show
-            //$("#btnAddRepresent").show();
-            //$("#btnDelRepresent").show();
-            //$("#btnSaveRepresent").show();
+        $.postJSON("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsList.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
+
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });

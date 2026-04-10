@@ -71,4 +71,10 @@ public interface LsmStoreService {
 
     /** 터치키 탭 엑셀 업로드 - 분류별 상품수 확인 */
     String getTukeyChkProdCnt(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제 */
+    int getKioskKeyTempDeleteAll(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 터치키 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제 */
+    int getTukeyTempDeleteAll(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
 }

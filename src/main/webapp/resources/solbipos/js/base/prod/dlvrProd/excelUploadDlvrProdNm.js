@@ -233,6 +233,8 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
                 // 데이터 저장
                 $scope.save(jsonData);
             } else {
+                // TMP 테이블 삭제
+                $scope.deleteDlvrProdTempAll();
                 $scope._popMsg(result + " 명칭이 중복됩니다.");
                 return false;
             }
@@ -292,6 +294,8 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
 
+                // TMP 테이블 삭제
+                $scope.deleteDlvrProdTempAll();
                 $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
                 if (nvl($scope.parentCtrl, '') !== '') {
                     var parentScope = agrid.getScope($scope.parentCtrl);
@@ -319,6 +323,16 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
         });
 
     };
+
+    // TMP 테이블 삭제
+    $scope.deleteDlvrProdTempAll = function () {
+        // 파라미터
+        var params = {};
+
+        // 키오스크 카테고리코드 전체 DELETE
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProd/dlvrProd/getDlvrProdNmMappingChkSaveDeleteAll.sb", params, function(){
+        });
+    }
 
     // 엑셀업로딩 팝업 열기
     $scope.excelUploadingPopup = function (showFg) {

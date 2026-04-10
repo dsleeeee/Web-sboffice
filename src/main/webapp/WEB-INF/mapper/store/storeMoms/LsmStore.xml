@@ -386,8 +386,9 @@
     -->
     <delete id="getKioskKeyTempDeleteAll" parameterType="lsmStoreVO">
         /* USE : LsmStoreMapper.getKioskKeyTempDeleteAll */
-            DELETE  TB_TMP_LSM_STORE_MS_KIOSK_KEY
-            WHERE   SESSION_ID = #{sessionId}
+        DELETE  TB_TMP_LSM_STORE_MS_KIOSK_KEY
+        WHERE   SESSION_ID  =   #{sessionId}
+        AND     STORE_CD    IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
     </delete>
 
     <!-- 상품코드 유효여부 체크 -->
@@ -434,7 +435,7 @@
         ,   MOD_ID
         )
         SELECT  #{sessionId}
-        ,       STORE_CD
+        ,       A.STORE_CD
         ,       #{posNo}
         ,       #{tuClsType}
         ,       #{tuClsCd}
@@ -451,9 +452,12 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
-        FROM    TB_MS_PRODUCT
-        WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        FROM    TB_MS_PRODUCT A
+        ,       TB_MS_STORE B
+        WHERE 	B.STORE_CD      = A.STORE_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND 	A.PROD_CD       = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
     </insert>
 
     <!-- 키오스크 탭 엑셀 업로드 - 키맵 관련 코드 조회 -->
@@ -673,6 +677,7 @@
         FROM    TB_TMP_TOUCH_KEY
         WHERE   1=1
         AND     SESSION_ID = #{sessionId}
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
     </delete>
 
     <!-- 터치키 탭 엑셀 업로드 - 데이터 임시 저장(01: 셀 사이즈) -->
@@ -713,7 +718,7 @@
         SELECT  #{sessionId}
         ,       (SELECT NVL(MAX(SEQ),0) +1 FROM TB_TMP_TOUCH_KEY WHERE SESSION_ID = #{sessionId})
         ,       #{hqOfficeCd}
-        ,       STORE_CD
+        ,       A.STORE_CD
         ,       #{tukeyClassCd}
         ,       (
                     SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
@@ -745,9 +750,12 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{tukeyGrpCd}
-        FROM    TB_MS_PRODUCT
-        WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        FROM    TB_MS_PRODUCT A
+        ,       TB_MS_STORE B
+        WHERE 	B.STORE_CD = A.STORE_CD
+        AND     A.STORE_CD = #{storeCd}
+        AND 	A.PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        AND     B.HQ_OFFICE_CD = #{hqOfficeCd}
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 데이터 임시 저장(02: 상품명) -->
@@ -788,7 +796,7 @@
         SELECT  #{sessionId}
         ,       (SELECT NVL(MAX(SEQ),0) +1 FROM TB_TMP_TOUCH_KEY WHERE SESSION_ID = #{sessionId})
         ,       #{hqOfficeCd}
-        ,       STORE_CD
+        ,       A.STORE_CD
         ,       #{tukeyClassCd}
         ,       (
                     SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
@@ -820,9 +828,12 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{tukeyGrpCd}
-        FROM    TB_MS_PRODUCT
-        WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        FROM    TB_MS_PRODUCT A
+        ,       TB_MS_STORE B
+        WHERE 	B.STORE_CD = A.STORE_CD
+        AND     A.STORE_CD = #{storeCd}
+        AND 	A.PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        AND     B.HQ_OFFICE_CD = #{hqOfficeCd}
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 데이터 임시 저장(03: 가격) -->
@@ -863,7 +874,7 @@
         SELECT  #{sessionId}
         ,       (SELECT NVL(MAX(SEQ),0) +1 FROM TB_TMP_TOUCH_KEY WHERE SESSION_ID = #{sessionId})
         ,       #{hqOfficeCd}
-        ,       STORE_CD
+        ,       A.STORE_CD
         ,       #{tukeyClassCd}
         ,       (
                     SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
@@ -895,9 +906,12 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{tukeyGrpCd}
-        FROM    TB_MS_PRODUCT
-        WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        FROM    TB_MS_PRODUCT A
+        ,       TB_MS_STORE B
+        WHERE 	B.STORE_CD = A.STORE_CD
+        AND     A.STORE_CD = #{storeCd}
+        AND 	A.PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
+        AND     B.HQ_OFFICE_CD = #{hqOfficeCd}
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 터치키 삭제 -->
@@ -928,9 +942,12 @@
                                         AND 	NMCODE_ITEM_2 	= 'Y'
                                         AND 	HQ_OFFICE_CD 	= #{hqOfficeCd}
                                     ) B
+                            ,       TB_MS_STORE C
                             WHERE 	A.SESSION_ID 	= #{sessionId}
                             AND     B.NMCODE_NM     = A.TUKEY_GRP_CD
                             AND 	B.NMCODE_ITEM_1 = A.TUKEY_CLASS_CD
+                            AND 	C.STORE_CD 		= A.STORE_CD
+                            AND 	C.HQ_OFFICE_CD	=  #{hqOfficeCd}
                 )
     </delete>
 

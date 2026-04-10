@@ -279,4 +279,16 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
         return dlvrProdNm;
     }
+
+    /** 배달시스템 상품 명칭 매핑 - TMP 테이블 삭제 */
+    @Override
+    public int getDlvrProdNmMappingChkSaveDeleteAll(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO) {
+        dlvrProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dlvrProdVO.setSessionId(sessionInfoVO.getSessionId());
+        dlvrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dlvrProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return dlvrProdMapper.getDlvrProdNmMappingChkSaveDeleteAll(dlvrProdVO);
+    }
 }

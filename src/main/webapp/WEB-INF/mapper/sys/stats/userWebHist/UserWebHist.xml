@@ -44,6 +44,9 @@
                 ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
                 ,  A.LOGIN_IP
                 ,  A.BRWSR_INFO
+                ,  A.SESSION_ID
+                ,  '일시정지'   AS PAUSE
+                ,  '해제'      AS RESUME
         FROM
             (
                 (
@@ -56,7 +59,8 @@
                             V_USER_ID AS V_USER_ID,
                             '' AS RESRCE_CD,
                             LOGIN_IP,
-                            BRWSR_INFO
+                            BRWSR_INFO,
+                            SESSION_ID
                     FROM TB_WB_LOGIN_HIST
                     WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
                 )
@@ -71,7 +75,8 @@
                             V_USER_ID,
                             RESRCE_CD AS RESRCE_CD,
                             LOGIN_IP,
-                            BRWSR_INFO
+                            BRWSR_INFO,
+                            '' AS SESSION_ID
                     FROM TB_WB_MENU_USE_HIST
                     WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
                 )
@@ -117,4 +122,35 @@
         ORDER BY A.H_DATE, A.H_DT
     </select>
 
+    <!-- 사용자 아이디 일시정지 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : userWebHistVO
+        COMMENTS : 사용자 정보를 일시정지 처리한다.
+    -->
+    <update id="getPauseUserId" parameterType="userWebHistVO">
+        /* USE : UserWebHistMapper.getPauseUserId */
+        UPDATE  TB_WB_USER_INFO
+        SET     USER_STAT_FG    =   '50'
+        ,       MOD_ID          =   #{modId}
+        ,       MOD_DT          =   #{modDt}
+        WHERE   USER_ID         =   #{userId}
+        AND     USER_STAT_FG    = '00'
+    </update>
+
+    <!-- 사용자 아이디 일시정지 해제 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : userWebHistVO
+        COMMENTS : 사용자 정보를 일시정지 해제한다.
+    -->
+    <update id="getResumeUserId" parameterType="userWebHistVO">
+        /* USE : UserWebHistMapper.getResumeUserId */
+        UPDATE  TB_WB_USER_INFO
+        SET     USER_STAT_FG    =   '00'
+        ,       MOD_ID          =   #{modId}
+        ,       MOD_DT          =   #{modDt}
+        WHERE   USER_ID         =   #{userId}
+        AND     USER_STAT_FG    = '50'
+    </update>
 </mapper>

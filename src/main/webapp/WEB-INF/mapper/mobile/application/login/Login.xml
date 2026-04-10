@@ -170,7 +170,8 @@
           LOGIN_DATE,
           LOGIN_DT,
           V_USER_ID,
-          ORGN_CD
+          ORGN_CD,
+          SESSION_ID
         )
         VALUES
         (
@@ -183,7 +184,8 @@
           #{loginDate},
           #{loginDt},
           #{vUserId},
-          #{orgnCd}
+          #{orgnCd},
+          #{sessionId}
         )
     </insert>
 

@@ -126,6 +126,12 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             return result;
         }
 
+        /** 일시정지 체크 */
+        if (UserStatFg.SUSPEND_ACCOUNT.equals(result.getUserStatFg())) {
+            result.setLoginResult(LoginResult.SUSPEND_ACCOUNT);
+            return result;
+        }
+
         /** 패스워드 초기 변경 인지 체크 */
         if(!"kjsun_op1234".equals(inputPw))
         {
@@ -238,6 +244,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         result.setUserPwd("");
         result.setLoginIp(params.getLoginIp());
         result.setBrwsrInfo(params.getBrwsrInfo());
+        result.setSessionId(params.getSessionId());
 
         // 로그인 시도 기록
         loginHist(result);
@@ -272,6 +279,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         loginHistVO.setLoginDate(currentDateString());
         loginHistVO.setLoginDt(currentDateTimeString());
         loginHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        loginHistVO.setSessionId(sessionInfoVO.getSessionId());
 
         return loginHist(loginHistVO);
     }

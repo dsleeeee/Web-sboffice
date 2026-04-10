@@ -189,6 +189,8 @@ app.controller('excelUploadLsmKioskStoreCtrl', ['$scope', '$http','$timeout', fu
                 var popMsg = response.data.data.list; //
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(messages["lsmStore.excelUpload.useYnMsg"] + popMsg); // 단종/미사용 상품이 존재합니다.
+                // 키오스크 TMP 테이블 전체 DELETE
+                $scope.deleteKioskKeyTempAll();
                 return false;
             }
 
@@ -209,6 +211,8 @@ app.controller('excelUploadLsmKioskStoreCtrl', ['$scope', '$http','$timeout', fu
                 var popMsg = response.data.data.list; //
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(popMsg + messages["lsmStore.excelUpload.prodCntOver"]); // 카테고리당 최대 상품 수 999개가 초과되었습니다.
+                // 키오스크 TMP 테이블 전체 DELETE
+                $scope.deleteKioskKeyTempAll();
                 return false;
             }
             // 상품 수 확인
@@ -264,6 +268,8 @@ app.controller('excelUploadLsmKioskStoreCtrl', ['$scope', '$http','$timeout', fu
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
 
+                // 키오스크 TMP 테이블 전체 DELETE
+                $scope.deleteKioskKeyTempAll();
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(messages['lsmStore.excelUploadMsg'] + messages['lsmStore.excelUpload.succMsg']);
                 var parentScope = agrid.getScope('lsmKioskStoreCtrl');
@@ -279,6 +285,16 @@ app.controller('excelUploadLsmKioskStoreCtrl', ['$scope', '$http','$timeout', fu
             }
             return false;
         })
+    };
+
+    // 키오스크 TMP 테이블 전체 DELETE
+    $scope.deleteKioskKeyTempAll = function(){
+        // 파라미터
+        var params = {};
+
+        // 키오스크 카테고리코드 전체 DELETE
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/lsmStore/lsmStore/getKioskKeyTempDeleteAll.sb", params, function(){
+        });
     };
 
     // 엑셀업로딩 팝업 열기

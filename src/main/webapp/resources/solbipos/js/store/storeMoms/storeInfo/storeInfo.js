@@ -134,14 +134,24 @@ app.controller('storeInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.momsStoreFg03 = $scope.momsStoreFg03;
     params.momsStoreFg04 = $scope.momsStoreFg04;
     params.momsStoreFg05 = $scope.momsStoreFg05;
+    params.storeCd = $scope.storeCd;
+    params.storeNm = $scope.storeNm;
     params.listScale = 100;
 
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/store/storeMoms/storeInfo/storeInfo/getStoreInfoList.sb", params, function (){
+    $.postJSON("/store/storeMoms/storeInfo/storeInfo/getStoreInfoList.sb", params, function (response){
+      var grid = $scope.flex;
+      grid.itemsSource = response.data.list;
+      grid.itemsSource.trackChanges = true;
 
+    }, function (response){
+      s_alert.pop(response.message);
+      var grid = $scope.flex;
+      grid.itemsSource = new wijmo.collections.CollectionView([]);
     });
+
   };
 
   // 확장조회 숨김/보임

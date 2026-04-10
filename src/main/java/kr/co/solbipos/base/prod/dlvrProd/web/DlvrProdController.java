@@ -218,10 +218,8 @@ public class DlvrProdController {
     /**
      * 상품명칭 매장적용 팝업 - 전체 엑셀다운로드
      *
-     * @param dlvrProdVOs
+     * @param dlvrProdVO
      * @param request
-     * @param response
-     * @param model
      * @return  Object
      * @author  김중선
      * @since   2023. 10. 13
@@ -256,6 +254,28 @@ public class DlvrProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         String result = dlvrProdService.getDlvrProdNmMappingChk(dlvrProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 배달시스템 상품 명칭 매핑 - TMP 테이블 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dlvrProdVO
+     * @return  String
+     * @author  김유승
+     * @since   2026.04.09
+     */
+    @RequestMapping(value = "/dlvrProd/getDlvrProdNmMappingChkSaveDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdNmMappingChkSaveDeleteAll(@RequestBody DlvrProdVO dlvrProdVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dlvrProdService.getDlvrProdNmMappingChkSaveDeleteAll(dlvrProdVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

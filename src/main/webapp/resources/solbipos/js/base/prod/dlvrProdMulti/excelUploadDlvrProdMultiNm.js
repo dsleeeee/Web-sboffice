@@ -241,6 +241,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
             } else {
                 $scope._popMsg(result + " 명칭이 중복됩니다.");
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                $scope.deleteDlvrProdMultiTempAll();
                 return false;
             }
         });
@@ -261,6 +262,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
 
                 // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
                 $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
+                $scope.deleteDlvrProdMultiTempAll();
                 return false;
             }else{
                 // 데이터 저장
@@ -304,6 +306,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
 
+                $scope.deleteDlvrProdMultiTempAll();
                 $scope._popMsg(messages['cmm.saveSucc']);
                 if (nvl($scope.parentCtrl, '') !== '') {
                     $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
@@ -321,6 +324,16 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
             return false;
         })
     };
+
+    $scope.deleteDlvrProdMultiTempAll = function () {
+        console.log(0);
+        // 파라미터
+        var params = {};
+
+        // 키오스크 카테고리코드 전체 DELETE
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiNmMappingChkSaveDeleteAll.sb", params, function(){
+        });
+    }
 
     // 엑셀업로딩 팝업 열기
     $scope.excelUploadingPopup = function (showFg) {

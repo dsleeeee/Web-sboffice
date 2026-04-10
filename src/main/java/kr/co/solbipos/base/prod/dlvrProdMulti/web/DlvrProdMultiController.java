@@ -289,4 +289,26 @@ public class DlvrProdMultiController {
         return returnListJson(Status.OK, regCnt);
     }
 
+    /**
+     * 배달시스템 상품 명칭 멀티 매핑 - TMP 테이블 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dlvrProdMultiVO
+     * @return  String
+     * @author  김유승
+     * @since   2026.04.09
+     */
+    @RequestMapping(value = "/dlvrProdMulti/getDlvrProdMultiNmMappingChkSaveDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdMultiNmMappingChkSaveDeleteAll(@RequestBody DlvrProdMultiVO dlvrProdMultiVO, HttpServletRequest request,
+                                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dlvrProdMultiService.getDlvrProdMultiNmMappingChkSaveDeleteAll(dlvrProdMultiVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

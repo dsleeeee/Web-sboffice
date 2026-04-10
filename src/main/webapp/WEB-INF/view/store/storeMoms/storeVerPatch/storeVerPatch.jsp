@@ -361,7 +361,7 @@
     var selectVerComboList = ${selectVerComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeVerPatch/storeVerPatch.js?ver=20250526.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeVerPatch/storeVerPatch.js?ver=20260327.01" charset="utf-8"></script>
 
 <%-- 매장정보 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storeVerPatch/patchStoreDtl.jsp">

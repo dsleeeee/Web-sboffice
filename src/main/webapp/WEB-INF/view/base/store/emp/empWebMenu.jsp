@@ -450,4 +450,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empWebMenu.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empWebMenu.js?ver=20260327.01" charset="utf-8"></script>

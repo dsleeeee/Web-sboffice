@@ -73,16 +73,20 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params = [];
         params.sMenuNm = $scope.sMenuNm;
 
-        $scope._inquirySub("/base/store/emp/empWebMenu/getMenuList.sb", params, function (){
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/store/emp/empWebMenu/getMenuList.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
 
             var useScope = agrid.getScope('useEmpCtrl');
             useScope.gridDefault();
             var unusedScope = agrid.getScope('unusedEmpCtrl');
             unusedScope.gridDefault();
-
-            $("#sMenuNm").val("");
-            $("#lblMenu").text("");
-
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
         });
     };
 
@@ -135,13 +139,21 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
 
-        $scope._inquirySub("/base/store/emp/empWebMenu/getUseEmp.sb", params, function() {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/store/emp/empWebMenu/getUseEmp.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
 
             // 미사용사원조회
             var scope = agrid.getScope("unusedEmpCtrl");
             scope.searchUnusedEmp();
 
-        }, false);
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
     };
 
     // 사용사원삭제(미사용사원으로 등록)
@@ -223,7 +235,18 @@ app.controller('unusedEmpCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.momsStoreFg04 = scope.momsStoreFg04;
         params.momsStoreFg05 = scope.momsStoreFg05;
 
-        $scope._inquirySub("/base/store/emp/empWebMenu/getUnuesdEmp.sb", params);
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/store/emp/empWebMenu/getUnuesdEmp.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
+
     };
 
     // 사용사원으로 등록(미사용 사원에서 삭제)

@@ -49,8 +49,35 @@ app.controller('userWebHistCtrl', ['$scope', '$http', '$timeout', function ($sco
                 } else if (col.format === "dateTime") {
                     e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
                 }
+                if (col.binding === "sessionId"){
+                    var item = s.rows[e.row].dataItem;
+                    // 값이 있으면 링크 효과
+                    if (item[("sessionId")] !== null) {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
+                }
+                if(col.binding === "pause" || col.binding === "resume"){
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
             }
         });
+
+        // 그리드 클릭 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col         = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                var params = selectedRow;
+                if ((col.binding === "sessionId" && selectedRow.sessionId !== null) || col.binding === "pause" || col.binding === "resume") {
+                    $scope.userWebSessionDelPwLayer.show(true);
+                    var scope = agrid.getScope('userWebSessionDelPwCtrl');
+                    params.procFg = col.binding;
+                    scope.setSelectedUser(params);
+                }
+            }
+        });
+
     };
 
     // <-- 검색 호출 -->

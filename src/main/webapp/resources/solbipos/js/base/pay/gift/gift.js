@@ -146,7 +146,18 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save(baseUrl + "class/saveGiftClassList.sb", params, function(){ $scope.allSearch() });
+      $scope._save(baseUrl + "class/saveGiftClassList.sb", params, function(){
+
+        // 사용자 행위 기록
+        var actParams = {};
+        actParams.resrceCd = menuCd;
+        actParams.pathNm = "기초관리-결제수단-상품권 등록";
+        actParams.contents = "상품권 분류 [삭제] 버튼 클릭 시";
+
+        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
+        $scope.allSearch()
+      });
 
     });
   };
@@ -426,6 +437,15 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save(baseUrl + "class/saveGiftList.sb", params, function () {
+
+        // 사용자 행위 기록
+        var actParams = {};
+        actParams.resrceCd = menuCd;
+        actParams.pathNm = "기초관리-결제수단-상품권 등록";
+        actParams.contents = "상품권 [삭제] 버튼 클릭 시";
+
+        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
         $scope.searchGift();
       });
     });
