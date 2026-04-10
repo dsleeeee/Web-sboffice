@@ -188,6 +188,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
             lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
             lsmStoreVO.setInFg(InFg.STORE);
             lsmStoreVO.setStyleCd("01");
+            lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             //임시 테이블 삭제
             if(lsmStoreVO.getProgressCnt() == 0) {
@@ -289,6 +290,22 @@ public class LsmStoreServiceImpl implements LsmStoreService {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
         return lsmStoreMapper.getTukeyChkProdCnt(lsmStoreVO);
+    }
+
+    /** 키오스크 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제 */
+    @Override
+    public int getKioskKeyTempDeleteAll(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
+        lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
+        return lsmStoreMapper.getKioskKeyTempDeleteAll(lsmStoreVO);
+    }
+
+    /** 터치키 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제 */
+    @Override
+    public int getTukeyTempDeleteAll(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
+        lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        lsmStoreVO.setSessionId(sessionInfoVO.getSessionId());
+        return lsmStoreMapper.getTukeyTempDeleteAll(lsmStoreVO);
     }
 
 

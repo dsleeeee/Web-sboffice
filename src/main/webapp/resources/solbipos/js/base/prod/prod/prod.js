@@ -424,6 +424,14 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       return false;
     }
 
+    // 사용자 행위 기록
+    var actParams = {};
+    actParams.resrceCd = menuCd;
+    actParams.pathNm = "기초관리-상품관리-상품정보관리";
+    actParams.contents = "[상품삭제] 버튼 클릭 시";
+
+    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if ($scope.flex.collectionView.items[i].gChk) {

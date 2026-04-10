@@ -441,4 +441,48 @@ public class LsmStoreController {
         return ReturnUtil.returnListJson(Status.OK, result);
     }
 
+    /**
+     * 키오스크 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   lsmStoreVO
+     * @return  String
+     * @author  김유승
+     * @since   2026.04.09
+     */
+    @RequestMapping(value = "/lsmStore/getKioskKeyTempDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKeyTempDeleteAll(@RequestBody LsmStoreVO lsmStoreVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = lsmStoreService.getKioskKeyTempDeleteAll(lsmStoreVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 터치키 탭 엑셀 업로드 - 키오스크키맵 TMP 테이블 삭제
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   lsmStoreVO
+     * @return  String
+     * @author  김유승
+     * @since   2026.04.09
+     */
+    @RequestMapping(value = "/lsmStore/getTukeyTempDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTukeyTempDeleteAll(@RequestBody LsmStoreVO lsmStoreVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = lsmStoreService.getTukeyTempDeleteAll(lsmStoreVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

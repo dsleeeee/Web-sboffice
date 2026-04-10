@@ -43,6 +43,9 @@ public class LoginHistVO extends CmmVO {
     private String vUserId;
     /** 사용자 소속코드*/
     private String orgnCd;
+
+    /** 세션ID */
+    private String sessionId;
     
     /**
      * @return the seq
@@ -159,5 +162,13 @@ public class LoginHistVO extends CmmVO {
 
     public void setOrgnCd(String orgnCd) {
         this.orgnCd = orgnCd;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

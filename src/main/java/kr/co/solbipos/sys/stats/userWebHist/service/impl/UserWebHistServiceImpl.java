@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
 /**
  * @Class Name : UserWebHistServiceImpl.java
  * @Description : 시스템관리 > 통계 > 사용자웹사용이력
@@ -41,5 +43,31 @@ public class UserWebHistServiceImpl implements UserWebHistService {
     @Override
     public List<DefaultMap<Object>> getUserWebHistList(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO) {
         return userWebHistMapper.getUserWebHistList(userWebHistVO);
+    }
+
+    /** 사용자 아이디 일시정지 */
+    @Override
+    public int getPauseUserId(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO) {
+        String currentDt = currentDateTimeString();
+
+        userWebHistVO.setModId(sessionInfoVO.getUserId());
+        userWebHistVO.setModDt(currentDt);
+
+        int result = userWebHistMapper.getPauseUserId(userWebHistVO);
+
+        return result;
+    }
+
+    /** 사용자 아이디 일시정지 해제 */
+    @Override
+    public int getResumeUserId(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO) {
+        String currentDt = currentDateTimeString();
+
+        userWebHistVO.setModId(sessionInfoVO.getUserId());
+        userWebHistVO.setModDt(currentDt);
+
+        int result = userWebHistMapper.getResumeUserId(userWebHistVO);
+
+        return result;
     }
 }

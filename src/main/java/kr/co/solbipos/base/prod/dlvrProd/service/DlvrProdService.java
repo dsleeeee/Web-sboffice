@@ -50,4 +50,7 @@ public interface DlvrProdService {
 
     /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 */
     String getDlvrProdNmMappingChk(DlvrProdVO[] dlvrProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 배달시스템 상품 명칭 매핑 - TMP 테이블 삭제 */
+    int getDlvrProdNmMappingChkSaveDeleteAll(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO);
 }

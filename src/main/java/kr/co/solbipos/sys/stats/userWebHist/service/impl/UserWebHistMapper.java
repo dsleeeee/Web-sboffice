@@ -28,4 +28,10 @@ public interface UserWebHistMapper {
 
     /** 사용자웹사용이력 조회 */
     List<DefaultMap<Object>> getUserWebHistList(UserWebHistVO userWebHistVO);
+
+    /** 사용자 아이디 일시정지 */
+    int getPauseUserId(UserWebHistVO userWebHistVO);
+
+    /** 사용자 아이디 일시정지 해제 */
+    int getResumeUserId(UserWebHistVO userWebHistVO);
 }

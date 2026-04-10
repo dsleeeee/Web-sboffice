@@ -52,6 +52,14 @@ app.controller('prodDeleteCtrl', ['$scope', '$http', function ($scope, $http) {
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/base/prod/prod/prod/selectProdDelete.sb", params, function () {
 
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "기초관리-상품관리-상품정보관리";
+                actParams.contents = "[선택상품삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                 // 부모창 재조회 및 팝업닫기
                 var scope = agrid.getScope('prodCtrl');
                 scope.searchProdList();
@@ -92,6 +100,14 @@ app.controller('prodDeleteCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
                 $scope._postJSONSave.withPopUp("/base/prod/prod/prod/allProdDelete.sb", params, function () {
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "기초관리-상품관리-상품정보관리";
+                    actParams.contents = "[전체상품삭제] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
 
                     // 부모창 재조회 및 팝업닫기
                     var scope = agrid.getScope('prodCtrl');

@@ -188,6 +188,8 @@ app.controller('excelUploadLsmTukeyStoreCtrl', ['$scope', '$http','$timeout', fu
                 var popMsg = response.data.data.list; //
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(messages["lsmStore.excelUpload.useYnMsg"] +popMsg); // 단종/미사용 상품이 존재합니다.
+                // 터치키 TMP 테이블 전체 DELETE
+                $scope.deleteTukeyTempAll();
                 return false;
             }
 
@@ -208,6 +210,8 @@ app.controller('excelUploadLsmTukeyStoreCtrl', ['$scope', '$http','$timeout', fu
                 var popMsg = response.data.data.list; //
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(popMsg + messages["lsmStore.excelUpload.prodCntOver"]); // 초과 메세지
+                // 터치키 TMP 테이블 전체 DELETE
+                $scope.deleteTukeyTempAll();
                 return false;
             }
 
@@ -263,6 +267,8 @@ app.controller('excelUploadLsmTukeyStoreCtrl', ['$scope', '$http','$timeout', fu
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
 
+                // 터치키 TMP 테이블 전체 DELETE
+                $scope.deleteTukeyTempAll();
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 
                 $scope._popMsg(messages['lsmStore.excelUploadMsg'] + messages['lsmStore.excelUpload.succMsg']);
@@ -280,6 +286,16 @@ app.controller('excelUploadLsmTukeyStoreCtrl', ['$scope', '$http','$timeout', fu
             }
             return false;
         })
+    };
+
+    // 터치키 TMP 테이블 전체 DELETE
+    $scope.deleteTukeyTempAll = function(){
+        // 파라미터
+        var params = {};
+
+        // 키오스크 카테고리코드 전체 DELETE
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/lsmStore/lsmStore/getTukeyTempDeleteAll.sb", params, function(){
+        });
     };
 
     // 엑셀업로딩 팝업 열기

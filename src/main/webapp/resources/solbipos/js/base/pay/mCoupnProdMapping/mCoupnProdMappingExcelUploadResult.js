@@ -133,6 +133,13 @@ app.controller('mCoupnProdMappingExcelUploadResultCtrl', ['$scope', '$http', '$t
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult/getMCoupnProdMappingExcelUploadResultSave.sb", params, function(){
+
+                var params2 = {};
+
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._postJSONSave.withOutPopUp("/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUpload/getMCoupnProdMappingExcelUploadCheckDeleteAll.sb", params2, function(){
+                });
+
                 // 팝업 닫기
                 $scope.close();
 

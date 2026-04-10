@@ -29,29 +29,9 @@
         <th><s:message code="hqEmp.regDt" /></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeStartDate"
-                      value="startDate"
-                      ng-model="startDate"
-                      control="startDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+            <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
             <span class="rg">~</span>
-            <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeEndDate"
-                      value="endDate"
-                      ng-model="endDate"
-                      control="endDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+            <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
             <span class="chk ml10">
               <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
               <label for="chkDt">
@@ -267,7 +247,7 @@
   var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=20250508.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=20260327.01" charset="utf-8"></script>
 
 <%-- 사원기초정보 상세 Tab 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">

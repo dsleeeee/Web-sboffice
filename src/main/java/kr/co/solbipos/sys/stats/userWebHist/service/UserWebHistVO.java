@@ -46,6 +46,12 @@ public class UserWebHistVO extends PageVO {
     /** 버추얼로그인 사용자 아이디 */
     private String vUserId;
 
+    /** 세션 삭제 비밀번호 */
+    private String password;
+
+    /** 사용자 세션 아이디 */
+    private String sessionId;
+
     public String getUserId() {
         return userId;
     }
@@ -108,5 +114,21 @@ public class UserWebHistVO extends PageVO {
 
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

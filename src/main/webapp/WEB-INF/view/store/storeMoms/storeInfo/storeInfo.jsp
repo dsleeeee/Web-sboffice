@@ -380,7 +380,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeInfo/storeInfo.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeInfo/storeInfo.js?ver=20260327.01" charset="utf-8"></script>
 
 <%-- 지도보기 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/mapPop.jsp">

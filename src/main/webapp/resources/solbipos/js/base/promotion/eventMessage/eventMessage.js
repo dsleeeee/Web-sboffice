@@ -152,7 +152,18 @@ app.controller('eventMessageCtrl', ['$scope', '$http','$timeout', function ($sco
             params.eventMessageDate = wijmo.Globalize.format($scope.eventMessageDate.value, 'yyyyMMdd');
         }
 
-        $scope._inquirySub("/base/promotion/eventMessage/list.sb", params, function () {});
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/base/promotion/eventMessage/list.sb", params, function (response){
+            var grid = $scope.flex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+        }, function (response){
+            s_alert.pop(response.message);
+            var grid = $scope.flex;
+            grid.itemsSource = new wijmo.collections.CollectionView([]);
+        });
+
     };
 
     // 일자 검색조건 사용/미사용 체크박스

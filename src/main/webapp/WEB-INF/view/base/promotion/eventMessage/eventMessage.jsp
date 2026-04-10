@@ -414,7 +414,7 @@
     var storeGroupList = ${storeGroupList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20210511.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/eventMessage/eventMessage.js?ver=20260327.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/eventMessage/eventMessageProdReg.jsp">

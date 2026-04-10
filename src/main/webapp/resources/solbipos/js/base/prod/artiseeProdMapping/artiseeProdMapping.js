@@ -157,6 +157,15 @@ app.controller('artiseeProdMappingCtrl', ['$scope', '$http', '$timeout', functio
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/base/prod/artiseeProdMapping/artiseeProdMapping/getDeleteMappingProd.sb", params, function () {
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "보나비-상품관리-아티제상품코드맵핑";
+                actParams.contents = "[삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                 $scope.mapStrList()
             });
         });

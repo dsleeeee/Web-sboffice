@@ -54,4 +54,7 @@ public interface DlvrProdMultiService {
 
     /** 배달시스템 상품 명칭 매핑2 - 상품명칭저장 */
     int saveDlvrProdMultiNm(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
+
+    /** 배달시스템 상품 명칭 멀티 매핑 - TMP 테이블 삭제 */
+    int getDlvrProdMultiNmMappingChkSaveDeleteAll(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 }

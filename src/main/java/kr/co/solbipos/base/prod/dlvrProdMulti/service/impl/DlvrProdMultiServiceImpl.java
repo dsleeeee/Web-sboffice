@@ -321,4 +321,16 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
 
         return result;
     }
+
+    /** 배달시스템 상품 명칭 멀티 매핑 - TMP 테이블 삭제 */
+    @Override
+    public int getDlvrProdMultiNmMappingChkSaveDeleteAll(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
+        dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getSessionId());
+        dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dlvrProdMultiVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveDeleteAll(dlvrProdMultiVO);
+    }
 }

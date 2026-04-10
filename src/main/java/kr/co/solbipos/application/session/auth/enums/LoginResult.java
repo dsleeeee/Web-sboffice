@@ -36,12 +36,16 @@ public enum LoginResult implements CodeEnum {
     , NOT_WEB_USE_ID("NWUI")
     /** 토큰 없거나 다름 */
     , TOKEN_ERROR("NOT1")
-    /** 초당 3회 초과 */
+    /** 초당 3회 초과(userId + ip) */
     , MANY_ATTEMPTS("NOT2")
     /** 브라우저 정보 이상 */
     , CHK_BROWSER("NOT3")
     /** 클라우드 IP 로그인 */
     , CLOUD_IP_LOGIN("NOT4")
+    /** 초당 3회 초과(userId) */
+    , MANY_ATTEMPTS_USERID("NOT5")
+    /** 클라우드 IP 로그인 */
+    , SUSPEND_ACCOUNT("SUS")
     ;
     
   private String code;

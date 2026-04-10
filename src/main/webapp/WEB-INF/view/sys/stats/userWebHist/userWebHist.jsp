@@ -146,6 +146,9 @@
                         <wj-flex-grid-column header="<s:message code="userWebHist.level3Nm"/>" binding="level3Nm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.loginIp"/>" binding="loginIp" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.brwsrInfo"/>" binding="brwsrInfo" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.sessionId"/>" binding="sessionId" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.pause"/>" binding="pause" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.resume"/>" binding="resume" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -154,4 +157,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebHist.js?ver=20240619.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebHist.js?ver=20260331.01" charset="utf-8"></script>
+
+<%-- 쿠폰순서 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/sys/stats/userWebHist/userWebSessionDelPw.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
