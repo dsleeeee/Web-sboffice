@@ -27,4 +27,7 @@ public interface NaverPlaceStatusService {
 
     /** 접속현황 조회 */
     List<DefaultMap<Object>> getConnectStatusList(NaverPlaceStatusVO naverPlaceStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 연동정보 초기화 */
+    int naverPlaceStatusReset(NaverPlaceStatusVO naverPlaceStatusVO, SessionInfoVO sessionInfoVO);
 }

@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+
 <div class="subCon" ng-controller="naverPlaceStatusCtrl">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="naverPlaceStatus.naverPlaceStatus"/></a>
@@ -67,6 +69,7 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.hqOfficeNm"/>" binding="hqOfficeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.reset"/>" binding="reset" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.uniqueId"/>" binding="uniqueId" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.lastResponseDt"/>" binding="lastResponseDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -119,6 +122,11 @@
 </div>
 
 <script type="text/javascript">
+    var menuCd = "${menuCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260410.02" charset="utf-8"></script>
+
+<%-- 네이버플레이스 연동 초기화 팝업 --%>
+<c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">
+</c:import>

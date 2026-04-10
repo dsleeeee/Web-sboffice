@@ -11,6 +11,7 @@ import kr.co.solbipos.sys.link.naverPlaceStatus.service.NaverPlaceStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -101,4 +102,25 @@ public class NaverPlaceStatusController {
 
         return ReturnUtil.returnListJson(Status.OK, result, naverPlaceStatusVO);
     }
+
+    /**
+     * 연동정보 초기화
+     * @param naverPlaceStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/naverPlaceStatusReset.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result naverPlaceStatusReset(@RequestBody NaverPlaceStatusVO naverPlaceStatusVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = naverPlaceStatusService.naverPlaceStatusReset(naverPlaceStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
 }

@@ -35,6 +35,37 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $ht
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // ReadOnly 효과설정
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === 'reset') {
+                    wijmo.addClass(e.cell, 'red');
+                    e.cell.textContent = '초기화';
+                }
+            }
+        });
+
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                if (col.binding === "reset") {
+                    // 초기화 팝업
+                    $scope.wjNaverPlaceStatusResetLayer.show(true);
+                    $scope._broadcast('naverPlaceStatusResetCtrl', selectedRow);
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "시스템관리-연동-네이버플레이스현황";
+                    actParams.contents = "'초기화' 컬럼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+                }
+            }
+        });
     };
 
     $scope.$on("naverPlaceStatusCtrl", function (event, data) {

@@ -49,6 +49,8 @@
         AND     A.STORE_CD = B.STORE_CD(+)
         AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
         AND     A.STORE_CD = D.STORE_CD
+        ORDER
+        BY      A.HQ_OFFICE_CD, A.STORE_CD
     </select>
 
     <!-- 접속현황 조회 -->
@@ -199,5 +201,33 @@
         WHERE   RESRCE_NM = #{resrceNm}
         AND     DISP_LEVEL = 3
     </select>
+
+    <!-- 네.아.로 ID, 네이버플레이스 연동매장 삭제 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverPlaceStatusVO
+        COMMENTS : 네.아.로 ID, 네이버플레이스 연동매장 정보 삭제
+    -->
+    <delete id="deleteNaverLink" parameterType="naverPlaceStatusVO">
+        /* NaverPlaceStatusMapper.deleteNaverLink */
+        DELETE
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 네이버 동의항목 삭제 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK_AGREEMENT
+        PARAM    : naverPlaceStatusVO
+        COMMENTS : 네이버 동의항목 정보 삭제
+    -->
+    <delete id="deleteNaverAgreement" parameterType="naverPlaceStatusVO">
+        /* NaverPlaceStatusMapper.deleteNaverAgreement */
+        DELETE
+        FROM    TB_CM_NAVER_LINK_AGREEMENT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </delete>
 
 </mapper>

@@ -29,6 +29,10 @@ public class NaverPlaceStatusVO extends PageVO {
     private String resrceCd;
     /** 메뉴 리소스 명 */
     private String resrceNm;
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 매장코드 */
+    private String storeCd;
 
     @Override
     public String getStartDate() {
@@ -64,5 +68,21 @@ public class NaverPlaceStatusVO extends PageVO {
 
     public void setResrceNm(String resrceNm) {
         this.resrceNm = resrceNm;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 }

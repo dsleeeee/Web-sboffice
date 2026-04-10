@@ -2,7 +2,6 @@ package kr.co.solbipos.sys.link.naverPlaceStatus.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.link.naverPlaceStatus.service.NaverPlaceStatusVO;
-import kr.co.solbipos.sys.link.orderkitStatus.service.OrderkitStatusVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -35,4 +34,10 @@ public interface NaverPlaceStatusMapper {
 
     /** 메뉴 리소스코드 조회*/
     String getMenuResrceCd(NaverPlaceStatusVO naverPlaceStatusVO);
+
+    /** 네.아.로 ID, 네이버플레이스 연동매장 삭제 */
+    int deleteNaverLink(NaverPlaceStatusVO naverPlaceStatusVO);
+
+    /** 네이버 동의항목 삭제 */
+    int deleteNaverAgreement(NaverPlaceStatusVO naverPlaceStatusVO);
 }
