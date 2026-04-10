@@ -613,7 +613,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 if ($("#marketingSmsSendTitle").val() != "") {
                     // 최대길이 체크
                     if (nvl($("#marketingSmsSendTitle").val(), '').getByteLengthForOracle() > 32) {
-                        $scope._popMsg(messages["marketingSmsSend.titleLengthChk"]); // 제목 길이가 너무 깁니다.
+                        $scope._popMsg(messages["marketingSmsSend.titleLengthChk"] + "</br>" + " 최대 : 32 " +
+                            ", 현재 : " + nvl($("#marketingSmsSendTitle").val(), '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]); // 제목 길이가 너무 깁니다.
                         return false;
                     }
                 }
