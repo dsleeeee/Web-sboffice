@@ -48,7 +48,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     /** Constructor Injection */
     @Autowired
     public CmmMenuServiceImpl(RedisConnService redisConnService, CmmMenuMapper cmmMenuMapper,
-        RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
+                              RedisCustomTemplate<String, SessionInfoVO> redisCustomTemplate) {
         this.redisConnService = redisConnService;
         this.cmmMenuMapper = cmmMenuMapper;
         this.redisCustomTemplate = redisCustomTemplate;
@@ -71,10 +71,10 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     public List<HqVO> getHqInfo(HqVO hqVO) {
         return cmmMenuMapper.getHqInfo(hqVO);
     }
-    
+
     /** 레이어 팝업 업체 조회 */
     public List<CmAgencyVO> getCmAgencyInfo(CmAgencyVO cmAgencyVO) {
-    	return cmmMenuMapper.getCmAgencyInfo(cmAgencyVO);
+        return cmmMenuMapper.getCmAgencyInfo(cmAgencyVO);
     }
 
     /** 리소스 정보로 메뉴 사용 내역 저장 */
@@ -140,81 +140,27 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     /** 세션에 사용 메뉴 추가 : interceptor 에서 호출 */
     @Override
     public SessionInfoVO addHistMenu(ResrceInfoBaseVO resrceInfoBaseVO,
-            SessionInfoVO sessionInfoVO) {
+                                     SessionInfoVO sessionInfoVO) {
 
         // 추가 할려는 리소스
         String resrceCd = resrceInfoBaseVO.getResrceCd();
         // 히스토리 메뉴
         List<ResrceInfoBaseVO> historyMenuData = sessionInfoVO.getHistoryMenuData();
-        // 접근확인 메뉴
-        List<ResrceInfoBaseVO> accessMenuData = sessionInfoVO.getAccessMenuData();
         // 히스토리메뉴 초기화
         if ( historyMenuData == null ) {
             historyMenuData = new ArrayList<>();
         }
-        // 접근확인 메뉴 초기화
-        if ( accessMenuData == null ) {
-            accessMenuData = new ArrayList<>();
-        }
-
         // 고정 메뉴
         List<ResrceInfoBaseVO> fixedMenuData = sessionInfoVO.getFixedMenuData();
-
-        // 접근확인 메뉴
-        int aSize = accessMenuData.size();
-
         // 고정 메뉴에 선택한 메뉴가 있는지 체크 > 추가하지 않고 고정메뉴 활성화
         if (fixedMenuData.size() > 0) {
             for(ResrceInfoBaseVO fixedMenuVO : fixedMenuData) {
                 // 같은게 있으면 히스토리에 추가하지 않고 해당 고정 메뉴 활성화 하고 세션 저장
                 if ( fixedMenuVO.getResrceCd().equals(resrceCd) ) {
                     sessionInfoVO.setFixedMenuData(fixedMenuData);
-                    // 접근확인 메뉴에 추가
-                    for (int i = 0; i < aSize; i++) {
-                        ResrceInfoBaseVO accessMenuVO = accessMenuData.get(i);
-                        // 접근확인 메뉴에 같은게 있으면 지우고 젤 뒤에 추가
-                        if (accessMenuVO.getResrceCd().equals(resrceCd)) {
-                            accessMenuData.remove(i);
-                            accessMenuData.add(resrceInfoBaseVO);
-                            sessionInfoVO.setAccessMenuData(accessMenuData);
-                        }else{
-                            accessMenuData.add(resrceInfoBaseVO);
-                            sessionInfoVO.setAccessMenuData(accessMenuData);
-                        }
-                    }
                     return checkActivation(resrceCd, sessionInfoVO);
                 }
             }
-        }
-
-        // 기존 접근확인 메뉴 리스트에 있는지 체크 > 지우고 젤 뒤에 추가
-        if (aSize == 0) {
-            accessMenuData.add(resrceInfoBaseVO);
-            sessionInfoVO.setAccessMenuData(accessMenuData);
-        } else {
-            for (int i = 0; i < aSize; i++) {
-                ResrceInfoBaseVO accessMenuVO = accessMenuData.get(i);
-                // 접근확인 메뉴에 같은게 있으면 지우고 젤 뒤에 추가
-                if (accessMenuVO.getResrceCd().equals(resrceCd)) {
-                    accessMenuData.remove(i);
-                    accessMenuData.add(resrceInfoBaseVO);
-                }else {
-                    // 마지막 까지 같은게 없으면
-                    if (i == aSize - 1) {
-                        // 접근확인 리소스 갯수가 세팅된 갯수를 넘어가면 지우고 추가함
-                        if (aSize > BaseEnv.SESSION_HIST_MENU_SIZE) {
-                            // 첫번째를 지운다.
-                            accessMenuData.remove(0);
-                            accessMenuData.add(resrceInfoBaseVO);
-                            // 세팅된 갯수를 넘어가지 않으면 바로 추가
-                        } else {
-                            accessMenuData.add(resrceInfoBaseVO);
-                        }
-                    }
-                }
-            }
-            // 접근확인메뉴 세션에 다시 Set
-            sessionInfoVO.setAccessMenuData(accessMenuData);
         }
 
         // 기존 히스토리 메뉴 리스트에 있는지 체크 > 지우고 젤 뒤에 추가
@@ -240,7 +186,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                         // 첫번째를 지운다.
                         historyMenuData.remove(0);
                         historyMenuData.add(resrceInfoBaseVO);
-                    // 세팅된 갯수를 넘어가지 않으면 바로 추가
+                        // 세팅된 갯수를 넘어가지 않으면 바로 추가
                     } else {
                         historyMenuData.add(resrceInfoBaseVO);
                     }
@@ -283,12 +229,9 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                 }
             }
         }
-        // 접근확인 메뉴
-        List<ResrceInfoBaseVO> accessMenuData = sessionInfoVO.getAccessMenuData();
 
         sessionInfoVO.setFixedMenuData(fixedMenuData);
         sessionInfoVO.setHistoryMenuData(historyMenuData);
-        sessionInfoVO.setAccessMenuData(accessMenuData);
 
         // 레디스에 수정한 세션정보를 저장
         if ( redisConnService.isAvailable() ) {
