@@ -483,8 +483,8 @@
                         <tbody>
                         <tr>
                             <%-- 제목 --%>
-                            <td>
-                                <input type="text" class="sb-input-msg w100" id="marketingSmsSendTitle" ng-model="title" />
+                            <td class="s14">
+                                (광고)<input type="text" class="sb-input-msg w75" id="marketingSmsSendTitle" ng-model="title" />
                             </td>
                         </tr>
                         <tr style="height: 10px"></tr>
@@ -717,8 +717,8 @@
                     <!--layerContent-->
                     <div class="title" style="width:400px;">
                         <a href="#" class="btn_close" ng-click="close()"></a>
-                        <div class="con">
-                            <img src="/resource/solbipos/css/img/sms/sms_advertisement2.jpg" style="width:100%" alt="광고문자 발송에 대한 의무사항 안내" />
+                        <div class="con mt30">
+                            <img src="/resource/solbipos/css/img/sms/sms_advertisement3.jpg" style="width:100%" alt="광고문자 발송에 대한 의무사항 안내" />
                         </div>
                         <div class="btnSet">
                             <span><a href="#" class="btn_blue" id="btnCloseToday" ng-click="closeToday()">오늘하루 열지않기</a></span>
