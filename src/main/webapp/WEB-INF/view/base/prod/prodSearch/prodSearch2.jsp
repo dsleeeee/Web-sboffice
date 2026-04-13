@@ -541,7 +541,7 @@
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.depositCupFg"/>" binding="depositCupFg" width="80" is-read-only="true" align="center" data-map="depositCupFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointUseYn"/>" binding="pointUseYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.dcYn"/>" binding="dcYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
@@ -563,7 +563,7 @@
                     <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true" format="@"></wj-flex-grid-column>
 
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
@@ -695,7 +695,7 @@
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.depositCupFg"/>" binding="depositCupFg" width="80" is-read-only="true" align="center" data-map="depositCupFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointUseYn"/>" binding="pointUseYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.dcYn"/>" binding="dcYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
@@ -717,7 +717,7 @@
                     <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true" format="@"></wj-flex-grid-column>
 
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
