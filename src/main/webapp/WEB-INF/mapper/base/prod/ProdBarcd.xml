@@ -945,6 +945,7 @@
         COMMENTS : [임시]바코드엑셀업로드
     -->
     <insert id="getExcelUploadCheckSave" parameterType="ProdExcelUploadVO">
+        /* prodBarcdMapper.getExcelUploadCheckSave */
         INSERT INTO TB_TMP_EXCEL_BARCD
         (
              SESSION_ID,
@@ -970,6 +971,7 @@
     </insert>
 
     <select id="getExcelList" parameterType="prodBarcdVO" resultType="DefaultMap">
+        /* prodBarcdMapper.getExcelList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>

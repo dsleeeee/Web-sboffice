@@ -256,7 +256,12 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       $scope.flex.columns[1].visible = true;
     }
     var params = {};
-    $scope._inquiryMain("/base/prod/prodBarcd/getExcelList.sb", params);
+    $scope._inquiryMain("/base/prod/prodBarcd/getExcelList.sb", params, function () {
+        var params = {};
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/prodBarcd/getExcelUploadCheckDeleteAll.sb", params, function(){
+        });
+    });
   };
 
   // 상품분류정보 팝업

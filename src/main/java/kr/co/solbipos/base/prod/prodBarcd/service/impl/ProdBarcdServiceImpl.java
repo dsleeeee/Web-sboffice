@@ -332,17 +332,6 @@ public class ProdBarcdServiceImpl implements ProdBarcdService {
 
             }
         }
-
-        ProdBarcdVO delProdBarcdVO = new ProdBarcdVO();
-
-        delProdBarcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        delProdBarcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
-            delProdBarcdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-        delProdBarcdVO.setSessionId(sessionInfoVO.getSessionId());
-
-        result = prodBarcdMapper.getExcelUploadCheckDeleteAll(delProdBarcdVO);
         return result;
     }
 }
