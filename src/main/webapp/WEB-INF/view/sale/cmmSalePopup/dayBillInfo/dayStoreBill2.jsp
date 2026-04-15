@@ -44,6 +44,7 @@
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.totSaleAmt"/>" binding="totSaleAmt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.totDcAmt"/>" binding="totDcAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.realSaleAmt"/>" binding="realSaleAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleDtl.saleDate"/>" binding="saleDate" width="" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -53,4 +54,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayBillInfo/dayStoreBill2.js?ver=20210719.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayBillInfo/dayStoreBill2.js?ver=20260415.02" charset="utf-8"></script>

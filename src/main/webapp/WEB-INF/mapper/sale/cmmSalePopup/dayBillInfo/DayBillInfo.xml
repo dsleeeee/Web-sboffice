@@ -84,7 +84,8 @@
                 tssh.SALE_YN,
                 tssh.TOT_SALE_AMT,
                 tssh.TOT_DC_AMT,
-                tssh.REAL_SALE_AMT
+                tssh.REAL_SALE_AMT,
+                tssh.SALE_DATE
         FROM    TB_SL_SALE_HDR tssh
         WHERE   1=1
         AND     tssh.HQ_OFFICE_CD = #{membrOrgnCd}
