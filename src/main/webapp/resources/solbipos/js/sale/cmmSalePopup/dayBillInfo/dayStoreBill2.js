@@ -56,7 +56,7 @@ app.controller('dayStoreBill2Ctrl', ['$scope', '$http', '$timeout', function ($s
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params       = {};
                 params.storeCd  = selectedRow.storeCd;
-                params.saleDate = selectedRow.billDt.replaceAll('-', '').substr(0,8);
+                params.saleDate = selectedRow.saleDate;
                 params.posNo    = selectedRow.posNo;
                 params.billNo   = selectedRow.billNo;
                 params.saleYn   = selectedRow.saleYn
