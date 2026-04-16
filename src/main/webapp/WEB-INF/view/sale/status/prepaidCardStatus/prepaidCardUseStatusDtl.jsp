@@ -36,13 +36,13 @@
                         <!-- define columns -->
                         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                             <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeNm"/>" binding="storeNm" width="200" is-read-only="true" align="left" format="d"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeNm"/>" binding="storeNm" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="prepaidCardStatus.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                             <wj-flex-grid-column header="<s:message code="prepaidCardStatus.posNo"/>" binding="posNo" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                         </c:if>
-                        <wj-flex-grid-column header="<s:message code="prepaidCardStatus.cardNo"/>" binding="vchargeCardNo" width="200" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prepaidCardStatus.cardNo"/>" binding="vchargeCardNo" width="200" is-read-only="true" align="center" aggregate="Sum" format="@"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prepaidCardStatus.useCnt"/>" binding="useCnt" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prepaidCardStatus.totUseAmt"/>" binding="totUseAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prepaidCardStatus.useCancelCnt"/>" binding="useCancelCnt" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
