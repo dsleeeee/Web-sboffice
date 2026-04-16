@@ -57,8 +57,8 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 				params.chkPop   = "cornerDayOfWeekProdPop"; // 매출관리>매출현황>코너별>요일별탭
 				params.yoil	 	= selectedRow.yoil;
 				if(!$scope.isChecked){
-					params.startDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekEndDate.value, 'yyyyMMdd');
+					params.startDate = $scope.startDateForDt;
+					params.endDate = $scope.endDateForDt;
 				}
 				var storeCornr   =  $scope.searchCornrCd.split(",");
 				var arrStoreCornr     = [];

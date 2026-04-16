@@ -85,6 +85,10 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			return false;
 		}
 
+		// 차트 팝업 날짜 셋팅
+		$("#chartStartDate").text(params.startDate);
+		$("#chartEndDate").text(params.endDate);
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/rank/getProdRankList.sb", params, function() {});
 
