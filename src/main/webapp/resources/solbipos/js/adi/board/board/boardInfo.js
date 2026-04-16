@@ -603,8 +603,6 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                     if(params.status === "I") {
                         params.boardSeqNo = result.data;
                     }
-                    //첨부파일 저장
-                    $scope.atchSave(params);
 
                     // 첨부파일 임시경로 UPDATE 후 게시글 이미지 서버경로로 치환
                     var params2 = new Array();
@@ -639,23 +637,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                         },1500)
                     }
 
-                    // 수정
-                    if(params.status === "U") {
-                        params.userId = $scope.selectedBoardInfo.userId;
-
-                        // 저장기능 수행후 재조회
-                        if($scope.fullSizeYn === true) {
-                            $scope.wjBoardDetailLayer.hide();
-                            $scope.wjBoardDetailFullSizeLayer.show(true);
-                        }else{
-                            $scope.wjBoardDetailFullSizeLayer.hide();
-                            $scope.wjBoardDetailLayer.show(true);
-                        }
-                    }
-
-                    $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                    $scope._popMsg("저장되었습니다.");
-                    $scope.close();
+                    //첨부파일 저장
+                    $scope.atchSave(params);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -701,8 +684,22 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             success: function(result) {
                 // console.log('save result', result);
                 if (result.status === "OK") {
-                    //$scope._popMsg("저장되었습니다.");
-                    //$scope.$broadcast('loadingPopupInactive');
+
+                    // 수정
+                    if(data.status === "U") {
+                        // 저장기능 수행후 재조회
+                        if($scope.fullSizeYn === true) {
+                            $scope.wjBoardDetailLayer.hide();
+                            $scope.wjBoardDetailFullSizeLayer.show(true);
+                        }else{
+                            $scope.wjBoardDetailFullSizeLayer.hide();
+                            $scope.wjBoardDetailLayer.show(true);
+                        }
+                    }
+
+                    $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    $scope._popMsg("저장되었습니다.");
+                    $scope.close();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');

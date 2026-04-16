@@ -30,11 +30,11 @@
             ,       tmsi.MOMS_TEAM
             ,       tmsi.MOMS_AC_SHOP
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
             <include refid="CmmSQL.PagingTemplateCount"/>
-            FROM    TB_NS_NONSALE_HDR tnnh
+            FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             ,       TB_MS_STORE tms
             ,       TB_MS_STORE_INFO tmsi
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -112,11 +112,11 @@
             SELECT  tnnh.STORE_CD
             ,       TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
             <include refid="CmmSQL.PagingTemplateCount"/>
-            FROM    TB_NS_NONSALE_HDR tnnh
+            FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tnnh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='saleYn != null and saleYn != ""'>
@@ -273,13 +273,13 @@
             ,       tms.STORE_NM
             ,       TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
             ,       tnnh.POS_NO
-            <!--, tnnh.CARD_NO -->
+            ,       tnnh.CHARGE_CARD_NO
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
-            <!--, tnnh.REMAIN_AMT -->
-            FROM    TB_NS_NONSALE_HDR tnnh
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            ,       tnnh.BALANCE
+            FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             ,       TB_MS_STORE tms
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tnnh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -294,25 +294,23 @@
             ,       tms.STORE_NM
             ,		tnnh.SALE_DATE
             ,       tnnh.POS_NO
-            <!-- ,       tnnh.CARD_NO -->
-            <!--, tnnh.REMAIN_AMT -->
-            <!--, tsspv.REG_DT -->
+            ,       tnnh.CHARGE_CARD_NO
+            ,       tnnh.BALANCE
             ORDER
-            BY      tnnh.STORE_CD
-            ,		tnnh.SALE_DATE
-            <!-- ,       tnnh.CARD_NO -->
-            <!-- ,       tnnh.REG_DT-->
+            BY      tnnh.SALE_DATE
+            ,       tnnh.POS_NO
+            ,       tnnh.CHARGE_CARD_NO
         </if>
         <!-- 매장 -->
         <if test='orgnFg == "S"'>
             SELECT  TO_CHAR(TO_DATE(tnnh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-            <!--, tnnh.CARD_NO -->
+            ,       tnnh.CHARGE_CARD_NO
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN 1 ELSE 0 END) AS CHARGE_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_AMT
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
-            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.TOT_SALE_AMT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
-            <!--, tnnh.REMAIN_AMT -->
-            FROM    TB_NS_NONSALE_HDR tnnh
+            ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
+            ,       tnnh.BALANCE
+            FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tnnh.SALE_DATE = #{saleDate}
             <if test='saleYn != null and saleYn != ""'>
@@ -321,13 +319,11 @@
             AND     tnnh.STORE_CD = #{storeCd}
             GROUP
             BY      tnnh.SALE_DATE
-            <!-- ,       tnnh.CARD_NO -->
-            <!-- ,       tnnh.REMAIN_AMT-->
-            <!-- ,       tnnh.REG_DT-->
+            ,       tnnh.CHARGE_CARD_NO
+            ,       tnnh.BALANCE
             ORDER
             BY      tnnh.SALE_DATE
-            <!-- ,       tnnh.CARD_NO -->
-            <!-- ,       tnnh.REG_DT-->
+            ,       tnnh.CHARGE_CARD_NO
         </if>
     </select>
 
@@ -368,12 +364,9 @@
             ,       tsspv.POS_NO
             ,       tsspv.VCHARGE_CARD_NO
             ,       tsspv.VCHARGE_REMAIN_AMT
-            ,       tsspv.REG_DT
             ORDER
-            BY      tsspv.STORE_CD
-            ,		tsspv.SALE_DATE
+            BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
-            ,       tsspv.REG_DT
         </if>
         <!-- 매장 -->
         <if test='orgnFg == "S"'>
@@ -395,11 +388,9 @@
             BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
             ,       tsspv.VCHARGE_REMAIN_AMT
-            ,       tsspv.REG_DT
             ORDER
             BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
-            ,       tsspv.REG_DT
         </if>
     </select>
 
