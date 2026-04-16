@@ -363,7 +363,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prepaidCardStatus/prepaidCardUseStatus.js?ver=20260408.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prepaidCardStatus/prepaidCardUseStatus.js?ver=20260416.01" charset="utf-8"></script>
 
 <%--선불카드 사용 현황 상세--%>
 <c:import url="/WEB-INF/view/sale/status/prepaidCardStatus/prepaidCardUseStatusDtl.jsp">

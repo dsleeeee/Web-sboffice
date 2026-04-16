@@ -147,7 +147,12 @@
 
         <%--layerContent--%>
         <div class="title" style="width:980px; padding:0">
-            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
+                <s:message code="cmm.chart" />
+                <label class="ml10" id="chartStartDate"></label>
+                <label> ~ </label>
+                <label id="chartEndDate"></label>
+            </p>
             <a href="#" class="btn_close _btnClose"></a>
 
             <%--위즈모 테이블--%>
@@ -222,5 +227,5 @@
 
     });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayOfWeek.js?ver=20250415.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayOfWeek.js?ver=20260416.01" charset="utf-8"></script>
 

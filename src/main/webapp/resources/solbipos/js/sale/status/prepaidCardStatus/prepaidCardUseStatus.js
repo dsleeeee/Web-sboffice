@@ -62,8 +62,8 @@ app.controller('prepaidCardUseStatusCtrl', ['$scope', '$http', '$timeout', funct
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "storeCd" || col.binding === "saleDate") {
                     var params = {};
-                    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
                     params.saleYn = $scope.useYnCombo.selectedValue;
                     params.storeCd = selectedRow.storeCd;
 
@@ -144,6 +144,10 @@ app.controller('prepaidCardUseStatusCtrl', ['$scope', '$http', '$timeout', funct
                 params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
             }
         }
+
+        // 팝업 조회날짜 셋팅
+        $scope.startDate = params.startDate;
+        $scope.endDate = params.endDate;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/prepaidCardStatus/getPrepaidCardUseStatus.sb", params, function() {

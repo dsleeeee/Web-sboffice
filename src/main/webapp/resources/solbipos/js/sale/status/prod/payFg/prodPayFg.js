@@ -63,8 +63,8 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.storeCd   = $("#pordPayFgSelectStoreCd").val();
         	params.prodCd = selectedRow.prodCd;
         	params.dialogHd  = col.header;
-            params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-            params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+            params.startDate = $scope.startDate; //조회기간
+            params.endDate = $scope.endDate; //조회기간
 
         if ((col.binding.substr(0, 3) === "pay") && col.binding !== "totPayAmt") { // 결제수단
           params.payCd = col.binding.substr(3,2); // pay01 : 끝에 2자리 숫자만 가져옴
@@ -113,6 +113,10 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
     params.payCol = payCol;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+
+    // 팝업 조회 날짜
+    $scope.startDate = params.startDate;
+    $scope.endDate = params.endDate;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/payFg/getProdPayFgList.sb", params, function() {});

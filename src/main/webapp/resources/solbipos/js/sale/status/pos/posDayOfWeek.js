@@ -160,6 +160,10 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
         if(!$scope.isChecked){
             params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+
+            // 차트 팝업 날짜 셋팅
+            $("#chartStartDate").text(params.startDate);
+            $("#chartEndDate").text(params.endDate);
         }
 
         if(params.startDate > params.endDate){

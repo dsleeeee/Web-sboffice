@@ -62,7 +62,7 @@ app.controller('mobileRtnStatusCtrl', ['$scope', '$http', '$timeout', function (
                 if (col.binding === "rtnRealSaleAmt") { // 반품금액 클릭
                     var params    = {};
                     params.srchStoreCd = $("#mobileRtnStatusStoreCd").val();
-                    params.startDate = selectedRow.saleDate;
+                    params.startDate = selectedRow.saleDate.replaceAll("-","");
                     $scope.wjRtnStatusDtlLayer.show(true);
                     $scope._broadcast('rtnStatusDtlCtrl', params);
                 }
