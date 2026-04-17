@@ -19,6 +19,7 @@
     -->
     <select id="getSearchOrderAcceptHistory" parameterType="OrderAcceptHistoryVO" resultType="DefaultMap">
         /* USE : OrderAcceptHistoryMapper.getSearchOrderAcceptHistory */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
         ,		B.BRANCH_CD
@@ -45,6 +46,7 @@
                     WHEN A.DLVR_IN_FG = '9' AND A.ACCEPT_STATUS = 'N' THEN '자사앱 주문중지'
                     ELSE ''
                 END AS STATUS_TYPE_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM	TB_PS_ORDER_ACCEPT_HISTORY	A
         ,		TB_MS_STORE B
         ,       TB_MS_STORE_INFO C
@@ -107,6 +109,7 @@
         ORDER
         BY      B.STORE_CD
         ,       A.CHANGE_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>
