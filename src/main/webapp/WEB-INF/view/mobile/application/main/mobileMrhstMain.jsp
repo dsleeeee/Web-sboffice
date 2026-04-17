@@ -74,6 +74,9 @@
 </div>
 
 <script type="text/javascript">
+
+    // DS061 본사 아이디 확인
+    var vLoginChkUserId = "${vLoginChkUserId}";
     // 오늘의 매출건수
     var daySaleCntList = [];
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -211,7 +214,7 @@
     <%-- // wijmo flexChart --%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileMrhstMain.js?ver=20210531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileMrhstMain.js?ver=20260417.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/adi/board/board/mobileBoardDetail.jsp">

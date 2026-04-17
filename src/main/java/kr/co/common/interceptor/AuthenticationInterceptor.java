@@ -27,6 +27,10 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -236,6 +240,85 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     LOGGER.info("AuthenticationInterceptor :: " + storeCd + " :: " + msg);
                     throw new AuthenticationException(msg, "/error/403.sb");
                 }
+            }
+        }
+
+        // 유효 메뉴 여부 확인(화면 URL만 체크, Event URL은 skip)
+        String dispLevel = "3"; // 웹은 메뉴 3depth로 사용
+        if(("/mobile/").equals(ROOT_PATH)){
+            dispLevel = "2";  // 모바일은 메뉴 2depth로 사용
+        }
+
+        // resrceInfoVO 셋팅
+        ResrceInfoVO resrceInfoVO = new ResrceInfoVO();
+        resrceInfoVO.setUrl(requestURL);
+        resrceInfoVO.setDispLevel(Long.valueOf(dispLevel));
+
+        // 메뉴 접근이 아닐 시
+        if(cmmMenuService.menuResrceChk(resrceInfoVO) < 1){
+
+            StringBuilder log = new StringBuilder();
+            String currentDt = DateUtil.currentDateTimeString();
+
+            // 현재 접근URL
+            String accessMenu = requestURL;
+
+            // 메뉴 접근 여부 확인
+            if (sessionInfoVO.getCurrentMenu() != null) {
+
+                // 현재 메뉴URL 가져오기
+                String currentMenu = sessionInfoVO.getCurrentMenu().getUrl();
+
+                // / 기준으로 자르기
+                String[] accessParts = accessMenu.split("/");
+                String[] currentParts = currentMenu.split("/");
+
+                String accessPrefix = "";
+                String currentPrefix = "";
+
+                // 앞에서 3개 조합 (index 1~3)
+                for (int i = 1; i < accessParts.length && i <= 3; i++) {
+                    if (accessParts[i] != null && !accessParts[i].isEmpty()) {
+                        accessPrefix += "/" + accessParts[i];
+                    }
+                }
+                for (int i = 1; i < currentParts.length && i <= 3; i++) {
+                    if (currentParts[i] != null && !currentParts[i].isEmpty()) {
+                        currentPrefix += "/" + currentParts[i];
+                    }
+                }
+
+                // 현재 URL, 접근 URL 비교
+                if (accessPrefix.equals(currentPrefix)) {
+                    // 같음
+                } else {
+                    // 다름
+                    log.append("----------_menu_check_최근접속메뉴와 현재메뉴 불일치 START----------\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",현재URL:").append(currentMenu).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접근URL:").append(accessMenu).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
+                            .append("----------_menu_check_최근접속메뉴와 현재메뉴 불일치 END----------\n");
+                }
+            }else{
+                // 없음
+                log.append("----------_menu_check_메뉴 접근 없이 조회 START----------\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",currentMenu:").append("NULL").append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",accessMenu:").append(accessMenu).append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
+                        .append("----------_menu_check_메뉴 접근 없이 조회 END----------\n");
+            }
+
+            if(log != null && log.length() > 0) {
+                LOGGER.info(log.toString());
+                makeMenuAccessLog(log);
             }
         }
 
@@ -489,6 +572,40 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    /**
+     * 로그를 입력받아 로그 파일에 출력
+     *
+     * @param log     로그
+     */
+    public void makeMenuAccessLog(StringBuilder log) {
+
+        String catalinaBase = System.getProperty("catalina.base");
+        // 오늘 날짜
+        Date date = new Date();
+        String nowDate = new SimpleDateFormat("yyyyMMdd").format(date);
+
+        // 생성 파일 경로
+        String fileName = "D:\\log_test\\MENU_CHECK_" + nowDate + ".OUT"; // TEST
+//        String fileName = catalinaBase + "/logs/MENU_CHECK" + nowDate + ".OUT";
+
+        try {
+            // 파일 객체 생성
+            File file = new File(fileName);
+
+            // true 지정시 파일의 기존 내용에 이어서 작성
+            FileWriter fw = new FileWriter(file, true);
+
+            // 파일안에 문자열 쓰기
+            fw.write(log.toString());
+            fw.flush();
+
+            // 객체 닫기
+            fw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

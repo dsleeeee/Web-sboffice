@@ -53,6 +53,10 @@ app.controller('hedofcMainCtrl', ['$scope', '$http', function ($scope, $http) {
         s_alert.pop("미등록 매핑정보가 있습니다. [보나비] - [상품관리] - [아티제상품코드매핑] 에서 등록하여 주십시오.");
     }
 
+    if(vLoginChkUserId === "N") {
+        s_alert.pop("[DS061] 엘티띵크 본사는 운영본사입니다. 사용에 주의하여 주십시오.");
+    }
+
     // 총 매장수
     $("#totalStoreCnt").text(storeCntList[0].storeCnt1 + ' /' + storeCntList[0].storeCntTotal);
 

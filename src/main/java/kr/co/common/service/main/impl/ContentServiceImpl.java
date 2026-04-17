@@ -358,4 +358,10 @@ public class ContentServiceImpl implements ContentService {
 
         return contentMapper.getErpProdCdNullCnt(sessionInfoVO);
     }
+
+    /** 가상 로그인 시 해당 총판/대리점 사용자 확인 */
+    @Override
+    public int getChkUserId(SessionInfoVO sessionInfoVO) {
+        return contentMapper.getChkUserId(sessionInfoVO);
+    }
 }

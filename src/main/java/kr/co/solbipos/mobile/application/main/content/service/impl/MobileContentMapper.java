@@ -87,4 +87,7 @@ public interface MobileContentMapper {
 
     /** 6개월이상 비밀번호 미수정시 알림 팝업 */
     String getMobileLastPwdChgDtChk(SessionInfoVO sessionInfoVO);
+
+    /** 가상 로그인 시 해당 총판/대리점 사용자 확인 */
+    int getMobileChkUserId(SessionInfoVO sessionInfoVO);
 }

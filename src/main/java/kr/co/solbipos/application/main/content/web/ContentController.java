@@ -307,6 +307,13 @@ public class ContentController {
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
+            // 가상 로그인 시 해당 총판/대리점 사용자 확인
+            if(sessionInfoVO.getHqOfficeCd().equals("DS061")){
+                int chkUserId = contentService.getChkUserId(sessionInfoVO);
+                if(chkUserId <= 0){
+                    model.addAttribute("vLoginChkUserId", "N");
+                }
+            }
         }
 
         /** 팝업 공고 조회 */
@@ -418,6 +425,13 @@ public class ContentController {
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
+            // 가상 로그인 시 해당 총판/대리점 사용자 확인
+            if(sessionInfoVO.getHqOfficeCd().equals("DS061")){
+                int chkUserId = contentService.getChkUserId(sessionInfoVO);
+                if(chkUserId <= 0){
+                    model.addAttribute("vLoginChkUserId", "N");
+                }
+            }
         }
 
         /** 팝업 공고 조회 */

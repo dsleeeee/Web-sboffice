@@ -201,6 +201,13 @@ public class MobileContentController {
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
+            // 가상 로그인 시 해당 총판/대리점 사용자 확인
+            if(sessionInfoVO.getHqOfficeCd().equals("DS061")){
+                int chkUserId = mobileContentService.getMobileChkUserId(sessionInfoVO);
+                if(chkUserId <= 0){
+                    model.addAttribute("vLoginChkUserId", "N");
+                }
+            }
         }
 
         /** 6개월이상 비밀번호 미수정시 알림 팝업 */
@@ -253,6 +260,13 @@ public class MobileContentController {
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
+            // 가상 로그인 시 해당 총판/대리점 사용자 확인
+            if(sessionInfoVO.getHqOfficeCd().equals("DS061")){
+                int chkUserId = mobileContentService.getMobileChkUserId(sessionInfoVO);
+                if(chkUserId <= 0){
+                    model.addAttribute("vLoginChkUserId", "N");
+                }
+            }
         }
 
         /** 6개월이상 비밀번호 미수정시 알림 팝업 */

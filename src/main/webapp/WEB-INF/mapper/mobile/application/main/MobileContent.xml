@@ -961,4 +961,17 @@
         AND USER_ID = #{userId}
     </select>
 
+    <!-- 가상 로그인 시 해당 총판/대리점 사용자 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileChkUserId" parameterType="sessionInfoVO" resultType="integer">
+        /* MobileContentMapper.getMobileChkUserId */
+        SELECT 	COUNT(*)
+        FROM 	TB_WB_USER_INFO_DTL_V01 A
+        WHERE 	A.ORGN_GRP_CD   =   '00615'
+        AND     A.USER_ID       =   #{vUserId}
+    </select>
+
 </mapper>

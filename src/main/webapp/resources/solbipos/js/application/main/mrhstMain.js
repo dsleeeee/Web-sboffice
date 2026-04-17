@@ -45,6 +45,10 @@ app.controller('mrhstMainCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mrhstMainCtrl', $scope, $http, true));
 
+    if(vLoginChkUserId === "N") {
+        s_alert.pop("[DS061] 엘티띵크 본사는 운영본사입니다. 사용에 주의하여 주십시오.");
+    }
+
     // 오늘의 매출건수
     $("#totalSaleCnt").text(daySaleCntList[0].realSaleCntTotal);
     $("#cardSaleCnt").text(daySaleCntList[0].cardCnt);

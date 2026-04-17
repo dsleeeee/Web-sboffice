@@ -86,4 +86,7 @@ public interface ContentService {
 
     /** USER_ID = 'a0001'일 시 미등록 매핑정보 표시 */
     int getErpProdCdNullCnt(SessionInfoVO sessionInfoVO);
+
+    /** 가상 로그인 시 해당 총판/대리점 사용자 확인 */
+    int getChkUserId(SessionInfoVO sessionInfoVO);
 }

@@ -200,4 +200,10 @@ public class MobileContentServiceImpl implements MobileContentService {
     public String getMobileLastPwdChgDtChk(SessionInfoVO sessionInfoVO) {
         return mobileContentMapper.getMobileLastPwdChgDtChk(sessionInfoVO);
     }
+
+    /** 가상 로그인 시 해당 총판/대리점 사용자 확인 */
+    @Override
+    public int getMobileChkUserId(SessionInfoVO sessionInfoVO) {
+        return mobileContentMapper.getMobileChkUserId(sessionInfoVO);
+    }
 }

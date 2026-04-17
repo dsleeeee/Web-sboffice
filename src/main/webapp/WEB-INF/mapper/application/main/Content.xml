@@ -1534,4 +1534,17 @@
         AND     (SELECT NVL(MAX(C.USE_YN), 'N') FROM TB_HQ_PRODUCT C WHERE C.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND C.PROD_CD = A.PROD_CD) = 'Y'
     </select>
 
+    <!-- 가상 로그인 시 해당 총판/대리점 사용자 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getChkUserId" parameterType="sessionInfoVO" resultType="integer">
+        /* ContentMapper.getChkUserId */
+        SELECT 	COUNT(*)
+        FROM 	TB_WB_USER_INFO_DTL_V01 A
+        WHERE 	A.ORGN_GRP_CD   =   '00615'
+        AND     A.USER_ID       =   #{vUserId}
+    </select>
+
 </mapper>
