@@ -587,8 +587,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String nowDate = new SimpleDateFormat("yyyyMMdd").format(date);
 
         // 생성 파일 경로
-        String fileName = "D:\\log_test\\MENU_CHECK_" + nowDate + ".OUT"; // TEST
-//        String fileName = catalinaBase + "/logs/MENU_CHECK" + nowDate + ".OUT";
+//        String fileName = "D:\\log_test\\MENU_CHECK_" + nowDate + ".OUT"; // TEST
+        String fileName = catalinaBase + "/logs/MENU_CHECK" + nowDate + ".OUT";
 
         try {
             // 파일 객체 생성
