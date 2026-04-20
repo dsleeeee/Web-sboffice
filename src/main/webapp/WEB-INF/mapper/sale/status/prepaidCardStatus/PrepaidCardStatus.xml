@@ -278,7 +278,7 @@
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
-            ,       tnnh.BALANCE
+            ,       MAX(tnnh.BALANCE) KEEP(DENSE_RANK LAST ORDER BY tnnh.CHARGE_DT) AS BALANCE
             FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             ,       TB_MS_STORE tms
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -295,7 +295,6 @@
             ,		tnnh.SALE_DATE
             ,       tnnh.POS_NO
             ,       tnnh.CHARGE_CARD_NO
-            ,       tnnh.BALANCE
             ORDER
             BY      tnnh.SALE_DATE
             ,       tnnh.POS_NO
@@ -309,7 +308,7 @@
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'Y' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_AMT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN 1 ELSE 0 END) AS CHARGE_CANCEL_CNT
             ,       SUM(CASE WHEN tnnh.SALE_YN = 'N' THEN tnnh.AMOUNT ELSE 0 END) AS TOT_CHARGE_CANCEL_AMT
-            ,       tnnh.BALANCE
+            ,       MAX(tnnh.BALANCE) KEEP(DENSE_RANK LAST ORDER BY tnnh.CHARGE_DT) AS BALANCE
             FROM    TB_NS_NONSALE_PREPAID_CHARGE tnnh
             WHERE   tnnh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tnnh.SALE_DATE = #{saleDate}
@@ -320,7 +319,6 @@
             GROUP
             BY      tnnh.SALE_DATE
             ,       tnnh.CHARGE_CARD_NO
-            ,       tnnh.BALANCE
             ORDER
             BY      tnnh.SALE_DATE
             ,       tnnh.CHARGE_CARD_NO
@@ -346,7 +344,7 @@
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
-            ,       tsspv.VCHARGE_REMAIN_AMT
+            ,       MAX(tsspv.VCHARGE_REMAIN_AMT) KEEP(DENSE_RANK LAST ORDER BY tsspv.REG_DT) AS VCHARGE_REMAIN_AMT
             FROM    TB_SL_SALE_PAY_VCHARGE tsspv
             ,       TB_MS_STORE tms
             WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -363,7 +361,6 @@
             ,		tsspv.SALE_DATE
             ,       tsspv.POS_NO
             ,       tsspv.VCHARGE_CARD_NO
-            ,       tsspv.VCHARGE_REMAIN_AMT
             ORDER
             BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
@@ -376,7 +373,7 @@
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'Y' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_AMT
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN 1 ELSE 0 END) AS USE_CANCEL_CNT
             ,       SUM(CASE WHEN tsspv.SALE_YN = 'N' THEN tsspv.SALE_AMT ELSE 0 END) AS TOT_USE_CANCEL_AMT
-            ,       tsspv.VCHARGE_REMAIN_AMT
+            ,       MAX(tsspv.VCHARGE_REMAIN_AMT) KEEP(DENSE_RANK LAST ORDER BY tsspv.REG_DT) AS VCHARGE_REMAIN_AMT
             FROM    TB_SL_SALE_PAY_VCHARGE tsspv
             WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tsspv.SALE_DATE = #{saleDate}
@@ -387,7 +384,6 @@
             GROUP
             BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
-            ,       tsspv.VCHARGE_REMAIN_AMT
             ORDER
             BY      tsspv.SALE_DATE
             ,       tsspv.VCHARGE_CARD_NO
