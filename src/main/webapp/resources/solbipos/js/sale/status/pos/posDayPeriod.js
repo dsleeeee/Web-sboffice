@@ -339,8 +339,8 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 
         // 등록일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
-            params.startDate = wijmo.Globalize.format($scope.srchPosDayPeriodStartDate.value, 'yyyyMMdd');
-            params.endDate = wijmo.Globalize.format($scope.srchPosDayPeriodEndDate.value, 'yyyyMMdd');
+            params.startDate = $scope.startDate;
+            params.endDate = $scope.endDate;
         }
 
         $scope.excelPosNo = params.posNo;
