@@ -261,6 +261,10 @@
     <typeAlias alias="zeusDataConnectVO" type="kr.co.solbipos.sys.admin.zeusDataConnect.service.ZeusDataConnectVO"/>
     <!-- 시스템관리 > 관리자기능 > POS로그수집관리 -->
     <typeAlias alias="posLogCollectMgmtVO" type="kr.co.solbipos.sys.admin.posLogCollectMgmt.service.PosLogCollectMgmtVO"/>
+
+    <!-- 시스템관리 > 관리자기능2 > 메뉴권한임의등록 -->
+    <typeAlias alias="authorInExRegistVO" type="kr.co.solbipos.sys.admin2.authorInExRegist.service.AuthorInExRegistVO"/>
+
     <!-- 시스템관리 > 연동 > OMS연동샘플 -->
     <typeAlias alias="omsLinkSampleVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO"/>
     <typeAlias alias="apiLinkVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO"/>

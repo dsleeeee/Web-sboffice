@@ -67,17 +67,54 @@ app.controller('dlvrExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-                $timeout(function () {
-                    // var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync($scope.flex, $('#dlvrExcelUpFile')[0].files[0], {includeColumnHeaders: true}
-                        , function (workbook) {
-                            $timeout(function () {
-                                // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
-                                $scope.excelUploadToJsonConvert();
-                            }, 10);
-                        }
-                    );
-                }, 10);
+
+                // $timeout(function () {
+                //     // var flex = $scope.flex;
+                //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync($scope.flex, $('#dlvrExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                //         , function (workbook) {
+                //             $timeout(function () {
+                //                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+                //                 $scope.excelUploadToJsonConvert();
+                //             }, 10);
+                //         }
+                //     );
+                // }, 10);
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '전화번호', 'cidTelNo');
+                            renameKey(item, '배달주소', 'dlvrAddr');
+                            renameKey(item, '배달주소상세', 'dlvrAddrDtl');
+                            renameKey(item, '배달메모', 'dlvrMemo');
+
+                            // 공백, ' 제거
+                            Object.keys(item).forEach(function(key){
+                                if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                    if (typeof item[key] === 'string') {
+                                        item[key] = item[key].trim().replaceAll('\'', '');
+                                    }
+                                }
+                            });
+                        });
+
+                        console.log(arr);
+                        //console.log(JSON.stringify(arr, null, 2));
+
+                        $timeout(function () {
+                            $scope.save(arr);
+                        }, 10);
+                    })
+                };
+                reader.readAsBinaryString(file);
             } else {
                 $("#dlvrExcelUpFile").val('');
                 $scope._popMsg(messages['prodExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)

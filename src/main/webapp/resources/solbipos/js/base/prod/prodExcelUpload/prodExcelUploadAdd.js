@@ -73,17 +73,101 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
-                $timeout(function () {
-                    var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#prodExcelUpFile')[0].files[0], {includeColumnHeaders: true}
-                        , function () {
-                            $timeout(function () {
-                                // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
-                                $scope.excelUploadToJsonConvert();
-                            }, 10);
-                        }
-                    );
-                }, 10);
+                // $timeout(function () {
+                //     var flex = $scope.flex;
+                //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#prodExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                //         , function () {
+                //             $timeout(function () {
+                //                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+                //                 $scope.excelUploadToJsonConvert();
+                //             }, 10);
+                //         }
+                //     );
+                // }, 10);
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            if(brandUseFg === "0") { item["hqBrandCd"] = brandList[0].name; }
+                            renameKey(item, '상품코드', 'prodCd');
+                            renameKey(item, '상품명', 'prodNm');
+                            renameKey(item, '상품분류', 'prodClassCd');
+                            renameKey(item, '상품유형', 'prodTypeFg');
+                            renameKey(item, '판매상품여부', 'saleProdYn');
+                            renameKey(item, '판매단가', 'saleUprc');
+                            renameKey(item, '내점가', 'stinSaleUprc');
+                            renameKey(item, '배달가', 'dlvrSaleUprc');
+                            renameKey(item, '포장가', 'packSaleUprc');
+                            renameKey(item, '거래처', 'vendrCd');
+                            renameKey(item, '공급단가', 'splyUprc');
+                            renameKey(item, '발주상품구분', 'poProdFg');
+                            renameKey(item, '발주단위', 'poUnitFg');
+                            renameKey(item, '발주단위수량', 'poUnitQty');
+                            renameKey(item, '발주최소수량', 'poMinQty');
+                            renameKey(item, '바코드', 'barCd');
+                            renameKey(item, '과세여부', 'vatFg');
+                            renameKey(item, '부가세포함여부', 'vatIncldYn');
+                            renameKey(item, '재고관리여부', 'stockProdYn');
+                            renameKey(item, '원가단가', 'costUprc');
+                            renameKey(item, '안전재고수량', 'safeStockQty');
+                            renameKey(item, '초기재고수량', 'startStockQty');
+                            renameKey(item, '가격관리구분', 'prcCtrlFg');
+                            renameKey(item, '보증금상품유형', 'depositCupFg');
+                            renameKey(item, '포인트사용여부', 'pointUseYn');
+                            renameKey(item, '할인여부', 'dcYn');
+                            renameKey(item, '코너', 'corner');
+                            renameKey(item, '비고', 'remark');
+                            renameKey(item, '상품약칭', 'prodAlias');
+                            renameKey(item, '식권구분', 'ticketFg');
+                            renameKey(item, '제조사', 'makerNm');
+                            renameKey(item, '매입VAT', 'acquireVat');
+                            renameKey(item, '포인트적립율', 'pointSaveRate');
+                            renameKey(item, '규격', 'spec');
+                            renameKey(item, '특정관리', 'specialManage');
+                            renameKey(item, '단품코드', 'singleProdCd');
+                            renameKey(item, '도서약칭', 'bookAlias');
+                            renameKey(item, '출판사', 'publishNm');
+                            renameKey(item, '저자1', 'author1');
+                            renameKey(item, '저자2', 'author2');
+                            renameKey(item, '역자1', 'translator1');
+                            renameKey(item, '역자2', 'translator2');
+                            renameKey(item, '발행일', 'pubDate');
+                            renameKey(item, '할인율', 'discRate');
+                            renameKey(item, '매입VAT', 'acquireVat');
+                            renameKey(item, '포인트적립율', 'pointSaveRate');
+                            renameKey(item, '규격', 'spec');
+                            renameKey(item, '특정관리', 'specialManage');
+                            renameKey(item, 'ISBN', 'isbn');
+                            renameKey(item, 'ISBN코드', 'isbnCode');
+
+                            // 공백, ' 제거
+                            Object.keys(item).forEach(function(key){
+                                if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                    if (typeof item[key] === 'string') {
+                                        item[key] = item[key].trim().replaceAll('\'', '');
+                                    }
+                                }
+                            });
+                        });
+
+                        console.log(arr);
+                        //console.log(JSON.stringify(arr, null, 2));
+
+                        $timeout(function () {
+                            $scope.save(arr);
+                        }, 10);
+                    })
+                };
+                reader.readAsBinaryString(file);
+
             } else {
                 $("#prodExcelUpFile").val('');
                 $scope._popMsg(messages['prodExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)

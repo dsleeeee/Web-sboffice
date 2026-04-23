@@ -623,16 +623,80 @@
                 // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
                 if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                     $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-                    $timeout(function () {
-                        var flex = $scope.flex;
-                        wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberExcelUpload')[0].files[0], {includeColumnHeaders: true}
-                            , function (workbook) {
-                                $timeout(function () {
-                                    $scope.memberExcelUploadToJsonConvert();
-                                }, 10);
-                            }
-                        );
-                    }, 10);
+                    // $timeout(function () {
+                    //     var flex = $scope.flex;
+                    //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberExcelUpload')[0].files[0], {includeColumnHeaders: true}
+                    //         , function (workbook) {
+                    //             $timeout(function () {
+                    //                 $scope.memberExcelUploadToJsonConvert();
+                    //             }, 10);
+                    //         }
+                    //     );
+                    // }, 10);
+
+
+                    // excel file read
+                    var reader = new FileReader();
+                    var arr = [];
+                    var scope = agrid.getScope('memberExcelUploadCtrl');
+                    reader.onload = function(){
+                        var fileData = reader.result;
+                        var wb = XLSX.read(fileData, {type : 'binary'});
+                        wb.SheetNames.forEach(function(sheetName) {
+                            arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                            // key명 변경
+                            arr.forEach(function(item){
+                                renameKey(item, '회원명(한글)', 'membrNm');
+                                renameKey(item, '회원명(영문)', 'memberEngNm');
+                                renameKey(item, '회원등급분류', 'membrClassCd');
+                                renameKey(item, '등록매장', 'membrStore');
+                                renameKey(item, '성별구분', 'gendrFg');
+                                renameKey(item, '회원카드번호', 'membrCardNo');
+                                renameKey(item, '생년월일', 'birthday');
+                                renameKey(item, '결혼여부', 'weddingYn');
+                                renameKey(item, '결혼기념일', 'weddingday');
+                                renameKey(item, '전화번호', 'memberTelNo');
+                                renameKey(item, '단축번호', 'memberShortNo');
+                                renameKey(item, 'E-MAIL', 'memberEmail');
+                                renameKey(item, '우편번호', 'memberPostNo');
+                                renameKey(item, '주소', 'memberAddr');
+                                renameKey(item, '상세주소', 'memberAddrDtl');
+                                renameKey(item, '이메일수신', 'emailRecvYn');
+                                renameKey(item, 'SMS수신', 'smsRecvYn');
+                                renameKey(item, '가용포인트', 'avablPoint');
+                                renameKey(item, '누적포인트', 'totSavePoint');
+                                renameKey(item, '선불충전금액', 'prepaidAmt');
+                                renameKey(item, '선불사용금액', 'prepaidUseAmt');
+                                renameKey(item, '후불발생금액', 'postpaidAmt');
+                                renameKey(item, '후불입금금액', 'depositAmt');
+
+                                // 공백, ' 제거
+                                Object.keys(item).forEach(function(key){
+                                    if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                        if (typeof item[key] === 'string') {
+                                            item[key] = item[key].trim().replaceAll('\'', '');
+                                        }
+                                    }
+                                });
+                            });
+
+                            console.log(arr);
+                            //console.log(JSON.stringify(arr, null, 2));
+
+                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                            $timeout(function () {
+                                if ($scope.valChk(arr, scope.isCheckedMembr)) {
+                                    scope.data = new wijmo.collections.CollectionView(arr);
+                                } else {
+                                    scope.data = new wijmo.collections.CollectionView(arr);
+                                }
+                                scope.data.trackChanges = true;
+                            }, 10);
+                        })
+                    };
+                    reader.readAsBinaryString(file);
+
                 } else {
                     $("#memberExcelUpload").val('');
                     $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
@@ -1186,16 +1250,53 @@
                 // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
                 if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                     $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-                    $timeout(function () {
-                        var flex = $scope.flex;
-                        wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberPointUpload')[0].files[0], {includeColumnHeaders: true}
-                            , function (workbook) {
-                                $timeout(function () {
-                                    $scope.memberPointUploadToJsonConvert();
-                                }, 10);
-                            }
-                        );
-                    }, 10);
+                    // $timeout(function () {
+                    //     var flex = $scope.flex;
+                    //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberPointUpload')[0].files[0], {includeColumnHeaders: true}
+                    //         , function (workbook) {
+                    //             $timeout(function () {
+                    //                 $scope.memberPointUploadToJsonConvert();
+                    //             }, 10);
+                    //         }
+                    //     );
+                    // }, 10);
+
+                    // excel file read
+                    var reader = new FileReader();
+                    var arr = [];
+                    var scope = agrid.getScope('memberExcelUploadCtrl');
+                    reader.onload = function(){
+                        var fileData = reader.result;
+                        var wb = XLSX.read(fileData, {type : 'binary'});
+                        wb.SheetNames.forEach(function(sheetName) {
+                            arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                            // key명 변경
+                            arr.forEach(function(item){
+                                renameKey(item, '회원명(한글)', 'membrNm');
+                                renameKey(item, '회원번호', 'membrNo');
+                                renameKey(item, '회원카드번호', 'membrCardNo');
+                                renameKey(item, '조정포인트', 'tmpTotAdjPoint');
+
+                                // 공백, ' 제거
+                                Object.keys(item).forEach(function(key){
+                                    if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                        if (typeof item[key] === 'string') {
+                                            item[key] = item[key].trim().replaceAll('\'', '');
+                                        }
+                                    }
+                                });
+                            });
+
+                            console.log(arr);
+                            //console.log(JSON.stringify(arr, null, 2));
+
+                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                            $scope.ajaxChk(arr);
+                        })
+                    };
+                    reader.readAsBinaryString(file);
+
                 } else {
                     $("#memberPointUpload").val('');
                     $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
@@ -1289,6 +1390,8 @@
                         } else {
                             scope.data = new wijmo.collections.CollectionView(resultList);
                         }
+                        scope.$applyAsync();
+                        // 데이터 변경
                         scope.data.trackChanges = true;
                     } else if (result.status === "SERVER_ERROR") {
                         s_alert.pop(result.message);
@@ -1754,3 +1857,6 @@
 <%-- 수불 엑셀업로드 에러내역 공통 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUploadErrInfo.jsp">
 </c:import>
+
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
