@@ -645,6 +645,12 @@
                         wb.SheetNames.forEach(function(sheetName) {
                             arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
+                            if (!arr || arr.length === 0) {
+                                $scope.$broadcast('loadingPopupInactive'); // 로딩 끄기
+                                $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                                return false;
+                            }
+
                             // key명 변경
                             arr.forEach(function(item){
                                 renameKey(item, '회원명(한글)', 'membrNm');
@@ -1264,12 +1270,17 @@
                     // excel file read
                     var reader = new FileReader();
                     var arr = [];
-                    var scope = agrid.getScope('memberExcelUploadCtrl');
                     reader.onload = function(){
                         var fileData = reader.result;
                         var wb = XLSX.read(fileData, {type : 'binary'});
                         wb.SheetNames.forEach(function(sheetName) {
                             arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                            if (!arr || arr.length === 0) {
+                                $scope.$broadcast('loadingPopupInactive'); // 로딩 끄기
+                                $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                                return false;
+                            }
 
                             // key명 변경
                             arr.forEach(function(item){
