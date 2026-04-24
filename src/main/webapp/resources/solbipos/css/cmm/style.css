@@ -2333,21 +2333,21 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 	#wjWrapType3 .wj-gridWrap {height:325px}
 	#wjWrapType1 .wj-gridWrap.col2-t1 {height:240px}
 	.wj-gridWrap #rtnStatusPosDtlGrid,.wj-gridWrap #rtnStatusDayDtlGrid{height:442px}
-		
+
 }
 @media all and (min-width:1029px){
 	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; min-height:257px; border-bottom-color:#eee}
 	#wjWrapType1 .wj-gridWrap.col2-t2,	#wjWrapType1 .wj-gridWrap.col2-t2 #dcfgDtlGrid {max-height:408px; min-height:408px; height:408px}
 	.wj-gridWrap #rtnStatusPosDtlGrid,.wj-gridWrap #rtnStatusDayDtlGrid{height:442px}
-		
+
 	/* paging type 3 >> 2 col */
 	.pageNum3 ul {height:30px}
 	.pageNum3 ul li {width:34px; height:30px; margin:0 2px; font-size:1em;}
-	.pageNum3 ul li a {line-height:30px; border-radius:4px;}	
+	.pageNum3 ul li a {line-height:30px; border-radius:4px;}
 	.pageNum3 ul li.btn_previous, .pageNum3 ul li.btn_next {width:34px; height:30px; margin:0 8px;}
 	.pageNum3 ul li.btn_previous a {width:34px; height:30px}
 	.pageNum3 ul li.btn_next a {width:34px; height:30px}
-	
+
 }
 
 /* SCROLLBAR Chrome, Safari, Whale */
@@ -2533,3 +2533,64 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
     left: 105%;              /* 오른쪽에 생성해야하므로 영역을 왼쪽쪽에서 105% 이동 */
 }
 
+/* ============================================
+ * Mobile 대응 - 가로 스크롤 허용
+ * 목적: 모바일 기기에서 PC 레이아웃(1024px)을 강제 유지하고 가로 스크롤 제공
+ * ============================================ */
+@media all and (max-width: 1024px) {
+
+    /* 1. 최상위 요소 설정: 가로 스크롤 활성화 및 최소 너비 강제 */
+    html, body {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        min-width: 1024px;
+        /* width: 1024px; */
+    }
+    .wrap {
+        overflow-x: visible;
+        overflow-y: visible;
+        min-width: 1024px;
+        /* width: 1024px; */
+    }
+
+    /* 2. 좌측 메뉴: 스크롤 시 화면에 고정되지 않고 페이지 흐름에 따라 위치 */
+    .wrap > nav.menuOpen,
+    .wrap > nav.menuClose {
+        position: absolute;
+    }
+
+    /* 3. 상단바(Header): fixed 해제 및 너비 고정 */
+    nav.menuOpen + .topWrap,
+    nav.menuClose + .topWrap {
+        position: absolute;
+        /* width: 1024px; */
+        min-width: 1024px;
+    }
+
+    /* 4. 콘텐츠 영역: 상단바 두께만큼 영역 확보 */
+    nav.menuOpen + .topWrap + .contents,
+    nav.menuClose + .topWrap + .contents {
+        padding-top: 80px;
+    }
+
+    /* 5. 데이터 그리드 및 테이블: 데이터 가독성을 위한 최소 너비 보장 */
+    /* 여러개의 그리드 표시에 화면 밀림현상 발생하여 제거 */
+    /*
+    .wj-gridWrap,
+    .wj-TblWrap,
+    .wj-TblWrapBr {
+        min-width: 800px;
+    }
+    */
+
+    /* 6. 개별 서브 콘텐츠 영역 최소 너비 */
+    /* 상위가 최소 1024px 보장, 내부 그리드(.wj-gridWrap 등)가 자체적으로 필요한 너비를 갖고 있음, 제거 */
+    /* 추가로 깨지는 화면 발생 시 재확인 */
+    /*
+    .subCon,
+    .subCon2,
+    .subCon3 {
+        min-width: 800px;
+    }
+    */
+}
