@@ -125,7 +125,7 @@
     var menuCd = "${menuCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260410.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260423.01" charset="utf-8"></script>
 
 <%-- 네이버플레이스 연동 초기화 팝업 --%>
 <c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">

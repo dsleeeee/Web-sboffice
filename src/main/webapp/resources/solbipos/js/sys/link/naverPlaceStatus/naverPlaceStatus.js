@@ -52,6 +52,10 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "reset") {
+
+                    selectedRow.resrceCd = menuCd;
+                    selectedRow.pathNm = "시스템관리-연동-네이버플레이스현황-초기화 팝업";
+
                     // 초기화 팝업
                     $scope.wjNaverPlaceStatusResetLayer.show(true);
                     $scope._broadcast('naverPlaceStatusResetCtrl', selectedRow);

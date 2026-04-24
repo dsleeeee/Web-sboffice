@@ -720,6 +720,13 @@
             WHERE 1=1
             AND tmp2.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
             AND tmp.STORE_CD = tmp2.STORE_CD
+            AND NOT EXISTS (
+                                SELECT 1
+                                FROM   TB_MS_PRINTER_PROD A
+                                WHERE  A.STORE_CD = tmp.STORE_CD
+                                AND    A.PRTER_NO = tmp2.PRTER_NO
+                                AND    A.PROD_CD = tmp.PROD_CD
+                           )
         ) B
         ON  (
                 A.STORE_CD = B.STORE_CD

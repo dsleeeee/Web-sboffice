@@ -37,8 +37,8 @@ app.controller('naverPlaceStatusResetCtrl', ['$scope', '$http', function ($scope
 
         // 사용자 행위 기록
         var actParams = {};
-        actParams.resrceCd = menuCd;
-        actParams.pathNm = "시스템관리-연동-네이버플레이스현황-초기화 팝업";
+        actParams.resrceCd = $scope.selectedStore.resrceCd;
+        actParams.pathNm = $scope.selectedStore.pathNm;
         actParams.contents = "[초기화] 버튼 클릭 시";
 
         $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
@@ -71,9 +71,25 @@ app.controller('naverPlaceStatusResetCtrl', ['$scope', '$http', function ($scope
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/sys/link/naverPlaceStatus/naverPlaceStatusReset.sb", params, function () {
 
-                // 부모창 재조회 및 팝업닫기
-                var scope = agrid.getScope('naverPlaceStatusCtrl');
-                scope.searchNaverplaceStatus();
+                // 1) 네이버플레이스현황
+                if ($scope.selectedStore.resrceCd === "006479" || $scope.selectedStore.resrceCd === "006358") {
+
+                    // 부모창 재조회
+                    var scope = agrid.getScope('naverPlaceStatusCtrl');
+                    scope.searchNaverplaceStatus();
+                }
+
+                // 2) 네이버플레이스 플러스 연동
+                if ($scope.selectedStore.resrceCd === "006459" || $scope.selectedStore.resrceCd === "006318") {
+
+                    setTimeout(function() {
+                        // 부모창 재조회
+                        const bc = new BroadcastChannel('refresh_channel');
+                        bc.postMessage('refresh');
+                    }, 1000);
+                }
+
+                // 팝업 닫기
                 $scope.wjNaverPlaceStatusResetLayer.hide(true);
             });
         });

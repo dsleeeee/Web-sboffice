@@ -50,4 +50,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatusReset.js?ver=20260410.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatusReset.js?ver=20260423.01" charset="utf-8"></script>

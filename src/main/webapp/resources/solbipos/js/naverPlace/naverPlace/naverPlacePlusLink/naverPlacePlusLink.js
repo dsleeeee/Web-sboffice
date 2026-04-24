@@ -152,4 +152,26 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
         });
     };
 
+    // 로그아웃
+    $scope.btn3 = function () {
+
+        var params = {};
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd = storeCd;
+        params.resrceCd = menuCd;
+        params.pathNm = "네이버플레이스-네이버플레이스-네이버플레이스 플러스 연동-초기화 팝업";
+
+        // 초기화 팝업
+        $scope.wjNaverPlaceStatusResetLayer.show(true);
+        $scope._broadcast('naverPlaceStatusResetCtrl', params);
+
+        // 사용자 행위 기록
+        var actParams = {};
+        actParams.resrceCd = menuCd;
+        actParams.pathNm = "네이버플레이스-네이버플레이스-네이버플레이스 플러스 연동";
+        actParams.contents = "'로그아웃' 버튼 클릭 시";
+
+        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+    }
+    
 }]);

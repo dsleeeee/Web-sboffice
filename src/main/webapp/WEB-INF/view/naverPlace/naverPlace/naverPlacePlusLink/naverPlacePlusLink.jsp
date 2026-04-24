@@ -1,13 +1,17 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="subCon" ng-controller="naverPlacePlusLinkCtrl">
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="naverPlacePlusLink.naverPlacePlusLink" /></a>
+        <a href="#" class="open fl" onclick="openLogout()"><s:message code="naverPlacePlusLink.naverPlacePlusLink" /></a>
+        <button class="btn_blue fr mt5 mr10" id="btnLogout" ng-click="btn3();" style="display: none;">
+            <s:message code="naverPlacePlusLink.logout"/>
+        </button>
     </div>
 
     <div id="divLinkN">
@@ -65,7 +69,8 @@
 </div>
 
 <script type="text/javascript">
-
+    // 메뉴코드
+    var menuCd = "${menuCd}";
     // 사용자 ID
     var userId = "${userId}";
     // 매장코드
@@ -169,9 +174,24 @@
 
     console.log("연동단계1 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
 
+    // 로그아웃 버튼 오픈
+    var clickCnt = 0;
+    function openLogout() {
+        clickCnt++;
+        if (clickCnt >= 10) {
+            $("#btnLogout").css("display", "block");
+        } else {
+            $("#btnLogout").css("display", "none");
+        }
+    }
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260330.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260423.01" charset="utf-8"></script>
+
+<%-- 네이버플레이스 연동 초기화 팝업 --%>
+<c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">
+</c:import>
 
 <style>
     /* 텍스트 스타일 */
