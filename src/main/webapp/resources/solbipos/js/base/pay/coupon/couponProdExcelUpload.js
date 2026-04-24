@@ -56,16 +56,60 @@ app.controller('excelUploadCouponProdCtrl', ['$scope', '$http', '$timeout', func
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-                $timeout(function () {
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync($scope.flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
-                        , function (workbook) {
-                            $timeout(function () {
-                                // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
-                                $scope.excelUploadToJsonConvert();
-                            }, 10);
+                // $timeout(function () {
+                //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync($scope.flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
+                //         , function (workbook) {
+                //             $timeout(function () {
+                //                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+                //
+                //                 $scope.excelUploadToJsonConvert();
+                //             }, 10);
+                //         }
+                //     );
+                // }, 10);
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        if (!arr || arr.length === 0) {
+                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                            $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                            return;
                         }
-                    );
-                }, 10);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '상품코드', 'prodCd');
+                            renameKey(item, '상품명', 'prodNm');
+
+                            // 공백, ' 제거
+                            Object.keys(item).forEach(function(key){
+                                if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                    if (typeof item[key] === 'string') {
+                                        item[key] = item[key].trim().replaceAll('\'', '');
+                                    }
+                                }
+                            });
+                        });
+
+                        console.log(arr);
+
+                        $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
+                        $scope.progressCnt = 0; // 처리된 숫자
+                        // 새 데이터 등록
+                        $scope.save(arr);
+
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    })
+                };
+                reader.readAsBinaryString(file);
+
             } else {
                 $("#excelUpFile").val('');
                 $scope._popMsg(messages['prodExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)

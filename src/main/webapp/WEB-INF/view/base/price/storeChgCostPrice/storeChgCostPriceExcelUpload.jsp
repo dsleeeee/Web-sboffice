@@ -187,4 +187,6 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/storeChgCostPrice/storeChgCostPriceExcelUpload.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/storeChgCostPrice/storeChgCostPriceExcelUpload.js?ver=20260424.01" charset="utf-8"></script>
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
