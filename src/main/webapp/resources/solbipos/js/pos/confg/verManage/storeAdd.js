@@ -515,44 +515,111 @@ app.controller('verAddStoreExcelFileUploadCtrl', ['$scope', '$http', '$timeout',
       if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
 
-        $timeout(function () {
+        // $timeout(function () {
+        //   try {
+        //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(
+        //         $scope.flex,
+        //         file,
+        //         { includeColumnHeaders: true },
+        //         function (workbook) {
+        //           try {
+        //             // ✅ workbook 유효성 체크
+        //             if (!workbook || !workbook.sheets || workbook.sheets.length === 0) {
+        //               throw new Error("시트 없음");
+        //             }
+        //             $timeout(function () {
+        //               $scope.excelUploadToJsonConvert();
+        //             }, 10);
+        //           } catch (err) {
+        //             console.error("⚠️ 엑셀 구조 오류:", err);
+        //             $scope._popMsg("업로드한 엑셀 파일의 시트 구조가 올바르지 않습니다.\n" +
+        //                 "파일을 다시 저장하거나 양식을 확인해주세요.");
+        //             $scope.$broadcast('loadingPopupInactive');
+        //             $("#excelUpFile").val(''); // 파일 선택 초기화
+        //           }
+        //         },
+        //         function (error) {
+        //           console.error("❌ loadAsync 실패:", error);
+        //           $scope._popMsg("엑셀 파일을 불러오는 중 오류가 발생했습니다.\n" +
+        //               "엑셀파일을 열어 내용 확인 및 다른 이름으로 저장 후 다시 시도해주세요.");
+        //           $scope.$broadcast('loadingPopupInactive');
+        //           $("#excelUpFile").val('');
+        //         }
+        //     );
+        //   } catch (e) {
+        //     console.error("❌ 예외 발생:", e);
+        //     $scope._popMsg("엑셀 업로드 중 알 수 없는 오류가 발생했습니다.");
+        //     $scope.$broadcast('loadingPopupInactive');
+        //     $("#excelUpFile").val('');
+        //   }
+        // }, 10);
+
+        // excel file read
+        var reader = new FileReader();
+        var arr = [];
+        reader.onload = function(){
           try {
-            wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(
-                $scope.flex,
-                file,
-                { includeColumnHeaders: true },
-                function (workbook) {
-                  try {
-                    // ✅ workbook 유효성 체크
-                    if (!workbook || !workbook.sheets || workbook.sheets.length === 0) {
-                      throw new Error("시트 없음");
+            var fileData = reader.result;
+            var wb = XLSX.read(fileData, {type : 'binary'});
+
+            if (!wb || !wb.SheetNames || wb.SheetNames.length === 0) {
+              throw new Error("시트 없음");
+            }
+
+            wb.SheetNames.forEach(function(sheetName) {
+              var rawArr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+              if (!rawArr || rawArr.length === 0) {
+                $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+                $scope._popMsg(messages['empCardInfo.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                return;
+              }
+
+              // key명 변경
+              arr = [];
+              rawArr.forEach(function(item){
+                renameKey(item, '매장코드', 'storeCd');
+
+                // 공백, ' 제거
+                Object.keys(item).forEach(function(key){
+                  if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                    if (typeof item[key] === 'string') {
+                      item[key] = item[key].trim().replaceAll('\'', '');
                     }
-                    $timeout(function () {
-                      $scope.excelUploadToJsonConvert();
-                    }, 10);
-                  } catch (err) {
-                    console.error("⚠️ 엑셀 구조 오류:", err);
-                    $scope._popMsg("업로드한 엑셀 파일의 시트 구조가 올바르지 않습니다.\n" +
-                        "파일을 다시 저장하거나 양식을 확인해주세요.");
-                    $scope.$broadcast('loadingPopupInactive');
-                    $("#excelUpFile").val(''); // 파일 선택 초기화
                   }
-                },
-                function (error) {
-                  console.error("❌ loadAsync 실패:", error);
-                  $scope._popMsg("엑셀 파일을 불러오는 중 오류가 발생했습니다.\n" +
-                      "엑셀파일을 열어 내용 확인 및 다른 이름으로 저장 후 다시 시도해주세요.");
-                  $scope.$broadcast('loadingPopupInactive');
-                  $("#excelUpFile").val('');
+                });
+
+                // storeCd 가 있는 데이터만 추가
+                if (item.storeCd !== null && item.storeCd !== undefined && item.storeCd !== "") {
+                  arr.push(item);
                 }
-            );
-          } catch (e) {
-            console.error("❌ 예외 발생:", e);
-            $scope._popMsg("엑셀 업로드 중 알 수 없는 오류가 발생했습니다.");
+              });
+
+              if (arr.length === 0) {
+                $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+                $scope._popMsg(messages['empCardInfo.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                return;
+              }
+
+              console.log(arr);
+
+              // 새 데이터 등록
+              $scope.save(arr);
+            });
+          } catch (err) {
+            console.error("⚠️ 엑셀 구조 오류:", err);
+            $scope._popMsg("업로드한 엑셀 파일의 시트 구조가 올바르지 않습니다.\n파일을 다시 저장하거나 양식을 확인해주세요.");
             $scope.$broadcast('loadingPopupInactive');
             $("#excelUpFile").val('');
           }
-        }, 10);
+        };
+        reader.onerror = function(error) {
+          console.error("❌ 파일 읽기 실패:", error);
+          $scope._popMsg("엑셀 파일을 불러오는 중 오류가 발생했습니다.\n엑셀파일을 열어 내용 확인 및 다른 이름으로 저장 후 다시 시도해주세요.");
+          $scope.$broadcast('loadingPopupInactive');
+          $("#excelUpFile").val('');
+        };
+        reader.readAsBinaryString(file);
 
       } else {
         $("#excelUpFile").val('');

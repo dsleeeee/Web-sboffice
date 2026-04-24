@@ -45,7 +45,9 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore.js?ver=20220704.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore.js?ver=20260423.01" charset="utf-8"></script>
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <%-- 공통팝업 실사/조정/폐기 엑셀업로드 에러내역 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadStore/excelUploadStoreErrInfo.jsp">

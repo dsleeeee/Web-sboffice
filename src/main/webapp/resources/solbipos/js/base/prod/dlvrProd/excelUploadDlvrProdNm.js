@@ -105,16 +105,54 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
-                $timeout(function () {
-                    var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
-                        , function (workbook) {
-                            $timeout(function () {
-                                $scope.excelUploadToJsonConvert();
-                            }, 10);
+                // $timeout(function () {
+                //     var flex = $scope.flex;
+                //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
+                //         , function (workbook) {
+                //             $timeout(function () {
+                //                 $scope.excelUploadToJsonConvert();
+                //             }, 10);
+                //         }
+                //     );
+                // }, 10);
+
+                // excel file read
+                var reader = new FileReader();
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type: 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        var rawArr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        if (!rawArr || rawArr.length === 0) {
+                            $scope.$broadcast('loadingPopupInactive');
+                            $scope._popMsg(messages['dlvrProd.not.excelUploadData']);
+                            return;
                         }
-                    );
-                }, 10);
+
+                        // 엑셀 헤더명 → 바인딩명으로 변환 (colHeaderBind 활용)
+                        var arr = [];
+                        rawArr.forEach(function(rawItem) {
+                            var item = {};
+                            Object.keys(rawItem).forEach(function(key) {
+                                var binding = $scope.colHeaderBind[key];
+                                if (binding) {
+                                    var val = rawItem[key];
+                                    if (val !== null && val !== undefined && val !== "" && typeof val === 'string') {
+                                        val = val.trim().replaceAll("'", "");
+                                    }
+                                    item[binding] = val;
+                                }
+                            });
+                            arr.push(item);
+                        });
+
+                        console.log(arr);
+                        $scope.excelUploadToJsonConvert(arr);
+                    });
+                };
+                reader.readAsBinaryString(file);
+
             } else {
                 $("#excelUpFile").val('');
                 $scope._popMsg(messages['dlvrProd.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
@@ -124,36 +162,32 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
     };
 
     // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
-    $scope.excelUploadToJsonConvert = function () {
+    $scope.excelUploadToJsonConvert = function (arr) {
         var jsonData  = [];
         var item = {};
         var strProdCd = ""; // prodCd 유효성 검사 확인용
         var vProdCd = "";
-        var rowLength = $scope.flex.rows.length;
 
-        if (rowLength === 0) {
+        if (!arr || arr.length === 0) {
             $scope._popMsg(messages['dlvrProd.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
             return false;
         }
 
         // 배달의민족앱[3] 상품명칭 입력값 전체 체크
         var str = "";
-        for (var r = 0; r < rowLength; r++) {
-
+        for (var r = 0; r < arr.length; r++) {
             str = "";
-            for (var c = 0; c < $scope.flex.columns.length; c++) {
-                if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
-                    var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
-                    var cellValue  = $scope.flex.getCellData(r, c, false);
+            var rowItem = arr[r];
 
-                    if(colBinding !== "prodCd" && cellValue !== null && cellValue !== undefined && cellValue != ""){
-                        str +=  "[채널사: ("+ colBinding + ")/" + cellValue + "]";
-                    }
+            Object.keys(rowItem).forEach(function(colBinding) {
+                var cellValue = rowItem[colBinding];
+                if (colBinding !== "prodCd" && cellValue !== null && cellValue !== undefined && cellValue !== "") {
+                    str += "[채널사: (" + colBinding + ")/" + cellValue + "]";
                 }
-            }
+            });
 
-            if(str != null && str != undefined && str != ""){
-                if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
+            if (str !== null && str !== undefined && str !== "") {
+                if (str.indexOf("[채널사: (dlvrProdNm3)/") === -1) {
                     $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
 
                     // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
@@ -164,33 +198,30 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
         }
 
         // 업로드 된 데이터 JSON 형태로 생성
-        for (var r = 0; r < rowLength; r++) {
+        for (var r = 0; r < arr.length; r++) {
+            var rowItem = arr[r];
             vProdCd = "";
-            for (var c = 0; c < $scope.flex.columns.length; c++) {
-                item = {};
-                if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
-                    var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
-                    var cellValue  = $scope.flex.getCellData(r, c, false);
 
-                    if(colBinding === "prodCd"){
-                        if(cellValue !== null && cellValue !== "") {
-                            vProdCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
-                            strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
-                        }else{ continue; }
-                    }else{
-                        if(vProdCd !== null && vProdCd !== "") {
-                            if (cellValue !== null && cellValue !== "") {
-                                item["prodCd"] = vProdCd;
-                                item["dlvrNameCd"] = colBinding.replaceAll("dlvrProdNm", "");
-                                item["dlvrProdNm"] = cellValue;
-                                item["status"] = "U";
+            if (rowItem.prodCd !== null && rowItem.prodCd !== undefined && rowItem.prodCd !== "") {
+                vProdCd = rowItem.prodCd.toString().replaceAll("'", "").replaceAll(" ", "");
+                strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
+            } else {
+                continue;
+            }
 
-                                jsonData.push(item);
-                            }
-                        }
+            Object.keys(rowItem).forEach(function(colBinding) {
+                if (colBinding !== "prodCd") {
+                    var cellValue = rowItem[colBinding];
+                    if (vProdCd !== null && vProdCd !== "" && cellValue !== null && cellValue !== "") {
+                        item = {};
+                        item["prodCd"] = vProdCd;
+                        item["dlvrNameCd"] = colBinding.replaceAll("dlvrProdNm", "");
+                        item["dlvrProdNm"] = cellValue;
+                        item["status"] = "U";
+                        jsonData.push(item);
                     }
                 }
-            }
+            });
         }
 
         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기

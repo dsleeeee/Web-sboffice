@@ -66,17 +66,61 @@ app.controller('cardCreditExcelUploadAddCtrl', ['$scope', '$http', '$timeout', f
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
-                $timeout(function () {
-                    var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#cardCreditExcelUpFile')[0].files[0], {includeColumnHeaders: true}
-                        , function () {
-                            $timeout(function () {
-                                // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
-                                $scope.excelUploadToJsonConvert();
-                            }, 10);
+                // $timeout(function () {
+                //     var flex = $scope.flex;
+                //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#cardCreditExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                //         , function () {
+                //             $timeout(function () {
+                //                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+                //                 $scope.excelUploadToJsonConvert();
+                //             }, 10);
+                //         }
+                //     );
+                // }, 10);
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        if (!arr || arr.length === 0) {
+                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                            $scope._popMsg(messages['cardCreditExcelUploadAdd.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                            return;
                         }
-                    );
-                }, 10);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '매장코드', 'storeCd');
+                            renameKey(item, '승인일자', 'apprDate');
+                            renameKey(item, '승인번호', 'apprNo');
+                            renameKey(item, '입금일자', 'creditDate');
+                            renameKey(item, '입금금액', 'creditAmt');
+                            renameKey(item, '수수료', 'creditFee');
+                            renameKey(item, '입금은행', 'creditBank');
+
+                            // 공백, ' 제거
+                            Object.keys(item).forEach(function(key){
+                                if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                    if (typeof item[key] === 'string') {
+                                        item[key] = item[key].trim().replaceAll('\'', '');
+                                    }
+                                }
+                            });
+                        });
+
+                        console.log(arr);
+
+                        // 새 데이터 등록
+                        $scope.save(arr);
+                    })
+                };
+                reader.readAsBinaryString(file);
+
             } else {
                 $("#cardCreditExcelUpFile").val('');
                 $scope._popMsg(messages['cardCreditExcelUploadAdd.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
