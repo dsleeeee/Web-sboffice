@@ -230,8 +230,8 @@
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.resrceCd"/>"     binding="resrceCd"      width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.resrceNm"/>"     binding="resrceNm"      width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.authGrpFg"/>"    binding="authGrpFg"     width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="authorInExRegist.exceptInExFg"/>" binding="exceptInExFg"  width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="authorInExRegist.orgnInExFg"/>"   binding="orgnInExFg"    width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="authorInExRegist.exceptInExFg"/>" binding="exceptInExFg"  width="80"  is-read-only="true" align="center" data-map="incldExcldDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="authorInExRegist.orgnInExFg"/>"   binding="orgnInExFg"    width="80"  is-read-only="true" align="center" data-map="incldExcldDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.useYn"/>"        binding="useYn"         width="80"  is-read-only="true" align="center"  visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -250,4 +250,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin2/authorInExRegist/userInExRegist.js?ver=20260417.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin2/authorInExRegist/userInExRegist.js?ver=20260427.01" charset="utf-8"></script>

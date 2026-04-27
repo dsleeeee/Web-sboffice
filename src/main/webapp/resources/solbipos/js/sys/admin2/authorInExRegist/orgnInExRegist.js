@@ -84,12 +84,18 @@ app.controller('orgnInExRegistCtrl', ['$scope', '$http', function ($scope, $http
                 var storeScope = agrid.getScope('regOrgnMenuCtrl');
                 storeScope._gridDataInit();
                 $("#lblRegOrgn").text("");
+                storeScope.setSelectedOrgn("");
             });
 
             // 미등록 메뉴 리스트 초기화
             $scope.$apply(function() {
-                var regSope = agrid.getScope('noRegOrgnMenuCtrl');
-                regSope._gridDataInit();
+                var regScope = agrid.getScope('noRegOrgnMenuCtrl');
+                regScope._gridDataInit();
+                regScope.setSelectedOrgn("");
+
+                // 상품 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+                var noRegOrgnMenuCtrlPager = document.getElementById('noRegOrgnMenuCtrlPager');
+                noRegOrgnMenuCtrlPager.style.visibility='hidden'
             });
 
         }, false);
@@ -196,12 +202,13 @@ app.controller('noRegOrgnMenuCtrl', ['$scope', '$http','$timeout', function ($sc
 
     // 권한그룹여부 콤보박스 셋팅
     $scope._setComboData('orgnAuthGrpFgCombo',authGrpFgComboData);
-    $scope._setComboData('authorProdcFgCombo',authorProdcFgComboData);
+    $scope._setComboData('orgnAuthorProdcFgCombo',authorProdcFgComboData);
     $scope._setComboData('incldExcldFgCombo',incldExcldFgComboData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.orgnAuthGrpFg = 'N';
+        $scope.incldExcldDataMap = new wijmo.grid.DataMap(incldExcldFgComboData, 'value', 'name'); // 포함제외구분
 
     };
 
@@ -209,6 +216,33 @@ app.controller('noRegOrgnMenuCtrl', ['$scope', '$http','$timeout', function ($sc
         if(data !== null && data !== undefined) {
             // 상품 데이터 셋팅
             $scope.setSelectedOrgn(data);
+
+            // 권한처리구분 셋팅
+            var orgnFg = $scope.selectedOrgn.orgnFg;
+
+            var filteredData;
+
+            if (orgnFg === 'H') {
+                filteredData = authorProdcFgComboData.filter(item =>
+                    item.value === 'H' || item.value === 'C'
+                );
+            } else if (orgnFg === 'S') {
+                filteredData = authorProdcFgComboData.filter(item =>
+                    item.value === 'S'
+                );
+            } else {
+                filteredData = authorProdcFgComboData;
+            }
+
+            $timeout(function () {
+                $scope._setComboData('orgnAuthorProdcFgCombo', filteredData);
+                if (orgnFg === 'S') {
+                    $scope.authorProdcFg = 'S';
+                } else {
+                    $scope.authorProdcFg = 'H';
+                }
+            });
+
         }
 
         // 미등록 메뉴 리스트 조회
@@ -242,33 +276,11 @@ app.controller('noRegOrgnMenuCtrl', ['$scope', '$http','$timeout', function ($sc
         params.resrceNm = $scope.orgnResrceNm;
         params.authGrpFg = $scope.orgnAuthGrpFg;
 
-        $scope._inquirySub("/sys/admin2/authorInExRegist/orgnInExRegist/getSearchOrgnNoRegMenuList.sb", params, function() {
-            var orgnFg = $scope.selectedOrgn.orgnFg;
+        $scope._inquiryMain("/sys/admin2/authorInExRegist/orgnInExRegist/getSearchOrgnNoRegMenuList.sb", params, function() {
 
-            var filteredData;
-
-            // 권한처리구분 셋팅
-            if (orgnFg === 'H') {
-                filteredData = authorProdcFgComboData.filter(item =>
-                    item.value === 'H' || item.value === 'C'
-                );
-            } else if (orgnFg === 'S') {
-                filteredData = authorProdcFgComboData.filter(item =>
-                    item.value === 'S'
-                );
-            } else {
-                filteredData = authorProdcFgComboData;
-            }
-
-            $timeout(function () {
-                $scope._setComboData('authorProdcFgCombo', filteredData);
-                if (orgnFg === 'S') {
-                    $scope.authorProdcFg = 'S';
-                } else {
-                    $scope.authorProdcFg = 'H';
-                }
-            });
-
+            // 상품 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+            var noRegOrgnMenuCtrlPager = document.getElementById('noRegOrgnMenuCtrlPager');
+            noRegOrgnMenuCtrlPager.style.visibility='visible'
         }, false);
     };
 
@@ -281,7 +293,7 @@ app.controller('noRegOrgnMenuCtrl', ['$scope', '$http','$timeout', function ($sc
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].status = "I";
                 $scope.flex.collectionView.items[i].orgnCd = $scope.selectedOrgn.orgnCd;
-                $scope.flex.collectionView.items[i].authorProdcFg = $scope.authorProdcFg;
+                $scope.flex.collectionView.items[i].authorProdcFg = $scope.orgnAuthorProdcFg;
                 $scope.flex.collectionView.items[i].incldExcldFg = $scope.incldExcldFg;
                 params.push($scope.flex.collectionView.items[i]);
             }
