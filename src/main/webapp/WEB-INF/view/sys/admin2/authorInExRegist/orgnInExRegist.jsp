@@ -186,9 +186,9 @@
                 <%-- 권한처리구분 --%>
                 <div class="sb-select fr w30 mr5">
                     <wj-combo-box
-                            id="authorProdcFg"
-                            ng-model="authorProdcFg"
-                            items-source="_getComboData('authorProdcFgCombo')"
+                            id="orgnAuthorProdcFg"
+                            ng-model="orgnAuthorProdcFg"
+                            items-source="_getComboData('orgnAuthorProdcFgCombo')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false">
@@ -222,8 +222,8 @@
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.resrceCd"/>"     binding="resrceCd"      width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.resrceNm"/>"     binding="resrceNm"      width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.authGrpFg"/>"    binding="authGrpFg"     width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="authorInExRegist.userInExFg"/>"   binding="userInExFg"    width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="authorInExRegist.orgnInExFg"/>"   binding="orgnInExFg"    width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="authorInExRegist.userInExFg"/>"   binding="userInExFg"    width="80"  is-read-only="true" align="center" data-map="incldExcldDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="authorInExRegist.orgnInExFg"/>"   binding="orgnInExFg"    width="80"  is-read-only="true" align="center" data-map="incldExcldDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="authorInExRegist.useYn"/>"        binding="useYn"         width="80"  is-read-only="true" align="center"  visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -242,4 +242,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin2/authorInExRegist/orgnInExRegist.js?ver=20260417.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin2/authorInExRegist/orgnInExRegist.js?ver=20260427.01" charset="utf-8"></script>

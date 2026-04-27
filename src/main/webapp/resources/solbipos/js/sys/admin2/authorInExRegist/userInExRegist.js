@@ -75,13 +75,19 @@ app.controller('userInExRegistCtrl', ['$scope', '$http', function ($scope, $http
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('regUserMenuCtrl');
                 storeScope._gridDataInit();
+                storeScope.setSelectedUser("");
                 $("#lblRegUser").text("");
             });
 
             // 미등록 메뉴 리스트 초기화
                 $scope.$apply(function() {
-                    var regSope = agrid.getScope('noRegUserMenuCtrl');
-                    regSope._gridDataInit();
+                    var regScope = agrid.getScope('noRegUserMenuCtrl');
+                    regScope._gridDataInit();
+                    regScope.setSelectedUser("");
+
+                    // 상품 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+                    var noRegUserMenuCtrlPager = document.getElementById('noRegUserMenuCtrlPager');
+                    noRegUserMenuCtrlPager.style.visibility='hidden'
                 });
 
         }, false);
@@ -195,12 +201,39 @@ app.controller('noRegUserMenuCtrl', ['$scope', '$http','$timeout', function ($sc
     $scope.initGrid = function (s, e) {
         // 권한그룹여부 셋팅
         $scope.userAuthGrpFg = 'N';
+        $scope.incldExcldDataMap = new wijmo.grid.DataMap(incldExcldFgComboData, 'value', 'name'); // 포함제외구분
     };
 
     $scope.$on("noRegUserMenuCtrl", function(event, data) {
         if(data !== null && data !== undefined) {
             // 상품 데이터 셋팅
             $scope.setSelectedUser(data);
+
+            // 권한처리구분 셋팅
+            var orgnFg = $scope.selectedUser.orgnFg;
+
+            var filteredData;
+
+            if (orgnFg === 'H') {
+                filteredData = authorProdcFgComboData.filter(item =>
+                    item.value === 'H' || item.value === 'C'
+                );
+            } else if (orgnFg === 'S') {
+                filteredData = authorProdcFgComboData.filter(item =>
+                    item.value === 'S'
+                );
+            } else {
+                filteredData = authorProdcFgComboData;
+            }
+
+            $timeout(function () {
+                $scope._setComboData('authorProdcFgCombo', filteredData);
+                if (orgnFg === 'S') {
+                    $scope.authorProdcFg = 'S';
+                } else {
+                    $scope.authorProdcFg = 'H';
+                }
+            });
         }
 
         // 미등록 메뉴 리스트 조회
@@ -233,33 +266,10 @@ app.controller('noRegUserMenuCtrl', ['$scope', '$http','$timeout', function ($sc
         params.resrceNm = $scope.userResrceNm;
         params.authGrpFg = $scope.userAuthGrpFg;
 
-        $scope._inquirySub("/sys/admin2/authorInExRegist/userInExRegist/getSearchUserNoRegMenuList.sb", params, function() {
-            var orgnFg = $scope.selectedUser.orgnFg;
-
-            var filteredData;
-
-            // 권한처리구분 셋팅
-            if (orgnFg === 'H') {
-                filteredData = authorProdcFgComboData.filter(item =>
-                    item.value === 'H' || item.value === 'C'
-                );
-            } else if (orgnFg === 'S') {
-                filteredData = authorProdcFgComboData.filter(item =>
-                    item.value === 'S'
-                );
-            } else {
-                filteredData = authorProdcFgComboData;
-            }
-
-            $timeout(function () {
-                $scope._setComboData('authorProdcFgCombo', filteredData);
-                if (orgnFg === 'S') {
-                    $scope.authorProdcFg = 'S';
-                } else {
-                    $scope.authorProdcFg = 'H';
-                }
-            });
-
+        $scope._inquiryMain("/sys/admin2/authorInExRegist/userInExRegist/getSearchUserNoRegMenuList.sb", params, function() {
+            // 상품 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+            var noRegUserMenuCtrlPager = document.getElementById('noRegUserMenuCtrlPager');
+            noRegUserMenuCtrlPager.style.visibility='visible'
         }, false);
     };
 

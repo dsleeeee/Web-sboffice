@@ -228,10 +228,10 @@
             AND A.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
         </if>
         <if test="storeCd != null and storeCd != ''">
-            AND UPPER(A.STORE_CD) LIKE '%'||UPPER(#{storeCd})||'%'
+            AND UPPER(B.STORE_CD) LIKE '%'||UPPER(#{storeCd})||'%'
         </if>
         <if test="storeNm != null and storeNm != ''">
-            AND A.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER
         BY		A.HQ_OFFICE_CD
