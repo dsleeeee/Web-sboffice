@@ -43,7 +43,7 @@
                         <s:message code="authorInExRegist.hqOfficeNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="hqOfficeNm" ng-model="userNm" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="hqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
                 <tr>

@@ -135,7 +135,8 @@
         WHERE 	NOT EXISTS 	(
                                 SELECT 	1
                                 FROM 	TB_WB_RESRCE_INFO B
-                                WHERE 	B.P_RESRCE = A.RESRCE_CD
+                                WHERE 	B.P_RESRCE  = A.RESRCE_CD
+                                AND 	B.RESRCE_FG = 'M'
                             )
         AND 	A.RESRCE_CD 	NOT IN	(
                                             SELECT 	RESRCE_CD
@@ -302,6 +303,7 @@
                                 SELECT 	1
                                 FROM 	TB_WB_RESRCE_INFO B
                                 WHERE 	B.P_RESRCE = A.RESRCE_CD
+                                AND 	B.RESRCE_FG = 'M'
                             )
         AND 	A.RESRCE_CD 	NOT IN	(
                                             SELECT 	RESRCE_CD
