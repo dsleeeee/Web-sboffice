@@ -289,7 +289,7 @@
     -->
     <select id="getStoreSalePriceList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getStoreSalePriceList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <include refid="CmmSQL.PagingTemplateHeader2"/>
         SELECT
         tmp.PROD_CD,
         tmp.PROD_NM,
@@ -312,7 +312,7 @@
         tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
         tmp.PRC_CTRL_FG,
         tmp.USE_YN
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        <include refid="CmmSQL.PagingTemplateCount2"/>
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp, --view
@@ -369,7 +369,7 @@
         AND tmpsp.PROD_CD = tmp.PROD_CD
         AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <include refid="CmmSQL.PagingTemplateBottom2"/>
     </select>
 
 

@@ -231,7 +231,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
                 }
             }
         }
-    }, false);
+    }, true);
   };
   // <-- //검색 호출 -->
 
