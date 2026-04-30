@@ -243,7 +243,7 @@ app.controller('salePriceManageCtrl', ['$scope', '$http', function ($scope, $htt
                 }
             }
 
-        }, false);
+        }, true);
     };
     // <-- //검색 호출 -->
 

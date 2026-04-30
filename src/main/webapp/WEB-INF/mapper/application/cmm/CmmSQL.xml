@@ -60,6 +60,48 @@
         ]]>
     </sql>
 
+    <!-- 공통 쿼리 헤더 2 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 최상단 헤더에 include 한다.
+    -->
+    <sql id="PagingTemplateHeader2">
+        <![CDATA[
+             SELECT
+                 ORG.*,
+                 ROWNUM AS RNUM
+             FROM
+                 (
+        ]]>
+    </sql>
+    <!-- 공통쿼리 : 데이터 Count2 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 내용 From 절 직전에 include 한다.
+    -->
+    <sql id="PagingTemplateCount2">
+        <!--<if test='offset == 1'>-->
+            <![CDATA[
+                , COUNT(*) OVER() AS TOT_CNT
+            ]]>
+        <!--</if>-->
+    </sql>
+
+    <!-- 공통 쿼리 Bottom 2 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿼리 페이징 처리시 최하단에 include 한다.
+    -->
+    <sql id="PagingTemplateBottom2">
+        <![CDATA[
+                ) ORG
+                OFFSET #{offset} - 1 ROWS FETCH NEXT #{listScale} ROWS ONLY
+        ]]>
+    </sql>
+
 </mapper>
 
 

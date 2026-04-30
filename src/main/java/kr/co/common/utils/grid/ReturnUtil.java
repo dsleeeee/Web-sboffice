@@ -96,13 +96,13 @@ public class ReturnUtil {
         if(!isEmpty(data) && !isEmpty(page)) {
             @SuppressWarnings("unchecked")
             List<DefaultMap<Object>> a = (List<DefaultMap<Object>>) data;
-            
+
             if(PageVO.class.isAssignableFrom(page.getClass().getSuperclass())) {
                 PageVO p = (PageVO) page;
                 p.setTotalCount(a.get(0).getInt("totCnt"));
             }
         }
-        
+
         if (!isEmpty(page)) {
             map.put(PAGE, page);
         }
