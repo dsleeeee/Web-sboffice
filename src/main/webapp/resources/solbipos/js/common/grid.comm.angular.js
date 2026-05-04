@@ -3,6 +3,7 @@
 function RootController(ctrlName, $scope, $http, isPicker) {
     // set $scope Name
     $scope.name = ctrlName;
+    $scope.totCnt = 0;
     // 그리드 초기화
     $scope._gridDataInit = function () {
         $scope.data = new wijmo.collections.CollectionView([]);
@@ -34,6 +35,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                 }
             }
         }
+        //
+        params['totCnt'] = $scope.totCnt;
         // 페이징 처리
         if ($scope._getPagingInfo('curr') > 0) {
             params['curr'] = $scope._getPagingInfo('curr');
@@ -88,6 +91,11 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                     $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
                     $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
                     $scope._broadcast('drawPager');
+
+                    //
+                    if(response.data.data.page.curr === 1){
+                        $scope.totCnt = pagingInfo.totCnt;
+                    }
                 }
             }
         }, function errorCallback(response) {

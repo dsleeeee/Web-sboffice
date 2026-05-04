@@ -372,6 +372,12 @@ public class SalePriceController {
 
         List<DefaultMap<String>> result = salePriceService.getStoreSalePriceList(salePriceVO, sessionInfoVO);
 
+        if(result.size() > 0) {
+            if (result.get(0).get("totCnt") == null) {
+                result.get(0).put("totCnt", salePriceVO.getTotCnt().toString());
+            }
+        }
+
         return returnListJson(Status.OK, result, salePriceVO);
     }
 
