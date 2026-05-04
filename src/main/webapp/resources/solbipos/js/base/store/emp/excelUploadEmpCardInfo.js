@@ -123,6 +123,15 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
 
                         // key명 변경
                         arr.forEach(function(item){
+                            // 엑셀 헤더 key 공백 제거
+                            Object.keys(item).forEach(function(key){
+                                var trimmedKey = key.trim();
+                                if (trimmedKey !== key) {
+                                    item[trimmedKey] = item[key];
+                                    delete item[key];
+                                }
+                            });
+
                             renameKey(item, '사원카드번호', 'employeeCardNo');
                             renameKey(item, '사원번호', 'employeeNo');
                             renameKey(item, '사원이름', 'employeeNm');

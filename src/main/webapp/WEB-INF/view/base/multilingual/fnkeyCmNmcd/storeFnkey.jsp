@@ -146,4 +146,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/storeFnkey.js?ver=20240124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/storeFnkey.js?ver=20260504.01" charset="utf-8"></script>

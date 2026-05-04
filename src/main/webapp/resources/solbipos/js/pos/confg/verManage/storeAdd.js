@@ -578,6 +578,15 @@ app.controller('verAddStoreExcelFileUploadCtrl', ['$scope', '$http', '$timeout',
               // key명 변경
               arr = [];
               rawArr.forEach(function(item){
+                // 엑셀 헤더 key 공백 제거
+                Object.keys(item).forEach(function(key){
+                  var trimmedKey = key.trim();
+                  if (trimmedKey !== key) {
+                    item[trimmedKey] = item[key];
+                    delete item[key];
+                  }
+                });
+
                 renameKey(item, '매장코드', 'storeCd');
 
                 // 공백, ' 제거

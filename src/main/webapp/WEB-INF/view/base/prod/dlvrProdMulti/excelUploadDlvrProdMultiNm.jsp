@@ -2,6 +2,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+
 <div style="display: none;" ng-controller="excelUploadDlvrProdMultiNmCtrl">
 
     <input type="file" class="form-control" id="excelUpFile"
@@ -34,6 +37,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/excelUploadDlvrProdMultiNm.js?ver=20260424.01" charset="utf-8"></script>
-<%-- excelfile read js --%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/excelUploadDlvrProdMultiNm.js?ver=20260504.01" charset="utf-8"></script>

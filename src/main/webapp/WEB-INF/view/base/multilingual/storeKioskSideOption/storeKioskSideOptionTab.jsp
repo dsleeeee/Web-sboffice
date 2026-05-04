@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
@@ -43,10 +45,7 @@
     var kioskPos2List = ${kioskPos2List};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/storeKioskSideOption/storeKioskSideOptionTab.js?ver=20251013.01" charset="utf-8"></script>
-
-<%-- excelfile read js --%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/storeKioskSideOption/storeKioskSideOptionTab.js?ver=20260504.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크(카테고리명) 탭 --%>

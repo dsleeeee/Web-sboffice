@@ -3,6 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
@@ -39,6 +42,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUploadAdd.js?ver=20260423.01" charset="utf-8"></script>
-<%-- excelfile read js --%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUploadAdd.js?ver=20260504.01" charset="utf-8"></script>

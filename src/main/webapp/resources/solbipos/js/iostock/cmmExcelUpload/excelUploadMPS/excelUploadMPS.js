@@ -393,6 +393,15 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
 
                         // key명 변경
                         arr.forEach(function(item){
+                            // 엑셀 헤더 key 공백 제거
+                            Object.keys(item).forEach(function(key){
+                                var trimmedKey = key.trim();
+                                if (trimmedKey !== key) {
+                                    item[trimmedKey] = item[key];
+                                    delete item[key];
+                                }
+                            });
+
                             renameKey(item, '상품코드/바코드', 'prodBarcdCd');
                             renameKey(item, '상품코드', 'prodCd');
                             renameKey(item, '바코드', 'barcdCd');

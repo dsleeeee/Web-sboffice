@@ -466,6 +466,15 @@ app.controller('captionMsgExcelCtrl', ['$scope', '$http', '$timeout', function (
 
                         // key명 변경
                         arr.forEach(function(item){
+                            // 엑셀 헤더 key 공백 제거
+                            Object.keys(item).forEach(function(key){
+                                var trimmedKey = key.trim();
+                                if (trimmedKey !== key) {
+                                    item[trimmedKey] = item[key];
+                                    delete item[key];
+                                }
+                            });
+
                             renameKey(item, '기능키 or 메시지코드', 'captionMsgId');
                             renameKey(item, '구분', 'captionMsgGb');
                             renameKey(item, '기능키 or 메시지명', 'captionMsgNm');

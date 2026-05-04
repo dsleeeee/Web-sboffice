@@ -3,6 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+
 <div class="subCon" id="storeChgCostPriceExcelUploadView" style="padding: 10px 20px 40px;">
 
     <%-- 양식다운로드 --%>
@@ -187,6 +190,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/storeChgCostPrice/storeChgCostPriceExcelUpload.js?ver=20260424.01" charset="utf-8"></script>
-<%-- excelfile read js --%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/storeChgCostPrice/storeChgCostPriceExcelUpload.js?ver=20260504.01" charset="utf-8"></script>

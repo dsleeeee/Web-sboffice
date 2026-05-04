@@ -253,6 +253,15 @@ app.controller('cmNmcdExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
                         // key명 변경
                         arr.forEach(function(item){
+                            // 엑셀 헤더 key 공백 제거
+                            Object.keys(item).forEach(function(key){
+                                var trimmedKey = key.trim();
+                                if (trimmedKey !== key) {
+                                    item[trimmedKey] = item[key];
+                                    delete item[key];
+                                }
+                            });
+
                             renameKey(item, '그룹코드', 'nmcodeGrpCd');
                             renameKey(item, '그룹코드명', 'nmcodeGrpNm');
                             renameKey(item, '공통코드', 'nmcodeCd');

@@ -262,6 +262,15 @@ app.controller('sideSdselClassExcelCtrl', ['$scope', '$http', '$timeout', functi
 
                         // key명 변경
                         arr.forEach(function(item){
+                            // 엑셀 헤더 key 공백 제거
+                            Object.keys(item).forEach(function(key){
+                                var trimmedKey = key.trim();
+                                if (trimmedKey !== key) {
+                                    item[trimmedKey] = item[key];
+                                    delete item[key];
+                                }
+                            });
+
                             renameKey(item, '세트구분', 'sdselTypeFg');
                             renameKey(item, '선택그룹코드', 'sdselGrpCd');
                             renameKey(item, '선택그룹명', 'sdselGrpNm');

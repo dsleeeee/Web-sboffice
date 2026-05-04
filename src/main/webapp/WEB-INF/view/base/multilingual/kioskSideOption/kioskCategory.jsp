@@ -125,4 +125,4 @@
     var kioskTuClsType2List = ${kioskTuClsType2List};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20250919.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20260504.01" charset="utf-8"></script>
