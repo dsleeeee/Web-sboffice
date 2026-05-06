@@ -653,8 +653,18 @@
                                 return false;
                             }
 
+
                             // key명 변경
                             arr.forEach(function(item){
+                                // 엑셀 헤더 key 공백 제거
+                                Object.keys(item).forEach(function(key){
+                                    var trimmedKey = key.trim();
+                                    if (trimmedKey !== key) {
+                                        item[trimmedKey] = item[key];
+                                        delete item[key];
+                                    }
+                                });
+
                                 renameKey(item, '회원명(한글)', 'membrNm');
                                 renameKey(item, '회원명(영문)', 'memberEngNm');
                                 renameKey(item, '회원등급분류', 'membrClassCd');
@@ -1288,6 +1298,15 @@
 
                             // key명 변경
                             arr.forEach(function(item){
+
+                                // 엑셀 헤더 key 공백 제거
+                                Object.keys(item).forEach(function(key){
+                                    var trimmedKey = key.trim();
+                                    if (trimmedKey !== key) {
+                                        item[trimmedKey] = item[key];
+                                        delete item[key];
+                                    }
+                                });
                                 renameKey(item, '회원명(한글)', 'membrNm');
                                 renameKey(item, '회원번호', 'membrNo');
                                 renameKey(item, '회원카드번호', 'membrCardNo');

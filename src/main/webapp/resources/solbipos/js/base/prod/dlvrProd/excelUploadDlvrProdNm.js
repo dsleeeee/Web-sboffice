@@ -135,7 +135,8 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
                         rawArr.forEach(function(rawItem) {
                             var item = {};
                             Object.keys(rawItem).forEach(function(key) {
-                                var binding = $scope.colHeaderBind[key];
+                                var trimmedKey = key.trim();
+                                var binding = $scope.colHeaderBind[trimmedKey];
                                 if (binding) {
                                     var val = rawItem[key];
                                     if (val !== null && val !== undefined && val !== "" && typeof val === 'string') {
