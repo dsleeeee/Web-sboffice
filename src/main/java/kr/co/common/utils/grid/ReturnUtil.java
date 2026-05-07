@@ -99,7 +99,13 @@ public class ReturnUtil {
 
             if(PageVO.class.isAssignableFrom(page.getClass().getSuperclass())) {
                 PageVO p = (PageVO) page;
-                p.setTotalCount(a.get(0).getInt("totCnt"));
+                //p.setTotalCount(a.get(0).getInt("totCnt"));
+
+                if (a.get(0).getInt("totCnt") > 0) {
+                    p.setTotalCount(a.get(0).getInt("totCnt"));
+                } else {
+                    p.setTotalCount(p.getTotCnt());
+                }
             }
         }
 

@@ -18,7 +18,7 @@
     -->
     <select id="getStoreSalePriceHistoryList" parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
         /* HqSalePriceHistory.getStoreSalePriceHistoryList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <include refid="CmmSQL.PagingTemplateHeader2"/>
         SELECT 	tlmpspl.STORE_CD,
                 tms.STORE_NM,
                 tlmpspl.PROD_CD,
@@ -36,7 +36,7 @@
                 tlmpspl.PROC_FG,
                 TO_CHAR(TO_DATE(tlmpspl.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT,
                 tlmpspl.MOD_ID
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        <include refid="CmmSQL.PagingTemplateCount2"/>
         FROM 	TB_LG_MS_PRODUCT_SALE_PRICE_LOG tlmpspl,
                 TB_MS_PRODUCT tmp,
                 TB_MS_STORE tms
@@ -72,16 +72,20 @@
                 </foreach>
             </if>
         </if>
-        AND (
+        <!-- AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-            )
+            ) -->
+        AND (
+                EXISTS (SELECT 1 FROM TB_WB_USER_BRAND ub WHERE ub.USER_ID = #{userId} AND ub.HQ_BRAND_CD = tmp.HQ_BRAND_CD)
+                OR NOT EXISTS (SELECT 1 FROM TB_WB_USER_BRAND ub WHERE ub.USER_ID = #{userId})
+        )
         AND 	tmp.STORE_CD = tlmpspl.STORE_CD
         AND 	tmp.PROD_CD = tlmpspl.PROD_CD
         AND 	tms.STORE_CD = tlmpspl.STORE_CD
         ORDER BY tlmpspl.STORE_CD, tlmpspl.PROD_CD, tlmpspl.PROC_DT
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <include refid="CmmSQL.PagingTemplateBottom2"/>
     </select>
 
     <!-- 본사판매가변경이력 > 매장판매가변경이력 조회(엑셀다운로드) -->

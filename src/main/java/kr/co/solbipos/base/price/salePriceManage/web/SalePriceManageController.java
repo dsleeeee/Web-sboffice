@@ -105,12 +105,6 @@ public class SalePriceManageController {
 
         List<DefaultMap<Object>> result = salePriceManageService.getSalePriceManageList(salePriceManageVO, sessionInfoVO);
 
-        if(result.size() > 0) {
-            if (result.get(0).get("totCnt") == null) {
-                result.get(0).put("totCnt", salePriceManageVO.getTotCnt());
-            }
-        }
-
         return ReturnUtil.returnListJson(Status.OK, result, salePriceManageVO);
     }
 
