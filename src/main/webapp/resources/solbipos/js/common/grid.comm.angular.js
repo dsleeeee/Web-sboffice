@@ -3,6 +3,7 @@
 function RootController(ctrlName, $scope, $http, isPicker) {
     // set $scope Name
     $scope.name = ctrlName;
+    // 리스트 전체 row 수
     $scope.totCnt = 0;
     // 그리드 초기화
     $scope._gridDataInit = function () {
@@ -35,7 +36,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                 }
             }
         }
-        //
+        // 페이징 1번이 아닌경우, 기존에 갖고있던 리스트 전체 row수 재활용
         params['totCnt'] = $scope.totCnt;
         // 페이징 처리
         if ($scope._getPagingInfo('curr') > 0) {
@@ -92,7 +93,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
                     $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
                     $scope._broadcast('drawPager');
 
-                    //
+                    // 페이징 1번인 경우, 리스트 전체 row수 셋팅
                     if(response.data.data.page.curr === 1){
                         $scope.totCnt = pagingInfo.totCnt;
                     }
