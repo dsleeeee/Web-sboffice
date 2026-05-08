@@ -63,6 +63,7 @@
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmp.STORE_CD = '000001'
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -153,7 +154,6 @@
                 </if>
                 AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
-                AND tmp.STORE_CD = tsdps.STORE_CD
                 AND tmp.PROD_CD = tsdps.PROD_CD
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     GROUP BY tsdps.SALE_DATE, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
@@ -219,6 +219,7 @@
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmp.STORE_CD = '000001'
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -309,7 +310,6 @@
                 </if>
                 AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
-                AND tmp.STORE_CD = tsdps.STORE_CD
                 AND tmp.PROD_CD = tsdps.PROD_CD
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     GROUP BY tsdps.SALE_DATE, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
