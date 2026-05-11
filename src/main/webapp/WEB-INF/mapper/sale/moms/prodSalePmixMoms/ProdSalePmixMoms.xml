@@ -63,7 +63,7 @@
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tmp.STORE_CD = '000003'     -- 속도를 위해 상품 매장코드 고정
+                AND tmp.STORE_CD = '000001'     -- 속도를 위해 상품 매장코드 고정
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -219,7 +219,7 @@
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tmp.STORE_CD = '000003'     -- 속도를 위해 상품 매장코드 고정
+                AND tmp.STORE_CD = '000001'     -- 속도를 위해 상품 매장코드 고정
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
                     AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
