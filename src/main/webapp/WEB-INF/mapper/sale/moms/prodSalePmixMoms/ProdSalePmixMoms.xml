@@ -96,10 +96,15 @@
                                             )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
-                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                    AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
-                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                    AND tmp.PROD_CD IN  (
+                                            SELECT  A.PROD_CD
+                                            FROM    TB_MS_PRODUCT A
+                                            WHERE   A.STORE_CD  =   '000001'
+                                            AND     A.PROD_NM   LIKE '%'||#{prodNm}||'%'
+                                        )
                 </if>
                 <if test='prodCdQuery != null and prodCdQuery != ""'>
                     AND tmp.PROD_CD IN (${prodCdQuery})
@@ -252,10 +257,15 @@
                                             )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
-                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                    AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
-                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                    AND tmp.PROD_CD IN  (
+                                            SELECT  A.PROD_CD
+                                            FROM    TB_MS_PRODUCT A
+                                            WHERE   A.STORE_CD  =   '000001'
+                                            AND     A.PROD_NM   LIKE '%'||#{prodNm}||'%'
+                                        )
                 </if>
                 <if test='prodCdQuery != null and prodCdQuery != ""'>
                     AND tmp.PROD_CD IN (${prodCdQuery})
