@@ -134,7 +134,7 @@
         ) tssd2
         ,   TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tmp.STORE_CD = tssd2.STORE_CD
+        AND tmp.STORE_CD = '000001' -- 속도를 위해 상품 매장코드 고정
         AND tmp.PROD_CD = tssd2.PROD_CD
         <if test="prodClassCd != null and prodClassCd != ''">
             AND tmp.PROD_CLASS_CD IN (
@@ -147,13 +147,13 @@
                                     )
         </if>
         <if test='prodCd != null and prodCd != ""'>
-            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+            AND tssd2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tssd2.PROD_CD IN (${prodCdQuery})
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
-        </if>
-        <if test='prodCdQuery != null and prodCdQuery != ""'>
-            AND tmp.PROD_CD IN (${prodCdQuery})
         </if>
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
             AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -441,7 +441,7 @@
         ) tssd2
         ,   TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tmp.STORE_CD = tssd2.STORE_CD
+        AND tmp.STORE_CD = '000001' -- 속도를 위해 상품 매장코드 고정
         AND tmp.PROD_CD = tssd2.PROD_CD
         <if test="prodClassCd != null and prodClassCd != ''">
             AND tmp.PROD_CLASS_CD IN (
@@ -454,13 +454,13 @@
                                     )
         </if>
         <if test='prodCd != null and prodCd != ""'>
-            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+            AND tssd2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tssd2.PROD_CD IN (${prodCdQuery})
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
-        </if>
-        <if test='prodCdQuery != null and prodCdQuery != ""'>
-            AND tmp.PROD_CD IN (${prodCdQuery})
         </if>
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
             AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때

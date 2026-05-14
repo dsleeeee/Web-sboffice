@@ -71,7 +71,7 @@
                     AND tsdps.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdps.STORE_CD IN (${storeCdQuery})
+                    AND tms.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -102,7 +102,7 @@
                     AND tmp.PROD_CD IN  (
                                             SELECT  A.PROD_CD
                                             FROM    TB_MS_PRODUCT A
-                                            WHERE   A.STORE_CD  =   '000001'
+                                            WHERE   A.STORE_CD  =   '000001' -- 속도를 위해 상품 매장코드 고정
                                             AND     A.PROD_NM   LIKE '%'||#{prodNm}||'%'
                                         )
                 </if>
@@ -232,7 +232,7 @@
                     AND tsdps.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdps.STORE_CD IN (${storeCdQuery})
+                    AND tms.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -263,7 +263,7 @@
                     AND tmp.PROD_CD IN  (
                                             SELECT  A.PROD_CD
                                             FROM    TB_MS_PRODUCT A
-                                            WHERE   A.STORE_CD  =   '000001'
+                                            WHERE   A.STORE_CD  =   '000001' -- 속도를 위해 상품 매장코드 고정
                                             AND     A.PROD_NM   LIKE '%'||#{prodNm}||'%'
                                         )
                 </if>
