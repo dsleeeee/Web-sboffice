@@ -41,7 +41,7 @@
 
                 <%--- 등록상품 그리드 --%>
                 <div class="w50 fl">
-                    <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;" ng-controller="regProdClsCtrl">
+                    <div class="wj-TblWrap ml10" style="height:410px; overflow-y: hidden;" ng-controller="regProdClsCtrl">
                         <div class="oh mb10">
                             <span class="fl bk lh20 s14"><s:message code="coupon.regProd"/></span>
                             <%--<c:if test="${coupnEnvstVal == 1}">--%>
@@ -74,7 +74,7 @@
 
                 <%--- 미등록상품 그리드 --%>
                 <div class="w50 fr">
-                    <div class="wj-TblWrap ml10" style="height:400px; overflow-y: hidden;" ng-controller="noRegProdClsCtrl">
+                    <div class="wj-TblWrap ml10" style="height:410px; overflow-y: hidden;" ng-controller="noRegProdClsCtrl">
                         <div class="oh mb10">
                             <span class="fl bk lh20 s14"><s:message code="coupon.noRegProd" /></span>
                             <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist" /></a></span>

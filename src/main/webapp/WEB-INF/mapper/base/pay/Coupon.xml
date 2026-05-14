@@ -1729,69 +1729,126 @@
     <select id="getHqProdClsList" parameterType="couponProdVO" resultType="DefaultMap">
         /* USE : CouponMapper.getHqProdClsList */
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
-            SELECT 	DISTINCT
-                    L_CLASS_CD
-            ,		'[' || L_CLASS_CD || ']' || L_CLASS_NM     AS L_CLASS_NM
-            ,		M_CLASS_CD
-            ,		'[' || M_CLASS_CD || ']' || M_CLASS_NM     AS M_CLASS_NM
-            ,		S_CLASS_CD
-            ,		'[' || S_CLASS_CD || ']' || S_CLASS_NM     AS S_CLASS_NM
-            FROM 	TB_HQ_PRODUCT_CLASS_V02 thpcv
-            ,		TB_HQ_COUPON_PROD_CLS thcpc
-            ,		TB_HQ_PRODUCT thp
-            WHERE 	thpcv.HQ_OFFICE_CD 	= #{hqOfficeCd}
-            AND 	thcpc.HQ_OFFICE_CD 	= thpcv.HQ_OFFICE_CD
-            AND 	thcpc.PROD_CLASS_CD = thpcv.PROD_CLASS_CD
-            AND 	thcpc.PAY_CLASS_CD 	= #{payClassCd}
-            AND 	thcpc.COUPN_CD 		= #{coupnCd}
-            AND 	thp.HQ_OFFICE_CD 	= thpcv.HQ_OFFICE_CD
-            AND 	thp.PROD_CD 		= thpcv.PROD_CD
-            AND 	thp.USE_YN  		= 'Y'
+            SELECT 	DISTINCT A.P_PROD_CLASS_CD   AS L_CLASS_CD
+            ,		'[' || A.P_PROD_CLASS_CD || ']' || (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS L_CLASS_NM
+            ,		A.PROD_CLASS_CD		AS M_CLASS_CD
+            ,		'[' || A.PROD_CLASS_CD || ']' || A.PROD_CLASS_NM     AS M_CLASS_NM
+            ,		B.PROD_CLASS_CD		AS S_CLASS_CD
+            ,		'[' || B.PROD_CLASS_CD || ']' || B.PROD_CLASS_NM     AS S_CLASS_NM
+            FROM 	(
+                        SELECT  HQ_OFFICE_CD
+                        ,		P_PROD_CLASS_CD
+                        ,		PROD_CLASS_CD
+                        ,		PROD_CLASS_NM
+                        FROM    TB_HQ_PRODUCT_CLASS
+                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                        AND     P_PROD_CLASS_CD IN  (
+                                                        SELECT  PROD_CLASS_CD
+                                                        FROM    TB_HQ_PRODUCT_CLASS
+                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                        AND     P_PROD_CLASS_CD = '00000'
+                                                    )
+                    ) A
+            ,		TB_HQ_PRODUCT_CLASS B
+            ,		TB_HQ_PRODUCT C
+            ,		TB_HQ_COUPON_PROD_CLS D
+            WHERE   B.P_PROD_CLASS_CD IN    (
+                                                SELECT  PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     P_PROD_CLASS_CD IN  (
+                                                                                SELECT  PROD_CLASS_CD
+                                                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                                AND     P_PROD_CLASS_CD = '00000'
+                                                                            )
+                                            )
+            AND     A.HQ_OFFICE_CD  =	B.HQ_OFFICE_CD
+            AND     A.PROD_CLASS_CD = 	B.P_PROD_CLASS_CD
+            AND 	B.HQ_OFFICE_CD 	= 	C.HQ_OFFICE_CD
+            AND 	B.PROD_CLASS_CD = 	C.PROD_CLASS_CD
+            AND 	C.USE_YN 		=	'Y'
+            AND 	D.HQ_OFFICE_CD 	=	B.HQ_OFFICE_CD
+            AND 	D.PROD_CLASS_CD = 	B.PROD_CLASS_CD
+            AND		D.PAY_CLASS_CD	=	#{payClassCd}
+            AND     D.COUPN_CD    	= 	#{coupnCd}
             <if test='prodCd != null and prodCd != ""'>
-                AND thpcv.S_CLASS_CD = #{prodCd}
+                AND B.PROD_CLASS_CD = #{prodCd}
             </if>
             <if test='prodNm != null and prodNm != ""'>
-                AND thpcv.S_CLASS_NM LIKE '%'||#{prodNm}||'%'
+                AND B.PROD_CLASS_NM LIKE '%'||#{prodNm}||'%'
             </if>
             AND (
-            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-            OR
-            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-            )
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (C.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+            ORDER
+            BY 		A.P_PROD_CLASS_CD
+            ,	 	A.PROD_CLASS_CD
+            ,		B.PROD_CLASS_CD
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
-            SELECT 	DISTINCT
-                    thpcv.L_CLASS_CD
-            ,		'[' || thpcv.L_CLASS_CD || ']' || thpcv.L_CLASS_NM     AS L_CLASS_NM
-            ,		thpcv.M_CLASS_CD
-            ,		'[' || thpcv.M_CLASS_CD || ']' || thpcv.M_CLASS_NM     AS M_CLASS_NM
-            ,		thpcv.S_CLASS_CD
-            ,		'[' || thpcv.S_CLASS_CD || ']' || thpcv.S_CLASS_NM     AS S_CLASS_NM
-            FROM 	TB_HQ_PRODUCT_CLASS_V02 thpcv
-            ,		TB_HQ_PRODUCT thp
-            WHERE 	thpcv.HQ_OFFICE_CD 	= #{hqOfficeCd}
-            AND 	thp.HQ_OFFICE_CD    = thpcv.HQ_OFFICE_CD
-            AND 	thp.PROD_CD 		= thpcv.PROD_CD
-            AND     thp.USE_YN          = 'Y'
-            AND 	thpcv.S_CLASS_CD IS NOT NULL
+            SELECT 	DISTINCT A.P_PROD_CLASS_CD   AS L_CLASS_CD
+            ,		'[' || A.P_PROD_CLASS_CD || ']' || (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS L_CLASS_NM
+            ,		A.PROD_CLASS_CD		AS M_CLASS_CD
+            ,		'[' || A.PROD_CLASS_CD || ']' || A.PROD_CLASS_NM     AS M_CLASS_NM
+            ,		B.PROD_CLASS_CD		AS S_CLASS_CD
+            ,		'[' || B.PROD_CLASS_CD || ']' || B.PROD_CLASS_NM     AS S_CLASS_NM
+            FROM 	(
+                        SELECT  HQ_OFFICE_CD
+                        ,		P_PROD_CLASS_CD
+                        ,		PROD_CLASS_CD
+                        ,		PROD_CLASS_NM
+                        FROM    TB_HQ_PRODUCT_CLASS
+                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                        AND     P_PROD_CLASS_CD IN (
+                                                        SELECT  PROD_CLASS_CD
+                                                        FROM    TB_HQ_PRODUCT_CLASS
+                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                        AND     P_PROD_CLASS_CD = '00000'
+                                                    )
+                    ) A
+            ,		TB_HQ_PRODUCT_CLASS B
+            ,		TB_HQ_PRODUCT C
+            WHERE   B.P_PROD_CLASS_CD IN    (
+                                                SELECT  PROD_CLASS_CD
+                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                                AND     P_PROD_CLASS_CD IN  (
+                                                                                SELECT  PROD_CLASS_CD
+                                                                                FROM    TB_HQ_PRODUCT_CLASS
+                                                                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                                                AND     P_PROD_CLASS_CD = '00000'
+                                                                            )
+                                            )
+            AND     A.HQ_OFFICE_CD  =	B.HQ_OFFICE_CD
+            AND     A.PROD_CLASS_CD = 	B.P_PROD_CLASS_CD
+            AND 	B.HQ_OFFICE_CD 	= 	C.HQ_OFFICE_CD
+            AND 	B.PROD_CLASS_CD = 	C.PROD_CLASS_CD
+            AND 	C.USE_YN 		=	'Y'
             <if test='prodCd != null and prodCd != ""'>
-                AND thpcv.S_CLASS_CD = #{prodCd}
+                AND B.PROD_CLASS_CD = #{prodCd}
             </if>
             <if test='prodNm != null and prodNm != ""'>
-                AND thpcv.S_CLASS_NM LIKE '%'||#{prodNm}||'%'
+                AND B.PROD_CLASS_NM LIKE '%'||#{prodNm}||'%'
             </if>
-            AND 	thpcv.S_CLASS_CD NOT IN (
-                                                SELECT PROD_CLASS_CD
+            AND 	B.PROD_CLASS_CD NOT IN  (
+                                                SELECT  PROD_CLASS_CD
                                                 FROM    TB_HQ_COUPON_PROD_CLS
                                                 WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                 AND     PAY_CLASS_CD    = #{payClassCd}
                                                 AND     COUPN_CD        = #{coupnCd}
                                             )
             AND (
-            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-            OR
-            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-            )
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (C.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+            ORDER
+            BY 		A.P_PROD_CLASS_CD
+            ,	 	A.PROD_CLASS_CD
+            ,		B.PROD_CLASS_CD
         </if>
     </select>
 

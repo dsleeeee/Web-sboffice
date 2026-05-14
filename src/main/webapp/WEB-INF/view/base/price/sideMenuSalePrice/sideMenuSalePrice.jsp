@@ -13,7 +13,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('sideMenuSalePriceCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('sideMenuSalePriceCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
