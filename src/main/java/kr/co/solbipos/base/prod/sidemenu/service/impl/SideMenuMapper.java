@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.sidemenu.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -184,7 +185,7 @@ public interface SideMenuMapper {
     int getSdselClassCopySaveMergeProd(SideMenuSelClassVO sideMenuSelClassVO);
 
     /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 매장에 내려줌 */
-    int getSdselClassCopySaveMergeProdStore(SideMenuSelClassVO sideMenuSelClassVO);
+    int getSdselClassCopySaveMergeProdStore(@Param("sideMenuSelClassVOs") SideMenuSelClassVO[] sideMenuSelClassVOs);
 
     /** 선택분류 적용매장등록 팝업 - 선택분류 조회 */
     List<DefaultMap<Object>> getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO);
@@ -229,7 +230,7 @@ public interface SideMenuMapper {
     int getSdselProdCopySaveMerge(SideMenuSelProdVO sideMenuSelProdVO);
 
     /** 선택상품복사 팝업 - 매장에 내려줌 */
-    int getSdselProdCopySaveMergeStore(SideMenuSelProdVO sideMenuSelProdVO);
+    int getSdselProdCopySaveMergeStore(@Param("sideMenuSelProdVOs") SideMenuSelProdVO[] sideMenuSelProdVOs);
 
     /** 선택상품 생성시 표기순번 자동채번 */
     String getDispSeqCodeProd(SideMenuSelProdVO sideMenuSelProdVO);

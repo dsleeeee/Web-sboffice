@@ -255,4 +255,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselProdCopySingle.js?ver=20250905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselProdCopySingle.js?ver=20260513.02" charset="utf-8"></script>

@@ -2341,9 +2341,11 @@
                         C.FIX_PROD_FG,
                         C.PRINT_YN
                         FROM TB_HQ_PRODUCT_SDSEL_PROD C
+                        JOIN TB_HQ_PRODUCT E ON E.HQ_OFFICE_CD = C.HQ_OFFICE_CD AND E.PROD_CD = C.PROD_CD
                         WHERE 1=1
                         AND C.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
+                        AND E.USE_YN = 'Y'
                     ) B
                 ON  (
                         A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
@@ -2402,9 +2404,11 @@
                         C.SOLD_OUT_YN,
                         C.PRINT_YN
                         FROM TB_MS_PRODUCT_SDSEL_PROD C
+                        JOIN TB_MS_PRODUCT E ON E.STORE_CD = C.STORE_CD AND E.PROD_CD = C.PROD_CD
                         WHERE 1=1
                         AND C.STORE_CD = #{storeCd}
                         AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
+                        AND E.USE_YN = 'Y'
                     ) B
                 ON  (
                         A.STORE_CD = B.STORE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
@@ -2456,28 +2460,38 @@
         /* SideMenuMapper.getSdselClassCopySaveMergeProdStore */
         MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
         USING (
-                SELECT
-                D.STORE_CD,
-                #{applySdselClassCd} AS SDSEL_CLASS_CD,
-                C.PROD_CD,
-                C.ADD_PROD_UPRC,
-                C.ADD_PROD_QTY,
-                C.DISP_SEQ,
-                C.USE_YN,
-                #{regDt} AS REG_DT,
-                #{regId} AS REG_ID,
-                #{modDt} AS MOD_DT,
-                #{modId} AS MOD_ID,
-                C.RCVKIND,
-                C.FIX_PROD_FG,
-                '' AS SOLD_OUT_YN,
-                C.PRINT_YN
-                FROM TB_HQ_PRODUCT_SDSEL_PROD C,
-                TB_MS_STORE D
-                WHERE 1=1
-                AND C.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
-                AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                SELECT  D.STORE_CD,
+                        MAP.APPLY_SDSEL_CLASS_CD AS SDSEL_CLASS_CD,
+                        C.PROD_CD,
+                        C.ADD_PROD_UPRC,
+                        C.ADD_PROD_QTY,
+                        C.DISP_SEQ,
+                        C.USE_YN,
+                        MAP.REG_DT,
+                        MAP.REG_ID,
+                        MAP.MOD_DT,
+                        MAP.MOD_ID,
+                        C.RCVKIND,
+                        C.FIX_PROD_FG,
+                        '' AS SOLD_OUT_YN,
+                        C.PRINT_YN
+                FROM TB_HQ_PRODUCT_SDSEL_PROD C
+                JOIN TB_MS_STORE D ON D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                JOIN (
+                        <foreach collection="sideMenuSelClassVOs" item="item" separator="UNION ALL">
+                            SELECT
+                            #{item.hqOfficeCd}        AS HQ_OFFICE_CD,
+                            #{item.copySdselClassCd}  AS COPY_SDSEL_CLASS_CD,
+                            #{item.applySdselClassCd} AS APPLY_SDSEL_CLASS_CD,
+                            #{item.regDt}             AS REG_DT,
+                            #{item.regId}             AS REG_ID,
+                            #{item.modDt}             AS MOD_DT,
+                            #{item.modId}             AS MOD_ID
+                            FROM DUAL
+                        </foreach>
+                     ) MAP ON C.SDSEL_CLASS_CD = MAP.COPY_SDSEL_CLASS_CD AND C.HQ_OFFICE_CD = MAP.HQ_OFFICE_CD
+                JOIN TB_HQ_PRODUCT E ON E.HQ_OFFICE_CD = C.HQ_OFFICE_CD AND E.PROD_CD = C.PROD_CD
+                WHERE E.USE_YN = 'Y'
             ) B
         ON  (
                 A.STORE_CD = B.STORE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
@@ -3016,10 +3030,12 @@
                             ,       C.FIX_PROD_FG
                             ,       C.PRINT_YN
                             FROM    TB_HQ_PRODUCT_SDSEL_PROD C
+                            JOIN    TB_HQ_PRODUCT E ON E.HQ_OFFICE_CD = C.HQ_OFFICE_CD AND E.PROD_CD = C.PROD_CD
                             WHERE   1=1
                             AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
                             AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
                             AND     C.PROD_CD           = #{copySdselProdCd}
+                            AND     E.USE_YN = 'Y'
                         ) B
                 ON  (
                             A.HQ_OFFICE_CD      = B.HQ_OFFICE_CD
@@ -3094,10 +3110,12 @@
                             ,       C.SOLD_OUT_YN
                             ,       C.PRINT_YN
                             FROM    TB_MS_PRODUCT_SDSEL_PROD C
+                            JOIN    TB_MS_PRODUCT E ON E.STORE_CD = C.STORE_CD AND E.PROD_CD = C.PROD_CD
                             WHERE   1=1
                             AND     C.STORE_CD          = #{storeCd}
                             AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
                             AND     C.PROD_CD           = #{copySdselProdCd}
+                            AND     E.USE_YN = 'Y'
                         ) B
                 ON  (
                             A.STORE_CD          = B.STORE_CD
@@ -3168,27 +3186,39 @@
         MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
         USING   (
                     SELECT  D.STORE_CD
-                    ,       #{applySdselClassCd}    AS SDSEL_CLASS_CD
-                    ,       #{applyDispSeq}         AS DISP_SEQ
+                    ,       MAP.APPLY_SDSEL_CLASS_CD    AS SDSEL_CLASS_CD
+                    ,       MAP.APPLY_DISP_SEQ          AS DISP_SEQ
                     ,       C.PROD_CD
                     ,       C.ADD_PROD_UPRC
                     ,       C.ADD_PROD_QTY
                     ,       C.USE_YN
-                    ,       #{regDt} AS REG_DT
-                    ,       #{regId} AS REG_ID
-                    ,       #{modDt} AS MOD_DT
-                    ,       #{modId} AS MOD_ID
+                    ,       MAP.REG_DT
+                    ,       MAP.REG_ID
+                    ,       MAP.MOD_DT
+                    ,       MAP.MOD_ID
                     ,       C.RCVKIND
                     ,       C.FIX_PROD_FG
                     ,       '' AS SOLD_OUT_YN
                     ,       C.PRINT_YN
                     FROM    TB_HQ_PRODUCT_SDSEL_PROD C
-                    ,       TB_MS_STORE D
-                    WHERE   1=1
-                    AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
-                    AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
-                    AND     C.PROD_CD           = #{copySdselProdCd}
-                    AND     D.HQ_OFFICE_CD      = C.HQ_OFFICE_CD
+                    JOIN    TB_MS_STORE D ON D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                    JOIN (
+                    <foreach collection="sideMenuSelProdVOs" item="item" separator="UNION ALL">
+                        SELECT
+                            #{item.hqOfficeCd}          AS HQ_OFFICE_CD
+                        ,   #{item.copySdselClassCd}    AS COPY_SDSEL_CLASS_CD
+                        ,   #{item.copySdselProdCd}     AS COPY_SDSEL_PROD_CD
+                        ,   #{item.applySdselClassCd}   AS APPLY_SDSEL_CLASS_CD
+                        ,   #{item.applyDispSeq}        AS APPLY_DISP_SEQ
+                        ,   #{item.regDt}               AS REG_DT
+                        ,   #{item.regId}               AS REG_ID
+                        ,   #{item.modDt}               AS MOD_DT
+                        ,   #{item.modId}               AS MOD_ID
+                        FROM DUAL
+                    </foreach>
+                    ) MAP ON C.SDSEL_CLASS_CD = MAP.COPY_SDSEL_CLASS_CD AND C.HQ_OFFICE_CD = MAP.HQ_OFFICE_CD AND C.PROD_CD = MAP.COPY_SDSEL_PROD_CD
+                    JOIN    TB_HQ_PRODUCT E ON E.HQ_OFFICE_CD = C.HQ_OFFICE_CD AND E.PROD_CD = C.PROD_CD
+                    WHERE   E.USE_YN = 'Y'
                 ) B
             ON  (
                         A.STORE_CD          = B.STORE_CD
