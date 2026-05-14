@@ -119,7 +119,7 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', '$timeout', function ($
     // 선택분류 복사
     $scope.sdselClassCopySave = function(orgParams){
 
-        $scope.totalRows = orgParams.length;    // 체크 매장수
+        /*$scope.totalRows = orgParams.length;    // 체크 매장수
         var params = [];
 
         // 저장 시작이면 작업내역 로딩 팝업 오픈
@@ -150,8 +150,8 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', '$timeout', function ($
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb', /* 통신할 URL */
-            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            url    : '/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb', /!* 통신할 URL *!/
+            data   : params, /!* 파라메터로 보낼 데이터 : @requestBody *!/
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
@@ -187,21 +187,80 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', '$timeout', function ($
                 $("#progressCnt").html($scope.progressCnt);
                 $scope.sdselClassCopySave(orgParams);
             }
+        });*/
+
+        // 로딩 팝업 오픈
+        $timeout(function () {
+            $scope.excelUploadingPopup(true);
+        }, 10);
+
+        var sParam = {};
+        if (document.getElementsByName('sessionId')[0]) {
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // 전체 데이터를 한 번에 전송
+        $http({
+            method: 'POST',
+            url: '/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb',
+            data: orgParams,  // 전체 전송
+            params: sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                // 작업내역 로딩 팝업 닫기
+                $scope.excelUploadingPopup(false);
+                // 저장되었습니다.
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                // 하단 화면에 선택분류 리스트 재조회
+                var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+                var selectedSelGroup = grpGrid.getSelectedSelGroup();
+                $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+                // 팝업 닫기
+                $scope.close();
+            } else {
+                // 작업내역 로딩 팝업 닫기
+                $scope.excelUploadingPopup(false);
+            }
+        }, function errorCallback(response) {
+            $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
+        }).then(function () {
         });
     };
 
     // 작업내역 로딩 팝업
     $scope.excelUploadingPopup = function (showFg) {
+
+        // 전체 화면 클릭 차단 오버레이
+        var overlay = document.getElementById('loadingOverlay');
+
         if (showFg) {
+            // 우클릭 차단 등록
+            document.addEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 등록
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 활성화 (클릭 차단)
+            overlay.classList.add('active');
             // 팝업내용 동적 생성
             var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.saving'] + '</p>';
-            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
+            //innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
             innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
             // html 적용
             $scope._loadingPopup.content.innerHTML = innerHtml;
             // 팝업 show
             $scope._loadingPopup.show(true);
         } else {
+            // 우클릭 차단 해제
+            document.removeEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 해제
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 비활성화
+            overlay.classList.remove('active');
             $scope._loadingPopup.hide(true);
         }
     };

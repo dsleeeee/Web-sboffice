@@ -4,22 +4,20 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.service.treePopup.TreePopupVO;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
 import kr.co.solbipos.base.prod.artiseeProdMapping.service.ArtiseeProdMappingVO;
 import kr.co.solbipos.base.prod.artiseeProdMapping.service.impl.ArtiseeProdMappingMapper;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -717,9 +715,13 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 선택상품 복사
             procCnt = sideMenuMapper.getSdselClassCopySaveMergeProd(sideMenuSelClassVO);
             // 본사에서 접속시
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 procCnt = sideMenuMapper.getSdselClassCopySaveMergeProdStore(sideMenuSelClassVO);
-            }
+            }*/
+        }
+        // 본사에서 접속시
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            procCnt = sideMenuMapper.getSdselClassCopySaveMergeProdStore(sideMenuSelClassVOs);  // 리스트로 한 번에 전달
         }
 
         return procCnt;
@@ -969,9 +971,13 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 선택상품 복사
             procCnt = sideMenuMapper.getSdselProdCopySaveMerge(sideMenuSelProdVO);
             // 본사에서 접속시
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 procCnt = sideMenuMapper.getSdselProdCopySaveMergeStore(sideMenuSelProdVO);
-            }
+            }*/
+        }
+        // 본사에서 접속시
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            procCnt = sideMenuMapper.getSdselProdCopySaveMergeStore(sideMenuSelProdVOs);  // 리스트로 한 번에 전달
         }
 
 
