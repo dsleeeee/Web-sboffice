@@ -61,8 +61,9 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', '$timeout', funct
 
     // 선택분류복사
     $scope.classSingleCopySave = function(){
-        //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까?
-        var msg = $("#srchApplySingleGroupSingle").val() + " " + messages["sideMenu.sdselClassCopy.classCopySaveConfirm"];
+        //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까? 데이터양에 따라 5-10초에서 수분이 걸릴 수도 있습니다.
+        var msg = $("#srchApplySingleGroupSingle").val() + " " + messages["sideMenu.sdselClassCopy.classCopySaveConfirm"]
+            + "</br>" + messages["sideMenu.sdselClassCopy.classCopySaveConfirm3"];
         $scope._popConfirm(msg, function() {
 
             var scopeGroup = agrid.getScope("sdselClassCopySingleGroupCtrl");
