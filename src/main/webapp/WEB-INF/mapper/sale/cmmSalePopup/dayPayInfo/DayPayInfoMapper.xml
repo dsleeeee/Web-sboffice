@@ -686,7 +686,8 @@
         ,       tsspf.STORE_CD, tms.STORE_NM
         ,       tsspf.POS_NO, tsspf.BILL_NO
         ,       tsspf.SALE_YN
-        ,       tsspf.FSTMP_CD, tcn.NMCODE_NM
+        ,       tsspf.FSTMP_CD
+        ,       tcn.NMCODE_NM   AS FSTMP_NM
         ,       tsspf.FSTMP_UPRC
         ,       tsspf.SALE_AMT AS FSTMP_TOT_AMT
         ,       tsspf.FSTMP_SER_NO
