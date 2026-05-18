@@ -40,12 +40,12 @@
             <wj-flex-grid-column header="<s:message code="dayFstmp.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayFstmp.billNo"/>" binding="billNo" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayFstmp.saleYn"/>" binding="saleYn" width="70" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpSeq"/>" binding="fstmpSeq" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpSeq"/>" binding="fstmpSeq" width="80" align="center" is-read-only="true"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpCd"/>" binding="fstmpCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpNm"/>" binding="fstmpNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpSerNo"/>" binding="fstmpSerNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpUprc"/>" binding="fstmpUprc" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpQty"/>" binding="fstmpQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpQty"/>" binding="fstmpQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="dayFstmp.fstmpTotAmt"/>" binding="fstmpTotAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
