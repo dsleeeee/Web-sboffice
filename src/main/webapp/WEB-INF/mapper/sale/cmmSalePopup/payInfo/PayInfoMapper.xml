@@ -493,12 +493,12 @@
         /* USE : PayInfoMapper.getFstmpList */
         <![CDATA[
         SELECT 	tsspf.FSTMP_CD
-        ,       tmfs.FSTMP_NM
+        ,       tcn.NMCODE_NM   AS FSTMP_NM
         ,       tsspf.FSTMP_UPRC
         ,       tsspf.SALE_AMT AS FSTMP_TOT_AMT
         ,       tsspf.FSTMP_SER_NO
         FROM 	TB_SL_SALE_PAY_FSTMP tsspf
-        ,       TB_MS_FOOD_STAMP tmfs
+        ,       TB_CM_NMCODE tcn
         WHERE   tsspf.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tsspf.STORE_CD            =   #{storeCd}
         AND     tsspf.SALE_DATE           =   #{saleDate}
@@ -512,12 +512,10 @@
         <if test='billNo != null and billNo != ""'>
             AND tsspf.BILL_NO = #{billNo}
         </if>
-        <![CDATA[
-        AND     tmfs.STORE_CD          (+) =   tsspf.STORE_CD
-        AND     tmfs.FSTMP_CD          (+) =   tsspf.FSTMP_CD
+        AND 	tcn.NMCODE_GRP_CD   (+)	=	'177'
+        AND     tcn.NMCODE_CD       (+) =   tsspf.FSTMP_CD
         ORDER
         BY      tsspf.REG_SEQ
-        ]]>
     </select>
 
 
