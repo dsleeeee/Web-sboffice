@@ -28,12 +28,12 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="fstmp.fstmpSeq"/>" binding="fstmpSeq" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="fstmp.fstmpSeq"/>" binding="fstmpSeq" width="80" align="center" is-read-only="true"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="fstmp.fstmpCd"/>" binding="fstmpCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="fstmp.fstmpNm"/>" binding="fstmpNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="fstmp.fstmpSerNo"/>" binding="fstmpSerNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="fstmp.fstmpUprc"/>" binding="fstmpUprc" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fstmp.fstmpQty"/>" binding="fstmpQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="fstmp.fstmpQty"/>" binding="fstmpQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="fstmp.fstmpTotAmt"/>" binding="fstmpTotAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>

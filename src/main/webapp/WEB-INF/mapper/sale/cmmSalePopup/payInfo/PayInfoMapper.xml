@@ -492,32 +492,31 @@
     <select id="getFstmpList" parameterType="payInfoVO" resultType="DefaultMap">
         /* USE : PayInfoMapper.getFstmpList */
         <![CDATA[
-        SELECT 	tsspfd.FSTMP_SEQ
-        ,       tsspfd.FSTMP_CD, tmfs.FSTMP_NM
-        ,       tsspfd.FSTMP_UPRC
-        ,       tsspfd.FSTMP_QTY
-        ,       tsspfd.FSTMP_UPRC * tsspfd.FSTMP_QTY AS FSTMP_TOT_AMT
-        ,       tsspfd.FSTMP_SER_NO
-        FROM 	TB_SL_SALE_PAY_FSTMP_DTL tsspfd
+        SELECT 	tsspf.FSTMP_CD
+        ,       tmfs.FSTMP_NM
+        ,       tsspf.FSTMP_UPRC
+        ,       tsspf.SALE_AMT AS FSTMP_TOT_AMT
+        ,       tsspf.FSTMP_SER_NO
+        FROM 	TB_SL_SALE_PAY_FSTMP tsspf
         ,       TB_MS_FOOD_STAMP tmfs
-        WHERE   tsspfd.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspfd.STORE_CD            =   #{storeCd}
-        AND     tsspfd.SALE_DATE           =   #{saleDate}
+        WHERE   tsspf.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspf.STORE_CD            =   #{storeCd}
+        AND     tsspf.SALE_DATE           =   #{saleDate}
         ]]>
         <if test='storeCd != null and storeCd != ""'>
-            AND tsspfd.STORE_CD = #{storeCd}
+            AND tsspf.STORE_CD = #{storeCd}
         </if>
         <if test='posNo != null and posNo != ""'>
-            AND tsspfd.POS_NO = #{posNo}
+            AND tsspf.POS_NO = #{posNo}
         </if>
         <if test='billNo != null and billNo != ""'>
-            AND tsspfd.BILL_NO = #{billNo}
+            AND tsspf.BILL_NO = #{billNo}
         </if>
         <![CDATA[
-        AND     tmfs.STORE_CD          (+) =   tsspfd.STORE_CD
-        AND     tmfs.FSTMP_CD          (+) =   tsspfd.FSTMP_CD
+        AND     tmfs.STORE_CD          (+) =   tsspf.STORE_CD
+        AND     tmfs.FSTMP_CD          (+) =   tsspf.FSTMP_CD
         ORDER
-        BY      tsspfd.FSTMP_SEQ
+        BY      tsspf.REG_SEQ
         ]]>
     </select>
 
