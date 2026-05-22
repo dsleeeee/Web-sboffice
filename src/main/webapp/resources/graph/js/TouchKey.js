@@ -2742,13 +2742,31 @@ Format.prototype.save = function () {
   try {
     if (xml.length < MAX_REQUEST_SIZE) {
       var onload = function (req) {
+        var jsonStr = null;
+        var httpStatus = (req != null && typeof req.getStatus === 'function') ? req.getStatus() : 0;
+        var responseText = (req != null && typeof req.getText === 'function') ? req.getText() : '';
+        var isHttpOk = (httpStatus >= 200 && httpStatus < 300);
+
+        try {
+          jsonStr = JSON.parse(responseText);
+        } catch (e) {
+          jsonStr = null;
+        }
+
+        if (!isHttpOk || !jsonStr || jsonStr.status !== 'OK') {
+          scope.$apply(function(){
+            scope.$broadcast('loadingPopupInactive');
+            scope._popMsg("저장 중 오류가 발생하였습니다.");
+          });
+          return;
+        }
+
         scope.$apply(function(){
           scope.$broadcast('loadingPopupInactive');
           scope._popMsg(mxResources.get('saved'));
 
           // 새로 저장한 그룹코드 값으로 selectBox 셋팅
           setTimeout(function () {
-            var jsonStr = JSON.parse(req.getText());
             var xmlStr = JSON.stringify(jsonStr.data).replaceAll('\"','');
             scope.touchKeyGrp = xmlStr;
             scope.touchKeyGrpCombo.selectedValue = xmlStr;

@@ -138,6 +138,7 @@ public class MobileAuthController {
                 params.setLoginAutoSerial(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_AUTO_SERIAL).getValue());
                 params.setLoginIp(getClientIp(request));
                 params.setBrwsrInfo(request.getHeader("User-Agent"));
+                params.setServerInstance(System.getProperty("server.instance", "unknown"));
 
                 // 로그인 시 특정아이디 블락
                 if (CmmUtil.isBlockedId(params.getUserId())) {
@@ -437,6 +438,7 @@ public class MobileAuthController {
 
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
+        params.setServerInstance(System.getProperty("server.instance", "unknown"));
 
         // 로그인 시 특정아이디 블락
         if (CmmUtil.isBlockedId(params.getUserId())) {

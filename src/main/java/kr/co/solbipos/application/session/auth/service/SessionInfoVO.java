@@ -184,6 +184,9 @@ public class SessionInfoVO extends CmmVO {
     /** 로그인 확인용 토큰 */
     private String loginChkToken;
 
+    /** 서버별 인스턴스 정보*/
+    private String serverInstance;
+
 	/**
      * @return the sessionId
      */
@@ -730,6 +733,14 @@ public class SessionInfoVO extends CmmVO {
 
     public void setLoginChkToken(String loginChkToken) {
         this.loginChkToken = loginChkToken;
+    }
+
+    public String getServerInstance() {
+        return serverInstance;
+    }
+
+    public void setServerInstance(String serverInstance) {
+        this.serverInstance = serverInstance;
     }
 
     @Override

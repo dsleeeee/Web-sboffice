@@ -18,35 +18,54 @@
     -->
     <select id="getSalePriceList" parameterType="storeSalePriceVO" resultType="DefaultMap">
         /* StoreSalePrice.getSalePriceList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        tms.STORE_CD,
-        tms.STORE_NM,
-        tmp.PROD_CD,
-        tmp.PROD_NM,
-        tmpsp.SALE_UPRC AS SALE_UPRC,    -- 매장 판매가
-        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,    -- 매장 내점판매가
-        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,    -- 매장 배달판매가
-        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,    -- 매장 포장판매가
-        thpsp.SALE_UPRC AS HQ_SALE_UPRC,   -- 본사 판매가
-        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사 내점판매가
-        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사 배달판매가
-        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC    -- 본사 포장판매가
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MS_PRODUCT tmp,
-        TB_MS_STORE tms,
-        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp, --view
-        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
-        WHERE 1=1
-        AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
-        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tms.STORE_CD = tmp.STORE_CD
-        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
-        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
-        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-        AND thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND thpsp.PROD_CD = tmp.PROD_CD
-        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        <include refid="CmmSQL.PagingTemplateHeader2"/>
+        WITH user_brand AS
+        (
+            SELECT  HQ_BRAND_CD
+            FROM    TB_WB_USER_BRAND
+            WHERE   USER_ID = #{userId}
+        ),
+        brand_check AS
+        (
+            SELECT  COUNT(*) AS CNT
+            FROM    user_brand
+        )
+        SELECT  /*+ PARALLEL(tmp 4) PARALLEL(tms 4) */
+                tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tmp.PROD_CD
+        ,       tmp.PROD_NM
+        ,       tmpsp.SALE_UPRC         AS SALE_UPRC            -- 매장 판매가
+        ,       tmpsp.STIN_SALE_UPRC    AS STIN_SALE_UPRC       -- 매장 내점판매가
+        ,       tmpsp.DLVR_SALE_UPRC    AS DLVR_SALE_UPRC       -- 매장 배달판매가
+        ,       tmpsp.PACK_SALE_UPRC    AS PACK_SALE_UPRC       -- 매장 포장판매가
+        ,       thpsp.SALE_UPRC         AS HQ_SALE_UPRC         -- 본사 판매가
+        ,       thpsp.STIN_SALE_UPRC    AS HQ_STIN_SALE_UPRC    -- 본사 내점판매가
+        ,       thpsp.DLVR_SALE_UPRC    AS HQ_DLVR_SALE_UPRC    -- 본사 배달판매가
+        ,       thpsp.PACK_SALE_UPRC    AS HQ_PACK_SALE_UPRC    -- 본사 포장판매가
+        <include refid="CmmSQL.PagingTemplateCount2"/>
+        FROM    TB_MS_PRODUCT tmp
+        ,       TB_MS_STORE tms
+        ,       TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp
+        ,       TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp
+        ,       brand_check bc
+        WHERE   tmp.SALE_PROD_YN    =   'Y'          -- 판매상품 여부
+        AND     tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     tms.STORE_CD        =   tmp.STORE_CD
+        AND     tmpsp.STORE_CD  (+) =   tmp.STORE_CD
+        AND     tmpsp.PROD_CD   (+) =   tmp.PROD_CD
+        AND     tmpsp.SALE_DATE     =   TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND     thpsp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     thpsp.PROD_CD       =   tmp.PROD_CD
+        AND     thpsp.SALE_DATE     =   TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND     (
+                    bc.CNT = 0
+                    OR EXISTS   (
+                                    SELECT  1
+                                    FROM    user_brand ub
+                                    WHERE   ub.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                                )
+                )
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
         </if>
@@ -58,16 +77,16 @@
         </if>
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
-                SELECT PROD_CLASS_CD
-                FROM TB_HQ_PRODUCT_CLASS
-                WHERE 1=1
-                AND HQ_OFFICE_CD = #{hqOfficeCd}
-                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
         </if>
         <if test='saleUprc == true or stinSaleUprc == true or dlvrSaleUprc == true or packSaleUprc == true'>
-         AND ( 1!= 1
+            AND ( 1!= 1
             <if test='saleUprc == true'>
                 OR tmpsp.SALE_UPRC != thpsp.SALE_UPRC
             </if>
@@ -94,13 +113,10 @@
                 </foreach>
             </if>
         </if>
-        AND (
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                OR
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-            )
-        ORDER BY tmp.PROD_CD, tms.STORE_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        ORDER
+        BY      tmp.PROD_CD
+        ,       tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom2"/>
     </select>
 
     <!-- 매장판매가현황 > 가격정보 조회(엑셀다운로드) -->

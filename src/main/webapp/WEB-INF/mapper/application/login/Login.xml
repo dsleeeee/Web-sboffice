@@ -175,7 +175,8 @@
           LOGIN_DT,
           V_USER_ID,
           ORGN_CD,
-          SESSION_ID
+          SESSION_ID,
+          SERVER_INSTANCE
         )
         VALUES
         (
@@ -189,7 +190,8 @@
           #{loginDt},
           #{vUserId},
           #{orgnCd},
-          #{sessionId}
+          #{sessionId},
+          #{serverInstance}
         )
     </insert>
 

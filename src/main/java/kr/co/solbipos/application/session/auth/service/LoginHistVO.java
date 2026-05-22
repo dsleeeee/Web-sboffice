@@ -46,6 +46,9 @@ public class LoginHistVO extends CmmVO {
 
     /** 세션ID */
     private String sessionId;
+
+    /** 서버별 인스턴스 정보 */
+    private String serverInstance;
     
     /**
      * @return the seq
@@ -170,5 +173,13 @@ public class LoginHistVO extends CmmVO {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getServerInstance() {
+        return serverInstance;
+    }
+
+    public void setServerInstance(String serverInstance) {
+        this.serverInstance = serverInstance;
     }
 }
