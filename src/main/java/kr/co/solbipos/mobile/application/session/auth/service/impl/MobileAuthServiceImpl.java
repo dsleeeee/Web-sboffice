@@ -245,6 +245,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         result.setLoginIp(params.getLoginIp());
         result.setBrwsrInfo(params.getBrwsrInfo());
         result.setSessionId(params.getSessionId());
+        result.setServerInstance(params.getServerInstance());
 
         // 로그인 시도 기록
         loginHist(result);
@@ -280,6 +281,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         loginHistVO.setLoginDt(currentDateTimeString());
         loginHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         loginHistVO.setSessionId(sessionInfoVO.getSessionId());
+        loginHistVO.setServerInstance(sessionInfoVO.getServerInstance());
 
         return loginHist(loginHistVO);
     }

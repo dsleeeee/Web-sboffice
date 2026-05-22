@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -282,7 +283,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 판매터치키 저장 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd, String tukeyGrpNm) {
+
+        if(true) {
+            throw new BizException(messageService.get("label.modifyFail"));
+        }
 
         boolean result = true;
 

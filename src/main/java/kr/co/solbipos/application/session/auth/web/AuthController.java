@@ -194,6 +194,7 @@ public class AuthController {
 
         params.setLoginIp(getClientIp(request));
         params.setBrwsrInfo(request.getHeader("User-Agent"));
+        params.setServerInstance(System.getProperty("server.instance", "unknown"));
 
         // 접속정보 가져오기
         String userId = params.getUserId();
