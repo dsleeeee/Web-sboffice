@@ -17,6 +17,7 @@ import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("sideMenuService")
+@Transactional
 public class SideMenuServiceImpl implements SideMenuService {
 
     private final SideMenuMapper sideMenuMapper;
