@@ -286,10 +286,6 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     @Transactional(rollbackFor = Exception.class)
     public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd, String tukeyGrpNm) {
 
-        if(true) {
-            throw new BizException(messageService.get("label.modifyFail"));
-        }
-
         boolean result = true;
 
         // XML 저장
