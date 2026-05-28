@@ -3,6 +3,7 @@ package kr.co.common.service.code;
 import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.CustomComboVO;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
@@ -87,4 +88,7 @@ public interface CmmCodeService {
 
     /** 커스텀 콤보박스 데이터 조회 */
     List<CustomComboVO> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO);
+
+    /** 서버 재시작 공지 여부 조회 */
+    DefaultMap<String> getDeployNoticeStatus();
 }

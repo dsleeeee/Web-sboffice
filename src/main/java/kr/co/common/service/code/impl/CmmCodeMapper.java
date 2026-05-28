@@ -1,6 +1,7 @@
 package kr.co.common.service.code.impl;
 
 import kr.co.common.data.domain.AgencyVO;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -56,4 +57,7 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> getHqOfficeListChkAgency(AgencyVO agencyVO);
+
+    /** 서버 재시작 공지 여부 조회 */
+    DefaultMap<String> getDeployNoticeStatus();
 }

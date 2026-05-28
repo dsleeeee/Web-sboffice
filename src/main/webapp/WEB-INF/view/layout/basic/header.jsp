@@ -10,6 +10,10 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
+<%-- 서버 재시작 공지 배너 --%>
+<div id="serverNoticeBanner" style="display:none; position:fixed; top:0; left:0; width:100%; background-color:#e74c3c; color:#fff; text-align:center; padding:10px 0; z-index:9999; font-size:14px; font-weight:bold;"></div>
+<%-- //서버 재시작 공지 배너 --%>
+
 <%-- 사용자정보영역 --%>
 <div class="topBar">
   <div class="menuControl" style="float:left;">
@@ -133,5 +137,5 @@
   var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20240604.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20260528.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>

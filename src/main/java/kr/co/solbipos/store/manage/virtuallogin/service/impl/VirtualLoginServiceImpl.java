@@ -112,6 +112,7 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
         loginHistVO.setLoginDt(DateUtil.currentDateTimeString());
         loginHistVO.setvUserId(sessionInfoVO.getvUserId());
         loginHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        loginHistVO.setServerInstance(sessionInfoVO.getServerInstance());
 
         return authMapper.insertLoginHist(loginHistVO);
     }
