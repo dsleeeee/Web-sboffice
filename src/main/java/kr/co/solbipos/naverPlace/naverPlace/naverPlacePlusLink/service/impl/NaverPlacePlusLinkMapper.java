@@ -88,4 +88,12 @@ public interface NaverPlacePlusLinkMapper {
      * @return
      */
     int updateNaverStore(NaverPlacePlusLinkVO naverPlacePlusLinkVO);
+
+    /**
+     * 개인(신용)정보 제3자 제공 동의 저장
+     *
+     * @param naverPlacePlusLinkVO
+     * @return
+     */
+    int savePersonalInfoProvision(NaverPlacePlusLinkVO naverPlacePlusLinkVO);
 }

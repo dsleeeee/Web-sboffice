@@ -69,6 +69,10 @@ public class NaverPlacePlusLinkVO extends PageVO {
     private String apiUrl;
     /** api key */
     private String apiKey;
+    /** 개인(신용)정보 제3자 제공 동의 여부 */
+    private String personalInfoProvision;
+    /** 개인(신용)정보 제3자 제공 동의 일시 */
+    private String personalInfoProvisionDt;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -260,5 +264,21 @@ public class NaverPlacePlusLinkVO extends PageVO {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getPersonalInfoProvision() {
+        return personalInfoProvision;
+    }
+
+    public void setPersonalInfoProvision(String personalInfoProvision) {
+        this.personalInfoProvision = personalInfoProvision;
+    }
+
+    public String getPersonalInfoProvisionDt() {
+        return personalInfoProvisionDt;
+    }
+
+    public void setPersonalInfoProvisionDt(String personalInfoProvisionDt) {
+        this.personalInfoProvisionDt = personalInfoProvisionDt;
     }
 }

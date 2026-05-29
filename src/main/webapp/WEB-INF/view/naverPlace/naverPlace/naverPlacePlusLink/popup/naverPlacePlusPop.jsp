@@ -23,6 +23,55 @@
     <div id="divPaging" class="pagination">
     </div>
 </div>
+
+<!-- 개인정보 제3자 정보 제공 동의 팝업 -->
+<div id="modalOverlay" class="modal-overlay" onclick="closeModal();">
+    <div class="modal-box" onclick="event.stopPropagation();">
+
+        <div class="modal-logo">링크POS × <span>N SmartPlace</span></div>
+        <div class="modal-store-name"><input type="hidden" id="hdPlaceId"/><span><label id="lblBusinessName"></label></span></div>
+
+        <h3 class="modal-title">네이버 스마트플레이스</h3>
+        <p class="modal-subtitle">링크POS에서 연동해 관리하세요.</p>
+
+        <p style="font-size:13px; font-weight:600; color:#333; margin:0 0 8px;">
+            개인(신용)정보 제3자 제공 동의 <span style="color:red; font-size:11px;">필수</span>
+        </p>
+
+        <div class="modal-scroll-body">
+            본인은 링크 주식회사(이하 “회사”)가 제공하는 네이버 스마트플레이스 연동 서비스(이하”서비스)를 이용하기 위해,
+            아래와 같이 ‘회사'가 본인의 개인(신용)정보를 제 3자에게 제공하는 것에 동의합니다.
+            <span class="label">제공 받는자</span>
+            네이버 주식회사
+            <span class="label">제공 목적</span>
+            네이버 스마트 플레이스 서비스 내 업체 등록<br>
+            기타 위 서비스와 POS 간 연동<br>
+            네이버 서비스 등록 업체에 대한 통계 데이터 제공 및 이용자 경험 향상 등을 위한 네이버 플레이스 서비스 및
+            네이버 플랫폼(네이버 예약, 주문 서비스, MY 플레이스 포함)의 운영 및 개발, 신규 서비스 개발 및 제공, 프로모션 및 각종 홍보
+            <span class="label">제공 항목</span>
+            POS 매출데이터 (상품정보, 결제정보, 할인정보, 주문정보, 메뉴정보), POS 영업현황, POS 테이블 현황, 대표자이름, 이메일주소, 휴대전화번호
+            <span class="label">이용 및 보유 기간</span>
+            고객의 동의 철회 요청과 같은 별도의 의사표시가 없는 한 네이버 주식회사가 해당 정보에 대한 사용권을 계속 보유·이용
+            단, 서비스 이용 해지 또는 제3자 제공 동의 철회 후에도 네이버 스마트플레이스를 계속 이용하는 경우,
+            필수 항목(대표자이름, 이메일주소, 휴대전화번호, 그외 필수정보)은 스마트플레이스 탈퇴 시까지 유지됩니다.
+            <span class="label">동의를 거부하는 경우에 대한 안내</span>
+            본 개인정보 제 3자 제공 동의는 “서비스”의 이용을 위해서 필수적인 사항이므로, 동의를 하지 않으시면 “서비스"를 이용하실 수 없습니다.
+            본 개인정보 제 3자 제공 동의를 거부하더라도 회사가 제공하는 기타 서비스의 이용에는 영향이 없습니다.
+        </div>
+
+        <label class="modal-agree">
+            <input type="checkbox" id="chkAgree" />
+            위 약관에 동의합니다.
+        </label>
+
+        <div class="modal-actions">
+            <button class="btn btn-green" onclick="mappingStore();">동의하고 연동하기</button>
+            <button class="btn btn-gray" onclick="closeModal();">취소</button>
+        </div>
+
+    </div>
+</div>
+
 </body>
 </html>
 
@@ -185,7 +234,7 @@
                                 }
 
                                 innerHtml += "</div>";
-                                innerHtml += "<button class=\"btn btn-blue\" onClick=\"mappingStore('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.link" /></button>";
+                                innerHtml += "<button class=\"btn btn-blue\" onClick=\"openModal('" + arr[i].placeId + "','" + arr[i].businessName + "')\"><s:message code="naverPlacePlusLink.link" /></button>";
                                 innerHtml += "</div>";
 
                             } else {
@@ -213,15 +262,40 @@
         });
     }
 
-    // 연동 하기
-    function mappingStore(placeId, businessName) {
+    // 개인(신용)정보 제3자 제공 동의 팝업 오픈
+    function openModal(placeId, businessName) {
+        $("#hdPlaceId").val(placeId);
+        $("#lblBusinessName").text(businessName);
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    // 개인(신용)정보 제3자 제공 동의 팝업 닫기
+    function closeModal() {
+        $("#hdPlaceId").val("");
+        $("#lblBusinessName").text("");
+        document.getElementById('chkAgree').checked = false;
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // 동의하고 연동하기
+    function mappingStore() {
+
+        // 체크박스 요소 선택
+        var checkbox = document.getElementById("chkAgree");
+
+        // checked 여부 확인
+        if (!checkbox.checked) {
+            alert("약관동의 체크박스를 먼저 선택해주세요.");
+            return false;
+        }
 
         var params = {};
+        params.hqOfficeCd = sessionStorage.getItem("hqOfficeCd");
         params.userId = sessionStorage.getItem("userId");
         params.storeCd = sessionStorage.getItem("storeCd");
         params.uniqueId = uniqueId;
-        params.placeId = placeId;
-        params.businessName = businessName;
+        params.placeId = $("#hdPlaceId").val();
+        params.businessName = $("#lblBusinessName").text();
 
         $.ajax({
             type: 'POST',
@@ -407,6 +481,138 @@
         background: #3b82f6;
         color: #fff;
         border-color: #3b82f6;
+    }
+
+    /* 모달 오버레이 */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    /* 모달 박스 */
+    .modal-box {
+        position: relative;
+        background: #fff;
+        border-radius: 14px;
+        padding: 36px 32px 30px;
+        width: 460px;
+        max-width: 90vw;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+    }
+
+    /* 상단 로고 영역 */
+    .modal-logo {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+    }
+
+    .modal-logo span {
+        color: #03c75a;
+    }
+
+    /* 매장명 태그 */
+    .modal-store-name {
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .modal-store-name span {
+        display: inline-block;
+        background: #f1f3f5;
+        border-radius: 20px;
+        padding: 6px 22px;
+        font-size: 15px;
+        color: #444;
+    }
+
+    /* 모달 제목 */
+    .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #222;
+        margin: 0 0 5px;
+    }
+
+    .modal-subtitle {
+        font-size: 14px;
+        color: #03c75a;
+        margin: 0 0 14px;
+    }
+
+    /* 본문 스크롤 영역 */
+    .modal-scroll-body {
+        background: #f8f9fa;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 16px;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.8;
+        max-height: 220px;
+        overflow-y: auto;
+        margin-bottom: 16px;
+    }
+
+    .modal-scroll-body .label {
+        font-weight: 600;
+        color: #333;
+        margin-top: 12px;
+        margin-bottom: 2px;
+        display: block;
+    }
+
+    /* 동의 체크박스 */
+    .modal-agree {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        color: #444;
+        margin-bottom: 22px;
+    }
+
+    .modal-agree input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #03c75a;
+        cursor: pointer;
+    }
+
+    /* 하단 버튼 영역 */
+    .modal-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .modal-actions .btn {
+        flex: 1;
+        height: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .btn-gray {
+        background-color: #f1f3f5;
+        color: #555;
+        border: none;
+    }
+
+    .btn-gray:hover {
+        background-color: #e5e7eb;
     }
 
 </style>

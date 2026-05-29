@@ -440,7 +440,6 @@ public class SideMenuServiceImpl implements SideMenuService {
     @Override
     public int saveMenuProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
-        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
@@ -459,21 +458,28 @@ public class SideMenuServiceImpl implements SideMenuService {
                 result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
                 // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    procResult = sideMenuMapper.insertHqMenuProdListToStore(sideMenuSelProdVO);
+                    sideMenuMapper.insertHqMenuProdListToStore(sideMenuSelProdVO);
                 }
             // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
                 // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                    sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
                 }
             // 삭제
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
                 // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    procResult = sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
+                    sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
+                }
+            }
+
+            // 프로시저 결과 확인 후 정상이 아닌경우, 전체 롤백
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                if (!"0000".equals(sideMenuSelProdVO.getResult())) {
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
         }

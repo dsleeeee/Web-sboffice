@@ -514,10 +514,17 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         naverPlacePlusLinkVO.setNaverStoreNm(naverPlacePlusApiVO.getBusinessName());
         naverPlacePlusLinkVO.setNaverPlaceId(resultMap.get("placeId").toString());
         naverPlacePlusLinkVO.setNaverLinkDt(regDateTime);
+        naverPlacePlusLinkVO.setRegDt(dt);
+        naverPlacePlusLinkVO.setRegId(naverPlacePlusApiVO.getUserId());
         naverPlacePlusLinkVO.setModDt(dt);
         naverPlacePlusLinkVO.setModId(naverPlacePlusApiVO.getUserId());
-
         naverPlacePlusLinkMapper.updateNaverStore(naverPlacePlusLinkVO);
+
+        // 개인(신용)정보 제3자 제공 동의 저장
+        naverPlacePlusLinkVO.setHqOfficeCd(naverPlacePlusApiVO.getHqOfficeCd());
+        naverPlacePlusLinkVO.setPersonalInfoProvision("Y");
+        naverPlacePlusLinkVO.setPersonalInfoProvisionDt(dt);
+        naverPlacePlusLinkMapper.savePersonalInfoProvision(naverPlacePlusLinkVO);
 
         return resultMap;
     }

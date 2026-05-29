@@ -247,4 +247,47 @@
         FROM    DUAL
     </select>
 
+    <!--개인(신용)정보 제3자 제공 동의 저장 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK_AGREEMENT
+        PARAM    : naverPlacePlusLinkVO
+        COMMENTS : 개인(신용)정보 제3자 제공 동의를 저장한다.
+    -->
+    <update id="savePersonalInfoProvision" parameterType="naverPlacePlusLinkVO">
+        /* NaverPlacePlusLinkMapper.savePersonalInfoProvision */
+        MERGE INTO TB_CM_NAVER_LINK_AGREEMENT A
+        USING DUAL
+        ON (
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.STORE_CD = #{storeCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET A.PERSONAL_INFO_PROVISION = #{personalInfoProvision},
+               A.PERSONAL_INFO_PROVISION_DT = #{personalInfoProvisionDt},
+               A.MOD_DT = #{modDt},
+               A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT (
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID,
+            A.PERSONAL_INFO_PROVISION,
+            A.PERSONAL_INFO_PROVISION_DT
+        )
+        VALUES (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{personalInfoProvision},
+            #{personalInfoProvisionDt}
+        )
+    </update>
+
 </mapper>
