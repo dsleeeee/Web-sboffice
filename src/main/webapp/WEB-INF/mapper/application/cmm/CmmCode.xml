@@ -152,6 +152,34 @@
             AND USE_YN = 'Y'
     </select>
 
+    <!-- 서버 재시작 공지 여부 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+      COMMENTS : 서버 재시작 공지 여부 조회한다.
+    -->
+    <select id="getDeployNoticeStatus" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.getDeployNoticeStatus */
+        SELECT  *
+        FROM    (
+                    SELECT  NMCODE_GRP_CD
+                    ,       NMCODE_CD
+                    ,       NMCODE_NM
+                    ,       NMCODE_ITEM_1
+                    ,       NMCODE_ITEM_2
+                    ,       USE_COL_NM
+                    ,       REG_DT
+                    ,       REG_ID
+                    ,       MOD_DT
+                    ,       MOD_ID
+                    FROM    TB_CM_NMCODE
+                    WHERE   NMCODE_GRP_CD   =   '184'
+                    AND     NMCODE_NM       =   '1'
+                    ORDER
+                    BY      NMCODE_CD ASC
+                )
+        WHERE   ROWNUM = 1
+    </select>
+
 </mapper>
 
 

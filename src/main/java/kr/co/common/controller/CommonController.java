@@ -2,6 +2,7 @@ package kr.co.common.controller;
 
 import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageResolveService;
@@ -25,6 +26,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -200,6 +202,24 @@ public class CommonController {
         }
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 서버 재시작 공지 여부 조회
+     *
+     * @param   request HttpServletRequest
+     * @return  Result
+     */
+    @RequestMapping(value = "/getDeployNoticeStatus.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getServerNotice(HttpServletRequest request) {
+
+        // 서버 재시작 공지 조회
+        DefaultMap<String> noticeInfo = cmmCodeService.getDeployNoticeStatus();
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("noticeInfo", noticeInfo);
+        return returnJson(Status.OK, resultMap);
     }
 
 }

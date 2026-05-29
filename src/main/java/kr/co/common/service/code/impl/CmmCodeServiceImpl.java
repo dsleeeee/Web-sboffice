@@ -3,6 +3,7 @@ package kr.co.common.service.code.impl;
 import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.CustomComboVO;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.redis.RedisConnService;
 import kr.co.common.template.RedisCustomTemplate;
@@ -31,6 +32,10 @@ public class CmmCodeServiceImpl implements CmmCodeService {
     private final RedisCustomTemplate<String, CommonCodeVO> redisCustomTemplate;
     private final SqlSession sqlSession;
 
+    private volatile DefaultMap<String> deployNoticeCache = null;
+    private volatile long deployNoticeCacheExpiry = 0L;
+    private volatile boolean deployNoticeCacheLoaded = false;
+    private static final long DEPLOY_NOTICE_CACHE_TTL_MS = 60_000L;
     /** Constructor Injection */
     @Autowired
     public CmmCodeServiceImpl(CmmCodeMapper cmmCodeMapper,
@@ -154,5 +159,21 @@ public class CmmCodeServiceImpl implements CmmCodeService {
         List<CustomComboVO> list = sqlSession.selectList("CmmCombo." + customComboVO.getQueryId(), customComboVO);
 
         return list;
+    }
+    /** 서버 재시작 공지 여부 조회 */
+    @Override
+    public DefaultMap<String> getDeployNoticeStatus() {
+        long now = System.currentTimeMillis();
+
+        // 60초 캐시 유효 → 캐시 반환
+        if (deployNoticeCacheLoaded && now < deployNoticeCacheExpiry) {
+            return deployNoticeCache;
+        }
+
+        // 캐시 만료 → DB 조회
+        deployNoticeCache = cmmCodeMapper.getDeployNoticeStatus();
+        deployNoticeCacheExpiry = now + DEPLOY_NOTICE_CACHE_TTL_MS;
+        deployNoticeCacheLoaded = true;
+        return deployNoticeCache;
     }
 }
