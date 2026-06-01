@@ -233,9 +233,6 @@ public class VirtualLoginController {
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        // 서버 인스턴스 
-        String serverInstance = sessionInfoVO.getServerInstance();
-
         // 로그인 토큰
         String sessionToken = sessionInfoVO.getLoginChkToken();
 
@@ -274,8 +271,6 @@ public class VirtualLoginController {
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             // 가상로그인 아이디는 현재 아이디가 되어야함
             sessionInfoVO.setvUserId(vGetUserId);
-            // 서버 인스턴스 정보 저장
-            sessionInfoVO.setServerInstance(serverInstance);
 
             // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
@@ -341,6 +336,8 @@ public class VirtualLoginController {
             SessionUtil.setEnv(request.getSession(), sessionInfoVO.getSessionId(), sessionInfoVO);
             sw.stop();
             LOGGER.info("가상로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
+
+            sessionInfoVO.setServerInstance(System.getProperty("server.instance", "unknown"));
 
             // 로그인이력 생성
             virtualLoginService.insertLoginHistory(sessionInfoVO);

@@ -300,7 +300,7 @@ app.controller('storeSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functi
         var totFileCnt = 0;
 
         // 전체 데이터 수 조회
-        params.limit = 1;
+        params.listScale = 1;
         params.offset = 1;
         $scope._postJSONQuery.withOutPopUp("/base/price/storeSalePrice/storeSalePrice/getSalePriceList.sb", params, function (response) {
 
@@ -327,7 +327,7 @@ app.controller('storeSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functi
                     $("#progressCnt").html(x + 1);
 
                     // 페이징 10000개씩 지정해 분할 다운로드 진행
-                    params.limit = 10000 * (x + 1);
+                    params.listScale = 10000;
                     params.offset = (10000 * (x + 1)) - 9999;
 
                     // 가상로그인 대응한 session id 설정
