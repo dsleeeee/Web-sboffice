@@ -27,6 +27,7 @@
             <th><s:message code="cmm.no" /></th>
             <th><s:message code="storeManage.posNo" /></th>
             <th><s:message code="storeManage.posNm" /></th>
+            <th><s:message code="storeManage.use" /></th>
           </tr>
           </thead>
           <tbody id="posNmContent">
@@ -41,4 +42,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setPosNm.js?ver=20250115" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/setPosNm.js?ver=20260604" charset="utf-8"></script>
