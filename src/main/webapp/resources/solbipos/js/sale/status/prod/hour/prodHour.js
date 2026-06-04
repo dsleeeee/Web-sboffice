@@ -70,8 +70,25 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 콤보박스 데이터 Set
     $scope._setComboData('prodHourlistScaleBox', gvListScaleBoxData);
 
+    // [추가] 프레임워크 렌더링이 완료된 직후(0.5초 뒤) 콤보박스 UI를 50으로 강제 매핑
+    $timeout(function() {
+        var comboScale = wijmo.Control.getControl("#prodHourlistScaleBox");
+        if(s_orgnCd == 'S615680')
+        {
+            if (comboScale) {
+                comboScale.selectedValue = "50";
+            }
+            $scope.listScale = "50";
+        }
+    }, 1000);
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        if(s_orgnCd == 'S615680') $scope.listScale = "50";
+
+       // 마우스 선택 모드를 사각형/세로 블록 지정(CellRange) 모드로 설정
+       s.selectionMode = wijmo.grid.SelectionMode.CellRange;
+
        // picker 사용시 호출 : 미사용시 호출안함
        $scope._makePickColumns("prodHourCtrl");
 
@@ -90,7 +107,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.prodNm    = messages["prodhour.prodNm"];
 
         // 시간대별 컬럼 생성
-        for (var i = 0; i < 24; i++) {        	
+        for (var i = 0; i < 24; i++) {
             if(i<10){
                 dataItem['totSaleQtyT0' + i] = i + "시";
                 dataItem['totSaleAmtT0' + i] = i + "시";
@@ -146,6 +163,78 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 }
             }
         };
+
+        // -------------------------------------------------------------
+        // [추가] 프레임워크 덮어쓰기 방지: 데이터 바인딩 완료 후 선택모드 강제 고정
+        // -------------------------------------------------------------
+        s.itemsSourceChanged.addHandler(function() {
+            s.selectionMode = wijmo.grid.SelectionMode.CellRange;
+        });
+        s.loadedRows.addHandler(function() {
+            s.selectionMode = wijmo.grid.SelectionMode.CellRange;
+        });
+        // 초기 실행 시에도 적용
+        s.selectionMode = wijmo.grid.SelectionMode.CellRange;
+
+        // -------------------------------------------------------------
+        // [고도화] Ctrl+C 누를 때 마우스로 드래그한 셀들의 합계를 계산하여 끝에 붙여넣는 로직
+        // -------------------------------------------------------------
+        s.hostElement.addEventListener('keydown', function (e) {
+            // 사용자가 Ctrl + C (또는 Mac에서 Cmd + C)를 눌렀을 때
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 67) {
+                var rng = s.selection;
+                if (rng.isValid) {
+                    // 1. 선택된 일반 데이터 영역의 텍스트 가져오기
+                    var text = s.getClipString(rng);
+
+                    // 2. 선택된 영역을 순회하며 열별로 합계 계산하기
+                    var dragSums = [];
+
+                    // leftCol부터 rightCol까지 (가로로 여러 열을 선택했을 때도 대응 가능)
+                    for (var c = rng.leftCol; c <= rng.rightCol; c++) {
+                        var colSum = 0;
+
+                        // 선택된 행(topRow ~ bottomRow)을 아래로 돌면서 숫자 합산
+                        for (var r = rng.topRow; r <= rng.bottomRow; r++) {
+                            var cellValue = s.getCellData(r, c, false); // 원본 데이터 가져오기
+
+                            // 숫자로 변환 가능한 값만 더하기 (공백이나 문자는 제외)
+                            if (cellValue !== null && cellValue !== undefined && !isNaN(cellValue)) {
+                                colSum += parseFloat(cellValue);
+                            }
+                        }
+
+                        // 금액이나 수량 포맷에 맞춰 세 자리 콤마(,) 추가하여 배열에 담기
+                        dragSums.push(wijmo.Globalize.format(colSum, 'n0'));
+                    }
+
+                    // 계산된 선택 합계들을 탭(\t) 문자로 구분 (엑셀 호환용)
+                    var footerText = dragSums.join("\t");
+
+                    if (text) {
+                        // 기본 복사동작을 막고, 선택 합계가 포함된 데이터를 클립보드에 주입
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // 복사할 데이터 아래에 [선택합계] 행을 붙여줍니다.
+                        var finalClipboardData = text + "\n" + footerText;
+
+                        // 클립보드에 강제 주입
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(finalClipboardData);
+                        } else {
+                            var textArea = document.createElement("textarea");
+                            textArea.value = finalClipboardData;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(textArea);
+                        }
+                    }
+                }
+            }
+        }, true); // 이벤트 캡처링 단계 실행
+        // -------------------------------------------------------------
 
         // 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {

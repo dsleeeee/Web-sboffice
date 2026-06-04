@@ -135,7 +135,7 @@
         <div class="wj-gridWrap" style="height: 350px;"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    selection-mode="Row"
+                    selection-mode="CellRange"
                     items-source="data"
                     control="flex"
                     initialized="initGrid(s,e)"
@@ -217,4 +217,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20250415.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var s_orgnCd = "${orgnCd}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20260604.01" charset="utf-8"></script>
