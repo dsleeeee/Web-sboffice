@@ -7213,6 +7213,7 @@
         ,       POS_NO
         ,       '['||POS_NO||']'||DECODE(POS_NM, NULL, 'POS'||POS_NO, POS_NM) AS POS_CD_NM
         ,       POS_NM
+        ,       USE_YN
         FROM    TB_MS_POS
         WHERE   STORE_CD = #{storeCd}
         ORDER
@@ -7309,6 +7310,7 @@
         /* USE : StoreManageMapper.updatePosNm */
         UPDATE TB_MS_POS
          SET POS_NM = #{posNm},
+             USE_YN = #{useYn, jdbcType=VARCHAR},
              MOD_DT = #{modDt},
              MOD_ID = #{modId}
        WHERE STORE_CD = #{storeCd}
