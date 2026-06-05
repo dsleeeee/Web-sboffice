@@ -105,6 +105,7 @@
                         </c:if>
 
                         <wj-flex-grid-column header="<s:message code="salePriceResve.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="상품유형구분" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -171,4 +172,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResveAdd.js?ver=20250430.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResveAdd.js?ver=20260605.01" charset="utf-8"></script>

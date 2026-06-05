@@ -182,6 +182,7 @@
                     </c:if>
 
                     <wj-flex-grid-column header="<s:message code="hqSalePriceResveExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="상품유형구분" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     <%-- 삭제시 필요 --%>
                     <wj-flex-grid-column header="<s:message code="hqSalePriceResveExcelUpload.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>

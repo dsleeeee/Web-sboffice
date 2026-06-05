@@ -625,15 +625,23 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
                         }
                     }
 
-                    // 변경판매가 - 1000000000 이상 입력 불가
-                    if ($scope.flex.collectionView.items[i].saleUprc >= 1000000000) {
-                        $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
-                        return false;
-                    }
-                    // 변경판매가 - -1000000000 이하 입력 불가
-                    if ($scope.flex.collectionView.items[i].saleUprc <= -1000000000) {
-                        $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
-                        return false;
+                    // 변경판매가 - 저울상품이면 음수 불가(0 허용), 일반상품이면 9자리 제한
+                    if ($scope.flex.collectionView.items[i].prodTypeFg === "3") {
+                        if ($scope.flex.collectionView.items[i].saleUprc < 0) {
+                            $scope._popMsg(messages["salePrice.saleUprcTypeChk"]); // 판매가는 숫자(양수)만 입력해주세요.
+                            return false;
+                        }
+                    } else {
+                        // 변경판매가 - 1000000000 이상 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc >= 1000000000) {
+                            $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
+                        // 변경판매가 - -1000000000 이하 입력 불가
+                        if ($scope.flex.collectionView.items[i].saleUprc <= -1000000000) {
+                            $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                            return false;
+                        }
                     }
 
                     // 내점/배달/포장 판매가 사용 시
@@ -656,15 +664,23 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
                                 }
                             }
 
-                            // 변경내점-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                            // 변경내점-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].stinSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
+                            // 변경내점-판매가 - 저울상품이면 음수 불가(0 허용), 일반상품이면 9자리 제한
+                            if ($scope.flex.collectionView.items[i].prodTypeFg === "3") {
+                                if ($scope.flex.collectionView.items[i].stinSaleUprc < 0) {
+                                    $scope._popMsg(messages["salePrice.stinSaleUprcTypeChk"]); // 내점판매가는 숫자(양수)만 입력해주세요.
+                                    return false;
+                                }
+                            } else {
+                                // 변경내점-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경내점-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].stinSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.stinSaleUprcInChk"]); // 변경내점-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
                             }
                         }
 
@@ -685,15 +701,23 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
                                 }
                             }
 
-                            // 변경배달-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                            // 변경배달-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].dlvrSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
+                            // 변경배달-판매가 - 저울상품이면 음수 불가(0 허용), 일반상품이면 9자리 제한
+                            if ($scope.flex.collectionView.items[i].prodTypeFg === "3") {
+                                if ($scope.flex.collectionView.items[i].dlvrSaleUprc < 0) {
+                                    $scope._popMsg(messages["salePrice.dlvrSaleUprcTypeChk"]); // 배달판매가는 숫자(양수)만 입력해주세요.
+                                    return false;
+                                }
+                            } else {
+                                // 변경배달-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경배달-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].dlvrSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.dlvrSaleUprcInChk"]); // 변경배달-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
                             }
                         }
 
@@ -714,15 +738,23 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
                                 }
                             }
 
-                            // 변경포장-판매가 - 1000000000 이상 입력 불가
-                            if ($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000) {
-                                $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
-                            }
-                            // 변경포장-판매가 - -1000000000 이하 입력 불가
-                            if ($scope.flex.collectionView.items[i].packSaleUprc <= -1000000000) {
-                                $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
-                                return false;
+                            // 변경포장-판매가 - 저울상품이면 음수 불가(0 허용), 일반상품이면 9자리 제한
+                            if ($scope.flex.collectionView.items[i].prodTypeFg === "3") {
+                                if ($scope.flex.collectionView.items[i].packSaleUprc < 0) {
+                                    $scope._popMsg(messages["salePrice.packSaleUprcTypeChk"]); // 포장판매가는 숫자(양수)만 입력해주세요.
+                                    return false;
+                                }
+                            } else {
+                                // 변경포장-판매가 - 1000000000 이상 입력 불가
+                                if ($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000) {
+                                    $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
+                                // 변경포장-판매가 - -1000000000 이하 입력 불가
+                                if ($scope.flex.collectionView.items[i].packSaleUprc <= -1000000000) {
+                                    $scope._popMsg(messages["salePrice.packSaleUprcInChk"]); // 변경포장-판매가는 숫자만(정수9자리) 입력해주세요.
+                                    return false;
+                                }
                             }
                         }
 

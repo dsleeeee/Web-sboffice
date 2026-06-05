@@ -522,6 +522,7 @@
           </c:if>
 
           <wj-flex-grid-column header="<s:message code="salePrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="salePriceManage.prodTypeFg"/>" binding="prodTypeFg" is-read-only="true" width="85" align="center" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -583,6 +584,7 @@
         </c:if>
 
         <wj-flex-grid-column header="<s:message code="salePrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePriceManage.prodTypeFg"/>" binding="prodTypeFg" is-read-only="true" width="85" align="center" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -607,4 +609,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20260212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20260605.01" charset="utf-8"></script>

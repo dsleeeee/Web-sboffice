@@ -289,6 +289,7 @@
                         <wj-flex-grid-column header="<s:message code="salePriceResve.update"/>" binding="packSaleUprc" width="56" align="right" max-length="10" ></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="salePriceResve.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="상품유형구분" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -387,7 +388,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20260212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20260605.01" charset="utf-8"></script>
 
 <%-- 가격예약(매장판매가) [상품별 판매가관리] 상품가격정보 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/storeProdSalePriceInfo.jsp">
