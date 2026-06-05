@@ -127,7 +127,7 @@
                             <wj-flex-grid-column header="<s:message code="salePriceManage.hq"/>" binding="hqSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="salePriceManage.store"/>" binding="storeSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="saleUprc" width="60" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.update"/>" binding="saleUprc" width="60" align="right" max-length="10"></wj-flex-grid-column>
 
                         <c:if test="${subPriceFg == '1'}">
                             <c:if test="${hqOfficeCd != '00000'}">
@@ -150,6 +150,7 @@
                         <c:if test="${hqOfficeCd != '00000'}">
                             <wj-flex-grid-column header="<s:message code="salePriceManage.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
                         </c:if>
+                        <wj-flex-grid-column header="상품유형구분" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="salePriceResve.useYn"/>" binding="useYn" data-map="useYnDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
@@ -225,4 +226,4 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20250430.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20260605.01" charset="utf-8"></script>

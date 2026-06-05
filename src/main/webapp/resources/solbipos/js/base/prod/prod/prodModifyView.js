@@ -452,6 +452,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         });
     };
 
+    // 저울상품이면 판매단가 음수 입력 안되게 처리
+    $(document).on("keydown", "#prodModifySaleUprc, #stinSaleUprc, #dlvrSaleUprc, #packSaleUprc", function (e) {
+        if (e.key === ".") {
+            e.preventDefault();
+        }
+        if ($scope.prodModifyInfo.prodTypeFg === "3" && e.key === "-") {
+            e.preventDefault();
+        }
+    });
+
     $(document).on("propertychange change keyup paste input", "#prodModifySaleUprc", function () {
 
         if(!$scope.saleUprcApply) return;
@@ -964,6 +974,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
+        // 저울상품 -> !저울상품, !저울상품 -> 저울상품으로 변경 불가능
+        if (nvl($scope.prodModifyInfo.orgProdTypeFg, "") !== "" && $scope.prodModifyInfo.orgProdTypeFg === "3" && $scope.prodModifyInfo.prodTypeFg !== "3"){
+            $scope._popMsg(messages["prod.prodTypeFg.msg1"]);
+            return false;
+        }
+        if (nvl($scope.prodModifyInfo.orgProdTypeFg, "") !== "" && $scope.prodModifyInfo.orgProdTypeFg !== "3" && $scope.prodModifyInfo.prodTypeFg === "3"){
+            $scope._popMsg(messages["prod.prodTypeFg.msg2"]);
+            return false;
+        }
+
         // 상품유형
         if ($scope.prodModifyInfo.prodTypeFg === "4"){
             // 보증금 상품은 강제로 면세 + 포인트사용여부 N + 할인여부 N
@@ -1018,6 +1038,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#prodModifySaleUprc").focus();
             return false;
         }
+        // 저울상품 판매단가 양수만 허용
+        if ($scope.prodModifyInfo.prodTypeFg === "3" && parseInt($("#prodModifySaleUprc").val()) < 0) {
+            $scope._popMsg(messages["prod.prodTypeFg.msg3"]);
+            $("#prodModifySaleUprc").focus();
+            return false;
+        }
 
         console.log($scope.prodModifyInfo.prodTipYn);
         // 봉사료포함여부 값 확인 - 봉사료포함여부에 값 잘못 들어가서 추가
@@ -1036,6 +1062,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $("#stinSaleUprc").focus();
                     return false;
                 }
+                // 저울상품은 내점가 양수만 허용
+                if ($scope.prodModifyInfo.prodTypeFg === "3" && parseInt($("#stinSaleUprc").val()) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.stinMsg3"]);
+                    $("#stinSaleUprc").focus();
+                    return false;
+                }
             }
             // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
             if ($("#dlvrSaleUprc").val() !== null && $("#dlvrSaleUprc").val() !== "") {
@@ -1045,12 +1077,24 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $("#dlvrSaleUprc").focus();
                     return false;
                 }
+                // 저울상품은 배달가 양수만 허용
+                if ($scope.prodModifyInfo.prodTypeFg === "3" && parseInt($("#dlvrSaleUprc").val()) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.dlvrMsg3"]);
+                    $("#dlvrSaleUprc").focus();
+                    return false;
+                }
             }
             // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
             if ($("#packSaleUprc").val() !== null && $("#packSaleUprc").val() !== "") {
                 if ($("#packSaleUprc").val() >= 1000000000 || !/^-?\d+$/.test($("#packSaleUprc").val())
                     || $("#packSaleUprc").val() <= -1000000000) {
                     $scope._popMsg(messages["prod.packSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#packSaleUprc").focus();
+                    return false;
+                }
+                // 저울상품은 포장가 양수만 허용
+                if ($scope.prodModifyInfo.prodTypeFg === "3" && parseInt($("#packSaleUprc").val()) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.packMsg3"]);
                     $("#packSaleUprc").focus();
                     return false;
                 }
@@ -1376,6 +1420,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#prodModifySaleUprc").focus();
             return false;
         }
+        // 저울상품은 판매단가 양수만 허용
+        if (vParams.prodTypeFg === "3" && parseInt(vParams.saleUprc) < 0) {
+            $scope._popMsg(messages["prod.prodTypeFg.msg3"]);
+            $("#prodModifySaleUprc").focus();
+            return false;
+        }
 
         console.log(vParams.prodTipYn);
         // 봉사료포함여부 값 확인 - 봉사료포함여부에 값 잘못 들어가서 추가
@@ -1394,12 +1444,24 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $("#stinSaleUprc").focus();
                     return false;
                 }
+                // 저울상품은 내점가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.stinSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.stinMsg3"]);
+                    $("#stinSaleUprc").focus();
+                    return false;
+                }
             }
             // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.dlvrSaleUprc !== null && vParams.dlvrSaleUprc !== "") {
                 if (vParams.dlvrSaleUprc >= 1000000000 || !/^-?\d+$/.test(vParams.dlvrSaleUprc.toString())
                     || vParams.dlvrSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.dlvrSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#dlvrSaleUprc").focus();
+                    return false;
+                }
+                // 저울상품은 배달가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.dlvrSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.dlvrMsg3"]);
                     $("#dlvrSaleUprc").focus();
                     return false;
                 }
@@ -1412,6 +1474,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $("#packSaleUprc").focus();
                     return false;
                 }
+                // 저울상품은 포장가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.packSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.packMsg3"]);
+                    $("#packSaleUprc").focus();
+                    return false;
+                }
             }
         }else{
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
@@ -1419,7 +1487,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (vParams.stinSaleUprc >= 1000000000 || !/^-?\d+$/.test(vParams.stinSaleUprc.toString())
                     || vParams.stinSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
-                    $("#prodModifySaleUprc").focus();
+                    $("#stinSaleUprc").focus();
+                    return false;
+                }
+                // 저울상품은 내점가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.stinSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.stinMsg3"]);
+                    $("#stinSaleUprc").focus();
                     return false;
                 }
             }
@@ -1428,7 +1502,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (vParams.dlvrSaleUprc >= 1000000000 || !/^-?\d+$/.test(vParams.dlvrSaleUprc.toString())
                     || vParams.dlvrSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
-                    $("#prodModifySaleUprc").focus();
+                    $("#dlvrSaleUprc").focus();
+                    return false;
+                }
+                // 저울상품은 배달가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.dlvrSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.dlvrMsg3"]);
+                    $("#dlvrSaleUprc").focus();
                     return false;
                 }
             }
@@ -1437,7 +1517,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (vParams.packSaleUprc >= 1000000000 || !/^-?\d+$/.test(vParams.packSaleUprc.toString())
                     || vParams.packSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
-                    $("#prodModifySaleUprc").focus();
+                    $("#packSaleUprc").focus();
+                    return false;
+                }
+                // 저울상품은 포장가 양수만 허용
+                if (vParams.prodTypeFg === "3" && parseInt(vParams.packSaleUprc) < 0) {
+                    $scope._popMsg(messages["prod.prodTypeFg.packMsg3"]);
+                    $("#packSaleUprc").focus();
                     return false;
                 }
             }
@@ -1751,6 +1837,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params, function(response){
                 // 상품정보
                 var prodModify = response.data.data.list;
+                prodModify.orgProdTypeFg = prodModify.prodTypeFg
 
                 // 상품정보 set
                 $scope.setProdModifyInfo(prodModify);
@@ -2268,6 +2355,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 $("#btnSetConfigProd").css("display", "");
             }
+        }
+    };
+
+    // 상품유형 변경 시 - 중량상품(3)이면 판매단가 placeholder 표시
+    $scope.prodTypeFgSelected = function(s) {
+        if (s.selectedValue === "3") {
+            $("#prodModifySaleUprc").attr("placeholder", "판매단가의 중량은 1g 기준, 양수만 입력 가능");
+        } else {
+            $("#prodModifySaleUprc").removeAttr("placeholder");
         }
     };
 

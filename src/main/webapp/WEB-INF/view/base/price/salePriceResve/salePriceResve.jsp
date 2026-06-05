@@ -422,7 +422,7 @@
                         <wj-flex-grid-column header="<s:message code="salePriceResve.hq"/>" binding="hqSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="salePriceResve.store"/>" binding="storeSaleUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="salePriceResve.update"/>" binding="saleUprc" width="60" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="salePriceResve.update"/>" binding="saleUprc" width="60" align="right" max-length="10"></wj-flex-grid-column>
 
                     <c:if test="${subPriceFg == '1'}">
                         <c:if test="${hqOfficeCd != '00000'}">
@@ -445,6 +445,7 @@
                     <c:if test="${hqOfficeCd != '00000'}">
                         <wj-flex-grid-column header="<s:message code="salePriceResve.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
                     </c:if>
+                    <wj-flex-grid-column header="상품유형구분" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -487,7 +488,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20260223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20260605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

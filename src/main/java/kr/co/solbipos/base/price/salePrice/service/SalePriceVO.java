@@ -184,6 +184,9 @@ public class SalePriceVO extends PageVO {
     /** 사용여부 */
     private String useYn;
 
+    /** 상품유형구분 */
+    private String prodTypeFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -697,5 +700,13 @@ public class SalePriceVO extends PageVO {
 
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getProdTypeFg() {
+        return prodTypeFg;
+    }
+
+    public void setProdTypeFg(String prodTypeFg) {
+        this.prodTypeFg = prodTypeFg;
     }
 }

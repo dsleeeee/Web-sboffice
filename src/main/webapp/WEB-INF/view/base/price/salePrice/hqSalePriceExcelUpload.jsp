@@ -136,18 +136,19 @@
                     <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="@"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right" max-length="10"></wj-flex-grid-column>
 
                     <c:if test="${subPriceFg == '1'}">
                         <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.hqStinSaleUprc"/>" binding="hqStinSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="100" align="right" max-length="10"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.hqDlvrSaleUprc"/>" binding="hqDlvrSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="100" align="right" max-length="10"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.hqPackSaleUprc"/>" binding="hqPackSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="100" align="right" max-length="10"></wj-flex-grid-column>
                     </c:if>
 
                     <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.prodTypeFg"/>" binding="prodTypeFg" width="85" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     <%-- 삭제시 필요 --%>
                     <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>

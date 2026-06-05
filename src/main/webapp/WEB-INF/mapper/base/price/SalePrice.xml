@@ -66,6 +66,7 @@
         tmpsp.PACK_SALE_UPRC,                        -- 포장판매금액(변경가능)
         tmp.PO_UNIT_QTY,                   -- 주문(발주)단위수량
         tmp.PRC_CTRL_FG,
+        thp.PROD_TYPE_FG,
         thpsp.SALE_UPRC AS HQ_SALE_UPRC,   -- 본사판매가
         thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사내점-판매가
         thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사배달-판매가
@@ -311,6 +312,7 @@
         tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
         tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
         tmp.PRC_CTRL_FG,
+        tmp.PROD_TYPE_FG,
         tmp.USE_YN
         <include refid="CmmSQL.PagingTemplateCount2"/>
         FROM TB_MS_PRODUCT tmp,
@@ -397,7 +399,8 @@
         thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
         thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
         thp.PRC_CTRL_FG,
-        thp.USE_YN
+        thp.USE_YN,
+        thp.PROD_TYPE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT thp,
         TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
@@ -787,7 +790,8 @@
                 thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC, -- 본사포장판매가
                 A.PACK_SALE_UPRC,                          -- 변경포장판매가
                 thp.PRC_CTRL_FG,
-                A.SEQ
+                A.SEQ,
+                thp.PROD_TYPE_FG
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
                 TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
@@ -819,6 +823,7 @@
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장판매가
                 A.PACK_SALE_UPRC,
                 tmp.PRC_CTRL_FG,
+                tmp.PROD_TYPE_FG,
                 A.SEQ
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
                 TB_MS_PRODUCT tmp,

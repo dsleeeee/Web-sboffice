@@ -73,7 +73,8 @@
                                   popover-enable="myForm.prodTypeFg.$invalid"
                                   popover-placement="bottom-left"
                                   popover-trigger="'mouseenter'"
-                                  uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 입력항목 입니다.">
+                                  uib-popover="<s:message code="prod.prodTypeFg" />은(는) 필수 입력항목 입니다."
+                                  selected-index-changed="prodTypeFgSelected(s)">
                     </wj-combo-box>
                   </div>
                 </td>
@@ -1604,6 +1605,10 @@
     border: 1px solid black;
     z-index: 99;
   }
+  #prodModifySaleUprc::placeholder {
+    font-size: 11px;
+    color: black;
+  }
 </style>
 <script type="text/javascript">
   $(document).ready(function() {
@@ -1780,7 +1785,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260306.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

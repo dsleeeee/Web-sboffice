@@ -39,7 +39,8 @@
         thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,                                         -- 변경배달-판매가
         thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,                                      -- 본사포장-판매가
         thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,                                         -- 변경포장-판매가
-        thp.PRC_CTRL_FG
+        thp.PRC_CTRL_FG,
+        thp.PROD_TYPE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT thp,
         (
@@ -538,6 +539,7 @@
         tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC_P,    -- 변경전 포장판매금액
         tmpsp.PACK_SALE_UPRC,                        -- 포장판매금액(변경가능)
         tmp.PRC_CTRL_FG,
+        tmp.PROD_TYPE_FG,
         thpsp.SALE_UPRC AS HQ_SALE_UPRC,             -- 본사판매가
         thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사내점-판매가
         thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사배달-판매가
@@ -694,7 +696,8 @@
         thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
         tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
         tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-        tmp.PRC_CTRL_FG
+        tmp.PRC_CTRL_FG,
+        tmp.PROD_TYPE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
@@ -1150,7 +1153,8 @@
                 thp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,      -- 본사포장-판매가
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-                tmp.PRC_CTRL_FG
+                tmp.PRC_CTRL_FG,
+                tmp.PROD_TYPE_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (
@@ -1238,7 +1242,8 @@
                 tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-                tmp.PRC_CTRL_FG
+                tmp.PRC_CTRL_FG,
+                tmp.PROD_TYPE_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (

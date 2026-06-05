@@ -43,6 +43,7 @@
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
                 tmp.PRC_CTRL_FG,
+                tmp.PROD_TYPE_FG,
                 tmp.USE_YN
                 <include refid="CmmSQL.PagingTemplateCount2"/>
                 FROM TB_MS_PRODUCT tmp,
@@ -110,6 +111,7 @@
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
                 tmp.PRC_CTRL_FG,
+                tmp.PROD_TYPE_FG,
                 tmp.USE_YN
                 <include refid="CmmSQL.PagingTemplateCount2"/>
                 FROM TB_MS_PRODUCT tmp,
