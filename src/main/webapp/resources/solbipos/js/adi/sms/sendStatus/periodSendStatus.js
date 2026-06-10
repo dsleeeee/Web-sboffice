@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+// 옵션
+var periodOptionData = [
+    {"name":"전체","value":""},
+    {"name":"사용","value":"Y"}
+];
 /**
  *  기간별 전송현황 조회 그리드 생성
  */
@@ -25,8 +30,13 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function 
     var startDate = wcombo.genDateVal("#periodSendStatusStartDate", gvStartDate);
     var endDate = wcombo.genDateVal("#periodSendStatusEndDate", gvEndDate);
 
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("periodOptionCombo", periodOptionData); // 옵션
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.periodOption = "Y";
+
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
@@ -123,9 +133,9 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
-        // 조회일자 최대 6달(186일) 제한
-        if (diffDay > 186) {
-            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
             return false;
         }
 
@@ -134,6 +144,7 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function 
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.srchOrgnCd = $scope.srchOrgnCd;
         params.srchOrgnNm = $scope.srchOrgnNm;
+        params.option = $scope.periodOption;
 
         $scope._inquiryMain("/adi/sms/sendStatus/periodSendStatus/getPeriodSendStatusList.sb", params, function() {}, false);
     };

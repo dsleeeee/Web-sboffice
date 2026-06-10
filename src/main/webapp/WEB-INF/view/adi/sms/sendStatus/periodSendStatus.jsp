@@ -54,6 +54,26 @@
                     <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
             </tr>
+            <tr>
+                <%-- 옵션 --%>
+                <th>
+                    <s:message code="periodSendStatus.periodOption" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="periodOptionCombo"
+                                ng-model="periodOption"
+                                items-source="_getComboData('periodOptionCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="periodOptionCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -106,4 +126,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20241119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20260610.01" charset="utf-8"></script>

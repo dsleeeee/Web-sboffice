@@ -90,6 +90,12 @@ public class SendStatusVO extends PageVO {
     /** 소속명 */
     private String srchOrgnNm;
 
+    /** 발신번호 */
+    private String telNoFg;
+
+    /** 옵션 */
+    private String option;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -201,4 +207,20 @@ public class SendStatusVO extends PageVO {
     public String getSrchOrgnNm() { return srchOrgnNm; }
 
     public void setSrchOrgnNm(String srchOrgnNm) { this.srchOrgnNm = srchOrgnNm; }
+
+    public String getTelNoFg() {
+        return telNoFg;
+    }
+
+    public void setTelNoFg(String telNoFg) {
+        this.telNoFg = telNoFg;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
 }

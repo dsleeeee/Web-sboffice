@@ -54,6 +54,26 @@
                     <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
+            <tr>
+                <%-- 옵션 --%>
+                <th>
+                    <s:message code="daySendStatus.dayOption" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="dayOptionCombo"
+                                ng-model="dayOption"
+                                items-source="_getComboData('dayOptionCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="dayOptionCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -160,4 +180,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20241119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20260610.01" charset="utf-8"></script>
