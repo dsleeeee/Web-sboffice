@@ -182,6 +182,23 @@
                     twuidv01.HQ_OFFICE_CD,
                     twuidv01.STORE_CD
                     FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                    WHERE 1=1
+                    <choose>
+                        <!-- SMS전송 -->
+                        <when test='sendFg != null and sendFg == "0"'>
+                            <![CDATA[
+                                    AND twuidv01.HQ_OFFICE_CD <> 'A0001'
+                                    AND twuidv01.ORGN_CD <> '00001'
+                                ]]>
+                        </when>
+                        <!-- 시스템알림 -->
+                        <when test='sendFg != null and sendFg == "1"'>
+                            AND (   twuidv01.HQ_OFFICE_CD = 'A0001'
+                                OR  twuidv01.ORGN_CD = '00001'
+                                )
+                        </when>
+                        <otherwise></otherwise>
+                    </choose>
                     GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
                 ) twuidv01
                 WHERE 1=1

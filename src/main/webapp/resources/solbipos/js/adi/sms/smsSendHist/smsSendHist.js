@@ -265,6 +265,7 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
             params.gubunCombo = $scope.gubunCombo;
         }
         params.storeCds = $("#smsSendHistStoreCd").val();
+        params.sendFg = $scope.sendFg;
 
         $scope._broadcast('smsSendHistExcelCtrl', params);
     };

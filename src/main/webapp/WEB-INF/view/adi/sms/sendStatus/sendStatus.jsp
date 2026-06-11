@@ -161,7 +161,7 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <p class="tl mt5 fl s12">&nbsp&nbsp * 발신번호 사용여부 변경 시에도 변작리스트에 포함되며, 상세 확인 후 처리 바랍니다.</p>
+            <p class="tl mt5 fl s12">&nbsp;&nbsp; * 발신번호 사용여부 변경 시에도 변작리스트에 포함되며, 상세 확인 후 처리 바랍니다.</p>
             <%-- 조회조건 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
             <%-- 예약취소 --%>
@@ -278,7 +278,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260611.02" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">

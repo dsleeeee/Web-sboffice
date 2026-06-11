@@ -189,6 +189,8 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', '$timeout', function ($s
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.srchOrgnCd = $scope.srchOrgnCd;
         params.srchOrgnNm = $scope.srchOrgnNm;
+        params.option = $scope.dayOption;
+        params.sendFg = $scope.sendFg;
 
         $scope._broadcast('daySendStatusExcelCtrl', params);
     };

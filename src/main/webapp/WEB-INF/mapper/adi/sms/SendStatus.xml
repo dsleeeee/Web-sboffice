@@ -617,6 +617,23 @@
                 twuidv01.HQ_OFFICE_CD,
                 twuidv01.STORE_CD
                 FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                WHERE 1=1
+                <choose>
+                    <!-- SMS전송 -->
+                    <when test='sendFg != null and sendFg == "0"'>
+                        <![CDATA[
+                            AND twuidv01.HQ_OFFICE_CD <> 'A0001'
+                            AND twuidv01.ORGN_CD <> '00001'
+                        ]]>
+                    </when>
+                    <!-- 시스템알림 -->
+                    <when test='sendFg != null and sendFg == "1"'>
+                        AND (   twuidv01.HQ_OFFICE_CD = 'A0001'
+                            OR  twuidv01.ORGN_CD = '00001'
+                            )
+                    </when>
+                    <otherwise></otherwise>
+                </choose>
                 GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
             ) twuidv01
             WHERE 1=1
@@ -653,6 +670,22 @@
         <if test="sendStatus != null and sendStatus != ''">
             AND hmt.SEND_STATUS = #{sendStatus}
         </if>
+        <choose>
+            <!-- 변작확인 -->
+            <when test='telNoFg != null and telNoFg == "0"'>
+                <![CDATA[
+                    AND hmt.CALLBACK NOT IN (SELECT SBPENC.D(hst.TEL_NO) FROM HCS_SENDM_T hst WHERE USE_YN = 'Y')
+                    AND twuidv01.HQ_OFFICE_CD <> 'A0001'
+                    AND twuidv01.ORGN_CD <> '00001'
+                ]]>
+            </when>
+            <!-- 정상 -->
+            <when test='telNoFg != null and telNoFg == "1"'>
+                AND (hmt.CALLBACK IN (SELECT SBPENC.D(hst.TEL_NO) FROM HCS_SENDM_T hst WHERE USE_YN = 'Y')
+                     OR twuidv01.HQ_OFFICE_CD = 'A0001' OR twuidv01.ORGN_CD = '00001')
+            </when>
+            <otherwise></otherwise>
+        </choose>
         AND twuidv01.ORGN_CD = hmt.S_OGN_CD
         ORDER BY hmt.REG_DT DESC
     </select>
@@ -918,6 +951,23 @@
                 twuidv01.HQ_OFFICE_CD,
                 twuidv01.STORE_CD
                 FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                WHERE 1=1
+                <choose>
+                    <!-- SMS전송 -->
+                    <when test='sendFg != null and sendFg == "0"'>
+                        <![CDATA[
+                            AND twuidv01.HQ_OFFICE_CD <> 'A0001'
+                            AND twuidv01.ORGN_CD <> '00001'
+                        ]]>
+                    </when>
+                    <!-- 시스템알림 -->
+                    <when test='sendFg != null and sendFg == "1"'>
+                        AND (   twuidv01.HQ_OFFICE_CD = 'A0001'
+                            OR  twuidv01.ORGN_CD = '00001'
+                            )
+                    </when>
+                    <otherwise></otherwise>
+                </choose>
                 GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
             ) twuidv01
             WHERE 1=1
@@ -953,10 +1003,16 @@
             </when>
         </choose>
         AND twuidv01.ORGN_CD = hdt.OGN_CD
-        AND (hdt.SMS_CHARGE_CNT != 0
-                OR hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
+        AND (hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
                 OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
                 OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
+                <choose>
+                    <!-- 전체 -->
+                    <when test='option != null and option == ""'>
+                        OR hdt.SMS_CHARGE_CNT != 0
+                    </when>
+                    <otherwise></otherwise>
+                </choose>
             )
         <if test='srchOrgnCd != null and srchOrgnCd !=""'>
             AND twuidv01.ORGN_CD LIKE '%' || #{srchOrgnCd} || '%'

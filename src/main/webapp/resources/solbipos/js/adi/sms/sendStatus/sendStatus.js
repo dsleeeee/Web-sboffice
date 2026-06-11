@@ -263,6 +263,8 @@ app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.rrOrgnNm = $scope.rrOrgnNm;
         params.reserveYn = $scope.reserveYn;
         params.sendStatus = $scope.sendStatus;
+        params.telNoFg = $scope.telNoFg;
+        params.sendFg = $scope.sendFg;
 
         $scope._broadcast('sendStatusExcelCtrl', params);
     };
