@@ -16,8 +16,16 @@ var app = agrid.getApp();
 // 옵션
 var dayOptionData = [
     {"name":"전체","value":""},
-    {"name":"사용","value":"Y"}
+    {"name":"SMS사용","value":"Y"}
 ];
+
+// 구분
+var sendFgData = [
+    {"name":"전체","value":""},
+    {"name":"SMS전송","value":"0"},
+    {"name":"시스템알림","value":"1"}
+];
+
 /**
  *  일자별 전송현황 조회 그리드 생성
  */
@@ -35,10 +43,12 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("dayOptionCombo", dayOptionData); // 옵션
+    $scope._setComboData("sendFgCombo", sendFgData); // 구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.dayOption = "Y";
+        $scope.sendFg = "0";
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -160,6 +170,7 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', '$timeout', function ($s
         params.srchOrgnCd = $scope.srchOrgnCd;
         params.srchOrgnNm = $scope.srchOrgnNm;
         params.option = $scope.dayOption;
+        params.sendFg = $scope.sendFg;
         params.listScale = $scope.daySendStatusListScale;
 
         $scope._inquiryMain("/adi/sms/sendStatus/daySendStatus/getDaySendStatusList.sb", params, function() {}, false);

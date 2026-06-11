@@ -16,8 +16,16 @@ var app = agrid.getApp();
 // 옵션
 var periodOptionData = [
     {"name":"전체","value":""},
-    {"name":"사용","value":"Y"}
+    {"name":"SMS사용","value":"Y"}
 ];
+
+// 구분
+var sendFgData = [
+    {"name":"전체","value":""},
+    {"name":"SMS전송","value":"0"},
+    {"name":"시스템알림","value":"1"}
+];
+
 /**
  *  기간별 전송현황 조회 그리드 생성
  */
@@ -32,10 +40,12 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function 
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("periodOptionCombo", periodOptionData); // 옵션
+    $scope._setComboData("sendFgCombo", sendFgData); // 구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.periodOption = "Y";
+        $scope.sendFg = "0";
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -145,6 +155,7 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function 
         params.srchOrgnCd = $scope.srchOrgnCd;
         params.srchOrgnNm = $scope.srchOrgnNm;
         params.option = $scope.periodOption;
+        params.sendFg = $scope.sendFg;
 
         $scope._inquiryMain("/adi/sms/sendStatus/periodSendStatus/getPeriodSendStatusList.sb", params, function() {}, false);
     };

@@ -44,6 +44,13 @@ var telNoFgData = [
     {"name":"정상","value":"1"}
 ];
 
+// 구분
+var sendFgData = [
+    {"name":"전체","value":""},
+    {"name":"SMS전송","value":"0"},
+    {"name":"시스템알림","value":"1"}
+];
+
 /**
  *  문자전송현황 조회 그리드 생성
  */
@@ -60,6 +67,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._setComboData("reserveYnCombo", reserveYnDataMapData); // 예약여부
     $scope._setComboData("sendStatusCombo", sendStatusFgData); // 결과
     $scope._setComboData("telNoFgCombo", telNoFgData); // 발신번호
+    $scope._setComboData("sendFgCombo", sendFgData); // 구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -67,7 +75,8 @@ app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
         $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
-        $scope.telNoFg = "0";
+        $scope.telNoFg  = "0";
+        $scope.sendFg   = "0";
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -141,6 +150,7 @@ app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.reserveYn = $scope.reserveYn;
         params.sendStatus = $scope.sendStatus;
         params.telNoFg = $scope.telNoFg;
+        params.sendFg = $scope.sendFg;
         params.listScale = 2000;
 
         $scope._inquiryMain("/adi/sms/sendStatus/sendStatus/getSendStatusList.sb", params, function() {

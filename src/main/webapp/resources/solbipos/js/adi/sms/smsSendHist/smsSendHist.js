@@ -31,6 +31,13 @@ var gubunComboData = [
     {"name":"매장","value":"2"}
 ];
 
+// 구분
+var sendFgData = [
+    {"name":"전체","value":""},
+    {"name":"SMS전송","value":"0"},
+    {"name":"시스템알림","value":"1"}
+];
+
 /**
  *  SMS전송이력 조회 그리드 생성
  */
@@ -48,12 +55,14 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("gubunCombo", gubunComboData); // 조회구분
+    $scope._setComboData("sendFgCombo", sendFgData); // 구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
+        $scope.sendFg = "0";
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -204,6 +213,7 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
             params.gubunCombo = $scope.gubunCombo;
         }
         params.storeCds = $("#smsSendHistStoreCd").val();
+        params.sendFg = $scope.sendFg;
         params.listScale = $scope.listScale;
 
         $scope._inquiryMain("/adi/sms/smsSendHist/smsSendHist/getSmsSendHistList.sb", params, function() {}, false);

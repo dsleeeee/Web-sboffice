@@ -73,6 +73,24 @@
                         </wj-combo-box>
                     </div>
                 </td>
+                <%-- 구분 --%>
+                <th>
+                    <s:message code="daySendStatus.sendFg" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="sendFgCombo"
+                                ng-model="sendFg"
+                                items-source="_getComboData('sendFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="sendFgCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -180,4 +198,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20260610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/daySendStatus.js?ver=20260611.01" charset="utf-8"></script>

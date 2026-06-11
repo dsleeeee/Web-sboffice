@@ -124,8 +124,8 @@
                 <th>
                     <s:message code="sendStatus.telNoFg" />
                 </th>
-                <td colspan="3">
-                    <div class="sb-select w20 fl">
+                <td>
+                    <div class="sb-select w40">
                         <wj-combo-box
                                 id="telNoFgCombo"
                                 ng-model="telNoFg"
@@ -137,13 +137,31 @@
                                 control="telNoFgCombo">
                         </wj-combo-box>
                     </div>
-                    <p class="tl mt5 lh15">&nbsp&nbsp * 발신번호 사용여부 변경 시에도 변작리스트에 포함되며, 상세 확인 후 처리 바랍니다.</p>
+                </td>
+                <%-- 구분 --%>
+                <th>
+                    <s:message code="sendStatus.sendFg" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="sendFgCombo"
+                                ng-model="sendFg"
+                                items-source="_getComboData('sendFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="sendFgCombo">
+                        </wj-combo-box>
+                    </div>
                 </td>
             </tr>
             </tbody>
         </table>
 
         <div class="mt10 oh sb-select dkbr">
+            <p class="tl mt5 fl s12">&nbsp&nbsp * 발신번호 사용여부 변경 시에도 변작리스트에 포함되며, 상세 확인 후 처리 바랍니다.</p>
             <%-- 조회조건 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
             <%-- 예약취소 --%>
@@ -260,7 +278,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260611.01" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">

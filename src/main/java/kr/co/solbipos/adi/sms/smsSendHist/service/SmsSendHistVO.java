@@ -60,6 +60,9 @@ public class SmsSendHistVO extends PageVO {
     /** 송신자 소속명 */
     private String ssOrgnNm;
 
+    /** 구분 */
+    private String sendFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -119,4 +122,12 @@ public class SmsSendHistVO extends PageVO {
     public String getSsOrgnNm() { return ssOrgnNm; }
 
     public void setSsOrgnNm(String ssOrgnNm) { this.ssOrgnNm = ssOrgnNm; }
+
+    public String getSendFg() {
+        return sendFg;
+    }
+
+    public void setSendFg(String sendFg) {
+        this.sendFg = sendFg;
+    }
 }

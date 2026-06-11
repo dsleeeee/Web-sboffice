@@ -96,6 +96,9 @@ public class SendStatusVO extends PageVO {
     /** 옵션 */
     private String option;
 
+    /** 구분 */
+    private String sendFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -222,5 +225,13 @@ public class SendStatusVO extends PageVO {
 
     public void setOption(String option) {
         this.option = option;
+    }
+
+    public String getSendFg() {
+        return sendFg;
+    }
+
+    public void setSendFg(String sendFg) {
+        this.sendFg = sendFg;
     }
 }
