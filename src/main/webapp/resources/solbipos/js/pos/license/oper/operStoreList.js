@@ -22,6 +22,13 @@ var useOsData = [
     {"name":"win11","value":"11"}
 ];
 
+// 조회 구분
+var srchDateFg = [
+    {"name":"전체","value":""},
+    {"name":"시스템오픈일자","value":"1"},
+    {"name":"시스템폐점일자","value":"2"}
+];
+
 /**
  *  운영현황 그리드 생성
  */
@@ -35,6 +42,7 @@ app.controller('operStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
 
     $scope._setComboData("posUsageCombo", posUsage); // 포스용도
     $scope._setComboData("useOsCombo", useOsData); // 포스용도
+    $scope._setComboData("srchDateFgCombo", srchDateFg); // 포스용도
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -69,6 +77,7 @@ app.controller('operStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         params.srchAgencyCd = $("#agencyCdOper").val();
         params.posUsage = $scope.posUsage;
         params.useOs    = $scope.useOs;
+        params.srchDateFg = $scope.dateFg;
 
         $scope._inquiryMain("/pos/license/oper/oper/getOperStoreList.sb", params, function() {}, false);
     };

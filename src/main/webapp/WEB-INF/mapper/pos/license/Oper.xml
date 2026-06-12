@@ -655,8 +655,9 @@
         ,		TO_CHAR(TO_DATE(J.INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')   AS MIN_INST_INS_DT
         ,		TO_CHAR(TO_DATE(K.INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')   AS MAX_INST_INS_DT
         ,       (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = (SELECT DECODE(P_AGENCY_CD, '00000', AGENCY_CD, P_AGENCY_CD) FROM TB_CM_AGENCY WHERE AGENCY_CD = B.AGENCY_CD)) AS DIST
-        FROM
-                (
+        ,       TO_CHAR(TO_DATE(B.SYS_OPEN_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')     AS SYS_OPEN_DATE
+        ,       DECODE(B.SYS_STAT_FG,'2',TO_CHAR(TO_DATE(B.SYS_CLOSURE_DATE, 'YYYYMMDD'), 'yyyy-mm-dd'), '')  AS SYS_CLOSURE_DATE
+        FROM    (
                     SELECT 	STORE_CD
                     , 		MAX(SALE_DATE) AS OPEN_DT
                     FROM 	TB_PS_EXACTCALC
@@ -774,6 +775,17 @@
         <if test='useOs != null and useOs != ""'>
             AND TRIM(SUBSTR(I.WIN_EDT_NO,19,2)) = #{useOs}
         </if>
+        <choose>
+            <!-- 시스템 -->
+            <when test='srchDateFg != null and srchDateFg == "1"'>
+                AND B.SYS_OPEN_DATE BETWEEN #{startDate} AND #{endDate}
+            </when>
+            <!-- 총판 -->
+            <when test='srchDateFg != null and srchDateFg == "2"'>
+                AND B.SYS_CLOSURE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND B.SYS_STAT_FG   =   '2'
+            </when>
+        </choose>
         ORDER
         BY      C.HQ_OFFICE_CD
         ,       B.STORE_CD

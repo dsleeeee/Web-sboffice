@@ -163,9 +163,9 @@ public class TodayGnrlzController {
                 if(list.get(i).getStr("payCd").equals("14")){
                     list.get(i).put("payNm", "식권대장");
                 }
-
+            }else if(sessionInfoVO.getHqOfficeCd().equals("A0001") || sessionInfoVO.getHqOfficeCd().equals("DS001")){
                 if(list.get(i).getStr("payCd").equals("06")){
-                    list.get(i).put("payNm", "선불카드");
+                    list.get(i).put("payNm", "VMEM 전자상품권");
                 }
             }
         }

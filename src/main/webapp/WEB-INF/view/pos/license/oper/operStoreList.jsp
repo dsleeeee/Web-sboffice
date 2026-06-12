@@ -30,39 +30,53 @@
         </colgroup>
         <tbody>
         <tr>
-            <%-- 시스템 오픈일자 --%>
+            <%-- 개점일자(포스) --%>
             <th>
-                <s:message code="oper.sysOpenDt" />
+                <s:message code="oper.posOpenDate" />
             </th>
             <td colspan="3">
                 <div class="sb-select">
-                        <span class="txtIn w110px">
-                            <wj-input-date
-                                    value="startDate"
-                                    ng-model="startDate"
-                                    control="startDateCombo"
-                                    min="2018-01-01"
-                                    max="2099-12-31"
-                                    initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                    <%-- 조회 구분--%>
+                    <span class="txtIn w130px">
+                       <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchDateFg"
+                                  ng-model="dateFg"
+                                  items-source="_getComboData('srchDateFgCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  control="srchDateFgCombo">
+                          </wj-combo-box>
+                      </div>
+                    </span>
+                    <span class="txtIn w110px">
+                        <wj-input-date
+                                value="startDate"
+                                ng-model="startDate"
+                                control="startDateCombo"
+                                min="2018-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
                     <span class="txtIn w110px">
-                            <wj-input-date
-                                    value="endDate"
-                                    ng-model="endDate"
-                                    control="endDateCombo"
-                                    min="2018-01-01"
-                                    max="2099-12-31"
-                                    initialized="_initDateBox(s)">
-                            </wj-input-date>
-                        </span>
+                        <wj-input-date
+                                value="endDate"
+                                ng-model="endDate"
+                                control="endDateCombo"
+                                min="2018-01-01"
+                                max="2099-12-31"
+                                initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="chk ml10" style="display:none">
-                          <input type="checkbox" id="chkDt" ng-model="isChecked" />
-                          <label for="chkDt">
+                        <input type="checkbox" id="chkDt" ng-model="isChecked" />
+                        <label for="chkDt">
                             <s:message code="oper.noSaleStore" />
-                          </label>
-                        </span>
+                        </label>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -182,22 +196,24 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeCd"/>" binding="hqOfficeCd"     width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>" binding="hqOfficeNm"     width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.storeCd"/>" binding="storeCd"        width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.storeNm"/>" binding="storeNm"        width="150" is-read-only="true" align="left"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.runDist"/>" binding="dist"           width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.runAgency"/>" binding="agencyNm"       width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.progFg"/>" binding="envstVal"       width=" 90" is-read-only="true" align="center" data-map="posFgDataMap"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.posNo"/>" binding="posNo"          width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.posUsage"/>" binding="subVal"         width=" 90" is-read-only="true" align="center" > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.sysStatNm"/>" binding="sysStatFg"      width=" 50" is-read-only="true" align="center" data-map="sysStatFgDataMap"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.useOs"/>" binding="winEdtNo"       width="150" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.posVerNo"/>" binding="posVerNo"       width="120" is-read-only="true" align="center"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.vanNm"/>" binding="vanNm"          width=" 80" is-read-only="true" align="left"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.minInstInsDt"/>" binding="minInstInsDt"   width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.maxInstInsDt"/>" binding="maxInstInsDt"   width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>" binding="openDt"         width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeCd"/>"       binding="hqOfficeCd"     width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>"       binding="hqOfficeNm"     width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.storeCd"/>"          binding="storeCd"        width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.storeNm"/>"          binding="storeNm"        width="150" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.runDist"/>"          binding="dist"           width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.runAgency"/>"        binding="agencyNm"       width="100" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.progFg"/>"           binding="envstVal"       width=" 90" is-read-only="true" align="center" data-map="posFgDataMap"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posNo"/>"            binding="posNo"          width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posUsage"/>"         binding="subVal"         width=" 90" is-read-only="true" align="center" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.sysStatNm"/>"        binding="sysStatFg"      width=" 50" is-read-only="true" align="center" data-map="sysStatFgDataMap"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.useOs"/>"            binding="winEdtNo"       width="150" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posVerNo"/>"         binding="posVerNo"       width="120" is-read-only="true" align="center"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.vanNm"/>"            binding="vanNm"          width=" 80" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.minInstInsDt"/>"     binding="minInstInsDt"   width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.maxInstInsDt"/>"     binding="maxInstInsDt"   width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posOpenDate"/>"      binding="openDt"         width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>"      binding="sysOpenDate"    width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.sysClosureDate"/>"   binding="sysClosureDate" width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -219,5 +235,5 @@
     var posUsage = ${posUsage};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/operStoreList.js?ver=20240503.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/operStoreList.js?ver=20260609.01" charset="utf-8"></script>
 

@@ -77,6 +77,9 @@ public class OperVO extends PageVO {
 
     /** 사용 OS */
     private String useOs;
+    
+    /** 조회 구분 */
+    private String srchDateFg;
 
     public boolean getChkDt() { return chkDt; }
 
@@ -214,5 +217,13 @@ public class OperVO extends PageVO {
 
     public void setUseOs(String useOs) {
         this.useOs = useOs;
+    }
+
+    public String getSrchDateFg() {
+        return srchDateFg;
+    }
+
+    public void setSrchDateFg(String srchDateFg) {
+        this.srchDateFg = srchDateFg;
     }
 }
