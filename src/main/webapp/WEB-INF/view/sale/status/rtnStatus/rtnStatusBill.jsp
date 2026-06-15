@@ -145,6 +145,16 @@
 </div>
 <script type="text/javascript">
     var srchOption2 = ${ccu.getCommCode("024")};
+    var hqOfficeCd = "${sessionScope.sessionInfo.hqOfficeCd}";
+
+    if (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS001') {
+        for (var i = 0; i < srchOption2.length; i++) {
+            if (srchOption2[i].value === '06') {
+                srchOption2[i].name = 'VMEM 전자상품권';
+                break;
+            }
+        }
+    }
 
     // 결제수단
     var payColList = [];

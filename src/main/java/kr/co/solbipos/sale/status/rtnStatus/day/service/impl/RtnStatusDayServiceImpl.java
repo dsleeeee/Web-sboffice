@@ -145,6 +145,7 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	/** 반품현황 - 결제수단 컬럼 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPayColAddList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		return rtnStatusDayMapper.getPayColAddList(rtnStatusDayVO);
 	}
 

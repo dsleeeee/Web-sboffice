@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <%--
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/dailyReport.css"	/>
@@ -172,7 +173,14 @@
 							<wj-flex-grid-column header="<s:message code="dailyReport.payPaycoAmt"      />"     binding="payPaycoAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.payVpointAmt"     />"     binding="payVpointAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.payVcoupnAmt"     />"     binding="payVcoupnAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.payVchargeAmt"    />"     binding="payVchargeAmt"     width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+							<c:choose>
+							<c:when test="${hqOfficeCd == 'A0001' or hqOfficeCd == 'DS001'}">
+								<wj-flex-grid-column header="<s:message code="dailyReport.payVchargeAmt"        />"     binding="payVchargeAmt"     width="150" is-read-only="true" align="right"                    ></wj-flex-grid-column>
+							</c:when>
+							<c:otherwise>
+								<wj-flex-grid-column header="<s:message code="dailyReport.prepaidCard"    />"     binding="payVchargeAmt"     width="150" is-read-only="true" align="right"                    ></wj-flex-grid-column>
+							</c:otherwise>
+						</c:choose>
 							<wj-flex-grid-column header="<s:message code="dailyReport.payMpayAmt"       />"     binding="payMpayAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.payMcoupnAmt"     />"     binding="payMcoupnAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.payMembrAmt"      />"     binding="payMembrAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>

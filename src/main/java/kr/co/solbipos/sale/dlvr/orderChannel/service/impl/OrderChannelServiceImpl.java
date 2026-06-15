@@ -45,6 +45,7 @@ public class OrderChannelServiceImpl implements OrderChannelService {
     /** 주문채널별현황 - 결제수단 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPayColList(OrderChannelVO orderChannelVO, SessionInfoVO sessionInfoVO){
+        orderChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return orderChannelMapper.getPayColList(orderChannelVO);
     }
 
