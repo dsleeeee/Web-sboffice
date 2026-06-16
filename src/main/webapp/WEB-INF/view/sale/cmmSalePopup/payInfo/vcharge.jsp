@@ -4,12 +4,20 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/sale/cmmSalePopup/payInfo/vcharge/"/>
 
 <wj-popup id="wjVchargeLayer" control="wjVchargeLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="vchargeLayer" class="wj-dialog wj-dialog-columns" ng-controller="vchargeCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="vcharge.vchargePay"/>
+      <c:choose>
+        <c:when test="${hqOfficeCd == 'A0001' or hqOfficeCd == 'DS001'}">
+          <s:message code="vcharge.vchargePay"/>
+        </c:when>
+        <c:otherwise>
+          <s:message code="vcharge.prepaidCard"/>
+        </c:otherwise>
+      </c:choose>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>

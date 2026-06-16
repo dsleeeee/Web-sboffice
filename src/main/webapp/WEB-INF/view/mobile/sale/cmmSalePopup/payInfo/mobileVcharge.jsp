@@ -3,12 +3,21 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <wj-popup control="wjMobileVchargeLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:90%;height:85%;" fade-in="false" fade-out="false">
     <div ng-controller="mobileVchargeCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="mobile.payInfo.vcharge.info"/>
+            <c:choose>
+                <c:when test="${hqOfficeCd == 'A0001' or hqOfficeCd == 'DS001'}">
+                    <s:message code="mobile.payInfo.vcharge.info"/>
+                </c:when>
+                <c:otherwise>
+                    <s:message code="mobile.payInfo.vcharge.prepaidCard"/>
+                </c:otherwise>
+            </c:choose>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
 

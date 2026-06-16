@@ -207,7 +207,14 @@
         (
             SELECT
             tcn.NMCODE_CD AS PAY_CD,
-            tcn.NMCODE_NM AS PAY_NM,
+            <choose>
+                <when test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS001")'>
+                    DECODE(tcn.NMCODE_CD,'06','VMEM 전자상품권',tcn.NMCODE_NM) AS PAY_NM,
+                </when>
+                <otherwise>
+                    tcn.NMCODE_NM AS PAY_NM,
+                </otherwise>
+            </choose>
             tcn.NMCODE_ITEM_1 AS PAY_METHOD
             FROM TB_CM_NMCODE tcn
             WHERE 1=1
