@@ -350,6 +350,7 @@
         twuidv01.ORGN_NM,
         twuidv01.ORGN_FG,
         tcasn.VF_YN,
+        SBPENC.D(tcasn.VF_TEL_NO) AS VF_TEL_NO,
         tcasn.TEL_FG,
         tcasn.ADD_SMS_FG,
         (CASE WHEN tcasn.TEL_FG = '0' AND tcasn.TEL_FG = '0' THEN '휴대폰인증'

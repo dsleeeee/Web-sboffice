@@ -238,6 +238,17 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     }
                 }
 
+                // 처리구분 완료시
+                if ($scope.flex.collectionView.items[i].addProcFg === "2") {
+                    if (nvl($scope.flex.collectionView.items[i].telFg, "") === "0" && nvl($scope.flex.collectionView.items[i].addSmsFg, "") === "0") {
+                        if (nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].vfTelNo, "")) {
+                            // 휴대폰번호+본인명의 경우 인증한 휴대폰번호만 [발신번호]에 등록 가능 합니다(발신번호: 03222451544, 휴대폰본인인증번호: 01057078334)
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.authTelNoRegMsg"] + " (발신번호: " + $scope.flex.collectionView.items[i].telNo + ", 휴대폰본인인증번호: " + $scope.flex.collectionView.items[i].vfTelNo + ")");
+                            return false;
+                        }
+                    }
+                }
+
                 // 발신번호 필수입력
                 if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
                     $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.

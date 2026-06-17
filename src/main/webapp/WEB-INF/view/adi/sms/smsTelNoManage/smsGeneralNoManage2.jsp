@@ -116,6 +116,7 @@
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.telNo"/>" binding="telNo" width="90" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.addSmsUserNm"/>" binding="addSmsUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.addSmsTelNo"/>" binding="addSmsTelNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.vfTelNo"/>" binding="vfTelNo" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.telDt"/>" binding="telDt" width="100" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.returnRemark"/>" binding="returnRemark" width="95" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.remark"/>" binding="remark" width="95" align="center"></wj-flex-grid-column>
@@ -160,7 +161,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20250107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260617.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">
