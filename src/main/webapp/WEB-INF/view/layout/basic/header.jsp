@@ -135,7 +135,8 @@
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var orgnCd = "${orgnCd}";
+  var noticePollingEnabled = "${sessionScope.sessionInfo.noticePollingEnabled}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20260528.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/layout/basic/header.js?ver=20260617.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>

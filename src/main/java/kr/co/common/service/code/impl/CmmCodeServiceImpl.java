@@ -160,6 +160,12 @@ public class CmmCodeServiceImpl implements CmmCodeService {
 
         return list;
     }
+    /** 공지 폴링 활성화 여부 조회 (마스터 스위치) */
+    @Override
+    public DefaultMap<String> getNoticePollingEnabled() {
+        return cmmCodeMapper.getNoticePollingEnabled();
+    }
+
     /** 서버 재시작 공지 여부 조회 */
     @Override
     public DefaultMap<String> getDeployNoticeStatus() {

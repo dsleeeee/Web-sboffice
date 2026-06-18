@@ -94,10 +94,10 @@ function checkServerNotice() {
     dataType: "json",
     cache: false,
     success: function(result) {
+      // 공지 유무와 무관하게 다음 허용 시각을 60초 후로 설정
+      sessionStorage.setItem("noticeNextAllowedAt", String(now + 60000));
       // 공지 데이터가 있는 경우에만 배너 표시
       if (result.status === "OK" && result.data.noticeInfo != null) {
-        // 다음 허용 시각을 60초 후로 설정
-        sessionStorage.setItem("noticeNextAllowedAt", String(now + 60000));
         // NMCODE_ITEM_2 값을 배너 텍스트로 표시 후 5초 뒤 숨김
         $("#serverNoticeBanner").text(result.data.noticeInfo.nmcodeItem2);
         $("#serverNoticeBanner").fadeIn(300);
@@ -108,17 +108,19 @@ function checkServerNotice() {
     }
   });
 }
-// 페이지 로드 시 즉시 1회 실행
-checkServerNotice();
-var _noticeNow = Date.now();
-var _noticeNextAllowedAt = Number(sessionStorage.getItem("noticeNextAllowedAt") || 0);
-// 이미 대기 중인 시각이 있으면 그 시각까지 남은 시간만큼 대기, 없으면 60초 후 시작
-var _noticeFirstDelay = _noticeNextAllowedAt > _noticeNow ? _noticeNextAllowedAt - _noticeNow : 60000;
-setTimeout(function() {
+if (noticePollingEnabled === "1") {
+  // 페이지 로드 시 즉시 1회 실행
   checkServerNotice();
-  // 이후 60초 간격으로 반복
-  setInterval(checkServerNotice, 60000);
-}, _noticeFirstDelay);
+  var _noticeNow = Date.now();
+  var _noticeNextAllowedAt = Number(sessionStorage.getItem("noticeNextAllowedAt") || 0);
+  // 이미 대기 중인 시각이 있으면 그 시각까지 남은 시간만큼 대기, 없으면 60초 후 시작
+  var _noticeFirstDelay = _noticeNextAllowedAt > _noticeNow ? _noticeNextAllowedAt - _noticeNow : 60000;
+  setTimeout(function() {
+    checkServerNotice();
+    // 이후 60초 간격으로 반복
+    setInterval(checkServerNotice, 60000);
+  }, _noticeFirstDelay);
+}
 /** //서버 재시작 공지 폴링 */
 
 // 이용약관
