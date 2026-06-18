@@ -1,6 +1,8 @@
 package kr.co.solbipos.mobile.application.session.auth.web;
 
 import kr.co.common.exception.AuthenticationException;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
@@ -68,6 +70,8 @@ public class MobileAuthController {
 
     @Autowired
     AuthService authService;
+    @Autowired
+    CmmCodeService cmmCodeService;
 
     private final MobileAuthService mobileAuthService;
     private final SessionService sessionService;
@@ -159,7 +163,6 @@ public class MobileAuthController {
                 Long count = isLoginAllowed(chkUserId, ip);
                 // 로그인 시도 횟수 확인 (userId) 기준
                 Long idCount = isLoginAllowed(chkUserId);
-                String currentDt = DateUtil.currentDateTimeString();
                 token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
                 StringBuilder log = new StringBuilder();
 
@@ -167,22 +170,7 @@ public class MobileAuthController {
                     // 로그인 시도 값 체크
                     if (count > 3) {
                         // 로그인 시도 제한 체크
-                        log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId + ip) (count > 3) START----------\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:제한\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                                .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId + ip) (count > 3) END----------");
+                        appendLoginLog(log, "err2", "로그인 시도 제한(userId + ip) (count > 3)", request, params, token, count, "제한");
 
                         // 특정 아이디만 세션 삭제
                         if (chkUserId.equals("momse08053") || chkUserId.equals("momse10160") || chkUserId.equals("momse09686") || chkUserId.equals("kjsun11177") || chkUserId.equals("ds053") || chkUserId.equals("ds00501")) {
@@ -195,22 +183,7 @@ public class MobileAuthController {
                         }
                     } else if (idCount > 3) {
                         // 로그인 시도 제한 체크
-                        log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId) (count > 3) START----------\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:제한\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                                .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId) (count > 3) END----------");
+                        appendLoginLog(log, "err5", "로그인 시도 제한(userId) (count > 3)", request, params, token, count, "제한");
 
                         // 특정 아이디만 세션 삭제
                         if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
@@ -221,7 +194,7 @@ public class MobileAuthController {
                             authService.loginHist(params);
                             throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
                         }
-                    }else if ("".equals(request.getHeader("User-Agent")) || request.getHeader("User-Agent") == null || request.getHeader("User-Agent").contains("python")
+                    } else if ("".equals(request.getHeader("User-Agent")) || request.getHeader("User-Agent") == null || request.getHeader("User-Agent").contains("python")
                             || request.getHeader("User-Agent").contains("curl") || request.getHeader("User-Agent").contains("wget")
                             || request.getHeader("User-Agent").contains("bot") || request.getHeader("User-Agent").contains("node")
                             || "".equals(request.getHeader("Accept")) || request.getHeader("Accept") == null
@@ -229,20 +202,7 @@ public class MobileAuthController {
                             || request.getHeader("referer") == null || !request.getHeader("referer").contains("/auth/login.sb")) {
 
                         // 브라우저 확인
-                        log.append("\n_login_chk_log_----------").append(userId).append(" 브라우저 이상 START----------\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                                .append("_login_chk_log_----------").append(userId).append(" 브라우저 이상 END----------");
+                        appendLoginLog(log, "err3", "브라우저 이상", request, params, token, null, "제한");
 
                         // 특정 아이디만 세션 삭제
                         if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
@@ -251,21 +211,8 @@ public class MobileAuthController {
                             throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
                         }
                     } else if (isCloudIp(params.getLoginIp())) {
-                        log.append("\n_login_chk_log_----------").append(userId).append(" 클라우드 IP 로그인 START----------\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                                .append("_login_chk_log_----------").append(userId).append(" 클라우드 IP 로그인 END----------");
+                        appendLoginLog(log, "err4", "클라우드 IP 로그인", request, params, token, count, "제한");
+
                         // 특정 아이디만 세션 삭제
                         if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
                             params.setLoginResult(LoginResult.CLOUD_IP_LOGIN);
@@ -273,24 +220,9 @@ public class MobileAuthController {
                             throw new AuthenticationException(messageService.get("login.fail"), failUrl);
                         }
                     } else {
-                        log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 성공 START----------\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:성공\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                                .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                                .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 성공 END----------");
+                        appendLoginLog(log, "succ", "로그인 시도 성공", request, params, token, count, "성공");
                     }
-                }finally {
+                } finally {
                     // 로그파일 생성
                     makeLoginLog(log);
                     LOGGER.info(log.toString());
@@ -333,6 +265,10 @@ public class MobileAuthController {
                     // 모바일 로그인 쿠키, 세션 처리
                     WebUtil.setCookie(BaseEnv.SB_LOGIN_FG, LoginFg.MOBILE.getCode(), 7*24*60*60 );
                     result.setLoginFg(LoginFg.MOBILE.getCode());
+
+                    // 공지 폴링 활성화 여부 조회 (NMCODE_GRP_CD='184', NMCODE_CD='0000')
+                    DefaultMap<String> noticePollingConfig = cmmCodeService.getNoticePollingEnabled();
+                    result.setNoticePollingEnabled(noticePollingConfig != null ? noticePollingConfig.get("nmcodeNm") : "0");
 
                     // 메인 페이지로
                     // 세션 생성
@@ -457,7 +393,6 @@ public class MobileAuthController {
         Long count = isLoginAllowed(userId, ip);
         // 로그인 시도 횟수 확인 (userId) 기준
         Long idCount = isLoginAllowed(userId);
-        String currentDt = DateUtil.currentDateTimeString();
         String token = (String) request.getSession().getAttribute("LOGIN_CHK_TOKEN");
         StringBuilder log = new StringBuilder();
 
@@ -465,22 +400,7 @@ public class MobileAuthController {
             // 로그인 시도 값 체크
             if (count > 3) {
                 // 로그인 시도 제한 체크
-                log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId + ip) (count > 3) START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:제한\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId + ip) (count > 3) END----------");
+                appendLoginLog(log, "err2", "로그인 시도 제한(userId + ip) (count > 3)", request, params, token, count, "제한");
 
                 if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
                     // 세션 삭제
@@ -492,22 +412,7 @@ public class MobileAuthController {
                 }
             } else if (idCount > 3) {
                 // 로그인 시도 제한 체크
-                log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId) (count > 3) START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:제한\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 제한(userId) (count > 3) END----------");
+                appendLoginLog(log, "err5", "로그인 시도 제한(userId) (count > 3)", request, params, token, count, "제한");
 
                 // 특정 아이디만 세션 삭제
                 if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
@@ -518,23 +423,9 @@ public class MobileAuthController {
                     authService.loginHist(params);
                     throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
                 }
-            }else if (token == null || token.isEmpty()) {
-
+            } else if (token == null || token.isEmpty()) {
                 // 토큰 보유 여부 확인
-                log.append("\n_login_chk_log_----------").append(userId).append(" 세션 토큰 값 없음 START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 세션 토큰 값 없음 END----------");
+                appendLoginLog(log, "err1", "세션 토큰 값 없음", request, params, token, null, "제한");
 
                 // 특정 아이디만 세션 삭제
                 if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
@@ -552,20 +443,7 @@ public class MobileAuthController {
                     || request.getHeader("referer") == null || !request.getHeader("referer").contains("/auth/login.sb")) {
 
                 // 브라우저 확인
-                log.append("\n_login_chk_log_----------").append(userId).append(" 브라우저 이상 START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 브라우저 이상 END----------");
+                appendLoginLog(log, "err3", "브라우저 이상", request, params, token, null, "제한");
 
                 // 특정 아이디만 세션 삭제
                 if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
@@ -576,21 +454,8 @@ public class MobileAuthController {
                     throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
                 }
             } else if (isCloudIp(params.getLoginIp())) {
-                log.append("\n_login_chk_log_----------").append(userId).append(" 클라우드 IP 로그인 START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 클라우드 IP 로그인 END----------");
+                appendLoginLog(log, "err4", "클라우드 IP 로그인", request, params, token, count, "제한");
+
                 // 특정 아이디만 세션 삭제
                 if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
                     // 세션 삭제
@@ -600,24 +465,9 @@ public class MobileAuthController {
                     throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
                 }
             } else {
-                log.append("\n_login_chk_log_----------").append(userId).append(" 로그인 시도 성공 START----------\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",처리여부:성공\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append("_login_chk_log_" + userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("_login_chk_log_----------").append(userId).append(" 로그인 시도 성공 END----------");
+                appendLoginLog(log, "succ", "로그인 시도 성공", request, params, token, count, "성공");
             }
-        }finally {
+        } finally {
             // 로그파일 생성
             makeLoginLog(log);
             LOGGER.info(log.toString());
@@ -647,6 +497,10 @@ public class MobileAuthController {
             // 모바일 로그인 쿠키, 세션 처리
             WebUtil.setCookie(BaseEnv.SB_LOGIN_FG, LoginFg.MOBILE.getCode(), 7*24*60*60 );
             result.setLoginFg(LoginFg.MOBILE.getCode());
+
+            // 공지 폴링 활성화 여부 조회 (NMCODE_GRP_CD='184', NMCODE_CD='0000')
+            DefaultMap<String> noticePollingConfig = cmmCodeService.getNoticePollingEnabled();
+            result.setNoticePollingEnabled(noticePollingConfig != null ? noticePollingConfig.get("nmcodeNm") : "0");
 
             // 자동로그인 체크 관련
             if(params.isChkLoginAuto()){
@@ -975,6 +829,43 @@ public class MobileAuthController {
             result |= (long) value << (24 - (8 * i));
         }
         return result & 0xFFFFFFFFL; // unsigned 처리
+    }
+
+    /**
+     * 로그인 체크 로그 항목을 StringBuilder에 추가
+     *
+     * @param log           로그 버퍼
+     * @param prefix        로그 접두사 (err1, err2, succ 등)
+     * @param title         로그 제목
+     * @param request       HTTP 요청
+     * @param params        로그인 세션 VO
+     * @param token         로그인 체크 토큰
+     * @param count         초당 접속 횟수 (null이면 해당 줄 생략)
+     * @param processResult 처리여부 문자열 ("제한" 또는 "성공")
+     */
+    private void appendLoginLog(StringBuilder log, String prefix, String title,
+                                HttpServletRequest request, SessionInfoVO params,
+                                String token, Long count, String processResult) {
+        String userId = params.getUserId();
+        String currentDt = DateUtil.currentDateTimeString();
+        log.append("\n_login_chk_log_").append(prefix + "_").append("----------").append(userId).append(" ").append(title).append(" START----------\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n");
+        if (count != null) {
+            log.append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n");
+        }
+        log.append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",처리여부:").append(processResult).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+           .append("_login_chk_log_").append(prefix + "_").append("----------").append(userId).append(" ").append(title).append(" END----------");
     }
 
     /**

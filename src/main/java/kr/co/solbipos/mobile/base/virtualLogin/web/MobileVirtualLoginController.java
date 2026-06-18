@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.cmm.CmmMenuService;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
@@ -73,8 +74,9 @@ public class MobileVirtualLoginController {
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeService cmmCodeService;
 
-    public MobileVirtualLoginController(MobileVirtualLoginService mobileVirtualLoginService, SessionService sessionService, MobileAuthService mobileAuthService, CmmMenuService cmmMenuService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+    public MobileVirtualLoginController(MobileVirtualLoginService mobileVirtualLoginService, SessionService sessionService, MobileAuthService mobileAuthService, CmmMenuService cmmMenuService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil, CmmCodeService cmmCodeService) {
         this.mobileVirtualLoginService = mobileVirtualLoginService;
         this.sessionService = sessionService;
         this.mobileAuthService = mobileAuthService;
@@ -82,6 +84,7 @@ public class MobileVirtualLoginController {
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeService = cmmCodeService;
     }
 
 
@@ -317,6 +320,10 @@ public class MobileVirtualLoginController {
                         cmmMenuService.getStoreCdList( sessionInfoVO.getOrgnCd() );
                 sessionInfoVO.setArrStoreCdList( storeCdList );
             }
+            // 공지 폴링 활성화 여부 조회 (NMCODE_GRP_CD='184', NMCODE_CD='0000')
+            DefaultMap<String> noticePollingConfig = cmmCodeService.getNoticePollingEnabled();
+            sessionInfoVO.setNoticePollingEnabled(noticePollingConfig != null ? noticePollingConfig.get("nmcodeNm") : "0");
+
             // 레디스에 세션 Set
             sessionService.setSessionInfo(sessionInfoVO);
             // 세션 담기

@@ -110,52 +110,21 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             System.out.println("session status 6:" + request.getSession().getAttribute("LOGIN_CHK_TOKEN"));
             System.out.println("session status 7:" + sessionInfoVO.getLoginChkToken());
 
-            String currentDt = DateUtil.currentDateTimeString();
-            StringBuilder log = new StringBuilder();
-
             // 토큰 없거나 틀린 경우 -- 세션 초기화는 차후 진행 예정 --
             if(sessionInfoVO.getLoginChkToken() == null){
 //                isSessionValid = false;
 //                isTokenValid = false;
 
-                log.append("\n----------").append(sessionInfoVO.getUserId()).append(" sessionInfoVO 토큰 값 Null(Interceptor) START----------\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",VO객체 토큰정보:").append(sessionInfoVO.getLoginChkToken()).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",토큰정보:").append(request.getSession().getAttribute("LOGIN_CHK_TOKEN")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                        .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                        .append("----------").append(sessionInfoVO.getUserId()).append(" sessionInfoVO 토큰 값 Null(Interceptor) END----------");
-
+                StringBuilder log = new StringBuilder();
+                appendTokenLog(log, "sessionInfoVO 토큰 값 Null(Interceptor)", request, sessionInfoVO);
                 LOGGER.info(log.toString());
             }else{
                 if(!sessionInfoVO.getLoginChkToken().equals(request.getSession().getAttribute("LOGIN_CHK_TOKEN"))){
 //                    isSessionValid = false;
 //                    isTokenValid = false;
 
-                    log.append("\n----------").append(sessionInfoVO.getUserId()).append(" 세션 토큰 값과 sessionInfoVO 토큰 값 비교 오류(Interceptor) START----------\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",VO객체 토큰정보:").append(sessionInfoVO.getLoginChkToken()).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",토큰정보:").append(request.getSession().getAttribute("LOGIN_CHK_TOKEN")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-                            .append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-                            .append("----------").append(sessionInfoVO.getUserId()).append(" 세션 토큰 값과 sessionInfoVO 토큰 값 비교 오류(Interceptor) END----------");
-
+                    StringBuilder log = new StringBuilder();
+                    appendTokenLog(log, "세션 토큰 값과 sessionInfoVO 토큰 값 비교 오류(Interceptor)", request, sessionInfoVO);
                     LOGGER.info(log.toString());
                 }
             }
@@ -258,7 +227,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if(cmmMenuService.menuResrceChk(resrceInfoVO) < 1){
 
             StringBuilder log = new StringBuilder();
-            String currentDt = DateUtil.currentDateTimeString();
 
             // 현재 접근URL
             String accessMenu = requestURL;
@@ -293,27 +261,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     // 같음
                 } else {
                     // 다름
-                    log.append("----------_menu_check_최근접속메뉴와 현재메뉴 불일치 START----------\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",현재URL:").append(currentMenu).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접근URL:").append(accessMenu).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-                            .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
-                            .append("----------_menu_check_최근접속메뉴와 현재메뉴 불일치 END----------\n");
+                    appendMenuLog(log, "최근접속메뉴와 현재메뉴 불일치", "현재URL", currentMenu, "접근URL", accessMenu, sessionInfoVO, requestURL);
                 }
-            }else{
+            } else {
                 // 없음
-                log.append("----------_menu_check_메뉴 접근 없이 조회 START----------\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",currentMenu:").append("NULL").append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",accessMenu:").append(accessMenu).append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",사용자ID :").append(sessionInfoVO.getUserId()).append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-                        .append("_menu_check_").append(sessionInfoVO.getUserId()).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
-                        .append("----------_menu_check_메뉴 접근 없이 조회 END----------\n");
+                appendMenuLog(log, "메뉴 접근 없이 조회", "currentMenu", "NULL", "accessMenu", accessMenu, sessionInfoVO, requestURL);
             }
 
             if(log != null && log.length() > 0) {
@@ -572,6 +524,64 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    /**
+     * 세션 토큰 체크 로그 항목을 StringBuilder에 추가
+     *
+     * @param log           로그 버퍼
+     * @param title         로그 제목
+     * @param request       HTTP 요청
+     * @param sessionInfoVO 세션 VO
+     */
+    private void appendTokenLog(StringBuilder log, String title,
+                                HttpServletRequest request, SessionInfoVO sessionInfoVO) {
+        String userId = sessionInfoVO.getUserId();
+        String currentDt = DateUtil.currentDateTimeString();
+        log.append("\n----------session_token_err_").append(userId).append(" ").append(title).append(" START----------\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",VO객체 토큰정보:").append(sessionInfoVO.getLoginChkToken()).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",토큰정보:").append(request.getSession().getAttribute("LOGIN_CHK_TOKEN")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+           .append("----------session_token_err_").append(userId).append(" ").append(title).append(" END----------");
+    }
+
+    /**
+     * 메뉴 접근 체크 로그 항목을 StringBuilder에 추가
+     *
+     * @param log           로그 버퍼
+     * @param title         로그 제목
+     * @param label1        첫 번째 항목 레이블
+     * @param value1        첫 번째 항목 값
+     * @param label2        두 번째 항목 레이블
+     * @param value2        두 번째 항목 값
+     * @param sessionInfoVO 세션 VO
+     * @param requestURL    요청 URL
+     */
+    private void appendMenuLog(StringBuilder log, String title,
+                               String label1, String value1,
+                               String label2, String value2,
+                               SessionInfoVO sessionInfoVO, String requestURL) {
+        String userId = sessionInfoVO.getUserId();
+        String currentDt = DateUtil.currentDateTimeString();
+        log.append("----------_menu_check_err_").append(title).append(" START----------\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label1).append(":").append(value1).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label2).append(":").append(value2).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
+           .append("----------_menu_check_err_").append(title).append(" END----------\n");
     }
 
     /**

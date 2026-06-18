@@ -79,7 +79,10 @@
 <c:import url="/WEB-INF/view/mobile/application/layer/mobileLastLoginHistPop.jsp">
 </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/header.js?ver=20260528.01" charset="utf-8"></script>
+<script type="text/javascript">
+  var noticePollingEnabled = "${sessionScope.sessionInfo.noticePollingEnabled}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/header.js?ver=20260617.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/variables/commonVariables.js?ver=2018100401" charset="utf-8"></script>
 
 <script type="text/javascript">

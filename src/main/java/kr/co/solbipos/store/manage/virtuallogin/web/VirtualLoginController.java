@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.cmm.CmmMenuService;
+import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
@@ -75,11 +76,12 @@ public class VirtualLoginController {
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeService cmmCodeService;
 
     /** Constructor Injection */
     @Autowired
     public VirtualLoginController(VirtualLoginService virtualLoginService,
-        SessionService sessionService, AuthService authService, CmmMenuService cmmMenuService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+        SessionService sessionService, AuthService authService, CmmMenuService cmmMenuService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil, CmmCodeService cmmCodeService) {
         this.virtualLoginService = virtualLoginService;
         this.sessionService = sessionService;
         this.authService = authService;
@@ -87,6 +89,7 @@ public class VirtualLoginController {
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeService = cmmCodeService;
     }
 
     /**
@@ -329,6 +332,10 @@ public class VirtualLoginController {
 
             // 토큰 생성
             sessionInfoVO.setLoginChkToken(sessionToken);
+
+            // 공지 폴링 활성화 여부 조회 (NMCODE_GRP_CD='184', NMCODE_CD='0000')
+            DefaultMap<String> noticePollingConfig = cmmCodeService.getNoticePollingEnabled();
+            sessionInfoVO.setNoticePollingEnabled(noticePollingConfig != null ? noticePollingConfig.get("nmcodeNm") : "0");
 
             // 레디스에 세션 Set
             sessionService.setSessionInfo(sessionInfoVO);

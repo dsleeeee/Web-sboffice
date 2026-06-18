@@ -91,4 +91,7 @@ public interface CmmCodeService {
 
     /** 서버 재시작 공지 여부 조회 */
     DefaultMap<String> getDeployNoticeStatus();
+
+    /** 공지 폴링 활성화 여부 조회 (마스터 스위치) */
+    DefaultMap<String> getNoticePollingEnabled();
 }

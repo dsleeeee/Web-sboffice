@@ -743,6 +743,17 @@ public class SessionInfoVO extends CmmVO {
         this.serverInstance = serverInstance;
     }
 
+    /** 공지 폴링 활성화 여부 (0: 비활성, 1: 활성) */
+    private String noticePollingEnabled;
+
+    public String getNoticePollingEnabled() {
+        return noticePollingEnabled;
+    }
+
+    public void setNoticePollingEnabled(String noticePollingEnabled) {
+        this.noticePollingEnabled = noticePollingEnabled;
+    }
+
     @Override
     public String toString() {
         return "SessionInfoVO{" +
