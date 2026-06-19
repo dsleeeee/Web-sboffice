@@ -638,4 +638,7 @@ public interface StoreManageMapper {
 
     /** 사용자ID 중복체크 */
     int getDupChkStoreUserId(StoreManageVO storeManageVO);
+
+    /** 환경설정 4019(포스-용도) 변경 시 해당 매장 모든 포스 TB_TX_POS.PROC_SEQ 갱신(메인포스 수신 감지용) */
+    int updatePosMsSeqByStore(StorePosEnvVO storePosEnvVO);
 }
