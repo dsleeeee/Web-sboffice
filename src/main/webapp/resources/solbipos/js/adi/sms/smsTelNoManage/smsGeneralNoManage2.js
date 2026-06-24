@@ -215,220 +215,227 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
     $scope.searchSmsGeneralNoManage = function(){
         var params = {};
 
-        $scope._inquiryMain("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getSmsGeneralNoManage2List.sb", params, function() {}, false);
+        $scope._inquiryMain("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getSmsGeneralNoManage2List.sb", params, function() {
+            $scope._popMsg(messages["smsGeneralNoManage2.popMsg"]);
+        }, false);
     };
     // <-- //검색 호출 -->
 
     // <-- 저장 호출 -->
     // 저장
     $("#funcSaveSmsGeneralNoManage2").click(function(e){
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var rowCount = i + 1;
-            var rowContent = "[" + rowCount + "번째의 " + $scope.flex.collectionView.items[i].orgnCd + "/" + $scope.flex.collectionView.items[i].orgnNm + "] ";
 
-            $scope.flex.collectionView.items[i].status = "I";
+        $scope._popMsg(messages["smsGeneralNoManage2.popMsg"], function() {
 
-            // 처리구분 수정했을때
-            if(nvl($scope.flex.collectionView.items[i].addProcFg, "") !== nvl($scope.flex.collectionView.items[i].backAddProcFg, "")) {
-                // 처리구분 반려시
-                if($scope.flex.collectionView.items[i].addProcFg === "3") {
-                    if(nvl($scope.flex.collectionView.items[i].returnRemark, "") === "") {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.returnRemarkBlank"]); // 처리구분 반려시 반려사유를 입력해주세요.
-                        return false;
-                    }
-                }
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var rowCount = i + 1;
+                var rowContent = "[" + rowCount + "번째의 " + $scope.flex.collectionView.items[i].orgnCd + "/" + $scope.flex.collectionView.items[i].orgnNm + "] ";
 
-                // 처리구분 완료시
-                if ($scope.flex.collectionView.items[i].addProcFg === "2") {
-                    if (nvl($scope.flex.collectionView.items[i].telFg, "") === "0" && nvl($scope.flex.collectionView.items[i].addSmsFg, "") === "0") {
-                        if (nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].vfTelNo, "")) {
-                            // 휴대폰번호+본인명의 경우 인증한 휴대폰번호만 [발신번호]에 등록 가능 합니다(발신번호: 03222451544, 휴대폰본인인증번호: 01057078334)
-                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.authTelNoRegMsg"] + " (발신번호: " + $scope.flex.collectionView.items[i].telNo + ", 휴대폰본인인증번호: " + $scope.flex.collectionView.items[i].vfTelNo + ")");
+                $scope.flex.collectionView.items[i].status = "I";
+
+                // 처리구분 수정했을때
+                if (nvl($scope.flex.collectionView.items[i].addProcFg, "") !== nvl($scope.flex.collectionView.items[i].backAddProcFg, "")) {
+                    // 처리구분 반려시
+                    if ($scope.flex.collectionView.items[i].addProcFg === "3") {
+                        if (nvl($scope.flex.collectionView.items[i].returnRemark, "") === "") {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.returnRemarkBlank"]); // 처리구분 반려시 반려사유를 입력해주세요.
                             return false;
                         }
                     }
+
+                    // 처리구분 완료시
+                    if ($scope.flex.collectionView.items[i].addProcFg === "2") {
+                        if (nvl($scope.flex.collectionView.items[i].telFg, "") === "0" && nvl($scope.flex.collectionView.items[i].addSmsFg, "") === "0") {
+                            if (nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].vfTelNo, "")) {
+                                // 휴대폰번호+본인명의 경우 인증한 휴대폰번호만 [발신번호]에 등록 가능 합니다(발신번호: 03222451544, 휴대폰본인인증번호: 01057078334)
+                                $scope._popMsg(rowContent + messages["smsGeneralNoManage2.authTelNoRegMsg"] + "</br> (발신번호: " + $scope.flex.collectionView.items[i].telNo + ", 휴대폰본인인증번호: " + $scope.flex.collectionView.items[i].vfTelNo + ")");
+                                return false;
+                            }
+                        }
+                    }
+
+                    // 발신번호 필수입력
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
+                        return false;
+                    } else {
+                        // 숫자만 입력
+                        var numChkexp = /[^0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 수정된 내역이 있는지 체크
+                    $scope.flex.collectionView.items[i].status = "U";
                 }
 
-                // 발신번호 필수입력
-                if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
-                    $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
-                    return false;
-                } else {
-                    // 숫자만 입력
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                // 발신번호 수정했을때
+                if (nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
+                    // 발신번호 필수입력
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
                         return false;
+                    } else {
+                        // 숫자만 입력
+                        var numChkexp = /[^0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 수정된 내역이 있는지 체크
+                    $scope.flex.collectionView.items[i].status = "U";
+                }
+
+                // 통화일시 수정했을때
+                if (nvl($scope.flex.collectionView.items[i].telDt, "") !== nvl($scope.flex.collectionView.items[i].backTelDt, "")) {
+                    // 발신번호 필수입력
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
+                        return false;
+                    } else {
+                        // 숫자만 입력
+                        var numChkexp = /[^0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 수정된 내역이 있는지 체크
+                    $scope.flex.collectionView.items[i].status = "U";
+                }
+
+                // 반려사유 수정했을때
+                if (nvl($scope.flex.collectionView.items[i].returnRemark, "") !== nvl($scope.flex.collectionView.items[i].backReturnRemark, "")) {
+                    // 발신번호 필수입력
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
+                        return false;
+                    } else {
+                        // 숫자만 입력
+                        var numChkexp = /[^0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 수정된 내역이 있는지 체크
+                    $scope.flex.collectionView.items[i].status = "U";
+                }
+
+                // 비고 수정했을때
+                if (nvl($scope.flex.collectionView.items[i].remark, "") !== nvl($scope.flex.collectionView.items[i].backRemark, "")) {
+                    // 발신번호 필수입력
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
+                        return false;
+                    } else {
+                        // 숫자만 입력
+                        var numChkexp = /[^0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 수정된 내역이 있는지 체크
+                    $scope.flex.collectionView.items[i].status = "U";
+                }
+            }
+
+            $scope._popConfirm(messages["cmm.choo.save"], function() {
+
+                $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+
+                // 파라미터 설정
+                var params = new Array();
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    // 수정된 내역이 있을때만
+                    if(nvl($scope.flex.collectionView.items[i].status, "") === "U") {
+                        params.push($scope.flex.collectionView.items[i]);
                     }
                 }
-
-                // 수정된 내역이 있는지 체크
-                $scope.flex.collectionView.items[i].status = "U";
-            }
-
-            // 발신번호 수정했을때
-            if(nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
-                // 발신번호 필수입력
-                if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
-                    $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
-                    return false;
-                } else {
-                    // 숫자만 입력
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
-                        return false;
-                    }
+                if (params.length <= 0) {
+                    $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    $scope._popMsg(messages["cmm.not.modify"]);
+                    return;
                 }
 
-                // 수정된 내역이 있는지 체크
-                $scope.flex.collectionView.items[i].status = "U";
-            }
-
-            // 통화일시 수정했을때
-            if(nvl($scope.flex.collectionView.items[i].telDt, "") !== nvl($scope.flex.collectionView.items[i].backTelDt, "")) {
-                // 발신번호 필수입력
-                if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
-                    $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
-                    return false;
-                } else {
-                    // 숫자만 입력
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
-                        return false;
-                    }
-                }
-
-                // 수정된 내역이 있는지 체크
-                $scope.flex.collectionView.items[i].status = "U";
-            }
-
-            // 반려사유 수정했을때
-            if(nvl($scope.flex.collectionView.items[i].returnRemark, "") !== nvl($scope.flex.collectionView.items[i].backReturnRemark, "")) {
-                // 발신번호 필수입력
-                if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
-                    $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
-                    return false;
-                } else {
-                    // 숫자만 입력
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
-                        return false;
-                    }
-                }
-
-                // 수정된 내역이 있는지 체크
-                $scope.flex.collectionView.items[i].status = "U";
-            }
-
-            // 비고 수정했을때
-            if(nvl($scope.flex.collectionView.items[i].remark, "") !== nvl($scope.flex.collectionView.items[i].backRemark, "")) {
-                // 발신번호 필수입력
-                if(nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
-                    $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
-                    return false;
-                } else {
-                    // 숫자만 입력
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].telNo)) {
-                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
-                        return false;
-                    }
-                }
-
-                // 수정된 내역이 있는지 체크
-                $scope.flex.collectionView.items[i].status = "U";
-            }
-        }
-
-        $scope._popConfirm(messages["cmm.choo.save"], function() {
-
-            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
-
-            // 파라미터 설정
-            var params = new Array();
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                // 수정된 내역이 있을때만
-                if(nvl($scope.flex.collectionView.items[i].status, "") === "U") {
-                    params.push($scope.flex.collectionView.items[i]);
-                }
-            }
-            if (params.length <= 0) {
-                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                $scope._popMsg(messages["cmm.not.modify"]);
-                return;
-            }
-
-            // 중복체크
-            var chkTelNo = '';
-            var modTelNo = '';
-            var chkParams = {};
-            var msg = '';
-            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                // 처리구분 = 완료이고 수정 시
-                if(nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
-                    if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") !== "2") {
-                        chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
-                    } else if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
-                        if(nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
+                // 중복체크
+                var chkTelNo = '';
+                var modTelNo = '';
+                var chkParams = {};
+                var msg = '';
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    // 처리구분 = 완료이고 수정 시
+                    if(nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
+                        if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") !== "2") {
                             chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
+                        } else if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
+                            if(nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
+                                chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
+                                modTelNo += $scope.flex.collectionView.items[i].backTelNo + ",";
+                            }
+                        }
+                    }
+                    // 처리구분 != 완료이고 수정 시
+                    else if(nvl($scope.flex.collectionView.items[i].addProcFg, "") !== "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
+                        if(nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
                             modTelNo += $scope.flex.collectionView.items[i].backTelNo + ",";
                         }
                     }
                 }
-                // 처리구분 != 완료이고 수정 시
-                else if(nvl($scope.flex.collectionView.items[i].addProcFg, "") !== "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
-                    if(nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
-                        modTelNo += $scope.flex.collectionView.items[i].backTelNo + ",";
-                    }
-                }
-            }
 
-            chkParams.chkTelNo = chkTelNo.substr(0 , chkTelNo.length-1);
-            chkParams.modTelNo = modTelNo.substr(0 , modTelNo.length-1);
+                chkParams.chkTelNo = chkTelNo.substr(0 , chkTelNo.length-1);
+                chkParams.modTelNo = modTelNo.substr(0 , modTelNo.length-1);
 
-            // 수정 값 중복체크
-            var chkTelNoArr = {};
-            var dupTelNo = '';
-            chkTelNoArr = chkParams.chkTelNo.split(",");
-            for(var i=0; i<chkTelNoArr.length; i++){
-                for(var j=0; j<chkTelNoArr.length; j++){
-                    if(i !== j){
-                        if(chkTelNoArr[i] == chkTelNoArr[j]){
-                            dupTelNo += chkTelNoArr[j] + ",";
+                // 수정 값 중복체크
+                var chkTelNoArr = {};
+                var dupTelNo = '';
+                chkTelNoArr = chkParams.chkTelNo.split(",");
+                for(var i=0; i<chkTelNoArr.length; i++){
+                    for(var j=0; j<chkTelNoArr.length; j++){
+                        if(i !== j){
+                            if(chkTelNoArr[i] == chkTelNoArr[j]){
+                                dupTelNo += chkTelNoArr[j] + ",";
+                            }
                         }
                     }
                 }
-            }
 
 
-            if(dupTelNo !== null && dupTelNo !== ""){
-                var msg = messages["smsTelNoStop.dupTelNo"] + "<br/> (";
-                msg += dupTelNo;
-                msg = msg.substr(0,msg.length - 1);
-                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                $scope._popMsg(msg + ")");  //  중복되는 전화번호가 존재합니다. 확인하여 주십시오.
-            }else{
-                if(chkParams.chkTelNo !== null && chkParams.chkTelNo !== ""){
-                    $scope.dupChkTelNo(chkParams,params);
+                if(dupTelNo !== null && dupTelNo !== ""){
+                    var msg = messages["smsTelNoStop.dupTelNo"] + "<br/> (";
+                    msg += dupTelNo;
+                    msg = msg.substr(0,msg.length - 1);
+                    $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    $scope._popMsg(msg + ")");  //  중복되는 전화번호가 존재합니다. 확인하여 주십시오.
                 }else{
-                    $scope.saveSmsGeneralNoManage(params);
+                    if(chkParams.chkTelNo !== null && chkParams.chkTelNo !== ""){
+                        $scope.dupChkTelNo(chkParams,params);
+                    }else{
+                        $scope.saveSmsGeneralNoManage(params);
+                    }
                 }
-            }
 
 
-            // 신규 발신번호 중복체크
-            // $scope._postJSONSave.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
-            //     var result = response.data.data;
-            //     if(result < 1) {
-            //         $scope.saveSmsGeneralNoManage(params);
-            //     } else {
-            //         $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
-            //         return false;
-            //     }
-            // });
+                // 신규 발신번호 중복체크
+                // $scope._postJSONSave.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
+                //     var result = response.data.data;
+                //     if(result < 1) {
+                //         $scope.saveSmsGeneralNoManage(params);
+                //     } else {
+                //         $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
+                //         return false;
+                //     }
+                // });
+            });
+
         });
     });
 

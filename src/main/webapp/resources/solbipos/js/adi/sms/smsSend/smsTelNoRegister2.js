@@ -31,6 +31,13 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
 
     // <-- 검색 호출 -->
     $scope.$on("smsTelNoRegister2Ctrl", function(event, data) {
+        // orgnFg가 HQ 또는 STORE이면 발신번호 유형을 유선번호로 기본 선택
+        if(orgnFg == "HQ" || orgnFg == "STORE") {
+            $('input[name=radioTelFg][value="1"]').prop('checked', true);
+        } else {
+            $('input[name=radioTelFg][value="0"]').prop('checked', true);
+        }
+        $scope.radioTelNoChange();
         event.preventDefault();
     });
     // <-- //검색 호출 -->
