@@ -659,9 +659,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         params.storeCd = storeScope.getSelectedStore().storeCd;
         params.posNo = $scope.getSelectedPosNo();
 
-        $scope.$broadcast('loadingPopupActive');
-        $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/deletePos.sb", params, function () {
-          $scope.$broadcast('loadingPopupInactive');
+        $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/deletePos.sb", params, function () {
           $scope._popMsg(messages["cmm.delSucc"]);
           $("#deletePosPw").val('');
           // 재조회

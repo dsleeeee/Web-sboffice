@@ -1384,14 +1384,14 @@ public class StoreManageServiceImpl implements StoreManageService {
         int installCnt = mapper.chkInstallPos(storePosEnvVO);
 
         if (installCnt > 0) {
-            throw new JsonException(Status.FAIL, messageService.get("storeManage.already.install.pos"));
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeManage.already.install.pos"));
         }
 
         // 매출자료가 있는지 체크 (TB_SL_SALE_HDR)
         int isSale = mapper.chkSaleYn(storePosEnvVO);
 
         if (isSale > 0) {
-            throw new JsonException(Status.FAIL, messageService.get("storeManage.already.sale.pos"));
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("storeManage.already.sale.pos"));
         }
 
         // 포스 환경 삭제 (TB_MS_POS_ENVST)
