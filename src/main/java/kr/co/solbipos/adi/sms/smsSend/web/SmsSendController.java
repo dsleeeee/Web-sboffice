@@ -169,6 +169,12 @@ public class SmsSendController {
 
         int result = smsSendService.getSmsSendReserveSave(smsSendVOs, sessionInfoVO);
 
+        if (result == -1) {
+            HashMap<String, Object> blocked = new HashMap<String, Object>();
+            blocked.put("blocked", true);
+            blocked.put("keyword", smsSendVOs[0].getTriggeredKeyword());
+            return returnJson(Status.OK, blocked);
+        }
         return returnJson(Status.OK, result);
     }
 
@@ -192,6 +198,12 @@ public class SmsSendController {
 
         int result = smsSendService.getSmsSendReserve1000Save(smsSendVO, sessionInfoVO);
 
+        if (result == -1) {
+            HashMap<String, Object> blocked = new HashMap<String, Object>();
+            blocked.put("blocked", true);
+            blocked.put("keyword", smsSendVO.getTriggeredKeyword());
+            return returnJson(Status.OK, blocked);
+        }
         return returnJson(Status.OK, result);
     }
 

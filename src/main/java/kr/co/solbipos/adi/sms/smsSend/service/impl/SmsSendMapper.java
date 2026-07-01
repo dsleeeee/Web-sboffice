@@ -64,4 +64,7 @@ public interface SmsSendMapper {
 
     /** 발신번호추가2 팝업 - 저장 update */
     int getSmsTelNoRegister2SaveUpdate(SmsSendVO smsSendVO);
+
+    /** SMS 전송 MSG_ID 채번(HCS_MSGSS_S 시퀀스 채번) */
+    String getSmsMsgId();
 }

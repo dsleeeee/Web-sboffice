@@ -102,7 +102,7 @@
             SEND_PROC_TIME,
             STD_ID
         ) VALUES (
-            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{msgId}, --MSG_ID,
             #{smsOgnCd}, --USER_ID,
             #{reserveYn}, --SCHEDULE_TYPE,
             #{regDt}, --NOW_DATE,
@@ -172,7 +172,7 @@
             SEND_PROC_TIME,
             STD_ID
         ) VALUES (
-            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{msgId}, --MSG_ID,
             #{smsOgnCd}, --USER_ID,
             #{reserveYn}, --SCHEDULE_TYPE,
             #{regDt}, --NOW_DATE,
@@ -250,7 +250,7 @@
             HCS_SMS_READY_REG_S.NEXTVAL, --SMS_READY_SEQ,
             #{smsSendSeq}, --SMS_SEND_SEQ,
             '0', --READY_FG,
-            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{msgId}, --MSG_ID,
             #{smsOgnCd}, --USER_ID,
             #{reserveYn}, --SCHEDULE_TYPE,
             #{regDt}, --NOW_DATE,
@@ -330,7 +330,7 @@
             HCS_SMS_READY_REG_S.NEXTVAL, --SMS_READY_SEQ,
             #{smsSendSeq}, --SMS_SEND_SEQ,
             '0', --READY_FG,
-            HCS_MSGSS_S.NEXTVAL, --MSG_ID,
+            #{msgId}, --MSG_ID,
             #{smsOgnCd}, --USER_ID,
             #{reserveYn}, --SCHEDULE_TYPE,
             #{regDt}, --NOW_DATE,
@@ -621,7 +621,7 @@
             #{smsOgnCd},
             #{smsSendSeq},
             #{smsSendCount},
-            HCS_MSGSS_S.NEXTVAL,
+            #{msgId},
             #{msgType}, -- 1:SMS 2:LMS 3:MMS
             #{title},
             #{content},
@@ -745,4 +745,13 @@
         AND CERT_ID = #{certId}
     </update>
 
+    <!-- SMS 전송 MSG_ID 채번(HCS_MSGSS_S 시퀀스 채번) -->
+    <!--
+        TABLE    :
+        COMMENTS : SMS 전송 MSG_ID 채번(HCS_MSGSS_S 시퀀스 채번)
+    -->
+    <select id="getSmsMsgId" resultType="string">
+        /* SmsSendMapper.getSmsMsgId */
+        SELECT HCS_MSGSS_S.NEXTVAL FROM DUAL
+    </select>
 </mapper>

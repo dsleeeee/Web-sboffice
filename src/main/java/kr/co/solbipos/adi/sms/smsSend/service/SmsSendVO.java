@@ -195,227 +195,564 @@ public class SmsSendVO extends PageVO {
     /** 원본파일명3 */
     private String fileOrgNm3;
 
-    public String getOrgnFg() { return orgnFg; }
+    /** SMS 메시지 Id */
+    private String msgId;
 
-    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+    // ------------------------------------------------------------------ //
+    // 금칙어 필터링 관련 필드
+    // ------------------------------------------------------------------ //
+    /** 탐지 유형 (keyword / url / combined) */
+    private String blockType;
 
-    public String getOrgnCd() { return orgnCd; }
+    /** 탐지된 금칙어 ID (BADWORD.ID) */
+    private Long triggeredKeywordId;
 
-    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+    /** 악성 판정된 URL */
+    private String triggeredUrl;
 
-    public String getHqOfficeCd() { return hqOfficeCd; }
+    /** URL 판정 소스 (kisa_xray, google_sb 등) */
+    private String urlCheckSource;
 
-    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
+    /** 처리 결과 ('blocked','held','warned','allowed') */
+    private String triggeredStatus;
 
-    public String getStoreCd() { return storeCd; }
+    /** 관리자 검토 ID (보류 시) */
+    private String adminReviewId;
 
-    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+    /** 메시지 앞 100자 (개인정보 최소화 원칙) */
+    private String messageSnippet;
 
-    public String getStoreNm() { return storeNm; }
+    /** MESSAGE_BLOCK_LOG PK — selectKey 채번 후 ADMIN_REVIEW_QUEUE INSERT 시 재사용 */
+    private Long blockLogId;
 
-    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+    /** 탐지된 금칙어 원문 (사용자 응답 메시지용) */
+    private String triggeredKeyword;
 
-    public String getAgencyCd() { return agencyCd; }
+    public String getOrgnFg() {
+        return orgnFg;
+    }
 
-    public void setAgencyCd(String agencyCd) { this.agencyCd = agencyCd; }
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
-    public String getUserId() { return userId; }
+    public String getOrgnCd() {
+        return orgnCd;
+    }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
+    }
 
-    public String getSmsQty() { return smsQty; }
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
 
-    public void setSmsQty(String smsQty) {  this.smsQty = smsQty; }
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
-    public String getSmsAmt() { return smsAmt; }
+    public String getStoreCd() {
+        return storeCd;
+    }
 
-    public void setSmsAmt(String smsAmt) {  this.smsAmt = smsAmt; }
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
 
-    public String getTitle() { return title; }
+    public String getStoreNm() {
+        return storeNm;
+    }
 
-    public void setTitle(String title) { this.title = title; }
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
 
-    public String getContent() { return content; }
+    public String getAgencyCd() {
+        return agencyCd;
+    }
 
-    public void setContent(String content) { this.content = content; }
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
 
-    public String getReserveYn() { return reserveYn; }
+    public String getUserId() {
+        return userId;
+    }
 
-    public void setReserveYn(String reserveYn) { this.reserveYn = reserveYn; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-    public String getRrOrgnCd() { return rrOrgnCd; }
+    public String getSmsQty() {
+        return smsQty;
+    }
 
-    public void setRrOrgnCd(String rrOrgnCd) { this.rrOrgnCd = rrOrgnCd; }
+    public void setSmsQty(String smsQty) {
+        this.smsQty = smsQty;
+    }
 
-    public String getRrOrgnFg() { return rrOrgnFg; }
+    public String getSmsAmt() {
+        return smsAmt;
+    }
 
-    public void setRrOrgnFg(String rrOrgnFg) { this.rrOrgnFg = rrOrgnFg; }
+    public void setSmsAmt(String smsAmt) {
+        this.smsAmt = smsAmt;
+    }
 
-    public String getRrUserId() { return rrUserId; }
+    public String getTitle() {
+        return title;
+    }
 
-    public void setRrUserId(String rrUserId) { this.rrUserId = rrUserId; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getSsOrgnCd() { return ssOrgnCd; }
+    public String getContent() {
+        return content;
+    }
 
-    public void setSsOrgnCd(String ssOrgnCd) { this.ssOrgnCd = ssOrgnCd; }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-    public String getSsOrgnFg() { return ssOrgnFg; }
+    public String getReserveYn() {
+        return reserveYn;
+    }
 
-    public void setSsOrgnFg(String ssOrgnFg) { this.ssOrgnFg = ssOrgnFg; }
+    public void setReserveYn(String reserveYn) {
+        this.reserveYn = reserveYn;
+    }
 
-    public String getSsUserId() { return ssUserId; }
+    public String getRrOrgnCd() {
+        return rrOrgnCd;
+    }
 
-    public void setSsUserId(String ssUserId) { this.ssUserId = ssUserId; }
+    public void setRrOrgnCd(String rrOrgnCd) {
+        this.rrOrgnCd = rrOrgnCd;
+    }
 
-    public String getMsgType() { return msgType; }
+    public String getRrOrgnFg() {
+        return rrOrgnFg;
+    }
 
-    public void setMsgType(String msgType) { this.msgType = msgType; }
+    public void setRrOrgnFg(String rrOrgnFg) {
+        this.rrOrgnFg = rrOrgnFg;
+    }
 
-    public String getSmsOgnCd() { return smsOgnCd; }
+    public String getRrUserId() {
+        return rrUserId;
+    }
 
-    public void setSmsOgnCd(String smsOgnCd) { this.smsOgnCd = smsOgnCd; }
+    public void setRrUserId(String rrUserId) {
+        this.rrUserId = rrUserId;
+    }
 
-    public String getCstOgnCd() { return cstOgnCd; }
+    public String getSsOrgnCd() {
+        return ssOrgnCd;
+    }
 
-    public void setCstOgnCd(String cstOgnCd) { this.cstOgnCd = cstOgnCd; }
+    public void setSsOrgnCd(String ssOrgnCd) {
+        this.ssOrgnCd = ssOrgnCd;
+    }
 
-    public String getCstNo() { return cstNo; }
+    public String getSsOrgnFg() {
+        return ssOrgnFg;
+    }
 
-    public void setCstNo(String cstNo) { this.cstNo = cstNo; }
+    public void setSsOrgnFg(String ssOrgnFg) {
+        this.ssOrgnFg = ssOrgnFg;
+    }
 
-    public String getSendDate() { return sendDate; }
+    public String getSsUserId() {
+        return ssUserId;
+    }
 
-    public void setSendDate(String sendDate) { this.sendDate = sendDate; }
+    public void setSsUserId(String ssUserId) {
+        this.ssUserId = ssUserId;
+    }
 
-    public String getCallback() { return callback; }
+    public String getMsgType() {
+        return msgType;
+    }
 
-    public void setCallback(String callback) { this.callback = callback; }
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
+    }
 
-    public String getPhoneNumber() { return phoneNumber; }
+    public String getSmsOgnCd() {
+        return smsOgnCd;
+    }
 
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setSmsOgnCd(String smsOgnCd) {
+        this.smsOgnCd = smsOgnCd;
+    }
 
-    public String getContentCount() { return contentCount; }
+    public String getCstOgnCd() {
+        return cstOgnCd;
+    }
 
-    public void setContentCount(String contentCount) { this.contentCount = contentCount; }
+    public void setCstOgnCd(String cstOgnCd) {
+        this.cstOgnCd = cstOgnCd;
+    }
 
-    public String getContentData() { return contentData; }
+    public String getCstNo() {
+        return cstNo;
+    }
 
-    public void setContentData(String contentData) { this.contentData = contentData; }
+    public void setCstNo(String cstNo) {
+        this.cstNo = cstNo;
+    }
 
-    public String getEmpNo() { return empNo; }
+    public String getSendDate() {
+        return sendDate;
+    }
 
-    public void setEmpNo(String empNo) { this.empNo = empNo; }
+    public void setSendDate(String sendDate) {
+        this.sendDate = sendDate;
+    }
 
-    public String getEmpNm() { return empNm; }
+    public String getCallback() {
+        return callback;
+    }
 
-    public void setEmpNm(String empNm) { this.empNm = empNm; }
+    public void setCallback(String callback) {
+        this.callback = callback;
+    }
 
-    public String getMpNo() { return mpNo; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    public void setMpNo(String mpNo) { this.mpNo = mpNo; }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-    public String getSmsRecvYn() { return smsRecvYn; }
+    public String getContentCount() {
+        return contentCount;
+    }
 
-    public void setSmsRecvYn(String smsRecvYn) { this.smsRecvYn = smsRecvYn; }
+    public void setContentCount(String contentCount) {
+        this.contentCount = contentCount;
+    }
 
-    public String getServiceFg() { return serviceFg; }
+    public String getContentData() {
+        return contentData;
+    }
 
-    public void setServiceFg(String serviceFg) { this.serviceFg = serviceFg; }
+    public void setContentData(String contentData) {
+        this.contentData = contentData;
+    }
 
-    public String getPageGubun() { return pageGubun; }
+    public String getEmpNo() {
+        return empNo;
+    }
 
-    public void setPageGubun(String pageGubun) { this.pageGubun = pageGubun; }
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
 
-    public String getSrchOrgnFg() { return srchOrgnFg; }
+    public String getEmpNm() {
+        return empNm;
+    }
 
-    public void setSrchOrgnFg(String srchOrgnFg) { this.srchOrgnFg = srchOrgnFg; }
+    public void setEmpNm(String empNm) {
+        this.empNm = empNm;
+    }
 
-    public String getSmsSendSeq() { return smsSendSeq; }
+    public String getMpNo() {
+        return mpNo;
+    }
 
-    public void setSmsSendSeq(String smsSendSeq) { this.smsSendSeq = smsSendSeq; }
+    public void setMpNo(String mpNo) {
+        this.mpNo = mpNo;
+    }
 
-    public String getSmsSendCount() { return smsSendCount; }
+    public String getSmsRecvYn() {
+        return smsRecvYn;
+    }
 
-    public void setSmsSendCount(String smsSendCount) { this.smsSendCount = smsSendCount; }
+    public void setSmsRecvYn(String smsRecvYn) {
+        this.smsRecvYn = smsRecvYn;
+    }
 
-    public String getSmsSendListCnt() { return smsSendListCnt; }
+    public String getServiceFg() {
+        return serviceFg;
+    }
 
-    public void setSmsSendListCnt(String smsSendListCnt) { this.smsSendListCnt = smsSendListCnt; }
+    public void setServiceFg(String serviceFg) {
+        this.serviceFg = serviceFg;
+    }
 
-    public String getMsgOneAmt() { return msgOneAmt; }
+    public String getPageGubun() {
+        return pageGubun;
+    }
 
-    public void setMsgOneAmt(String msgOneAmt) { this.msgOneAmt = msgOneAmt; }
+    public void setPageGubun(String pageGubun) {
+        this.pageGubun = pageGubun;
+    }
 
-    public String getAddFg() { return addFg; }
+    public String getSrchOrgnFg() {
+        return srchOrgnFg;
+    }
 
-    public void setAddFg(String addFg) { this.addFg = addFg; }
+    public void setSrchOrgnFg(String srchOrgnFg) {
+        this.srchOrgnFg = srchOrgnFg;
+    }
 
-    public String getFileUrl() { return fileUrl; }
+    public String getSmsSendSeq() {
+        return smsSendSeq;
+    }
 
-    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
+    public void setSmsSendSeq(String smsSendSeq) {
+        this.smsSendSeq = smsSendSeq;
+    }
 
-    public String getFileNm() { return fileNm; }
+    public String getSmsSendCount() {
+        return smsSendCount;
+    }
 
-    public void setFileNm(String fileNm) { this.fileNm = fileNm; }
+    public void setSmsSendCount(String smsSendCount) {
+        this.smsSendCount = smsSendCount;
+    }
 
-    public String getFileOrgNm() { return fileOrgNm; }
+    public String getSmsSendListCnt() {
+        return smsSendListCnt;
+    }
 
-    public void setFileOrgNm(String fileOrgNm) { this.fileOrgNm = fileOrgNm; }
+    public void setSmsSendListCnt(String smsSendListCnt) {
+        this.smsSendListCnt = smsSendListCnt;
+    }
 
-    public String getCertId() { return certId; }
+    public String getMsgOneAmt() {
+        return msgOneAmt;
+    }
 
-    public void setCertId(String certId) { this.certId = certId; }
+    public void setMsgOneAmt(String msgOneAmt) {
+        this.msgOneAmt = msgOneAmt;
+    }
 
-    public String getTelFg() { return telFg; }
+    public String getAddFg() {
+        return addFg;
+    }
 
-    public void setTelFg(String telFg) { this.telFg = telFg; }
+    public void setAddFg(String addFg) {
+        this.addFg = addFg;
+    }
 
-    public String getAddSmsFg() { return addSmsFg; }
+    public String getFileUrl() {
+        return fileUrl;
+    }
 
-    public void setAddSmsFg(String addSmsFg) { this.addSmsFg = addSmsFg; }
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
 
-    public String getAddSmsUserNm() { return addSmsUserNm; }
+    public String getFileNm() {
+        return fileNm;
+    }
 
-    public void setAddSmsUserNm(String addSmsUserNm) { this.addSmsUserNm = addSmsUserNm; }
+    public void setFileNm(String fileNm) {
+        this.fileNm = fileNm;
+    }
 
-    public String getAddSmsTelNo() { return addSmsTelNo; }
+    public String getFileOrgNm() {
+        return fileOrgNm;
+    }
 
-    public void setAddSmsTelNo(String addSmsTelNo) { this.addSmsTelNo = addSmsTelNo; }
+    public void setFileOrgNm(String fileOrgNm) {
+        this.fileOrgNm = fileOrgNm;
+    }
 
-    public String getFileUrl1() { return fileUrl1; }
+    public String getCertId() {
+        return certId;
+    }
 
-    public void setFileUrl1(String fileUrl1) { this.fileUrl1 = fileUrl1; }
+    public void setCertId(String certId) {
+        this.certId = certId;
+    }
 
-    public String getFileNm1() { return fileNm1; }
+    public String getTelFg() {
+        return telFg;
+    }
 
-    public void setFileNm1(String fileNm1) { this.fileNm1 = fileNm1; }
+    public void setTelFg(String telFg) {
+        this.telFg = telFg;
+    }
 
-    public String getFileOrgNm1() { return fileOrgNm1; }
+    public String getAddSmsFg() {
+        return addSmsFg;
+    }
 
-    public void setFileOrgNm1(String fileOrgNm1) { this.fileOrgNm1 = fileOrgNm1; }
+    public void setAddSmsFg(String addSmsFg) {
+        this.addSmsFg = addSmsFg;
+    }
 
-    public String getFileUrl2() { return fileUrl2; }
+    public String getAddSmsUserNm() {
+        return addSmsUserNm;
+    }
 
-    public void setFileUrl2(String fileUrl2) { this.fileUrl2 = fileUrl2; }
+    public void setAddSmsUserNm(String addSmsUserNm) {
+        this.addSmsUserNm = addSmsUserNm;
+    }
 
-    public String getFileNm2() { return fileNm2; }
+    public String getAddSmsTelNo() {
+        return addSmsTelNo;
+    }
 
-    public void setFileNm2(String fileNm2) { this.fileNm2 = fileNm2; }
+    public void setAddSmsTelNo(String addSmsTelNo) {
+        this.addSmsTelNo = addSmsTelNo;
+    }
 
-    public String getFileOrgNm2() { return fileOrgNm2; }
+    public String getFileUrl1() {
+        return fileUrl1;
+    }
 
-    public void setFileOrgNm2(String fileOrgNm2) { this.fileOrgNm2 = fileOrgNm2; }
+    public void setFileUrl1(String fileUrl1) {
+        this.fileUrl1 = fileUrl1;
+    }
 
-    public String getFileUrl3() { return fileUrl3; }
+    public String getFileNm1() {
+        return fileNm1;
+    }
 
-    public void setFileUrl3(String fileUrl3) { this.fileUrl3 = fileUrl3; }
+    public void setFileNm1(String fileNm1) {
+        this.fileNm1 = fileNm1;
+    }
 
-    public String getFileNm3() { return fileNm3; }
+    public String getFileOrgNm1() {
+        return fileOrgNm1;
+    }
 
-    public void setFileNm3(String fileNm3) { this.fileNm3 = fileNm3; }
+    public void setFileOrgNm1(String fileOrgNm1) {
+        this.fileOrgNm1 = fileOrgNm1;
+    }
 
-    public String getFileOrgNm3() { return fileOrgNm3; }
+    public String getFileUrl2() {
+        return fileUrl2;
+    }
 
-    public void setFileOrgNm3(String fileOrgNm3) { this.fileOrgNm3 = fileOrgNm3; }
+    public void setFileUrl2(String fileUrl2) {
+        this.fileUrl2 = fileUrl2;
+    }
+
+    public String getFileNm2() {
+        return fileNm2;
+    }
+
+    public void setFileNm2(String fileNm2) {
+        this.fileNm2 = fileNm2;
+    }
+
+    public String getFileOrgNm2() {
+        return fileOrgNm2;
+    }
+
+    public void setFileOrgNm2(String fileOrgNm2) {
+        this.fileOrgNm2 = fileOrgNm2;
+    }
+
+    public String getFileUrl3() {
+        return fileUrl3;
+    }
+
+    public void setFileUrl3(String fileUrl3) {
+        this.fileUrl3 = fileUrl3;
+    }
+
+    public String getFileNm3() {
+        return fileNm3;
+    }
+
+    public void setFileNm3(String fileNm3) {
+        this.fileNm3 = fileNm3;
+    }
+
+    public String getFileOrgNm3() {
+        return fileOrgNm3;
+    }
+
+    public void setFileOrgNm3(String fileOrgNm3) {
+        this.fileOrgNm3 = fileOrgNm3;
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+
+    public String getBlockType() {
+        return blockType;
+    }
+
+    public void setBlockType(String blockType) {
+        this.blockType = blockType;
+    }
+
+    public Long getTriggeredKeywordId() {
+        return triggeredKeywordId;
+    }
+
+    public void setTriggeredKeywordId(Long triggeredKeywordId) {
+        this.triggeredKeywordId = triggeredKeywordId;
+    }
+
+    public String getTriggeredUrl() {
+        return triggeredUrl;
+    }
+
+    public void setTriggeredUrl(String triggeredUrl) {
+        this.triggeredUrl = triggeredUrl;
+    }
+
+    public String getUrlCheckSource() {
+        return urlCheckSource;
+    }
+
+    public void setUrlCheckSource(String urlCheckSource) {
+        this.urlCheckSource = urlCheckSource;
+    }
+
+    public String getTriggeredStatus() {
+        return triggeredStatus;
+    }
+
+    public void setTriggeredStatus(String triggeredStatus) {
+        this.triggeredStatus = triggeredStatus;
+    }
+
+    public String getAdminReviewId() {
+        return adminReviewId;
+    }
+
+    public void setAdminReviewId(String adminReviewId) {
+        this.adminReviewId = adminReviewId;
+    }
+
+    public String getMessageSnippet() {
+        return messageSnippet;
+    }
+
+    public void setMessageSnippet(String messageSnippet) {
+        this.messageSnippet = messageSnippet;
+    }
+
+    public Long getBlockLogId() {
+        return blockLogId;
+    }
+
+    public void setBlockLogId(Long blockLogId) {
+        this.blockLogId = blockLogId;
+    }
+
+    public String getTriggeredKeyword() {
+        return triggeredKeyword;
+    }
+
+    public void setTriggeredKeyword(String triggeredKeyword) {
+        this.triggeredKeyword = triggeredKeyword;
+    }
 }

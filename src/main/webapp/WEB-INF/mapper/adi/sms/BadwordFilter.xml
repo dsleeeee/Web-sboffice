@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BadwordFilter.xml
+    금칙어 필터링
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.06.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.badword.service.impl.BadwordFilterMapper">
+
+    <!-- 활성 금칙어 전체 목록 조회 (in-memory 캐시 초기 로드용) -->
+    <!--
+        TABLE    : BADWORD
+        COMMENTS : 금칙어 마스터
+    -->
+    <select id="selectActiveBadwordList" resultType="badwordVO">
+        /* BadwordFilterMapper.selectActiveBadwordList */
+        SELECT  ID,
+                KEYWORD,
+                KEYWORD_NORMALIZED,
+                CATEGORY,
+                MATCH_TYPE,
+                SEVERITY,
+                SOURCE,
+                IS_ACTIVE
+        FROM    BADWORD
+        WHERE   IS_ACTIVE = '1'
+        ORDER
+        BY      ID
+    </select>
+
+    <!-- 모든 검사 이력 저장 insert (탐지 여부와 관계없이 항상 적재) -->
+    <!--
+        TABLE    : MESSAGE_BLOCK_LOG
+        COMMENTS : SMS 필터링 검사 전체 이력 (STATUS: PASSED / BLOCKED / PENDING)
+    -->
+    <insert id="insertMessageBlockLog" parameterType="SmsSendVO">
+        /* BadwordFilterMapper.insertMessageBlockLog */
+        <!-- 시퀀스를 미리 채번해서 blockLogId 에 저장 → ADMIN_REVIEW_QUEUE INSERT 시 재사용 -->
+        <selectKey keyProperty="blockLogId" resultType="long" order="BEFORE">
+            SELECT MESSAGE_BLOCK_LOG_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO MESSAGE_BLOCK_LOG
+        (
+            ID,
+            ACCOUNT_ID,
+            MESSAGE_ID,
+            BLOCK_TYPE,
+            TRIGGERED_KEYWORD_ID,
+            TRIGGERED_URL,
+            URL_CHECK_SOURCE,
+            STATUS,
+            ADMIN_REVIEW_ID,
+            MESSAGE_SNIPPET,
+            CREATED_AT,
+            SMS_SEND_SEQ,
+            CALLBACK,
+            S_OGN_CD,
+            S_OGN_FG,
+            S_USER_ID
+        )
+        VALUES
+        (
+            #{blockLogId},
+            #{ssUserId},
+            #{msgId},
+            #{blockType},
+            #{triggeredKeywordId},
+            #{triggeredUrl},
+            #{urlCheckSource},
+            CASE
+                WHEN #{triggeredStatus} = 'block' THEN 'blocked'
+                WHEN #{triggeredStatus} = 'hold'  THEN 'held'
+                WHEN #{triggeredStatus} = 'warn'  THEN 'warned'
+                ELSE                                   'allowed'
+            END,
+            #{adminReviewId},
+            #{messageSnippet},
+            #{regDt},
+            #{smsSendSeq},
+            SBPENC.E(#{callback}),
+            #{ssOrgnCd},
+            #{ssOrgnFg},
+            #{ssUserId}
+        )
+    </insert>
+
+    <!-- 보류(hold) 건 관리자 검토 큐 등록 -->
+    <!--
+        TABLE    : ADMIN_REVIEW_QUEUE
+        COMMENTS : 보류 건 관리자 검토 큐
+    -->
+    <insert id="insertAdminReviewQueue" parameterType="SmsSendVO">
+        /* BadwordFilterMapper.insertAdminReviewQueue */
+        INSERT INTO ADMIN_REVIEW_QUEUE
+        (
+            ID,
+            BLOCK_LOG_ID,
+            STATUS,
+            CREATED_AT
+        )
+        VALUES
+        (
+            ADMIN_REVIEW_QUEUE_SEQ.NEXTVAL,
+            #{blockLogId},
+            'pending',
+            #{regDt}
+        )
+    </insert>
+
+</mapper>

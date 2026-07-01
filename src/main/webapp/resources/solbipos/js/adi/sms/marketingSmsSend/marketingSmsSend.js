@@ -848,7 +848,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             params.msgOneAmt = msgOneAmt; // 메세지별 건당금액
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){
+            $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(response){
+                // 금칙어 탐지 시 발송제한
+                if (response.data.data && response.data.data.blocked) {
+                    $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                }
+                // 갱신
                 $scope.allSearch();
 
                 // 20240528 운영중에는 실시간 전송이 되니까 count 안맞음으로 인한 오류로 제거
@@ -893,7 +898,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 }
             }
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch(); });
+            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function (response) {
+                // 금칙어 탐지 시 발송제한
+                if (response.data.data && response.data.data.blocked) {
+                    $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                }
+                // 갱신
+                $scope.allSearch();
+            });
         }
     };
 
