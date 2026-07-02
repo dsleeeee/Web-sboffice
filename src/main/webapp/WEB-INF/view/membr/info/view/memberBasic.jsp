@@ -39,7 +39,7 @@
                     <%-- 회원명 --%>
                     <th><s:message code="regist.membr.nm"/></th>
                     <td>
-                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" class="sb-input w100" maxlength="30" required>
+                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" class="sb-input w100" maxlength="10" required>
                     </td>
                     <%-- 회원명영문 --%>
                     <th><s:message code="regist.membr.nm.eng"/></th>
@@ -51,7 +51,7 @@
                     <%-- 회원카드번호 --%>
                     <th><s:message code="regist.membr.card.no"/></th>
                     <td>
-                        <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo" class="sb-input w100" maxlength="30" required  ng-disabled="member.membrNo !== '자동채번'">
+                        <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo" class="sb-input w100" maxlength="40" required  ng-disabled="member.membrNo !== '자동채번'" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();">
                     </td>
                     <%-- 카드사용구분 --%>
                     <th><s:message code="regist.membr.card.yn"/></th>
@@ -107,7 +107,7 @@
                     <%-- 연락처 --%>
                     <th><s:message code="regist.tel"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="telNo" name="telNo" ng-model="member.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
+                        <input type="text" id="telNo" name="telNo" ng-model="member.telNo" class="sb-input w100" maxlength="12" placeholder="8~12자리" required onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     </td>
                     <%-- 핸드폰번호 --%>
                     <th style="display:none;"><s:message code="regist.phone.no"/><em class="imp">*</em></th>
@@ -725,4 +725,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20250916.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20260625.01" charset="utf-8"></script>

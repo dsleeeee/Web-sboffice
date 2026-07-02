@@ -1258,7 +1258,9 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT thtk.TUKEY_CLASS_CD,
+                SELECT thtk.TUKEY_GRP_CD,
+                       thtkg.TUKEY_GRP_NM,
+                       thtk.TUKEY_CLASS_CD,
                        thtkc.TUKEY_CLASS_NM,
                        thtk.PAGE_NO,
                        thp.PROD_CD,
@@ -1269,8 +1271,9 @@
                        thtk.TUKEY_GRP_CD
                   FROM TB_HQ_TOUCH_KEY thtk,
                 	   TB_HQ_TOUCH_KEY_CLASS thtkc,
-                       TB_HQ_PRODUCT thp
-                 WHERE thtk.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                       TB_HQ_PRODUCT thp,
+                       TB_HQ_TOUCH_KEY_GROUP thtkg
+                WHERE thtk.HQ_OFFICE_CD 	= #{hqOfficeCd}
                    AND thtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
                    AND thtkc.HQ_OFFICE_CD   = thtk.HQ_OFFICE_CD
                    AND thtkc.TUKEY_GRP_CD   = thtk.TUKEY_GRP_CD
@@ -1278,8 +1281,12 @@
                    AND thp.HQ_OFFICE_CD (+) = thtk.HQ_OFFICE_CD
                    AND thp.PROD_CD      (+) = thtk.PROD_CD
                    AND thp.PROD_CD IS NULL --  상품마스터에 없는 경우(매장)
-                 UNION
-                SELECT thtk.TUKEY_CLASS_CD,
+                   AND thtkg.HQ_OFFICE_CD 	=	thtk.HQ_OFFICE_CD
+                   AND thtkg.TUKEY_GRP_CD 	=	thtk.TUKEY_GRP_CD
+                UNION
+                SELECT thtk.TUKEY_GRP_CD,
+                       thtkg.TUKEY_GRP_NM,
+                       thtk.TUKEY_CLASS_CD,
                        thtkc.TUKEY_CLASS_NM,
                        thtk.PAGE_NO,
                        thp.PROD_CD,
@@ -1290,7 +1297,8 @@
                        thtk.TUKEY_GRP_CD
                   FROM TB_HQ_TOUCH_KEY thtk,
                 	   TB_HQ_TOUCH_KEY_CLASS thtkc,
-                       TB_HQ_PRODUCT thp
+                       TB_HQ_PRODUCT thp,
+                       TB_HQ_TOUCH_KEY_GROUP thtkg
                  WHERE thtk.HQ_OFFICE_CD 	= #{hqOfficeCd}
                    AND thtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
                    AND thtkc.HQ_OFFICE_CD   = thtk.HQ_OFFICE_CD
@@ -1298,6 +1306,8 @@
                    AND thtkc.TUKEY_CLASS_CD = thtk.TUKEY_CLASS_CD
                    AND thp.HQ_OFFICE_CD     = thtk.HQ_OFFICE_CD
                    AND thp.PROD_CD          = thtk.PROD_CD
+                   AND thtkg.HQ_OFFICE_CD 	=	thtk.HQ_OFFICE_CD
+                   AND thtkg.TUKEY_GRP_CD 	=	thtk.TUKEY_GRP_CD
                    AND (
                         thp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
                         OR  thp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
@@ -1309,7 +1319,9 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT tmtk.TUKEY_CLASS_CD,
+                SELECT tmtk.TUKEY_GRP_CD,
+                       tmtkg.TUKEY_GRP_NM,
+                       tmtk.TUKEY_CLASS_CD,
                        tmtkc.TUKEY_CLASS_NM,
                        tmtk.PAGE_NO,
                        tmp.PROD_CD,
@@ -1320,7 +1332,8 @@
                        tmtk.TUKEY_GRP_CD
                   FROM TB_MS_TOUCH_KEY tmtk,
                 	   TB_MS_TOUCH_KEY_CLASS tmtkc,
-                 	   TB_MS_PRODUCT tmp
+                 	   TB_MS_PRODUCT tmp,
+                       TB_MS_TOUCH_KEY_GROUP tmtkg
                  WHERE tmtk.STORE_CD 	    = #{storeCd}
                    AND tmtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
                    AND tmtkc.STORE_CD       = tmtk.STORE_CD
@@ -1329,8 +1342,12 @@
                    AND tmp.STORE_CD     (+) = tmtk.STORE_CD
                    AND tmp.PROD_CD      (+) = tmtk.PROD_CD
                    AND tmp.PROD_CD IS NULL --  상품마스터에 없는 경우(매장)
+                   AND tmtkg.STORE_CD       = tmtk.STORE_CD
+                   AND tmtkg.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
                  UNION
-                SELECT tmtk.TUKEY_CLASS_CD,
+                SELECT tmtk.TUKEY_GRP_CD,
+                       tmtkg.TUKEY_GRP_NM,
+                       tmtk.TUKEY_CLASS_CD,
                        tmtkc.TUKEY_CLASS_NM,
                        tmtk.PAGE_NO,
                        tmp.PROD_CD,
@@ -1341,7 +1358,8 @@
                        tmtk.TUKEY_GRP_CD             -- 터치키분류정보, 터치키정보, 상품정보
                   FROM TB_MS_TOUCH_KEY tmtk,
                 	   TB_MS_TOUCH_KEY_CLASS tmtkc,
-                 	   TB_MS_PRODUCT tmp
+                 	   TB_MS_PRODUCT tmp,
+                       TB_MS_TOUCH_KEY_GROUP tmtkg
                  WHERE tmtk.STORE_CD 	    = #{storeCd}
                    AND tmtk.TUKEY_GRP_CD    = #{tukeyGrpCd}
                    AND tmtkc.STORE_CD       = tmtk.STORE_CD
@@ -1349,6 +1367,8 @@
                    AND tmtkc.TUKEY_CLASS_CD = tmtk.TUKEY_CLASS_CD
                    AND tmp.STORE_CD         = tmtk.STORE_CD
                    AND tmp.PROD_CD          = tmtk.PROD_CD
+                   AND tmtkg.STORE_CD       = tmtk.STORE_CD
+                   AND tmtkg.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
                    AND (
                         tmp.SALE_PROD_YN = 'N'     -- 상품 '판매상품여부'  - '미판매상품' 인 경우
                         OR  tmp.USE_YN   = 'N'     -- 상품 '사용여부'      - '미사용' 인 경우
@@ -1496,6 +1516,7 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT 	DISTINCT thtkc.TUKEY_GRP_CD
                 ,       thtkg.TUKEY_GRP_NM
+                ,       NVL(thtkg.DISPLAY_YN, 'Y')  AS DISPLAY_YN
                 FROM 	TB_HQ_TOUCH_KEY_CLASS thtkc
                 ,		TB_HQ_TOUCH_KEY_GROUP thtkg
                 WHERE	thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD (+)
@@ -1507,6 +1528,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT	DISTINCT tmtkc.TUKEY_GRP_CD
                 ,       tmtkg.TUKEY_GRP_NM
+                ,       NVL(tmtkg.DISPLAY_YN, 'Y')  AS DISPLAY_YN
                 FROM 	TB_MS_TOUCH_KEY_CLASS tmtkc
                 ,		TB_MS_TOUCH_KEY_GROUP tmtkg
                 WHERE	tmtkc.STORE_CD = tmtkg.STORE_CD (+)
@@ -1540,6 +1562,7 @@
                 TUKEY_GRP_NM   = #{tukeyGrpNm}
             ,   MOD_DT      = #{modDt}
             ,   MOD_ID      = #{modId}
+            ,   DISPLAY_YN  = #{displayYn}
             WHEN NOT MATCHED THEN
             INSERT
             (
@@ -1550,6 +1573,7 @@
             ,   REG_ID
             ,   MOD_DT
             ,   MOD_ID
+            ,   DISPLAY_YN
             )
             VALUES
             (
@@ -1560,6 +1584,7 @@
             ,   #{regId}
             ,   #{modDt}
             ,   #{modId}
+            ,   #{displayYn}
             )
             </when>
             <!-- 매장 -->
@@ -1576,6 +1601,7 @@
                 TUKEY_GRP_NM   = #{tukeyGrpNm}
             ,   MOD_DT      = #{modDt}
             ,   MOD_ID      = #{modId}
+            ,   DISPLAY_YN  = #{displayYn}
             WHEN NOT MATCHED THEN
             INSERT
             (
@@ -1586,6 +1612,7 @@
             ,   REG_ID
             ,   MOD_DT
             ,   MOD_ID
+            ,   DISPLAY_YN
             )
             VALUES
             (
@@ -1596,6 +1623,7 @@
             ,   #{regId}
             ,   #{modDt}
             ,   #{modId}
+            ,   #{displayYn}
             )
             </when>
         </choose>
@@ -2594,6 +2622,7 @@
                 WHERE   thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD(+)
                 AND     thtkc.TUKEY_GRP_CD = thtkg.TUKEY_GRP_CD(+)
+                AND 	NVL(thtkg.DISPLAY_YN,'Y') 	=	'Y'
                 ORDER BY thtkc.TUKEY_GRP_CD
             </when>
             <!-- 매장 -->
@@ -2605,6 +2634,7 @@
                 WHERE   tmtkc.STORE_CD = #{storeCd}
                 AND     tmtkc.STORE_CD = tmtkg.STORE_CD(+)
                 AND     tmtkc.TUKEY_GRP_CD = tmtkg.TUKEY_GRP_CD(+)
+                AND 	NVL(tmtkg.DISPLAY_YN,'Y') 	=	'Y'
                 ORDER BY DECODE(tmtkc.TUKEY_GRP_CD, #{envstVal}, 1), tmtkc.TUKEY_GRP_CD
             </when>
         </choose>
@@ -4215,6 +4245,7 @@
                     ,       #{regId}       AS REG_ID
                     ,       #{modDt}       AS MOD_DT
                     ,       #{modId}       AS MOD_ID
+                    ,       B.DISPLAY_YN   AS DISPLAY_YN
                     FROM    (
                                 SELECT  DISTINCT TUKEY_GRP_CD
                                 ,       STORE_CD
@@ -4237,6 +4268,7 @@
                 SET A.TUKEY_GRP_NM  = #{tukeyGrpNm}
                 ,   A.MOD_DT        = #{modDt}
                 ,   A.MOD_ID        = #{modId}
+                ,   A.DISPLAY_YN    = #{displayYn}
             WHEN NOT MATCHED THEN
                 INSERT
                     (
@@ -4247,6 +4279,7 @@
                     ,   A.REG_ID
                     ,   A.MOD_DT
                     ,   A.MOD_ID
+                    ,   A.DISPLAY_YN
                     )
                 VALUES
                     (
@@ -4257,6 +4290,7 @@
                     ,   B.REG_ID
                     ,   B.MOD_DT
                     ,   B.MOD_ID
+                    ,   B.DISPLAY_YN
                     )
     </update>
 

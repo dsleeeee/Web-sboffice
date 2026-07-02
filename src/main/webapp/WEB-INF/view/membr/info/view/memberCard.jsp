@@ -62,7 +62,7 @@
                     <%-- 신규카드번호 --%>
                     <th><s:message code="regist.card.new.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo" class="sb-input w100" maxlength="30" required>
+                        <input type="text" id="rMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo" class="sb-input w100" maxlength="40" required onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();">
                     </td>
                     <%-- 이전카드번호 --%>
                     <th><s:message code="regist.card.old.no"/></th>

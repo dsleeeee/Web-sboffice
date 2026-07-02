@@ -74,7 +74,7 @@
                                  width="115" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrNm" data-type="String"
                                  visible="{{membrNm}}"
-                                 width="100" align="left"></wj-flex-grid-column>
+                                 max-length="10" width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.nm.en"/>" binding="memberEngNm"
                                  data-type="String" visible="{{memberEngNm}}"
                                  width="100" align="left"></wj-flex-grid-column>
@@ -92,7 +92,7 @@
                                  width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.membrCardNo"/>" binding="membrCardNo"
                                  data-type="String" format="@" visible="{{membrCardNo}}"
-                                 width="100" align="left"></wj-flex-grid-column>
+                                 max-length="40" width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.birthday"/>" binding="birthday"
                                  data-type="String" format="@" visible="{{birthday}}"
                                  width="100" align="left"></wj-flex-grid-column>
@@ -104,7 +104,7 @@
                                  width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.telNo"/>" binding="memberTelNo"
                                  data-type="String" format="@" visible="{{memberTelNo}}"
-                                 width="100" align="left"></wj-flex-grid-column>
+                                 max-length="12" width="100" align="left"></wj-flex-grid-column>
             <%-- <wj-flex-grid-column header="<s:message code="member.excel.phonneNo"/>" binding="phonneNo" width="100"
                                  align="left"
                                  data-type="String" visible="{{phonneNo}}"></wj-flex-grid-column> --%>
@@ -804,9 +804,8 @@
                     }
 
                     // 회원명(한글) 최대길이 체크
-                    if (nvl(item.membrNm + '', '').getByteLengthForOracle() > 50) {
-                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 50 " +
-                            ", 현재 : " + item.membrNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50 현재 : (영문:1yte, 한글:3byte)
+                    if (nvl(item.membrNm + '', '').length > 10) {
+                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 10 "; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 10자
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -874,46 +873,45 @@
 
                 // 회원카드번호
                 if (nvl(item.membrCardNo, '') !== '') {
-                    if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
-                        // Grid 내에서의 회원카드번호 중복체크
-                        var isDuplicateCardNoInGrid = false;
-                        for (var j = 0; j < $scope.totalRows; j++) {
-                            var itemj = jsonData[j];
-                            if (j != i && itemj.membrCardNo === item.membrCardNo) {
-                                isDuplicateCardNoInGrid = true;
-                                break;
-                            }
-                        }
-                        if (isDuplicateCardNoInGrid) {
-                            msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
-                            item.result = msg;
-                            failCnt++;
-                            continue;
-                        }
-                        // DB상의 회원카드번호 중복체크
-                        var params = {};
-                        params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
-                        params.membrCardNo = item.membrCardNo;
-                        if (isDuplicateMemberCard(params)) { // 회원카드 중복체크
-                            // msg = messages["member.excel.membrCardNo"] + " : " + messages["member.excel.upload.duplicate.data"]; // 회원카드번호(이)가 중복되었습니다. 다시 확인하세요.
-                            msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
-                            item.result = msg;
-                            failCnt++;
-                            continue;
-                        }
-                    }
-                    var numChkregexp = /[^A-za-z0-9]/g;
+                    // 대문자 변환
+                    item.membrCardNo = item.membrCardNo.toUpperCase();
+                    // 영문/숫자 형식 체크
+                    var numChkregexp = /[^A-Za-z0-9]/g;
                     if (numChkregexp.test(item.membrCardNo)) {
                         msg = messages["member.excel.membrCardNo"] + messages["cmm.require.number.en"]; // 회원카드번호(은)는 숫자와 영문만 입력할 수 있습니다.
                         item.result = msg;
                         failCnt++;
                         continue;
                     }
-
                     // 회원카드번호 최대길이 체크
-                    if (nvl(item.membrCardNo, '') !== '' && nvl(item.membrCardNo + '', '').getByteLengthForOracle() > 40) {
-                        msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 " +
-                            ", 현재 : " + item.membrCardNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 회원카드번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 40 현재 : (영문:1yte, 한글:3byte)
+                    if (nvl(item.membrCardNo + '', '').length > 40) {
+                        msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 "; // 회원카드번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 40자
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                    // Grid 내에서의 회원카드번호 중복체크 (필수)
+                    var isDuplicateCardNoInGrid = false;
+                    for (var j = 0; j < $scope.totalRows; j++) {
+                        var itemj = jsonData[j];
+                        if (j != i && itemj.membrCardNo === item.membrCardNo) {
+                            isDuplicateCardNoInGrid = true;
+                            break;
+                        }
+                    }
+                    if (isDuplicateCardNoInGrid) {
+                        msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                    // DB상의 회원카드번호 중복체크 (필수)
+                    var params = {};
+                    params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
+                    params.membrCardNo = item.membrCardNo;
+                    if (isDuplicateMemberCard(params)) { // 회원카드 중복체크
+                        // msg = messages["member.excel.membrCardNo"] + " : " + messages["member.excel.upload.duplicate.data"]; // 회원카드번호(이)가 중복되었습니다. 다시 확인하세요.
+                        msg = messages["regist.card.add.overlap"]; // 중복되는 카드번호가 있습니다. 다시 확인해주세요.
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -977,8 +975,25 @@
 
                 // 전화번호
                 if (nvl(item.memberTelNo, '') !== '') {
-                    if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
-                        // Grid 내에서의 전화번호 중복체크
+                    // 숫자 형식 체크
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test(nvl(item.memberTelNo, 0))) {
+                        msg = messages["member.excel.telNo"] + messages["excelUpload.not.numberData"]; // 전화번호의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                    // 전화번호 자리수 체크 (8~12자리)
+                    if (nvl(item.memberTelNo + '', '').length < 8 || nvl(item.memberTelNo + '', '').length > 12) {
+                        msg = messages["member.excel.telNo"] + " 8~12자리를 입력해주세요.";
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                    // 더미번호 제외하고 필수 중복체크
+                    var isDummy = /^(.)\1+$/.test(item.memberTelNo) || item.memberTelNo === '01000000000';
+                    if(!isDummy) {
+                        // Grid 내에서의 전화번호 중복체크 (필수)
                         var isDuplicateTelNoInGrid = false;
                         for (var j = 0; j < $scope.totalRows; j++) {
                             var itemj = jsonData[j];
@@ -993,7 +1008,7 @@
                             failCnt++;
                             continue;
                         }
-                        // DB상의 전화번호 중복체크
+                        // DB상의 전화번호 중복체크 (필수)
                         var params = {};
                         params.membrOrgnCd = '${sessionScope.sessionInfo.orgnCd}';
                         params.telNo = item.memberTelNo;
@@ -1003,21 +1018,6 @@
                             failCnt++;
                             continue;
                         }
-                    }
-                    var numChkexp = /[^0-9]/g;
-                    if (numChkexp.test(nvl(item.memberTelNo, 0))) {
-                        msg = messages["member.excel.telNo"] + messages["excelUpload.not.numberData"]; // 전화번호의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
-                        item.result = msg;
-                        failCnt++;
-                        continue;
-                    }
-                    // 전화번호 최대길이 체크
-                    if (nvl(item.memberTelNo + '', '').getByteLengthForOracle() > 16) {
-                        msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 16 " +
-                            ", 현재 : " + item.memberTelNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 전화번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 16 현재 : (영문:1yte, 한글:3byte)
-                        item.result = msg;
-                        failCnt++;
-                        continue;
                     }
                 } else { // 필수값
                     msg = messages["member.excel.telNo"] + messages["excelUpload.require.data"]; // 전화번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.

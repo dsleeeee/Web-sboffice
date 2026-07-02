@@ -784,7 +784,7 @@
             #{membrEngNm},
             #{membrNicknm},
             #{membrClassCd},
-            #{membrCardNo},
+            UPPER(#{membrCardNo}),
             #{regStoreCd},
             #{postNo},
             SBPENC.E(#{addr}),
@@ -866,7 +866,7 @@
                tmm.MEMBER_ENG_NM = #{membrEngNm},
                tmm.MEMBR_NICKNM = #{membrNicknm},
                tmm.MEMBR_CLASS_CD = #{membrClassCd},
-               tmm.MEMBR_CARD_NO = #{membrCardNo},
+               tmm.MEMBR_CARD_NO = UPPER(#{membrCardNo}),
                tmm.REG_STORE_CD = #{regStoreCd},
                tmm.POST_NO = #{postNo},
                tmm.ADDR = SBPENC.E(#{addr}),
@@ -920,7 +920,7 @@
         tmmc.MOD_DT = #{modDt}
         WHERE tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
         <if test="membrCardNo != null and !membrCardNo.equals('')">
-            AND tmmc.MEMBR_CARD_NO = #{membrCardNo}
+            AND UPPER(tmmc.MEMBR_CARD_NO) = UPPER(#{membrCardNo})
         </if>
     </update>
 
@@ -948,6 +948,25 @@
         FROM TB_MB_MEMBER
         WHERE MEMBR_ORGN_CD =  #{membrOrgnCd}
         AND	SBPENC.D(TEL_NO) = #{telNo}
+        <if test='membrNo != null and membrNo.toString() != ""'>
+            AND MEMBR_NO != #{membrNo}
+        </if>
+    </select>
+
+    <!-- 회원 기본 카드번호 중복체크 (TB_MB_MEMBER) -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 회원 기본 카드번호 중복 체크
+    -->
+    <select id="getMemberCardNoCount" parameterType="registVO" resultType="int">
+        /* RegistMapper.getMemberCardNoCount */
+        SELECT COUNT(1)
+          FROM TB_MB_MEMBER
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND UPPER(MEMBR_CARD_NO) = UPPER(#{membrCardNo})
+        <if test='membrNo != null and membrNo.toString() != ""'>
+            AND MEMBR_NO != #{membrNo}
+        </if>
     </select>
 
     <!-- 카드정보 중복체크-->
@@ -960,7 +979,7 @@
         SELECT COUNT(1)
           FROM TB_MB_MEMBER_CARD tmmc
          WHERE MEMBR_ORGN_CD =  #{membrOrgnCd}
-           AND	MEMBR_CARD_NO = #{membrCardNo}
+           AND	UPPER(MEMBR_CARD_NO) = UPPER(#{membrCardNo})
            AND CST_CARD_STAT_FG = '0'
     </select>
 
@@ -974,7 +993,7 @@
         SELECT NVL(max(MEMBR_NO), 'X') AS MEMBR_NO
         FROM TB_MB_MEMBER_CARD tmmc
         WHERE membr_orgn_cd =  #{membrOrgnCd}
-        AND	membr_card_no = #{membrCardNo}
+        AND	UPPER(membr_card_no) = UPPER(#{membrCardNo})
         AND CST_CARD_STAT_FG = '0'
     </select>
 
@@ -986,7 +1005,7 @@
     <update id="updateMembr" parameterType="registVO">
         /* RegistMapper.updateMembr */
         UPDATE TB_MB_MEMBER tmm
-           SET tmm.MEMBR_CARD_NO = #{membrCardNo},
+           SET tmm.MEMBR_CARD_NO = UPPER(#{membrCardNo}),
                tmm.CST_CARD_USE_FG = '0',
                tmm.MOD_ID = #{modId},
                tmm.MOD_DT = #{modDt}
@@ -1366,7 +1385,7 @@
             tmmc.MOD_DT,
             tmmc.MEMBR_CARD_SEQ
         ) VALUES (
-            #{membrCardNo},
+            UPPER(#{membrCardNo}),
             #{membrOrgnCd},
             #{membrNo},
             '0',
@@ -1379,7 +1398,7 @@
             #{regDt},
             #{modId},
             #{modDt},
-            (SELECT NVL(MAX(MEMBR_CARD_SEQ),-1)+1 FROM TB_MB_MEMBER_CARD WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_CARD_NO = #{membrCardNo})
+            (SELECT NVL(MAX(MEMBR_CARD_SEQ),-1)+1 FROM TB_MB_MEMBER_CARD WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND UPPER(MEMBR_CARD_NO) = UPPER(#{membrCardNo}))
         )
     </insert>
 

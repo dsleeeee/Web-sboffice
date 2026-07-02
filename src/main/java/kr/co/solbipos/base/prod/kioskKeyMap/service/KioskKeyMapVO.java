@@ -188,6 +188,9 @@ public class KioskKeyMapVO extends PageVO {
     /** 상품(멀티) 조회를 위한 쿼리 문자열*/
     private String prodCdQuery;
 
+    /** 표시여부 */
+    private String displayYn;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -740,5 +743,13 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setProdCdQuery(String prodCdQuery) {
         this.prodCdQuery = prodCdQuery;
+    }
+
+    public String getDisplayYn() {
+        return displayYn;
+    }
+
+    public void setDisplayYn(String displayYn) {
+        this.displayYn = displayYn;
     }
 }

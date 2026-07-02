@@ -9,6 +9,12 @@
  *
  * **************************************************************/
 
+// 표시여부
+var displayYnComboData = [
+  {"name": "표시", "value": "Y"},
+  {"name": "미표시", "value": "N"}
+];
+
 // 팝업 그리드 생성
 app.controller('clsTypeNmCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -19,6 +25,7 @@ app.controller('clsTypeNmCtrl', ['$scope', '$http', '$timeout', function ($scope
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
+    $scope.displayYnComboDataMap = new wijmo.grid.DataMap(displayYnComboData, 'value', 'name');
   };
 
   // 팝업 그리드 조회
@@ -61,7 +68,7 @@ app.controller('clsTypeNmCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope.clsTypeNmLayer.hide();
 
         var scope = agrid.getScope("kioskKeyMapRegistCtrl");
-        scope.setTuClsDropdownList();
+        scope.setTuClsDropdownList("L", true);
       });
     });
   }

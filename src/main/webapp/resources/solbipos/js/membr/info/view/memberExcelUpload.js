@@ -65,6 +65,16 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                   $scope.isEdited = true;
                   dataItem.result = "양식검증 필요";
               }
+              // 회원카드번호 : 영문/숫자만, 대문자 변환
+              if (col.binding === "membrCardNo" && dataItem.membrCardNo) {
+                  dataItem.membrCardNo = dataItem.membrCardNo.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                  s.invalidate();
+              }
+              // 전화번호 : 숫자만
+              if (col.binding === "memberTelNo" && dataItem.memberTelNo) {
+                  dataItem.memberTelNo = dataItem.memberTelNo.replace(/[^0-9]/g, '');
+                  s.invalidate();
+              }
             }
         });
 
