@@ -743,6 +743,8 @@
     <typeAlias alias="smsSendVO" type="kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO"/>
     <!-- 부가서비스 > SMS관리 > SMS전송(탭) > 금칙어 필터링 -->
     <typeAlias alias="badwordVO" type="kr.co.solbipos.adi.sms.badword.service.BadwordVO"/>
+    <!-- 부가서비스 > SMS관리 > SMS금칙어(탭) -->
+    <typeAlias alias="smsBadwordVO" type="kr.co.solbipos.adi.sms.smsBadword.service.SmsBadwordVO"/>
     <!-- 부가서비스 > SMS관리 > 문자전송현황 -->
     <typeAlias alias="sendStatusVO" type="kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO"/>
     <!-- 부가서비스 > SMS관리 > 메세지관리 -->

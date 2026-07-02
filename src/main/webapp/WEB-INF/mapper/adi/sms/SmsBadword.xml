@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsBadword.xml
+    SMS금칙어(탭)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.07.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsBadword.service.impl.SmsBadwordMapper">
+
+    <!-- 금칙어관리 - 목록 조회 -->
+    <!--
+        TABLE    : BADWORD
+        COMMENTS : 금칙어 마스터
+    -->
+    <select id="getBadwordManageList" parameterType="SmsBadwordVO" resultType="DefaultMap">
+        <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
+        /* SmsBadwordMapper.getBadwordManageList */
+        SELECT  ID,
+                KEYWORD,
+                KEYWORD_NORMALIZED,
+                CATEGORY,
+                MATCH_TYPE,
+                SEVERITY,
+                SOURCE,
+                IS_ACTIVE
+        <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
+        FROM    BADWORD
+        WHERE   1=1
+        <if test='keyword != null and keyword != ""'>
+            AND KEYWORD LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test='category != null and category != ""'>
+            AND CATEGORY = #{category}
+        </if>
+        <if test='matchType != null and matchType != ""'>
+            AND MATCH_TYPE = #{matchType}
+        </if>
+        <if test='severity != null and severity != ""'>
+            AND SEVERITY = #{severity}
+        </if>
+        <if test='isActive != null and isActive != ""'>
+            AND IS_ACTIVE = #{isActive}
+        </if>
+        ORDER BY ID
+        <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
+    </select>
+
+    <!-- 금칙어관리 - 저장 insert -->
+    <!--
+        TABLE    : BADWORD
+        COMMENTS : 금칙어 마스터
+    -->
+    <insert id="insertBadwordManage" parameterType="SmsBadwordVO">
+        /* SmsBadwordMapper.insertBadwordManage */
+        INSERT INTO BADWORD
+        (
+            ID,
+            KEYWORD,
+            KEYWORD_NORMALIZED,
+            CATEGORY,
+            MATCH_TYPE,
+            SEVERITY,
+            SOURCE,
+            IS_ACTIVE,
+            CREATED_AT,
+            CREATED_BY,
+            UPDATED_AT,
+            UPDATED_BY
+        )
+        VALUES
+        (
+            BADWORD_SEQ.NEXTVAL,
+            #{keyword},
+            #{keywordNormalized},
+            #{category},
+            #{matchType},
+            #{severity},
+            #{source},
+            #{isActive},
+            #{regDt},
+        	#{regId},
+        	#{modDt},
+        	#{modId}
+        )
+    </insert>
+
+    <!-- 금칙어관리 - 저장 update -->
+    <!--
+        TABLE    : BADWORD
+        COMMENTS : 금칙어 마스터
+    -->
+    <update id="updateBadwordManage" parameterType="SmsBadwordVO">
+        /* SmsBadwordMapper.updateBadwordManage */
+        UPDATE  BADWORD
+        SET     KEYWORD             = #{keyword},
+                KEYWORD_NORMALIZED  = #{keywordNormalized},
+                CATEGORY            = #{category},
+                MATCH_TYPE          = #{matchType},
+                SEVERITY            = #{severity},
+                SOURCE              = #{source},
+                IS_ACTIVE           = #{isActive},
+                CREATED_AT          = #{regDt},
+                CREATED_BY          = #{regId},
+                UPDATED_AT          = #{modDt},
+                UPDATED_BY          = #{modId}
+        WHERE   ID = #{id}
+    </update>
+
+    <!-- 금칙어관리 - 저장 delete -->
+    <!--
+        TABLE    : BADWORD
+        COMMENTS : 금칙어 마스터
+    -->
+    <delete id="deleteBadwordManage" parameterType="SmsBadwordVO">
+        /* SmsBadwordMapper.deleteBadwordManage */
+        DELETE FROM BADWORD
+        WHERE   ID = #{id}
+    </delete>
+
+    <!-- 탐지/차단 결과 로그 - 목록 조회 -->
+    <!--
+        TABLE    : MESSAGE_BLOCK_LOG, BADWORD
+        COMMENTS : SMS 필터링 검사 전체 이력
+    -->
+    <select id="getMsgBlockLogList" parameterType="SmsBadwordVO" resultType="DefaultMap">
+        /* SmsBadwordMapper.getMsgBlockLogList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  L.ID,
+                L.ACCOUNT_ID,
+                L.MESSAGE_ID,
+                L.BLOCK_TYPE,
+                L.TRIGGERED_KEYWORD_ID,
+                B.KEYWORD AS TRIGGERED_KEYWORD,
+                L.TRIGGERED_URL,
+                L.URL_CHECK_SOURCE,
+                L.STATUS,
+                L.ADMIN_REVIEW_ID,
+                L.MESSAGE_SNIPPET,
+                TO_CHAR(TO_DATE(L.CREATED_AT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS CREATED_AT,
+                L.SMS_SEND_SEQ,
+                SBPENC.D(L.CALLBACK) AS CALLBACK,
+                L.S_OGN_CD,
+                L.S_OGN_FG,
+                L.S_USER_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    MESSAGE_BLOCK_LOG L
+        LEFT OUTER JOIN BADWORD B
+               ON B.ID = L.TRIGGERED_KEYWORD_ID
+        WHERE   1=1
+        <if test='startDate != null and startDate != ""'>
+            <![CDATA[
+            AND TO_DATE(L.CREATED_AT, 'YYYYMMDDHH24MISS') >= TO_DATE(#{startDate}, 'YYYYMMDD')
+            ]]>
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            <![CDATA[
+            AND TO_DATE(L.CREATED_AT, 'YYYYMMDDHH24MISS') < TO_DATE(#{endDate}, 'YYYYMMDD') + 1
+            ]]>
+        </if>
+        <if test='blockType != null and blockType != ""'>
+            AND L.BLOCK_TYPE = #{blockType}
+        </if>
+        <if test='triggeredKeyword != null and triggeredKeyword != ""'>
+            AND B.KEYWORD LIKE '%' || #{triggeredKeyword} || '%'
+        </if>
+        <if test='triggeredUrl != null and triggeredUrl != ""'>
+            AND L.TRIGGERED_URL LIKE '%' || #{triggeredUrl} || '%'
+        </if>
+        <if test='msgStatus != null and msgStatus != ""'>
+            AND L.STATUS = #{msgStatus}
+        </if>
+        ORDER BY L.CREATED_AT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
