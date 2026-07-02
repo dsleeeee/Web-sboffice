@@ -49,6 +49,7 @@
                 AND     thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
                 AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
                 AND     thkc.TU_CLS_TYPE NOT IN ('00')
+                AND     NVL(thkg.DISPLAY_YN,'Y') 	=	'Y'
                 ORDER
                 BY      thkc.TU_CLS_TYPE
             </when>
@@ -64,6 +65,7 @@
                 AND     thkc.POS_NO = thkg.POS_NO(+)
                 AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
                 AND     thkc.TU_CLS_TYPE NOT IN ('00')
+                AND     NVL(thkg.DISPLAY_YN,'Y') 	=	'Y'
                 ORDER
                 BY      thkc.TU_CLS_TYPE
             </when>
@@ -207,12 +209,13 @@
         COMMENTS : 터치키그룹을 조회한다.
     -->
     <select id="getClsTypeList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
-        /* USE : KioskKeyMapMapper.a */
+        /* USE : KioskKeyMapMapper.getClsTypeList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT 	DISTINCT thkc.TU_CLS_TYPE
                 ,       thkg.TU_CLS_TYPE_NM
+                ,       NVL(thkg.DISPLAY_YN, 'Y')  AS DISPLAY_YN
                 FROM 	TB_HQ_KIOSK_CLS thkc
                 ,		TB_HQ_KIOSK_GROUP thkg
                 WHERE	thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD (+)
@@ -233,6 +236,7 @@
                 SELECT	DISTINCT tmkc.TU_CLS_TYPE
                 ,       tmkg.TU_CLS_TYPE_NM
                 ,       tmkc.POS_NO
+                ,       NVL(tmkg.DISPLAY_YN, 'Y')  AS DISPLAY_YN
                 FROM 	TB_MS_KIOSK_CLS tmkc
                 ,		TB_MS_KIOSK_GROUP tmkg
                 WHERE	tmkc.STORE_CD = tmkg.STORE_CD (+)
@@ -276,6 +280,7 @@
                     TU_CLS_TYPE_NM  = #{tuClsTypeNm}
                 ,   MOD_DT      = #{modDt}
                 ,   MOD_ID      = #{modId}
+                ,   DISPLAY_YN  = #{displayYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -286,6 +291,7 @@
                 ,   REG_ID
                 ,   MOD_DT
                 ,   MOD_ID
+                ,   DISPLAY_YN
                 )
                 VALUES
                 (
@@ -296,6 +302,7 @@
                 ,   #{regId}
                 ,   #{modDt}
                 ,   #{modId}
+                ,   #{displayYn}
                 )
             </when>
             <!-- 매장 -->
@@ -330,6 +337,7 @@
                         A.TU_CLS_TYPE_NM    = B.TU_CLS_TYPE_NM
                 ,       A.MOD_DT            = B.MOD_DT
                 ,       A.MOD_ID            = B.MOD_ID
+                ,       A.DISPLAY_YN        = #{displayYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -341,6 +349,7 @@
                 ,   A.REG_ID
                 ,   A.MOD_DT
                 ,   A.MOD_ID
+                ,   A.DISPLAY_YN
                 )
                 VALUES
                 (
@@ -352,6 +361,7 @@
                 ,   B.REG_ID
                 ,   B.MOD_DT
                 ,   B.MOD_ID
+                ,   #{displayYn}
                 )
             </when>
         </choose>
@@ -6181,61 +6191,65 @@
     <update id="updateStoreGrpNm" parameterType="kioskKeyMapVO">
         /* KioskKeyMapMapper.updateStoreGrpNm */
         MERGE INTO TB_MS_KIOSK_GROUP A
-            USING 	(
-                SELECT  A.STORE_CD			AS STORE_CD
-                     , 		A.POS_NO			AS POS_NO
-                     ,		A.TU_CLS_TYPE		AS TU_CLS_TYPE
-                     ,		#{tuClsTypeNm}		AS TU_CLS_TYPE_NM
-                     ,		#{regDt}	        AS REG_DT
-                     ,		#{regId}	        AS REG_ID
-                     ,		#{modDt}	        AS MOD_DT
-                     ,		#{modId}	        AS MOD_ID
-                FROM 	(
-                    SELECT 	DISTINCT STORE_CD
-                                     ,       POS_NO
-                                     ,       TU_CLS_TYPE
-                    FROM    TB_MS_KIOSK_CLS
-                    WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                ) A
-                   , 	    TB_HQ_KIOSK_GROUP B
-                WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                  AND 	A.TU_CLS_TYPE 	= B.TU_CLS_TYPE
-                  AND 	B.HQ_OFFICE_CD 	= #{hqOfficeCd}
-                  AND 	A.TU_CLS_TYPE   = #{tuClsType}
-            ) B
-            ON	(
+        USING 	(
+            SELECT  A.STORE_CD			AS STORE_CD
+            , 		A.POS_NO			AS POS_NO
+            ,		A.TU_CLS_TYPE		AS TU_CLS_TYPE
+            ,		#{tuClsTypeNm}		AS TU_CLS_TYPE_NM
+            ,		#{regDt}	        AS REG_DT
+            ,		#{regId}	        AS REG_ID
+            ,		#{modDt}	        AS MOD_DT
+            ,		#{modId}	        AS MOD_ID
+            ,       B.DISPLAY_YN        AS DISPLAY_YN
+            FROM 	(
+                        SELECT 	DISTINCT STORE_CD
+                        ,       POS_NO
+                        ,       TU_CLS_TYPE
+                        FROM    TB_MS_KIOSK_CLS
+                        WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    ) A
+            , 	    TB_HQ_KIOSK_GROUP B
+            WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND 	A.TU_CLS_TYPE 	= B.TU_CLS_TYPE
+            AND 	B.HQ_OFFICE_CD 	= #{hqOfficeCd}
+            AND 	A.TU_CLS_TYPE   = #{tuClsType}
+        ) B
+        ON	(
                     A.STORE_CD 		= B.STORE_CD
-                    AND A.TU_CLS_TYPE   = #{tuClsType}
-                    AND A.POS_NO 	    = B.POS_NO
-                )
-            WHEN MATCHED THEN
-                UPDATE
-                    SET 	A.TU_CLS_TYPE_NM  = #{tuClsTypeNm}
-                        ,   	A.MOD_DT          = #{modDt}
-                        ,   	A.MOD_ID          = #{modId}
-            WHEN NOT MATCHED THEN
-                INSERT
-                    (
-                     A.STORE_CD
-                        ,	 A.POS_NO
-                        ,    A.TU_CLS_TYPE
-                        ,    A.TU_CLS_TYPE_NM
-                        ,    A.REG_DT
-                        ,    A.REG_ID
-                        ,    A.MOD_DT
-                        ,    A.MOD_ID
-                        )
-                    VALUES
-                    (
-                          B.STORE_CD
-                    ,	 B.POS_NO
-                    ,    B.TU_CLS_TYPE
-                    ,    B.TU_CLS_TYPE_NM
-                    ,    B.REG_DT
-                    ,    B.REG_ID
-                    ,    B.MOD_DT
-                    ,    B.MOD_ID
-                    )
+                AND A.TU_CLS_TYPE   = #{tuClsType}
+                AND A.POS_NO 	    = B.POS_NO
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET 	A.TU_CLS_TYPE_NM    = #{tuClsTypeNm}
+        ,   	A.MOD_DT            = #{modDt}
+        ,   	A.MOD_ID            = #{modId}
+        ,       A.DISPLAY_YN        = #{displayYn}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,	    A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_TYPE_NM
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.DISPLAY_YN
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,	    B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_TYPE_NM
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.DISPLAY_YN
+        )
     </update>
 
     <!-- 키오스크 매장적용(매장/포장) - 매장 그룹명 수정 -->

@@ -580,6 +580,26 @@ public class RegistController {
     }
 
     /**
+     * 회원 기본 카드번호 중복체크 (TB_MB_MEMBER)
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/getMemberCardNoCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberCardNoCount(RegistVO registVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.getMemberCardNoCount(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
      * 카드정보 중복체크
      * @param registVO
      * @param request

@@ -26,6 +26,8 @@
                     item-formatter="_itemFormatter">
 
                     <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.tukeyGrp"/>" binding="tukeyGrpCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.tukeyGrpNm"/>" binding="tukeyGrpNm" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.classCd"/>" binding="tukeyClassCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.classNm"/>" binding="tukeyClassNm" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.pageNo"/>" binding="pageNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
