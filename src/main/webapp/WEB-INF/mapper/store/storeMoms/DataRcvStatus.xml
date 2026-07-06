@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DataRcvStatus.xml
+    맘스터치 > 매장관리 > 자료수신현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.07.03      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.dataRcvStatus.service.impl.DataRcvStatusMapper">
+
+    <!-- 자료수신현황 헤더 조회 -->
+    <!--
+        TABLE    : TB_LG_MST_COUNT_LOG_HDR, TB_MS_STORE, TB_MS_STORE_INFO, TB_HQ_BRANCH_MOMS
+        PARAM    : dataRcvStatusVO
+        COMMENTS : 자료수신현황 헤더(일별/매장/포스별)를 조회한다.
+    -->
+    <select id="getDataRcvStatusHdrList" parameterType="dataRcvStatusVO" resultType="DefaultMap">
+        /* USE : DataRcvStatusMapper.getDataRcvStatusHdrList */
+        SELECT  TO_CHAR(TO_DATE(A.LOG_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LOG_DATE
+        ,       TO_CHAR(TO_DATE(A.LOG_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+        ,       NVL(tms.BRANCH_CD, '')  AS BRANCH_CD
+        ,       NVL((SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = tms.BRANCH_CD), '') AS BRANCH_NM
+        ,       A.STORE_CD
+        ,       NVL(tms.STORE_NM, '')   AS STORE_NM
+        ,       A.HQ_BRAND_CD
+        ,       NVL(tmsi.MOMS_TEAM, '')     AS MOMS_TEAM
+        ,       NVL(tmsi.MOMS_AC_SHOP, '')  AS MOMS_AC_SHOP
+        ,       A.POS_NO
+        ,       A.LOG_SEQ
+        ,       A.POS_TELEX_ID
+        FROM    TB_LG_MST_COUNT_LOG_HDR A
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     tms.HQ_OFFICE_CD    = A.HQ_OFFICE_CD
+        AND     tms.STORE_CD        = A.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        AND     A.LOG_DATE  BETWEEN #{startDate} AND #{endDate}
+        <if test="storeHqBrandCd != null and storeHqBrandCd != ''">
+            AND A.HQ_BRAND_CD       = #{storeHqBrandCd}
+        </if>
+        <if test="storeHqBrandCd == null or storeHqBrandCd == ''">
+            <if test="userBrandList != null and userBrandList.length > 0">
+                AND A.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrStoreCd != null and arrStoreCd.length > 0">
+            AND A.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="momsTeam != null and momsTeam != ''">
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test="momsAcShop != null and momsAcShop != ''">
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test="momsAreaFg != null and momsAreaFg != ''">
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test="momsCommercial != null and momsCommercial != ''">
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test="momsShopType != null and momsShopType != ''">
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test="momsStoreManageType != null and momsStoreManageType != ''">
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test="branchCd != null and branchCd != ''">
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test="momsStoreFg01 != null and momsStoreFg01 != ''">
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test="momsStoreFg02 != null and momsStoreFg02 != ''">
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test="momsStoreFg03 != null and momsStoreFg03 != ''">
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test="momsStoreFg04 != null and momsStoreFg04 != ''">
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test="momsStoreFg05 != null and momsStoreFg05 != ''">
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        ORDER
+        BY      A.LOG_DATE
+        ,       A.STORE_CD
+        ,       A.POS_NO
+        ,       A.LOG_SEQ
+    </select>
+
+    <!-- 자료수신현황 상세 조회 -->
+    <!--
+        TABLE    : TB_LG_MST_COUNT_LOG_DTL, TB_MS_STORE
+        PARAM    : dataRcvStatusVO
+        COMMENTS : 헤더 행 클릭 시 마스터코드별 상세를 조회한다. VIEW_YN='Y' 만 표시.
+    -->
+    <select id="getDataRcvStatusDtlList" parameterType="dataRcvStatusVO" resultType="DefaultMap">
+        /* USE : DataRcvStatusMapper.getDataRcvStatusDtlList */
+        SELECT  TO_CHAR(TO_DATE(A.LOG_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LOG_DATE
+        ,       A.STORE_CD
+        ,       NVL(tms.STORE_NM, '') AS STORE_NM
+        ,       A.POS_NO
+        ,       A.LOG_SEQ
+        ,       A.MS_CD
+        ,       A.MS_CD_NM
+        ,       A.MS_CD_ENG_NM
+        ,       A.VIEW_YN
+        ,       A.REQ_SEQ
+        ,       A.RES_CNT
+        ,       A.MIN_PROC_SEQ
+        ,       A.MAX_PROC_SEQ
+        FROM    TB_LG_MST_COUNT_LOG_DTL A
+        ,       TB_MS_STORE tms
+        WHERE   A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     tms.HQ_OFFICE_CD    = A.HQ_OFFICE_CD
+        AND     tms.STORE_CD        = A.STORE_CD
+        AND     A.LOG_DATE          = #{logDate}
+        AND     A.STORE_CD          = #{storeCd}
+        AND     A.POS_NO            = #{posNo}
+        AND     A.LOG_SEQ           = #{logSeq}
+        AND     A.VIEW_YN           = 'Y'
+        ORDER
+        BY      A.MS_CD
+    </select>
+
+</mapper>
