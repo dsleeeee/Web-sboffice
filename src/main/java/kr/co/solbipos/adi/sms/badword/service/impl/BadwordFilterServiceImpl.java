@@ -109,9 +109,9 @@ public class BadwordFilterServiceImpl implements BadwordFilterService {
         badwordFilterMapper.insertMessageBlockLog(smsSendVO);
 
         // '보류' 이면 관리자 검토 테이블 등록
-        if ("hold".equals(result.getStatus())) {
+        /*if ("hold".equals(result.getStatus())) {
             badwordFilterMapper.insertAdminReviewQueue(smsSendVO);
-        }
+        }*/
     }
 
     /** 캐시 강제 갱신 */
