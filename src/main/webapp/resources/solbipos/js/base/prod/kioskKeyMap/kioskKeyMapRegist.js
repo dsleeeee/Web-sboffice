@@ -747,7 +747,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
     }
 
     // 키맵그룹 dropdownLIst 재조회
-    $scope.setTuClsDropdownList = function (type){
+    $scope.setTuClsDropdownList = function (type, updateAll){
 
         // 키맵그룹 dropdown 재조회
         var newGrp = 0; // 새로 생성된 그룹의 index 번호(dropdown 셋팅을 위해)
@@ -796,7 +796,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                         // if(type === "L"){
                         //     kioskTuClsTypeListAll = comboArrayAll;
                     }
-                    if(pageFg === '1'){
+                    if(pageFg === '1' || updateAll){
                         kioskTuClsTypeListAll = comboArrayAll;
                     }
 

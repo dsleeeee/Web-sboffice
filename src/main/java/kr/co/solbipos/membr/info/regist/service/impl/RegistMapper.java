@@ -200,6 +200,9 @@ public interface RegistMapper {
     /** 전화번호 중복 체크 */
     int getMemberTelNoCount(RegistVO registVO);
 
+    /** 회원 기본 카드번호 중복 체크 (TB_MB_MEMBER) */
+    int getMemberCardNoCount(RegistVO registVO);
+
     /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO);
 

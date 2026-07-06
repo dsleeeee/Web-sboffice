@@ -628,6 +628,24 @@ public class RegistServiceImpl implements RegistService {
     }
 
     /**
+     *  회원 기본 카드번호 중복 체크 (TB_MB_MEMBER)
+     */
+    @Override
+    public int getMemberCardNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO){
+
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        int result = mapper.getMemberCardNoCount(registVO);
+        return result;
+    }
+
+    /**
      *  카드 중복 체크
      */
     @Override

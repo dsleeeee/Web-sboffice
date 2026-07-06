@@ -215,6 +215,9 @@ public class TouchKeyVO extends PageVO {
     /** 명칭코드항목1 */
     private String nmcodeItem1;
 
+    /** 표시여부 */
+    private String displayYn;
+
     /**
      * @return the orgnFg
      */
@@ -851,5 +854,13 @@ public class TouchKeyVO extends PageVO {
 
     public void setNmcodeItem1(String nmcodeItem1) {
         this.nmcodeItem1 = nmcodeItem1;
+    }
+
+    public String getDisplayYn() {
+        return displayYn;
+    }
+
+    public void setDisplayYn(String displayYn) {
+        this.displayYn = displayYn;
     }
 }

@@ -160,6 +160,9 @@ public interface RegistService {
     /** 전화번호 중복 체크 */
     int getMemberTelNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
+    /** 회원 기본 카드번호 중복 체크 (TB_MB_MEMBER) */
+    int getMemberCardNoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
     /** 카드정보 중복 체크 */
     int getMemberCardInfoCount(RegistVO registVO, SessionInfoVO sessionInfoVO);
 

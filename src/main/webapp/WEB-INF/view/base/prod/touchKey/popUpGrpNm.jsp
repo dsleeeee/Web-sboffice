@@ -30,6 +30,7 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.tukeyGrp"/>"   binding="tukeyGrpCd" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.tukeyGrpNm"/>" binding="tukeyGrpNm" width="200" align="center" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.displayYn"/>" binding="displayYn" width="100" align="center" data-map="displayYnComboDataMap" visible="false"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -39,4 +40,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20240311.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20260625.01" charset="utf-8"></script>

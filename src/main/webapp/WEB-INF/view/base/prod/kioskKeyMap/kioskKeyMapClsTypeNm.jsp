@@ -31,6 +31,7 @@
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.posNo"/>"         binding="posNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsType"/>"     binding="tuClsType" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsTypeNm"/>"   binding="tuClsTypeNm" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="kioskKeyMap.displayYn"/>"     binding="displayYn" width="100" align="center" data-map="displayYnComboDataMap" visible="false"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -40,4 +41,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20250124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20260625.01" charset="utf-8"></script>

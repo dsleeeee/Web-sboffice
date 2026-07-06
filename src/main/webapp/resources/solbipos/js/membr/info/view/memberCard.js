@@ -148,7 +148,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 카드번호는 숫자만 입력할 수 있습니다.
+        // 카드번호는 숫자/영문만 입력할 수 있습니다.
         var msg = messages["regist.card.new.no"] + messages["cmm.require.number.en"];
         var numChkregexp = /[^a-zA-Z0-9]/g;
         if (numChkregexp.test($scope.member.membrCardNo)) {
@@ -166,8 +166,8 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
         // });
 
         // 카드번호 최대길이 체크
-        if (nvl($scope.member.membrCardNo, '') !== '' && nvl($scope.member.membrCardNo + '', '').getByteLengthForOracle() > 16) {
-            msg = messages["regist.card.new.no"] + messages["excelUpload.overLength"] + " 16 " + messages["excelUpload.bateLengthInfo"];
+        if (nvl($scope.member.membrCardNo, '') !== '' && nvl($scope.member.membrCardNo + '', '').length > 40) {
+            msg = messages["regist.membr.card.no"] + messages["cmm.overLength"] + " 40 ";
             $scope._popMsg(msg);
             return false;
         }

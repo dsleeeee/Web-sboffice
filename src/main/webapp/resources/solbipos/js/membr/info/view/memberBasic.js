@@ -49,6 +49,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberBasicCtrl', $scope, $http, false));
 
+    // member 객체 초기화
+    $scope.member = {};
+
     // 기본 회원등급
     if (memberClassList.length == 0) {
         memberClassList = [{value: "", name: "전체"}, {value: "001", name: "기본등급"}];
@@ -168,7 +171,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#trWeddingDay").css("display", "none");
             $scope.weddingDayCombo.selectedValue = new Date();
             $scope.weddingDayCombo.refresh();
-            $scope.member.weddingDay = new Date();
+            $scope.member.weddingday = new Date();
 
             // 생일구분 기본셋팅
             $("input:checkbox[id='birthChk']").prop("checked", false);
@@ -291,8 +294,6 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // 데이터 바인딩
             $scope.member = memberDetailInfo;
             $scope.member.temp = orgnNm;
-
-            console.log($scope.member);
 
             // [1246 광운대아이스링크]
             if(kwuEnvstVal === "1") {
@@ -427,8 +428,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 회원명 최대길이 체크
-        if (nvl($scope.member.membrNm, '') !== '' && nvl($scope.member.membrNm + '', '').getByteLengthForOracle() > 50) {
-            msg = messages["regist.membr.nm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + $scope.member.membrNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+        if ($("#rMembrNm").val().length > 10) {
+            var msg = messages["regist.membr.nm"] + messages["cmm.overLength"] + " 10 ";
             $scope._popMsg(msg);
             return false;
         }
@@ -462,9 +463,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // 전화번호 최대길이 체크
-        if (nvl($scope.member.telNo, '') !== '' && nvl($scope.member.telNo + '', '').getByteLengthForOracle() > 14) {
-            msg = messages["regist.tel"] + messages["cmm.overLength"] + " 14 " + messages["cmm.bateLengthInfo"];
+        // 전화번호 자리수 체크 (8~12자리)
+        if (nvl($scope.member.telNo, '').length < 8 || nvl($scope.member.telNo, '').length > 12) {
+            var msg = messages["regist.tel"] + " 8~12자리를 입력해주세요.";
             $scope._popMsg(msg);
             return false;
         }
@@ -505,11 +506,17 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         //     $scope._popMsg(msg);
         //     return false;
         // }
-        // 회원카드번호는 숫자만 입력할 수 있습니다.
+        // 회원카드번호는 영문/숫자만 입력할 수 있습니다.
         var msg = messages["regist.membr.card.no"] + messages["cmm.require.number.en"];
         var numChkregexp = /[^a-zA-Z0-9]/g;
         if(!isNull($scope.member.membrCardNo)) {
             if (numChkregexp.test($scope.member.membrCardNo)) {
+                $scope._popMsg(msg);
+                return false;
+            }
+            // 회원카드번호 최대길이 체크
+            if ($scope.member.membrCardNo.length > 40) {
+                var msg = messages["regist.membr.card.no"] + messages["cmm.overLength"] + " 40 ";
                 $scope._popMsg(msg);
                 return false;
             }
@@ -614,7 +621,47 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (!$scope.valueCheck()) return false;
 
+        // 연락처 중복 체크 (더미번호 제외)
+        var telNo = $scope.member.telNo;
+        var isDummy = /^(.)\1+$/.test(telNo) || telNo === '01000000000';
         var params = $scope.member;
+
+        if (!isDummy) {
+            $scope._postJSONQuery.withPopUp('/membr/info/view/base/getMemberTelNoCount.sb', params, function(response) {
+                if (response.data.data > 0) {
+                    $scope._popMsg(messages["regist.membr.telNoDuplicate"]); // 이미 등록된 연락처입니다.
+                    return false;
+                }
+                $scope.cardNoChk();
+            });
+        } else {
+            $scope.cardNoChk();
+        }
+    };
+
+    // 카드번호 중복 체크
+    $scope.cardNoChk = function () {
+        var membrCardNo = $("#basicMembrCardNo").val();
+        var params = $scope.member;
+
+        if (!isNull(membrCardNo)) {
+            $scope.member.membrCardNo = membrCardNo;
+            $scope._postJSONQuery.withPopUp('/membr/info/view/base/getMemberCardNoCount.sb', params, function(response) {
+                if (response.data.data > 0) {
+                    $scope._popMsg(messages["regist.membr.cardNoDuplicate"]); // 이미 등록된 회원카드번호입니다.
+                    return false;
+                }
+                $scope.saveSave();
+            });
+        } else {
+            $scope.saveSave();
+        }
+    };
+
+    $scope.saveSave = function () {
+
+        var params = angular.copy($scope.member);
+        params.membrNm = $("#rMembrNm").val();
         params.postNo  = $("#rPostNo").val();
         params.latitude = $("#rLatitude").val();
         params.longitude = $("#rLongitude").val();
@@ -624,7 +671,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         /*if($scope.member.telNo === ''){
             $scope.member.telNo = '01000000000';
         }*/
-        
+
         // 기혼인 경우만 결혼날짜 입력
         if($scope.weddingYnCombo.selectedIndex === 1) {
             params.weddingday = dateToDaystring($scope.member.weddingday);
@@ -737,10 +784,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // 데이터 초기화 (수정, 저장 후 다시 팝업 호출 시, 예전 정보가 남아있는 경우가 있어서)
         // $scope.member = {};
     };
+    // <-- //saveSave -->
 
     // 닫기
     $scope.close = function () {
-        $scope.member = {};
         $scope.resetForm();
         $scope.memberRegistLayer.hide();
     };
