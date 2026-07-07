@@ -98,6 +98,9 @@ public class DataRcvStatusVO extends PageVO {
     /** 로그일자 */
     private String logDate;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
 
@@ -172,4 +175,12 @@ public class DataRcvStatusVO extends PageVO {
 
     public String getLogDate() { return logDate; }
     public void setLogDate(String logDate) { this.logDate = logDate; }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

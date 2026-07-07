@@ -1,6 +1,10 @@
 package kr.co.solbipos.store.storeMoms.dataRcvStatus.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.storeMoms.dataRcvStatus.service.DataRcvStatusService;
 import kr.co.solbipos.store.storeMoms.dataRcvStatus.service.DataRcvStatusVO;
@@ -30,10 +34,12 @@ import java.util.List;
 public class DataRcvStatusServiceImpl implements DataRcvStatusService {
 
     private final DataRcvStatusMapper dataRcvStatusMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public DataRcvStatusServiceImpl(DataRcvStatusMapper dataRcvStatusMapper) {
+    public DataRcvStatusServiceImpl(DataRcvStatusMapper dataRcvStatusMapper, PopupMapper popupMapper) {
         this.dataRcvStatusMapper = dataRcvStatusMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 자료수신현황 헤더 조회 */
@@ -49,9 +55,11 @@ public class DataRcvStatusServiceImpl implements DataRcvStatusService {
             }
         }
 
-        // 멀티매장선택 배열 세팅
-        if (dataRcvStatusVO.getStoreCds() != null && !dataRcvStatusVO.getStoreCds().equals("")) {
-            dataRcvStatusVO.setArrStoreCd(dataRcvStatusVO.getStoreCds().split(","));
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(dataRcvStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dataRcvStatusVO.getStoreCds(), 3900));
+            dataRcvStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dataRcvStatusMapper.getDataRcvStatusHdrList(dataRcvStatusVO);
