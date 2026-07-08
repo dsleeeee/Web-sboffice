@@ -89,18 +89,18 @@
             <tr>
                 <%-- 사용여부 --%>
                 <th>
-                    <s:message code="smsBadwordTab.isActive"/>
+                    <s:message code="smsBadwordTab.useYn"/>
                 </th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
-                                id="isActive"
-                                ng-model="isActive"
-                                items-source="_getComboData('isActive')"
+                                id="useYn"
+                                ng-model="useYn"
+                                items-source="_getComboData('useYn')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
-                                control="isActiveCombo">
+                                control="useYnCombo">
                         </wj-combo-box>
                     </div>
                 </td>
@@ -142,14 +142,14 @@
                 is-read-only="false"
                 item-formatter="_itemFormatter">
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.id"/>" binding="id" width="60" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.id"/>" binding="badwordId" width="40" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.keyword"/>" binding="keyword" width="200" is-read-only="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.keywordNormalized"/>" binding="keywordNormalized" width="200" is-read-only="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.category"/>" binding="category" width="150" is-read-only="false" align="center" data-map="categoryDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.matchType"/>" binding="matchType" width="100" is-read-only="false" align="center" data-map="matchTypeDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.severity"/>" binding="severity" width="100" is-read-only="false" align="center" data-map="severityDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.source"/>" binding="source" width="200" is-read-only="false" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.isActive"/>" binding="isActive" width="100" is-read-only="false" align="center" data-map="isActiveDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.useYn"/>" binding="useYn" width="100" is-read-only="false" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
         </wj-flex-grid>
     </div>
 
@@ -162,4 +162,4 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/badwordManage.js?ver=20260702.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/badwordManage.js?ver=20260707.01" charset="utf-8"></script>

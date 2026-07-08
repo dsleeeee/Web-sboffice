@@ -205,28 +205,16 @@ public class SmsSendVO extends PageVO {
     private String blockType;
 
     /** 탐지된 금칙어 ID (BADWORD.ID) */
-    private Long triggeredKeywordId;
+    private Long badwordId;
 
-    /** 악성 판정된 URL */
-    private String triggeredUrl;
-
-    /** URL 판정 소스 (kisa_xray, google_sb 등) */
-    private String urlCheckSource;
+    /** 악성 판정된 URL 로그 ID	 */
+    private String urlCheckId;
 
     /** 처리 결과 ('blocked','held','warned','allowed') */
-    private String triggeredStatus;
-
-    /** 관리자 검토 ID (보류 시) */
-    private String adminReviewId;
-
-    /** 메시지 앞 100자 (개인정보 최소화 원칙) */
-    private String messageSnippet;
-
-    /** MESSAGE_BLOCK_LOG PK — selectKey 채번 후 ADMIN_REVIEW_QUEUE INSERT 시 재사용 */
-    private Long blockLogId;
+    private String msgStatus;
 
     /** 탐지된 금칙어 원문 (사용자 응답 메시지용) */
-    private String triggeredKeyword;
+    private String keyword;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -692,67 +680,35 @@ public class SmsSendVO extends PageVO {
         this.blockType = blockType;
     }
 
-    public Long getTriggeredKeywordId() {
-        return triggeredKeywordId;
+    public Long getBadwordId() {
+        return badwordId;
     }
 
-    public void setTriggeredKeywordId(Long triggeredKeywordId) {
-        this.triggeredKeywordId = triggeredKeywordId;
+    public void setBadwordId(Long badwordId) {
+        this.badwordId = badwordId;
     }
 
-    public String getTriggeredUrl() {
-        return triggeredUrl;
+    public String getUrlCheckId() {
+        return urlCheckId;
     }
 
-    public void setTriggeredUrl(String triggeredUrl) {
-        this.triggeredUrl = triggeredUrl;
+    public void setUrlCheckId(String urlCheckId) {
+        this.urlCheckId = urlCheckId;
     }
 
-    public String getUrlCheckSource() {
-        return urlCheckSource;
+    public String getMsgStatus() {
+        return msgStatus;
     }
 
-    public void setUrlCheckSource(String urlCheckSource) {
-        this.urlCheckSource = urlCheckSource;
+    public void setMsgStatus(String msgStatus) {
+        this.msgStatus = msgStatus;
     }
 
-    public String getTriggeredStatus() {
-        return triggeredStatus;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setTriggeredStatus(String triggeredStatus) {
-        this.triggeredStatus = triggeredStatus;
-    }
-
-    public String getAdminReviewId() {
-        return adminReviewId;
-    }
-
-    public void setAdminReviewId(String adminReviewId) {
-        this.adminReviewId = adminReviewId;
-    }
-
-    public String getMessageSnippet() {
-        return messageSnippet;
-    }
-
-    public void setMessageSnippet(String messageSnippet) {
-        this.messageSnippet = messageSnippet;
-    }
-
-    public Long getBlockLogId() {
-        return blockLogId;
-    }
-
-    public void setBlockLogId(Long blockLogId) {
-        this.blockLogId = blockLogId;
-    }
-
-    public String getTriggeredKeyword() {
-        return triggeredKeyword;
-    }
-
-    public void setTriggeredKeyword(String triggeredKeyword) {
-        this.triggeredKeyword = triggeredKeyword;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

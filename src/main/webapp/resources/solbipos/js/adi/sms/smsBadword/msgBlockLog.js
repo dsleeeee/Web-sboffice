@@ -13,16 +13,16 @@
  */
 var app = agrid.getApp();
 
-// 차단원인유형
+// 차단 원인 유형
 var blockTypeFg = [
     {"name":"전체","value":""},
     {"name":"금칙어","value":"keyword"},
-    {"name":"URL","value":"url"},
-    {"name":"금칙어+URL","value":"combined"}
+    {"name":"URL","value":"url"}
+    /*{"name":"금칙어+URL","value":"combined"}*/
 ];
 
-// 처리결과
-var statusFg = [
+// 메시지 상태
+var msgStatusFg = [
     {"name":"전체","value":""},
     {"name":"차단","value":"blocked"},
     {"name":"보류","value":"held"},
@@ -41,13 +41,13 @@ app.controller('msgBlockLogCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
-    $scope._setComboData("blockType", blockTypeFg);   // 차단원인유형
-    $scope._setComboData("status", statusFg);         // 처리결과
+    $scope._setComboData("blockType", blockTypeFg);   // 차단 원인 유형
+    $scope._setComboData("msgStatus", msgStatusFg);   // 메시지 상태
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        $scope.blockTypeDataMap  = new wijmo.grid.DataMap(blockTypeFg.slice(1),  'value', 'name'); // 차단원인유형
-        $scope.statusDataMap  = new wijmo.grid.DataMap(statusFg.slice(1),  'value', 'name');       // 처리결과
+        $scope.blockTypeDataMap  = new wijmo.grid.DataMap(blockTypeFg.slice(1),  'value', 'name');      // 차단 원인 유형
+        $scope.msgStatusDataMap  = new wijmo.grid.DataMap(msgStatusFg.slice(1),  'value', 'name');      // 메시지 상태
     };
 
     $scope.$on("msgBlockLogCtrl", function (event, data) {
@@ -64,7 +64,7 @@ app.controller('msgBlockLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.blockType = $scope.blockTypeCombo.selectedValue;
         params.triggeredKeyword = $("#triggeredKeyword").val();
         params.triggeredUrl = $("#triggeredUrl").val();
-        params.msgStatus = $scope.statusCombo.selectedValue;
+        params.msgStatus = $scope.msgStatusCombo.selectedValue;
         params.listScale = $scope.listScale;
 
         $scope._inquiryMain("/adi/sms/smsBadword/msgBlockLog/getMsgBlockLogList.sb", params, function () {}, false);

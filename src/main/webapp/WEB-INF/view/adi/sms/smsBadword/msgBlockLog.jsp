@@ -27,7 +27,7 @@
             <tr>
                 <%-- 탐지일시 --%>
                 <th>
-                    <s:message code="smsBadwordTab.createdAt"/>
+                    <s:message code="smsBadwordTab.regDt"/>
                 </th>
                 <td>
                     <div class="sb-select">
@@ -36,7 +36,7 @@
                         <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
                     </div>
                 </td>
-                <%-- 차단원인유형 --%>
+                <%-- 차단 원인 유형 --%>
                 <th>
                     <s:message code="smsBadwordTab.blockType"/>
                 </th>
@@ -55,36 +55,36 @@
                 </td>
             </tr>
             <tr>
-                <%-- 탐지금칙어 --%>
+                <%-- 금칙어 --%>
                 <th>
-                    <s:message code="smsBadwordTab.triggeredKeyword"/>
+                    <s:message code="smsBadwordTab.keyword"/>
                 </th>
                 <td>
                     <input type="text" id="triggeredKeyword" ng-model="triggeredKeyword" class="sb-input w100" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
-                <%-- 악성판정 URL --%>
+                <%-- URL --%>
                 <th>
-                    <s:message code="smsBadwordTab.triggeredUrl"/>
+                    <s:message code="smsBadwordTab.url"/>
                 </th>
                 <td>
                     <input type="text" id="triggeredUrl" ng-model="triggeredUrl" class="sb-input w100" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
             <tr>
-                <%-- 처리결과 --%>
+                <%-- 메시지 상태 --%>
                 <th>
-                    <s:message code="smsBadwordTab.status"/>
+                    <s:message code="smsBadwordTab.msgStatus"/>
                 </th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
-                                id="status"
-                                ng-model="status"
-                                items-source="_getComboData('status')"
+                                id="msgStatus"
+                                ng-model="msgStatus"
+                                items-source="_getComboData('msgStatus')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
-                                control="statusCombo">
+                                control="msgStatusCombo">
                         </wj-combo-box>
                     </div>
                 </td>
@@ -120,19 +120,15 @@
                 items-source="data"
                 is-read-only="false"
                 item-formatter="_itemFormatter">
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.id"/>" binding="id" width="60" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.accountId"/>" binding="accountId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.messageId"/>" binding="messageId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.smsSendSeq"/>" binding="smsSendSeq" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.id"/>" binding="msgBlockId" width="40" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.blockType"/>" binding="blockType" width="100" is-read-only="true" align="center" data-map="blockTypeDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.triggeredKeywordId"/>" binding="triggeredKeywordId" width="60" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.triggeredKeyword"/>" binding="triggeredKeyword" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.triggeredUrl"/>" binding="triggeredUrl" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.urlCheckSource"/>" binding="urlCheckSource" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.status"/>" binding="status" width="80" is-read-only="true" align="center" data-map="statusDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.adminReviewId"/>" binding="adminReviewId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.messageSnippet"/>" binding="messageSnippet" is-read-only="true" width="300"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.createdAt"/>" binding="createdAt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.badwordId"/>" binding="badwordId" width="60" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.keyword"/>" binding="keyword" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.urlCheckId"/>" binding="urlCheckId" width="60" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.url"/>" binding="url" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.msgStatus"/>" binding="msgStatus" width="80" is-read-only="true" align="center" data-map="msgStatusDataMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.msgContent"/>" binding="msgContent" is-read-only="true" width="400"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.regDt"/>" binding="regDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.callback"/>" binding="callback" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.sOgnCd"/>" binding="sOgnCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.sUserId"/>" binding="sUserId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -149,4 +145,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/msgBlockLog.js?ver=20260702.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/msgBlockLog.js?ver=20260707.01" charset="utf-8"></script>

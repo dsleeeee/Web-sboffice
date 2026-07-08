@@ -30,9 +30,6 @@ public interface BadwordFilterMapper {
     /** 활성 금칙어 전체 목록 조회 (캐시용) */
     List<BadwordVO> selectActiveBadwordList();
 
-    /** 차단이력 저장 (blockLogId 채번 포함) */
-    int insertMessageBlockLog(SmsSendVO smsSendVO);
-
-    /** 보류 건 등록 */
-    int insertAdminReviewQueue(SmsSendVO smsSendVO);
+    /** 차단이력 저장 */
+    int insertMessageBlock(SmsSendVO smsSendVO);
 }

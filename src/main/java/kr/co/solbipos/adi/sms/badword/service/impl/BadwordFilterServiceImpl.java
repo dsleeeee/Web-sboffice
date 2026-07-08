@@ -98,20 +98,20 @@ public class BadwordFilterServiceImpl implements BadwordFilterService {
     public void saveBlockLog(SmsSendVO smsSendVO, FilterResult result, SessionInfoVO sessionInfoVO) {
 
         smsSendVO.setBlockType(result.isDetected() ? result.getBlockType() : "");
-        smsSendVO.setTriggeredKeywordId(result.getTriggeredKeywordId());
-        smsSendVO.setTriggeredStatus(result.getStatus());
+        smsSendVO.setBadwordId(result.getBadwordId());
 
-        // 개인정보 최소화 원칙: 본문 앞 100자만 저장
-        String content = smsSendVO.getContent();
-        smsSendVO.setMessageSnippet(content != null && content.length() > 100 ? content.substring(0, 100) : content);
+        // 메시지 상태
+        String msgStatus;
+        switch (result.getSeverity()) {
+            case "block": msgStatus = "blocked"; break;
+            case "hold":  msgStatus = "held";    break;
+            case "warn":  msgStatus = "warned";  break;
+            default:      msgStatus = "allowed"; break;
+        }
+        smsSendVO.setMsgStatus(msgStatus);
 
-        // MESSAGE_BLOCK_LOG INSERT (selectKey로 blockLogId 채번 포함)
-        badwordFilterMapper.insertMessageBlockLog(smsSendVO);
-
-        // '보류' 이면 관리자 검토 테이블 등록
-        /*if ("hold".equals(result.getStatus())) {
-            badwordFilterMapper.insertAdminReviewQueue(smsSendVO);
-        }*/
+        // 차단이력 저장
+        badwordFilterMapper.insertMessageBlock(smsSendVO);
     }
 
     /** 캐시 강제 갱신 */

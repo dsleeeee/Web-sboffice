@@ -22,7 +22,7 @@ public class SmsBadwordVO extends PageVO {
     private static final long serialVersionUID = 692647285725286776L;
 
     /** 금칙어 ID */
-    private String id;
+    private String badwordId;
 
     /** 금칙어 키워드 */
     private String keyword;
@@ -42,63 +42,33 @@ public class SmsBadwordVO extends PageVO {
     /** 출처 */
     private String source;
 
-    /** 활성여부 (1:활성, 0:비활성) */
-    private String isActive;
+    /** 사용여부 */
+    private String useYn;
 
-    /** 차단로그 ID */
-    private String blockLogId;
+    /** 조회 시작 일자 */
+    private String startDate;
 
-    /** 계정 ID */
-    private String accountId;
-
-    /** 메시지 ID */
-    private String messageId;
+    /** 조회 종료 일자 */
+    private String endDate;
 
     /** 차단 유형 */
     private String blockType;
 
-    /** 트리거된 키워드 ID */
-    private String triggeredKeywordId;
-
-    /** 트리거된 URL */
-    private String triggeredUrl;
-
-    /** 상태 (blocked/held/warned/allowed) */
-    private String msgStatus;
-
-    /** 메시지 미리보기 */
-    private String messageSnippet;
-
-    /** 소속코드 */
-    private String sOgnCd;
-
-    /** 소속구분 */
-    private String sOgnFg;
-
-    /** 사용자 ID */
-    private String sUserId;
-
-    /** 검색 시작일 */
-    private String startDt;
-
-    /** 검색 종료일 */
-    private String endDt;
-
-    /** 검색 시작일 (msgBlockLog) */
-    private String startDate;
-
-    /** 검색 종료일 (msgBlockLog) */
-    private String endDate;
-
-    /** 탐지 금칙어 텍스트 검색 */
+    /** 탐지 키워드 */
     private String triggeredKeyword;
 
-    public String getId() {
-        return id;
+    /** 탐지 URL */
+    private String triggeredUrl;
+
+    /** 메시지 상태 (blocked/held/warned/allowed) */
+    private String msgStatus;
+
+    public String getBadwordId() {
+        return badwordId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBadwordId(String badwordId) {
+        this.badwordId = badwordId;
     }
 
     public String getKeyword() {
@@ -149,36 +119,32 @@ public class SmsBadwordVO extends PageVO {
         this.source = source;
     }
 
-    public String getIsActive() {
-        return isActive;
+    public String getUseYn() {
+        return useYn;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 
-    public String getBlockLogId() {
-        return blockLogId;
+    @Override
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setBlockLogId(String blockLogId) {
-        this.blockLogId = blockLogId;
+    @Override
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
-    public String getAccountId() {
-        return accountId;
+    @Override
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
+    @Override
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getBlockType() {
@@ -189,12 +155,12 @@ public class SmsBadwordVO extends PageVO {
         this.blockType = blockType;
     }
 
-    public String getTriggeredKeywordId() {
-        return triggeredKeywordId;
+    public String getTriggeredKeyword() {
+        return triggeredKeyword;
     }
 
-    public void setTriggeredKeywordId(String triggeredKeywordId) {
-        this.triggeredKeywordId = triggeredKeywordId;
+    public void setTriggeredKeyword(String triggeredKeyword) {
+        this.triggeredKeyword = triggeredKeyword;
     }
 
     public String getTriggeredUrl() {
@@ -211,77 +177,5 @@ public class SmsBadwordVO extends PageVO {
 
     public void setMsgStatus(String msgStatus) {
         this.msgStatus = msgStatus;
-    }
-
-    public String getMessageSnippet() {
-        return messageSnippet;
-    }
-
-    public void setMessageSnippet(String messageSnippet) {
-        this.messageSnippet = messageSnippet;
-    }
-
-    public String getsOgnCd() {
-        return sOgnCd;
-    }
-
-    public void setsOgnCd(String sOgnCd) {
-        this.sOgnCd = sOgnCd;
-    }
-
-    public String getsOgnFg() {
-        return sOgnFg;
-    }
-
-    public void setsOgnFg(String sOgnFg) {
-        this.sOgnFg = sOgnFg;
-    }
-
-    public String getsUserId() {
-        return sUserId;
-    }
-
-    public void setsUserId(String sUserId) {
-        this.sUserId = sUserId;
-    }
-
-    public String getStartDt() {
-        return startDt;
-    }
-
-    public void setStartDt(String startDt) {
-        this.startDt = startDt;
-    }
-
-    public String getEndDt() {
-        return endDt;
-    }
-
-    public void setEndDt(String endDt) {
-        this.endDt = endDt;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getTriggeredKeyword() {
-        return triggeredKeyword;
-    }
-
-    public void setTriggeredKeyword(String triggeredKeyword) {
-        this.triggeredKeyword = triggeredKeyword;
     }
 }

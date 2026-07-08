@@ -172,7 +172,7 @@ public class SmsSendController {
         if (result == -1) {
             HashMap<String, Object> blocked = new HashMap<String, Object>();
             blocked.put("blocked", true);
-            blocked.put("keyword", smsSendVOs[0].getTriggeredKeyword());
+            blocked.put("keyword", smsSendVOs[0].getKeyword());
             return returnJson(Status.OK, blocked);
         }
         return returnJson(Status.OK, result);
@@ -201,7 +201,7 @@ public class SmsSendController {
         if (result == -1) {
             HashMap<String, Object> blocked = new HashMap<String, Object>();
             blocked.put("blocked", true);
-            blocked.put("keyword", smsSendVO.getTriggeredKeyword());
+            blocked.put("keyword", smsSendVO.getKeyword());
             return returnJson(Status.OK, blocked);
         }
         return returnJson(Status.OK, result);

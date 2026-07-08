@@ -16,16 +16,16 @@ public class FilterResult {
     private String blockType;
 
     /** 탐지된 금칙어 ID (BADWORD.ID) */
-    private Long triggeredKeywordId;
+    private Long badwordId;
 
     /** 탐지된 금칙어 원문 */
-    private String triggeredKeyword;
+    private String keyword;
 
     /**
      * 처리 방식
      * block / hold / warn
      */
-    private String status;
+    private String severity;
 
     /** 정상 통과 결과 */
     public static FilterResult pass() {
@@ -37,21 +37,45 @@ public class FilterResult {
     /** 탐지 결과 */
     public static FilterResult detected(BadwordVO badword, String blockType) {
         FilterResult result = new FilterResult();
-        result.detected           = true;
-        result.blockType          = blockType;
-        result.triggeredKeywordId = badword.getId();
-        result.triggeredKeyword   = badword.getKeyword();
-        result.status             = badword.getSeverity();
+        result.detected     = true;
+        result.blockType    = blockType;
+        result.badwordId    = badword.getBadwordId();
+        result.keyword      = badword.getKeyword();
+        result.severity     = badword.getSeverity();
         return result;
     }
 
     public boolean isDetected() { return detected; }
 
-    public Long getTriggeredKeywordId() { return triggeredKeywordId; }
+    public String getBlockType() {
+        return blockType;
+    }
 
-    public String getTriggeredKeyword() { return triggeredKeyword; }
+    public void setBlockType(String blockType) {
+        this.blockType = blockType;
+    }
 
-    public String getStatus() { return status; }
+    public Long getBadwordId() {
+        return badwordId;
+    }
 
-    public String getBlockType() { return blockType; }
+    public void setBadwordId(Long badwordId) {
+        this.badwordId = badwordId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
 }

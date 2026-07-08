@@ -162,17 +162,15 @@ public class SmsSendServiceImpl implements SmsSendService {
                         smsSendVO.setSendDate(currentDt);
                     }
 
-                    // 전송이력시퀀스(발송되지 않으므로 명시적으로 비움)
-                    smsSendVO.setSmsSendSeq("");
-
                     // 탐지된 금칙어
-                    smsSendVO.setTriggeredKeyword(filterResult.getTriggeredKeyword());
+                    smsSendVO.setKeyword(filterResult.getKeyword());
 
                     // 금칙어 로그 저장
                     badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
-
-                    procCnt = -1;
                 }
+
+                procCnt = -1;
+
             } else {
                 // 잔여금액 - 사용금액
                 smsSendChkVO.setSmsAmt(String.valueOf( Long.parseLong(smsAmt) -  Long.parseLong(useSmsAmt) ));
@@ -241,9 +239,6 @@ public class SmsSendServiceImpl implements SmsSendService {
 
                     LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
                     LOGGER.info("WEB_SMS >>> SMS전송 >>> SMS전송 저장");
-
-                    // 금칙어 로그 저장
-                    badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
 
                     // SMS
                     if (smsSendVO.getMsgType().equals("1")) {
@@ -327,11 +322,8 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             if (filterResult.isDetected()) {
 
-                // 전송이력시퀀스(발송되지 않으므로 명시적으로 비움)
-                smsSendVO.setSmsSendSeq("");
-
                 // 탐지된 금칙어
-                smsSendVO.setTriggeredKeyword(filterResult.getTriggeredKeyword());
+                smsSendVO.setKeyword(filterResult.getKeyword());
 
                 // 이력만 남기고 SMS 미전송
                 badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
@@ -362,9 +354,6 @@ public class SmsSendServiceImpl implements SmsSendService {
                 procCnt = smsSendMapper.getSmsSendSeqSaveInsert(smsSendVO);
                 LOGGER.info("WEB_SMS >>> SMS전송 >>> 메세지타입 : " + smsSendVO.getMsgType());
                 LOGGER.info("WEB_SMS >>> SMS전송 >>> SMS전송 저장");
-
-                // 금칙어 로그 저장
-                badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
 
                 // SMS
                 if(smsSendVO.getMsgType().equals("1")) {

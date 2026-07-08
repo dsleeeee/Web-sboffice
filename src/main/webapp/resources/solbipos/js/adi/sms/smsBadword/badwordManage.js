@@ -42,10 +42,10 @@ var severityFg = [
 ];
 
 // 사용여부(활성여부)
-var isActiveFg = [
+var useYnFg = [
     {"name":"전체","value":""},
-    {"name":"사용","value":"1"},
-    {"name":"미사용","value":"0"}
+    {"name":"사용","value":"Y"},
+    {"name":"미사용","value":"N"}
 ];
 
 app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -58,7 +58,7 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("category", categoryFg);   // 카테고리
     $scope._setComboData("matchType", matchTypeFg); // 매칭타입
     $scope._setComboData("severity", severityFg);   // 처리방식
-    $scope._setComboData("isActive", isActiveFg);   // 사용여부
+    $scope._setComboData("useYn", useYnFg);         // 사용여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -66,7 +66,7 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.categoryDataMap  = new wijmo.grid.DataMap(categoryFg.slice(1),  'value', 'name'); // 카테고리
         $scope.matchTypeDataMap = new wijmo.grid.DataMap(matchTypeFg.slice(1), 'value', 'name'); // 매칭타입
         $scope.severityDataMap  = new wijmo.grid.DataMap(severityFg.slice(1),  'value', 'name'); // 처리방식
-        $scope.isActiveDataMap  = new wijmo.grid.DataMap(isActiveFg.slice(1),  'value', 'name'); // 사용여부
+        $scope.useYnDataMap  = new wijmo.grid.DataMap(useYnFg.slice(1),  'value', 'name');      // 사용여부
 
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -74,7 +74,7 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
                 var item = s.rows[e.row].dataItem;
                 // 변경시 체크박스 체크
                 if (col.binding === "keyword" || col.binding === "keywordNormalized" || col.binding === "category" || col.binding === "matchType"
-                    || col.binding === "severity" || col.binding === "source" || col.binding === "isActive") {
+                    || col.binding === "severity" || col.binding === "source" || col.binding === "useYn") {
 
                     $scope.checked(item);
                 }
@@ -101,7 +101,7 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
         params.category = $scope.categoryCombo.selectedValue;
         params.matchType = $scope.matchTypeCombo.selectedValue;
         params.severity = $scope.severityCombo.selectedValue;
-        params.isActive = $scope.isActiveCombo.selectedValue;
+        params.useYn = $scope.useYnCombo.selectedValue;
         //params.listScale = $scope.listScale;
 
         $scope._inquiryMain("/adi/sms/smsBadword/badwordManage/getBadwordManageList.sb", params, function () {}, false);
@@ -111,14 +111,14 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.addRow = function () {
         var params = {};
         params.gChk               = true;
-        params.id                 = "";
+        params.badwordId          = "";
         params.keyword            = "";
         params.keywordNormalized  = "";
         params.category           = "loan";
         params.matchType          = "contains";
         params.severity           = "block";
         params.source             = "";
-        params.isActive           = "1";
+        params.useYn              = "Y";
 
         $scope._addRow(params);
     };
@@ -206,7 +206,7 @@ app.controller('badwordManageCtrl', ['$scope', '$http', '$timeout', function ($s
             // itemsRemoved 중 id 있는 것만 (신규 추가 후 삭제 시 id 없으면 DB 호출 불필요)
             var params = [];
             for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-                if ($scope.flex.collectionView.itemsRemoved[i].id) {
+                if ($scope.flex.collectionView.itemsRemoved[i].badwordId) {
                     $scope.flex.collectionView.itemsRemoved[i].status = "D";
                     params.push($scope.flex.collectionView.itemsRemoved[i]);
                 }

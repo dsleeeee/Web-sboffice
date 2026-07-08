@@ -22,9 +22,9 @@ public class BadwordVO extends PageVO {
     private static final long serialVersionUID = 629368046159174716L;
 
     /** 고유 ID */
-    private Long id;
+    private Long badwordId;
 
-    /** 금칙어 원문 */
+    /** 금칙어 원문 (정규식 패턴 허용) */
     private String keyword;
 
     /** 정규화된 키워드 (특수문자 제거 버전) */
@@ -51,27 +51,27 @@ public class BadwordVO extends PageVO {
     /** 출처 (kisa_report / manual / feedback 등) */
     private String source;
 
-    /** 활성 여부 (1:활성 / 0:비활성) */
-    private String isActive;
-
-    /** 등록 관리자 ID */
-    private String createdBy;
+    /** 사용 여부 (Y:사용 / N:미사용) */
+    private String useYn;
 
     /** 등록 일시 */
-    private String createdAt;
+    private String regDt;
 
-    /** 수정 관리자 ID */
-    private String updatedBy;
+    /** 등록 ID */
+    private String regId;
 
     /** 수정 일시 */
-    private String updatedAt;
+    private String modDt;
 
-    public Long getId() {
-        return id;
+    /** 수정 ID */
+    private String modId;
+
+    public Long getBadwordId() {
+        return badwordId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBadwordId(Long badwordId) {
+        this.badwordId = badwordId;
     }
 
     public String getKeyword() {
@@ -122,43 +122,43 @@ public class BadwordVO extends PageVO {
         this.source = source;
     }
 
-    public String getIsActive() {
-        return isActive;
+    public String getUseYn() {
+        return useYn;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getRegDt() {
+        return regDt;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setRegDt(String regDt) {
+        this.regDt = regDt;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getRegId() {
+        return regId;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setRegId(String regId) {
+        this.regId = regId;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getModDt() {
+        return modDt;
     }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setModDt(String modDt) {
+        this.modDt = modDt;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getModId() {
+        return modId;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setModId(String modId) {
+        this.modId = modId;
     }
 }
