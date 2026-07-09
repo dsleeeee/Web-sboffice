@@ -317,6 +317,8 @@ public class RegistServiceImpl implements RegistService {
 
             if ( registVO.getMembrCardNo() != null && !"".equals(registVO.getMembrCardNo())) {
                 registVO.setCstCardIssFg("0");//신규발급
+                // 신규카드 발급소속 회원의 등록매장으로 세팅
+                registVO.setIssOrgnCd(registVO.getRegStoreCd());
                 mapper.insertMembrCard(registVO);
             }
         }
@@ -699,6 +701,8 @@ public class RegistServiceImpl implements RegistService {
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
+        // 신규 등록 시 카드상태 정상처리
+        registVO.setCstCardUseFg("0");
 
         // 회원카드 등록
         int result = mapper.insertMembrCard(registVO);
@@ -732,10 +736,20 @@ public class RegistServiceImpl implements RegistService {
         registVO.setCstCardUseFg("1");
 
         // 회원카드 수정
-        int result = mapper.insertMembrCard(registVO);
-        int membrResult = mapper.updateMembr(registVO);
+        String newMembrCardNo = registVO.getMembrCardNo();
+
+        // 이전 카드 수정
         registVO.setMembrCardNo(registVO.getOldCstCardNo());
         int cardResult = mapper.updateMembrCard(registVO);
+
+        // 신규 카드 등록
+        registVO.setMembrCardNo(newMembrCardNo);
+        // 카드정보 탭에서 등록 시 카드상태(정상) 세팅
+        registVO.setCstCardUseFg("0");
+        int result = mapper.insertMembrCard(registVO);
+
+        // 회원정보 수정
+        int membrResult = mapper.updateMembr(registVO);
         if (result <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }

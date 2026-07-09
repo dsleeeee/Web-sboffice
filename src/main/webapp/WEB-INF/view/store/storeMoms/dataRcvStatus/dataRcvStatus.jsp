@@ -363,7 +363,7 @@
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.msCd"/>"       binding="msCd"       width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.msCdNm"/>"     binding="msCdNm"     width="120" align="left"   is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.msCdEngNm"/>"  binding="msCdEngNm"  width="130" align="left"   is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dataRcvStatus.viewYn"/>"     binding="viewYn"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dataRcvStatus.viewYn"/>"     binding="viewYn"     width="80"  align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.reqSeq"/>"     binding="reqSeq"     width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.resCnt"/>"     binding="resCnt"     width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dataRcvStatus.minProcSeq"/>" binding="minProcSeq" width="90"  align="center" is-read-only="true"></wj-flex-grid-column>

@@ -119,7 +119,7 @@
                     <wj-flex-grid-column header="<s:message code="regist.card.old.no"/>" binding="oldCstCardNo" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.iss.fg"/>" binding="statFgNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.fg"/>" binding="issFgNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.org"/>" binding="membrOrgnCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="regist.card.org"/>" binding="issOrgnCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.iss.date"/>" binding="issDate" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="regist.card.iss.remark"/>" binding="issRemark" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>

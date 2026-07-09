@@ -919,6 +919,10 @@
         tmmc.MOD_ID = #{modId},
         tmmc.MOD_DT = #{modDt}
         WHERE tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmc.MEMBR_CARD_SEQ  = (SELECT MAX(MEMBR_CARD_SEQ) FROM TB_MB_MEMBER_CARD WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo} AND UPPER(MEMBR_CARD_NO) = UPPER(#{membrCardNo}))
+        <if test="membrNo != null and !membrNo.equals('')">
+            AND tmmc.MEMBR_NO = #{membrNo}
+        </if>
         <if test="membrCardNo != null and !membrCardNo.equals('')">
             AND UPPER(tmmc.MEMBR_CARD_NO) = UPPER(#{membrCardNo})
         </if>
@@ -961,9 +965,10 @@
     <select id="getMemberCardNoCount" parameterType="registVO" resultType="int">
         /* RegistMapper.getMemberCardNoCount */
         SELECT COUNT(1)
-          FROM TB_MB_MEMBER
+          FROM TB_MB_MEMBER_CARD
          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
            AND UPPER(MEMBR_CARD_NO) = UPPER(#{membrCardNo})
+        AND CST_CARD_STAT_FG = '0'
         <if test='membrNo != null and membrNo.toString() != ""'>
             AND MEMBR_NO != #{membrNo}
         </if>
@@ -995,6 +1000,9 @@
         WHERE membr_orgn_cd =  #{membrOrgnCd}
         AND	UPPER(membr_card_no) = UPPER(#{membrCardNo})
         AND CST_CARD_STAT_FG = '0'
+        <if test='membrNo != null and membrNo.toString() != ""'>
+            AND MEMBR_NO != #{membrNo}
+        </if>
     </select>
 
     <!-- 회원정보 수정 Sec-->
@@ -1388,7 +1396,7 @@
             UPPER(#{membrCardNo}),
             #{membrOrgnCd},
             #{membrNo},
-            '0',
+            #{cstCardUseFg},
             #{oldCstCardNo},
             #{cstCardIssFg},
             #{issRemark},
