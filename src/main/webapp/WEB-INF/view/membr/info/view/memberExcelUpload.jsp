@@ -212,7 +212,7 @@
     var membrClassManageFg = ${membrClassManageFg};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=20260702.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=20260709.01" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.13" charset="utf-8"></script>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>

@@ -176,6 +176,13 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('excelUploadCtrl', $scope, $http, true));
 
+        // 회원명에는 일반 특수문자(예: ♥)는 허용하고, surrogate pair 이모지와 이모지 조합 문자는 차단한다.
+        var membrNmEmojiRegexp = /[\uD800-\uDFFF\uFE0F\u20E3\u200D]/g;
+        function hasMembrNmEmoji(value) {
+            if (nvl(value, '') === '') return false;
+            membrNmEmojiRegexp.lastIndex = 0;
+            return membrNmEmojiRegexp.test(value + '');
+        }
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
@@ -775,6 +782,14 @@
 
                 // 회원명(한글) 값 체크
                 if (nvl(item.membrNm, '') !== '') {
+                    // 엑셀 업로드 값에 이모지가 있으면 검증 실패로 처리하여 저장 대상에서 제외한다.
+                    if (hasMembrNmEmoji(item.membrNm)) {
+                        msg = messages["member.excel.nm.kr"] + "에 이모지는 입력할 수 없습니다.";
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+
                     if(isChecked) { // 중복체크(회원명, 전화번호, 카드번호)할 경우 검증
                         // Grid 내에서의 회원명(한글) 중복체크
                         var isDuplicateNmInGrid = false;

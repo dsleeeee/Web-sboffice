@@ -52,6 +52,23 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     // member 객체 초기화
     $scope.member = {};
 
+    // 회원명에는 한글/영문/숫자/일반 특수문자만 허용하고, 이모지는 입력하지 못하도록 처리한다.
+    // 단독 특수기호(예: ♥)는 허용하고, surrogate pair 이모지와 이모지 조합 문자만 차단한다.
+    var membrNmEmojiRegexp = /[\uD800-\uDFFF\uFE0F\u20E3\u200D]/g;
+
+    // 입력/붙여넣기 시 회원명에서 이모지를 즉시 제거한다.
+    // 저장 전 검증도 별도로 유지해서 브라우저 이벤트를 우회한 값이 넘어오는 경우를 방어한다.
+    $scope.removeMembrNmEmoji = function () {
+        if (isNull($scope.member.membrNm)) return;
+
+        var membrNm = $scope.member.membrNm;
+        var filtered = membrNm.replace(membrNmEmojiRegexp, "");
+        if (membrNm !== filtered) {
+            $scope.member.membrNm = filtered;
+            $("#rMembrNm").val(filtered);
+        }
+    };
+
     // 기본 회원등급
     if (memberClassList.length == 0) {
         memberClassList = [{value: "", name: "전체"}, {value: "001", name: "기본등급"}];
@@ -434,6 +451,15 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 회원명 입력 이벤트가 발생하지 않았거나 스크립트로 값이 세팅된 경우를 대비해 저장 직전에도 이모지를 차단한다.
+        // 전역 플래그(g)를 사용하는 정규식은 test() 호출마다 검색 위치가 바뀌므로 매 검사 전 lastIndex를 초기화한다.
+        var membrNm = $("#rMembrNm").val();
+        membrNmEmojiRegexp.lastIndex = 0;
+        if (!isNull(membrNm) && membrNmEmojiRegexp.test(membrNm)) {
+            $scope._popMsg(messages["regist.membr.nm"] + "에 이모지는 입력할 수 없습니다.");
+            return false;
+        }
+
         // 회원명 영문 최대길이 체크
         if (nvl($scope.member.membrEngNm, '') !== '' && nvl($scope.member.membrEngNm + '', '').getByteLengthForOracle() > 50) {
             msg = messages["member.excel.nm.en"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + $scope.member.membrEngNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
@@ -644,14 +670,15 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         var membrCardNo = $("#basicMembrCardNo").val();
         var params = $scope.member;
 
-        if (!isNull(membrCardNo)) {
+        if (!isNull(membrCardNo) && $scope.member.cstCardUseFg === "0") {
             $scope.member.membrCardNo = membrCardNo;
-            $scope._postJSONQuery.withPopUp('/membr/info/view/base/getMemberCardNoCount.sb', params, function(response) {
-                if (response.data.data > 0) {
-                    $scope._popMsg(messages["regist.membr.cardNoDuplicate"]); // 이미 등록된 회원카드번호입니다.
+            $scope._postJSONQuery.withPopUp('/membr/info/view/base/getMemberCardInfoCountDetail.sb', params, function(response) {
+                if(response.data.data !== "X") {
+                    $scope._popMsg("회원번호[" + response.data.data + "]가 카드번호 [" + $scope.member.membrCardNo + "] 사용중입니다.");
                     return false;
+                }else {
+                    $scope.saveSave();
                 }
-                $scope.saveSave();
             });
         } else {
             $scope.saveSave();

@@ -47,6 +47,13 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
     // 중복체크(회원명, 전화번호, 카드번호) 여부
     $scope.isCheckedMembr = false;
 
+    // 회원명에는 일반 특수문자(예: ♥)는 허용하고, surrogate pair 이모지와 이모지 조합 문자는 제거한다.
+    var membrNmEmojiRegexp = /[\uD800-\uDFFF\uFE0F\u20E3\u200D]/g;
+    function removeMembrNmEmoji(value) {
+        if (isNull(value)) return value;
+        return (value + "").replace(membrNmEmojiRegexp, "");
+    }
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
@@ -74,6 +81,14 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
               if (col.binding === "memberTelNo" && dataItem.memberTelNo) {
                   dataItem.memberTelNo = dataItem.memberTelNo.replace(/[^0-9]/g, '');
                   s.invalidate();
+              }
+              // 그리드에서 회원명을 직접 수정할 때 이모지가 남지 않도록 즉시 제거한다.
+              if (col.binding === "membrNm" && dataItem.membrNm) {
+                  var filteredMembrNm = removeMembrNmEmoji(dataItem.membrNm);
+                  if (dataItem.membrNm !== filteredMembrNm) {
+                      dataItem.membrNm = filteredMembrNm;
+                      s.invalidate();
+                  }
               }
             }
         });
