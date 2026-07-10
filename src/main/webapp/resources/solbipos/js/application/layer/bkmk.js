@@ -240,8 +240,9 @@ $(document).ready(function () {
       $(".ic_fix").click(function (event) {
         if ($(this).hasClass("ic_fix off")) {
           var fixedCnt = $(".ic_fix.on").length;
-          if (fixedCnt > 2) {
-            s_alert.pop("고정메뉴는 최대 3개까지 선택 가능합니다.");
+          if (fixedCnt > 4) {
+            // 26.07.10 고정메뉴 3->5 수정
+            s_alert.pop("고정메뉴는 최대 5개까지 선택 가능합니다.");
           } else {
             $(this).removeClass("ic_fix off").addClass("ic_fix on");
           }

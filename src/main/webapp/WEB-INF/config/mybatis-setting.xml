@@ -1297,6 +1297,7 @@
     <typeAlias alias="billSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.billSaleMrpizza.service.BillSaleMrpizzaVO"/>
     <!-- 미스터피자 > 마케팅조회 > 매출실적비교 -->
     <typeAlias alias="salePerfCompareVO" type="kr.co.solbipos.sale.marketing.salePerfCompare.service.SalePerfCompareVO"/>
+    <typeAlias alias="salePerfCompareBensonVO" type="kr.co.solbipos.sale.anals.salePerfCompareBenson.service.SalePerfCompareBensonVO"/>
 
     <!-- 국민대 > 근로학생관리 > 근로학생관리 -->
     <typeAlias alias="workStudentKookminVO" type="kr.co.solbipos.kookmin.workStudent.workStudent.service.WorkStudentKookminVO"/>
@@ -1444,6 +1445,11 @@
     <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 플러스 연동 -->
     <typeAlias alias="naverPlacePlusLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkVO"/>
     <typeAlias alias="naverPlacePlusApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO"/>
+
+    <!-- 벤슨 > 매출분석 > 상품 ABC분석 -->
+    <typeAlias alias="abcBensonVO" type="kr.co.solbipos.sale.anals.abcBenson.service.AbcBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 대비기간 매출실적 -->
+    <typeAlias alias="salePerfCompareBensonVO" type="kr.co.solbipos.sale.anals.salePerfCompareBenson.service.SalePerfCompareBensonVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

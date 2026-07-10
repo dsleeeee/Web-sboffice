@@ -41,7 +41,7 @@
                     </div>
                     <p class="s14 mt10">* 조회시 메뉴명은 <span class="red">빨간색</span>으로 표시됩니다. 조회된 <span class="red">메뉴명</span> 클릭시 해당 메뉴로 이동됩니다.</p>
                     <p class="s14">* 즐겨찾기 할 메뉴의 <span class="txtIcFav"></span>을 선택하시면 즐겨찾기 탭에 저장되어 편리하게 이용할 수 있습니다.</p>
-                    <p class="s14 mt10">* 고정메뉴를 <span class="txtIcFix"></span>설정해 놓으면 로그인시 고정메뉴가 상단에 표시됩니다. 아이콘을 클릭해서 고정메뉴를 선택해보세요. (최대 3개)</p>
+                    <p class="s14 mt10">* 고정메뉴를 <span class="txtIcFix"></span>설정해 놓으면 로그인시 고정메뉴가 상단에 표시됩니다. 아이콘을 클릭해서 고정메뉴를 선택해보세요. (최대 5개)</p>
                     <div id="bkmkMenu" class="menuOrg mt10 mb10">
                     </div>
                 </div>
@@ -54,4 +54,4 @@
     </div>
     <!--//layer:For Center screen-->
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js?ver=20240603.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js?ver=20260709.01" charset="utf-8"></script>
