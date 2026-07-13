@@ -782,6 +782,12 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // 수정
             if ($scope.saveMode === "MOD") {
 
+                // 수정 시에는 회원명 체크
+                if (nvl(params.membrNm, '') === '') {
+                    $scope._popMsg(messages["regist.membr.nm"] + messages["cmm.require.text"]); // 회원명을 입력하세요.
+                    return;
+                }
+
                 // 매출처구분 (1: 매출처)
                 if ($scope.member.customerFg == 1) {
                     $scope._popMsg(messages["regist.membr.customerFgSaveAlert"]); // 매출처회원은 수정할 수 없습니다.

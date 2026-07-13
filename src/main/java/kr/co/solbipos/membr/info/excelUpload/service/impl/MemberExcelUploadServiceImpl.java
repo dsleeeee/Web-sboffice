@@ -108,6 +108,14 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                 if(memberExcelUploadVO.getMembrNm() == null || memberExcelUploadVO.getMembrNm() == ""){
                     memberExcelUploadVO.setMembrNm(memberExcelUploadVO.getMembrNo());
                 }
+                // 회원카드번호에 값이 있을때
+                if (!StringUtils.isEmpty(memberExcelUploadVO.getMembrCardNo())) {
+                    // 회원카드 있으면 회원정보 [고객카드사용구분] 정상 처리
+                    memberExcelUploadVO.setCstCardUseFg("0");
+                }else{
+                    // 회원카드 없으면 회원정보 [고객카드사용구분] 중지 처리
+                    memberExcelUploadVO.setCstCardUseFg("1");
+                }
                 result = mapper.insertMember(memberExcelUploadVO);
 
                 if (result == 1) {
