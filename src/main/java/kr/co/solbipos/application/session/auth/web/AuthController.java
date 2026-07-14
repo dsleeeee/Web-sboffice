@@ -218,7 +218,7 @@ public class AuthController {
                 appendLoginLog(log, "err2", "로그인 시도 제한(userId+ip) (count > 3)", request, params, token, count, "제한");
 
                 // 특정 아이디만 세션 삭제
-                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.startsWith("h0268")) {
                     // 세션 삭제
                     sessionService.deleteSessionInfo(request);
                     // 제한 초과 처리
@@ -231,7 +231,7 @@ public class AuthController {
                 appendLoginLog(log, "err5", "로그인 시도 제한(userId) (count > 3)", request, params, token, count, "제한");
 
                 // 특정 아이디만 세션 삭제
-                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.startsWith("h0268")) {
                     // 세션 삭제
                     sessionService.deleteSessionInfo(request);
                     // 제한 초과 처리
@@ -244,7 +244,7 @@ public class AuthController {
                 appendLoginLog(log, "err1", "세션 토큰 값 없음", request, params, token, null, "제한");
 
                 // 특정 아이디만 세션 삭제
-                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.startsWith("h0268")) {
                     // 세션 삭제
                     sessionService.deleteSessionInfo(request);
                     params.setLoginResult(LoginResult.TOKEN_ERROR);
@@ -262,7 +262,7 @@ public class AuthController {
                 appendLoginLog(log, "err3", "브라우저 이상", request, params, token, null, "제한");
 
                 // 특정 아이디만 세션 삭제
-                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.startsWith("h0268")) {
                     // 세션 삭제
                     sessionService.deleteSessionInfo(request);
                     params.setLoginResult(LoginResult.CHK_BROWSER);
@@ -273,7 +273,7 @@ public class AuthController {
                 appendLoginLog(log, "err4", "클라우드 IP 로그인", request, params, token, count, "제한");
 
                 // 특정 아이디만 세션 삭제
-                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501")) {
+                if (userId.equals("momse08053") || userId.equals("momse10160") || userId.equals("momse09686") || userId.equals("kjsun11177") || userId.equals("ds053") || userId.equals("ds00501") || userId.startsWith("h0268")) {
                     // 세션 삭제
                     sessionService.deleteSessionInfo(request);
                     params.setLoginResult(LoginResult.CLOUD_IP_LOGIN);
