@@ -1467,6 +1467,8 @@
     <!-- 벤슨 > 상품매출분석 > 월별상품매출현황(매장별) -->
     <typeAlias alias="monthProdStoreBensonVO" type="kr.co.solbipos.sale.prod.monthProdStoreBenson.service.MonthProdStoreBensonVO"/>
 
+    <!-- 벤슨 > 회계관리 > 회계관리 -->
+    <typeAlias alias="accountingMainVO" type="kr.co.solbipos.accounting.accountingMain.service.AccountingMainVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

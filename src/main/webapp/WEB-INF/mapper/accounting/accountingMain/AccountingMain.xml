@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AccountingMain.xml
+    회계관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.07.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.accounting.accountingMain.service.impl.AccountingMainMapper">
+
+    <resultMap id="accountingMap" type="DefaultMap">
+        <result column="OPTION03" property="option03" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 매장별 항목관리 탭 - 조회 -->
+    <!--
+        TABLE    : TB_AC_STORE_OPTION
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcDayTransferList" parameterType="AccountingMainVO" resultType="DefaultMap">
+        /* AccountingMainMapper.getAcDayTransferList */
+        SELECT 	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       A.STORE_CD
+        ,       B.STORE_NM
+        ,       A.TOT_SALE_AMT
+        ,       A.TOT_DC_AMT
+        ,       A.REAL_SALE_AMT
+        ,       A.BILL_CNT
+        ,       DECODE(A.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / A.BILL_CNT)) AS BILL_UPRC
+        ,       A.REAL_SALE_AMT - A.VAT_AMT AS GA_AMT
+        ,       A.VAT_AMT
+        ,       A.TOT_TIP_AMT
+        ,       A.TOT_ETC_AMT
+        ,       A.CUP_AMT
+        FROM 	TB_SL_DAILY_TOTAL A
+        ,		TB_MS_STORE B
+        ,		TB_AC_STORE_OPTION C
+        WHERE 	1=1
+        AND     B.STORE_CD   	=   A.STORE_CD
+        AND 	C.STORE_CD 	(+)	=	A.STORE_CD
+        AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='option01 != null and option01 != ""'>
+            AND C.OPTION01 LIKE '%' || #{option01} || '%'
+        </if>
+        <if test='option02 != null and option02 != ""'>
+            AND C.OPTION02 = #{option02}
+        </if>
+        <if test='option03 != null'>
+            AND NVL(C.OPTION03, 'N') = #{option03}
+        </if>
+        <if test='option04 != null and option04 != ""'>
+            AND C.OPTION04 LIKE '%' || #{option04} || '%'
+        </if>
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.STORE_CD
+    </select>
+
+    <!-- 월별전송 탭 - 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TOTAL
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcMonthTransferList" parameterType="AccountingMainVO" resultType="DefaultMap">
+        /* AccountingMainMapper.getAcMonthTransferList */
+        SELECT 	TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,       A.STORE_CD
+        ,       B.STORE_NM
+        ,       A.TOT_SALE_AMT
+        ,       A.TOT_DC_AMT
+        ,       A.REAL_SALE_AMT
+        ,       A.BILL_CNT
+        ,       DECODE(A.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / A.BILL_CNT)) AS BILL_UPRC
+        ,       A.REAL_SALE_AMT - A.VAT_AMT AS GA_AMT
+        ,       A.VAT_AMT
+        ,       A.TOT_TIP_AMT
+        ,       A.TOT_ETC_AMT
+        ,       A.CUP_AMT
+        FROM 	TB_SL_MONTHLY_TOTAL A
+        ,		TB_MS_STORE B
+        ,		TB_AC_STORE_OPTION C
+        WHERE 	1=1
+        AND     B.STORE_CD   	=   A.STORE_CD
+        AND 	C.STORE_CD 	(+)	=	A.STORE_CD
+        AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.SALE_YM       BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='option01 != null and option01 != ""'>
+            AND C.OPTION01 LIKE '%' || #{option01} || '%'
+        </if>
+        <if test='option02 != null and option02 != ""'>
+            AND C.OPTION02 = #{option02}
+        </if>
+        <if test='option03 != null'>
+            AND NVL(C.OPTION03, 'N') = #{option03}
+        </if>
+        <if test='option04 != null and option04 != ""'>
+            AND C.OPTION04 LIKE '%' || #{option04} || '%'
+        </if>
+        ORDER
+        BY      A.SALE_YM
+        ,       A.STORE_CD
+    </select>
+
+    <!-- 매장별 항목관리 탭 - 조회 -->
+    <!--
+        TABLE    : TB_AC_STORE_OPTION
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcStoreOptionList" parameterType="AccountingMainVO" resultMap="accountingMap">
+        /* AccountingMainMapper.getAcStoreOptionList */
+        SELECT  A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       A.STORE_NM
+        ,       B.OPTION01
+        ,       B.OPTION02
+        ,       NVL(B.OPTION03, 'N') AS option03
+        ,       B.OPTION04
+        ,       B.OPTION05
+        ,       B.OPTION06
+        ,       B.OPTION07
+        ,       B.OPTION08
+        ,       B.OPTION09
+        ,       B.OPTION10
+        ,       B.OPTION11
+        ,       B.OPTION12
+        ,       B.OPTION13
+        ,       B.OPTION14
+        ,       B.OPTION15
+        ,       B.OPTION16
+        ,       B.OPTION17
+        ,       B.OPTION18
+        ,       B.OPTION19
+        ,       B.OPTION20
+        FROM    TB_MS_STORE A
+        ,       TB_AC_STORE_OPTION B
+        WHERE   1=1
+        AND     B.STORE_CD  (+) =   A.STORE_CD
+        AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='option01 != null and option01 != ""'>
+            AND B.OPTION01 LIKE '%' || #{option01} || '%'
+        </if>
+        <if test='option02 != null and option02 != ""'>
+            AND B.OPTION02 = #{option02}
+        </if>
+        <if test='option03 != null'>
+            AND NVL(B.OPTION03, 'N') = #{option03}
+        </if>
+        <if test='option04 != null and option04 != ""'>
+            AND B.OPTION04 LIKE '%' || #{option04} || '%'
+        </if>
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+    <!-- 매장별항목관리 탭 - 저장 -->
+    <!--
+        TABLE    : TB_AC_STORE_OPTION
+        PARAM    :
+        COMMENTS :
+    -->
+    <update id="saveAcStoreOption" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcStoreOption */
+        MERGE INTO TB_AC_STORE_OPTION A
+        USING DUAL
+        ON  (
+                    HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND STORE_CD        =   #{storeCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            OPTION01    =   #{option01}
+        ,   OPTION02    =   #{option02}
+        ,   OPTION03    =   #{option03}
+        ,   OPTION04    =   #{option04}
+        ,   MOD_DT      =   #{modDt}
+        ,   MOD_ID      =   #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       STORE_CD
+        ,       OPTION01
+        ,       OPTION02
+        ,       OPTION03
+        ,       OPTION04
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{storeCd}
+        ,       #{option01}
+        ,       #{option02}
+        ,       #{option03}
+        ,       #{option04}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </update>
+
+    <!-- 매장별항목관리 탭 - 삭제 -->
+    <!--
+        TABLE    : TB_AC_STORE_OPTION
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="delAcStoreOption" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.delAcStoreOption */
+        DELETE
+        FROM    TB_AC_STORE_OPTION A
+        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.STORE_CD      =   #{storeCd}
+    </delete>
+
+    <!-- 공통코드관리 탭 - 공통코드(좌측) 조회 -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcComCodeList" parameterType="AccountingMainVO" resultType="DefaultMap">
+        /* AccountingMainMapper.getAcComCodeList */
+        SELECT  HQ_OFFICE_CD
+        ,       AC_NMCODE_CD
+        ,       AC_NMCODE_NM
+        ,       AC_NMCODE_ETC01
+        ,       AC_NMCODE_ETC02
+        ,       AC_NMCODE_ETC03
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        FROM    TB_AC_HQ_NMCODE
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+    </select>
+
+    <!-- 공통코드관리 탭 - 상세코드(우측) 조회 -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE_DTL
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getAcComCodeDtlList" parameterType="AccountingMainVO" resultType="DefaultMap">
+        /* AccountingMainMapper.getAcComCodeDtlList */
+        SELECT  HQ_OFFICE_CD
+        ,       AC_NMCODE_CD
+        ,       AC_NMCODE_DTL_CD
+        ,       AC_NMCODE_DTL_NM
+        ,       AC_NMCODE_DTL_ETC01
+        ,       AC_NMCODE_DTL_ETC02
+        ,       AC_NMCODE_DTL_ETC03
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        FROM    TB_AC_HQ_NMCODE_DTL
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD    =   #{acNmcodeCd}
+    </select>
+
+    <!-- 공통코드관리 탭 - 공통코드(좌측) 저장(추가) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE
+        PARAM    :
+        COMMENTS :
+    -->
+    <insert id="saveAcComCodeInsert" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeInsert */
+        INSERT INTO TB_AC_HQ_NMCODE
+        (
+                HQ_OFFICE_CD
+        ,       AC_NMCODE_CD
+        ,       AC_NMCODE_NM
+        ,       AC_NMCODE_ETC01
+        ,       AC_NMCODE_ETC02
+        ,       AC_NMCODE_ETC03
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{acNmcodeCd}
+        ,       #{acNmcodeNm}
+        ,       #{acNmcodeEtc01,jdbcType=VARCHAR}
+        ,       #{acNmcodeEtc02,jdbcType=VARCHAR}
+        ,       #{acNmcodeEtc03,jdbcType=VARCHAR}
+        ,       #{useYn}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
+    <!-- 공통코드관리 탭 - 공통코드(좌측) 저장(수정) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE
+        PARAM    :
+        COMMENTS :
+    -->
+    <update id="saveAcComCodeUpdate" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeUpdate */
+        UPDATE  TB_AC_HQ_NMCODE
+        SET
+                AC_NMCODE_NM    =   #{acNmcodeNm}
+        ,       AC_NMCODE_ETC01 =   #{acNmcodeEtc01,jdbcType=VARCHAR}
+        ,       AC_NMCODE_ETC02 =   #{acNmcodeEtc02,jdbcType=VARCHAR}
+        ,       AC_NMCODE_ETC03 =   #{acNmcodeEtc03,jdbcType=VARCHAR}
+        ,       USE_YN          =   #{useYn}
+        ,       MOD_DT          =   #{modDt}
+        ,       MOD_ID          =   #{modId}
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD    =   #{acNmcodeCd}
+    </update>
+
+    <!-- 공통코드관리 탭 - 공통코드(좌측) 저장(삭제) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="saveAcComCodeDelete" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeDelete */
+        DELETE
+        FROM    TB_AC_HQ_NMCODE
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD    =   #{acNmcodeCd}
+    </delete>
+
+    <!-- 공통코드관리 탭 - 공통코드(좌측) 삭제 시 하위 상세코드 일괄삭제 -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE_DTL
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="deleteAcComCodeDtlByNmcodeCd" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.deleteAcComCodeDtlByNmcodeCd */
+        DELETE
+        FROM    TB_AC_HQ_NMCODE_DTL
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD    =   #{acNmcodeCd}
+    </delete>
+
+    <!-- 공통코드관리 탭 - 상세코드(우측) 저장(추가) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE_DTL
+        PARAM    :
+        COMMENTS :
+    -->
+    <insert id="saveAcComCodeDtlInsert" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeDtlInsert */
+        INSERT INTO TB_AC_HQ_NMCODE_DTL
+        (
+                HQ_OFFICE_CD
+        ,       AC_NMCODE_CD
+        ,       AC_NMCODE_DTL_CD
+        ,       AC_NMCODE_DTL_NM
+        ,       AC_NMCODE_DTL_ETC01
+        ,       AC_NMCODE_DTL_ETC02
+        ,       AC_NMCODE_DTL_ETC03
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{acNmcodeCd}
+        ,       #{acNmcodeDtlCd}
+        ,       #{acNmcodeDtlNm}
+        ,       #{acNmcodeDtlEtc01,jdbcType=VARCHAR}
+        ,       #{acNmcodeDtlEtc02,jdbcType=VARCHAR}
+        ,       #{acNmcodeDtlEtc03,jdbcType=VARCHAR}
+        ,       #{useYn}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
+    <!-- 공통코드관리 탭 - 상세코드(우측) 저장(수정) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE_DTL
+        PARAM    :
+        COMMENTS :
+    -->
+    <update id="saveAcComCodeDtlUpdate" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeDtlUpdate */
+        UPDATE  TB_AC_HQ_NMCODE_DTL
+        SET
+                AC_NMCODE_DTL_NM    =   #{acNmcodeDtlNm}
+        ,       AC_NMCODE_DTL_ETC01 =   #{acNmcodeDtlEtc01,jdbcType=VARCHAR}
+        ,       AC_NMCODE_DTL_ETC02 =   #{acNmcodeDtlEtc02,jdbcType=VARCHAR}
+        ,       AC_NMCODE_DTL_ETC03 =   #{acNmcodeDtlEtc03,jdbcType=VARCHAR}
+        ,       USE_YN              =   #{useYn}
+        ,       MOD_DT              =   #{modDt}
+        ,       MOD_ID              =   #{modId}
+        WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD        =   #{acNmcodeCd}
+        AND     AC_NMCODE_DTL_CD    =   #{acNmcodeDtlCd}
+    </update>
+
+    <!-- 공통코드관리 탭 - 상세코드(우측) 저장(삭제) -->
+    <!--
+        TABLE    : TB_AC_HQ_NMCODE_DTL
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="saveAcComCodeDtlDelete" parameterType="accountingMainVO">
+        /* USE : AccountingMainMapper.saveAcComCodeDtlDelete */
+        DELETE
+        FROM    TB_AC_HQ_NMCODE_DTL
+        WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     AC_NMCODE_CD        =   #{acNmcodeCd}
+        AND     AC_NMCODE_DTL_CD    =   #{acNmcodeDtlCd}
+    </delete>
+</mapper>

@@ -9,6 +9,7 @@ import kr.co.solbipos.application.com.bkmk.service.BkmkService;
 import kr.co.solbipos.application.com.bkmk.service.BkmkVO;
 import kr.co.solbipos.application.com.fixing.service.FixingService;
 import kr.co.solbipos.application.com.fixing.service.FixingVO;
+import kr.co.solbipos.application.common.service.ResrceInfoBaseVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -119,6 +120,26 @@ public class BkmkController {
         sessionInfoVO.setBkmkMenuData(cmmMenuService.getBkmkMenuList(sessionInfoVO));
         // 고정 메뉴 리스트 Set
         sessionInfoVO.setFixedMenuData(cmmMenuService.getFixedMenuList(sessionInfoVO));
+
+        // 고정 메뉴 리스트는 히스토리 메뉴 리스트에서 제거 (헤더 상단 고정메뉴 목록에 중복 표시 방지)
+        List<ResrceInfoBaseVO> historyMenuData = sessionInfoVO.getHistoryMenuData();
+        List<ResrceInfoBaseVO> fixedMenuData = sessionInfoVO.getFixedMenuData();
+        if ( historyMenuData != null && fixedMenuData != null ) {
+            for ( ResrceInfoBaseVO fixedMenuVO : fixedMenuData ) {
+                for ( int i = historyMenuData.size() - 1; i >= 0; i-- ) {
+                    if ( historyMenuData.get(i).getResrceCd().equals(fixedMenuVO.getResrceCd()) ) {
+                        historyMenuData.remove(i);
+                    }
+                }
+            }
+            sessionInfoVO.setHistoryMenuData(historyMenuData);
+        }
+
+        // 지금 보고 있는 화면이 고정 해제 등으로 고정/히스토리 어디에도 없게 됐으면 히스토리에 다시 추가
+        // (이미 고정메뉴에 있으면 addHistMenu 내부에서 자동으로 건너뜀)
+        if ( sessionInfoVO.getCurrentMenu() != null ) {
+            sessionInfoVO = cmmMenuService.addHistMenu(sessionInfoVO.getCurrentMenu(), sessionInfoVO);
+        }
 
         // redis에 세션 세팅
         sessionService.setSessionInfo(sessionInfoVO);
