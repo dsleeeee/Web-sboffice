@@ -1450,6 +1450,8 @@
     <typeAlias alias="abcBensonVO" type="kr.co.solbipos.sale.anals.abcBenson.service.AbcBensonVO"/>
     <!-- 벤슨 > 매출분석 > 대비기간 매출실적 -->
     <typeAlias alias="salePerfCompareBensonVO" type="kr.co.solbipos.sale.anals.salePerfCompareBenson.service.SalePerfCompareBensonVO"/>
+    <!-- 벤슨 > 회계관리 > 회계관리 -->
+    <typeAlias alias="accountingMainVO" type="kr.co.solbipos.accounting.accountingMain.service.AccountingMainVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

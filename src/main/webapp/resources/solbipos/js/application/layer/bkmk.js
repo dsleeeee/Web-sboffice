@@ -59,12 +59,33 @@ $(document).ready(function () {
               if (fixMenus) {
                 var fixMenu = "";
                 fixMenus.forEach(function (item) {
+                  // 히스토리 메뉴 등 같은 resrceCd의 li가 이미 떠 있으면 제거 (중복 표시 방지)
+                  $("#" + item.resrceCd).remove();
+
+                  // 가상로그인 중이면 다른 화면 링크와 동일하게 sid 유지 (없으면 item.url 그대로, 기존과 동일)
+                  var fixHrefUrl = document.getElementsByName('sessionId')[0]
+                    ? item.url + '?sid=' + document.getElementsByName('sessionId')[0].value
+                    : item.url;
+                  // 현재 보고 있는 화면이면 활성(on) 표시 (menuCd는 commonVariables.jsp에서 전역으로 내려주는 현재 메뉴 코드)
+                  var activeClass = (item.resrceCd === menuCd) ? 'on' : '';
                   fixMenu = '<li id="' + item.resrceCd + '">';
-                  fixMenu += '<a href="' + item.url + '" class="">' + item.resrceNm + '</a>';
+                  fixMenu += '<a href="' + fixHrefUrl + '" class="' + activeClass + '">' + item.resrceNm + '</a>';
                   fixMenu += '<a href="#" class="btn_close favClose" data-value="' + item.resrceCd + '" ></a>';
                   fixMenu += '</li>';
                   $("#_fixMenu").prepend(fixMenu);
                 });
+              }
+
+              // 지금 보고 있는 화면이 방금 고정 해제되어 목록에서 완전히 사라졌으면, 히스토리 항목으로 되살림
+              if (menuCd && $("#" + menuCd).length === 0) {
+                var curHrefUrl = document.getElementsByName('sessionId')[0]
+                  ? window.location.pathname + '?sid=' + document.getElementsByName('sessionId')[0].value
+                  : window.location.pathname;
+                var curMenu = '<li id="' + menuCd + '">';
+                curMenu += '<a href="' + curHrefUrl + '" class="on">' + menuNm + '</a>';
+                curMenu += '<a href="#" class="btn_close histClose" data-value="' + menuCd + '" ></a>';
+                curMenu += '</li>';
+                $("#_fixMenu").prepend(curMenu);
               }
             });
           });
