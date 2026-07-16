@@ -142,6 +142,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.prodModifyInfo.saleTypeYnDlv = false;
     $scope.prodModifyInfo.saleTypeYnPkg = false;
 
+    // 벤슨 값 세팅
+    if(momsEnvstVal === "1" || hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
+        var releaseDate = wcombo.genDateVal("#releaseDate", gvStartDate);
+    }
+
     // [1250 맘스터치] 사용시 기본 셋팅
     if(momsEnvstVal === "1") {
         // 단종여부 체크박스
@@ -149,7 +154,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $("#divChkDiscon").css("display", "none");
 
         // 출시일, 단종일
-        var releaseDate = wcombo.genDateVal("#releaseDate", gvStartDate);
         var disconDate = wcombo.genDateVal("#disconDate", gvEndDate);
 
         // 판매채널
@@ -753,6 +757,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 params.nuCaffeine = $scope.prodModifyInfo.nuCaffeine;
             }
 
+            // 벤슨 kiosk 시간설정 셋팅
+            if (hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
+                params.saleTimeFg = $scope.saleTimeFgCombo.selectedValue;
+                if ($scope.saleTimeFgCombo.selectedValue === "Y") {
+                    params.saleTime = getKioskTimeValue();
+                } else {
+                    params.saleTime = "";
+                }
+                params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
+                params.optionGrpCd = $("#_optionGrpCd").val();
+                params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
+            }
             // params에 있는 값으로 한번더 value check
             if ($scope.paramsValueCheck(params)) {
 
@@ -1193,8 +1209,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
-        // [1250 맘스터치]
-        if(momsEnvstVal === "1") {
+        // [1250 맘스터치], 벤슨
+        if(momsEnvstVal === "1" || hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
             // KIOSK 판매시간
             if($scope.saleTimeFgCombo.selectedValue === "Y"){
 
@@ -1623,8 +1639,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
-        // [1250 맘스터치]
-        if(momsEnvstVal === "1") {
+        // [1250 맘스터치], 벤슨
+        if(momsEnvstVal === "1" || hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
             // KIOSK 판매시간
             if($scope.saleTimeFgCombo.selectedValue === "Y"){
 
@@ -1792,6 +1808,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", false);  // 판매방식(내점)
         $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", false);  // 판매방식(배달)
         $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", false);  // 판매방식(포장)
+
+        // 벤슨 값 초기화
+        if(momsEnvstVal === "1" || hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
+            $("#_optionGrpCd").val("");
+            $("#_optionGrpNm").val("");
+            $("#_optionGrpNmCd").val("");
+            releaseDate.value = getCurDate('-');
+        }
 
         // [1250 맘스터치] 사용시 초기화
         if(momsEnvstVal === "1") {
@@ -1993,6 +2017,41 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 // 초기재고 필수입력 제거
                 $("#prodModifyStartStockQty").removeAttr("required");
+
+                // 벤슨 kiosk 시간설정 셋팅
+                if(hqOfficeCd === "DS079" || hqOfficeCd === "H0665") {
+                    if ($scope.prodModifyInfo.saleTimeFg === 'Y') {
+                        var vParams = {};
+                        vParams.prodCd = $scope.prodModifyInfo.prodCd;
+
+                        $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdSaleTime.sb", vParams, function (response) {
+                            if (response.data.data.list.length > 0) {
+                                var data = response.data.data.list;
+                                var str = "";
+
+                                for (var i = 0; i < data.length; i++) {
+                                    if (i > 0) {
+                                        str += ",";
+                                    }
+                                    str += data[i].sSaleTime + "-" + data[i].eSaleTime;
+                                }
+                                setKioskTimeValue(str);
+                            }
+                        });
+                    } else {
+                        resetKioskTimeHtml();
+                    }
+
+                    if ($scope.prodModifyInfo.optionGrpCd !== null && $scope.prodModifyInfo.optionGrpCd !== undefined && $scope.prodModifyInfo.optionGrpCd !== "") {
+                        $("#_optionGrpNm").val($scope.prodModifyInfo.optionGrpNm);
+                        $("#_optionGrpCd").val($scope.prodModifyInfo.optionGrpCd);
+                        $("#_optionGrpNmCd").val("[" + $scope.prodModifyInfo.optionGrpCd + "] " +$scope.prodModifyInfo.optionGrpNm);
+                    }
+
+                    if ($scope.prodModifyInfo.releaseDate !== null && $scope.prodModifyInfo.releaseDate !== undefined && $scope.prodModifyInfo.releaseDate !== "") {
+                        releaseDate.value = new Date(getFormatDate($scope.prodModifyInfo.releaseDate, "-"));
+                    }
+                }
 
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {

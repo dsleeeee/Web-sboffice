@@ -14,6 +14,12 @@
 
 var app = agrid.getApp();
 
+// KIOSK 시간설정
+var saletimeFgData = [
+  {"name": "사용", "value": "Y"},
+  {"name": "미사용", "value": "N"}
+];
+
 /** 그리드 생성 */
 app.controller('kioskKeyMapCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -24,6 +30,7 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.saleTimeFgComboDataMap = new wijmo.grid.DataMap(saletimeFgData, 'value', 'name'); // KIOSK 시간설정
   };
 
   // 다른 컨트롤러의 broadcast 받기

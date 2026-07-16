@@ -83,6 +83,14 @@ var vatIncldYnComboData = [
   {"name": "포함", "value": "Y"},
   {"name": "별도", "value": "N"}
 ];
+
+// KIOSK 시간설정
+var saletimeFgData = [
+  {"name": "사용", "value": "Y"},
+  {"name": "미사용", "value": "N"}
+];
+
+
 /* 상품상세 필수 END */
 
 /**
@@ -180,6 +188,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.useYnComboDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name'); // 사용여부
     $scope.soldOutYnDataMap = new wijmo.grid.DataMap(soldOutYnData, 'value', 'name'); // 품절여부
     $scope.kioskDisplayYnDataMap = new wijmo.grid.DataMap(kioskDisplayYnData, 'value', 'name'); // 비노출여부
+    $scope.saleTimeFgComboDataMap = new wijmo.grid.DataMap(saletimeFgData, 'value', 'name'); // KIOSK 시간설정
 
     // 품절여부 변경 시 체크박스 체크
     s.cellEditEnded.addHandler(function (s, e) {

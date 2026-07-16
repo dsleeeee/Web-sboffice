@@ -71,7 +71,11 @@
                                                                         WHERE ENVST_CD = '4019'
                                                                         AND ENVST_VAL = '6'
                                                                         AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069,
-                DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+                DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
+                (SELECT LISTAGG(TO_CHAR(TO_DATE(tmpst.S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(tmpst.E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY tmpst.S_SALE_TIME || '~' || tmpst.E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = tmp.STORE_CD AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME, -- KIOSK 시간설정
+                tmp.SALE_TIME_FG,
+                tmp.OPTION_GRP_CD,
+                tmp.RELEASE_DATE
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
