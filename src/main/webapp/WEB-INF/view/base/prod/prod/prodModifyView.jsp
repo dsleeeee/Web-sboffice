@@ -1274,7 +1274,7 @@
               <td></td>
           </tr>
           <%-- [1250 맘스터치] --%>
-          <c:if test="${momsEnvstVal == '1'}">
+          <c:if test="${momsEnvstVal == '1' or hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
             <tr>
               <%-- KIOSK 판매시간 --%>
               <th><s:message code="prod.kioskSaleTime"/></th>
@@ -1324,7 +1324,7 @@
                       </wj-combo-box>
                   </div>
               </td>
-              <c:if test="${momsEnvstVal == '1'}">
+              <c:if test="${momsEnvstVal == '1' or hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
               <%-- 상품옵션그룹 --%>
               <th><s:message code="prod.optionGrp"/></th>
               <td>
@@ -1336,7 +1336,7 @@
               </td>
               </c:if>
             </tr>
-          <c:if test="${momsEnvstVal == '1'}">
+          <c:if test="${momsEnvstVal == '1' or hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
             <tr>
               <%-- 출시일 --%>
               <th><s:message code="prod.releaseDate"/></th>
@@ -1345,16 +1345,18 @@
                   <span class="txtIn"><input id="releaseDate" class="w110px"></span>
                 </div>
               </td>
-              <%-- 단종 --%>
-              <th>
-                  <div style="float: left;"><input type="checkbox" id="chkDisconYn" ng-model="isCheckedDisconYn" ng-change="isChkDisconYn()"/></div>
-                  <div style="padding-top: 3px; padding-left: 20px;"><s:message code="prod.discon" /></div>
-              </th>
-              <td>
-                <div class="sb-select w200px" id="divChkDiscon">
-                   <span class="txtIn"><input id="disconDate" class="w110px"></span>
-                </div>
-              </td>
+              <c:if test="${momsEnvstVal == '1'}">
+                <%-- 단종 --%>
+                <th>
+                    <div style="float: left;"><input type="checkbox" id="chkDisconYn" ng-model="isCheckedDisconYn" ng-change="isChkDisconYn()"/></div>
+                    <div style="padding-top: 3px; padding-left: 20px;"><s:message code="prod.discon" /></div>
+                </th>
+                <td>
+                  <div class="sb-select w200px" id="divChkDiscon">
+                     <span class="txtIn"><input id="disconDate" class="w110px"></span>
+                  </div>
+                </td>
+              </c:if>
             </tr>
           </c:if>
             <tr>
@@ -1435,7 +1437,7 @@
           <tr>
             <th class="gr lh30">
 <%--              <input type="text" id="_info" name="info" style="height:50px" class="sb-input w100" ng-model="prodModifyInfo.info"/>--%>
-                  <textarea id="_info"  class="w100" cols="42" style="height:30px;resize: none;" ng-model="prodModifyInfo.prodInfo"></textarea>
+                  <textarea id="_info"  class="w100" cols="42" style="height:50px;resize: none;" ng-model="prodModifyInfo.prodInfo"></textarea>
             </th>
           </tr>
           </tbody>
@@ -1785,7 +1787,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20260716.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

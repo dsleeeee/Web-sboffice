@@ -512,6 +512,12 @@
                 <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.useYn4068"/>" binding="useYn4068" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.useYn4069"/>" binding="useYn4069" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="100" data-map="saleTimeFgComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
             </wj-flex-grid>
         </div>
     </div>
@@ -579,7 +585,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20250224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20260716.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
