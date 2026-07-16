@@ -1466,7 +1466,14 @@
     <typeAlias alias="dayProdStoreBensonVO" type="kr.co.solbipos.sale.prod.dayProdStoreBenson.service.DayProdStoreBensonVO"/>
     <!-- 벤슨 > 상품매출분석 > 월별상품매출현황(매장별) -->
     <typeAlias alias="monthProdStoreBensonVO" type="kr.co.solbipos.sale.prod.monthProdStoreBenson.service.MonthProdStoreBensonVO"/>
-
+    <!-- 벤슨 > 간소화화면 > 상품매출일별(매장) -->
+    <typeAlias alias="prodSaleDayStoreBensonVO" type="kr.co.solbipos.sale.benson.prodSaleDayStoreBenson.service.ProdSaleDayStoreBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 상품매출월별(매장) -->
+    <typeAlias alias="prodSaleMonthStoreBensonVO" type="kr.co.solbipos.sale.benson.prodSaleMonthStoreBenson.service.ProdSaleMonthStoreBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 일별매출(매장) -->
+    <typeAlias alias="daySaleStoreBensonVO" type="kr.co.solbipos.sale.benson.daySaleStoreBenson.service.DaySaleStoreBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 월별매출(매장) -->
+    <typeAlias alias="monthSaleStoreBensonVO" type="kr.co.solbipos.sale.benson.monthSaleStoreBenson.service.MonthSaleStoreBensonVO"/>
     <!-- 벤슨 > 회계관리 > 회계관리 -->
     <typeAlias alias="accountingMainVO" type="kr.co.solbipos.accounting.accountingMain.service.AccountingMainVO"/>
 

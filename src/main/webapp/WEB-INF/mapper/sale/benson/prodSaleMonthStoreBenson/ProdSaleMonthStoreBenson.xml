@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdSaleMonthStoreBenson.xml
+    (벤슨) 상품매출월별(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.07.08     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.prodSaleMonthStoreBenson.service.impl.ProdSaleMonthStoreBensonMapper">
+
+    <!-- 상품매출월별(매장) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleMonthStoreBensonList" parameterType="ProdSaleMonthStoreBensonVO" resultType="DefaultMap">
+        /* ProdSaleMonthStoreBensonMapper.getProdSaleMonthStoreBensonList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ,       SUM(tsmpsmv.TOT_SALE_QTY)   AS SALE_QTY1
+        ,       SUM(tsmpsmv.TOT_SALE_AMT)   AS TOT_SALE_AMT1
+        ,       SUM(tsmpsmv.REAL_SALE_AMT)  AS REAL_SALE_AMT1
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 tsmpsmv
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
+        WHERE   1=1
+        AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmpsmv.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tsmpsmv.PROD_CD IN (${prodCdQuery})
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tms.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmp.PROD_CD     = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
+        GROUP
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ORDER
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품매출월별(매장) - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleMonthStoreBensonExcelList" parameterType="ProdSaleMonthStoreBensonVO" resultType="DefaultMap">
+        /* ProdSaleMonthStoreBensonMapper.getProdSaleMonthStoreBensonExcelList */
+        SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ,       SUM(tsmpsmv.TOT_SALE_QTY) AS SALE_QTY1
+        ,       SUM(tsmpsmv.TOT_SALE_AMT) AS TOT_SALE_AMT1
+        ,       SUM(tsmpsmv.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        FROM    TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 tsmpsmv
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
+        WHERE   1=1
+        AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmpsmv.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tsmpsmv.PROD_CD IN (${prodCdQuery})
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tms.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmp.PROD_CD         = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
+        GROUP
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ORDER
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
+    </select>
+
+    <!-- 상품매출월별(매장) - 분할 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleMonthStoreBensonExcelDivisionList" parameterType="ProdSaleMonthStoreBensonVO" resultType="DefaultMap">
+        /* ProdSaleMonthStoreBensonMapper.getProdSaleMonthStoreBensonExcelDivisionList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ,       SUM(tsmpsmv.TOT_SALE_QTY) AS SALE_QTY1
+        ,       SUM(tsmpsmv.TOT_SALE_AMT) AS TOT_SALE_AMT1
+        ,       SUM(tsmpsmv.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        FROM    TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 tsmpsmv
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
+        WHERE   1=1
+        AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmpsmv.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tsmpsmv.PROD_CD IN (${prodCdQuery})
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tms.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
+        AND     tmp.PROD_CD         = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
+        GROUP
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        ,       tms.STORE_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
+        ORDER
+        BY      tsmpsmv.SALE_YM
+        ,       tsmpsmv.STORE_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품매출월별(매장) - 분할 엑셀다운로드 사용자 제한 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDivisionExcelDownloadUserIdChk" parameterType="ProdSaleMonthStoreBensonVO" resultType="Integer">
+        /* ProdSaleMonthStoreBensonMapper.getDivisionExcelDownloadUserIdChk */
+        SELECT  COUNT(*)
+        FROM    TB_HQ_NMCODE thn
+        WHERE   1=1
+        AND     thn.HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     thn.NMCODE_GRP_CD   = '168'
+        AND     thn.NMCODE_NM       = #{userId}
+    </select>
+
+    <!-- 상품매출월별(매장) - 엑셀다운로드 진행 사용자 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getDivisionExcelDownloadSaveInsert" parameterType="ProdSaleMonthStoreBensonVO">
+        /* ProdSaleMonthStoreBensonMapper.getDivisionExcelDownloadSaveInsert */
+        INSERT INTO TB_CM_DOWNLOAD_LIMIT_CHECK
+        (
+            ORGN_CD
+        ,   SEQ
+        ,   PROC_DT
+        ,   USER_ID
+        ,   DOWNLOAD_FG
+        ,   RESRCE_CD
+        ,   RESRCE_NM
+        ,   DOWNLOAD_USE_FG
+        ,   DOWNLOAD_START_DT
+        ,   DOWNLOAD_FILE_COUNT
+        ,   DOWNLOAD_EXPECTED_END_DT
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ,   DOWNLOAD_DT
+        )
+        VALUES
+        (
+            #{orgnCd}
+        ,   #{seq}
+        ,   #{regDt}
+        ,   #{userId}
+        ,   #{downloadFg}
+        ,   #{resrceCd}
+        ,   #{resrceNm}
+        ,   #{downloadUseFg}
+        ,   #{regDt}
+        ,   #{downloadFileCount}
+        ,   #{downloadExpectedEndDt}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        ,   #{regDt}
+        )
+    </insert>
+
+    <!-- 상품매출월별(매장) - 화면별 건당 다운로드 예상시간(초) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDownloadSeq" parameterType="ProdSaleMonthStoreBensonVO" resultType="String">
+        /* ProdSaleMonthStoreBensonMapper.getDownloadSeq */
+        SELECT  SQ_TB_CM_DOWNLOAD_LIMIT_CHECK.NEXTVAL AS SEQ
+        FROM    dual
+    </select>
+
+    <!-- 상품매출월별(매장) - 화면별 건당 다운로드 예상시간(초) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getExpectedTimeSecond" parameterType="ProdSaleMonthStoreBensonVO" resultType="String">
+        /* ProdSaleMonthStoreBensonMapper.getExpectedTimeSecond */
+        SELECT  FN_GET_TB_CM_DOWNLOAD_LIMIT_END_TIME_CHECK(#{downloadFg}, #{downloadNo}) AS EXPECTED_TIME_SECOND
+        FROM    dual
+    </select>
+
+    <!-- 상품매출월별(매장) - 엑셀다운로드 진행 사용자 현재 인원수 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDivisionExcelDownloadCntChk" parameterType="ProdSaleMonthStoreBensonVO" resultType="String">
+        /* ProdSaleMonthStoreBensonMapper.getDivisionExcelDownloadCntChk */
+        SELECT  FN_GET_TB_CM_DOWNLOAD_LIMIT_CHECK(#{downloadFg}) AS MSG_CNT_CHK
+        FROM    dual
+    </select>
+
+    <!-- 상품매출월별(매장) - 엑셀다운로드 진행 사용자 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getDivisionExcelDownloadSaveUpdate" parameterType="ProdSaleMonthStoreBensonVO">
+        /* ProdSaleMonthStoreBensonMapper.getDivisionExcelDownloadSaveUpdate */
+        UPDATE  TB_CM_DOWNLOAD_LIMIT_CHECK
+        SET     DOWNLOAD_DT = #{modDt}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   1=1
+        AND     ORGN_CD = #{orgnCd}
+        AND     SEQ     = #{seq}
+    </update>
+
+</mapper>
