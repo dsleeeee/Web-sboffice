@@ -117,7 +117,7 @@
                 <%-- 항목2 : 콤보박스(방식1/방식2/방식3) --%>
                 <wj-flex-grid-column header="<s:message code="acStoreOption.option02"/>" binding="option02" width="90" align="center" data-map="option02DataMap" ></wj-flex-grid-column>
                 <%-- 항목3 : 체크박스 (서버가 boolean(true/false)으로 내려줘야 자동으로 체크박스로 렌더링됨) --%>
-                <wj-flex-grid-column header="<s:message code="acStoreOption.option03"/>" binding="option03" width="60" align="center" format="boolean"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="acStoreOption.option03"/>" binding="option03" width="60" align="center"></wj-flex-grid-column>
                 <%-- 항목4 : 숫자입력 (0~100, 저장 시 JS에서 범위 체크) --%>
                 <wj-flex-grid-column header="<s:message code="acStoreOption.option04"/>" binding="option04" width="80" align="right"></wj-flex-grid-column>
                 <%-- 항목5~항목20 : 세부 입력방식 정의 전이라 우선 텍스트 입력 컬럼으로 처리 (추후 타입 확정되면 교체 필요) --%>
