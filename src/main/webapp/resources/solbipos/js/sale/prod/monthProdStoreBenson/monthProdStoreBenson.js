@@ -100,7 +100,7 @@ app.controller('monthProdStoreBensonCtrl', ['$scope', '$http', '$timeout', funct
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
         params.storeCds = $("#monthProdStoreBensonStoreCd").val();
-        params.prodCds = $("#monthProdBensonSelectCd").val();
+        params.prodCds = $("#monthProdStoreBensonSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         // '전체' 일때
         if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
