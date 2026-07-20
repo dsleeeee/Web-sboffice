@@ -99,7 +99,13 @@ app.controller('dayProdStoreBensonCtrl', ['$scope', '$http', '$timeout', functio
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -230,7 +236,13 @@ app.controller('dayProdStoreBensonCtrl', ['$scope', '$http', '$timeout', functio
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;

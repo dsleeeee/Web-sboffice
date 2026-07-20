@@ -281,7 +281,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStoreBenson/dayProdStoreBenson.js?ver=20260708.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStoreBenson/dayProdStoreBenson.js?ver=20260708.02" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
