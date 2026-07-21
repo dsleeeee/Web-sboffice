@@ -1454,6 +1454,10 @@
     <typeAlias alias="dayBensonVO" type="kr.co.solbipos.sale.day.dayBenson.service.DayBensonVO"/>
     <!-- 벤슨 > 매출분석 > 월별매출현황(채널별) -->
     <typeAlias alias="monthBensonVO" type="kr.co.solbipos.sale.month.monthBenson.service.MonthBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 당일매출현황(영수증) -->
+    <typeAlias alias="todayBensonVO" type="kr.co.solbipos.sale.today.todayBenson.service.TodayBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 할인구분기간상세 -->
+    <typeAlias alias="dcfgPeriodSaleBensonVO" type="kr.co.solbipos.sale.status.dcfgPeriodSaleBenson.service.DcfgPeriodSaleBensonVO"/>
     <!-- 벤슨 > 매장분석 > 매장-일별매출현황(채널별) -->
     <typeAlias alias="storeDayChannelBensonVO" type="kr.co.solbipos.sale.store.storeDayChannelBenson.service.StoreDayChannelBensonVO"/>
     <!-- 벤슨 > 매장분석 > 매장-월별매출현황(채널별) -->

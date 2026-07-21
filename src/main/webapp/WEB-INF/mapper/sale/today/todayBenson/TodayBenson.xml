@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TodayBenson.xml
+    (벤슨) 당일매출현황(영수증)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.07.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.today.todayBenson.service.impl.TodayBensonMapper">
+
+    <!-- 당일매출현황(영수증) 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 당일매출현황(영수증) 리스트 조회
+    -->
+    <select id="getTodayBensonList" parameterType="todayBensonVO" resultType="DefaultMap">
+        /* TodayBensonMapper.getTodayBensonList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tssh.STORE_CD
+        ,		tms.STORE_NM
+        ,       tssh.POS_NO
+        ,       tssh.BILL_NO
+        , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+        ,       tssh.SALE_YN
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
+        ,       tssh.TOT_GUEST_CNT
+        ,       DECODE(NVL(tssh.TOT_GUEST_CNT,0), 0, 0, DECODE(tssh.SALE_YN, 'Y', ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT), -(ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)))) AS GUEST_UPRC
+        ,       tssh.REG_DT AS FIRST_ORDER_DT
+        ,       tssh.TOT_OFFADD_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach>  +  NVL(tsspc.PAY02, 0) +  NVL(tsspc.PAY021, 0) AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsspm.MPAY${item} AS MPAY${item}
+                </foreach>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        ,       tsspc.PAY02 AS PAY02 -- 현금
+        ,       tsspc.PAY021 AS PAY021 -- 현금영수증
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_SL_SALE_HDR tssh
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                PAY${item} AS PAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshp.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsshp.SALE_DATE     = #{startDate}
+                                AND     tsshp.PAY_CD != '02' -- 현금,현금영수증 분리
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                ) tsshp
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                                MPAY${item} AS MPAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
+                                FROM    TB_SL_SALE_PAY_MPAY tsspm
+                                WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsspm.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsspm.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(SALE_AMT)
+                                FOR MPAY_CD
+                                IN (${pivotMpayCol})
+                            )
+                ) tsspm
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                DC${item} AS DC${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshd.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsshd.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                ) tsshd
+        ,       (
+                    -- 현금,현금영수증 분리
+                    SELECT  tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO,
+                    SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
+                    SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
+                    FROM    TB_SL_SALE_PAY_CASH tsspc
+                    WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsspc.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     tsspc.SALE_DATE =       #{startDate}
+                    GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
+                ) tsspc
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND     tssh.SALE_DATE    = #{startDate}
+        AND     tms.HQ_OFFICE_CD  = tssh.HQ_OFFICE_CD
+        AND     tms.STORE_CD      = tssh.STORE_CD
+        AND     tmsi.STORE_CD (+) = tssh.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshp.POS_NO      (+) = tssh.POS_NO
+        AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspm.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspm.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspm.POS_NO      (+) = tssh.POS_NO
+        AND     tsspm.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshd.POS_NO      (+) = tssh.POS_NO
+        AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspc.POS_NO      (+) = tssh.POS_NO
+        AND     tsspc.BILL_NO     (+) = tssh.BILL_NO
+        ORDER
+        BY      tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 당일매출현황(영수증) 엑셀 다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 당일매출현황(영수증) 엑셀 다운로드 조회
+    -->
+    <select id="getTodayBensonExcelList" parameterType="todayBensonVO" resultType="DefaultMap">
+        /* TodayBensonMapper.getTodayBensonExcelList */
+        SELECT (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tssh.STORE_CD
+        ,		tms.STORE_NM
+        ,       tssh.POS_NO
+        ,       tssh.BILL_NO
+        , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+        ,       tssh.SALE_YN
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
+        ,       tssh.TOT_GUEST_CNT
+        ,       DECODE(NVL(tssh.TOT_GUEST_CNT,0), 0, 0, DECODE(tssh.SALE_YN, 'Y', ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT), -(ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)))) AS GUEST_UPRC
+        ,       tssh.REG_DT AS FIRST_ORDER_DT
+        ,       tssh.TOT_OFFADD_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach>  +  NVL(tsspc.PAY02, 0) +  NVL(tsspc.PAY021, 0) AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsspm.MPAY${item} AS MPAY${item}
+                </foreach>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        ,       tsspc.PAY02 AS PAY02 -- 현금
+        ,       tsspc.PAY021 AS PAY021 -- 현금영수증
+        FROM    TB_SL_SALE_HDR tssh
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                PAY${item} AS PAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshp.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsshp.SALE_DATE     = #{startDate}
+                                AND     tsshp.PAY_CD != '02' -- 현금,현금영수증 분리
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                ) tsshp
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                                MPAY${item} AS MPAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
+                                FROM    TB_SL_SALE_PAY_MPAY tsspm
+                                WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsspm.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsspm.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(SALE_AMT)
+                                FOR MPAY_CD
+                                IN (${pivotMpayCol})
+                            )
+                ) tsspm
+        ,       (
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                DC${item} AS DC${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshd.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND     tsshd.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                ) tsshd
+        ,       (
+                    -- 현금,현금영수증 분리
+                    SELECT  tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO,
+                    SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
+                    SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
+                    FROM    TB_SL_SALE_PAY_CASH tsspc
+                    WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsspc.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     tsspc.SALE_DATE =       #{startDate}
+                    GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
+                ) tsspc
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND     tssh.SALE_DATE    = #{startDate}
+        AND     tms.HQ_OFFICE_CD  = tssh.HQ_OFFICE_CD
+        AND     tms.STORE_CD      = tssh.STORE_CD
+        AND     tmsi.STORE_CD (+) = tssh.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshp.POS_NO      (+) = tssh.POS_NO
+        AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspm.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspm.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspm.POS_NO      (+) = tssh.POS_NO
+        AND     tsspm.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshd.POS_NO      (+) = tssh.POS_NO
+        AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspc.POS_NO      (+) = tssh.POS_NO
+        AND     tsspc.BILL_NO     (+) = tssh.BILL_NO
+        ORDER
+        BY      tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO
+    </select>
+
+    <!-- 영수증조회팝업 - 영수증 출력데이터 조회 -->
+    <!--
+        TABLE    : TB_SL_RCP_PRINT_DATA
+        COMMENTS : 영수증 출력데이터 조회를 조회한다.
+    -->
+    <select id="getBillPrintData" parameterType="todayBensonVO" resultType="DefaultMap">
+        /* TodayBensonMapper.getBillPrintData */
+        SELECT  PRINT_DATA
+        FROM    TB_SL_RCP_PRINT_DATA
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD     = #{storeCd}
+        AND     SALE_DATE    = #{saleDate}
+        AND     POS_NO       = #{posNo}
+        AND     BILL_NO      = #{billNo}
+    </select>
+
+</mapper>
