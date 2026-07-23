@@ -33,6 +33,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('addStoreCtrl', $scope, $http, false));
 
   $scope.hqOfficeCd = gvHqOfficeCd;
+  $scope.sysStatFg = "1";
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
   $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드

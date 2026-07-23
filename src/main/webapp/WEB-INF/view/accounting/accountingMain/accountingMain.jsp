@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/accounting/accountingMain/accountingMain.js?ver=20260713.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/accounting/accountingMain/accountingMain.js?ver=20260723.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일별전송 레이어 --%>

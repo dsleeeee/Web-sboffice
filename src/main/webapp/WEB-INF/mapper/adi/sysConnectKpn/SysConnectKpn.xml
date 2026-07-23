@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SysConnectKpn.xml
+    부가서비스 > 정산 > KPN시스템접속
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.07.21     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.adi.sysConnectKpn.sysConnectKpn.service.impl.SysConnectKpnMapper">
+
+    <!-- KPN API 연동정보(URL/키/캐시토큰) 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : sysConnectKpnVO
+        COMMENTS : API_NO 기준으로 KPN 토큰발급 API URL, 인증키, 캐시된 통합인증토큰을 조회한다.
+    -->
+    <select id="getKpnApiInfo" parameterType="kr.co.solbipos.adi.sysConnectKpn.sysConnectKpn.service.SysConnectKpnVO" resultType="DefaultMap">
+        /* SysConnectKpnMapper.getKpnApiInfo */
+        SELECT API_NO
+        ,      API_INFO
+        ,      ORGN_CD
+        ,      API_URL
+        ,      ACCESS_TOKEN
+        ,      SECRET_KEY
+        ,      ETC02               AS USNO
+        ,      ETC03               AS INTG_CER_TKN
+        ,      ETC04               AS INTG_CER_TKN_PBLC_DATE
+        ,      ETC05               AS INTG_CER_TKN_PBLC_TIME
+        ,      ETC06               AS INTG_CER_TKN_DDL_DATE
+        ,      ETC07               AS INTG_CER_TKN_DDL_TIME
+        FROM   TB_CM_API_LINK_INFO
+        WHERE  API_NO = #{apiNo}
+        AND    USE_YN = 'Y'
+    </select>
+
+    <!-- 신규 발급받은 KPN 토큰 정보 업데이트 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : sysConnectKpnVO
+        COMMENTS : KPN 토큰발급 API 응답값(통합인증토큰/발행/만료 일시)으로 캐시를 갱신한다.
+    -->
+    <update id="updateKpnToken" parameterType="kr.co.solbipos.adi.sysConnectKpn.sysConnectKpn.service.SysConnectKpnVO">
+        /* SysConnectKpnMapper.updateKpnToken */
+        UPDATE TB_CM_API_LINK_INFO
+        SET    ETC03  = #{intgCerTkn}
+        ,      ETC04  = #{intgCerTknPblcDate}
+        ,      ETC05  = #{intgCerTknPblcTime}
+        ,      ETC06  = #{intgCerTknDdlDate}
+        ,      ETC07  = #{intgCerTknDdlTime}
+        ,      MOD_DT = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+        ,      MOD_ID = #{modId}
+        WHERE  API_NO = #{apiNo}
+    </update>
+
+    <!-- KPN API 호출 로그 저장 -->
+    <!--
+        TABLE    : TB_CM_API_LINK
+        PARAM    : apiLinkVO
+        COMMENTS : KPN 토큰발급 API 호출 시도(요청/응답/상태코드)를 이력으로 남긴다.
+    -->
+    <insert id="saveApiLog" parameterType="apiLinkVO">
+        /* SysConnectKpnMapper.saveApiLog */
+        <selectKey keyProperty="seq" resultType="int" order="AFTER">
+            SELECT SQ_CM_API_LINK.CURRVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TB_CM_API_LINK
+        (
+               SEQ
+           ,   LINK_TYPE
+           ,   URL
+           ,   REQUEST_METHOD
+           ,   REQUEST
+           ,   RESPONSE
+           ,   REQUEST_DT
+           ,   RESPONSE_DT
+           ,   STATUS_CODE
+           ,   REG_DT
+           ,   REG_ID
+        )
+        VALUES
+        (
+               SQ_CM_API_LINK.NEXTVAL
+           ,   #{linkType}
+           ,   #{url}
+           ,   #{requestMethod}
+           ,   #{request}
+           ,   #{response}
+           ,   #{requestDt}
+           ,   #{responseDt}
+           ,   #{statusCode}
+           ,   #{regDt}
+           ,   #{regId}
+        )
+    </insert>
+</mapper>

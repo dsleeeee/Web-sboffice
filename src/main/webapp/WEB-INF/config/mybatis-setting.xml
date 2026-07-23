@@ -1476,6 +1476,12 @@
     <typeAlias alias="monthSaleStoreBensonVO" type="kr.co.solbipos.sale.benson.monthSaleStoreBenson.service.MonthSaleStoreBensonVO"/>
     <!-- 벤슨 > 회계관리 > 회계관리 -->
     <typeAlias alias="accountingMainVO" type="kr.co.solbipos.accounting.accountingMain.service.AccountingMainVO"/>
+    <!-- 벤슨 > 회계관리 > 배달비현황 -->
+    <typeAlias alias="accountingDlvrVO" type="kr.co.solbipos.accounting.accountingDlvr.service.AccountingDlvrVO"/>
+    <!-- 벤슨 > 결제수단매출 > 결제수단상세 -->
+    <typeAlias alias="payDtlBensonVO" type="kr.co.solbipos.sale.pay.payDtlBenson.service.PayDtlBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 시간대매출 -->
+    <typeAlias alias="timeSaleBensonVO" type="kr.co.solbipos.sale.anals.timeSaleBenson.service.TimeSaleBensonVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

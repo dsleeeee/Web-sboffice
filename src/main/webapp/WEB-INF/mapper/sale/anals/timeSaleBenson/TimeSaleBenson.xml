@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TimeSaleBenson.xml
+    시간대매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.07.20     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.timeSaleBenson.service.impl.TimeSaleBensonMapper">
+
+    <!-- 일별 탭 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleBensonDayList" parameterType="timeSaleBensonVO" resultType="DefaultMap">
+        /* TimeSaleBensonMapper.getTimeSaleBensonDayList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+                TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+                TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM
+        ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO
+        </if>
+        <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+            ,       A.STORE_CD
+            ,       B.STORE_NM
+        </if>
+        ,		A.SALE_HOUR
+        ,		SUM(NVL(A.TOT_SALE_AMT, 0))  AS TOT_SALE_AMT
+        ,		SUM(NVL(A.TOT_DC_AMT, 0))    AS TOT_DC_AMT
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+        ,		SUM(NVL(A.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+        ,       DECODE(SUM(A.REAL_SALE_CNT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT) / SUM(A.REAL_SALE_CNT))) AS BILL_UPRC
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0)) AS GA_AMT
+        ,		SUM(NVL(A.VAT_AMT, 0))       AS VAT_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TIME A
+        ,		TB_MS_STORE B
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_DATE 	BETWEEN #{startDate} AND #{endDate}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+            GROUP
+            BY 		A.SALE_DATE
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_DATE
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+            </if>
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+            GROUP
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 일별 탭 - 조회조건 엑셀다운로드 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleBensonDayExcelList" parameterType="timeSaleBensonVO" resultType="DefaultMap">
+        /* TimeSaleBensonMapper.getTimeSaleBensonDayExcelList */
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+            TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM
+            ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO
+        </if>
+        <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+            ,       A.STORE_CD
+            ,       B.STORE_NM
+        </if>
+        ,		A.SALE_HOUR
+        ,		SUM(NVL(A.TOT_SALE_AMT, 0))  AS TOT_SALE_AMT
+        ,		SUM(NVL(A.TOT_DC_AMT, 0))    AS TOT_DC_AMT
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+        ,		SUM(NVL(A.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+        ,       DECODE(SUM(A.REAL_SALE_CNT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT) / SUM(A.REAL_SALE_CNT))) AS BILL_UPRC
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0)) AS GA_AMT
+        ,		SUM(NVL(A.VAT_AMT, 0))       AS VAT_AMT
+        FROM 	TB_SL_DAILY_TIME A
+        ,		TB_MS_STORE B
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_DATE 	BETWEEN #{startDate} AND #{endDate}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+            GROUP
+            BY 		A.SALE_DATE
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_DATE
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+            </if>
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+            GROUP
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+        </if>
+    </select>
+
+    <!-- 월별 탭 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleBensonMonthList" parameterType="timeSaleBensonVO" resultType="DefaultMap">
+        /* TimeSaleBensonMapper.getTimeSaleBensonMonthList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+                    TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+                    TO_CHAR(TO_DATE(#{startMonth}, 'yyyymm'), 'yyyy-mm') AS DAY_FROM
+            ,       TO_CHAR(TO_DATE(#{endMonth}, 'yyyymm'), 'yyyy-mm') AS DAY_TO
+        </if>
+        <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+            ,       A.STORE_CD
+            ,       B.STORE_NM
+        </if>
+        ,		A.SALE_HOUR
+        ,		SUM(NVL(A.TOT_SALE_AMT, 0))  AS TOT_SALE_AMT
+        ,		SUM(NVL(A.TOT_DC_AMT, 0))    AS TOT_DC_AMT
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+        ,		SUM(NVL(A.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+        ,       DECODE(SUM(A.REAL_SALE_CNT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT) / SUM(A.REAL_SALE_CNT))) AS BILL_UPRC
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0)) AS GA_AMT
+        ,		SUM(NVL(A.VAT_AMT, 0))       AS VAT_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_MONTHLY_TIME A
+        ,		TB_MS_STORE B
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_YM 	    BETWEEN #{startMonth} AND #{endMonth}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+            GROUP
+            BY 		A.SALE_YM
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_YM
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+            </if>
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+            GROUP
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 월별 탭 - 조회조건 엑셀다운로드 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleBensonMonthExcelList" parameterType="timeSaleBensonVO" resultType="DefaultMap">
+        /* TimeSaleBensonMapper.getTimeSaleBensonMonthExcelList */
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+                    TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+                    TO_CHAR(TO_DATE(#{startMonth}, 'yyyymm'), 'yyyy-mm') AS DAY_FROM
+            ,       TO_CHAR(TO_DATE(#{endMonth}, 'yyyymm'), 'yyyy-mm') AS DAY_TO
+        </if>
+        <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+            ,       A.STORE_CD
+            ,       B.STORE_NM
+        </if>
+        ,		A.SALE_HOUR
+        ,		SUM(NVL(A.TOT_SALE_AMT, 0))  AS TOT_SALE_AMT
+        ,		SUM(NVL(A.TOT_DC_AMT, 0))    AS TOT_DC_AMT
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+        ,		SUM(NVL(A.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+        ,       DECODE(SUM(A.REAL_SALE_CNT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT) / SUM(A.REAL_SALE_CNT))) AS BILL_UPRC
+        ,		SUM(NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0)) AS GA_AMT
+        ,		SUM(NVL(A.VAT_AMT, 0))       AS VAT_AMT
+        FROM 	TB_SL_MONTHLY_TIME A
+        ,		TB_MS_STORE B
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_YM 	    BETWEEN #{startMonth} AND #{endMonth}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "date"'>
+            GROUP
+            BY 		A.SALE_YM
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_YM
+            ,		A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+            </if>
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "period"'>
+            GROUP
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+            ORDER
+            BY      A.SALE_HOUR
+            <if test='storeOption != null and storeOption != "" and storeOption == "store"'>
+                ,       A.STORE_CD
+                ,       B.STORE_NM
+            </if>
+        </if>
+    </select>
+</mapper>

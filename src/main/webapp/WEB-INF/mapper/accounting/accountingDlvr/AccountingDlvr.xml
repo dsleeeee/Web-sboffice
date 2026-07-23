@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AccountingDlvr.xml
+    배달비현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2023.07.20     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.accounting.accountingDlvr.service.impl.AccountingDlvrMapper">
+
+    <!-- 배달비현황 - 일별 탭 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : accountingDlvrVO
+        COMMENTS :
+    -->
+    <select id="getAccountingDlvrDayList" parameterType="accountingDlvrVO" resultType="DefaultMap">
+        /* AccountingDlvrMapper.getAccountingDlvrDayList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		DECODE(A.DLVR_IN_FG, 0 ,'일반', C.NMCODE_NM)  AS DLVR_NM
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.DLVR_AMT, 0) AS REAL_SALE_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) - NVL(A.DLVR_AMT, 0) - NVL(A.DLVR_VAT_AMT, 0) AS GA_AMT_EXCEPT_DLVR
+        ,		NVL(A.VAT_AMT, 0) - NVL(A.DLVR_VAT_AMT,0) AS VAT_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,		NVL(A.VAT_AMT, 0)   AS VAT_AMT
+        ,		NVL(A.DLVR_AMT , 0) AS DLVR_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM	TB_SL_DAILY_TOTAL_ORDAPP A
+        ,		TB_MS_STORE B
+        ,		TB_CM_NMCODE C
+        WHERE 	A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+        AND 	A.SALE_DATE 	    BETWEEN #{startDate} AND #{endDate}
+        AND 	B.STORE_CD 		    =	A.STORE_CD
+        AND 	C.NMCODE_GRP_CD (+) =	'112'
+        AND 	C.NMCODE_CD 	(+) =	A.DLVR_IN_FG
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.STORE_CD
+        ,       A.DLVR_IN_FG
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 배달비현황 - 일별 탭 엑셀 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : accountingDlvrVO
+        COMMENTS :
+    -->
+    <select id="getAccountingDlvrDayExcelList" parameterType="accountingDlvrVO" resultType="DefaultMap">
+        /* AccountingDlvrMapper.getAccountingDlvrDayExcelList */
+        SELECT	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		DECODE(A.DLVR_IN_FG, 0 ,'일반', C.NMCODE_NM)  AS DLVR_NM
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.DLVR_AMT, 0) AS REAL_SALE_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) - NVL(A.DLVR_AMT, 0) - NVL(A.DLVR_VAT_AMT, 0) AS GA_AMT_EXCEPT_DLVR
+        ,		NVL(A.VAT_AMT, 0) - NVL(A.DLVR_VAT_AMT,0) AS VAT_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,		NVL(A.VAT_AMT, 0)   AS VAT_AMT
+        ,		NVL(A.DLVR_AMT , 0) AS DLVR_AMT
+        FROM	TB_SL_DAILY_TOTAL_ORDAPP A
+        ,		TB_MS_STORE B
+        ,		TB_CM_NMCODE C
+        WHERE 	A.HQ_OFFICE_CD 	    =	#{hqOfficeCd}
+        AND 	A.SALE_DATE 	    BETWEEN #{startDate} AND #{endDate}
+        AND 	B.STORE_CD 		    =	A.STORE_CD
+        AND 	C.NMCODE_GRP_CD (+) =	'112'
+        AND 	C.NMCODE_CD 	(+) =	A.DLVR_IN_FG
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.STORE_CD
+        ,       A.DLVR_IN_FG
+    </select>
+
+    <!-- 배달비현황 - 월별 탭 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TOTAL_ORDAPP
+        PARAM    : accountingDlvrVO
+        COMMENTS :
+    -->
+    <select id="getAccountingDlvrMonthList" parameterType="accountingDlvrVO" resultType="DefaultMap">
+        /* AccountingDlvrMapper.getAccountingDlvrMonthList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		DECODE(A.DLVR_IN_FG, 0 ,'일반', C.NMCODE_NM)  AS DLVR_NM
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.DLVR_AMT, 0) AS REAL_SALE_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) - NVL(A.DLVR_AMT, 0) - NVL(A.DLVR_VAT_AMT, 0)   AS GA_AMT_EXCEPT_DLVR
+        ,		NVL(A.VAT_AMT, 0) - NVL(A.DLVR_VAT_AMT,0)   AS VAT_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,		NVL(A.VAT_AMT, 0)   AS VAT_AMT
+        ,		NVL(A.DLVR_AMT , 0) AS DLVR_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM	TB_SL_MONTHLY_TOTAL_ORDAPP A
+        ,		TB_MS_STORE B
+        ,		TB_CM_NMCODE C
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_YM 		BETWEEN #{startMonth} AND #{endMonth}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        AND 	C.NMCODE_GRP_CD (+) =	'112'
+        AND 	C.NMCODE_CD 	(+) =	A.DLVR_IN_FG
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER
+        BY      A.SALE_YM
+        ,       A.STORE_CD
+        ,       A.DLVR_IN_FG
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 배달비현황 - 월별 탭 엑셀 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TOTAL_ORDAPP
+        PARAM    : accountingDlvrVO
+        COMMENTS :
+    -->
+    <select id="getAccountingDlvrMonthExcelList" parameterType="accountingDlvrVO" resultType="DefaultMap">
+        /* AccountingDlvrMapper.getAccountingDlvrMonthExcelList */
+        SELECT	TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		DECODE(A.DLVR_IN_FG, 0 ,'일반', C.NMCODE_NM)  AS DLVR_NM
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.DLVR_AMT, 0) AS REAL_SALE_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) - NVL(A.DLVR_AMT, 0) - NVL(A.DLVR_VAT_AMT, 0)   AS GA_AMT_EXCEPT_DLVR
+        ,		NVL(A.VAT_AMT, 0) - NVL(A.DLVR_VAT_AMT,0)   AS VAT_AMT_EXCEPT_DLVR
+        ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,		NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,		NVL(A.VAT_AMT, 0)   AS VAT_AMT
+        ,		NVL(A.DLVR_AMT , 0) AS DLVR_AMT
+        FROM	TB_SL_MONTHLY_TOTAL_ORDAPP A
+        ,		TB_MS_STORE B
+        ,		TB_CM_NMCODE C
+        WHERE 	A.HQ_OFFICE_CD 	=	#{hqOfficeCd}
+        AND 	A.SALE_YM 		BETWEEN #{startMonth} AND #{endMonth}
+        AND 	B.STORE_CD 		=	A.STORE_CD
+        AND 	C.NMCODE_GRP_CD (+) =	'112'
+        AND 	C.NMCODE_CD 	(+) =	A.DLVR_IN_FG
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER
+        BY      A.SALE_YM
+        ,       A.STORE_CD
+        ,       A.DLVR_IN_FG
+    </select>
+</mapper>

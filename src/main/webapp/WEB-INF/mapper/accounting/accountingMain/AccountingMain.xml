@@ -27,16 +27,16 @@
         ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
         ,       A.STORE_CD
         ,       B.STORE_NM
-        ,       A.TOT_SALE_AMT
-        ,       A.TOT_DC_AMT
-        ,       A.REAL_SALE_AMT
-        ,       A.BILL_CNT
-        ,       DECODE(A.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / A.BILL_CNT)) AS BILL_UPRC
-        ,       A.REAL_SALE_AMT - A.VAT_AMT AS GA_AMT
-        ,       A.VAT_AMT
-        ,       A.TOT_TIP_AMT
-        ,       A.TOT_ETC_AMT
-        ,       A.CUP_AMT
+        ,       NVL(A.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT
+        ,       NVL(A.TOT_DC_AMT, 0)    AS TOT_DC_AMT
+        ,       NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,       NVL(A.BILL_CNT, 0)      AS BILL_CNT
+        ,       DECODE(NVL(A.BILL_CNT, 0), 0, 0, ROUND(NVL(A.REAL_SALE_AMT, 0) / NVL(A.BILL_CNT, 0))) AS BILL_UPRC
+        ,       NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,       NVL(A.VAT_AMT, 0)       AS VAT_AMT
+        ,       NVL(A.TOT_TIP_AMT, 0)   AS TOT_TIP_AMT
+        ,       NVL(A.TOT_ETC_AMT, 0)   AS TOT_ETC_AMT
+        ,       NVL(A.CUP_AMT, 0)       AS CUP_AMT
         FROM 	TB_SL_DAILY_TOTAL A
         ,		TB_MS_STORE B
         ,		TB_AC_STORE_OPTION C
@@ -76,16 +76,16 @@
         SELECT 	TO_CHAR(TO_DATE(A.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
         ,       A.STORE_CD
         ,       B.STORE_NM
-        ,       A.TOT_SALE_AMT
-        ,       A.TOT_DC_AMT
-        ,       A.REAL_SALE_AMT
-        ,       A.BILL_CNT
-        ,       DECODE(A.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / A.BILL_CNT)) AS BILL_UPRC
-        ,       A.REAL_SALE_AMT - A.VAT_AMT AS GA_AMT
-        ,       A.VAT_AMT
-        ,       A.TOT_TIP_AMT
-        ,       A.TOT_ETC_AMT
-        ,       A.CUP_AMT
+        ,       NVL(A.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT
+        ,       NVL(A.TOT_DC_AMT, 0)    AS TOT_DC_AMT
+        ,       NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        ,       NVL(A.BILL_CNT, 0)      AS BILL_CNT
+        ,       DECODE(NVL(A.BILL_CNT, 0), 0, 0, ROUND(NVL(A.REAL_SALE_AMT, 0) / NVL(A.BILL_CNT, 0))) AS BILL_UPRC
+        ,       NVL(A.REAL_SALE_AMT, 0) - NVL(A.VAT_AMT, 0) AS GA_AMT
+        ,       NVL(A.VAT_AMT, 0)       AS VAT_AMT
+        ,       NVL(A.TOT_TIP_AMT, 0)   AS TOT_TIP_AMT
+        ,       NVL(A.TOT_ETC_AMT, 0)   AS TOT_ETC_AMT
+        ,       NVL(A.CUP_AMT, 0)       AS CUP_AMT
         FROM 	TB_SL_MONTHLY_TOTAL A
         ,		TB_MS_STORE B
         ,		TB_AC_STORE_OPTION C

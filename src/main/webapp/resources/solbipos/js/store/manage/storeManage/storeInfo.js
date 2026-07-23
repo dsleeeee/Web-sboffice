@@ -738,6 +738,18 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           }
         }
 
+        else if ($scope.store.hqOfficeCd === "H0665" || $scope.store.hqOfficeCd === 'DS039') {
+          if ($scope.store.storeCd.length !== 7) {
+            $scope._popMsg(messages["storeManage.benson.storeCdLengthChk"]); // 벤슨 매장코드는 7자리만 가능합니다.
+            return false;
+          }
+
+          if ($scope.store.storeCd.substr(0, 3) !== "BSC") {
+            $scope._popMsg(messages["storeManage.benson.storeCdChk"]); // 벤슨 매장코드 시작규칙은 BSC 입니다.
+            return false;
+          }
+        }
+
         // 그 외
         else {
           $scope._popMsg(messages["storeManage.manual.notUse.msg"]); // 매장코드 확인 - 관리자에게 문의하십시오.
@@ -1729,7 +1741,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    if ($scope.store.hqOfficeCd !== "A0001" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "H0345" && $scope.store.hqOfficeCd !== "H0616") {
+    if ($scope.store.hqOfficeCd !== "A0001" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "H0345" && $scope.store.hqOfficeCd !== "H0616" && $scope.store.hqOfficeCd !== "H0665" && $scope.store.hqOfficeCd !== "DS039" ) {
       // 매장코드 확인 - 관리자에게 문의하십시오.
       $scope._popMsg(messages["storeManage.manual.notUse.msg"]);
       return false;
