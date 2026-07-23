@@ -107,7 +107,7 @@
               </td>
               </tr>
             <tr>
-                <th><s:message code="media.store.noRegisted"/><br/><s:message code="cmm.excel.excelUpload" /></th>
+                <th><s:message code="media.store.registed.batch"/><br/><s:message code="cmm.excel.excelUpload" /></th>
                 <td colspan="3">
                     <%-- 양식다운로드 --%>
                     <button class="btn_skyblue ml2 " ng-click="sampleDownload()"><s:message code="cmm.excel.sampleDown" /></button>
@@ -212,7 +212,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20260504.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20260723.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

@@ -16,7 +16,11 @@ var app = agrid.getApp();
 app.controller('accountingMainCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
-        $scope.acDayTransferShow();
+        $("#acDayTransferView").show();
+        $("#acMonthTransferView").hide();
+        $("#acStoreOptionView").hide();
+        $("#acComCodeView").hide();
+
     };
 
     // 일별전송 탭 보이기
@@ -30,6 +34,9 @@ app.controller('accountingMainCtrl', ['$scope', function ($scope) {
         $("#acMonthTransferView").hide();
         $("#acStoreOptionView").hide();
         $("#acComCodeView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        agrid.getScope("acDayTransferCtrl").flex.refresh();
     };
 
     // 월별전송 탭 보이기
@@ -43,6 +50,9 @@ app.controller('accountingMainCtrl', ['$scope', function ($scope) {
         $("#acMonthTransferView").show();
         $("#acStoreOptionView").hide();
         $("#acComCodeView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        agrid.getScope("acMonthTransferCtrl").flex.refresh();
     };
 
     // 매장별항목관리 탭 보이기
@@ -56,6 +66,9 @@ app.controller('accountingMainCtrl', ['$scope', function ($scope) {
         $("#acMonthTransferView").hide();
         $("#acStoreOptionView").show();
         $("#acComCodeView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        agrid.getScope("acStoreOptionCtrl").flex.refresh();
     };
 
     // 공통코드관리 탭 보이기
@@ -69,5 +82,8 @@ app.controller('accountingMainCtrl', ['$scope', function ($scope) {
         $("#acMonthTransferView").hide();
         $("#acStoreOptionView").hide();
         $("#acComCodeView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        agrid.getScope("acComCodeCtrl").flex.refresh();
     };
 }]);
