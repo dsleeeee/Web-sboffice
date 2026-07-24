@@ -3199,7 +3199,15 @@
             SH_B_ISBN_FG,
             SH_B_ISBN_CODE,
             ORG_PROD_FG,
-            BUNDLE_FG
+            BUNDLE_FG,
+            PROD_KO_NM_DISP,
+            PROD_EN_NM_DISP,
+            PROD_CN_NM_DISP,
+            PROD_JP_NM_DISP,
+            PROD_KO_NM_DISP_KIOSK,
+            PROD_EN_NM_DISP_KIOSK,
+            PROD_CN_NM_DISP_KIOSK,
+            PROD_JP_NM_DISP_KIOSK
             FROM TB_HQ_PRODUCT_INFO
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3262,7 +3270,15 @@
             SH_B_ISBN_FG            = B.SH_B_ISBN_FG,
             SH_B_ISBN_CODE          = B.SH_B_ISBN_CODE,
             ORG_PROD_FG             = B.ORG_PROD_FG,
-            BUNDLE_FG               = B.BUNDLE_FG
+            BUNDLE_FG               = B.BUNDLE_FG,
+            PROD_KO_NM_DISP         = B.PROD_KO_NM_DISP,
+            PROD_EN_NM_DISP         = B.PROD_EN_NM_DISP,
+            PROD_CN_NM_DISP         = B.PROD_CN_NM_DISP,
+            PROD_JP_NM_DISP         = B.PROD_JP_NM_DISP,
+            PROD_KO_NM_DISP_KIOSK   = B.PROD_KO_NM_DISP_KIOSK,
+            PROD_EN_NM_DISP_KIOSK   = B.PROD_EN_NM_DISP_KIOSK,
+            PROD_CN_NM_DISP_KIOSK   = B.PROD_CN_NM_DISP_KIOSK,
+            PROD_JP_NM_DISP_KIOSK   = B.PROD_JP_NM_DISP_KIOSK
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3320,7 +3336,15 @@
                 A.SH_B_ISBN_FG,
                 A.SH_B_ISBN_CODE,
                 A.ORG_PROD_FG,
-                A.BUNDLE_FG
+                A.BUNDLE_FG,
+                A.PROD_KO_NM_DISP,
+                A.PROD_EN_NM_DISP,
+                A.PROD_CN_NM_DISP,
+                A.PROD_JP_NM_DISP,
+                A.PROD_KO_NM_DISP_KIOSK,
+                A.PROD_EN_NM_DISP_KIOSK,
+                A.PROD_CN_NM_DISP_KIOSK,
+                A.PROD_JP_NM_DISP_KIOSK
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3377,7 +3401,15 @@
                 B.SH_B_ISBN_FG,
                 B.SH_B_ISBN_CODE,
                 B.ORG_PROD_FG,
-                B.BUNDLE_FG
+                B.BUNDLE_FG,
+                B.PROD_KO_NM_DISP,
+                B.PROD_EN_NM_DISP,
+                B.PROD_CN_NM_DISP,
+                B.PROD_JP_NM_DISP,
+                B.PROD_KO_NM_DISP_KIOSK,
+                B.PROD_EN_NM_DISP_KIOSK,
+                B.PROD_CN_NM_DISP_KIOSK,
+                B.PROD_JP_NM_DISP_KIOSK
             )
     </insert>
 
@@ -4433,7 +4465,15 @@
             SH_B_ISBN_FG,
             SH_B_ISBN_CODE,
             ORG_PROD_FG,
-            BUNDLE_FG
+            BUNDLE_FG,
+            PROD_KO_NM_DISP,
+            PROD_EN_NM_DISP,
+            PROD_CN_NM_DISP,
+            PROD_JP_NM_DISP,
+            PROD_KO_NM_DISP_KIOSK,
+            PROD_EN_NM_DISP_KIOSK,
+            PROD_CN_NM_DISP_KIOSK,
+            PROD_JP_NM_DISP_KIOSK
             FROM TB_MS_PRODUCT_INFO
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -4496,7 +4536,15 @@
             SH_B_ISBN_FG            = B.SH_B_ISBN_FG,
             SH_B_ISBN_CODE          = B.SH_B_ISBN_CODE,
             ORG_PROD_FG             = B.ORG_PROD_FG,
-            BUNDLE_FG               = B.BUNDLE_FG
+            BUNDLE_FG               = B.BUNDLE_FG,
+            PROD_KO_NM_DISP         = B.PROD_KO_NM_DISP,
+            PROD_EN_NM_DISP         = B.PROD_EN_NM_DISP,
+            PROD_CN_NM_DISP         = B.PROD_CN_NM_DISP,
+            PROD_JP_NM_DISP         = B.PROD_JP_NM_DISP,
+            PROD_KO_NM_DISP_KIOSK   = B.PROD_KO_NM_DISP_KIOSK,
+            PROD_EN_NM_DISP_KIOSK   = B.PROD_EN_NM_DISP_KIOSK,
+            PROD_CN_NM_DISP_KIOSK   = B.PROD_CN_NM_DISP_KIOSK,
+            PROD_JP_NM_DISP_KIOSK   = B.PROD_JP_NM_DISP_KIOSK
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -4554,7 +4602,15 @@
                 A.SH_B_ISBN_FG,
                 A.SH_B_ISBN_CODE,
                 A.ORG_PROD_FG,
-                A.BUNDLE_FG
+                A.BUNDLE_FG,
+                A.PROD_KO_NM_DISP,
+                A.PROD_EN_NM_DISP,
+                A.PROD_CN_NM_DISP,
+                A.PROD_JP_NM_DISP,
+                A.PROD_KO_NM_DISP_KIOSK,
+                A.PROD_EN_NM_DISP_KIOSK,
+                A.PROD_CN_NM_DISP_KIOSK,
+                A.PROD_JP_NM_DISP_KIOSK
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -4611,7 +4667,15 @@
                 B.SH_B_ISBN_FG,
                 B.SH_B_ISBN_CODE,
                 B.ORG_PROD_FG,
-                B.BUNDLE_FG
+                B.BUNDLE_FG,
+                B.PROD_KO_NM_DISP,
+                B.PROD_EN_NM_DISP,
+                B.PROD_CN_NM_DISP,
+                B.PROD_JP_NM_DISP,
+                B.PROD_KO_NM_DISP_KIOSK,
+                B.PROD_EN_NM_DISP_KIOSK,
+                B.PROD_CN_NM_DISP_KIOSK,
+                B.PROD_JP_NM_DISP_KIOSK
             )
     </insert>
 

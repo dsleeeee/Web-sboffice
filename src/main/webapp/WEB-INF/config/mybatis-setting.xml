@@ -427,6 +427,8 @@
     <typeAlias alias="torderQtyDispVO" type="kr.co.solbipos.base.prod.torderQtyDisp.service.TorderQtyDispVO"/>
     <!-- 기초관리 > 상품관리2 > QR주문키맵등록 -->
     <typeAlias alias="qrOrderKeyMapVO" type="kr.co.solbipos.base.prod.qrOrderKeyMap.service.QrOrderKeyMapVO"/>
+    <!-- 기초관리 > 상품관리2 > 플랫폼 상품 등록 -->
+    <typeAlias alias="platformProdNmRegVO" type="kr.co.solbipos.base.prod.platformProdNmReg.service.PlatformProdNmRegVO"/>
 
     <!-- 기초관리 > 상품관리 > 상품정보조회 -->
     <typeAlias alias="prodSearchVO" type="kr.co.solbipos.base.prod.prodSearch.service.ProdSearchVO"/>

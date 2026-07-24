@@ -171,6 +171,16 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       //   }
       // }
     }
+    // 허용된 확장자인지 체크
+    var fileVal = $("#file").val();
+    if (fileVal !== null && fileVal !== undefined && fileVal !== "") {
+      var fileExt = fileVal.substring(fileVal.lastIndexOf(".") + 1).toLowerCase();
+      var allowedExtList = $scope.getFileType().toLowerCase().replace(/\./g, "").split(",");
+      if (allowedExtList.indexOf(fileExt) === -1) {
+        $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
+        return;
+      }
+    }
     $scope.chkRegist();
   }
 
@@ -269,6 +279,14 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       type:"POST",
       data:param,
       success:function(result){
+        // 벤슨 제외 본사 키오스크(인트로), 키오스크(인트로중간광고) mp4 파일 사용 금지 처리
+        if (param.fileType === "003" || param.fileType === "013") {
+          if (hqOfficeCd !== "DS079" && hqOfficeCd !== "H0665") {
+            result = result.split(",").filter(function (ext) {
+              return ext.toLowerCase() !== ".mp4";
+            }).join(",");
+          }
+        }
         $scope.setFileType(result);
         $("#file").attr("accept",result);
 
