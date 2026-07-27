@@ -748,6 +748,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(messages["storeManage.benson.storeCdChk"]); // 벤슨 매장코드 시작규칙은 BSC 입니다.
             return false;
           }
+
+          if (/^[0-9]+$/.test($scope.store.storeCd.substr(3, 4)) !== true) {
+            $scope._popMsg(messages["storeManage.benson.storeCdChk2"]); // 벤슨 매장코드 규칙은 BSC(영어) + 숫자 4자리 입니다.
+            return false;
+          }
         }
 
         // 그 외
