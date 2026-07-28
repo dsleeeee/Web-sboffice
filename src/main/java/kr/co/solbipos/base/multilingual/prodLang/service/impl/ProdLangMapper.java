@@ -37,4 +37,10 @@ public interface ProdLangMapper {
 
     /** 상품설명 영문, 중문, 일문 저장 */
     int saveProdInfo(ProdLangVO prodLangVO);
+
+    /** 플랫폼 상품명 탭 리스트 조회 */
+    List<DefaultMap<String>> getProdPlatformList(ProdLangVO prodLangVO);
+
+    /** 플랫폼 상품명(영문, 중문, 일문) 저장 */
+    int saveProdPlatform(ProdLangVO prodLangVO);
 }

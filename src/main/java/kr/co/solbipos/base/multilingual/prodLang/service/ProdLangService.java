@@ -33,4 +33,10 @@ public interface ProdLangService {
 
     /** 상품설명 영문, 중문, 일문 저장 */
     int saveProdInfo(ProdLangVO[] prodLangVOs, SessionInfoVO sessionInfoVO);
+
+    /** 플랫폼 상품명 탭 리스트 조회 */
+    List<DefaultMap<String>> getProdPlatformList(ProdLangVO prodLangVO, SessionInfoVO sessionInfoVO);
+
+    /** 플랫폼 상품명(영문, 중문, 일문) 저장 */
+    int saveProdPlatform(ProdLangVO[] prodLangVOs, SessionInfoVO sessionInfoVO);
 }

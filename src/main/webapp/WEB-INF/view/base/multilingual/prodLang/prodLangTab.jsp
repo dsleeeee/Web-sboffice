@@ -5,6 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="con">
     <div class="tabType1" ng-controller="prodLangTabCtrl" ng-init="init()">
@@ -16,6 +17,10 @@
             <%-- 상품설명 탭 --%>
             <li>
                 <a id="prodInfoTab" href="#" ng-click="prodInfoShow()"><s:message code="prodLang.prodInfo"/></a>
+            </li>
+            <%-- 플랫폼 상품명 탭 --%>
+            <li <c:if test="${hqOfficeCd != 'DS079' and hqOfficeCd != 'H0665'}">style="display: none;"</c:if> >
+                <a id="prodPlatformTab" href="#" ng-click="prodPlatformShow()"><s:message code="prodLang.platform"/></a>
             </li>
         </ul>
     </div>
@@ -32,7 +37,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/prodLang/prodLangTab.js?ver=20260504.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/prodLang/prodLangTab.js?ver=20260728.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 상품명 탭 --%>
@@ -41,6 +46,10 @@
 
 <%-- 상품설명 탭 --%>
 <c:import url="/WEB-INF/view/base/multilingual/prodLang/prodInfo.jsp">
+</c:import>
+
+<%-- 플랫폼 상품명 탭 --%>
+<c:import url="/WEB-INF/view/base/multilingual/prodLang/prodPlatform.jsp">
 </c:import>
 
 <%-- 탭페이지 레이어 끝 --%>

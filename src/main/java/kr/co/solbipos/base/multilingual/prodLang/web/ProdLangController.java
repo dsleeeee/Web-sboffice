@@ -166,4 +166,45 @@ public class ProdLangController {
 
         return returnListJson(Status.OK, result);
     }
+
+    /**
+     * 플랫폼 상품명 탭 리스트 조회
+     * @param prodLangVO
+     * @param request
+     * @return
+     * @author  이다솜
+     * @since   2026. 07. 24.
+     */
+    @RequestMapping(value = "/getProdPlatformList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdPlatformList(ProdLangVO prodLangVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodLangService.getProdPlatformList(prodLangVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodLangVO);
+    }
+
+    /**
+     * 플랫폼 상품명 영문, 중문, 일문 저장
+     * @param prodLangVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2026. 07. 27.
+     */
+    @RequestMapping(value = "/saveProdPlatform.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProdPlatform(@RequestBody ProdLangVO[] prodLangVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodLangService.saveProdPlatform(prodLangVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
 }

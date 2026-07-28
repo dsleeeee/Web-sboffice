@@ -135,4 +135,44 @@ public class ProdLangServiceImpl implements ProdLangService {
 
         return result;
     }
+
+    /** 플랫폼 상품명 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdPlatformList(ProdLangVO prodLangVO, SessionInfoVO sessionInfoVO){
+
+        prodLangVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodLangVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 array 값 세팅
+            if (prodLangVO.getUserProdBrands() != null && !"".equals(prodLangVO.getUserProdBrands())) {
+                String[] userBrandList = prodLangVO.getUserProdBrands().split(",");
+                if (userBrandList.length > 0) {
+                    prodLangVO.setUserProdBrandList(userBrandList);
+                }
+            }
+        }
+
+        return prodLangMapper.getProdPlatformList(prodLangVO);
+    }
+
+    /** 플랫폼 상품명(영문, 중문, 일문) 저장 */
+    @Override
+    public int saveProdPlatform(ProdLangVO[] prodLangVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (ProdLangVO prodLangVO : prodLangVOs) {
+
+            prodLangVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodLangVO.setRegDt(dt);
+            prodLangVO.setRegId(sessionInfoVO.getUserId());
+            prodLangVO.setModDt(dt);
+            prodLangVO.setModId(sessionInfoVO.getUserId());
+
+            result += prodLangMapper.saveProdPlatform(prodLangVO);
+        }
+
+        return result;
+    }
 }

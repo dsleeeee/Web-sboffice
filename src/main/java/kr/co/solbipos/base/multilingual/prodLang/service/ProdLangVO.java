@@ -34,6 +34,24 @@ public class ProdLangVO extends PageVO {
     private String prodCnInfo;
     /** 상품설명(일문)*/
     private String prodJpInfo;
+    /** POS상품명(영문) 1,2 */
+    private String prodEnNmDisp1;
+    private String prodEnNmDisp2;
+    /** POS상품명(중문) 1,2 */
+    private String prodCnNmDisp1;
+    private String prodCnNmDisp2;
+    /** POS상품명(일문) 1,2 */
+    private String prodJpNmDisp1;
+    private String prodJpNmDisp2;
+    /** 키오스크상품명(영문) 1,2 */
+    private String prodEnNmDispKiosk1;
+    private String prodEnNmDispKiosk2;
+    /** 키오스크상품명(중문) 1,2 */
+    private String prodCnNmDispKiosk1;
+    private String prodCnNmDispKiosk2;
+    /** 키오스크상품명(일문) 1,2 */
+    private String prodJpNmDispKiosk1;
+    private String prodJpNmDispKiosk2;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -145,5 +163,101 @@ public class ProdLangVO extends PageVO {
 
     public void setProdJpInfo(String prodJpInfo) {
         this.prodJpInfo = prodJpInfo;
+    }
+
+    public String getProdEnNmDisp1() {
+        return prodEnNmDisp1;
+    }
+
+    public void setProdEnNmDisp1(String prodEnNmDisp1) {
+        this.prodEnNmDisp1 = prodEnNmDisp1;
+    }
+
+    public String getProdEnNmDisp2() {
+        return prodEnNmDisp2;
+    }
+
+    public void setProdEnNmDisp2(String prodEnNmDisp2) {
+        this.prodEnNmDisp2 = prodEnNmDisp2;
+    }
+
+    public String getProdCnNmDisp1() {
+        return prodCnNmDisp1;
+    }
+
+    public void setProdCnNmDisp1(String prodCnNmDisp1) {
+        this.prodCnNmDisp1 = prodCnNmDisp1;
+    }
+
+    public String getProdCnNmDisp2() {
+        return prodCnNmDisp2;
+    }
+
+    public void setProdCnNmDisp2(String prodCnNmDisp2) {
+        this.prodCnNmDisp2 = prodCnNmDisp2;
+    }
+
+    public String getProdJpNmDisp1() {
+        return prodJpNmDisp1;
+    }
+
+    public void setProdJpNmDisp1(String prodJpNmDisp1) {
+        this.prodJpNmDisp1 = prodJpNmDisp1;
+    }
+
+    public String getProdJpNmDisp2() {
+        return prodJpNmDisp2;
+    }
+
+    public void setProdJpNmDisp2(String prodJpNmDisp2) {
+        this.prodJpNmDisp2 = prodJpNmDisp2;
+    }
+
+    public String getProdEnNmDispKiosk1() {
+        return prodEnNmDispKiosk1;
+    }
+
+    public void setProdEnNmDispKiosk1(String prodEnNmDispKiosk1) {
+        this.prodEnNmDispKiosk1 = prodEnNmDispKiosk1;
+    }
+
+    public String getProdEnNmDispKiosk2() {
+        return prodEnNmDispKiosk2;
+    }
+
+    public void setProdEnNmDispKiosk2(String prodEnNmDispKiosk2) {
+        this.prodEnNmDispKiosk2 = prodEnNmDispKiosk2;
+    }
+
+    public String getProdCnNmDispKiosk1() {
+        return prodCnNmDispKiosk1;
+    }
+
+    public void setProdCnNmDispKiosk1(String prodCnNmDispKiosk1) {
+        this.prodCnNmDispKiosk1 = prodCnNmDispKiosk1;
+    }
+
+    public String getProdCnNmDispKiosk2() {
+        return prodCnNmDispKiosk2;
+    }
+
+    public void setProdCnNmDispKiosk2(String prodCnNmDispKiosk2) {
+        this.prodCnNmDispKiosk2 = prodCnNmDispKiosk2;
+    }
+
+    public String getProdJpNmDispKiosk1() {
+        return prodJpNmDispKiosk1;
+    }
+
+    public void setProdJpNmDispKiosk1(String prodJpNmDispKiosk1) {
+        this.prodJpNmDispKiosk1 = prodJpNmDispKiosk1;
+    }
+
+    public String getProdJpNmDispKiosk2() {
+        return prodJpNmDispKiosk2;
+    }
+
+    public void setProdJpNmDispKiosk2(String prodJpNmDispKiosk2) {
+        this.prodJpNmDispKiosk2 = prodJpNmDispKiosk2;
     }
 }

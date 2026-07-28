@@ -170,4 +170,246 @@
         ,   MOD_ID       = #{modId}
     </update>
 
+    <!-- 플랫폼 상품명 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_INFO
+        PARAM    : prodLangVO
+        COMMENTS : 플랫폼 상품명 탭 리스트를 조회한다. (base/prod/platformProdNmReg/getPlatformProdNmRegList.sb 와 동일 결과)
+    -->
+    <select id="getProdPlatformList" parameterType="prodLangVO" resultType="DefaultMap">
+        /* ProdLangMapper.getProdPlatformList */
+        SELECT thp.HQ_OFFICE_CD
+        ,      (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+        ,      thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD
+        ,      (SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL) AS PROD_CLASS_NM
+        ,      CASE WHEN INSTR(thpi.PROD_KO_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_KO_NM_DISP, 1, INSTR(thpi.PROD_KO_NM_DISP, CHR(10)) - 1)
+                    ELSE thpi.PROD_KO_NM_DISP
+               END AS PROD_KO_NM_DISP_1
+        ,      CASE WHEN INSTR(thpi.PROD_KO_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_KO_NM_DISP, INSTR(thpi.PROD_KO_NM_DISP, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_KO_NM_DISP_2
+        ,      CASE WHEN INSTR(thpi.PROD_EN_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_EN_NM_DISP, 1, INSTR(thpi.PROD_EN_NM_DISP, CHR(10)) - 1)
+                    ELSE thpi.PROD_EN_NM_DISP
+               END AS PROD_EN_NM_DISP_1
+        ,      CASE WHEN INSTR(thpi.PROD_EN_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_EN_NM_DISP, INSTR(thpi.PROD_EN_NM_DISP, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_EN_NM_DISP_2
+        ,      CASE WHEN INSTR(thpi.PROD_CN_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_CN_NM_DISP, 1, INSTR(thpi.PROD_CN_NM_DISP, CHR(10)) - 1)
+                    ELSE thpi.PROD_CN_NM_DISP
+               END AS PROD_CN_NM_DISP_1
+        ,      CASE WHEN INSTR(thpi.PROD_CN_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_CN_NM_DISP, INSTR(thpi.PROD_CN_NM_DISP, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_CN_NM_DISP_2
+        ,      CASE WHEN INSTR(thpi.PROD_JP_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_JP_NM_DISP, 1, INSTR(thpi.PROD_JP_NM_DISP, CHR(10)) - 1)
+                    ELSE thpi.PROD_JP_NM_DISP
+               END AS PROD_JP_NM_DISP_1
+        ,      CASE WHEN INSTR(thpi.PROD_JP_NM_DISP, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_JP_NM_DISP, INSTR(thpi.PROD_JP_NM_DISP, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_JP_NM_DISP_2
+        ,      CASE WHEN INSTR(thpi.PROD_KO_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_KO_NM_DISP_KIOSK, 1, INSTR(thpi.PROD_KO_NM_DISP_KIOSK, CHR(10)) - 1)
+                    ELSE thpi.PROD_KO_NM_DISP_KIOSK
+               END AS PROD_KO_NM_DISP_KIOSK_1
+        ,      CASE WHEN INSTR(thpi.PROD_KO_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_KO_NM_DISP_KIOSK, INSTR(thpi.PROD_KO_NM_DISP_KIOSK, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_KO_NM_DISP_KIOSK_2
+        ,      CASE WHEN INSTR(thpi.PROD_EN_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_EN_NM_DISP_KIOSK, 1, INSTR(thpi.PROD_EN_NM_DISP_KIOSK, CHR(10)) - 1)
+                    ELSE thpi.PROD_EN_NM_DISP_KIOSK
+               END AS PROD_EN_NM_DISP_KIOSK_1
+        ,      CASE WHEN INSTR(thpi.PROD_EN_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_EN_NM_DISP_KIOSK, INSTR(thpi.PROD_EN_NM_DISP_KIOSK, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_EN_NM_DISP_KIOSK_2
+        ,      CASE WHEN INSTR(thpi.PROD_CN_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_CN_NM_DISP_KIOSK, 1, INSTR(thpi.PROD_CN_NM_DISP_KIOSK, CHR(10)) - 1)
+                    ELSE thpi.PROD_CN_NM_DISP_KIOSK
+               END AS PROD_CN_NM_DISP_KIOSK_1
+        ,      CASE WHEN INSTR(thpi.PROD_CN_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_CN_NM_DISP_KIOSK, INSTR(thpi.PROD_CN_NM_DISP_KIOSK, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_CN_NM_DISP_KIOSK_2
+        ,      CASE WHEN INSTR(thpi.PROD_JP_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_JP_NM_DISP_KIOSK, 1, INSTR(thpi.PROD_JP_NM_DISP_KIOSK, CHR(10)) - 1)
+                    ELSE thpi.PROD_JP_NM_DISP_KIOSK
+               END AS PROD_JP_NM_DISP_KIOSK_1
+        ,      CASE WHEN INSTR(thpi.PROD_JP_NM_DISP_KIOSK, CHR(10)) > 0
+                    THEN SUBSTR(thpi.PROD_JP_NM_DISP_KIOSK, INSTR(thpi.PROD_JP_NM_DISP_KIOSK, CHR(10)) + 1)
+                    ELSE NULL
+               END AS PROD_JP_NM_DISP_KIOSK_2
+        ,      NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
+        ,      thp.USE_YN
+        FROM   TB_HQ_PRODUCT thp
+        ,      TB_HQ_PRODUCT_INFO thpi
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp
+        WHERE  1=1
+        AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
+        AND    thp.PROD_CD      = thpi.PROD_CD (+)
+        AND    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+        AND    thp.PROD_CD = thpsp.PROD_CD
+        AND    thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        <if test="prodCd != null and prodCd != ''">
+        AND    thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+        AND    thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+        AND    thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test='userProdBrands != null and userProdBrands != ""'>
+            -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+            AND thp.HQ_BRAND_CD IN
+            <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND     (
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                  OR
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+        ORDER
+        BY      thp.PROD_CD ASC
+    </select>
+
+    <!-- POS상품명(영문) 1,2 조합 : 명2(개행/캐리지리턴/탭 제거 후) 값이 없으면 명1만, 있으면 명1 + CHR(10) + 명2 -->
+    <sql id="posEnNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- POS상품명(중문) 1,2 조합 -->
+    <sql id="posCnNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- POS상품명(일문) 1,2 조합 -->
+    <sql id="posJpNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDisp1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDisp2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- 키오스크상품명(영문) 1,2 조합 : POS와 동일 규칙 -->
+    <sql id="kioskEnNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodEnNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- 키오스크상품명(중문) 1,2 조합 -->
+    <sql id="kioskCnNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodCnNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- 키오스크상품명(일문) 1,2 조합 -->
+    <sql id="kioskJpNmExpr">
+        CASE WHEN TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)) IS NULL
+             THEN TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+             ELSE TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDispKiosk1}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+                  || CHR(10) ||
+                  TRIM(REPLACE(REPLACE(REPLACE(#{prodJpNmDispKiosk2}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL))
+        END
+    </sql>
+
+    <!-- 플랫폼 상품명(영문, 중문, 일문) 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_INFO
+        PARAM    : prodLangVO
+        COMMENTS : 플랫폼 상품명(영문, 중문, 일문) POS, KIOSK명을 저장한다.
+    -->
+    <update id="saveProdPlatform" parameterType="prodLangVO">
+        /* USE : ProdLangMapper.saveProdPlatform */
+        MERGE INTO TB_HQ_PRODUCT_INFO
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD      = #{prodCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            PROD_EN_NM_DISP        = <include refid="posEnNmExpr"/>
+        ,   PROD_CN_NM_DISP        = <include refid="posCnNmExpr"/>
+        ,   PROD_JP_NM_DISP        = <include refid="posJpNmExpr"/>
+        ,   PROD_EN_NM_DISP_KIOSK  = <include refid="kioskEnNmExpr"/>
+        ,   PROD_CN_NM_DISP_KIOSK  = <include refid="kioskCnNmExpr"/>
+        ,   PROD_JP_NM_DISP_KIOSK  = <include refid="kioskJpNmExpr"/>
+        ,   MOD_DT                 = #{modDt}
+        ,   MOD_ID                 = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            HQ_OFFICE_CD
+        ,   PROD_CD
+        ,   PROD_EN_NM_DISP
+        ,   PROD_CN_NM_DISP
+        ,   PROD_JP_NM_DISP
+        ,   PROD_EN_NM_DISP_KIOSK
+        ,   PROD_CN_NM_DISP_KIOSK
+        ,   PROD_JP_NM_DISP_KIOSK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{prodCd}
+        ,   <include refid="posEnNmExpr"/>
+        ,   <include refid="posCnNmExpr"/>
+        ,   <include refid="posJpNmExpr"/>
+        ,   <include refid="kioskEnNmExpr"/>
+        ,   <include refid="kioskCnNmExpr"/>
+        ,   <include refid="kioskJpNmExpr"/>
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </update>
+
 </mapper>
