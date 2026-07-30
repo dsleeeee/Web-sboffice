@@ -49,7 +49,7 @@
 
     <div class="updownSet oh mt10">
         <p class="fl s13 bk mt10 lh20">
-            * 다국어 수정시 [H0393] 맘스터치 만 적용됩니다.
+            * 다국어 수정시 [A0001]보나비, [H0393]맘스터치, [H0665]벤슨 만 적용됩니다.
         </p>
         <%-- 저장 --%>
         <button class="btn_skyblue" ng-click="saveRow()" >

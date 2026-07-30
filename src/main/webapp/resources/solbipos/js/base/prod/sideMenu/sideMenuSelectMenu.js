@@ -60,6 +60,12 @@ var popUpClassYnData = [
     {"name": "토핑", "value": "T"}
 ];
 
+// 영수증적용
+var receiptApplyYnData = [
+  {"name":"적용","value":"Y"},
+  {"name":"미적용","value":"N"}
+];
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -540,6 +546,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
     }
 
+    $scope.receiptApplyYnDataMap = new wijmo.grid.DataMap(receiptApplyYnData, 'value', 'name'); // 영수증적용
+
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -681,6 +689,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.expandYn = "N";
     params.mappingYn = "N";
     params.popUpClassYn = "N";
+    params.receiptApplyYn = "Y";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);

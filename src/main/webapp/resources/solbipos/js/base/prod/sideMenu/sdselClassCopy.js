@@ -424,6 +424,8 @@ app.controller('sdselClassCopyClassCtrl', ['$scope', '$http', function ($scope, 
             $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
         }
 
+        $scope.receiptApplyYnDataMap = new wijmo.grid.DataMap(receiptApplyYnData, 'value', 'name'); // 영수증적용
+
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {

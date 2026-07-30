@@ -95,7 +95,7 @@
                           )
               ) B
         ON (      A.STORE_CD IN (
-                                    SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393', 'A0001', 'H0514') <!-- 매장적용(맘스, 아티제, [1347] 사용매장) -->
+                                    SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393', 'A0001', 'H0514', 'DS079', 'H0665') <!-- 매장적용(맘스, 아티제, 벤슨, [1347] 사용매장) -->
                                     UNION ALL
                                     SELECT STORE_CD FROM TB_MS_STORE_ENVST WHERE ENVST_CD  = '1347' AND ENVST_VAL = 'Y'
                                 )

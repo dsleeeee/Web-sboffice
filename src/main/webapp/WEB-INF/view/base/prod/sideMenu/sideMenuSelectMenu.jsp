@@ -187,6 +187,9 @@
                         <c:if test="${hqOfficeCd == 'A0001'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
+                        <c:if test="${hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.receiptApplyYn"/>" binding="receiptApplyYn" data-map="receiptApplyYnDataMap" width="100"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -280,7 +283,7 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20260108.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20260730.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

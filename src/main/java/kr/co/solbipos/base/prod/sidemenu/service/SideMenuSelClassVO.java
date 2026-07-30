@@ -129,6 +129,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 분류코드 리스트 */
     private String[] classCdList;
 
+    /** 영수증적용 */
+    private String receiptApplyYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -413,5 +416,13 @@ public class SideMenuSelClassVO extends CmmVO {
 
     public void setClassCdList(String[] classCdList) {
         this.classCdList = classCdList;
+    }
+
+    public String getReceiptApplyYn() {
+        return receiptApplyYn;
+    }
+
+    public void setReceiptApplyYn(String receiptApplyYn) {
+        this.receiptApplyYn = receiptApplyYn;
     }
 }

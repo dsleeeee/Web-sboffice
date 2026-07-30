@@ -3725,7 +3725,8 @@
             TOP_YN,
             EXPAND_YN,
             MAPPING_YN,
-            POP_UP_CLASS_YN
+            POP_UP_CLASS_YN,
+            RECEIPT_APPLY_YN
             FROM TB_HQ_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3752,7 +3753,8 @@
             TOP_YN = B.TOP_YN,
             EXPAND_YN = B.EXPAND_YN,
             MAPPING_YN = B.MAPPING_YN,
-            POP_UP_CLASS_YN = B.POP_UP_CLASS_YN
+            POP_UP_CLASS_YN = B.POP_UP_CLASS_YN,
+            RECEIPT_APPLY_YN = B.RECEIPT_APPLY_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3775,7 +3777,8 @@
                 A.TOP_YN,
                 A.EXPAND_YN,
                 A.MAPPING_YN,
-                A.POP_UP_CLASS_YN
+                A.POP_UP_CLASS_YN,
+                A.RECEIPT_APPLY_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3797,7 +3800,8 @@
                 B.TOP_YN,
                 B.EXPAND_YN,
                 B.MAPPING_YN,
-                B.POP_UP_CLASS_YN
+                B.POP_UP_CLASS_YN,
+                B.RECEIPT_APPLY_YN
             )
     </insert>
 
@@ -4041,7 +4045,8 @@
             TOP_YN,
             EXPAND_YN,
             MAPPING_YN,
-            POP_UP_CLASS_YN
+            POP_UP_CLASS_YN,
+            RECEIPT_APPLY_YN
             FROM TB_MS_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -4068,7 +4073,8 @@
             TOP_YN = B.TOP_YN,
             EXPAND_YN = B.EXPAND_YN,
             MAPPING_YN = B.MAPPING_YN,
-            POP_UP_CLASS_YN = B.POP_UP_CLASS_YN
+            POP_UP_CLASS_YN = B.POP_UP_CLASS_YN,
+            RECEIPT_APPLY_YN = B.RECEIPT_APPLY_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -4091,7 +4097,8 @@
                 A.TOP_YN,
                 A.EXPAND_YN,
                 A.MAPPING_YN,
-                A.POP_UP_CLASS_YN
+                A.POP_UP_CLASS_YN,
+                A.RECEIPT_APPLY_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -4113,7 +4120,8 @@
                 B.TOP_YN,
                 B.EXPAND_YN,
                 B.MAPPING_YN,
-                B.POP_UP_CLASS_YN
+                B.POP_UP_CLASS_YN,
+                B.RECEIPT_APPLY_YN
             )
     </insert>
 
