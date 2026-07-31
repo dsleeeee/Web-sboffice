@@ -1,6 +1,9 @@
 package kr.co.solbipos.adi.sms.smsTelNoManage.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
@@ -9,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -32,12 +37,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     private final SmsTelNoManageMapper smsTelNoManageMapper;
+    private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsTelNoManageServiceImpl(SmsTelNoManageMapper smsTelNoManageMapper) { this.smsTelNoManageMapper = smsTelNoManageMapper; }
+    public SmsTelNoManageServiceImpl(SmsTelNoManageMapper smsTelNoManageMapper, MessageService messageService) { this.smsTelNoManageMapper = smsTelNoManageMapper;
+        this.messageService = messageService;
+    }
 
     /** 발신번호관리 - 조회 */
     @Override
@@ -319,6 +327,30 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
             }
         }
 
+        // 계정별 처리구분 완료 개수 제한 체크 (insert/update 반영 후 실제 DB 상태 기준, 초과 시 예외 던져서 트랜잭션 롤백)
+        Set<String> chkGroupSet = new LinkedHashSet<String>();
+        for (SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
+            if (smsTelNoManageVO.getStatus() == GridDataFg.UPDATE) {
+                chkGroupSet.add(smsTelNoManageVO.getOrgnCd() + "|" + smsTelNoManageVO.getUserId() + "|" + smsTelNoManageVO.getTelFg());
+            }
+        }
+
+        for (String group : chkGroupSet) {
+            String[] parts = group.split("\\|");
+
+            SmsTelNoManageVO chkVO = new SmsTelNoManageVO();
+            chkVO.setOrgnCd(parts[0]);
+            chkVO.setUserId(parts[1]);
+            chkVO.setTelFg(parts[2]);
+
+            int cnt = smsTelNoManageMapper.getAddProcFgCnt(chkVO);
+            int limit = "0".equals(parts[2]) ? 1 : 5;
+
+            if (cnt > limit) {
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("smsGeneralNoManage2.addProcFgCntOver") + "- 소속:" + parts[0] + " 사용자:" + parts[1]);
+            }
+        }
+
         return procCnt;
     }
 
@@ -337,13 +369,12 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
             smsTelNoManageVO.setChkTelNoList(chkTelNoList);
         }
 
-        if(smsTelNoManageVO.getModTelNo() != null && smsTelNoManageVO.getModTelNo() != "") {
-            String[] modTelNoList = smsTelNoManageVO.getModTelNo().split(",");
-            smsTelNoManageVO.setModTelNoList(modTelNoList);
+        if(smsTelNoManageVO.getModCertId() != null && smsTelNoManageVO.getModCertId() != "") {
+            String[] modCertIdList = smsTelNoManageVO.getModCertId().split(",");
+            smsTelNoManageVO.setModCertIdList(modCertIdList);
         }
 
         return smsTelNoManageMapper.getDupChkTelNo(smsTelNoManageVO);
     }
-
 
 }

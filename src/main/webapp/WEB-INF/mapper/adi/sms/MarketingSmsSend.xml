@@ -547,4 +547,82 @@
         <!--AND txn.NMCODE_NM = #{telNo}-->
     <!--</select>-->
 
+    <!-- 전송 URL 관리(화이트리스트 등록요청) - 본인 요청 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_SMS_XRAY_WHITE
+        COMMENTS :
+    -->
+    <select id="getRegSendUrlList" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+        /* MarketingSmsSendMapper.getRegSendUrlList */
+        SELECT 	A.USER_ID
+        ,		A.TEL_NO
+        ,		A.SEND_URL
+        ,		TO_CHAR(TO_DATE(A.USE_START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(A.USE_END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')	AS USE_PERIOD
+        ,		A.APPR_FG
+        ,		REG_DT
+        ,		REG_ID
+        ,		MOD_DT
+        ,		MOD_ID
+        FROM 	TB_CM_SMS_XRAY_WHITE A
+        WHERE 	A.USER_ID   =   #{userId}
+        ORDER
+        BY      A.TEL_NO
+        ,       A.SEND_URL
+        ,       A.USE_START_DATE
+    </select>
+
+    <!-- URL 중복 요청 확인 -->
+    <!--
+        TABLE    : TB_CM_SMS_XRAY_WHITE
+        COMMENTS :
+    -->
+    <select id="getChkSendUrl" parameterType="MarketingSmsSendVO" resultType="Integer">
+        /* MarketingSmsSendMapper.getChkSendUrl */
+        SELECT  COUNT(*)
+        FROM 	TB_CM_SMS_XRAY_WHITE A
+        WHERE 	A.SEND_URL  =   #{sendUrl}
+        AND     A.USER_ID   =   #{userId}
+        AND     A.TEL_NO    =   #{telNo}
+        AND     A.APPR_FG   IN  ('0', '1')
+        <![CDATA[
+            AND     A.USE_START_DATE <= #{useEndDate}
+            AND     A.USE_END_DATE   >= #{useStartDate}
+        ]]>
+    </select>
+
+    <!-- 전송 URL 관리(화이트리스트 등록요청) - 요청 등록 insert -->
+    <!--
+        TABLE    : TB_CM_SMS_XRAY_WHITE
+        COMMENTS :
+    -->
+    <insert id="insertRegSendUrl" parameterType="MarketingSmsSendVO">
+        /* MarketingSmsSendMapper.insertRegSendUrl */
+        INSERT INTO TB_CM_SMS_XRAY_WHITE
+        (
+                USER_ID
+        ,       TEL_NO
+        ,       SEND_URL
+        ,       APPR_FG
+        ,       USE_START_DATE
+        ,       USE_END_DATE
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{userId}
+        ,       #{telNo}
+        ,       #{sendUrl}
+        ,       #{apprFg}
+        ,       #{useStartDate}
+        ,       #{useEndDate}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
 </mapper>

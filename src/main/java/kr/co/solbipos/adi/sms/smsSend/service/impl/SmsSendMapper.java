@@ -67,4 +67,19 @@ public interface SmsSendMapper {
 
     /** SMS 전송 MSG_ID 채번(HCS_MSGSS_S 시퀀스 채번) */
     String getSmsMsgId();
+
+    /** URL이 whitelist 포함인지 확인 */
+    int getChkWhiteUrl(SmsSendVO smsSendVO);
+
+    /** URL이 blacklist 포함인지 확인 (블랙리스트 매칭시 XRAY_ID, 없으면 null) */
+    String getChkBlackUrl(SmsSendVO smsSendVO);
+
+    /** URL 체크 이력 저장 (urlType: B-블랙/W-화이트/G-그레이, 발견된 URL마다 항상 저장) */
+    int insertUrlCheckLog(SmsSendVO smsSendVO);
+
+    /** SMS전송 - 전송, 예약 권한 확인 */
+    int getChkRegUserInfo(SmsSendVO smsSendVO);
+
+    /** SMS전송 - 서류인증신청 번호 수량 확인 */
+    int getChkRegInfoCnt(SmsSendVO smsSendVO);
 }

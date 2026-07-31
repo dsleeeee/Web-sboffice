@@ -466,11 +466,42 @@
                 #{item}
             </foreach>
         </if>
-        <if test='modTelNo != null and modTelNo != ""'>
-            AND SBPENC.D(A.TEL_NO) NOT IN
-            <foreach collection="modTelNoList" item="item" open=" (" separator="," close=")" >
+        <if test='modCertId != null and modCertId != ""'>
+            AND A.CERT_ID NOT IN
+            <foreach collection="modCertIdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
+        UNION
+        SELECT  SBPENC.D(TEL_NO) AS TEL_NO
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ADD_PROC_FG = '2'
+        <if test='chkTelNo != null and chkTelNo != ""'>
+            AND SBPENC.D(TEL_NO) IN
+            <foreach collection="chkTelNoList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='modCertId != null and modCertId != ""'>
+            AND CERT_ID NOT IN
+            <foreach collection="modCertIdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO
+        COMMENTS :
+    -->
+    <select id="getAddProcFgCnt" parameterType="SmsTelNoManageVO" resultType="Integer">
+        /* SmsTelNoManageMapper.getAddProcFgCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ORGN_CD     = #{orgnCd}
+        AND     USER_ID     = #{userId}
+        AND     TEL_FG      = #{telFg}
+        AND     ADD_PROC_FG = '2'
     </select>
 </mapper>

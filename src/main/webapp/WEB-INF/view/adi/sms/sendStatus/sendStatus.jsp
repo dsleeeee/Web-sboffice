@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div id="sendStatusView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
@@ -212,6 +213,7 @@
                     <wj-flex-grid-column header="<s:message code="sendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sendStatus.gubun"/>" binding="gubun" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sendStatus.smsSendSeq"/>" binding="smsSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sendStatus.sUserId"/>" binding="sUserId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -260,6 +262,7 @@
                 <wj-flex-grid-column header="<s:message code="sendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.gubun"/>" binding="gubun" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sendStatus.smsSendSeq"/>" binding="smsSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="sendStatus.sUserId"/>" binding="sUserId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -267,6 +270,7 @@
 </div>
 
 <script type="text/javascript">
+    var s_userId      = "${userId}";
     // SMS전송 - 메세지그룹
     var msgGrpColList = [];
     <%--javascript에서 사용할 할인 json 데이터 생성--%>
@@ -278,7 +282,7 @@
     </c:forEach>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260611.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/sendStatus.js?ver=20260731.02" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">

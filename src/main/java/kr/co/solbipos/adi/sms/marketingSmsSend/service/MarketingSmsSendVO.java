@@ -177,6 +177,19 @@ public class MarketingSmsSendVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String regUseStoreCdQuery;
 
+    /** 요청 ID */
+    private String userId;
+
+    /** 전송URL */
+    private String sendUrl;
+
+    /** 승인여부 */
+    private String apprFg;
+
+    /** 사용시작일자 */
+    private String useStartDate;
+    /** 사용종료일자 */
+    private String useEndDate;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -572,5 +585,45 @@ public class MarketingSmsSendVO extends PageVO {
 
     public void setRegUseStoreCdQuery(String regUseStoreCdQuery) {
         this.regUseStoreCdQuery = regUseStoreCdQuery;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSendUrl() {
+        return sendUrl;
+    }
+
+    public void setSendUrl(String sendUrl) {
+        this.sendUrl = sendUrl;
+    }
+
+    public String getApprFg() {
+        return apprFg;
+    }
+
+    public void setApprFg(String apprFg) {
+        this.apprFg = apprFg;
+    }
+
+    public String getUseStartDate() {
+        return useStartDate;
+    }
+
+    public void setUseStartDate(String useStartDate) {
+        this.useStartDate = useStartDate;
+    }
+
+    public String getUseEndDate() {
+        return useEndDate;
+    }
+
+    public void setUseEndDate(String useEndDate) {
+        this.useEndDate = useEndDate;
     }
 }

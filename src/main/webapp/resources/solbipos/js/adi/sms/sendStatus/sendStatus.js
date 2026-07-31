@@ -176,11 +176,17 @@ app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 예약취소
     $scope.reserveCancel = function() {
+
         // 파라미터 설정
         var paramsChk = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                paramsChk.push($scope.flex.collectionView.items[i]);
+                if(nvl(s_userId, '') === nvl($scope.flex.collectionView.items[i].sUserId, '')) {
+                    paramsChk.push($scope.flex.collectionView.items[i]);
+                }else{
+                    $scope._popMsg(messages["sendStatus.chkRegUserInfo"]); // 본인 발신번호로 등록된 예약만 취소 가능합니다.
+                    return false;
+                }
             }
         }
 

@@ -80,6 +80,10 @@
             </table>
 
             <div class="mt10 oh">
+                <p class="tl s14 mt5 lh15">- 계정당 휴대폰번호는 최대 2건, 유선번호는 최대 5건까지 승인할 수 있습니다.</p>
+            </div>
+
+            <div class="oh">
                 <%--조회--%>
                 <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('smsGeneralNoManage2Ctrl', 1)"><s:message code="cmm.search" /></button>
                 <p class="tl s14 mt5 lh15">- 통화일시는 녹취확인용으로 반드시 년/월/일 시간 정보로 필수 입력해주세요.</p>
@@ -161,7 +165,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260629.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260728.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">

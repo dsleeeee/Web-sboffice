@@ -172,7 +172,12 @@ public class SmsSendController {
         if (result == -1) {
             HashMap<String, Object> blocked = new HashMap<String, Object>();
             blocked.put("blocked", true);
-            blocked.put("keyword", smsSendVOs[0].getKeyword());
+            // URL이 있으면 URL부터 확인
+            if ("URL".equals(smsSendVOs[0].getBlockType())) {
+                blocked.put("urlBlocked", true);
+            } else {
+                blocked.put("keyword", smsSendVOs[0].getKeyword());
+            }
             return returnJson(Status.OK, blocked);
         }
         return returnJson(Status.OK, result);
@@ -201,7 +206,12 @@ public class SmsSendController {
         if (result == -1) {
             HashMap<String, Object> blocked = new HashMap<String, Object>();
             blocked.put("blocked", true);
-            blocked.put("keyword", smsSendVO.getKeyword());
+            // URL이 있으면 URL부터 확인
+            if ("URL".equals(smsSendVO.getBlockType())) {
+                blocked.put("urlBlocked", true);
+            } else {
+                blocked.put("keyword", smsSendVO.getKeyword());
+            }
             return returnJson(Status.OK, blocked);
         }
         return returnJson(Status.OK, result);
@@ -348,6 +358,52 @@ public class SmsSendController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         String result = smsSendService.getSmsTelNoRegister2FileSave(request, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * SMS전송 - 전송, 예약 권한 확인
+     *
+     * @param   smsSendVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2026. 07. 27.
+     */
+    @RequestMapping(value = "/smsSend/getChkRegUserInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkRegUserInfo(SmsSendVO smsSendVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getChkRegUserInfo(smsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * SMS전송 - 서류인증신청 번호 수량 확인
+     *
+     * @param   smsSendVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2026. 07. 27.
+     */
+    @RequestMapping(value = "/smsTelNoRegister2/getChkRegInfoCnt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkRegInfoCnt(SmsSendVO smsSendVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getChkRegInfoCnt(smsSendVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

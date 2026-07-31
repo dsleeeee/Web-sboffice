@@ -212,8 +212,8 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getVerifyChk2.sb', params, function (response) {
             if (response.data.data.list !== 0) {
-                // 첨부파일 체크
-                $scope.fileChk();
+                // 번호 수량 체크
+                $scope.chkRegInfoCnt();
 
             } else {
                 $scope._popMsg(messages["smsTelNoRegister2.vfTelNoBlankAlert"]); // 휴대폰 본인인증을 해주세요.
@@ -221,6 +221,18 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
             }
         });
     });
+
+    // 번호 수량 체크
+    $scope.chkRegInfoCnt = function () {
+
+        var params = {};
+        params.telFg = $('input[name=radioTelFg]:checked').val(); // 발신번호 유형 (0:휴대폰번호, 1:유선번호)
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getChkRegInfoCnt.sb', params, function (response) {
+            // 첨부파일 체크
+            $scope.fileChk();
+        });
+    }
 
     // 첨부파일 체크
     $scope.fileChk = function() {

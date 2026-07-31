@@ -1,8 +1,12 @@
 package kr.co.solbipos.adi.sms.marketingSmsSend.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
@@ -41,16 +45,18 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     private final SmsSendMapper smsSendMapper; // SMS전송 팝업
     private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
+    private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil) {
+    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.marketingSmsSendMapper = marketingSmsSendMapper;
         this.smsSendMapper = smsSendMapper; // SMS전송 팝업
         this.popupMapper = popupMapper;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.messageService = messageService;
     }
 
     /** 메세지그룹 컬럼 리스트 조회 */
@@ -212,4 +218,40 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
 //
 //        return marketingSmsSendMapper.getTelNoNmCodeChk(marketingSmsSendVO);
 //    }
+
+    /** 전송 URL 관리(화이트리스트 등록요청) - 본인 요청 목록 조회 */
+    @Override
+    public List<DefaultMap<Object>> getRegSendUrlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+        marketingSmsSendVO.setUserId(sessionInfoVO.getUserId());
+        return marketingSmsSendMapper.getRegSendUrlList(marketingSmsSendVO);
+    }
+
+    /** 전송 URL 관리(화이트리스트 등록요청) - 요청 등록 */
+    @Override
+    public int saveRegSendUrl(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        marketingSmsSendVO.setUserId(sessionInfoVO.getUserId());
+        marketingSmsSendVO.setApprFg("0"); // 요청
+
+        // 사용종료일자 = 사용시작일자 + 90일
+        marketingSmsSendVO.setUseEndDate(DateUtil.addDaysString(marketingSmsSendVO.getUseStartDate(), 90));
+
+        marketingSmsSendVO.setRegDt(currentDt);
+        marketingSmsSendVO.setRegId(sessionInfoVO.getUserId());
+        marketingSmsSendVO.setModDt(currentDt);
+        marketingSmsSendVO.setModId(sessionInfoVO.getUserId());
+
+        // url 중복 요청 확인
+        int urlDupChk = marketingSmsSendMapper.getChkSendUrl(marketingSmsSendVO);
+
+        // url 있을 시 오류 반환
+        if(urlDupChk > 0){
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("marketingSmsSend.dypChkSendUrl"));
+        }
+
+        return marketingSmsSendMapper.insertRegSendUrl(marketingSmsSendVO);
+    }
 }

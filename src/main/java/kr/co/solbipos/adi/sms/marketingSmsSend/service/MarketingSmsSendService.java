@@ -52,4 +52,10 @@ public interface MarketingSmsSendService {
 
     /** 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용) */
 //    DefaultMap<String> getTelNoNmCodeChk(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송 URL 관리(화이트리스트 등록요청) - 본인 요청 목록 조회 */
+    List<DefaultMap<Object>> getRegSendUrlList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송 URL 관리(화이트리스트 등록요청) - 요청 등록 */
+    int saveRegSendUrl(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 }

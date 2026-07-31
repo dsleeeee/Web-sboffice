@@ -198,6 +198,7 @@ public class SmsSendVO extends PageVO {
     /** SMS 메시지 Id */
     private String msgId;
 
+
     // ------------------------------------------------------------------ //
     // 금칙어 필터링 관련 필드
     // ------------------------------------------------------------------ //
@@ -215,6 +216,15 @@ public class SmsSendVO extends PageVO {
 
     /** 탐지된 금칙어 원문 (사용자 응답 메시지용) */
     private String keyword;
+
+    /** 화이트리스트 체크 URL */
+    private String chkUrl;
+
+    /** URL 체크 결과 구분 (B:블랙리스트, W:화이트리스트, G:그레이(미등록)) */
+    private String urlType;
+
+    /** 블랙리스트 매칭된 XRAY_ID */
+    private String xrayId;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -710,5 +720,29 @@ public class SmsSendVO extends PageVO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getChkUrl() {
+        return chkUrl;
+    }
+
+    public void setChkUrl(String chkUrl) {
+        this.chkUrl = chkUrl;
+    }
+
+    public String getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(String urlType) {
+        this.urlType = urlType;
+    }
+
+    public String getXrayId() {
+        return xrayId;
+    }
+
+    public void setXrayId(String xrayId) {
+        this.xrayId = xrayId;
     }
 }

@@ -34,6 +34,10 @@
                 <%--<button class="btn_blue mr5 fl" id="btnVerify" ng-click="verify()">--%>
                     <%--<s:message code="marketingSmsSend.verify" />--%>
                 <%--</button>--%>
+                <%-- 전송URL관리 --%>
+                <button class="btn_blue mr5 fl" id="btnRegSendUrl" ng-click="regSendUrl()">
+                    <s:message code="marketingSmsSend.regSendUrl"/>
+                </button>
                 <%-- 확장조회 --%>
                 <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
@@ -531,11 +535,11 @@
                     <tr>
                         <td>
                             <%-- 전송 --%>
-                            <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendReserve('0')">
+                            <button class="btn_skyblue fl" id="btnSmsSend" ng-click="smsSendChk('0')">
                                 <s:message code="marketingSmsSend.send" />
                             </button>
                             <%-- 예약 --%>
-                            <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendReserve('1')">
+                            <button class="btn_skyblue ml5 fl" id="btnSmsReserve" ng-click="smsSendChk('1')">
                                 <s:message code="marketingSmsSend.reserve" />
                             </button>
                             <%-- 발신번호추가 --%>
@@ -738,7 +742,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20260630.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20260729.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
@@ -757,4 +761,8 @@
     <%--<c:param name="menuCd" value="${menuCd}"/>--%>
     <%--<c:param name="menuNm" value="${menuNm}"/>--%>
 <%--</c:import>--%>
+
+<%-- 전송 URL 관리 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/marketingSmsSend/regSendUrl.jsp">
+</c:import>
 

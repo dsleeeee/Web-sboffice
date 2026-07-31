@@ -759,6 +759,8 @@
     <typeAlias alias="smsChargeHistVO" type="kr.co.solbipos.adi.sms.smsChargeHist.service.SmsChargeHistVO"/>
     <!-- 부가서비스 > SMS관리 > 발신번호관리 -->
     <typeAlias alias="smsTelNoManageVO" type="kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO"/>
+    <!-- 부가서비스 > SMS관리 > 악성문자차단관리(X-Ray) -->
+    <typeAlias alias="smsXrayManageVO" type="kr.co.solbipos.adi.sms.smsXrayManage.service.SmsXrayManageVO"/>
 
     <!-- 부가서비스 > SMS분석 > 보나비예약건수현황 -->
     <typeAlias alias="resveCountStatusVO" type="kr.co.solbipos.adi.sms.resveCountStatus.service.ResveCountStatusVO"/>

@@ -24,14 +24,14 @@
         ,      API_INFO
         ,      ORGN_CD
         ,      API_URL
-        ,      ACCESS_TOKEN
-        ,      SECRET_KEY
-        ,      ETC02               AS USNO
-        ,      ETC03               AS INTG_CER_TKN
-        ,      ETC04               AS INTG_CER_TKN_PBLC_DATE
-        ,      ETC05               AS INTG_CER_TKN_PBLC_TIME
-        ,      ETC06               AS INTG_CER_TKN_DDL_DATE
-        ,      ETC07               AS INTG_CER_TKN_DDL_TIME
+        ,      ACCESS_TOKEN     AS API_SECRET_KEY
+        ,      SECRET_KEY       AS API_AUTH_KEY
+        ,      ETC02            AS USNO
+        ,      ETC03            AS INTG_CER_TKN
+        ,      ETC04            AS INTG_CER_TKN_PBLC_DATE
+        ,      ETC05            AS INTG_CER_TKN_PBLC_TIME
+        ,      ETC06            AS INTG_CER_TKN_DDL_DATE
+        ,      ETC07            AS INTG_CER_TKN_DDL_TIME
         FROM   TB_CM_API_LINK_INFO
         WHERE  API_NO = #{apiNo}
         AND    USE_YN = 'Y'

@@ -81,17 +81,20 @@ public class SmsTelNoManageVO extends PageVO {
     /** 전화번호 */
     private String[] chkTelNoList;
 
-    /** 전화번호 */
-    private String modTelNo;
+    /** 완료상태에서 빠지는 행의 관리요청번호(중복체크 제외 대상, 콤마구분) */
+    private String modCertId;
 
-    /** 전화번호 */
-    private String[] modTelNoList;
+    /** 완료상태에서 빠지는 행의 관리요청번호 목록 */
+    private String[] modCertIdList;
 
     /** 소속코드 */
     private String srchOrgnCd;
 
     /** 소속명 */
     private String srchOrgnNm;
+
+    /** 발신번호 유형 (0:휴대폰번호, 1:유선번호) */
+    private String telFg;
 
     public String getOrgnCd() { return orgnCd; }
 
@@ -179,20 +182,20 @@ public class SmsTelNoManageVO extends PageVO {
         this.chkTelNoList = chkTelNoList;
     }
 
-    public String getModTelNo() {
-        return modTelNo;
+    public String getModCertId() {
+        return modCertId;
     }
 
-    public void setModTelNo(String modTelNo) {
-        this.modTelNo = modTelNo;
+    public void setModCertId(String modCertId) {
+        this.modCertId = modCertId;
     }
 
-    public String[] getModTelNoList() {
-        return modTelNoList;
+    public String[] getModCertIdList() {
+        return modCertIdList;
     }
 
-    public void setModTelNoList(String[] modTelNoList) {
-        this.modTelNoList = modTelNoList;
+    public void setModCertIdList(String[] modCertIdList) {
+        this.modCertIdList = modCertIdList;
     }
 
     public String getSrchOrgnCd() { return srchOrgnCd; }
@@ -202,4 +205,8 @@ public class SmsTelNoManageVO extends PageVO {
     public String getSrchOrgnNm() { return srchOrgnNm; }
 
     public void setSrchOrgnNm(String srchOrgnNm) { this.srchOrgnNm = srchOrgnNm; }
+
+    public String getTelFg() { return telFg; }
+
+    public void setTelFg(String telFg) { this.telFg = telFg; }
 }

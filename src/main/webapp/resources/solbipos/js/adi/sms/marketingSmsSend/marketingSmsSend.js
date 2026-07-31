@@ -578,12 +578,31 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // <-- //그리드 행 삭제 -->
 
     // <-- 전송, 예약 -->
+    // 사용자 확인
+    $scope.smsSendChk = function(reserveYn) {
+
+        var params = {};
+        params.callback = $scope.telNoCombo;
+
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getChkRegUserInfo.sb', params, function (response) {
+            var result = response.data.data;
+            if (result > 0) {
+                $scope.smsSendReserve(reserveYn);
+            } else {
+                $scope._popMsg(messages["smsSend.chkRegUserInfo"]);
+                return false;
+            }
+        });
+    }
+
     // 전송, 예약
-    $scope.smsSendReserve = function(reserveYn) {
+    $scope.smsSendReserve = function (reserveYn){
+
         // 잔여금액
         $scope.restSmsAmt();
 
         $scope.showByte();
+
 
         var params = {};
 
@@ -849,9 +868,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(response){
-                // 금칙어 탐지 시 발송제한
+                // 금칙어/URL 탐지 시 발송제한
                 if (response.data.data && response.data.data.blocked) {
-                    $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                    if (response.data.data.urlBlocked) {
+                        $scope._popMsg(messages["smsSend.urlExistsChk"]);
+                    } else {
+                        $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                    }
                 }
                 // 갱신
                 $scope.allSearch();
@@ -899,9 +922,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             }
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function (response) {
-                // 금칙어 탐지 시 발송제한
+                // 금칙어/URL 탐지 시 발송제한
                 if (response.data.data && response.data.data.blocked) {
-                    $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                    if (response.data.data.urlBlocked) {
+                        $scope._popMsg(messages["smsSend.urlExistsChk"]);
+                    } else {
+                        $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                    }
                 }
                 // 갱신
                 $scope.allSearch();
@@ -1078,6 +1105,14 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // 발신번호추가2
     $scope.telNoAdd2 = function() {
         $scope.wjSmsTelNoRegister2Layer.show(true);
+        event.preventDefault();
+    };
+
+    // 전송 URL 관리
+    $scope.regSendUrl = function (){
+        $scope.wjRegSendUrlLayer.show(true);
+        var scope = agrid.getScope("regSendUrlCtrl");
+        scope.init();
         event.preventDefault();
     };
 

@@ -58,4 +58,10 @@ public interface SmsSendService {
 
     /** 발신번호추가2 팝업 - 첨부파일 저장 */
     String getSmsTelNoRegister2FileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
+
+    /** SMS전송 - 전송, 예약 권한 확인 */
+    int getChkRegUserInfo(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** SMS전송 - 서류인증신청 번호 수량 확인 */
+    int getChkRegInfoCnt(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
 }
