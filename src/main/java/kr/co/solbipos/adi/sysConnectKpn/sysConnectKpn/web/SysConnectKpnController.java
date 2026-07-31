@@ -60,8 +60,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class SysConnectKpnController {
 
     /** TB_CM_API_LINK_INFO 에서 KPN 연동정보를 찾기 위한 API 번호 */
-//    private static final String KPN_API_NO = "0026"; // 개발
-    private static final String KPN_API_NO = "0027";  // 운영
+    private static final String KPN_API_NO = "0026"; // 개발
+//    private static final String KPN_API_NO = "0027";  // 운영
     /** KPN 토큰발급 API 요청 header 의 서비스 코드 (KPN 측 고정값) */
     private static final String KPN_SVC_CD = "pascer01u0";
 
@@ -182,8 +182,8 @@ public class SysConnectKpnController {
         // 캐시 만료/없음 : KPN 토큰발급 API 새로 호출
         String apiUrl = apiInfo.getStr("apiUrl");
         String usno = apiInfo.getStr("usno");
-        String apiSecretKey = apiInfo.getStr("accessToken");
-        String apiAuthKey = apiInfo.getStr("secretKey");
+        String apiSecretKey = apiInfo.getStr("apiSecretKey");
+        String apiAuthKey = apiInfo.getStr("apiAuthKey");
 
         if (CmmUtil.nvl(apiUrl, "").isEmpty()) {
             throw new IllegalArgumentException("KPN 토큰발급 API URL이 설정되지 않았습니다.");
@@ -360,8 +360,8 @@ public class SysConnectKpnController {
 
         StringBuilder sb = new StringBuilder(baseUrl);
         sb.append(baseUrl.contains("?") ? "&" : "?");
-        sb.append("token=").append(URLEncoder.encode(token, StandardCharsets.UTF_8.toString()));
-        sb.append("&usr_id=").append(URLEncoder.encode(userId, StandardCharsets.UTF_8.toString()));
+        sb.append("usrToken=").append(URLEncoder.encode(token, StandardCharsets.UTF_8.toString()));
+        sb.append("&usrId=").append(URLEncoder.encode(userId, StandardCharsets.UTF_8.toString()));
 
         return sb.toString();
     }

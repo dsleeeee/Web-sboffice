@@ -73,4 +73,7 @@ public interface SmsTelNoManageMapper {
 
     /** 일반번호 인증요청 처리2 팝업 - 중복체크 */
     List<DefaultMap<String>> getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 */
+    int getAddProcFgCnt(SmsTelNoManageVO smsTelNoManageVO);
 }

@@ -1,6 +1,9 @@
 package kr.co.solbipos.adi.sms.smsSend.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.adi.sms.badword.service.BadwordFilterService;
 import kr.co.solbipos.adi.sms.badword.service.FilterResult;
@@ -18,7 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -42,15 +49,22 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class SmsSendServiceImpl implements SmsSendService {
     private final SmsSendMapper smsSendMapper;
     private final BadwordFilterService badwordFilterService;
+    private final MessageService messageService;
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private static final Pattern URL_PATTERN = Pattern.compile(
+            "(?i)\\b((?:https?://|www\\.)[^\\s가-힣<>\"']+|(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:/[^\\s<>\"']*)?)"
+    );
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsSendServiceImpl(SmsSendMapper smsSendMapper, BadwordFilterService badwordFilterService) {
+    public SmsSendServiceImpl(SmsSendMapper smsSendMapper, BadwordFilterService badwordFilterService, MessageService messageService) {
         this.smsSendMapper = smsSendMapper;
         this.badwordFilterService = badwordFilterService;
+        this.messageService = messageService;
     }
 
     /** 발신번호 조회 */
@@ -58,6 +72,7 @@ public class SmsSendServiceImpl implements SmsSendService {
     public List<DefaultMap<Object>> getSmsTelNoComboList(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
 
         smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
 
         return smsSendMapper.getSmsTelNoComboList(smsSendVO);
     }
@@ -115,11 +130,109 @@ public class SmsSendServiceImpl implements SmsSendService {
         // SMS잔여금액 > SMS사용금액 체크
         if((Long.parseLong(smsAmt) - Long.parseLong(useSmsAmt)) > 0) {
 
-            // 금칙어 필터링 — 결과와 관계없이 검사 이력 저장 후 발송 여부 결정
+            // 화이트리스트 사용기간 체크 기준일 (예약전송은 예약일시, 즉시전송은 현재일시) - URL체크보다 먼저 채워둠
+            if (!"1".equals(smsSendVOs[0].getReserveYn()) || smsSendVOs[0].getSendDate() == null || smsSendVOs[0].getSendDate().isEmpty()) {
+                smsSendVOs[0].setSendDate(currentDt);
+            }
+
+            // URL 차단 - 악성문자차단관리(X-Ray)
+            boolean sendYn = true;
+            boolean anyBlack = false;
+            Set<String> urlSet = new LinkedHashSet<>();
+
+            Matcher matcher = URL_PATTERN.matcher(smsSendVOs[0].getContent() == null ? "" : smsSendVOs[0].getContent());
+
+            // url 개별로 분리해서 저장
+            while (matcher.find()) {
+                String url = matcher.group();
+
+                // 문장 끝 구두점 제거
+                url = url.replaceAll("[.,!?)\\]}]+$", "");
+
+                urlSet.add(url);
+            }
+
+            // URL 있을 시
+            if (!urlSet.isEmpty()) {
+
+                sendYn = false;
+
+                boolean allWhite = true;
+                // URL마다 블랙(B)/화이트(W)/그레이(G) 판정 + 발견된 URL은 결과와 무관하게 항상 이력 저장
+                for (String url : urlSet) {
+
+                    SmsSendVO chkUrlVO = new SmsSendVO();
+                    chkUrlVO.setUserId(sessionInfoVO.getUserId());
+                    chkUrlVO.setChkUrl(url);
+                    chkUrlVO.setCallback(smsSendVOs[0].getCallback());
+                    chkUrlVO.setContent(smsSendVOs[0].getContent());
+                    chkUrlVO.setSendDate(smsSendVOs[0].getSendDate());
+
+                    String urlType;
+                    // 블랙리스트인지 (매칭되면 XRAY_ID, 없으면 null)
+                    String xrayId = smsSendMapper.getChkBlackUrl(chkUrlVO);
+                    if (xrayId != null) {
+                        urlType = "B";
+                        anyBlack = true;
+                        // todo api 실시간 전송
+                    }
+                    // 화이트리스트인지
+                    else if (smsSendMapper.getChkWhiteUrl(chkUrlVO) > 0) {
+                        urlType = "W";
+                    }
+                    // 그 외
+                    else {
+                        urlType = "G";
+                        allWhite = false;
+                    }
+
+                    // URL 체크 이력 저장 (전송/차단 여부와 무관하게 항상)
+                    chkUrlVO.setUrlType(urlType);
+                    chkUrlVO.setXrayId(xrayId);
+                    chkUrlVO.setRegDt(currentDt);
+                    chkUrlVO.setRegId(sessionInfoVO.getUserId());
+                    chkUrlVO.setModDt(currentDt);
+                    chkUrlVO.setModId(sessionInfoVO.getUserId());
+                    chkUrlVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
+                    chkUrlVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                    chkUrlVO.setSsUserId(sessionInfoVO.getUserId());
+                    smsSendMapper.insertUrlCheckLog(chkUrlVO);
+                }
+
+                if (!anyBlack && allWhite) {
+                    sendYn = true;
+                }
+            }
+
+            // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
             FilterResult filterResult = badwordFilterService.check(smsSendVOs[0].getContent());
 
-            if (filterResult.isDetected()) {
-                // 이력만 남기고 SMS 미전송
+            // URL 문제(블랙/그레이 모두) - 금칙어 여부와 무관하게 최우선 차단, 금칙어 동시탐지시 이력도 같이 저장. 예외 대신 procCnt=-1 플래그로 처리(트랜잭션 롤백에 이력이 사라지지 않도록)
+            if (!sendYn) {
+
+                // 금칙어도 함께 검출된 경우 금칙어 이력도 같이 저장
+                if (filterResult.isDetected()) {
+                    for (SmsSendVO smsSendVO : smsSendVOs) {
+                        smsSendVO.setRegDt(currentDt);
+                        smsSendVO.setRegId(sessionInfoVO.getUserId());
+                        smsSendVO.setModDt(currentDt);
+                        smsSendVO.setModId(sessionInfoVO.getUserId());
+                        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+                        smsSendVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
+                        smsSendVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        smsSendVO.setSsUserId(sessionInfoVO.getUserId());
+                        smsSendVO.setKeyword(filterResult.getKeyword());
+                        badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
+                    }
+                }
+
+                for (SmsSendVO smsSendVO : smsSendVOs) {
+                    smsSendVO.setBlockType("URL");
+                }
+                procCnt = -1;
+
+            } else if (filterResult.isDetected()) {
+                // URL 문제 없이 금칙어만 탐지된 경우 - 이력만 남기고 SMS 미전송
                 for (SmsSendVO smsSendVO : smsSendVOs) {
                     smsSendVO.setRegDt(currentDt);
                     smsSendVO.setRegId(sessionInfoVO.getUserId());
@@ -317,12 +430,92 @@ public class SmsSendServiceImpl implements SmsSendService {
         // SMS잔여금액 > SMS사용금액 체크
         if((Long.parseLong(smsAmt) - Long.parseLong(useSmsAmt)) > 0) {
 
-            // 금칙어 필터링 — 결과와 관계없이 검사 이력 저장 후 발송 여부 결정
+            // 화이트리스트 사용기간 체크 기준일 (예약전송은 예약일시, 즉시전송은 현재일시) - URL체크보다 먼저 채워둠
+            if (!"1".equals(smsSendVO.getReserveYn()) || smsSendVO.getSendDate() == null || smsSendVO.getSendDate().isEmpty()) {
+                smsSendVO.setSendDate(currentDt);
+            }
+
+            // URL 차단 - 악성문자차단관리(X-Ray)
+            boolean sendYn = true;
+            boolean anyBlack = false;
+            Set<String> urlSet = new LinkedHashSet<>();
+
+            Matcher matcher = URL_PATTERN.matcher(smsSendVO.getContent() == null ? "" : smsSendVO.getContent());
+
+            // url 개별로 분리해서 저장
+            while (matcher.find()) {
+                String url = matcher.group();
+
+                // 문장 끝 구두점 제거
+                url = url.replaceAll("[.,!?)\\]}]+$", "");
+
+                urlSet.add(url);
+            }
+
+            // URL 있을 시
+            if (!urlSet.isEmpty()) {
+
+                sendYn = false;
+
+                boolean allWhite = true;
+                // URL마다 블랙(B)/화이트(W)/그레이(G) 판정 + 발견된 URL은 결과와 무관하게 항상 이력 저장
+                for (String url : urlSet) {
+
+                    SmsSendVO chkUrlVO = new SmsSendVO();
+                    chkUrlVO.setUserId(sessionInfoVO.getUserId());
+                    chkUrlVO.setChkUrl(url);
+                    chkUrlVO.setCallback(smsSendVO.getCallback());
+                    chkUrlVO.setContent(smsSendVO.getContent());
+                    chkUrlVO.setSendDate(smsSendVO.getSendDate());
+
+                    String urlType;
+                    String xrayId = smsSendMapper.getChkBlackUrl(chkUrlVO);
+                    if (xrayId != null) {
+                        urlType = "B";
+                        anyBlack = true;
+                    } else if (smsSendMapper.getChkWhiteUrl(chkUrlVO) > 0) {
+                        urlType = "W";
+                    } else {
+                        urlType = "G";
+                        allWhite = false;
+                    }
+
+                    // URL 체크 이력 저장 (전송/차단 여부와 무관하게 항상)
+                    chkUrlVO.setUrlType(urlType);
+                    chkUrlVO.setXrayId(xrayId);
+                    chkUrlVO.setRegDt(currentDt);
+                    chkUrlVO.setRegId(sessionInfoVO.getUserId());
+                    chkUrlVO.setModDt(currentDt);
+                    chkUrlVO.setModId(sessionInfoVO.getUserId());
+                    chkUrlVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
+                    chkUrlVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                    chkUrlVO.setSsUserId(sessionInfoVO.getUserId());
+                    smsSendMapper.insertUrlCheckLog(chkUrlVO);
+                }
+
+                if (!anyBlack && allWhite) {
+                    sendYn = true;
+                }
+            }
+
+            // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
             FilterResult filterResult = badwordFilterService.check(smsSendVO.getContent());
 
-            if (filterResult.isDetected()) {
+            // URL 문제(블랙/그레이 모두) - 금칙어 여부와 무관하게 최우선 차단, 금칙어 동시탐지시 이력도 같이 저장. 예외 대신 procCnt=-1 플래그로 처리(트랜잭션 롤백에 이력이 사라지지 않도록)
+            if (!sendYn) {
 
-                // 탐지된 금칙어
+                // 금칙어도 함께 검출된 경우 금칙어 이력도 같이 저장
+                if (filterResult.isDetected()) {
+                    smsSendVO.setKeyword(filterResult.getKeyword());
+                    badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
+                }
+
+                smsSendVO.setBlockType("URL");
+                procCnt = -1;
+
+            } else if (filterResult.isDetected()) {
+
+                // URL 문제 없이 금칙어만 탐지된 경우
                 smsSendVO.setKeyword(filterResult.getKeyword());
 
                 // 이력만 남기고 SMS 미전송
@@ -750,5 +943,35 @@ public class SmsSendServiceImpl implements SmsSendService {
         }
 
         return contentData;
+    }
+
+    /** SMS전송 - 전송, 예약 권한 확인 */
+    @Override
+    public int getChkRegUserInfo(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
+        return smsSendMapper.getChkRegUserInfo(smsSendVO);
+    }
+
+    /** SMS전송 - 서류인증신청 번호 수량 확인 */
+    @Override
+    public int getChkRegInfoCnt(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        // 발신번호 유형
+        int limit = "0".equals(smsSendVO.getTelFg()) ? 1 : 5;
+        String msg = "0".equals(smsSendVO.getTelFg()) ? messageService.get("smsTelNoRegister2.chkPhoneCnt") : messageService.get("smsTelNoRegister2.chkLandLineCnt");
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt = smsSendMapper.getChkRegInfoCnt(smsSendVO);
+
+        if(procCnt >= limit){
+            throw new JsonException(Status.SERVER_ERROR, msg);
+        }
+
+        return procCnt;
     }
 }

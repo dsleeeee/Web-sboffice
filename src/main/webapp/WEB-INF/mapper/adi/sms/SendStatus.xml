@@ -59,7 +59,8 @@
         hmt.SUBJECT,
         hmt.MSG_CONTENT,
         hmt.SMS_SEND_SEQ,
-        hmt.GUBUN
+        hmt.GUBUN,
+        hmt.S_USER_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -391,7 +392,8 @@
         hmt.SUBJECT,
         hmt.MSG_CONTENT,
         hmt.SMS_SEND_SEQ,
-        hmt.GUBUN
+        hmt.GUBUN,
+        hmt.S_USER_ID
         FROM
         (
             SELECT *

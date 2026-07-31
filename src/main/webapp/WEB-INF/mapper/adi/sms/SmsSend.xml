@@ -25,10 +25,15 @@
                    WHEN LENGTH(SBPENC.D(hst.TEL_NO)) >= 12 THEN (SUBSTR(SBPENC.D(hst.TEL_NO), 1, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 5, 4) || '-' || SUBSTR(SBPENC.D(hst.TEL_NO), 9))
                    ELSE SBPENC.D(hst.TEL_NO) END
             ) AS NAME
-            FROM HCS_SENDM_T hst
+            FROM HCS_SENDM_T hst,
+            TB_CM_ADD_SMS_NO tcasn
             WHERE 1=1
             AND hst.OGN_CD = #{orgnCd}
             AND hst.USE_YN = 'Y'
+            AND tcasn.ORGN_CD = hst.OGN_CD
+            AND SBPENC.D(tcasn.TEL_NO) = SBPENC.D(hst.TEL_NO)
+            AND tcasn.USER_ID = #{userId}
+            AND tcasn.ADD_PROC_FG = '2'
             ORDER BY hst.USE_SEQ
         ]]>
     </select>
@@ -753,5 +758,108 @@
     <select id="getSmsMsgId" resultType="string">
         /* SmsSendMapper.getSmsMsgId */
         SELECT HCS_MSGSS_S.NEXTVAL FROM DUAL
+    </select>
+
+    <!-- URL whitelist 포함 여부 확인 -->
+    <!--
+        TABLE    : TB_CM_SMS_XRAY_WHITE
+        COMMENTS :
+    -->
+    <select id="getChkWhiteUrl" parameterType="smsSendVO" resultType="Integer">
+        /* SmsSendMapper.getChkWhiteUrl */
+        SELECT  COUNT(*)
+        FROM 	TB_CM_SMS_XRAY_WHITE A
+        WHERE 	A.USER_ID   =   #{userId}
+        AND     A.TEL_NO    =   #{callback}
+        AND     A.SEND_URL  =   #{chkUrl}
+        AND     A.APPR_FG   =   '1'
+        AND     SUBSTR(#{sendDate}, 1, 8) BETWEEN A.USE_START_DATE AND A.USE_END_DATE
+    </select>
+
+    <!-- URL이 blacklist 포함인지 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getChkBlackUrl" parameterType="smsSendVO" resultType="String">
+        /* SmsSendMapper.getChkBlackUrl */
+        SELECT  XRAY_ID
+        FROM 	TB_CM_SMS_XRAY
+        WHERE   SBPENC.D(XRAY_URL)  =   #{chkUrl}
+        AND     USE_YN              =   'Y'
+        AND     ROWNUM = 1
+    </select>
+
+    <!-- URL 체크 이력 저장 (발견된 URL마다 항상 저장, urlType: B-블랙/W-화이트/G-그레이) -->
+    <!--
+        TABLE    : TB_CM_SMS_MESSAGE_BLOCK_XRAY
+        COMMENTS : URL 체크(블랙/화이트/그레이) 이력
+    -->
+    <insert id="insertUrlCheckLog" parameterType="smsSendVO">
+        /* SmsSendMapper.insertUrlCheckLog */
+        INSERT INTO TB_CM_SMS_MESSAGE_BLOCK_XRAY
+        (
+            MSG_BLOCK_ID
+        ,   URL_TYPE
+        ,   XRAY_ID
+        ,   XRAY_URL
+        ,   MSG_STATUS
+        ,   MSG_CONTENT
+        ,   CALLBACK
+        ,   S_OGN_CD
+        ,   S_OGN_FG
+        ,   S_USER_ID
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            TB_CM_SMS_MESSAGE_BLOCK_XRAY_SEQ.NEXTVAL
+        ,   #{urlType}
+        ,   #{xrayId}
+        ,   #{chkUrl}
+        ,   (CASE WHEN #{urlType} = 'W' THEN 'allow' ELSE 'block' END)
+        ,   #{content}
+        ,   SBPENC.E(#{callback})
+        ,   #{ssOrgnCd}
+        ,   #{ssOrgnFg}
+        ,   #{ssUserId}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- SMS전송 - 전송, 예약 권한 확인 -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO
+        COMMENTS :
+    -->
+    <select id="getChkRegUserInfo" parameterType="smsSendVO" resultType="Integer">
+        /* SmsSendMapper.getChkRegUserInfo */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ORGN_CD             =   #{orgnCd}
+        AND     USER_ID             =   #{userId}
+        AND     SBPENC.D(TEL_NO)    =   #{callback}
+        AND     ADD_PROC_FG         =   '2'
+    </select>
+
+    <!-- SMS전송 - 서류인증신청 번호 수량 확인 -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO
+        COMMENTS :
+    -->
+    <select id="getChkRegInfoCnt" parameterType="smsSendVO" resultType="Integer">
+        /* SmsSendMapper.getChkRegInfoCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ORGN_CD     =   #{orgnCd}
+        AND     USER_ID     =   #{userId}
+        AND     TEL_FG      =   #{telFg}
+        AND     ADD_PROC_FG IN ('0','1','2')
     </select>
 </mapper>

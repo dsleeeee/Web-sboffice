@@ -587,4 +587,34 @@ public class MarketingSmsSendController {
         }
     }
 
+    /**
+     * 전송 URL 관리(화이트리스트 등록요청) - 본인 요청 목록 조회
+     */
+    @RequestMapping(value = "/marketingSmsSend/getRegSendUrlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRegSendUrlList(MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = marketingSmsSendService.getRegSendUrlList(marketingSmsSendVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, marketingSmsSendVO);
+    }
+
+    /**
+     * 전송 URL 관리(화이트리스트 등록요청) - 요청 등록
+     */
+    @RequestMapping(value = "/marketingSmsSend/saveRegSendUrl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRegSendUrl(@RequestBody MarketingSmsSendVO marketingSmsSendVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = marketingSmsSendService.saveRegSendUrl(marketingSmsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

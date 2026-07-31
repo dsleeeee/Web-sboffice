@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsXrayManage.xml
+    SMS Xray관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.07.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsXrayManage.service.impl.SmsXrayManageMapper">
+
+    <!-- SMS Xray관리 - 목록 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsXrayManageList" parameterType="SmsXrayManageVO" resultType="DefaultMap">
+        /* SmsXrayManageMapper.getSmsXrayManageList */
+        SELECT 	B.ORGN_CD
+        ,       B.ORGN_NM
+        ,       A.USER_ID
+        ,       B.USER_NM
+        ,		A.TEL_NO
+        ,		A.SEND_URL
+        ,		TO_CHAR(TO_DATE(A.USE_START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(A.USE_END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')	AS USE_PERIOD
+        ,       A.USE_START_DATE
+        ,		A.APPR_FG
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        ,       A.APPR_ID
+        ,       (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.APPR_ID) AS APPR_NM
+        ,       A.APPR_REASON
+        FROM 	TB_CM_SMS_XRAY_WHITE A
+        ,		TB_WB_USER_INFO_DTL_V01 B
+        WHERE 	B.USER_ID 	=	A.USER_ID
+        <if test='orgnCd != null and orgnCd != ""'>
+            AND B.ORGN_CD LIKE '%' ||#{orgnCd}|| '%'
+        </if>
+        <if test='orgnNm != null and orgnNm != ""'>
+            AND B.ORGN_NM LIKE '%' ||#{orgnNm}|| '%'
+        </if>
+        <if test='reqId != null and reqId != ""'>
+            AND B.USER_ID LIKE '%' ||#{reqId}|| '%'
+        </if>
+        <if test='reqNm != null and reqNm != ""'>
+            AND B.USER_NM LIKE '%' ||#{reqNm}|| '%'
+        </if>
+        <if test='apprFg != null and apprFg != ""'>
+            AND A.APPR_FG LIKE '%' ||#{apprFg}|| '%'
+        </if>
+        ORDER
+        BY      B.ORGN_CD
+        ,       A.USER_ID
+        ,       A.TEL_NO
+        ,       A.SEND_URL
+        ,       A.USE_START_DATE
+
+    </select>
+
+    <!-- SMS Xray관리 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="updateSmsXrayManage" parameterType="SmsXrayManageVO">
+        /* SmsXrayManageMapper.updateSmsXrayManage */
+        UPDATE  TB_CM_SMS_XRAY_WHITE
+        SET     APPR_FG     =   #{apprFg}
+        ,       APPR_ID     =   #{apprId}
+        ,       APPR_REASON =   #{apprReason}
+        ,       MOD_DT      =   #{modDt}
+        ,       MOD_ID      =   #{modId}
+        WHERE   USER_ID         =   #{userId}
+        AND     TEL_NO          =   #{telNo}
+        AND     SEND_URL        =   #{sendUrl}
+        AND     USE_START_DATE  =   #{useStartDate}
+    </update>
+
+    <!-- 탐지/차단결과 로그 - 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_SMS_MESSAGE_BLOCK_XRAY
+        COMMENTS : URL 체크(블랙/화이트/그레이) 이력
+    -->
+    <select id="getUrlBlockLogList" parameterType="SmsXrayManageVO" resultType="DefaultMap">
+        /* SmsXrayManageMapper.getUrlBlockLogList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.MSG_BLOCK_ID
+        ,       A.URL_TYPE
+        ,       A.XRAY_ID
+        ,       A.XRAY_URL
+        ,       A.MSG_STATUS
+        ,       A.MSG_CONTENT
+        ,       SBPENC.D(A.CALLBACK) AS CALLBACK
+        ,       A.S_OGN_CD
+        ,       A.S_OGN_FG
+        ,       A.S_USER_ID
+        ,       TO_CHAR(TO_DATE(A.REG_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS REG_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_CM_SMS_MESSAGE_BLOCK_XRAY A
+        WHERE   1=1
+        AND     A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        <if test='urlType != null and urlType != ""'>
+            AND A.URL_TYPE = #{urlType}
+        </if>
+        <if test='chkUrl != null and chkUrl != ""'>
+            AND A.XRAY_URL LIKE '%' || #{chkUrl} || '%'
+        </if>
+        ORDER
+        BY      A.REG_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
