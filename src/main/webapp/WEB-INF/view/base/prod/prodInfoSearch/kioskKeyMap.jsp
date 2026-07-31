@@ -109,12 +109,6 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <c:if test="${hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.kioskSaleTime"/>" binding="saleTimeFg" width="80" align="center" is-read-only="true" data-map="saleTimeFgComboDataMap" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.saleTimeFg"/>" binding="saleTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.prodOptionGrpCd"/>" binding="optionGrpCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.releaseDate"/>" binding="releaseDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          </c:if>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -153,12 +147,6 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <c:if test="${hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.kioskSaleTime"/>" binding="saleTimeFg" width="80" align="center" is-read-only="true" data-map="saleTimeFgComboDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.saleTimeFg"/>" binding="saleTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.prodOptionGrpCd"/>" binding="optionGrpCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.releaseDate"/>" binding="releaseDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          </c:if>
         </wj-flex-grid>
       </div>
     </div>
@@ -167,4 +155,4 @@
 <script>
     var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/kioskKeyMap.js?ver=20260716.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/kioskKeyMap.js?ver=20260731.01" charset="utf-8"></script>
