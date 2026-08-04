@@ -106,4 +106,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsXrayManage/urlBlockLog.js?ver=20260730.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsXrayManage/urlBlockLog.js?ver=20260804.01" charset="utf-8"></script>

@@ -113,11 +113,11 @@
     </div>
 
     <%-- 페이지 리스트 --%>
-    <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="smsXrayManageCtrlPager" data-size="10">
-        </ul>
-    </div>
+<%--    <div class="pageNum mt20">--%>
+<%--        &lt;%&ndash; id &ndash;%&gt;--%>
+<%--        <ul id="smsXrayManageCtrlPager" data-size="10">--%>
+<%--        </ul>--%>
+<%--    </div>--%>
     <%--//페이지 리스트--%>
 </div>
 

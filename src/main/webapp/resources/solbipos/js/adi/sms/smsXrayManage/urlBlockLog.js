@@ -15,6 +15,7 @@ var app = agrid.getApp();
 
 // URL 유형
 var urlBlockLogUrlTypeFg = [
+    {"name":"전체","value":""},
     {"name":"차단","value":"B"},
     {"name":"전송","value":"W"},
     {"name":"그 외 차단","value":"G"}
