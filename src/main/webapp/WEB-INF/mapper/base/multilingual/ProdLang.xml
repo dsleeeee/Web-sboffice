@@ -110,8 +110,8 @@
         ,      TB_HQ_PRODUCT_INFO thpi
         WHERE  1=1
         AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
-        AND    thp.PROD_CD      = thpi.PROD_CD
+        AND    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
+        AND    thp.PROD_CD      = thpi.PROD_CD (+)
         <if test="prodCd != null and prodCd != ''">
         AND    thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
         </if>
