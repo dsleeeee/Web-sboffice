@@ -36,7 +36,7 @@ app.controller('dcfgPeriodSaleBensonCtrl', ['$scope', '$http', '$timeout', funct
                     col.binding === "lv1Cd" || col.binding === "lv2Cd" || col.binding === "lv3Cd" ||
                     col.binding === "lv1Nm" || col.binding === "lv2Nm" || col.binding === "lv3Nm" ||
                     col.binding === "prodCd" || col.binding === "prodNm" ||
-                    col.binding === "saleQty" || col.binding === "saleAmt" || col.binding === "dcAmt" || col.binding === "totDcAmt" || col.binding === "realSaleAmt") {
+                    col.binding === "totSaleQty" || col.binding === "totSaleAmt" || col.binding === "dcAmt" || col.binding === "totDcAmt" || col.binding === "realSaleAmt") {
 
                     // 소계
                     if (item[("seq")] === '2') {

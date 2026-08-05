@@ -95,9 +95,9 @@
                 <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.prodClassSNm"/>" binding="lv3Nm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.prodCd"/>" binding="prodCd" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.saleQty"/>" binding="saleQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.saleQty"/>" binding="totSaleQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" visible="false"></wj-flex-grid-column><%-- row merge시 인접cell과 내용이 같으면 셀이 합쳐지므로, 셀 합침 방지를 위해 추가--%>
-                <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.totSaleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" visible="false"></wj-flex-grid-column><%-- row merge시 인접cell과 내용이 같으면 셀이 합쳐지므로, 셀 합침 방지를 위해 추가--%>
                 <wj-flex-grid-column header="<s:message code="dcfgPeriodSaleBenson.dcAmt"/>" binding="dcAmt" width="80"  align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" visible="false"></wj-flex-grid-column><%-- row merge시 인접cell과 내용이 같으면 셀이 합쳐지므로, 셀 합침 방지를 위해 추가--%>
