@@ -177,6 +177,12 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return marketingSmsSendMapper.getVerifyChk(marketingSmsSendVO);
     }
 
+    /** 발신번호추가2 팝업 - 본인인증 통과 시 DI 저장 */
+    @Override
+    public int updateAddSmsNoDi(MarketingSmsSendVO marketingSmsSendVO) {
+        return marketingSmsSendMapper.updateAddSmsNoDi(marketingSmsSendVO);
+    }
+
     /** 본인인증 요청 저장 */
     @Override
     public int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {

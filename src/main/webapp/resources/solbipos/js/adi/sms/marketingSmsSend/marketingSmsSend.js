@@ -1104,7 +1104,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
 
     // 발신번호추가2
     $scope.telNoAdd2 = function() {
-        $scope.wjSmsTelNoRegister2Layer.show(true);
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsUserRegist/smsUserRegist/getUserRegistInfo.sb', {}, function (response) {
+            var data = response.data.data;
+            if (!data || !data.userId) {
+                $scope._popMsg(messages["smsUserRegist.notRegistAlert"]);
+                return;
+            }
+
+            $scope.wjSmsTelNoRegister2Layer.show(true);
+        });
         event.preventDefault();
     };
 

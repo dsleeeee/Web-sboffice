@@ -52,6 +52,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     public List<DefaultMap<Object>> getSmsTelNoManageList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
 
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsTelNoManageVO.setUserId(sessionInfoVO.getUserId());
 
         return smsTelNoManageMapper.getSmsTelNoManageList(smsTelNoManageVO);
     }
@@ -80,7 +81,6 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
 
         System.out.println("JH : getSmsTelNoManageChk 진입");
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
         int cnt = 0;
 
         System.out.println("JH : 전화번호 : " + smsTelNoManageVO.getTelNo());
@@ -149,6 +149,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     public List<DefaultMap<Object>> getSmsTelNoStopList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
 
         smsTelNoManageVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsTelNoManageVO.setUserId(sessionInfoVO.getUserId());
 
         return smsTelNoManageMapper.getSmsTelNoStopList(smsTelNoManageVO);
     }
@@ -344,10 +345,30 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
             chkVO.setTelFg(parts[2]);
 
             int cnt = smsTelNoManageMapper.getAddProcFgCnt(chkVO);
-            int limit = "0".equals(parts[2]) ? 1 : 5;
+            int limit = "0".equals(parts[2]) ? 2 : 5;
 
             if (cnt > limit) {
                 throw new JsonException(Status.SERVER_ERROR, messageService.get("smsGeneralNoManage2.addProcFgCntOver") + "- 소속:" + parts[0] + " 사용자:" + parts[1]);
+            }
+        }
+
+        // 번호 중복 체크 (같은 배치 내 충돌 + 기존 활성 등록 뺏기 둘 다 감지, insert/update 반영 후 실제 DB 상태 기준, 위반 시 예외 던져서 트랜잭션 롤백)
+        Set<String> chkTelNoSet = new LinkedHashSet<String>();
+        for (SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
+            if (smsTelNoManageVO.getStatus() == GridDataFg.UPDATE && "2".equals(smsTelNoManageVO.getAddProcFg())) {
+                chkTelNoSet.add(smsTelNoManageVO.getTelNo());
+            }
+        }
+
+        if (!chkTelNoSet.isEmpty()) {
+            SmsTelNoManageVO dupChkVO = new SmsTelNoManageVO();
+            dupChkVO.setChkTelNo(String.join(",", chkTelNoSet));
+            dupChkVO.setChkTelNoList(chkTelNoSet.toArray(new String[0]));
+
+            List<DefaultMap<String>> dupList = smsTelNoManageMapper.getDupUserTelNo(dupChkVO);
+
+            if (!dupList.isEmpty()) {
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("smsTelNoStop.dupTelNo"));
             }
         }
 
@@ -358,23 +379,6 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     public DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo) {
 
         return smsTelNoManageMapper.getSmsPreviewFileNm(smsTelNoManageVO);
-    }
-
-    /** 일반번호 인증요청 처리2 팝업 - 중복체크 */
-    @Override
-    public List<DefaultMap<String>> getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
-
-        if(smsTelNoManageVO.getChkTelNo() != null && smsTelNoManageVO.getChkTelNo() != "") {
-            String[] chkTelNoList = smsTelNoManageVO.getChkTelNo().split(",");
-            smsTelNoManageVO.setChkTelNoList(chkTelNoList);
-        }
-
-        if(smsTelNoManageVO.getModCertId() != null && smsTelNoManageVO.getModCertId() != "") {
-            String[] modCertIdList = smsTelNoManageVO.getModCertId().split(",");
-            smsTelNoManageVO.setModCertIdList(modCertIdList);
-        }
-
-        return smsTelNoManageMapper.getDupChkTelNo(smsTelNoManageVO);
     }
 
 }

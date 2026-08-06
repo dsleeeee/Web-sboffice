@@ -32,6 +32,7 @@
             AND hst.USE_YN = 'Y'
             AND tcasn.ORGN_CD = hst.OGN_CD
             AND SBPENC.D(tcasn.TEL_NO) = SBPENC.D(hst.TEL_NO)
+            AND tcasn.CERT_ID = hst.CERT_ID
             AND tcasn.USER_ID = #{userId}
             AND tcasn.ADD_PROC_FG = '2'
             ORDER BY hst.USE_SEQ
@@ -718,6 +719,20 @@
         AND     CERT_ID = #{certId}
     </select>
 
+    <!-- 발신번호추가2 팝업 - 저장 시 DI 재확인용 조회 -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO
+        COMMENTS :
+    -->
+    <select id="getAddSmsNoDi" parameterType="SmsSendVO" resultType="String">
+        /* SmsSendMapper.getAddSmsNoDi */
+        SELECT  DI
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ORGN_CD = #{orgnCd}
+        AND     USER_ID = #{userId}
+        AND     CERT_ID = #{certId}
+    </select>
+
     <!-- 발신번호추가2 팝업 - 저장 update -->
     <!--
         TABLE    : CET_SMSPT_T
@@ -836,30 +851,50 @@
     <!-- SMS전송 - 전송, 예약 권한 확인 -->
     <!--
         TABLE    : TB_CM_ADD_SMS_NO
-        COMMENTS :
+        COMMENTS : TB_CM_ADD_SMS_NO가 완료이고 HCS_SENDM_T.USE_YN='Y'인 값만 전송,예약 가능
     -->
     <select id="getChkRegUserInfo" parameterType="smsSendVO" resultType="Integer">
         /* SmsSendMapper.getChkRegUserInfo */
         SELECT  COUNT(*)
-        FROM    TB_CM_ADD_SMS_NO
-        WHERE   ORGN_CD             =   #{orgnCd}
-        AND     USER_ID             =   #{userId}
-        AND     SBPENC.D(TEL_NO)    =   #{callback}
-        AND     ADD_PROC_FG         =   '2'
+        FROM    TB_CM_ADD_SMS_NO tcasn
+        WHERE   tcasn.ORGN_CD = #{orgnCd}
+        AND     tcasn.USER_ID = #{userId}
+        AND     SBPENC.D(tcasn.TEL_NO) = #{callback}
+        AND     tcasn.ADD_PROC_FG = '2'
+        AND     EXISTS  (
+                            SELECT  1
+                            FROM    HCS_SENDM_T hst
+                            WHERE   hst.OGN_CD = tcasn.ORGN_CD
+                            AND     hst.TEL_NO = tcasn.TEL_NO
+                            AND     hst.CERT_ID = tcasn.CERT_ID
+                            AND     hst.USE_YN = 'Y'
+                        )
     </select>
 
     <!-- SMS전송 - 서류인증신청 번호 수량 확인 -->
     <!--
         TABLE    : TB_CM_ADD_SMS_NO
-        COMMENTS :
+        COMMENTS : 접수,처리중은 그대로 카운트 + 완료는 HCS_SENDM_T.USE_YN='Y'인 값만 카운트
     -->
     <select id="getChkRegInfoCnt" parameterType="smsSendVO" resultType="Integer">
         /* SmsSendMapper.getChkRegInfoCnt */
         SELECT  COUNT(*)
-        FROM    TB_CM_ADD_SMS_NO
-        WHERE   ORGN_CD     =   #{orgnCd}
-        AND     USER_ID     =   #{userId}
-        AND     TEL_FG      =   #{telFg}
-        AND     ADD_PROC_FG IN ('0','1','2')
+        FROM    TB_CM_ADD_SMS_NO tcasn
+        WHERE   tcasn.ORGN_CD = #{orgnCd}
+        AND     tcasn.USER_ID = #{userId}
+        AND     tcasn.TEL_FG = #{telFg}
+        AND     (
+                    tcasn.ADD_PROC_FG IN ('0','1')
+                    OR
+                    (tcasn.ADD_PROC_FG = '2' AND EXISTS (
+                                                            SELECT  1
+                                                            FROM    HCS_SENDM_T hst
+                                                            WHERE   hst.OGN_CD = tcasn.ORGN_CD
+                                                            AND     hst.TEL_NO = tcasn.TEL_NO
+                                                            AND     hst.CERT_ID = tcasn.CERT_ID
+                                                            AND     hst.USE_YN = 'Y'
+                                                        )
+                    )
+                )
     </select>
 </mapper>

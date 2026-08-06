@@ -24,10 +24,15 @@
             SELECT
             SBPENC.D(hst.TEL_NO) AS TEL_NO,
             hst.USE_YN,
-            hst.USE_SEQ
-            FROM HCS_SENDM_T hst
+            hst.USE_SEQ,
+            tcasn2.USER_ID
+            FROM HCS_SENDM_T hst,
+            TB_CM_ADD_SMS_NO tcasn2
             WHERE 1=1
             AND hst.OGN_CD = #{orgnCd}
+            AND tcasn2.ORGN_CD (+)  =   hst.OGN_CD
+            AND tcasn2.TEL_NO (+)   =   hst.TEL_NO
+            AND tcasn2.CERT_ID (+)  =   hst.CERT_ID
             ORDER BY hst.USE_SEQ
         )
         UNION ALL
@@ -35,7 +40,8 @@
             SELECT
             TEL_NO,
             ADD_PROC_FG || RETURN_REMARK AS USE_YN,
-            99999 AS USE_SEQ
+            99999 AS USE_SEQ,
+            USER_ID
             FROM
             (
                 SELECT
@@ -48,7 +54,8 @@
                 ) AS ADD_PROC_FG,
                 (CASE WHEN tcasn.ADD_PROC_FG = '3' THEN tcasn.RETURN_REMARK
                         ELSE null END
-                ) AS RETURN_REMARK
+                ) AS RETURN_REMARK,
+                tcasn.USER_ID
                 FROM TB_CM_ADD_SMS_NO tcasn
                 WHERE 1=1
                 AND tcasn.ORGN_CD = #{orgnCd}
@@ -98,7 +105,8 @@
         SELECT  COUNT(*)
         FROM    HCS_SENDM_T
         WHERE   SBPENC.D(TEL_NO) = #{telNo}
-        AND     OGN_CD = #{orgnCd}
+        AND     OGN_CD  = #{orgnCd}
+        AND     USE_YN  =   'Y'
     </select>
 
     <!-- 발신번호관리 수정 -->
@@ -163,8 +171,10 @@
         twuidv01.ORGN_NM,
         SBPENC.D(hst.TEL_NO) AS TEL_NO,
         hst.USE_YN,
-        hst.CERT_ID
+        hst.CERT_ID,
+        tcasn.USER_ID
         FROM HCS_SENDM_T hst,
+        TB_CM_ADD_SMS_NO tcasn,
         (
             SELECT
             twuidv01.ORGN_FG,
@@ -198,6 +208,9 @@
             AND twuidv01.ORGN_NM LIKE '%'||#{srchOrgnNm}||'%'
         </if>
         AND twuidv01.ORGN_CD = hst.OGN_CD
+        AND tcasn.ORGN_CD (+)  =   hst.OGN_CD
+        AND tcasn.TEL_NO (+)   =   hst.TEL_NO
+        AND tcasn.CERT_ID (+)  =   hst.CERT_ID
         ORDER BY hst.OGN_CD, hst.USE_SEQ
     </select>
 
@@ -380,10 +393,15 @@
         SBPENC.D(tcasn.TEL_NO) AS BACK_TEL_NO,
         tcasn.TEL_DT AS BACK_TEL_DT,
         tcasn.RETURN_REMARK AS BACK_RETURN_REMARK,
-        tcasn.REMARK AS BACK_REMARK
+        tcasn.REMARK AS BACK_REMARK,
+        hst.USE_YN AS HCS_USE_YN
         FROM TB_CM_ADD_SMS_NO tcasn,
-        TB_WB_USER_INFO_DTL_V01 twuidv01
+        TB_WB_USER_INFO_DTL_V01 twuidv01,
+        HCS_SENDM_T hst
         WHERE 1=1
+        AND hst.OGN_CD (+)     =   tcasn.ORGN_CD
+        AND hst.TEL_NO (+)     =   tcasn.TEL_NO
+        AND hst.CERT_ID (+)    =   tcasn.CERT_ID
         <if test="orgnCd != null and orgnCd != ''">
             AND tcasn.ORGN_CD LIKE '%'||#{orgnCd}||'%'
         </if>
@@ -446,48 +464,31 @@
         AND tcasn.CERT_ID = #{certId}
     </select>
 
-    <!-- 일반번호 인증요청 처리2 팝업 - 중복체크  -->
+    <!-- 일반번호 인증요청 처리2 팝업 - 저장 후 중복체크 (같은 배치 내 충돌 + 기존 활성 등록 뺏기 둘 다 감지) -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_CM_ADD_SMS_NO, HCS_SENDM_T
+        COMMENTS : ADD_PROC_FG='2'인 행 중 같은 TEL_NO를 서로 다른 USER_ID가 갖고 있고, 그 번호가 지금 HCS_SENDM_T에서 활성(USE_YN='Y')이면 중복으로 판단
     -->
-    <select id="getDupChkTelNo" resultType="DefaultMap">
-        /* SmsTelNoManageMapper.getDupChkTelNo */
-        SELECT  SBPENC.D(A.TEL_NO) AS TEL_NO
-        FROM    HCS_SENDM_T A
-        ,		TB_CM_ADD_SMS_NO B
-        WHERE   A.USE_YN 			= 'Y'
-        AND 	B.TEL_NO 	 	(+) = A.TEL_NO
-        AND 	B.CERT_ID 	 	(+) = A.CERT_ID
-        AND 	B.ADD_PROC_FG	(+) = '2'
+    <select id="getDupUserTelNo" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getDupUserTelNo */
+        SELECT  SBPENC.D(tcasn.TEL_NO) AS TEL_NO
+        FROM    TB_CM_ADD_SMS_NO tcasn
+        WHERE   tcasn.ADD_PROC_FG = '2'
         <if test='chkTelNo != null and chkTelNo != ""'>
-            AND SBPENC.D(A.TEL_NO) IN
+            AND SBPENC.D(tcasn.TEL_NO) IN
             <foreach collection="chkTelNoList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        <if test='modCertId != null and modCertId != ""'>
-            AND A.CERT_ID NOT IN
-            <foreach collection="modCertIdList" item="item" open=" (" separator="," close=")" >
-                #{item}
-            </foreach>
-        </if>
-        UNION
-        SELECT  SBPENC.D(TEL_NO) AS TEL_NO
-        FROM    TB_CM_ADD_SMS_NO
-        WHERE   ADD_PROC_FG = '2'
-        <if test='chkTelNo != null and chkTelNo != ""'>
-            AND SBPENC.D(TEL_NO) IN
-            <foreach collection="chkTelNoList" item="item" open=" (" separator="," close=")" >
-                #{item}
-            </foreach>
-        </if>
-        <if test='modCertId != null and modCertId != ""'>
-            AND CERT_ID NOT IN
-            <foreach collection="modCertIdList" item="item" open=" (" separator="," close=")" >
-                #{item}
-            </foreach>
-        </if>
+        AND EXISTS  (
+                        SELECT  1
+                        FROM    HCS_SENDM_T hst
+                        WHERE   hst.OGN_CD = tcasn.ORGN_CD
+                        AND     hst.TEL_NO = tcasn.TEL_NO
+                        AND     hst.USE_YN = 'Y'
+                    )
+        GROUP BY SBPENC.D(tcasn.TEL_NO)
+        HAVING COUNT(DISTINCT tcasn.USER_ID) > 1
     </select>
 
     <!-- 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 -->
@@ -498,10 +499,18 @@
     <select id="getAddProcFgCnt" parameterType="SmsTelNoManageVO" resultType="Integer">
         /* SmsTelNoManageMapper.getAddProcFgCnt */
         SELECT  COUNT(*)
-        FROM    TB_CM_ADD_SMS_NO
-        WHERE   ORGN_CD     = #{orgnCd}
-        AND     USER_ID     = #{userId}
-        AND     TEL_FG      = #{telFg}
-        AND     ADD_PROC_FG = '2'
+        FROM    TB_CM_ADD_SMS_NO tcasn
+        WHERE   tcasn.ORGN_CD = #{orgnCd}
+        AND     tcasn.USER_ID = #{userId}
+        AND     tcasn.TEL_FG = #{telFg}
+        AND     tcasn.ADD_PROC_FG = '2'
+        AND     EXISTS  (
+                            SELECT  1
+                            FROM    HCS_SENDM_T hst
+                            WHERE   hst.OGN_CD = tcasn.ORGN_CD
+                            AND     hst.TEL_NO = tcasn.TEL_NO
+                            AND     hst.CERT_ID = tcasn.CERT_ID
+                            AND     hst.USE_YN = 'Y'
+                        )
     </select>
 </mapper>

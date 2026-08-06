@@ -106,6 +106,7 @@
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.orgnCd"/>" binding="orgnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.orgnNm"/>" binding="orgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.orgnFg"/>" binding="orgnFg" data-map="orgnFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.userId"/>" binding="userId" width="80" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.vfYn"/>" binding="vfYn" data-map="vfYnDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.telFg"/>" binding="telFg" data-map="telFgDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.addSmsFg"/>" binding="addSmsFg" data-map="addSmsFgDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -127,7 +128,6 @@
 
                         <%--저장시 필요--%>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.certId"/>" binding="certId" width="160" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.fileName1"/>" binding="fileName1" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.fileName2"/>" binding="fileName2" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.backAddProcFg"/>" binding="backAddProcFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -165,7 +165,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260728.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260803.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">

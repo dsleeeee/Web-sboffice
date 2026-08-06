@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsUserRegist.xml
+    SMS 사용 등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.08.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsUserRegist.service.impl.SmsUserRegistMapper">
+
+    <!-- DI로 기존 등록 사용자아이디 조회 -->
+    <!--
+        TABLE    : TB_CM_SMS_USER_REGIST
+        COMMENTS :
+    -->
+    <select id="getUserIdByDi" parameterType="SmsUserRegistVO" resultType="String">
+        /* SmsUserRegistMapper.getUserIdByDi */
+        SELECT  USER_ID
+        FROM    TB_CM_SMS_USER_REGIST
+        WHERE   DI = #{di}
+    </select>
+
+    <!-- SMS 사용 등록 - 신규 등록 insert -->
+    <!--
+        TABLE    : TB_CM_SMS_USER_REGIST
+        COMMENTS :
+    -->
+    <insert id="insertUserRegist" parameterType="SmsUserRegistVO">
+        /* SmsUserRegistMapper.insertUserRegist */
+        INSERT INTO TB_CM_SMS_USER_REGIST
+        (
+            USER_ID
+        ,   DI
+        ,   TEL_NO
+        ,   AGREE1_YN
+        ,   AGREE2_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{userId}
+        ,   #{di}
+        ,   SBPENC.E(#{telNo})
+        ,   'Y'
+        ,   'Y'
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- USER_ID로 등록정보 조회 (진입시 체크용) -->
+    <!--
+        TABLE    : TB_CM_SMS_USER_REGIST
+        COMMENTS :
+    -->
+    <select id="getUserRegistInfo" parameterType="SmsUserRegistVO" resultType="DefaultMap">
+        /* SmsUserRegistMapper.getUserRegistInfo */
+        SELECT  USER_ID
+        ,       DI
+        ,       SBPENC.D(TEL_NO) AS TEL_NO
+        ,       TO_CHAR(TO_DATE(REG_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd hh24:mi:ss') AS REG_DT
+        FROM    TB_CM_SMS_USER_REGIST
+        WHERE   USER_ID = #{userId}
+    </select>
+
+    <!-- SMS 사용등록 - SMS사용자 삭제  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="deleteUserRegist" parameterType="SmsUserRegistVO">
+        /* SmsUserRegistMapper.deleteUserRegist */
+        DELETE  TB_CM_SMS_USER_REGIST
+        WHERE   1=1
+        AND     USER_ID = #{userId}
+    </delete>
+
+    <!-- SMS 사용등록 - 발신번호 미사용 처리 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="deleteSmsTelNoManage" parameterType="SmsUserRegistVO">
+        /* SmsUserRegistMapper.deleteSmsTelNoManage */
+        UPDATE  HCS_SENDM_T C
+        SET     USE_YN  =   #{useYn}
+        ,       MOD_DT  =   #{modDt}
+        ,       MOD_ID  =   #{modId}
+        WHERE   EXISTS  (
+                            SELECT  1
+                            FROM    TB_CM_SMS_USER_REGIST A
+                            ,       TB_CM_ADD_SMS_NO B
+                            WHERE   B.USER_ID           =   A.USER_ID
+                            AND     B.ORGN_CD           =   C.OGN_CD
+                            AND     SBPENC.D(B.TEL_NO)  =   SBPENC.D(C.TEL_NO)
+                            AND     B.CERT_ID           =   C.CERT_ID
+                            AND     A.USER_ID           =   #{userId}
+                        )
+    </update>
+
+</mapper>

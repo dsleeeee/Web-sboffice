@@ -47,6 +47,7 @@
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoManage.telNo"/>" binding="telNo" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsTelNoManage.userId"/>" binding="userId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%-- 저장시 필요 --%>
                     <wj-flex-grid-column header="<s:message code="smsTelNoManage.useSeq"/>" binding="useSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>

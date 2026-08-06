@@ -78,6 +78,7 @@
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.orgnNm"/>" binding="orgnNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.telNo"/>" binding="telNo" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsTelNoStop.userId"/>" binding="userId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.certId"/>" binding="certId" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>

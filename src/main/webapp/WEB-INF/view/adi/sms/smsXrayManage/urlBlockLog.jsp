@@ -85,7 +85,7 @@
                 item-formatter="_itemFormatter">
             <wj-flex-grid-column header="<s:message code="smsXrayTab.id"/>" binding="msgBlockId" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsXrayTab.urlType"/>" binding="urlType" width="90" is-read-only="true" align="center" data-map="urlTypeDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsXrayTab.xrayId"/>" binding="xrayId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsXrayTab.xrayId"/>" binding="xrayId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsXrayTab.url"/>" binding="xrayUrl" width="220" is-read-only="true" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsXrayTab.msgStatus"/>" binding="msgStatus" width="80" is-read-only="true" align="center" data-map="msgStatusDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsXrayTab.msgContent"/>" binding="msgContent" is-read-only="true" width="350"></wj-flex-grid-column>

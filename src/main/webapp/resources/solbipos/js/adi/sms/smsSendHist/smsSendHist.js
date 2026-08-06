@@ -124,6 +124,7 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.regDt = messages["smsSendHist.regDt"];
         dataItem.smsSendOrgnCd = messages["smsSendHist.send"];
         dataItem.smsSendOrgnNm = messages["smsSendHist.send"];
+        dataItem.sUserId = messages["smsSendHist.send"];
         dataItem.smsSendSeq = messages["smsSendHist.smsSendSeq"];
         dataItem.smsSendCount = messages["smsSendHist.smsSendCount"];
         dataItem.msgType = messages["smsSendHist.msgType"];
@@ -324,6 +325,7 @@ app.controller('smsSendHistExcelCtrl', ['$scope', '$http', '$timeout', function 
         dataItem.regDt = messages["smsSendHist.regDt"];
         dataItem.smsSendOrgnCd = messages["smsSendHist.send"];
         dataItem.smsSendOrgnNm = messages["smsSendHist.send"];
+        dataItem.sUserId = messages["smsSendHist.send"];
         dataItem.smsSendSeq = messages["smsSendHist.smsSendSeq"];
         dataItem.smsSendCount = messages["smsSendHist.smsSendCount"];
         dataItem.msgType = messages["smsSendHist.msgType"];
