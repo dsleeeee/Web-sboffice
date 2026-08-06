@@ -801,6 +801,16 @@ public class SmsSendServiceImpl implements SmsSendService {
         return smsSendMapper.getVerifyChk2(smsSendVO);
     }
 
+    /** 발신번호추가2 팝업 - 저장 시 DI 재확인용 조회 */
+    @Override
+    public String getAddSmsNoDi(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
+
+        return smsSendMapper.getAddSmsNoDi(smsSendVO);
+    }
+
     /** 발신번호추가2 팝업 - 저장 */
     @Override
     public int getSmsTelNoRegister2Save(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
@@ -960,7 +970,7 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         int procCnt = 0;
         // 발신번호 유형
-        int limit = "0".equals(smsSendVO.getTelFg()) ? 1 : 5;
+        int limit = "0".equals(smsSendVO.getTelFg()) ? 2 : 5;
         String msg = "0".equals(smsSendVO.getTelFg()) ? messageService.get("smsTelNoRegister2.chkPhoneCnt") : messageService.get("smsTelNoRegister2.chkLandLineCnt");
 
         smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());

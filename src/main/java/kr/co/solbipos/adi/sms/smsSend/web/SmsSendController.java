@@ -12,6 +12,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendService;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
+import kr.co.solbipos.adi.sms.smsUserRegist.service.SmsUserRegistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,14 +52,16 @@ public class SmsSendController {
 
     private final SessionService sessionService;
     private final SmsSendService smsSendService;
+    private final SmsUserRegistService smsUserRegistService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsSendController(SessionService sessionService, SmsSendService smsSendService) {
+    public SmsSendController(SessionService sessionService, SmsSendService smsSendService, SmsUserRegistService smsUserRegistService) {
         this.sessionService = sessionService;
         this.smsSendService = smsSendService;
+        this.smsUserRegistService = smsUserRegistService;
     }
 
     /**
@@ -319,6 +322,42 @@ public class SmsSendController {
         int result = smsSendService.getVerifyChk2(smsSendVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 발신번호추가2 팝업 - 저장 시 SMS사용등록 여부 + DI 재확인
+     * (본인인증 성공 시 세션에 담아둔 DI와, 저장 시점의 SMS사용등록 DI가 여전히 일치하는지)
+     *
+     * @param   request
+     * @return  Object
+     * @author  김유승
+     * @since   2026. 08. 03.
+     */
+    @RequestMapping(value = "/smsTelNoRegister2/getUserRegistDiChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getUserRegistDiChk(SmsSendVO smsSendVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        System.out.println("DI체크 진입 - certId : " + smsSendVO.getCertId());
+
+        DefaultMap<Object> registInfo = smsUserRegistService.getUserRegistInfo(sessionInfoVO);
+
+        // NOT_REGIST : SMS 사용등록 안됨, DI_MISMATCH : 본인인증 DI와 등록된 DI 불일치, OK : 통과
+        String result;
+
+        if (registInfo == null || registInfo.getStr("userId") == null || registInfo.getStr("userId").isEmpty()) {
+            result = "NOT_REGIST";
+        } else {
+            String verifiedDi = smsSendService.getAddSmsNoDi(smsSendVO, sessionInfoVO);
+            if (verifiedDi == null || !verifiedDi.equals(registInfo.getStr("di"))) {
+                result = "DI_MISMATCH";
+            } else {
+                result = "OK";
+            }
+        }
+
+        return returnJson(Status.OK, result);
     }
 
     /**

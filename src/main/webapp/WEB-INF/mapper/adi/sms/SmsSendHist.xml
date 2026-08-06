@@ -38,7 +38,8 @@
             hssrt.SEND_QTY,
             hssrt.WAIT_QTY,
             hssrt.SUCCESS_QTY,
-            hssrt.FAIL_QTY
+            hssrt.FAIL_QTY,
+            hssrt.S_USER_ID
             FROM HCS_SMS_SEND_REG_T hssrt,
             (
                 SELECT
@@ -160,7 +161,8 @@
             hssrt.SEND_QTY,
             hssrt.WAIT_QTY,
             hssrt.SUCCESS_QTY,
-            hssrt.FAIL_QTY
+            hssrt.FAIL_QTY,
+            hssrt.S_USER_ID
             FROM HCS_SMS_SEND_REG_T hssrt,
             (
                 SELECT

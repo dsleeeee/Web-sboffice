@@ -62,6 +62,9 @@ public interface SmsSendMapper {
     /** 발신번호추가2 팝업 - 본인인증 여부 조회2 */
     int getVerifyChk2(SmsSendVO smsSendVO);
 
+    /** 발신번호추가2 팝업 - 저장 시 DI 재확인용 조회 */
+    String getAddSmsNoDi(SmsSendVO smsSendVO);
+
     /** 발신번호추가2 팝업 - 저장 update */
     int getSmsTelNoRegister2SaveUpdate(SmsSendVO smsSendVO);
 

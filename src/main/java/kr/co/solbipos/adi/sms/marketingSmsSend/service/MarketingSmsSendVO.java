@@ -150,6 +150,9 @@ public class MarketingSmsSendVO extends PageVO {
     /** 관리요청번호 */
     private String certId;
 
+    /** DI(본인확인정보) */
+    private String di;
+
     /** 결과코드 */
     private String resCd;
 
@@ -491,6 +494,14 @@ public class MarketingSmsSendVO extends PageVO {
 
     public void setCertId(String certId) {
         this.certId = certId;
+    }
+
+    public String getDi() {
+        return di;
+    }
+
+    public void setDi(String di) {
+        this.di = di;
     }
 
     public String getResCd() {

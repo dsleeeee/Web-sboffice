@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : SmsTelNoManageController.java
@@ -67,7 +66,9 @@ public class SmsTelNoManageController {
     public static final  String RET_URL         = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
     // 본인인증 결과 URL
     public static final  String VERIFY_RET_URL  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb";
-    public static final  String VERIFY_RET_URL2  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
+    // TODO 로컬 테스트용으로 임시 변경함 - 배포 전 아래 운영주소로 반드시 되돌릴 것!!
+//    public static final  String VERIFY_RET_URL2  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
+    public static final  String VERIFY_RET_URL2  = "http://localhost:8080/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
     public static final  String GW_URL          = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
@@ -599,28 +600,5 @@ public class SmsTelNoManageController {
         DefaultMap<String> result = smsTelNoManageService.getSmsPreviewFileNm(smsTelNoManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 일반번호 인증요청 처리2 팝업 - 중복체크
-     *
-     * @param   smsTelNoManageVO
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  Object
-     * @author  김유승
-     * @since   2025. 01. 07.
-     */
-    @RequestMapping(value = "/smsGeneralNoManage2/getDupChkTelNo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
-                                      HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> result = smsTelNoManageService.getDupChkTelNo(smsTelNoManageVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, result, smsTelNoManageVO);
     }
 }

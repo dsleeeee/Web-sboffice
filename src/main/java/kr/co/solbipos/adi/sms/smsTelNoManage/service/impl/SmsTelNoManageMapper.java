@@ -71,8 +71,8 @@ public interface SmsTelNoManageMapper {
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
     DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO);
 
-    /** 일반번호 인증요청 처리2 팝업 - 중복체크 */
-    List<DefaultMap<String>> getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO);
+    /** 일반번호 인증요청 처리2 팝업 - 저장 후 중복체크 (같은 번호를 서로 다른 사용자가 완료 상태로 갖고 있는지) */
+    List<DefaultMap<String>> getDupUserTelNo(SmsTelNoManageVO smsTelNoManageVO);
 
     /** 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 */
     int getAddProcFgCnt(SmsTelNoManageVO smsTelNoManageVO);

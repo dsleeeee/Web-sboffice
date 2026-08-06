@@ -131,7 +131,7 @@
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.regDt"/>" binding="regDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.callback"/>" binding="callback" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smsBadwordTab.sOgnCd"/>" binding="sOgnCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smsBadwordTab.sUserId"/>" binding="sUserId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="smsBadwordTab.sUserId"/>" binding="sUserId" width="100" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
         </wj-flex-grid>
     </div>
 

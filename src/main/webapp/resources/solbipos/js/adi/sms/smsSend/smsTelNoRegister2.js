@@ -13,6 +13,22 @@
  */
 var app = agrid.getApp();
 
+// 본인인증 팝업(KCP 콜백)에서 window.opener로 직접 호출하는 브릿지 함수
+// (Angular 컨텍스트 밖에서 호출되므로 $$phase 체크 후 $apply)
+window.smsTelNoRegister2VerifyCallback = function (message) {
+    var scope = angular.element(document.querySelector('[ng-controller="smsTelNoRegister2Ctrl"]')).scope();
+
+    var applyFn = function () {
+        scope._popMsg(message);
+    };
+
+    if (scope.$root.$$phase) {
+        applyFn();
+    } else {
+        scope.$apply(applyFn);
+    }
+};
+
 /**
  *  발신번호 사전등록2 팝업 조회 그리드 생성
  */
@@ -106,26 +122,35 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
 
     // 휴대폰 본인인증
     $scope.vfTelNo = function(){
-        if($("#srchCertId").val() == "" || $("#srchCertId").val() == null) {
-            // 본인인증
-            $scope.verify();
+        // SMS 사용등록 여부 먼저 확인 (KCP 팝업 열기 전에 차단)
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsUserRegist/smsUserRegist/getUserRegistInfo.sb', {}, function (response0) {
+            var registData = response0.data.data;
+            if (!registData || !registData.userId) {
+                $scope._popMsg(messages["smsUserRegist.notRegistAlert"]);
+                return;
+            }
 
-        } else {
-            // 본인인증 체크
-            var params = {};
-            params.certId = $("#srchCertId").val();
+            if($("#srchCertId").val() == "" || $("#srchCertId").val() == null) {
+                // 본인인증
+                $scope.verify();
 
-            $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getVerifyChk2.sb', params, function (response) {
-                if (response.data.data.list !== 0) {
-                    $scope._popMsg(messages["smsTelNoRegister2.verifyChk"]); // 이미 본인인증이 완료되었습니다.
-                    return false;
+            } else {
+                // 본인인증 체크
+                var params = {};
+                params.certId = $("#srchCertId").val();
 
-                } else {
-                    // 본인인증
-                    $scope.verify();
-                }
-            });
-        }
+                $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getVerifyChk2.sb', params, function (response) {
+                    if (response.data.data.list !== 0) {
+                        $scope._popMsg(messages["smsTelNoRegister2.verifyChk"]); // 이미 본인인증이 완료되었습니다.
+                        return false;
+
+                    } else {
+                        // 본인인증
+                        $scope.verify();
+                    }
+                });
+            }
+        });
     };
 
     // 본인인증
@@ -211,14 +236,25 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
         params.certId = $("#srchCertId").val();
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getVerifyChk2.sb', params, function (response) {
-            if (response.data.data.list !== 0) {
-                // 번호 수량 체크
-                $scope.chkRegInfoCnt();
+            // if (response.data.data.list !== 0) {
+                // SMS사용등록 여부 + DI 재확인
+                $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getUserRegistDiChk.sb', { certId: params.certId }, function (response2) {
+                    var chkResult = response2.data.data;
 
-            } else {
-                $scope._popMsg(messages["smsTelNoRegister2.vfTelNoBlankAlert"]); // 휴대폰 본인인증을 해주세요.
-                return false;
-            }
+                    if (chkResult === 'OK') {
+                        // 번호 수량 체크
+                        $scope.chkRegInfoCnt();
+                    } else if (chkResult === 'NOT_REGIST') {
+                        $scope._popMsg(messages["smsUserRegist.notRegistAlert"]);
+                    } else {
+                        $scope._popMsg(messages["smsUserRegist.diMismatchAlert"]);
+                    }
+                });
+
+            // } else {
+            //     $scope._popMsg(messages["smsTelNoRegister2.vfTelNoBlankAlert"]); // 휴대폰 본인인증을 해주세요.
+            //     return false;
+            // }
         });
     });
 
@@ -228,7 +264,7 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
         var params = {};
         params.telFg = $('input[name=radioTelFg]:checked').val(); // 발신번호 유형 (0:휴대폰번호, 1:유선번호)
 
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getChkRegInfoCnt.sb', params, function (response) {
+        $scope._postJSONQuery.withPopUp('/adi/sms/smsSend/smsTelNoRegister2/getChkRegInfoCnt.sb', params, function (response) {
             // 첨부파일 체크
             $scope.fileChk();
         });

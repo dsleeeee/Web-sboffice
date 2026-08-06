@@ -156,6 +156,9 @@ public class SmsSendVO extends PageVO {
     /** 관리요청번호 */
     private String certId;
 
+    /** DI(본인확인정보) */
+    private String di;
+
     /** 발신번호구분 */
     private String telFg;
 
@@ -568,6 +571,14 @@ public class SmsSendVO extends PageVO {
 
     public void setCertId(String certId) {
         this.certId = certId;
+    }
+
+    public String getDi() {
+        return di;
+    }
+
+    public void setDi(String di) {
+        this.di = di;
     }
 
     public String getTelFg() {

@@ -366,10 +366,10 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     return;
                 }
 
-                // 계정별 처리구분 완료 개수 제한 체크 (그리드에 보이는 최종 상태 기준)
+                // 계정별 처리구분 완료 개수 제한 체크 (그리드에 보이는 최종 상태 기준, 1차 체크 - 최종 확정은 저장 후 서버에서 재검증)
                 var addProcFgCntMap = {};
                 for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                    if (nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2") {
+                    if (nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].hcsUseYn, "") === "Y") {
                         var groupKey = $scope.flex.collectionView.items[i].orgnCd + "|" + $scope.flex.collectionView.items[i].userId + "|" + $scope.flex.collectionView.items[i].telFg;
                         addProcFgCntMap[groupKey] = (addProcFgCntMap[groupKey] || 0) + 1;
                     }
@@ -378,7 +378,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 var addProcFgCntOverMsg = '';
                 for (var groupKey in addProcFgCntMap) {
                     var keyParts = groupKey.split("|");
-                    var groupLimit = keyParts[2] === "0" ? 1 : 5;
+                    var groupLimit = keyParts[2] === "0" ? 2 : 5;
                     if (addProcFgCntMap[groupKey] > groupLimit) {
                         addProcFgCntOverMsg += "(" + keyParts[0] + " / " + keyParts[1] + ") ";
                     }
@@ -386,7 +386,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
 
                 if (addProcFgCntOverMsg !== '') {
                     $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                    // 처리구분 완료 가능 건수를 초과했습니다. (휴대폰번호 1건, 유선번호 5건까지 가능)
+                    // 처리구분 완료 가능 건수를 초과했습니다. (휴대폰번호 2건, 유선번호 5건까지 가능)
                     $scope._popMsg(messages["smsGeneralNoManage2.addProcFgCntOver"] + "<br/>" + addProcFgCntOverMsg);
                     return;
                 }
@@ -416,77 +416,12 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 }
                 // 전화번호 중복 체크
 
-                // 그리드 이외에 값 중복체크
-                var chkTelNo = '';
-                var modCertId = '';
-                var chkParams = {};
-                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                    // 처리구분 = 완료이고 수정 시
-                    if(nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
-                        if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") !== "2") {
-                            chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
-                        } else if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
-                            if(nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
-                                chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
-                                // 번호가 바뀌는 행 자신은 중복체크 제외 대상 (cert_id로 특정, 값이 아닌 행 단위로 제외)
-                                modCertId += $scope.flex.collectionView.items[i].certId + ",";
-                            }
-                        }
-                    }
-                    // 처리구분 != 완료이고 수정 시
-                    else if(nvl($scope.flex.collectionView.items[i].addProcFg, "") !== "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
-                        if(nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
-                            // 완료에서 빠지는 행 자신은 중복체크 제외 대상
-                            modCertId += $scope.flex.collectionView.items[i].certId + ",";
-                        }
-                    }
-                }
-
-                chkParams.chkTelNo = chkTelNo.substr(0 , chkTelNo.length-1);
-                chkParams.modCertId = modCertId.substr(0 , modCertId.length-1);
-
-                if(chkParams.chkTelNo !== null && chkParams.chkTelNo !== ""){
-                    $scope.dupChkTelNo(chkParams,params);
-                }else{
-                    $scope.saveSmsGeneralNoManage(params);
-                }
-
-
-                // 신규 발신번호 중복체크
-                // $scope._postJSONSave.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
-                //     var result = response.data.data;
-                //     if(result < 1) {
-                //         $scope.saveSmsGeneralNoManage(params);
-                //     } else {
-                //         $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
-                //         return false;
-                //     }
-                // });
+                // 나머지(기존 시스템과의 충돌 등)는 저장 후 서버에서 최종 검증(위반 시 롤백)
+                $scope.saveSmsGeneralNoManage(params);
             });
 
         });
     });
-
-    $scope.dupChkTelNo = function(chkParams,params){
-
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getDupChkTelNo.sb", chkParams, function(response){
-            var list = response.data.data.list;
-            var msg = '';
-            if(list.length > 0){
-                msg = messages["smsTelNoStop.dupTelNo"] + "<br/> (";
-                for(var i=0; i<list.length; i++){
-                    msg += list[i].telNo + ",";
-                }
-                msg = msg.substr(0,msg.length - 1);
-                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                $scope._popMsg(msg + ")");  //  중복되는 전화번호가 존재합니다. 확인하여 주십시오.
-            }else{
-                $scope.saveSmsGeneralNoManage(params);
-            }
-
-        });
-    };
 
     // $scope.getSmsGeneralNoManageCount= function (params){
     //

@@ -121,9 +121,12 @@
                             </td>
                             <td class="br">
                                 <%-- 휴대폰 본인인증 --%>
-                                <button class="btn_skyblue ml5 fl" id="btnYfTelNo" ng-click="vfTelNo()">
-                                    <s:message code="smsTelNoRegister2.vfTelNo" />
-                                </button>
+                                <div style="display:flex; align-items:center;">
+                                    <button class="btn_skyblue ml5" id="btnYfTelNo" ng-click="vfTelNo()">
+                                        <s:message code="smsTelNoRegister2.vfTelNo" />
+                                    </button>
+                                    &nbsp;&nbsp;<span style="color:red; font-size:12px;"><s:message code="smsTelNoRegister2.vfTelNoGuide" /></span>
+                                </div>
                                 <div style="display: none;">
                                     <input type="text" class="sb-input w100" id="srchCertId" ng-model="certId" readonly />
                                 </div>
@@ -249,7 +252,7 @@
                         </tr>
                         <tr>
                             <td class="br tc">
-                                가입명의
+                                기업명의
                             </td>
                             <td class="br">
                                 <br>
@@ -272,7 +275,7 @@
                         </tr>
                         <tr>
                             <td class="br tc">
-                                가입명의
+                                기업명의
                             </td>
                             <td class="br">
                                 <br>
@@ -312,7 +315,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20260728.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20260806.01" charset="utf-8"></script>
 
 <%-- SMS 개인정보취급방침 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/contentPop1.jsp">

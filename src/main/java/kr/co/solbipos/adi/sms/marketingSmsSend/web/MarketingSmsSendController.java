@@ -7,12 +7,13 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.kcp.CT_CLI;
-import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.web.SmsTelNoManageController;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
+import kr.co.solbipos.adi.sms.smsUserRegist.service.SmsUserRegistService;
+import kr.co.common.service.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,15 +56,19 @@ public class MarketingSmsSendController {
     private final SessionService sessionService;
     private final MarketingSmsSendService marketingSmsSendService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final SmsUserRegistService smsUserRegistService;
+    private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil) {
+    public MarketingSmsSendController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil, SmsUserRegistService smsUserRegistService, MessageService messageService) {
         this.sessionService = sessionService;
         this.marketingSmsSendService = marketingSmsSendService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.smsUserRegistService = smsUserRegistService;
+        this.messageService = messageService;
     }
 
     /**
@@ -491,6 +496,7 @@ public class MarketingSmsSendController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
+        String di = "";
 
         System.out.println("JH : 결과 : " + request.getQueryString());
         System.out.println("JH : site_cd : " + request.getParameter("site_cd"));
@@ -532,6 +538,7 @@ public class MarketingSmsSendController {
                 result = "-2";
                 out.println("<script>window.resizeTo(800,500);alert('검증에 실패하였습니다.<br>위변조된 데이터로 의심됩니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
                 out.flush();
+                return;
             }
 
             if(encCertData2 != null){
@@ -556,6 +563,22 @@ public class MarketingSmsSendController {
 
                 System.out.println("---------------------------");
                 marketingSmsSendVO.setTelNo(cc.getKeyValue("phone_no"));
+
+                // SMS 사용등록 여부 + DI 일치 체크
+                di = cc.getKeyValue("di");
+                DefaultMap<Object> registInfo = smsUserRegistService.getUserRegistInfo(sessionInfoVO);
+
+                if (registInfo == null || registInfo.getStr("userId") == null || registInfo.getStr("userId").isEmpty()) {
+                    out.println("<script>window.opener.smsTelNoRegister2VerifyCallback('" + messageService.get("smsUserRegist.notRegistAlert") + "'); window.close();</script>");
+                    out.flush();
+                    return;
+                }
+
+                if (!registInfo.getStr("di").equals(di)) {
+                    out.println("<script>window.opener.smsTelNoRegister2VerifyCallback('" + messageService.get("smsUserRegist.diMismatchAlert") + "'); window.close();</script>");
+                    out.flush();
+                    return;
+                }
             }
 
 //            if(marketingSmsSendService.getVerifyChk(marketingSmsSendVO, sessionInfoVO) != 0){
@@ -564,6 +587,16 @@ public class MarketingSmsSendController {
 //                out.flush();
 //            } else {
             if(marketingSmsSendService.updateVerify(marketingSmsSendVO, sessionInfoVO) == 1){
+
+                // 트리거가 방금 만든 TB_CM_ADD_SMS_NO 임시행에 DI 저장 (저장 버튼 클릭 시 재확인용)
+                if (encCertData2 != null) {
+                    MarketingSmsSendVO diSaveVO = new MarketingSmsSendVO();
+                    diSaveVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+                    diSaveVO.setUserId(sessionInfoVO.getUserId());
+                    diSaveVO.setCertId(ordrIdxx);
+                    diSaveVO.setDi(di);
+                    marketingSmsSendService.updateAddSmsNoDi(diSaveVO);
+                }
 
                 // 정상등록
                 out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); </script>");

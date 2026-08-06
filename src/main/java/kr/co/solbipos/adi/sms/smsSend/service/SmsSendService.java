@@ -53,6 +53,9 @@ public interface SmsSendService {
     /** 발신번호추가2 팝업 - 본인인증 여부 조회 */
     int getVerifyChk2(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
 
+    /** 발신번호추가2 팝업 - 저장 시 DI 재확인용 조회 */
+    String getAddSmsNoDi(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
     /** 발신번호추가2 팝업 - 저장 */
     int getSmsTelNoRegister2Save(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
 

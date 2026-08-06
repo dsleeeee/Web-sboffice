@@ -44,6 +44,9 @@ public interface MarketingSmsSendService {
     /** 마케팅용 SMS전송 - 본인인증 여부 조회 */
     int getVerifyChk(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 
+    /** 발신번호추가2 팝업 - 본인인증 통과 시 DI 저장 */
+    int updateAddSmsNoDi(MarketingSmsSendVO marketingSmsSendVO);
+
     /** 마케팅용 SMS전송 - 본인인증 요청 저장 */
     int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 
