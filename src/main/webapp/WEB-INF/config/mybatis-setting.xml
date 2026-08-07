@@ -1221,6 +1221,8 @@
     <typeAlias alias="cupReturnStatusVO" type="kr.co.solbipos.sale.status.cupReturnStatus.service.CupReturnStatusVO"/>
     <!-- 맘스터치 > 매출분석2 > 선불카드현황 -->
     <typeAlias alias="prepaidCardStatusVO" type="kr.co.solbipos.sale.status.prepaidCardStatus.service.PrepaidCardStatusVO"/>
+    <!-- 맘스터치 > 매출분석2 > 일별 가승인 상세매출 -->
+    <typeAlias alias="dayTemporaryDtlSaleVO" type="kr.co.solbipos.sale.anals.dayTemporaryDtlSale.service.DayTemporaryDtlSaleVO"/>
 
 
     <!-- 맘스터치 > 기타관리 > 점포별 파일 버전현황 -->

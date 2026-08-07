@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayTemporaryDtlSale.xml
+    일별 가승인 상세매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.08.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.anals.dayTemporaryDtlSale.service.impl.DayTemporaryDtlSaleMapper">
+
+    <!-- 맘스터치 전용 - 매장별가승인매출 코드 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : 맘스터치 전용 - 매장별가승인매출 코드 콤보박스 목록을 조회한다.
+    -->
+    <select id="getTemporaryPayColList" resultType="DefaultMap">
+        /* DayTemporaryDtlSaleMapper.getTemporaryPayColList */
+        SELECT  A.NMCODE_ITEM_1 AS NMCODE_CD
+        ,       A.NMCODE_ITEM_2 AS NMCODE_NM
+        FROM    TB_CM_NMCODE A
+        WHERE   A.NMCODE_GRP_CD = '248'
+        AND     A.NMCODE_NM = '매장별가승인매출'
+        ORDER
+        BY      A.NMCODE_CD
+    </select>
+
+    <!-- 일별 가승인 상세매출 - 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_TEMPORARY
+        PARAM    : dayTemporaryDtlSaleVO
+        COMMENTS : 일별 가승인 상세매출 리스트를 조회한다.
+    -->
+    <select id="getDayTemporaryDtlSaleList" parameterType="dayTemporaryDtlSaleVO" resultType="DefaultMap">
+        /* DayTemporaryDtlSaleMapper.getDayTemporaryDtlSaleList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'DY') AS YOIL
+        ,       TMS.BRANCH_CD
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS THBM WHERE THBM.HQ_OFFICE_CD = #{hqOfficeCd} AND THBM.BRANCH_CD = TMS.BRANCH_CD) AS BRANCH_NM
+        ,       A.STORE_CD
+        ,       TMS.STORE_NM
+        ,       SUM(CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS TEMPORARY_PAY_CNT
+        ,       SUM(A.SALE_AMT) AS TOT_SALE_AMT
+        <foreach collection="temporaryPayColList" item="item">
+        ,       SUM(CASE WHEN A.TEMPORARY_PAY_CD = #{item.nmcodeCd} THEN A.SALE_AMT ELSE 0 END) AS TEMPORARY_PAY${item.nmcodeCd}
+        </foreach>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_SL_SALE_PAY_TEMPORARY A
+        ,       TB_MS_STORE TMS
+        ,       TB_MS_STORE_INFO TMSI
+        ,       (
+                    SELECT  B.NMCODE_ITEM_1 AS NMCODE_CD
+                    FROM    TB_CM_NMCODE B
+                    WHERE   B.NMCODE_GRP_CD = '248'
+                    AND     B.NMCODE_NM = '매장별가승인매출'
+                ) TP
+        WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     A.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
+        AND     A.STORE_CD = TMS.STORE_CD
+        AND     A.STORE_CD = TMSI.STORE_CD (+)
+        AND     A.TEMPORARY_PAY_CD = TP.NMCODE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND TMS.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND TMS.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND TMSI.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND TMSI.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND TMSI.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND TMSI.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND TMSI.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND TMSI.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND TMS.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND TMSI.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND TMSI.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND TMSI.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND TMSI.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND TMSI.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        GROUP
+        BY      A.SALE_DATE
+        ,       TMS.BRANCH_CD
+        ,       A.STORE_CD
+        ,       TMS.STORE_NM
+        ORDER
+        BY      A.SALE_DATE DESC
+        ,       A.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
