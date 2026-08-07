@@ -301,7 +301,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD      =   '1263'
                                                             AND     A.ENVST_VAL     =   '1'
@@ -438,7 +439,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD  =   '1263'
                                                             AND     A.ENVST_VAL =   '1'
@@ -666,7 +668,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD      =   '1263'
                                                             AND     A.ENVST_VAL     =   '1'
@@ -803,7 +806,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD  =   '1263'
                                                             AND     A.ENVST_VAL =   '1'
@@ -1035,7 +1039,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD      =   '1263'
                                                             AND     A.ENVST_VAL     =   '1'
@@ -1172,7 +1177,8 @@
                                                                         SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
                                                                         SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
-                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '006967' RESRCE_CD FROM DUAL
                                                                     ) B
                                                             WHERE   A.ENVST_CD  =   '1263'
                                                             AND     A.ENVST_VAL =   '1'

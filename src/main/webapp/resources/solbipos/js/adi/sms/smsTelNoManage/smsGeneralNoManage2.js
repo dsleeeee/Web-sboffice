@@ -246,6 +246,16 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
 
                 // 처리구분 수정했을때
                 if (nvl($scope.flex.collectionView.items[i].addProcFg, "") !== nvl($scope.flex.collectionView.items[i].backAddProcFg, "")) {
+
+                    // 처리구분 완료, 반려시 (변경 여부 무관하게 무조건 체크)
+                    if ($scope.flex.collectionView.items[i].addProcFg === "2" || $scope.flex.collectionView.items[i].addProcFg === "3") {
+                        if (nvl($scope.flex.collectionView.items[i].telDt, "") === "") {
+                            // 처리구분 완료/반려 시 통화일시를 입력해주세요
+                            $scope._popMsg(messages["smsGeneralNoManage2.returnTelDt"]);
+                            return false;
+                        }
+                    }
+
                     // 처리구분 반려시
                     if ($scope.flex.collectionView.items[i].addProcFg === "3") {
                         if (nvl($scope.flex.collectionView.items[i].returnRemark, "") === "") {
