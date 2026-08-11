@@ -279,8 +279,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       type:"POST",
       data:param,
       success:function(result){
-        // 벤슨 제외 본사 키오스크(인트로), 키오스크(인트로중간광고) mp4 파일 사용 금지 처리
-        if (param.fileType === "003" || param.fileType === "013") {
+        // 벤슨 제외 본사 POS 듀얼모니터(광고), 키오스크(인트로), 키오스크(인트로중간광고) mp4 파일 사용 금지 처리
+        if (param.fileType === "001" || param.fileType === "003" || param.fileType === "013") {
           if (hqOfficeCd !== "DS079" && hqOfficeCd !== "H0665") {
             result = result.split(",").filter(function (ext) {
               return ext.toLowerCase() !== ".mp4";
