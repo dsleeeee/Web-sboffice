@@ -47,9 +47,8 @@ import static kr.co.solbipos.adi.sms.smsTelNoManage.web.SmsTelNoManageController
 public class SmsUserRegistController {
 
     /** 본인인증 결과 콜백(KCP) URL */
-    // TODO: 로컬 테스트용으로 임시 변경함 - 배포 전 아래 운영주소로 반드시 되돌릴 것!!
-    // private static final String VERIFY_RET_URL = "https://neo.solbipos.com/adi/sms/smsUserRegist/smsUserRegist/updateVerify.sb";
-    private static final String VERIFY_RET_URL = "http://localhost:8080/adi/sms/smsUserRegist/smsUserRegist/updateVerify.sb";
+     private static final String VERIFY_RET_URL = "https://neo.solbipos.com/adi/sms/smsUserRegist/smsUserRegist/updateVerify.sb";
+//    private static final String VERIFY_RET_URL = "http://localhost:8080/adi/sms/smsUserRegist/smsUserRegist/updateVerify.sb";
 
     private final SessionService sessionService;
     private final SmsUserRegistService smsUserRegistService;

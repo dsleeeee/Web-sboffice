@@ -66,9 +66,8 @@ public class SmsTelNoManageController {
     public static final  String RET_URL         = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
     // 본인인증 결과 URL
     public static final  String VERIFY_RET_URL  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb";
-    // TODO 로컬 테스트용으로 임시 변경함 - 배포 전 아래 운영주소로 반드시 되돌릴 것!!
-//    public static final  String VERIFY_RET_URL2  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
-    public static final  String VERIFY_RET_URL2  = "http://localhost:8080/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
+    public static final  String VERIFY_RET_URL2  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
+//    public static final  String VERIFY_RET_URL2  = "http://localhost:8080/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
     public static final  String GW_URL          = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
 
     private final SessionService sessionService;
