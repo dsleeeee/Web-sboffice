@@ -358,6 +358,9 @@ public class UserServiceImpl implements UserService {
         // 전송건수
         smsSendVO.setSmsSendCount("0");
 
+        // 메시지 ID 조회
+        smsSendVO.setMsgId(smsSendMapper.getSmsMsgId());
+
         DefaultMap<Object> result = smsSendMapper.getSmsAmtList(smsSendVO);
         // 현재 잔여금액
         String smsAmt = result.getStr("smsAmt");
