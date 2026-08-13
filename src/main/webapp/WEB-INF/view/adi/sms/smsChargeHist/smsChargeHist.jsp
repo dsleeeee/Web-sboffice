@@ -200,7 +200,7 @@
     var siteUrl = '<%=pay_site_url%>'; // 결제상세 URL
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20240812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20260810.01" charset="utf-8"></script>
 
 <%-- SMS임의충전 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeRegist.jsp">
