@@ -169,6 +169,18 @@ public class SessionInfoVO extends CmmVO {
     /** POS 자동 로그인 return URL */
     private String resrceCd;
 
+    /** POS 자동로그인 accessCd 전달 여부 (Y: POS 자동로그인, N: 일반 로그인) */
+    private String accessCdYn;
+
+    /** POS 자동로그인 리소스 코드 전달 여부 (Y: 특정 메뉴 직접이동, N: 메인화면 진입) */
+    private String resrceCdYn;
+
+    /** POS 자동로그인 SMS 인증 상태 (Y: 인증완료 또는 인증불필요, N: 미인증) */
+    private String smsVfcYn;
+
+    /** POS SMS 인증 성공 후 로그인 성공 DB 반영 필요 여부 (Y: 반영 대기, N: 반영 완료 또는 불필요) */
+    private String posLoginCompletePendingYn;
+
     /** 리소스 코드 */
     private String optResrceCd;
 
@@ -695,6 +707,38 @@ public class SessionInfoVO extends CmmVO {
         this.resrceCd = resrceCd;
     }
 
+    public String getAccessCdYn() {
+        return accessCdYn;
+    }
+
+    public void setAccessCdYn(String accessCdYn) {
+        this.accessCdYn = accessCdYn;
+    }
+
+    public String getResrceCdYn() {
+        return resrceCdYn;
+    }
+
+    public void setResrceCdYn(String resrceCdYn) {
+        this.resrceCdYn = resrceCdYn;
+    }
+
+    public String getSmsVfcYn() {
+        return smsVfcYn;
+    }
+
+    public void setSmsVfcYn(String smsVfcYn) {
+        this.smsVfcYn = smsVfcYn;
+    }
+
+    public String getPosLoginCompletePendingYn() {
+        return posLoginCompletePendingYn;
+    }
+
+    public void setPosLoginCompletePendingYn(String posLoginCompletePendingYn) {
+        this.posLoginCompletePendingYn = posLoginCompletePendingYn;
+    }
+
     public String getOptResrceCd() {
         return optResrceCd;
     }
@@ -801,6 +845,10 @@ public class SessionInfoVO extends CmmVO {
                 ", loginFg='" + loginFg + '\'' +
                 ", loginAutoSerial='" + loginAutoSerial + '\'' +
                 ", resrceCd='" + resrceCd + '\'' +
+                ", accessCdYn='" + accessCdYn + '\'' +
+                ", resrceCdYn='" + resrceCdYn + '\'' +
+                ", smsVfcYn='" + smsVfcYn + '\'' +
+                ", posLoginCompletePendingYn='" + posLoginCompletePendingYn + '\'' +
                 ", optResrceCd='" + optResrceCd + '\'' +
                 ", webUseYn='" + webUseYn + '\'' +
                 ", orgnFgCode='" + orgnFgCode + '\'' +

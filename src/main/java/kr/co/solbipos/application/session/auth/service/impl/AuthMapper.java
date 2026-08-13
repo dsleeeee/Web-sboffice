@@ -3,6 +3,7 @@ package kr.co.solbipos.application.session.auth.service.impl;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,6 +34,16 @@ public interface AuthMapper {
      * @return
      */
     SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO);
+
+    /**
+     * FN_GET_TB_CM_SMS_VFC_CODE 호출
+     * userId는 인증 대상 계정, opFg1은 CHK/C10/C11/C20/C21 작업 구분,
+     * opFg2는 C11/C21 인증번호이며 opFg3은 현재 인증 처리에서 사용하지 않는다.
+     */
+    String getSmsVfcCode(@Param("userId") String userId,
+                         @Param("opFg1") String opFg1,
+                         @Param("opFg2") String opFg2,
+                         @Param("opFg3") String opFg3);
 
     /** 로그인 정보 업데이트 */
     int updateLoginInfo(SessionInfoVO sessionInfoVO);

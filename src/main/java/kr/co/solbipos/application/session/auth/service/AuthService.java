@@ -30,6 +30,27 @@ public interface AuthService {
      */
     SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO);
 
+    /** USER_ID 기준 SMS 사용 등록 여부를 CHK 함수로 조회 */
+    SmsVfcResultVO checkSmsUser(String userId);
+
+    /** 로그인 SMS 인증번호를 C10 함수로 생성 및 발송 */
+    SmsVfcResultVO requestLoginSmsVfcCode(String userId);
+
+    /** 사용자가 입력한 로그인 SMS 인증번호를 C11 함수로 검증 */
+    SmsVfcResultVO verifyLoginSmsVfcCode(String userId, String smsVfcNo);
+
+    /** 마케팅 SMS 전송 전 추가 인증번호를 C20 함수로 생성 및 발송 */
+    SmsVfcResultVO requestAdditionalSmsVfcCode(String userId);
+
+    /** 사용자가 입력한 마케팅 SMS 전송 추가 인증번호를 C21 함수로 검증 */
+    SmsVfcResultVO verifyAdditionalSmsVfcCode(String userId, String smsVfcNo);
+
+    /** 로그인 성공 정보는 반영하지 않고 계정 및 비밀번호/accessCd만 검증 */
+    SessionInfoVO authenticate(SessionInfoVO sessionInfoVO);
+
+    /** SMS 인증까지 완료된 로그인 성공 정보와 성공 이력을 최종 반영 */
+    void completeLogin(SessionInfoVO sessionInfoVO);
+
     /**
      * 로그인
      *

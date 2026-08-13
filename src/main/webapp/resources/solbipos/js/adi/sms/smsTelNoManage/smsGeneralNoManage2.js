@@ -379,7 +379,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 // 계정별 처리구분 완료 개수 제한 체크 (그리드에 보이는 최종 상태 기준, 1차 체크 - 최종 확정은 저장 후 서버에서 재검증)
                 var addProcFgCntMap = {};
                 for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                    if (nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].hcsUseYn, "") === "Y") {
+                    if (nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2") {
                         var groupKey = $scope.flex.collectionView.items[i].orgnCd + "|" + $scope.flex.collectionView.items[i].userId + "|" + $scope.flex.collectionView.items[i].telFg;
                         addProcFgCntMap[groupKey] = (addProcFgCntMap[groupKey] || 0) + 1;
                     }

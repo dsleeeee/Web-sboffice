@@ -480,13 +480,6 @@
                 #{item}
             </foreach>
         </if>
-        AND EXISTS  (
-                        SELECT  1
-                        FROM    HCS_SENDM_T hst
-                        WHERE   hst.OGN_CD = tcasn.ORGN_CD
-                        AND     hst.TEL_NO = tcasn.TEL_NO
-                        AND     hst.USE_YN = 'Y'
-                    )
         GROUP BY SBPENC.D(tcasn.TEL_NO)
         HAVING COUNT(DISTINCT tcasn.USER_ID) > 1
     </select>
@@ -499,18 +492,10 @@
     <select id="getAddProcFgCnt" parameterType="SmsTelNoManageVO" resultType="Integer">
         /* SmsTelNoManageMapper.getAddProcFgCnt */
         SELECT  COUNT(*)
-        FROM    TB_CM_ADD_SMS_NO tcasn
-        WHERE   tcasn.ORGN_CD = #{orgnCd}
-        AND     tcasn.USER_ID = #{userId}
-        AND     tcasn.TEL_FG = #{telFg}
-        AND     tcasn.ADD_PROC_FG = '2'
-        AND     EXISTS  (
-                            SELECT  1
-                            FROM    HCS_SENDM_T hst
-                            WHERE   hst.OGN_CD = tcasn.ORGN_CD
-                            AND     hst.TEL_NO = tcasn.TEL_NO
-                            AND     hst.CERT_ID = tcasn.CERT_ID
-                            AND     hst.USE_YN = 'Y'
-                        )
+        FROM    TB_CM_ADD_SMS_NO A
+        WHERE   A.ORGN_CD       = #{orgnCd}
+        AND     A.USER_ID       = #{userId}
+        AND     A.TEL_FG        = #{telFg}
+        AND     A.ADD_PROC_FG   = '2'
     </select>
 </mapper>

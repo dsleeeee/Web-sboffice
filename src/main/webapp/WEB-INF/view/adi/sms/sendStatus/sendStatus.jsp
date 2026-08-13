@@ -171,7 +171,7 @@
             </button>
             <c:if test="${orgnFg == 'MASTER'}">
                 <%-- SMS전송 --%>
-                <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">
+                <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()" style="display:none">
                     <s:message code="sendStatus.smsSend"/>
                 </button>
             </c:if>

@@ -201,6 +201,9 @@ public class SmsSendVO extends PageVO {
     /** SMS 메시지 Id */
     private String msgId;
 
+    /** 마케팅 SMS 전송 전 추가인증 성공 시 서버가 발급한 1회용 토큰 */
+    private String smsVfcToken;
+
 
     // ------------------------------------------------------------------ //
     // 금칙어 필터링 관련 필드
@@ -691,6 +694,14 @@ public class SmsSendVO extends PageVO {
 
     public void setMsgId(String msgId) {
         this.msgId = msgId;
+    }
+
+    public String getSmsVfcToken() {
+        return smsVfcToken;
+    }
+
+    public void setSmsVfcToken(String smsVfcToken) {
+        this.smsVfcToken = smsVfcToken;
     }
 
     public String getBlockType() {
