@@ -26,9 +26,10 @@
             <input type="hidden" id="orgnCd" ng-model="orgnCd"/>
             <input type="hidden" id="chargeDate" ng-model="chargeDate"/>
             <input type="hidden" id="chargeTime" ng-model="chargeTime"/>
+            <input type="hidden" id="callPage"/>
         </div>
         <%-- //body --%>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/resultmessageEdit.js?ver=20211021.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/resultmessageEdit.js?ver=20260810.01" charset="utf-8"></script>

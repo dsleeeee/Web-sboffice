@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsUserStatus.xml
+    SMS사용현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.smsUserStatus.service.impl.SmsUserStatusMapper">
+
+    <!-- SMS사용자 - 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_SMS_USER_REGIST, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : SMS 사용 등록 사용자 현황
+    -->
+    <select id="getSmsUserList" parameterType="smsUserStatusVO" resultType="DefaultMap">
+        /* SmsUserStatusMapper.getSmsUserList */
+        SELECT
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            tcsr.USER_ID,
+            twuidv01.USER_NM,
+            tcsr.DI AS DI,
+            SBPENC.D(tcsr.TEL_NO) AS TEL_NO,
+            TO_CHAR(TO_DATE(tcsr.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+        FROM TB_CM_SMS_USER_REGIST tcsr,
+             TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        AND twuidv01.USER_ID (+) = tcsr.USER_ID
+        <if test="orgnCd != null and orgnCd != ''">
+            AND twuidv01.ORGN_CD LIKE '%' || #{orgnCd} || '%'
+        </if>
+        <if test="orgnNm != null and orgnNm != ''">
+            AND twuidv01.ORGN_NM LIKE '%' || #{orgnNm} || '%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND tcsr.USER_ID LIKE '%' || #{userId} || '%'
+        </if>
+        <if test="userNm != null and userNm != ''">
+            AND twuidv01.USER_NM LIKE '%' || #{userNm} || '%'
+        </if>
+        ORDER BY tcsr.REG_DT DESC
+    </select>
+
+    <!-- 발신번호 - 목록 조회 -->
+    <!--
+        TABLE    : HCS_SENDM_T, TB_CM_ADD_SMS_NO
+        COMMENTS : 발신번호 인증 및 추가 현황 (전체 조직)
+    -->
+    <select id="getSendTelNoList" parameterType="smsUserStatusVO" resultType="DefaultMap">
+        /* SmsUserStatusMapper.getSendTelNoList */
+        SELECT
+                hst.OGN_CD AS ORGN_CD,
+                twuidv01.ORGN_NM,
+                SBPENC.D(hst.TEL_NO) AS TEL_NO,
+                hst.USE_YN,
+                hst.CERT_ID,
+                tcasn.USER_ID,
+                (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tcasn.USER_ID AND ROWNUM = 1) AS USER_NM
+        FROM    HCS_SENDM_T hst,
+                TB_CM_ADD_SMS_NO tcasn,
+                (
+                    SELECT
+                    twuidv01.ORGN_FG,
+                    twuidv01.ORGN_CD,
+                    twuidv01.ORGN_NM,
+                    twuidv01.HQ_OFFICE_CD,
+                    twuidv01.STORE_CD,
+                    (     CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                               WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                               ELSE null
+                          END
+                    ) AS AGENCY_CD
+                    FROM
+                    (
+                        SELECT
+                        DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                        twuidv01.ORGN_CD,
+                        twuidv01.ORGN_NM,
+                        twuidv01.HQ_OFFICE_CD,
+                        twuidv01.STORE_CD
+                        FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                        GROUP
+                          BY twuidv01.ORGN_FG,
+                             twuidv01.ORGN_CD,
+                             twuidv01.ORGN_NM,
+                             twuidv01.HQ_OFFICE_CD,
+                             twuidv01.STORE_CD
+                    ) twuidv01
+                    WHERE 1=1
+                    GROUP
+                       BY  twuidv01.ORGN_FG,
+                           twuidv01.ORGN_CD,
+                           twuidv01.ORGN_NM,
+                           twuidv01.HQ_OFFICE_CD,
+                           twuidv01.STORE_CD
+                ) twuidv01
+        WHERE 1=1
+        <if test='orgnCd != null and orgnCd != ""'>
+            AND twuidv01.ORGN_CD LIKE '%'||#{orgnCd}||'%'
+        </if>
+        <if test='orgnNm != null and orgnNm != ""'>
+            AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND tcasn.USER_ID LIKE '%' || #{userId} || '%'
+        </if>
+        <if test="userNm != null and userNm != ''">
+            AND EXISTS (SELECT 1 FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tcasn.USER_ID AND USER_NM LIKE '%' || #{userNm} || '%')
+        </if>
+        <choose>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "Y"'>
+                AND tcasn.USER_ID IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "N"'>
+                AND tcasn.USER_ID NOT IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        AND twuidv01.ORGN_CD = hst.OGN_CD
+        AND tcasn.ORGN_CD (+)  =   hst.OGN_CD
+        AND tcasn.TEL_NO  (+)  =   hst.TEL_NO
+        AND tcasn.CERT_ID (+)  =   hst.CERT_ID
+        ORDER
+           BY hst.OGN_CD,
+              hst.USE_SEQ
+    </select>
+
+    <!-- 충전현황 - 목록 조회 -->
+    <!--
+        TABLE    : CET_SMSPT_T, TB_WB_USER_INFO_DTL_V01
+        COMMENTS : SMS 잔여금액 현황 (조직별)
+    -->
+    <select id="getSmsChargeStatusList" parameterType="smsUserStatusVO" resultType="DefaultMap">
+        /* SmsUserStatusMapper.getSmsChargeStatusList */
+        SELECT
+                cpt.OGN_CD AS ORGN_CD,
+                twuidv01.ORGN_NM,
+                ('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여금액 : ' || cst.SMS_AMT || ')') AS ORGN,
+                TO_CHAR(TO_DATE(cpt.CHARGE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHARGE_DATE,
+                TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH24:MI:SS') AS CHARGE_TIME,
+                cpt.PGRESOURCE,
+                cpt.CONTROLNO,
+                cpt.APPROVALNUM,
+                NVL(cpt.BASE_CHARGE_AMT, 0) AS BASE_CHARGE_AMT,
+                NVL(cpt.CHARGE_AMT, 0) AS CHARGE_AMT,
+                NVL(cpt.CHARGE_TOT - cpt.CHARGE_AMT, 0) AS VAT_AMT,
+                NVL(cpt.CHARGE_TOT, 0) AS CHARGE_TOT,
+                cpt.SUCCESS_YN,
+                cpt.CHARGE_ID,
+                (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID) AS CHARGE_ID_NM,
+                cpt.RESULTMESSAGE
+        FROM  CET_PGLOG_T cpt,
+              CET_SMSPT_T cst,
+              (
+                    SELECT
+                            twuidv01.ORGN_FG,
+                            twuidv01.ORGN_CD,
+                            twuidv01.ORGN_NM,
+                            twuidv01.HQ_OFFICE_CD,
+                            twuidv01.STORE_CD,
+                            ( CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                                   ELSE twuidv01.ORGN_CD END
+                            ) AS AGENCY_CD
+                    FROM
+                        (
+                            SELECT
+                            DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                            twuidv01.ORGN_CD,
+                            twuidv01.ORGN_NM,
+                            twuidv01.HQ_OFFICE_CD,
+                            twuidv01.STORE_CD
+                            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                            GROUP
+                            BY  twuidv01.ORGN_FG,
+                                twuidv01.ORGN_CD,
+                                twuidv01.ORGN_NM,
+                                twuidv01.HQ_OFFICE_CD,
+                                twuidv01.STORE_CD
+                        ) twuidv01
+                    WHERE 1=1
+                    GROUP
+                       BY  twuidv01.ORGN_FG,
+                           twuidv01.ORGN_CD,
+                           twuidv01.ORGN_NM,
+                           twuidv01.HQ_OFFICE_CD,
+                           twuidv01.STORE_CD
+              ) twuidv01
+        WHERE 1=1
+        AND   cpt.CHARGE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='orgnCd != null and orgnCd != ""'>
+            AND cpt.OGN_CD LIKE '%'||#{orgnCd}||'%'
+        </if>
+        <if test='orgnNm != null and orgnNm != ""'>
+            AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND cpt.CHARGE_ID LIKE '%' || #{userId} || '%'
+        </if>
+        <if test="userNm != null and userNm != ''">
+            AND EXISTS (SELECT 1 FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID AND USER_NM LIKE '%' || #{userNm} || '%')
+        </if>
+        <choose>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "Y"'>
+                AND cpt.CHARGE_ID IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "N"'>
+                AND cpt.CHARGE_ID NOT IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        AND   cst.OGN_CD (+)= cpt.OGN_CD
+        AND   twuidv01.ORGN_CD = cst.OGN_CD
+        ORDER
+        BY    cpt.OGN_CD ASC,
+              cpt.CHARGE_DATE DESC,
+              cpt.CHARGE_TIME DESC
+    </select>
+
+    <!-- 전송이력 - 목록 조회 -->
+    <!--
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC
+        COMMENTS : SMS/LMS 발송 이력
+    -->
+    <select id="getSmsSendHistList" parameterType="smsUserStatusVO" resultType="DefaultMap">
+        /* SmsUserStatusMapper.getSmsSendHistList */
+        SELECT A.*
+        FROM
+        (
+            SELECT
+                    hssrt.REG_DT,
+                    hssrt.SMS_SEND_ORGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hssrt.SMS_SEND_ORGN_CD GROUP BY ORGN_NM) AS SMS_SEND_ORGN_NM,
+                    hssrt.SMS_SEND_SEQ,
+                    hssrt.SMS_SEND_COUNT,
+                    hssrt.MSG_TYPE,
+                    hssrt.SUBJECT,
+                    hssrt.MSG_CONTENT,
+                    DECODE(hssrt.RESERVE_YN, '1', TO_CHAR(TO_DATE(hssrt.SEND_DATE, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'), NULL) AS SEND_DATE,
+                    TO_CHAR(TO_DATE(hssrt.READ_DATE, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS READ_DATE,
+                    hssrt.RESERVE_YN,
+                    hssrt.SEND_QTY,
+                    hssrt.WAIT_QTY,
+                    hssrt.SUCCESS_QTY,
+                    hssrt.FAIL_QTY,
+                    hssrt.S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = hssrt.S_USER_ID AND ROWNUM = 1) AS S_USER_NM
+            FROM HCS_SMS_SEND_REG_T hssrt,
+                (
+                    SELECT
+                            twuidv01.ORGN_FG,
+                            twuidv01.ORGN_CD,
+                            twuidv01.ORGN_NM,
+                            twuidv01.HQ_OFFICE_CD,
+                            twuidv01.STORE_CD,
+                            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                                  ELSE twuidv01.ORGN_CD END
+                            ) AS AGENCY_CD
+                    FROM
+                        (
+                        SELECT
+                                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                                twuidv01.ORGN_CD,
+                                twuidv01.ORGN_NM,
+                                twuidv01.HQ_OFFICE_CD,
+                                twuidv01.STORE_CD
+                        FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                        WHERE 1=1
+                        GROUP
+                            BY  twuidv01.ORGN_FG,
+                                twuidv01.ORGN_CD,
+                                twuidv01.ORGN_NM,
+                                twuidv01.HQ_OFFICE_CD,
+                                twuidv01.STORE_CD
+                        ) twuidv01
+                        WHERE 1=1
+                        GROUP
+                            BY  twuidv01.ORGN_FG,
+                                twuidv01.ORGN_CD,
+                                twuidv01.ORGN_NM,
+                                twuidv01.HQ_OFFICE_CD,
+                                twuidv01.STORE_CD
+                ) twuidv01
+            WHERE 1=1
+            AND hssrt.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND twuidv01.ORGN_CD = hssrt.SMS_SEND_ORGN_CD
+            ORDER BY hssrt.REG_DT DESC
+        ) A
+        WHERE 1=1
+        <if test="orgnCd != null and orgnCd != ''">
+            AND A.SMS_SEND_ORGN_CD LIKE '%' || #{orgnCd} || '%'
+        </if>
+        <if test="orgnNm != null and orgnNm != ''">
+            AND A.SMS_SEND_ORGN_NM LIKE '%' || #{orgnNm} || '%'
+        </if>
+        <if test="userId != null and userId != ''">
+            AND A.S_USER_ID LIKE '%' || #{userId} || '%'
+        </if>
+        <if test="userNm != null and userNm != ''">
+            AND A.S_USER_NM LIKE '%' || #{userNm} || '%'
+        </if>
+        <choose>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "Y"'>
+                AND A.S_USER_ID IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "N"'>
+                AND A.S_USER_ID NOT IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
+            </when>
+            <otherwise></otherwise>
+        </choose>
+    </select>
+
+</mapper>

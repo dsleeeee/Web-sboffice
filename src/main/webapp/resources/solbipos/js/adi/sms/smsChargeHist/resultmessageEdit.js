@@ -36,8 +36,14 @@ app.controller('resultmessageEditCtrl', ['$scope', '$http', function ($scope, $h
 
         $scope._postJSONSave.withPopUp("/adi/sms/smsChargeHist/smsChargeHist/getResultmessageSave.sb", params, function (){
             $scope.wjResultmessageEditLayer.hide();
-            var scope = agrid.getScope('smsChargeHistCtrl');
-            scope.searchSmsChargeHist();
+
+            if($("#callPage").val() === "smsChargeHist"){
+                var scope = agrid.getScope('smsChargeHistCtrl');
+                scope.searchSmsChargeHist();
+            }else{
+                var scope = agrid.getScope('smsChargeStatusCtrl');
+                scope.searchSmsChargeStatus();
+            }
         });
     };
 
