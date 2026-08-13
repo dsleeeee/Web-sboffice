@@ -68,6 +68,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblSmsReserveMsgType").text(data.msgType);
         $("#lblSmsReserveMsgOneAmt").text(data.msgOneAmt);
         $("#lblSmsReserveSmsSendListCnt").text(data.smsSendListCnt);
+        $("#lblSmsReserveVfcToken").text(data.smsVfcToken || "");
 
         event.preventDefault();
     });
@@ -82,6 +83,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         var msgType = $("#lblSmsReserveMsgType").text();
         var msgOneAmt = $("#lblSmsReserveMsgOneAmt").text();
         var smsSendListCnt = $("#lblSmsReserveSmsSendListCnt").text();
+        var smsVfcToken = $("#lblSmsReserveVfcToken").text(); // 예약 저장까지 전달할 C21 추가인증 토큰
 
         if(parseInt(reserveDate) < parseInt(getCurDateTime())) {
             $scope._popMsg(messages["smsReserve.reserveTimeAlert"]); // 예약시간은 현재시간 이후로 가능합니다.
@@ -97,7 +99,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
             // 마케팅용 SMS전송
             var smsReserveScope = agrid.getScope('marketingSmsSendCtrl');
         }
-        smsReserveScope.smsSendSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt);
+        smsReserveScope.smsSendSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, smsVfcToken);
 
         // 팝업 닫기
         $scope.close();
@@ -110,6 +112,7 @@ app.controller('smsReserveCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblSmsReserveMsgType").text("");
         $("#lblSmsReserveMsgOneAmt").text("");
         $("#lblSmsReserveSmsSendListCnt").text("");
+        $("#lblSmsReserveVfcToken").text("");
 
         $scope.wjSmsReserveLayer.hide();
         event.preventDefault();

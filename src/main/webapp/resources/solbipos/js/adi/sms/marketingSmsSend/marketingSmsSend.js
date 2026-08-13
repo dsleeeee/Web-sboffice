@@ -190,6 +190,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     $("#lblMarketingSmsSendSmsAmt").text("0");
 
     var gridYn = "N"; // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
+    var smsUserRegistCheckInProgress = false; // 전송/예약 전 SMS 사용등록 중복 확인 방지
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -501,7 +502,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 잔여금액
-    $scope.restSmsAmt = function() {
+    $scope.restSmsAmt = function(callback) {
         var params = {};
 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getSmsAmtList.sb', params, function (response) {
@@ -512,6 +513,11 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             $("#lblMarketingSmsSendSmsOneAmt").text($scope.smsAmtList.smsOneAmt); // SMS건당금액
             $("#lblMarketingSmsSendLmsOneAmt").text($scope.smsAmtList.lmsOneAmt); // LMS건당금액
             $("#lblMarketingSmsSendMmsOneAmt").text($scope.smsAmtList.mmsOneAmt); // MMS건당금액
+
+            // 추가인증 후에는 최신 잔액 반영이 끝난 뒤 기존 전송 조건을 검사한다.
+            if (typeof callback === "function") {
+                callback();
+            }
         });
     };
 
@@ -578,8 +584,36 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     // <-- //그리드 행 삭제 -->
 
     // <-- 전송, 예약 -->
-    // 사용자 확인
+    // 전송/예약 클릭 시 SMS 사용등록 확인 후 추가인증 팝업 표시
     $scope.smsSendChk = function(reserveYn) {
+        if (smsUserRegistCheckInProgress) {
+            return;
+        }
+
+        smsUserRegistCheckInProgress = true;
+
+        // 현재 로그인 사용자의 SMS 사용등록 정보 조회
+        $scope._postJSONQuery.withOutPopUp('/adi/sms/smsUserRegist/smsUserRegist/getUserRegistInfo.sb', {}, function (response) {
+            var data = response.data.data;
+            if (!data || !data.userId) {
+                // SMS 미등록 사용자 전송/예약 차단
+                $scope._popMsg(messages["smsUserRegist.notRegistAlert"]);
+                return;
+            }
+
+            // SMS 등록 사용자 추가인증 팝업 표시
+            $scope.$broadcast('openMarketingSmsSendVfc', reserveYn);
+        }, function () {
+            // SMS 사용등록 조회 실패 안내
+            $scope._popMsg(messages["cmm.error"]);
+        }, function () {
+            // SMS 사용등록 확인 상태 초기화
+            smsUserRegistCheckInProgress = false;
+        });
+    };
+
+    // C21 추가인증 성공 후 선택 발신번호 승인·활성 여부 확인
+    $scope.smsSendAfterVfc = function(reserveYn, smsVfcToken) {
 
         var params = {};
         params.callback = $scope.telNoCombo;
@@ -587,21 +621,18 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsSend/getChkRegUserInfo.sb', params, function (response) {
             var result = response.data.data;
             if (result > 0) {
-                $scope.smsSendReserve(reserveYn);
+                $scope.smsSendReserve(reserveYn, smsVfcToken);
             } else {
                 $scope._popMsg(messages["smsSend.chkRegUserInfo"]);
                 return false;
             }
         });
-    }
+    };
 
-    // 전송, 예약
-    $scope.smsSendReserve = function (reserveYn){
-
-        // 잔여금액
-        $scope.restSmsAmt();
-
-        $scope.showByte();
+    // 추가인증과 발신번호 확인 후 최신 잔액 조회 및 기존 전송/예약 로직 실행
+    $scope.smsSendReserve = function (reserveYn, smsVfcToken){
+        $scope.restSmsAmt(function() {
+            $scope.showByte();
 
 
         var params = {};
@@ -717,6 +748,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     param.msgType = msgType;
                     param.msgOneAmt = msgOneAmt;
                     param.smsSendListCnt = smsSendListCnt;
+                    param.smsVfcToken = smsVfcToken;
 
                     // SMS전송 팝업
                     var smsSendScope = agrid.getScope('smsSendCtrl');
@@ -725,14 +757,15 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     event.preventDefault();
                 } else {
                     // 전송 저장
-                    $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt, smsSendListCnt);
+                    $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt, smsSendListCnt, smsVfcToken);
                 }
             // }
         // });
+        });
     };
 
     // 전송 저장
-    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt) {
+    $scope.smsSendSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, smsVfcToken) {
         // 첨부파일 개수
         var fileCount = 0;
         // MMS 첨부파일 체크
@@ -824,17 +857,17 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             // MMS
            if(msgType == "3") {
                // 첨부파일 저장
-               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount);
+               $scope.smsSendFileSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, smsVfcToken);
            // SMS, LMS
            } else {
                // 전송 저장 save
-               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, 0, "");
+               $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, 0, "", smsVfcToken);
            }
         }
     };
 
     // 전송 저장 save
-    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData) {
+    $scope.smsSendRealSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData, smsVfcToken) {
         // 1000건 이상
         if(parseInt(smsSendListCnt) >= 1000) {
             // 파라미터 설정
@@ -865,9 +898,10 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
             params.smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스
             params.smsSendListCnt = smsSendListCnt; // 조회한 회원수
             params.msgOneAmt = msgOneAmt; // 메세지별 건당금액
+            params.smsVfcToken = smsVfcToken; // C21 성공 후 발급된 1회용 추가인증 토큰
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(response){
+            // 데스크톱 마케팅 SMS 전용 추가인증 저장 API
+            $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getMarketingSmsSendReserve1000Save.sb", params, function(response){
                 // 금칙어/URL 탐지 시 발송제한
                 if (response.data.data && response.data.data.blocked) {
                     if (response.data.data.urlBlocked) {
@@ -916,12 +950,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     $scope.flexMarketingSmsSend.collectionView.items[i].smsSendSeq = $("#lblMarketingSmsSendSmsSendSeq").text(); // 전송이력시퀀스(SMS전송 팝업 : 전송시 채번 / 마케팅용 SMS전송 : 회원조회시 채번)
                     $scope.flexMarketingSmsSend.collectionView.items[i].smsSendListCnt = smsSendListCnt; // 조회한 회원수
                     $scope.flexMarketingSmsSend.collectionView.items[i].msgOneAmt = msgOneAmt; // 메세지별 건당금액
+                    $scope.flexMarketingSmsSend.collectionView.items[i].smsVfcToken = smsVfcToken; // C21 성공 후 발급된 1회용 추가인증 토큰
 
                     params.push($scope.flexMarketingSmsSend.collectionView.items[i]);
                 }
             }
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function (response) {
+            // 데스크톱 마케팅 SMS 전용 추가인증 저장 API
+            $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getMarketingSmsSendReserveSave.sb", params, function (response) {
                 // 금칙어/URL 탐지 시 발송제한
                 if (response.data.data && response.data.data.blocked) {
                     if (response.data.data.urlBlocked) {
@@ -961,7 +996,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 첨부파일 저장
-    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount) {
+    $scope.smsSendFileSave = function(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, smsVfcToken) {
         var formData = new FormData($("#marketingSmsSendSmsForm")[0]);
         // formData.append("orgnCd", orgnCd);
         formData.append("pageGubun", "marketingSmsSendFileSms");
@@ -988,7 +1023,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     contentData = contentData.substring(0, contentData.length-1);
 
                     // 전송 저장 save
-                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData);
+                    $scope.smsSendRealSave(reserveYn, reserveDate, msgType, msgOneAmt, smsSendListCnt, fileCount, contentData, smsVfcToken);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');

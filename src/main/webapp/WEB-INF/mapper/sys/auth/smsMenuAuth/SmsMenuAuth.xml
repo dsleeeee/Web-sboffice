@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SmsMenuAuth.xml
+    SMS화면관리(관리자)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.08.10     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sys.auth.smsMenuAuth.service.impl.SmsMenuAuthMapper">
+
+    <!-- SMS 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO
+        PARAM    : smsMenuAuthVO
+        COMMENTS : SMS메뉴 목록을 조회한다.
+    -->
+    <select id="getSmsMenuList" parameterType="smsMenuAuthVO" resultType="DefaultMap">
+        /* SmsMenuAuthMapper.getSmsMenuList */
+        SELECT  A.RESRCE_CD
+        ,       A.RESRCE_NM
+        FROM    TB_WB_RESRCE_INFO A
+        WHERE   A.USE_YN = 'Y'
+        AND     A.RESRCE_FG = 'M'
+        <if test="resrceCd != null and resrceCd != ''">
+            AND A.RESRCE_CD LIKE '%'||#{resrceCd}||'%'
+        </if>
+        <if test="resrceNm != null and resrceNm != ''">
+            AND A.RESRCE_NM LIKE '%'||#{resrceNm}||'%'
+        </if>
+        START WITH A.P_RESRCE IN ('000064', '002579', '005259')
+        CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
+        ORDER
+        BY      A.RESRCE_CD
+    </select>
+
+    <!-- SMS 메뉴에 등록된 사용자 조회 -->
+    <!--
+        TABLE    : TB_CM_EMPLOYEE, TB_WB_AUTHOR_USER_IN_EX
+        PARAM    : smsMenuAuthVO
+        COMMENTS : SMS 메뉴에 등록된 사용자 목록을 조회한다.
+    -->
+    <select id="getRegUserList" parameterType="smsMenuAuthVO" resultType="DefaultMap">
+        /* SmsMenuAuthMapper.getRegUserList */
+        SELECT 	A.EMP_NO
+        ,		A.EMP_NM
+        ,		A.USER_ID
+        ,		A.WEB_USE_YN
+        ,		A.SERVICE_FG
+        ,		A.USE_YN
+        FROM 	TB_CM_EMPLOYEE A
+        ,		TB_WB_AUTHOR_USER_IN_EX B
+        WHERE 	A.ADMIN_FG 	=	'A'
+        AND     B.USER_ID 	=	A.USER_ID
+        AND     B.RESRCE_CD =   #{resrceCd}
+        AND     B.INCLD_EXCLD_FG = 'I'
+        AND     B.USE_YN = 'Y'
+        ORDER
+        BY      A.EMP_NO
+    </select>
+
+    <!-- SMS 메뉴에 미등록된 사용자 조회 -->
+    <!--
+        TABLE    : TB_CM_EMPLOYEE, TB_WB_AUTHOR_USER_IN_EX
+        PARAM    : smsMenuAuthVO
+        COMMENTS : SMS 메뉴에 미등록된 사용자 목록을 조회한다.
+    -->
+    <select id="getNoRegUserList" parameterType="smsMenuAuthVO" resultType="DefaultMap">
+        /* SmsMenuAuthMapper.getNoRegUserList */
+        SELECT 	A.EMP_NO
+        ,		A.EMP_NM
+        ,		A.USER_ID
+        ,		A.WEB_USE_YN
+        ,		A.SERVICE_FG
+        ,		A.USE_YN
+        FROM 	TB_CM_EMPLOYEE A
+        WHERE 	A.ADMIN_FG	=	'A'
+        AND     NOT EXISTS  (
+                                SELECT  1
+                                FROM    TB_WB_AUTHOR_USER_IN_EX B
+                                WHERE   B.USER_ID = A.USER_ID
+                                AND     B.RESRCE_CD = #{resrceCd}
+                                AND     B.INCLD_EXCLD_FG = 'I'
+                                AND     B.USE_YN = 'Y'
+                            )
+        ORDER
+        BY      A.EMP_NO
+    </select>
+
+    <!-- 사용자 SMS 메뉴 권한 등록 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_USER_IN_EX
+        PARAM    : smsMenuAuthVO
+        COMMENTS : 사용자에 SMS 메뉴 권한을 등록한다
+    -->
+    <insert id="insertSmsMenuAuth" parameterType="smsMenuAuthVO">
+        /* USE : SmsMenuAuthMapper.insertSmsMenuAuth */
+        MERGE INTO TB_WB_AUTHOR_USER_IN_EX
+        USING DUAL
+        ON  (
+                    USER_ID     = #{userId}
+                AND RESRCE_CD   = #{resrceCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                INCLD_EXCLD_FG  = 'I'
+        ,       USE_YN          = 'Y'
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                USER_ID
+        ,       AUTHOR_PRODC_FG
+        ,       RESRCE_CD
+        ,       INCLD_EXCLD_FG
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       REMARK
+        ,       LOGIN_FG
+        )
+        VALUES
+        (
+                #{userId}
+        ,       #{authorProdcFg}
+        ,       #{resrceCd}
+        ,       'I'
+        ,       'Y'
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{remark}
+        ,       'W'
+        )
+    </insert>
+
+    <!-- 사용자 SMS 메뉴 권한 삭제 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_USER_IN_EX
+        PARAM    : smsMenuAuthVO
+        COMMENTS : 사용자에 SMS 메뉴 권한을 삭제한다
+    -->
+    <delete id="deleteSmsMenuAuth" parameterType="smsMenuAuthVO">
+        /* USE : SmsMenuAuthMapper.deleteSmsMenuAuth */
+        DELETE
+        FROM    TB_WB_AUTHOR_USER_IN_EX
+        WHERE   USER_ID     =   #{userId}
+        AND     RESRCE_CD   =   #{resrceCd}
+    </delete>
+
+</mapper>

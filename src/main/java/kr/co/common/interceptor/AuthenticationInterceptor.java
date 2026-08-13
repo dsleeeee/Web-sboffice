@@ -181,6 +181,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
 
         }else{
+            // POS 자동로그인 SMS 인증 전에는 인증 관련 URL 외의 화면 및 업무 호출을 차단한다.
+            if (isPosSmsVfcPending(sessionInfoVO) && !isPosSmsVfcRequest(requestURL)) {
+                // 일반 화면은 인증 대기화면으로 이동하고, AJAX 요청에는 동일 URL을 오류 응답으로 전달한다.
+                String smsVfcUrl = "/auth/posSmsVfc.sb";
+                if (WebUtil.isJsonRequest(request)) {
+                    throw new JsonException(Status.FAIL, "SMS 인증이 필요합니다.", smsVfcUrl);
+                }
+                response.sendRedirect(smsVfcUrl);
+                return false;
+            }
+
             // (세션이 있는 경우만) 세션 값 확인, 로그 검증용(가상로그인의 경우 매장/대리점 구분이 안되어 로그 남김)
             LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
             //정상 세션값 확인시
@@ -524,6 +535,27 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    /**
+     * 세션 플래그로 POS 자동로그인 SMS 인증 대기 상태를 확인한다.
+     * accessCd 사용(Y), 메뉴 직접이동 아님(N), SMS 인증 미완료(N) 조건을 모두 확인한다.
+     */
+    private boolean isPosSmsVfcPending(SessionInfoVO sessionInfoVO) {
+        return sessionInfoVO != null
+                && "Y".equals(sessionInfoVO.getAccessCdYn())
+                && "N".equals(sessionInfoVO.getResrceCdYn())
+                && "N".equals(sessionInfoVO.getSmsVfcYn());
+    }
+
+    /**
+     * SMS 인증 대기 중 예외적으로 허용할 URL인지 확인한다.
+     * 대기화면 조회, 인증번호 발송(C10), 인증번호 검증(C11)만 허용한다.
+     */
+    private boolean isPosSmsVfcRequest(String requestURL) {
+        return "/auth/posSmsVfc.sb".equals(requestURL)
+                || "/auth/posSmsVfcCodeSend.sb".equals(requestURL)
+                || "/auth/posSmsVfcCodeVerify.sb".equals(requestURL);
     }
 
     /**

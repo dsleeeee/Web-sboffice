@@ -1,17 +1,21 @@
 package kr.co.solbipos.application.session.auth.web;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
+import kr.co.common.utils.SessionUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.SmsVfcResultVO;
 import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +38,12 @@ import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static kr.co.common.utils.HttpUtils.getClientIp;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 import org.springframework.data.redis.connection.RedisConnection;
@@ -73,7 +81,22 @@ public class AuthController {
     @Autowired
     kr.co.common.service.code.CmmCodeService cmmCodeService;
 
+    /** 로그인 성공 후 기본 이동 URL */
     final String MAIN_PAGE_URL = "main.sb";
+    /** 일반 로그인에서 인증번호를 발송한 USER_ID를 보관하는 세션 키 */
+    private static final String LOGIN_SMS_VFC_USER_ID = "LOGIN_SMS_VFC_USER_ID";
+    /** 일반 로그인에서 인증번호를 발송한 서버 시각을 보관하는 세션 키 */
+    private static final String LOGIN_SMS_VFC_SENT_AT = "LOGIN_SMS_VFC_SENT_AT";
+    /** POS 자동로그인에서 인증번호를 발송한 USER_ID를 보관하는 세션 키 */
+    private static final String POS_SMS_VFC_USER_ID = "POS_SMS_VFC_USER_ID";
+    /** POS 자동로그인에서 인증번호를 발송한 서버 시각을 보관하는 세션 키 */
+    private static final String POS_SMS_VFC_SENT_AT = "POS_SMS_VFC_SENT_AT";
+    /** 인증번호 발송 후 검증 가능한 시간: 3분 */
+    private static final long SMS_VFC_VALID_MILLIS = 3 * 60 * 1000L;
+    /** 인증번호 발송 후 재전송을 제한하는 시간: 30초 */
+    private static final long SMS_VFC_RESEND_MILLIS = 30 * 1000L;
+    /** POS 자동로그인 SMS 인증 대기화면 URL */
+    private static final String POS_SMS_VFC_URL = "/auth/posSmsVfc.sb";
 
     // 차단할 클라우드 IP 대역 (CIDR 형식)
     // 예: 3.0.0.0/8 -> 3.x.x.x 전체 범위
@@ -112,19 +135,31 @@ public class AuthController {
      * @return
      */
     @RequestMapping(value = "login.sb", method = RequestMethod.GET)
-    public String login(String userId, String type, HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String login(String userId, String type, String smsAuth, HttpServletRequest request, HttpServletResponse response, Model model) {
 
         if (sessionService.isValidSession(request)) {
 
+            // 기존 세션이 있는 POS 요청을 처리한 후 이동할 URL이다.
             String returnUrl = MAIN_PAGE_URL;
 
-            // POS에서 WEB화면 접근시 WEB 로그인 session이 이미 있는경우
-            if (request.getParameter("accessCd") != null && request.getParameter("accessCd").length() > 30) {
-                if (request.getParameter("resrceCd") != null && request.getParameter("resrceCd").length() > 0) {
+            // POS에서 WEB화면 접근 시 WEB 로그인 세션이 이미 있는 경우
+            if (isPosAccessCd(request.getParameter("accessCd"))) {
+                // 현재 Redis/WAS 세션에 저장된 사용자 정보에 POS 인증 플래그를 반영한다.
+                SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+                // resrceCd가 있으면 특정 메뉴 직접이동이므로 POS SMS 인증 대상에서 제외한다.
+                boolean hasResrceCd = hasRequestValue(request.getParameter("resrceCd"));
 
-                    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+                sessionInfoVO.setAccessCdYn("Y");
+                sessionInfoVO.setResrceCdYn(hasResrceCd ? "Y" : "N");
+
+                if (hasResrceCd) {
                     sessionInfoVO.setResrceCd(request.getParameter("resrceCd"));
+                    if (sessionInfoVO.getSmsVfcYn() == null) {
+                        // 메뉴 직접이동은 인증 대상이 아니지만, SMS 인증 완료로 처리하지 않는다.
+                        sessionInfoVO.setSmsVfcYn("N");
+                    }
 
+                    // resrceCd에 대응하는 실제 메뉴 이동 URL이다.
                     String posLoginReturnUrl = authService.getPosLoginReturnUrl(sessionInfoVO);
 
                     if(!isEmpty(posLoginReturnUrl)){
@@ -140,6 +175,19 @@ public class AuthController {
                         // view화면 처리시 사용
                         returnUrl += "?posLoginReconnect=Y";
                     }
+                } else if (!"Y".equals(sessionInfoVO.getSmsVfcYn())) {
+                    setPosSmsVfcRequirement(sessionInfoVO);
+                }
+
+                // 새 POS 로그인의 인증 대기 중 SMS 인증이 불필요한 경로로 바뀌면 성공 반영을 완료한다.
+                if (isPosLoginCompletePending(sessionInfoVO) && !isPosSmsVfcPending(sessionInfoVO)) {
+                    authService.completeLogin(sessionInfoVO);
+                    sessionInfoVO.setPosLoginCompletePendingYn("N");
+                }
+
+                updateSessionInfo(request, sessionInfoVO);
+                if (isPosSmsVfcPending(sessionInfoVO)) {
+                    return "redirect:" + POS_SMS_VFC_URL;
                 }
             }
 
@@ -148,10 +196,153 @@ public class AuthController {
 
         model.addAttribute("userId", userId);
         model.addAttribute("type", isEmpty(type) ? "" : type);
+        model.addAttribute("smsAuth", isEmpty(smsAuth) ? "" : smsAuth);
+        setSmsVfcTimerModel(userId, request, model, LOGIN_SMS_VFC_USER_ID, LOGIN_SMS_VFC_SENT_AT);
         // 토큰 생성, 셋팅
         String token = UUID.randomUUID().toString();
         request.getSession().setAttribute("LOGIN_CHK_TOKEN", token);
         return "login/login:Login";
+    }
+
+    /** USER_ID 기준 SMS 사용 등록 여부 조회 */
+    @RequestMapping(value = "loginSmsUserRegistYn.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsUserRegistYn(String userId) {
+
+        if (userId == null || userId.trim().isEmpty()) {
+            return returnJson(Status.OK, "smsUserRegistYn", "N");
+        }
+
+        // CHK 함수의 SMS 사용 등록 여부 코드와 사용자 안내 메시지이다.
+        SmsVfcResultVO result = authService.checkSmsUser(userId.trim());
+        if (result.isSuccess()) {
+            return returnJson(Status.OK, "smsUserRegistYn", "Y");
+        }
+        if ("01".equals(result.getCode())) {
+            return returnJson(Status.OK, "smsUserRegistYn", "N");
+        }
+
+        // SMS 사용 여부를 확인할 수 없으면 로그인을 진행하지 않는다.
+        return returnJson(Status.FAIL, result);
+    }
+
+    /** 로그인 SMS 인증번호 요청 */
+    @RequestMapping(value = "loginSmsVfcCodeSend.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result requestLoginSmsVfcCode(String userId, HttpServletRequest request) {
+
+        if (userId == null || userId.trim().isEmpty()) {
+            return returnJson(Status.OK, new SmsVfcResultVO("01", "아이디를 입력하여 주십시오."));
+        }
+
+        // 공백을 제거한 실제 인증번호 발송 대상 USER_ID이다.
+        String targetUserId = userId.trim();
+        // C10 함수의 인증번호 발송 결과이다.
+        SmsVfcResultVO result = authService.requestLoginSmsVfcCode(targetUserId);
+        if (result.isSent()) {
+            request.getSession().setAttribute(LOGIN_SMS_VFC_USER_ID, targetUserId);
+            request.getSession().setAttribute(LOGIN_SMS_VFC_SENT_AT, System.currentTimeMillis());
+        }
+
+        return returnJson(Status.OK, result);
+    }
+
+    /** POS 자동로그인 SMS 인증 대기화면 */
+    @RequestMapping(value = "posSmsVfc.sb", method = RequestMethod.GET)
+    public String posSmsVfc(HttpServletRequest request, Model model) {
+
+        // POS 자동로그인 완료 후 생성된 현재 사용자 세션 정보이다.
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        if (!isPosSmsVfcPending(sessionInfoVO)) {
+            return "redirect:/main.sb";
+        }
+
+        setSmsVfcTimerModel(sessionInfoVO.getUserId(), request, model,
+                POS_SMS_VFC_USER_ID, POS_SMS_VFC_SENT_AT);
+        return "application/pos/autoLoginSmsVfc";
+    }
+
+    /** POS 자동로그인 인증번호 요청 */
+    @RequestMapping(value = "posSmsVfcCodeSend.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result requestPosSmsVfcCode(HttpServletRequest request, HttpServletResponse response) {
+
+        // 요청 파라미터 대신 로그인 세션의 USER_ID를 발송 대상으로 사용한다.
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        if (!isPosSmsVfcPending(sessionInfoVO)) {
+            return returnJson(Status.FAIL, "SMS 인증 대기 상태가 아닙니다.");
+        }
+
+        // C10 함수의 POS 인증번호 발송 결과이다.
+        SmsVfcResultVO result = authService.requestLoginSmsVfcCode(sessionInfoVO.getUserId());
+        if (result.isSent()) {
+            request.getSession().setAttribute(POS_SMS_VFC_USER_ID, sessionInfoVO.getUserId());
+            request.getSession().setAttribute(POS_SMS_VFC_SENT_AT, System.currentTimeMillis());
+        }
+
+        // 인증 대기화면에 반환할 발송 결과 데이터이다.
+        Map<String, Object> responseData = smsVfcResponseData(result);
+        // 코드 03은 요청/실패 횟수 초과 잠금이므로 세션을 즉시 종료한다.
+        boolean forceLogout = "03".equals(result.getCode());
+        responseData.put("forceLogout", forceLogout);
+        if (forceLogout) {
+            logoutPosSmsVfc(request, response);
+            responseData.put("url", "/auth/login.sb");
+        }
+        return returnJson(Status.OK, responseData);
+    }
+
+    /** POS 자동로그인 인증번호 검증 */
+    @RequestMapping(value = "posSmsVfcCodeVerify.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result verifyPosSmsVfcCode(String smsVfcNo, HttpServletRequest request, HttpServletResponse response) {
+
+        // 인증 성공 여부를 반영할 현재 POS 자동로그인 사용자 세션이다.
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        if (!isPosSmsVfcPending(sessionInfoVO)) {
+            return returnJson(Status.FAIL, "SMS 인증 대기 상태가 아닙니다.");
+        }
+
+        // DB 검증 전에 발송 계정 일치 여부와 애플리케이션 기준 3분을 확인한 결과이다.
+        // 유효하면 null이며, 유효하지 않으면 화면에 반환할 실패 결과가 들어간다.
+        SmsVfcResultVO result = validateSmsVfcRequest(
+                sessionInfoVO.getUserId(), request, POS_SMS_VFC_USER_ID, POS_SMS_VFC_SENT_AT);
+        if (result == null) {
+            // C11 함수에 전달할 사용자의 6자리 인증번호이다.
+            String verificationNo = smsVfcNo == null ? "" : smsVfcNo.trim();
+            result = authService.verifyLoginSmsVfcCode(sessionInfoVO.getUserId(), verificationNo);
+        }
+
+        // 인증 대기화면에서 성공 이동 또는 실패 메시지 처리에 사용할 응답 데이터이다.
+        Map<String, Object> responseData = smsVfcResponseData(result);
+        responseData.put("verified", result.isSuccess());
+        responseData.put("forceLogout", false);
+
+        if (result.isSuccess()) {
+            // 새 POS 자동로그인은 C11 성공 시점에만 마지막 로그인 일시와 성공 이력을 반영한다.
+            if (isPosLoginCompletePending(sessionInfoVO)) {
+                authService.completeLogin(sessionInfoVO);
+                sessionInfoVO.setPosLoginCompletePendingYn("N");
+            }
+            sessionInfoVO.setSmsVfcYn("Y");
+            updateSessionInfo(request, sessionInfoVO);
+            clearPosSmsVfc(request);
+            responseData.put("url", "/main.sb");
+        } else {
+            // 인증 실패 이력만 남긴 뒤 정상 로그인 세션 상태를 복원하기 위한 원본 결과값이다.
+            LoginResult loginResult = sessionInfoVO.getLoginResult();
+            sessionInfoVO.setLoginResult(LoginResult.FAIL);
+            authService.loginHist(sessionInfoVO);
+            sessionInfoVO.setLoginResult(loginResult);
+
+            if ("03".equals(result.getCode())) {
+                responseData.put("forceLogout", true);
+                logoutPosSmsVfc(request, response);
+                responseData.put("url", "/auth/login.sb");
+            }
+        }
+
+        return returnJson(Status.OK, responseData);
     }
 
     /**
@@ -167,7 +358,8 @@ public class AuthController {
      */
     @RequestMapping(value = "login.sb", method = RequestMethod.POST)
     public String loginProcess(@Validated(Login.class) SessionInfoVO params,
-                               BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response,
+                               BindingResult bindingResult, String smsVfcNo,
+                               HttpServletRequest request, HttpServletResponse response,
                                Model model) {
 
         StopWatch sw = new StopWatch();
@@ -292,13 +484,14 @@ public class AuthController {
 
         // TB_WB_LOGIN_HIST에 세션ID 저장
         params.setSessionId(request.getSession().getId());
-        // 로그인 시도
-        SessionInfoVO result = authService.login(params);
-        // 로그인 결과값
+        // 로그인 화면이 accessCd를 userPwd에 담아 전송하므로 장문 여부로 POS 자동로그인을 구분한다.
+        boolean posAutoLogin = params.getUserPwd() != null && params.getUserPwd().length() > 30;
+        // 일반 로그인은 비밀번호, POS 자동로그인은 DB의 accessCd를 검증한 사용자 정보이다.
+        SessionInfoVO result = authService.authenticate(params);
+        // 계정 존재, 비밀번호/accessCd 일치, 계정 상태를 포함한 로그인 결과 코드이다.
         LoginResult code = result.getLoginResult();
 
         /**
-         * TODO 로그인 시도 결과로 이동 경로<br>
          * 1. 성공 : 메인 페이지로 이동<br>
          * 2. 실패<br>
          * 2-1. 메세지와 함께 로그인 페이지로 이동<br>
@@ -307,6 +500,48 @@ public class AuthController {
         String returnUrl = MAIN_PAGE_URL;
         // 로그인 성공
         if (code == LoginResult.SUCCESS) {
+
+            // POS 자동로그인은 이번 웹 로그인 SMS 인증 대상에서 제외한다.
+            if (!posAutoLogin) {
+                // CHK 함수로 일반 로그인 사용자의 SMS 인증 대상 여부를 확인한다.
+                SmsVfcResultVO smsUserResult = authService.checkSmsUser(result.getUserId());
+                if (!smsUserResult.isSuccess() && !"01".equals(smsUserResult.getCode())) {
+                    result.setLoginResult(LoginResult.FAIL);
+                    authService.loginHist(result);
+                    throw new AuthenticationException(escapeJavaScriptMessage(smsUserResult.getMessage()), failUrl);
+                }
+
+                if (smsUserResult.isSuccess()) {
+                    // 인증번호를 요청한 계정인지와 발송 후 3분 이내인지 확인한 결과이다.
+                    SmsVfcResultVO requestResult = validateSmsVfcRequest(
+                            result.getUserId(), request, LOGIN_SMS_VFC_USER_ID, LOGIN_SMS_VFC_SENT_AT);
+                    if (requestResult != null) {
+                        result.setLoginResult(LoginResult.FAIL);
+                        authService.loginHist(result);
+                        throw new AuthenticationException(escapeJavaScriptMessage(requestResult.getMessage()), failUrl + "&smsAuth=Y");
+                    }
+
+                    // C11 함수에 전달할 로그인 화면의 6자리 인증번호이다.
+                    String verificationNo = smsVfcNo == null ? "" : smsVfcNo.trim();
+                    // C11 함수의 인증번호 일치 여부와 실패 횟수 결과이다.
+                    SmsVfcResultVO smsResult = authService.verifyLoginSmsVfcCode(result.getUserId(), verificationNo);
+                    if (!smsResult.isSuccess()) {
+                        result.setLoginResult(LoginResult.FAIL);
+                        authService.loginHist(result);
+                        throw new AuthenticationException(escapeJavaScriptMessage(smsResult.getMessage()), failUrl + "&smsAuth=Y");
+                    }
+                }
+            }
+
+            // 로그인 방식에 따라 POS 자동로그인 SMS 인증 상태를 세션에 기록한다.
+            setLoginSmsVfcSessionState(result, posAutoLogin, params.getResrceCd(), failUrl);
+
+            // POS SMS 인증 대기 상태가 아니면 현재 요청에서 로그인 성공 정보를 즉시 반영한다.
+            // 인증 대기 상태는 C11 성공 시점까지 마지막 로그인 일시와 성공 이력 반영을 미룬다.
+            if (!isPosLoginCompletePending(result)) {
+                authService.completeLogin(result);
+            }
+            clearLoginSmsVfc(request);
 
             // VO객체 세션값 셋팅
             result.setLoginChkToken(token);
@@ -324,6 +559,7 @@ public class AuthController {
 
                 LOGGER.info("resrceCd 값 : " + params.getResrceCd());
 
+                // resrceCd가 있는 POS 요청의 실제 메뉴 이동 URL이다.
                 String posLoginReturnUrl = authService.getPosLoginReturnUrl(params);
                 if(!isEmpty(posLoginReturnUrl)){
 
@@ -335,6 +571,11 @@ public class AuthController {
                         returnUrl = posLoginReturnUrl;
                     }
                 }
+            }
+
+            // SMS 인증이 필요한 POS 자동로그인은 메인화면보다 인증 대기화면을 먼저 연다.
+            if (isPosSmsVfcPending(result)) {
+                returnUrl = POS_SMS_VFC_URL.substring(1);
             }
 
             LOGGER.info("returnUrl 값 : " + returnUrl);
@@ -395,6 +636,187 @@ public class AuthController {
         LOGGER.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 
         return "redirect:/" + returnUrl;
+    }
+
+    /** 예외 메시지를 로그인 화면 JavaScript 문자열에서 안전하게 출력할 수 있도록 변환 */
+    private String escapeJavaScriptMessage(String message) {
+        if (message == null || message.isEmpty()) {
+            return "SMS 인증 처리 중 오류가 발생했습니다.";
+        }
+
+        return message.replace("\\", "\\\\")
+                .replace("'", "\\'")
+                .replace("\r\n", "\\n")
+                .replace("\r", "\\n")
+                .replace("\n", "\\n");
+    }
+
+    /**
+     * 인증번호 검증 전 발송 대상 계정과 애플리케이션 기준 유효시간을 확인한다.
+     *
+     * @return 검증 가능하면 null, 요청 이력 없음 또는 만료이면 실패 결과
+     */
+    private SmsVfcResultVO validateSmsVfcRequest(String userId, HttpServletRequest request,
+                                                 String userIdSessionKey, String sentAtSessionKey) {
+        // 인증번호를 발송한 USER_ID로, 다른 계정의 인증번호 사용을 차단할 때 비교한다.
+        Object requestedUserId = request.getSession().getAttribute(userIdSessionKey);
+        // 인증번호 발송 성공 시 저장한 서버 시각으로, 3분 유효시간을 계산할 때 사용한다.
+        Object sentAt = request.getSession().getAttribute(sentAtSessionKey);
+        if (!userId.equals(requestedUserId) || !(sentAt instanceof Long)) {
+            return new SmsVfcResultVO("04", "인증번호 요청 이력이 없습니다.\n인증번호를 먼저 요청하여 주십시오.");
+        }
+
+        // 인증번호 발송 후 현재까지 경과한 시간이다.
+        long elapsedMillis = System.currentTimeMillis() - (Long) sentAt;
+        if (elapsedMillis < 0 || elapsedMillis >= SMS_VFC_VALID_MILLIS) {
+            return new SmsVfcResultVO("04", "인증번호가 유효하지 않습니다.\n인증번호를 다시 요청하여 주십시오.");
+        }
+
+        return null;
+    }
+
+    /** 화면 새로고침 후에도 인증 유효시간과 재전송 제한시간을 이어서 표시하도록 모델값 설정 */
+    private void setSmsVfcTimerModel(String userId, HttpServletRequest request, Model model,
+                                     String userIdSessionKey, String sentAtSessionKey) {
+        // 현재 화면의 USER_ID와 일치하는지 확인할 인증번호 발송 대상 계정이다.
+        Object requestedUserId = request.getSession().getAttribute(userIdSessionKey);
+        // 화면에 남은 시간을 복원하기 위한 인증번호 발송 성공 시각이다.
+        Object sentAt = request.getSession().getAttribute(sentAtSessionKey);
+        if (userId == null || !userId.equals(requestedUserId) || !(sentAt instanceof Long)) {
+            model.addAttribute("smsVfcRequestedYn", "N");
+            return;
+        }
+
+        // 서버 시각 역전 시 음수가 되지 않도록 보정한 발송 후 경과시간이다.
+        long elapsedMillis = Math.max(0L, System.currentTimeMillis() - (Long) sentAt);
+        model.addAttribute("smsVfcRequestedYn", "Y");
+        model.addAttribute("smsVfcExpireSeconds", remainingSeconds(SMS_VFC_VALID_MILLIS, elapsedMillis));
+        model.addAttribute("smsVfcResendSeconds", remainingSeconds(SMS_VFC_RESEND_MILLIS, elapsedMillis));
+    }
+
+    /** 제한시간과 경과시간의 차이를 화면 타이머에서 사용할 초 단위로 변환 */
+    private long remainingSeconds(long limitMillis, long elapsedMillis) {
+        // 제한시간을 이미 지난 경우 화면에 음수가 표시되지 않도록 0으로 보정한다.
+        long remainingMillis = Math.max(0L, limitMillis - elapsedMillis);
+        return (remainingMillis + 999L) / 1000L;
+    }
+
+    /** 일반 로그인 인증 성공 후 발송 대상 계정과 발송시각 세션값 제거 */
+    private void clearLoginSmsVfc(HttpServletRequest request) {
+        request.getSession().removeAttribute(LOGIN_SMS_VFC_USER_ID);
+        request.getSession().removeAttribute(LOGIN_SMS_VFC_SENT_AT);
+    }
+
+    /** POS 자동로그인 인증 성공 또는 로그아웃 후 발송 계정과 발송시각 세션값 제거 */
+    private void clearPosSmsVfc(HttpServletRequest request) {
+        request.getSession().removeAttribute(POS_SMS_VFC_USER_ID);
+        request.getSession().removeAttribute(POS_SMS_VFC_SENT_AT);
+    }
+
+    /**
+     * 로그인 방식에 따른 POS SMS 인증 세션 상태 설정
+     * 일반 로그인 N/N/Y, 메뉴 직접이동 Y/Y/N, POS 메인 SMS 미등록 Y/N/Y,
+     * POS 메인 SMS 등록 Y/N/N 상태로 저장한다.
+     */
+    private void setLoginSmsVfcSessionState(SessionInfoVO result, boolean posAutoLogin,
+                                            String resrceCd, String failUrl) {
+        if (!posAutoLogin) {
+            // 일반 로그인은 POS 인증 대상이 아니므로 SMS 인증이 불필요한 상태로 저장한다.
+            result.setAccessCdYn("N");
+            result.setResrceCdYn("N");
+            result.setSmsVfcYn("Y");
+            result.setPosLoginCompletePendingYn("N");
+            return;
+        }
+
+        // 특정 메뉴 직접이동 여부를 나타내며 값이 없을 때만 POS 메인 SMS 인증을 확인한다.
+        boolean hasResrceCd = hasRequestValue(resrceCd);
+        result.setAccessCdYn("Y");
+        result.setResrceCdYn(hasResrceCd ? "Y" : "N");
+        // 메뉴 직접이동은 인증 대상이 아니지만, 추후 메인 진입에 대비해 미인증으로 저장한다.
+        result.setSmsVfcYn("N");
+        result.setPosLoginCompletePendingYn("N");
+
+        if (!hasResrceCd) {
+            // CHK 함수로 POS 메인 진입 사용자의 SMS 등록 여부를 확인한 결과이다.
+            SmsVfcResultVO smsUserResult = authService.checkSmsUser(result.getUserId());
+            if (smsUserResult.isSuccess()) {
+                result.setSmsVfcYn("N");
+                // 새 POS 로그인 성공 정보는 C11 인증 성공 후 반영한다.
+                result.setPosLoginCompletePendingYn("Y");
+            } else if ("01".equals(smsUserResult.getCode())) {
+                result.setSmsVfcYn("Y");
+            } else {
+                result.setLoginResult(LoginResult.FAIL);
+                authService.loginHist(result);
+                throw new AuthenticationException(escapeJavaScriptMessage(smsUserResult.getMessage()), failUrl);
+            }
+        }
+    }
+
+    /** 기존 로그인 세션으로 POS 메인 진입 시 SMS 인증 필요 여부 설정 */
+    private void setPosSmsVfcRequirement(SessionInfoVO sessionInfoVO) {
+        // CHK 함수 결과에 따라 기존 세션을 인증 대기 또는 인증 불필요 상태로 변경한다.
+        SmsVfcResultVO smsUserResult = authService.checkSmsUser(sessionInfoVO.getUserId());
+        if (smsUserResult.isSuccess()) {
+            sessionInfoVO.setSmsVfcYn("N");
+        } else if ("01".equals(smsUserResult.getCode())) {
+            sessionInfoVO.setSmsVfcYn("Y");
+        } else {
+            throw new AuthenticationException(
+                    escapeJavaScriptMessage(smsUserResult.getMessage()), "/auth/logout.sb");
+        }
+    }
+
+    /**
+     * POS 자동로그인 SMS 인증 대기 상태인지 확인한다.
+     * accessCd로 로그인했고, 특정 메뉴 직접이동이 아니며, SMS 인증이 완료되지 않은 경우이다.
+     */
+    private boolean isPosSmsVfcPending(SessionInfoVO sessionInfoVO) {
+        return sessionInfoVO != null
+                && "Y".equals(sessionInfoVO.getAccessCdYn())
+                && "N".equals(sessionInfoVO.getResrceCdYn())
+                && "N".equals(sessionInfoVO.getSmsVfcYn());
+    }
+
+    /** 새 POS 자동로그인의 성공 정보가 C11 인증 완료를 기다리는 상태인지 확인 */
+    private boolean isPosLoginCompletePending(SessionInfoVO sessionInfoVO) {
+        return sessionInfoVO != null
+                && "Y".equals(sessionInfoVO.getPosLoginCompletePendingYn());
+    }
+
+    /** request 파라미터의 null 문자열까지 제외하여 실제 값 존재 여부 확인 */
+    private boolean hasRequestValue(String value) {
+        return value != null && !value.trim().isEmpty() && !"null".equalsIgnoreCase(value.trim());
+    }
+
+    /** 로그인 화면에서 userPwd로 전달되는 30자 초과 accessCd인지 확인하는 기존 POS 판별 기준 */
+    private boolean isPosAccessCd(String accessCd) {
+        return hasRequestValue(accessCd) && accessCd.length() > 30;
+    }
+
+    /** Redis 세션과 WAS 세션의 사용자 정보를 함께 갱신 */
+    private void updateSessionInfo(HttpServletRequest request, SessionInfoVO sessionInfoVO) {
+        sessionService.setSessionInfo(sessionInfoVO);
+        SessionUtil.setEnv(request.getSession(), sessionInfoVO.getSessionId(), sessionInfoVO);
+    }
+
+    /** SMS 함수 결과를 인증 화면 AJAX 응답 형태로 변환 */
+    private Map<String, Object> smsVfcResponseData(SmsVfcResultVO result) {
+        // 화면에서 메시지, 발송 성공 여부, 결과 코드를 처리할 응답 데이터이다.
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("code", result.getCode());
+        responseData.put("message", result.getMessage());
+        responseData.put("sent", result.isSent());
+        return responseData;
+    }
+
+    /** 인증 잠금 코드 발생 시 POS 인증 세션과 로그인 쿠키를 함께 제거 */
+    private void logoutPosSmsVfc(HttpServletRequest request, HttpServletResponse response) {
+        clearPosSmsVfc(request);
+        authService.logout(request, response);
+        WebUtil.removeCookie(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG));
+        WebUtil.removeCookie(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_AUTO_SERIAL));
     }
 
     /**

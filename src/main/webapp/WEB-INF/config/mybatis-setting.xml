@@ -213,6 +213,8 @@
     <typeAlias alias="webMenuVO" type="kr.co.solbipos.sys.menu.webmenu.service.WebMenuVO"/>
 -->
     <typeAlias alias="authGroupVO" type="kr.co.solbipos.sys.auth.authgroup.service.AuthGroupVO"/>
+    <!-- 시스템관리 > 권한관리 > SMS화면관리(관리자) -->
+    <typeAlias alias="smsMenuAuthVO" type="kr.co.solbipos.sys.auth.smsMenuAuth.service.SmsMenuAuthVO"/>
     <typeAlias alias="systemCdVO" type="kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO"/>
     <typeAlias alias="envstVO" type="kr.co.solbipos.sys.cd.envconfg.service.EnvstVO"/>
     <typeAlias alias="envstDtlVO" type="kr.co.solbipos.sys.cd.envconfg.service.EnvstDtlVO"/>

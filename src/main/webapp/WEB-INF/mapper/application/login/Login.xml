@@ -147,6 +147,13 @@
 
     </select>
 
+    <!-- SMS 인증 함수 호출 -->
+    <select id="getSmsVfcCode" resultType="String">
+        /* AuthMapper.getSmsVfcCode */
+        SELECT  FN_GET_TB_CM_SMS_VFC_CODE(#{userId}, #{opFg1}, #{opFg2}, #{opFg3})
+        FROM    DUAL
+    </select>
+
     <select id="selectLoginHist" resultType="loginHistVO" parameterType="loginHistVO">
         /* AuthMapper.selectLoginHist */
          SELECT SEQ,

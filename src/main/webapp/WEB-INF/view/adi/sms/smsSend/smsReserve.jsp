@@ -63,6 +63,8 @@
                             <label id="lblSmsReserveMsgOneAmt" style="display: none;"></label>
                             <%-- 전송건수 --%>
                             <label id="lblSmsReserveSmsSendListCnt" style="display: none;"></label>
+                            <%-- 마케팅 SMS 전송 전 C21 추가인증 성공 토큰 --%>
+                            <label id="lblSmsReserveVfcToken" style="display: none;"></label>
                         </div>
                     </td>
                 </tr>
@@ -73,4 +75,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20240717.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20260811.01" charset="utf-8"></script>

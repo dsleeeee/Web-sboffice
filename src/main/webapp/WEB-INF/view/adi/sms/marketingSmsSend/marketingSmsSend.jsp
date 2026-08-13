@@ -721,6 +721,10 @@
             </div>
         </div>
         <!-- //팝업 -->
+
+        <%-- 마케팅 SMS 전송 전 추가인증 팝업: 메인 컨트롤러 하위에서 재사용 --%>
+        <c:import url="/WEB-INF/view/adi/sms/marketingSmsSend/marketingSmsSendVfc.jsp">
+        </c:import>
     </div>
 
 </div>
@@ -742,7 +746,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20260803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20260812.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>
@@ -765,4 +769,3 @@
 <%-- 전송 URL 관리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/marketingSmsSend/regSendUrl.jsp">
 </c:import>
-

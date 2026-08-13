@@ -12,6 +12,7 @@ import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.LoginHistVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.auth.service.SmsVfcResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,59 @@ public class AuthServiceImpl implements AuthService {
     public SessionInfoVO selectWebUser(SessionInfoVO sessionInfoVO) {
         SessionInfoVO si = authMapper.selectWebUser(sessionInfoVO);
         return isEmpty(si) ? new SessionInfoVO() : si;
+    }
+
+    /** SMS 사용 등록 여부 조회 */
+    @Override
+    public SmsVfcResultVO checkSmsUser(String userId) {
+        return callSmsVfcCode(userId, "CHK", "");
+    }
+
+    /** 로그인 SMS 인증번호 요청 */
+    @Override
+    public SmsVfcResultVO requestLoginSmsVfcCode(String userId) {
+        return callSmsVfcCode(userId, "C10", "");
+    }
+
+    /** 로그인 SMS 인증번호 검증 */
+    @Override
+    public SmsVfcResultVO verifyLoginSmsVfcCode(String userId, String smsVfcNo) {
+        return callSmsVfcCode(userId, "C11", smsVfcNo);
+    }
+
+    /** 마케팅 SMS 전송 전 추가 인증번호 요청 */
+    @Override
+    public SmsVfcResultVO requestAdditionalSmsVfcCode(String userId) {
+        return callSmsVfcCode(userId, "C20", "");
+    }
+
+    /** 마케팅 SMS 전송 전 추가 인증번호 검증 */
+    @Override
+    public SmsVfcResultVO verifyAdditionalSmsVfcCode(String userId, String smsVfcNo) {
+        return callSmsVfcCode(userId, "C21", smsVfcNo);
+    }
+
+    /** SMS 인증 DB 함수 호출 결과를 코드, 메시지, 발송 여부로 변환 */
+    private SmsVfcResultVO callSmsVfcCode(String userId, String opFg1, String opFg2) {
+        // DB 함수의 원본 반환값으로 "결과코드|메시지" 형식이다.
+        String value = authMapper.getSmsVfcCode(userId, opFg1, opFg2, "");
+        if (value == null) {
+            return new SmsVfcResultVO("99", "SMS 인증 처리 중 오류가 발생했습니다.");
+        }
+
+        // 결과코드와 사용자 안내 메시지를 구분하는 첫 번째 구분자 위치이다.
+        int separator = value.indexOf('|');
+        if (separator < 0) {
+            LOGGER.error("invalid SMS verification result. userId:{}, opFg1:{}, result:{}", userId, opFg1, value);
+            return new SmsVfcResultVO("99", "SMS 인증 처리 중 오류가 발생했습니다.");
+        }
+
+        // 화면 분기와 성공 여부 판단에 사용할 DB 함수 결과코드이다.
+        String code = value.substring(0, separator);
+        // C20의 02는 과다요청 경고와 함께 실제 인증번호가 발송된 결과이다.
+        boolean sent = ("C10".equals(opFg1) && "00".equals(code))
+                || ("C20".equals(opFg1) && ("00".equals(code) || "02".equals(code)));
+        return new SmsVfcResultVO(code, value.substring(separator + 1), sent);
     }
 
     /**
@@ -165,12 +219,7 @@ public class AuthServiceImpl implements AuthService {
 
         // TODO: 로그인이후 90/180일 경과, 휴면계정, 일시정지 처리 필요. (화면에서 정보수정 없어서 일단 구현 안함)
 
-        // 전부 통과했다면 로그인 정상 판단, 로그인일시 업데이트
-        result.setLastLoginDt(currentDateTimeString());
-        // TODO: 정상 로그인시 로그인 실패횟수 초기화 시킬건지 정의 필요.
-        result.setLoginFailCnt(0L);
-        authMapper.updateLoginInfo(result);
-
+        // OTP 검증 전까지 로그인 성공 정보는 반영하지 않는다.
         result.setLoginResult(LoginResult.SUCCESS);
 
         return result;
@@ -244,7 +293,19 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public SessionInfoVO login(SessionInfoVO params) {
 
-        // 로그인 과정
+        // 기존 호출부 호환을 위해 검증과 성공 반영을 연속 수행한 최종 로그인 결과이다.
+        SessionInfoVO result = authenticate(params);
+        if (LoginResult.SUCCESS.equals(result.getLoginResult())) {
+            completeLogin(result);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SessionInfoVO authenticate(SessionInfoVO params) {
+
+        // 계정 상태와 일반 비밀번호 또는 POS accessCd를 검증한 사용자 정보이다.
         SessionInfoVO result = loginProcess(params);
 
         // 없는 id 일 경우에 로그인시도 ID Set 후 이력 남김
@@ -259,10 +320,24 @@ public class AuthServiceImpl implements AuthService {
         result.setSessionId(params.getSessionId());
         result.setServerInstance(params.getServerInstance());
 
-        // 로그인 시도 기록
-        loginHist(result);
+        // 실패 이력은 즉시 기록하고, 성공 이력은 OTP 검증 후 기록한다.
+        if (!LoginResult.SUCCESS.equals(result.getLoginResult())) {
+            loginHist(result);
+        }
 
         return result;
+    }
+
+    @Override
+    public void completeLogin(SessionInfoVO result) {
+        // SMS 인증까지 모두 완료된 시점에 마지막 로그인 일시와 실패 횟수를 갱신한다.
+        result.setLastLoginDt(currentDateTimeString());
+        result.setLoginFailCnt(0L);
+        result.setModDt(currentDateTimeString());
+        result.setModId(result.getUserId());
+        result.setLoginResult(LoginResult.SUCCESS);
+        authMapper.updateLoginInfo(result);
+        loginHist(result);
     }
 
     /**
