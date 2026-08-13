@@ -776,6 +776,7 @@
             var failCnt = 0;
             var params = [];
             var msg = '';
+            var membrNmMaxLength = hqOfficeCd === "A0001" ? 30 : 10;
             for (var i = 0; i < $scope.totalRows; i++) {
                 var item = jsonData[i];
                 failCnt = 0;
@@ -819,8 +820,8 @@
                     }
 
                     // 회원명(한글) 최대길이 체크
-                    if (nvl(item.membrNm + '', '').length > 10) {
-                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 10 "; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 10자
+                    if (nvl(item.membrNm + '', '').length > membrNmMaxLength) {
+                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " " + membrNmMaxLength + " "; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                         item.result = msg;
                         failCnt++;
                         continue;

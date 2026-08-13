@@ -39,7 +39,7 @@
                     <%-- 회원명 --%>
                     <th><s:message code="regist.membr.nm"/></th>
                     <td>
-                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" ng-change="removeMembrNmEmoji()" class="sb-input w100" maxlength="10" required>
+                        <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm" ng-change="removeMembrNmEmoji()" class="sb-input w100" maxlength="${hqOfficeCd eq 'A0001' ? 30 : 10}" required>
                     </td>
                     <%-- 회원명영문 --%>
                     <th><s:message code="regist.membr.nm.eng"/></th>
@@ -725,4 +725,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20260713.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20260813.01" charset="utf-8"></script>

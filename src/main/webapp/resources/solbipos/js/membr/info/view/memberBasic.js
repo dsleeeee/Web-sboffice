@@ -444,9 +444,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
-        // 회원명 최대길이 체크
-        if ($("#rMembrNm").val().length > 10) {
-            var msg = messages["regist.membr.nm"] + messages["cmm.overLength"] + " 10 ";
+        // 회원명 최대길이 체크 (A0001은 30자, 그 외는 10자)
+        var membrNmMaxLength = hqOfficeCd === "A0001" ? 30 : 10;
+        if ($("#rMembrNm").val().length > membrNmMaxLength) {
+            var msg = messages["regist.membr.nm"] + messages["cmm.overLength"] + " " + membrNmMaxLength + " ";
             $scope._popMsg(msg);
             return false;
         }
