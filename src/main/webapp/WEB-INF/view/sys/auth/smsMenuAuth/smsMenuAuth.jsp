@@ -45,7 +45,7 @@
                 <div class="updownSet oh mb10">
                     <span class="fl bk s14 lh30"><s:message code="smsMenuAuth.smsAdminMenu"/></span>
                 </div>
-                <div class="wj-gridWrap" style="height:500px; overflow:auto;">
+                <div class="wj-gridWrap" style="height:500px; overflow:hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -75,7 +75,7 @@
                     <s:message code="cmm.del"/>
                 </button>
             </div>
-            <div class="wj-gridWrap" style="height:500px; overflow:auto;">
+            <div class="wj-gridWrap" style="height:500px; overflow:hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -109,7 +109,7 @@
                     <s:message code="cmm.add"/>
                 </button>
             </div>
-            <div class="wj-gridWrap" style="height:500px; overflow:auto;">
+            <div class="wj-gridWrap" style="height:500px; overflow:hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
