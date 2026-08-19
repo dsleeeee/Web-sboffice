@@ -205,7 +205,7 @@
                                 연락처
                             </td>
                             <td class="br">
-                                Tel. 1544-5194   E-mail. yhs@solbipos.co.kr   Fax. 02-868-5194
+                                Tel. 1544-5194   E-mail. yhs@kcp.co.kr   Fax. 02-868-5194
                             </td>
                         </tr>
                     </table>
@@ -222,7 +222,7 @@
                                 부서명
                             </td>
                             <td class="br">
-                                솔루션운영팀
+                                CX팀
                             </td>
                         </tr>
                         <tr>
@@ -238,7 +238,7 @@
                                 연락처
                             </td>
                             <td class="br">
-                                Tel. 02-851-9635  E-mail. ydkim @solbipos.co.kr   Fax. 02-868-5194
+                                Tel. 02-851-9635  E-mail. ydkim.lk@lynk.co.kr   Fax. 02-868-5194
                             </td>
                         </tr>
                     </table>

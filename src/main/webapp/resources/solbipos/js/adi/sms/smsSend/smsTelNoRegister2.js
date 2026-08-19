@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2024.11.06     김설아      1.0
+ * 2026.08.13     김설아      2.0            KCP 본인확인 신규 연동방식(V2) 전환
  *
  * **************************************************************/
 /**
@@ -13,18 +14,30 @@
  */
 var app = agrid.getApp();
 
-// 본인인증 팝업(KCP 콜백)에서 window.opener로 직접 호출하는 브릿지 함수
-// (Angular 컨텍스트 밖에서 호출되므로 $$phase 체크 후 $apply)
+/*
+ * [발신번호추가2 - 휴대폰 본인인증 처리 순서]
+ * getVerifyVal2.sb가 KCP 거래를 등록하고, updateVerify2.sb가 결과를 S2S 조회해 콜백을 호출한다.
+ */
+
+// KCP 본인인증 결과 메시지를 발신번호 등록 화면에 표시한다.
+// Angular 컨텍스트 밖에서 호출되므로 digest 상태를 확인한다.
 window.smsTelNoRegister2VerifyCallback = function (message) {
     var scope = angular.element(document.querySelector('[ng-controller="smsTelNoRegister2Ctrl"]')).scope();
 
     var applyFn = function () {
+        if (scope.finishKcpAuthPopup) {
+            // 콜백을 마친 KCP 팝업 상태·감시 타이머·인증 폼을 정리한다.
+            scope.finishKcpAuthPopup(false);
+        }
+        scope.verifyInProgress = false;
         scope._popMsg(message);
     };
 
     if (scope.$root.$$phase) {
+        // 콜백 메시지를 현재 Angular 화면에 반영한다.
         applyFn();
     } else {
+        // Angular digest를 시작하며 콜백 메시지를 화면에 반영한다.
         scope.$apply(applyFn);
     }
 };
@@ -39,6 +52,84 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
 
     // 처리 동의 안내 체크
     $scope.contentYn = true;
+    $scope.verifyInProgress = false;
+    $scope.kcpAuthPopup = null;
+    $scope.kcpAuthPopupName = "";
+    $scope.kcpAuthPopupTimer = null;
+
+    // KCP 인증 팝업·감시 타이머·인증 폼을 정리한다.
+    // closePopup이 true이면 열린 인증 팝업도 닫는다.
+    $scope.finishKcpAuthPopup = function (closePopup) {
+        if ($scope.kcpAuthPopupTimer) {
+            clearInterval($scope.kcpAuthPopupTimer);
+            $scope.kcpAuthPopupTimer = null;
+        }
+
+        if (closePopup && $scope.kcpAuthPopup && !$scope.kcpAuthPopup.closed) {
+            $scope.kcpAuthPopup.close();
+        }
+
+        $scope.kcpAuthPopup = null;
+        $scope.kcpAuthPopupName = "";
+
+        var authForm = document.getElementById("smsTelNoRegister2KcpAuthForm");
+        if (authForm) {
+            authForm.reset();
+            authForm.removeAttribute("action");
+            authForm.removeAttribute("target");
+        }
+    };
+
+    // Angular digest 상태에 맞춰 본인인증 진행 여부를 반영한다.
+    function setVerifyInProgress(value) {
+        if ($scope.$root.$$phase) {
+            $scope.verifyInProgress = value;
+        } else {
+            $scope.$evalAsync(function () {
+                $scope.verifyInProgress = value;
+            });
+        }
+    }
+
+    // KCP 인증 실패 시 자원과 진행 상태를 초기화하고 안내 메시지를 표시한다.
+    function failKcpAuth(message) {
+        // 실패한 KCP 팝업·감시 타이머·인증 폼을 정리한다.
+        $scope.finishKcpAuthPopup(true);
+        setVerifyInProgress(false);
+        if (message) {
+            $scope._popMsg(message);
+        }
+    }
+
+    // 팝업 차단을 피하기 위해 빈 KCP 인증창을 미리 열고 닫힘을 감시한다.
+    function openKcpAuthPopup() {
+        var width = 410;
+        var height = 500;
+        var leftpos = screen.width / 2 - (width / 2);
+        var toppos = screen.height / 2 - (height / 2);
+        var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
+        var position = ",left=" + leftpos + ", top=" + toppos;
+
+        // 새 인증창을 열기 전에 남아 있는 KCP 인증 자원을 정리한다.
+        $scope.finishKcpAuthPopup(true);
+        $scope.kcpAuthPopupName = "smsTelNoRegister2KcpAuth_" + new Date().getTime();
+        $scope.kcpAuthPopup = window.open("about:blank", $scope.kcpAuthPopupName, winopts + position);
+
+        if (!$scope.kcpAuthPopup) {
+            $scope.kcpAuthPopupName = "";
+            return false;
+        }
+
+        // smsTelNoRegister2VerifyCallback() 없이 창이 닫히면 kcpAuthPopupTimer가 finishKcpAuthPopup()과 잠금을 정리한다.
+        $scope.kcpAuthPopupTimer = setInterval(function () {
+            if (!$scope.kcpAuthPopup || $scope.kcpAuthPopup.closed) {
+                // 콜백 없이 닫힌 팝업의 감시 타이머와 인증 폼을 정리한다.
+                $scope.finishKcpAuthPopup(false);
+                setVerifyInProgress(false);
+            }
+        }, 500);
+        return true;
+    }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -120,13 +211,29 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
         }
     };
 
-    // 휴대폰 본인인증
+    // SMS 사용등록·기존 인증 여부를 확인한 뒤 휴대폰 본인인증을 시작한다.
     $scope.vfTelNo = function(){
-        // SMS 사용등록 여부 먼저 확인 (KCP 팝업 열기 전에 차단)
+        if ($scope.verifyInProgress) {
+            return;
+        }
+
+        $scope.verifyInProgress = true;
+        // 사용자 클릭 시점에 KCP 인증창을 선오픈한다.
+        if (!openKcpAuthPopup()) {
+            // 선오픈 실패를 KCP 인증 실패 상태로 초기화한다.
+            setVerifyInProgress(false);
+            $scope._popMsg("팝업이 차단되었습니다. 팝업 허용 후 다시 시도해주세요.");
+            return;
+        }
+
+        // getUserRegistInfo.sb/getVerifyChk2.sb가 차단하면 failKcpAuth()가 선오픈 창도 닫는다.
+        var userInfoHandled = false;
         $scope._postJSONQuery.withOutPopUp('/adi/sms/smsUserRegist/smsUserRegist/getUserRegistInfo.sb', {}, function (response0) {
+            userInfoHandled = true;
             var registData = response0.data.data;
             if (!registData || !registData.userId) {
-                $scope._popMsg(messages["smsUserRegist.notRegistAlert"]);
+                // SMS 사용 미등록 상태를 KCP 인증 실패 상태로 초기화한다.
+                failKcpAuth(messages["smsUserRegist.notRegistAlert"]);
                 return;
             }
 
@@ -139,58 +246,77 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
                 var params = {};
                 params.certId = $("#srchCertId").val();
 
+                var verifyCheckHandled = false;
                 $scope._postJSONQuery.withOutPopUp('/adi/sms/smsSend/smsTelNoRegister2/getVerifyChk2.sb', params, function (response) {
+                    verifyCheckHandled = true;
                     if (response.data.data.list !== 0) {
-                        $scope._popMsg(messages["smsTelNoRegister2.verifyChk"]); // 이미 본인인증이 완료되었습니다.
+                        // 이미 인증된 건의 KCP 팝업·타이머·폼을 정리한다.
+                        failKcpAuth(messages["smsTelNoRegister2.verifyChk"]); // 이미 본인인증이 완료되었습니다.
                         return false;
 
                     } else {
                         // 본인인증
                         $scope.verify();
                     }
+                }, function () {
+                    verifyCheckHandled = true;
+                    // 인증 상태 조회 오류를 KCP 인증 실패 상태로 초기화한다.
+                    failKcpAuth("본인확인 상태 조회 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+                }, function () {
+                    if (!verifyCheckHandled) {
+                        // 미처리 상태 조회 종료를 KCP 인증 실패 상태로 초기화한다.
+                        failKcpAuth("본인확인 상태 조회 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+                    }
                 });
+            }
+        }, function () {
+            userInfoHandled = true;
+            // SMS 사용 등록정보 조회 오류를 KCP 인증 실패 상태로 초기화한다.
+            failKcpAuth("SMS 사용 등록정보 조회 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+        }, function () {
+            if (!userInfoHandled) {
+                // 미처리 등록정보 조회 종료를 KCP 인증 실패 상태로 초기화한다.
+                failKcpAuth("SMS 사용 등록정보 조회 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
             }
         });
     };
 
-    // 본인인증
+    // KCP 본인인증 거래와 대기 데이터를 등록한 뒤 선오픈한 팝업에 인증 폼을 제출한다.
     $scope.verify = function(){
-        $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal2.sb", null, function(result) {
+        if (!$scope.kcpAuthPopup || $scope.kcpAuthPopup.closed) {
+            // 닫힌 팝업을 KCP 인증 실패 상태로 초기화한다.
+            failKcpAuth(null);
+            return;
+        }
+
+        var registerHandled = false;
+        // MARKETING_VERIFY2 목적의 KCP 거래를 등록하고 인증 폼 제출값을 요청한다.
+        var registerRequest = $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal2.sb", null, function(result) {
+            registerHandled = true;
             var data = result.data;
-            console.log(data);
 
-            var auth_form = document.form_auth;
+            if (!data || data.error || !data.callUrl || !data.regCertKey || !data.ordrIdxx) {
+                // 거래등록 응답 오류를 KCP 인증 실패 상태로 초기화한다.
+                failKcpAuth((data && data.error) || "본인확인 요청 준비 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+                return;
+            }
 
-            var return_gubun;
-            var width = 410;
-            var height = 500;
+            if (!$scope.kcpAuthPopup || $scope.kcpAuthPopup.closed) {
+                // 닫힌 팝업을 KCP 인증 실패 상태로 초기화한다.
+                failKcpAuth(null);
+                return;
+            }
 
-            var leftpos = screen.width / 2 - (width / 2);
-            var toppos = screen.height / 2 - (height / 2);
+            var authForm = document.getElementById("smsTelNoRegister2KcpAuthForm");
+            if (!authForm) {
+                // 인증 폼 초기화 오류를 KCP 인증 실패 상태로 처리한다.
+                failKcpAuth("본인확인 요청 화면을 초기화하지 못했습니다. 화면을 새로고침 후 다시 시도해주세요.");
+                return;
+            }
 
-            var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
-            var position = ",left=" + leftpos + ", top=" + toppos;
-
-            var url = data.gwUrl + '?' +                        // KCP 인증창
-                'site_cd=' + data.siteCd + '&' +                // 상점코드
-                'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
-                'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
-                'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
-                'up_hash=' + data.upHash + '&' +                // 요청 hash data
-                'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
-                'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
-                'cert_enc_use_ext=Y'
-            ;
-
-            console.log("JH");
-            console.log("site_cd : " + data.siteCd);
-            console.log("web_siteid : " + data.webSiteid);
-            console.log("gw_url : " + data.gwUrl);
-            console.log("Ret_URL : " + data.retUrl);
-            console.log("ordr_idxx : " + data.ordrIdxx);
-            console.log("up_hash : " + data.upHash);
-            console.log("sessionID : " + data.sessionId);
-            console.log("url : " + url);
+            // #smsTelNoRegister2KcpAuthForm에는 reg_cert_key/kcp_page_submit_yn만 넣고 ordrIdxx는 saveVerify.sb의 CERT_ID로만 쓴다.
+            authForm.elements["reg_cert_key"].value = data.regCertKey;
+            authForm.elements["kcp_page_submit_yn"].value = data.kcpPageSubmitYn || "N";
 
             $("#srchCertId").val(data.ordrIdxx);
 
@@ -198,15 +324,44 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
             var params = {};
             params.certId = data.ordrIdxx;
 
-            $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
-                    console.log("JH : 결과");
-                    var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
-                    console.log('1111');
+            var saveHandled = false;
+            // KCP 콜백이 갱신할 CERT_ID 대기 데이터를 저장한다.
+            var saveRequest = $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function () {
+                    saveHandled = true;
+                    if (!$scope.kcpAuthPopup || $scope.kcpAuthPopup.closed) {
+                        // 대기 데이터 저장 중 닫힌 팝업을 인증 실패 상태로 초기화한다.
+                        failKcpAuth(null);
+                        return;
+                    }
+
+                    authForm.action = data.callUrl;
+                    authForm.target = $scope.kcpAuthPopupName;
+                    // 선오픈한 팝업을 KCP 인증창으로 이동시킨다.
+                    authForm.submit();
                 },
                 function (result) {
-                    s_alert.pop("JH : 결과msg" + result.message);
-                    s_alert.pop(result.message);
+                    saveHandled = true;
+                    // CERT_ID 대기 데이터 저장 실패를 인증 전 상태로 초기화한다.
+                    failKcpAuth(result.message);
                 });
+
+            saveRequest.always(function () {
+                if (!saveHandled) {
+                    // 미처리 저장 종료를 KCP 인증 실패 상태로 초기화한다.
+                    failKcpAuth(null);
+                }
+            });
+        }, function (result) {
+            registerHandled = true;
+            // KCP 거래등록 요청 실패를 인증 전 상태로 초기화한다.
+            failKcpAuth(result.message);
+        });
+
+        registerRequest.always(function () {
+            if (!registerHandled) {
+                // 미처리 요청 종료를 KCP 인증 실패 상태로 초기화한다.
+                failKcpAuth(null);
+            }
         });
     };
 
@@ -387,7 +542,6 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
             success: function(result) {
                 // alert(result.status);
                 // alert(result.data);
-                // console.log('save result', result);
                 if (result.status === "OK") {
                     // $scope._popMsg("저장되었습니다.");
                     $scope.$broadcast('loadingPopupInactive');
@@ -521,8 +675,12 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
         }
     };
 
-    // 팝업 닫기
+    // KCP 인증 자원과 입력값을 초기화하고 등록 팝업을 닫는다.
     $scope.close = function() {
+        // 등록 팝업을 닫기 전에 KCP 팝업·감시 타이머·인증 폼을 정리한다.
+        $scope.finishKcpAuthPopup(true);
+        $scope.verifyInProgress = false;
+
         // 처리 동의 안내 체크
         $scope.contentYn = true;
 

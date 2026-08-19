@@ -47,11 +47,21 @@ public interface MarketingSmsSendService {
     /** 발신번호추가2 팝업 - 본인인증 통과 시 DI 저장 */
     int updateAddSmsNoDi(MarketingSmsSendVO marketingSmsSendVO);
 
-    /** 마케팅용 SMS전송 - 본인인증 요청 저장 */
+    /**
+     * KCP 거래의 주문번호로 본인인증 대기 행을 저장한다.
+     */
     int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
 
-    /** 마케팅용 SMS전송 - 본인인증 결과 저장 */
+    /**
+     * KCP 거래에 보관된 요청자 정보로 인증 대기 행의 결과를 갱신한다.
+     */
     int updateVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 인증 결과와 DI를 하나의 트랜잭션으로 저장한다.
+     */
+    int completeVerify2(MarketingSmsSendVO verifyVO, MarketingSmsSendVO diSaveVO,
+                        SessionInfoVO sessionInfoVO);
 
     /** 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용) */
 //    DefaultMap<String> getTelNoNmCodeChk(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO);

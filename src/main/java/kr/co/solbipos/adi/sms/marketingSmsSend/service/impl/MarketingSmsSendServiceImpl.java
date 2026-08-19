@@ -183,7 +183,9 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return marketingSmsSendMapper.updateAddSmsNoDi(marketingSmsSendVO);
     }
 
-    /** 본인인증 요청 저장 */
+    /**
+     * KCP 거래의 주문번호와 요청자 정보로 본인인증 대기 행을 저장한다.
+     */
     @Override
     public int saveVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
@@ -194,28 +196,45 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         return marketingSmsSendMapper.saveVerify(marketingSmsSendVO);
     }
 
-    /** 본인인증 요청 결과 update */
+    /**
+     * KCP 인증 결과를 기존 인증 대기 행에 갱신한다.
+     */
     @Override
     public int updateVerify(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
-
-        int cnt = 0;
-
-        System.out.println("JH : getSmsTelNoManageUpdate 진입");
         String currentDt = currentDateTimeString();
 
         marketingSmsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         marketingSmsSendVO.setModDt(currentDt);
         marketingSmsSendVO.setModId(sessionInfoVO.getUserId());
 
-        System.out.println("JH : 본인인증 update 인덱스스");
-        System.out.println("JH : 소속코드 : " + marketingSmsSendVO.getOrgnCd());
-        System.out.println("JH : 전화번호 : " + marketingSmsSendVO.getTelNo());
-        System.out.println("JH : 수정날짜 : " + marketingSmsSendVO.getModDt());
-        System.out.println("JH : 수정자 : " + marketingSmsSendVO.getModId());
-        System.out.println("JH : 요청번호 : " + marketingSmsSendVO.getCertId());
-        cnt = marketingSmsSendMapper.updateVerify(marketingSmsSendVO);
-        System.out.println("JH : updateVerify 결과" + cnt);
-        return cnt;
+        return marketingSmsSendMapper.updateVerify(marketingSmsSendVO);
+    }
+
+    /**
+     * 인증 결과와 DI를 {@link Transactional}로 함께 저장한다.
+     */
+    @Override
+    public int completeVerify2(MarketingSmsSendVO verifyVO, MarketingSmsSendVO diSaveVO,
+                               SessionInfoVO sessionInfoVO) {
+        String currentDt = currentDateTimeString();
+        verifyVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        verifyVO.setModDt(currentDt);
+        verifyVO.setModId(sessionInfoVO.getUserId());
+
+        // 인증 이력 저장
+        if (marketingSmsSendMapper.updateVerify(verifyVO) != 1) {
+            // RuntimeException을 던져 아래 DI 갱신을 실행하지 않고 현재 트랜잭션을 롤백한다.
+            throw new IllegalStateException("본인인증 이력 저장에 실패했습니다.");
+        }
+
+        diSaveVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        diSaveVO.setUserId(sessionInfoVO.getUserId());
+        // DI 저장
+        if (marketingSmsSendMapper.updateAddSmsNoDi(diSaveVO) != 1) {
+            // 두 번째 갱신 실패도 RuntimeException으로 처리해 바로 앞 인증이력 갱신까지 함께 롤백한다.
+            throw new IllegalStateException("본인인증 DI 저장에 실패했습니다.");
+        }
+        return 1;
     }
 
     /** 마케팅용 SMS전송 - 발신번호 공통코드에 등록되 있는지 확인(특수부가사업자 승인 전 임시사용) */

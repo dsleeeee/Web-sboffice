@@ -42,13 +42,16 @@
         ,   MOD_DT
         ,   MOD_ID
         )
+        <!--
+            V1 약관값 'Y' 하드코딩 → V2 SmsUserRegistController에서 검증한 agree1Yn/agree2Yn 저장.
+        -->
         VALUES
         (
             #{userId}
         ,   #{di}
         ,   SBPENC.E(#{telNo})
-        ,   'Y'
-        ,   'Y'
+        ,   #{agree1Yn}
+        ,   #{agree2Yn}
         ,   #{regDt}
         ,   #{regId}
         ,   #{modDt}

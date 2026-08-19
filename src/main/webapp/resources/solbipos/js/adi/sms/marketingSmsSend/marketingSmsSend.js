@@ -907,7 +907,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     if (response.data.data.urlBlocked) {
                         $scope._popMsg(messages["smsSend.urlExistsChk"]);
                     } else {
-                        $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                        $scope._popMsg(messages["marketingSmsSend.badword.block.msg"]);
                     }
                 }
                 // 갱신
@@ -962,7 +962,7 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                     if (response.data.data.urlBlocked) {
                         $scope._popMsg(messages["smsSend.urlExistsChk"]);
                     } else {
-                        $scope._popMsg("'" + response.data.data.keyword +"' " + messages["marketingSmsSend.badword.block.msg"]);
+                        $scope._popMsg(messages["marketingSmsSend.badword.block.msg"]);
                     }
                 }
                 // 갱신

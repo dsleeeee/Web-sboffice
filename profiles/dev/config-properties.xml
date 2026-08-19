@@ -42,6 +42,21 @@
   <entry key="redis.pool.maxIdle">500</entry>
   <entry key="redis.pool.maxWaitMillis">5000</entry>
 
+  <!-- NHN KCP 본인확인 V2 (테스트 환경) -->
+  <!--
+    V1 Controller 상수 → V2 KcpCertServiceImpl 환경설정. dev는 테스트 KCP와 dev Redis를 사용한다.
+    returnBaseUrl이 실제 dev 인스턴스 및 같은 dev Redis로 라우팅되는지 배포 환경에서 확인해야 한다.
+  -->
+  <entry key="kcp.cert.v2.siteCd">AO7F3</entry>
+  <entry key="kcp.cert.v2.webSiteId"></entry>
+  <entry key="kcp.cert.v2.encKey">c2a22fa3ebe4698075bcac6b433d52e351c881b02fb83488d4283a43385b1f8e</entry>
+  <entry key="kcp.cert.v2.registerUrl">https://testcert.kcp.co.kr/api/reg/certDataReg.do</entry>
+  <entry key="kcp.cert.v2.queryUrl">https://testcert.kcp.co.kr/api/query/getCertData.do</entry>
+  <entry key="kcp.cert.v2.returnBaseUrl">https://neo.solbipos.com</entry>
+  <entry key="kcp.cert.v2.connectTimeoutMs">5000</entry>
+  <entry key="kcp.cert.v2.readTimeoutMs">10000</entry>
+  <entry key="kcp.cert.v2.transactionTtlMinutes">15</entry>
+
 
   <!-- ====================================-->
   <!--  login Properties-->

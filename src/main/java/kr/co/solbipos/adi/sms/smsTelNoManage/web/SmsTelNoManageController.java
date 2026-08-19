@@ -6,11 +6,17 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.kcp.CT_CLI;
+import kr.co.solbipos.adi.sms.kcp.service.KcpCertRegistration;
+import kr.co.solbipos.adi.sms.kcp.service.KcpCertResult;
+import kr.co.solbipos.adi.sms.kcp.service.KcpCertService;
+import kr.co.solbipos.adi.sms.kcp.service.KcpCertTransaction;
+import kr.co.solbipos.adi.sms.kcp.web.KcpPopupResponse;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
 import kr.co.solbipos.base.price.chgCostPrice.service.ChgCostPriceVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -51,35 +53,24 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 @RequestMapping("/adi/sms/smsTelNoManage")
 public class SmsTelNoManageController {
 
-//        https로만 결과값 전송이 가능한데 개발서버는 http라 테스트 불가능
-//        SITE_CD = "S6186";
-//        WEB_SITEID = "";
-//        ENC_KEY = "E66DCEB95BFBD45DF9DFAEEBCB092B5DC2EB3BF0";
-//        RET_URL = "https://192.168.0.85:10001/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
-//        RET_URL      = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
-//        GW_URL = "https://testcert.kcp.co.kr/kcp_cert/cert_view.jsp";
-
-    public static final  String SITE_CD         = "AGSVU";
-    public static final  String WEB_SITEID      = "J21101407426";
-    public static final  String ENC_KEY         = "beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2";
-    // 발신번호 결과 URL
-    public static final  String RET_URL         = "https://neo.solbipos.com/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
-    // 본인인증 결과 URL
-    public static final  String VERIFY_RET_URL  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb";
-    public static final  String VERIFY_RET_URL2  = "https://neo.solbipos.com/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
-//    public static final  String VERIFY_RET_URL2  = "http://localhost:8080/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb";
-    public static final  String GW_URL          = "https://cert.kcp.co.kr/kcp_cert/cert_view.jsp";
-
+    // 프로필의 returnBaseUrl과 조합할 KCP 콜백 경로
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmsTelNoManageController.class);
+    private static final String RETURN_PATH =
+            "/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb";
     private final SessionService sessionService;
     private final SmsTelNoManageService smsTelNoManageService;
+    private final KcpCertService kcpCertService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsTelNoManageController(SessionService sessionService, SmsTelNoManageService smsTelNoManageService) {
+    public SmsTelNoManageController(SessionService sessionService,
+                                    SmsTelNoManageService smsTelNoManageService,
+                                    KcpCertService kcpCertService) {
         this.sessionService = sessionService;
         this.smsTelNoManageService = smsTelNoManageService;
+        this.kcpCertService = kcpCertService;
     }
 
     /**
@@ -119,7 +110,8 @@ public class SmsTelNoManageController {
     }
 
     /**
-     * 발신번호관리 - 발신번호 등록 요청 저장
+     * 발신번호관리 - 휴대폰 본인인증 대기 요청 저장
+     * 팝업 제출 전에 주문번호를 CERT_ID로 저장하고 callback에서 결과를 갱신한다.
      *
      * @param smsTelNoManageVO
      * @param request
@@ -135,13 +127,15 @@ public class SmsTelNoManageController {
                                         HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 발신번호 인증 대기 행 저장
         int result = smsTelNoManageService.getSmsTelNoManageSave(smsTelNoManageVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
 
     /**
-     * 발신번호관리 - 발신번호 등록 요청 결과 저장
+     * 발신번호관리 - 휴대폰 발신번호 KCP 결과 콜백
+     * KCP 거래를 복원하고 인증 결과를 조회해 발신번호 등록 결과를 저장한다.
      *
      * @param request
      * @param response
@@ -152,102 +146,76 @@ public class SmsTelNoManageController {
      */
     @RequestMapping(value = "/smsTelNoManage/getSmsTelNoRegisterRequest.sb", method = RequestMethod.POST)
     public void getSmsTelNoRegisterRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+        // 콜백 결과코드와 거래키 수신
+        String resCd = trim(request.getParameter("res_cd"));
+        String regCertKey = trim(request.getParameter("reg_cert_key"));
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
+        // 실패 거래 복원 및 결과 저장
+        if (!"0000".equals(resCd)) {
+            // 실패한 거래정보 조회 및 DB 결과 저장
+            updateFailedVerification(regCertKey, resCd);
+            // 거래정보 삭제
+            removeQuietly(regCertKey);
+            // 인증 실패 알림 후 팝업 종료
+            KcpPopupResponse.alertAndClose(response,
+                    "본인인증이 완료되지 않았습니다." + codeSuffix(resCd), false);
+            return;
+        }
 
-        System.out.println("JH : 결과 : " + request.getQueryString());
-        System.out.println("JH : site_cd : " + request.getParameter("site_cd"));
-        System.out.println("JH : ordr_idxx : " + request.getParameter("ordr_idxx"));
-        System.out.println("JH : res_cd : " + request.getParameter("res_cd"));
-        System.out.println("JH : res_msg : " + request.getParameter("res_msg"));
-        System.out.println("JH : req_tx : " + request.getParameter("req_tx"));
-        System.out.println("JH : cert_no : " + request.getParameter("cert_no"));
-        System.out.println("JH : enc_cert_data2 : " + request.getParameter("enc_cert_data2"));
-        System.out.println("JH : up_hash : " + request.getParameter("up_hash"));
-        System.out.println("JH : dn_hash : " + request.getParameter("dn_hash"));
+        if (isBlank(regCertKey)) {
+            // 인증 실패 알림 후 팝업 종료
+            KcpPopupResponse.alertAndClose(response, "본인인증 거래정보가 없습니다.", false);
+            return;
+        }
 
-        String siteCd = request.getParameter("site_cd");
-        String ordrIdxx = request.getParameter("ordr_idxx");
-        String resCd = request.getParameter("res_cd");
-        String resMsg = request.getParameter("res_msg");
-        String reqTx = request.getParameter("req_tx");
-        String certNo = request.getParameter("cert_no");
-        String encCertData2 = request.getParameter("enc_cert_data2");
-        String upHash = request.getParameter("up_hash");
-        String dnHash = request.getParameter("dn_hash");
-
-        CT_CLI cc = new CT_CLI();
-
-        smsTelNoManageVO.setCertId(ordrIdxx);
-        smsTelNoManageVO.setResCd(resCd);
-        smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
-
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        String result = "";
-        if( resCd.equals( "0000" ) ){
-
-            // dn_hash 검증
-            // KCP 가 리턴해 드리는 dn_hash 와 사이트 코드, 요청번호 , 인증번호를 검증하여
-            // 해당 데이터의 위변조를 방지합니다
-            if(!cc.checkValidHash(ENC_KEY, dnHash, (siteCd + ordrIdxx + certNo))){
-                // 검증실패
-                result = "-2";
-                out.println("<script>window.resizeTo(800,500);alert('검증에 실패하였습니다.<br>위변조된 데이터로 의심됩니다.<br>고객센터로 문의해주세요.'); window.close();</script>");
-                out.flush();
+        try {
+            // 인증 결과 조회 및 복호화
+            KcpCertResult certResult = kcpCertService.getResult(
+                    regCertKey, KcpCertService.PURPOSE_SMS_TEL_NO_REGIST);
+            KcpCertTransaction transaction = certResult.getTransaction();
+            String telNo = value(certResult, "phone_no");
+            if (isBlank(telNo)) {
+                // 거래정보 삭제
+                removeQuietly(regCertKey);
+                // 인증 실패 알림 후 팝업 종료
+                KcpPopupResponse.alertAndClose(response,
+                        "본인인증 결과에 휴대폰 번호가 없습니다.", false);
+                return;
             }
 
-            if(encCertData2 != null){
-                // 인증데이터 복호화 함수
-                // 해당 함수는 암호화된 enc_cert_data2 를
-                // site_cd 와 cert_no 를 가지고 복화화 하는 함수 입니다.
-                // 정상적으로 복호화 된경우에만 인증데이터를 가져올수 있습니다.
-                cc.decryptEncCert( ENC_KEY, siteCd, certNo, encCertData2 );
+            // 거래 요청자 정보 복원
+            SessionInfoVO sessionInfoVO = toSessionInfo(transaction);
+            SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
+            smsTelNoManageVO.setCertId(transaction.getOrdrIdxx());
+            smsTelNoManageVO.setResCd(resCd);
+            smsTelNoManageVO.setTelNo(telNo);
 
-                System.out.println("JH : -------- 복호화 결과 --------");
-                System.out.println("JH : phone_no : " + cc.getKeyValue("phone_no"));
-                System.out.println("JH : comm_id : " + cc.getKeyValue("comm_id"));
-                System.out.println("JH : user_name : " + cc.getKeyValue("user_name"));
-                System.out.println("JH : birth_day : " + cc.getKeyValue("birth_day"));
-                System.out.println("JH : sex_code : " + cc.getKeyValue("sex_code"));
-                System.out.println("JH : local_code : " + cc.getKeyValue("local_code"));
-                System.out.println("JH : ci : " + cc.getKeyValue("ci"));
-                System.out.println("JH : di : " + cc.getKeyValue("di"));
-                System.out.println("JH : ci_url : " + URLDecoder.decode(cc.getKeyValue("ci_url")));
-                System.out.println("JH : di_url : " + URLDecoder.decode(cc.getKeyValue("di_url")));
-                System.out.println("JH : web_siteid : " + cc.getKeyValue("web_siteid"));
-
-                System.out.println("---------------------------");
-                smsTelNoManageVO.setTelNo(cc.getKeyValue("phone_no"));
+            // 인증된 휴대폰 번호 중복 확인
+            if (smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0) {
+                // 거래정보 삭제
+                removeQuietly(regCertKey);
+                // 중복 번호 알림 후 팝업 종료
+                KcpPopupResponse.alertAndClose(response, "기존에 등록된 전화번호입니다.", false);
+                return;
             }
 
-            if(smsTelNoManageService.getSmsTelNoManageChk(smsTelNoManageVO, sessionInfoVO) != 0){
-                // 기등록번호
-                out.println("<script>window.resizeTo(800,500);alert('기존에 등록된 전화번호입니다.'); window.close();</script>");
-                out.flush();
-            } else {
-                if(smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) == 1){
-
-                    // 정상등록
-                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.opener.location.reload(); </script>");
-//                    out.println("<script>window.resizeTo(800,500);alert('정상등록되었습니다.'); window.close(); window.location.reload(); </script>");
-                    out.flush();
-                } else {
-
-                    // 인증성공 + DB저장실패
-                    out.println("<script>window.resizeTo(800,500);alert('본인인증에 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.'); window.close();</script>");
-                    out.flush();
-                }
+            // 발신번호 인증 결과 저장
+            if (smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO) != 1) {
+                // 저장 실패 알림 후 팝업 종료
+                KcpPopupResponse.alertAndClose(response,
+                        "본인인증은 성공했으나 저장에 문제가 있습니다. 고객센터로 문의해주세요.", false);
+                return;
             }
-        } else {
-            // 실패코드 저장
-            smsTelNoManageVO.setTelNo("");
-            smsTelNoManageService.getSmsTelNoManageUpdate(smsTelNoManageVO, sessionInfoVO);
 
-            out.println("<script>window.resizeTo(800,500);alert('본인인증 에러가 발생하였습니다. 고객센터로 문의해주세요.'); window.close();</script>");
-            out.flush();
+            // 거래정보 삭제
+            kcpCertService.removeByRegCertKey(regCertKey);
+            // 인증 성공 알림 후 팝업 종료
+            KcpPopupResponse.alertAndClose(response, "정상등록되었습니다.", true);
+        } catch (Exception e) {
+            LOGGER.error("KCP V2 result processing failed for SMS sender number registration", e);
+            // 처리 오류 알림 후 팝업 종료
+            KcpPopupResponse.alertAndClose(response,
+                    "본인인증 결과 처리 중 오류가 발생했습니다. 다시 시도해주세요.", false);
         }
     }
 
@@ -275,7 +243,7 @@ public class SmsTelNoManageController {
     }
 
     /**
-     * 값 가져감
+     * 일반번호 서류인증에 사용할 주문번호를 채번한다.
      *
      * @param
      * @param
@@ -288,45 +256,35 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsTelNoManage/getVal.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVal(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        System.out.println("컨트롤러 진입");
-
-        String ORDR_IDXX = new SimpleDateFormat("yyyyMMddHHmmssSSSSSSS").format(new Date());
-
-        System.out.println("주문번호 " + ORDR_IDXX);
-
-        CT_CLI       cc      = new CT_CLI();
-
-        String UP_HASH       = "";
-        UP_HASH = cc.makeHashData( ENC_KEY, SITE_CD   +
-                ORDR_IDXX +
-                ""   +
-                ""   +
-                "00" +
-                "00" +
-                "00" +
-                ""   +
-                ""
-        );
-
-        System.out.println("주문번호 " + UP_HASH);
-
+        sessionService.getSessionInfo(request);
         DefaultMap<String> result = new DefaultMap<>();
-        result.put("site_cd", SITE_CD);
-        result.put("web_siteid", WEB_SITEID);
-        result.put("gw_url", GW_URL);
-        result.put("Ret_URL", RET_URL);
-        result.put("ordr_idxx", ORDR_IDXX);
-        result.put("up_hash", UP_HASH);
+        // 주문번호 채번
+        result.put("ordr_idxx", kcpCertService.newOrderId());
+        return returnJson(Status.OK, result);
+    }
 
-        System.out.println("세션 ID " + sessionInfoVO.getSessionId());
-
-        result.put("sessionId", sessionInfoVO.getSessionId());
-
-        System.out.println("결과1 " + result);
-
+    /**
+     * 휴대폰 발신번호 등록용 KCP 거래를 등록한다.
+     * 인증 팝업에 제출할 POST 값을 반환한다.
+     */
+    @RequestMapping(value = "/smsTelNoManage/getKcpVerifyVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKcpVerifyVal(HttpServletRequest request) {
+        DefaultMap<String> result = new DefaultMap<>();
+        try {
+            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+            // KCP 거래등록
+            KcpCertRegistration registration = kcpCertService.register(
+                    KcpCertService.PURPOSE_SMS_TEL_NO_REGIST, RETURN_PATH, sessionInfoVO);
+            // 인증 팝업 호출값 구성
+            result.put("call_url", registration.getCallUrl());
+            result.put("reg_cert_key", registration.getRegCertKey());
+            result.put("ordr_idxx", registration.getOrdrIdxx());
+            result.put("kcp_page_submit_yn", registration.getKcpPageSubmitYn());
+        } catch (Exception e) {
+            LOGGER.warn("KCP V2 transaction registration failed for SMS sender number: {}", e.getMessage());
+            result.put("error", "본인인증 거래등록에 실패했습니다.");
+        }
         return returnJson(Status.OK, result);
     }
 
@@ -593,11 +551,77 @@ public class SmsTelNoManageController {
     @RequestMapping(value = "/smsPreview/getSmsPreviewFileNm.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
-                          HttpServletResponse response, Model model) {
+                           HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         DefaultMap<String> result = smsTelNoManageService.getSmsPreviewFileNm(smsTelNoManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /** 실패한 KCP 거래를 복원해 발신번호 인증 대기 행에 결과 코드를 저장한다. */
+    private void updateFailedVerification(String regCertKey, String resCd) {
+        if (isBlank(regCertKey)) {
+            return;
+        }
+        try {
+            // 거래정보 조회
+            KcpCertTransaction transaction = kcpCertService.getTransaction(
+                    regCertKey, KcpCertService.PURPOSE_SMS_TEL_NO_REGIST);
+            SmsTelNoManageVO smsTelNoManageVO = new SmsTelNoManageVO();
+            smsTelNoManageVO.setCertId(transaction.getOrdrIdxx());
+            smsTelNoManageVO.setResCd(resCd);
+            smsTelNoManageVO.setTelNo("");
+            // 최초 요청자 정보 복원 및 실패 결과 저장
+            smsTelNoManageService.getSmsTelNoManageUpdate(
+                    smsTelNoManageVO, toSessionInfo(transaction));
+        } catch (Exception e) {
+            LOGGER.warn("Failed to persist rejected KCP V2 sender-number verification: {}", e.getMessage());
+        }
+    }
+
+    /** Redis 거래에 저장된 최초 요청자 정보로 업무 처리용 세션 객체를 복원한다. */
+    private SessionInfoVO toSessionInfo(KcpCertTransaction transaction) {
+        // Redis 거래의 사용자·소속·세션 정보를 복원한다.
+        SessionInfoVO sessionInfoVO = new SessionInfoVO();
+        sessionInfoVO.setSessionId(transaction.getSessionId());
+        sessionInfoVO.setUserId(transaction.getUserId());
+        sessionInfoVO.setOrgnCd(transaction.getOrgnCd());
+        return sessionInfoVO;
+    }
+
+    /** KCP 복호화 결과에서 지정한 인증 항목을 문자열로 꺼낸다. */
+    private String value(KcpCertResult result, String key) {
+        // 복호화 결과에서 필요한 업무 필드만 꺼낸다.
+        Object value = result.getCertData().get(key);
+        return value == null ? "" : String.valueOf(value);
+    }
+
+    /** 콜백 응답을 방해하지 않도록 Redis 거래 정리 중 발생한 예외를 로그로만 남긴다. */
+    private void removeQuietly(String regCertKey) {
+        if (isBlank(regCertKey)) {
+            return;
+        }
+        try {
+            // 거래정보 삭제
+            kcpCertService.removeByRegCertKey(regCertKey);
+        } catch (Exception e) {
+            LOGGER.warn("Failed to remove rejected KCP V2 sender-number transaction: {}", e.getMessage());
+        }
+    }
+
+    /** KCP 결과 코드가 있을 때만 사용자 안내 문구 뒤에 붙일 문자열을 만든다. */
+    private String codeSuffix(String code) {
+        return isBlank(code) ? "" : " (" + code + ")";
+    }
+
+    /** 콜백 파라미터의 null을 빈 문자열로 바꾸고 앞뒤 공백을 제거한다. */
+    private String trim(String value) {
+        return value == null ? "" : value.trim();
+    }
+
+    /** 값이 null이거나 공백뿐인지 확인한다. */
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 }

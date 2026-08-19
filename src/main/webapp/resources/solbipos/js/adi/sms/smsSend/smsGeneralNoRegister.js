@@ -101,26 +101,35 @@ app.controller('smsGeneralNoRegisterCtrl', ['$scope', '$http', function ($scope,
         }
     };
 
-    // 서류인증신청 저장 전 관리요청번호(CERT_ID) 채번
-    // 값가져오기
+    // 일반번호 서류인증 저장 전에 관리요청번호(CERT_ID)를 발급받는다.
     $scope.getValSmsGeneralNo = function(addFg, fileUrl, fileNm) {
         $.postJSON("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null, function(result) {
                 var data = result.data;
-                console.log(data);
+
+                if (!data || data.error || !data.ordrIdxx) {
+                    $scope._popMsg((data && data.error) || "관리요청번호 생성 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+                    return;
+                }
+
+                // ordrIdxx는 smsGeneralNoRealSave()의 certId로만 전달한다.
                 var ordrIdxx = data.ordrIdxx;
 
                 // 서류인증신청 저장
                 $scope.smsGeneralNoRealSave(addFg, fileUrl, fileNm, ordrIdxx);
+            },
+            function (result) {
+                $scope._popMsg(result.message || "관리요청번호 생성 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
             }
         );
     };
 
-    // 서류인증신청 저장
+    // 발급받은 관리요청번호와 함께 일반번호 서류인증 신청을 저장한다.
     $scope.smsGeneralNoRealSave = function(addFg, fileUrl, fileNm, ordrIdxx) {
         var params = {};
         params.addFg = addFg;
         params.fileUrl = fileUrl;
         params.fileNm = fileNm;
+        // certId는 getVal.sb가 발급한 일반번호 서류심사 관리번호다.
         params.certId = ordrIdxx;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -148,7 +157,6 @@ app.controller('smsGeneralNoRegisterCtrl', ['$scope', '$http', function ($scope,
             success: function(result) {
                 // alert(result.status);
                 // alert(result.data);
-                // console.log('save result', result);
                 if (result.status === "OK") {
                     // $scope._popMsg("저장되었습니다.");
                     $scope.$broadcast('loadingPopupInactive');

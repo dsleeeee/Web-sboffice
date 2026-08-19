@@ -42,6 +42,22 @@
   <entry key="redis.pool.maxIdle">500</entry>
   <entry key="redis.pool.maxWaitMillis">5000</entry>
 
+  <!-- NHN KCP 본인확인 V2 (테스트 환경) -->
+  <!--
+    V1 Controller 상수 → V2 KcpCertServiceImpl 환경설정. local은 테스트 KCP와 localhost callback을 사용한다.
+    timeout은 S2S 통신 제한, TTL은 KcpCertTransactionStore 보관시간이다.
+    다른 PC에서 개발자 IP로 접속하면 localhost는 그 다른 PC를 뜻하므로 callback까지 완료할 수 없다.
+  -->
+  <entry key="kcp.cert.v2.siteCd">AO7F3</entry>
+  <entry key="kcp.cert.v2.webSiteId"></entry>
+  <entry key="kcp.cert.v2.encKey">c2a22fa3ebe4698075bcac6b433d52e351c881b02fb83488d4283a43385b1f8e</entry>
+  <entry key="kcp.cert.v2.registerUrl">https://testcert.kcp.co.kr/api/reg/certDataReg.do</entry>
+  <entry key="kcp.cert.v2.queryUrl">https://testcert.kcp.co.kr/api/query/getCertData.do</entry>
+  <entry key="kcp.cert.v2.returnBaseUrl">http://localhost:8080</entry>
+  <entry key="kcp.cert.v2.connectTimeoutMs">5000</entry>
+  <entry key="kcp.cert.v2.readTimeoutMs">10000</entry>
+  <entry key="kcp.cert.v2.transactionTtlMinutes">15</entry>
+
 
   <!-- ====================================-->
   <!--  login Properties-->

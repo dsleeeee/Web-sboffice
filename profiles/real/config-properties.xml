@@ -42,6 +42,21 @@
     <entry key="redis.pool.maxIdle">500</entry>
     <entry key="redis.pool.maxWaitMillis">5000</entry>
 
+    <!-- NHN KCP 본인확인 V2 (운영 환경) -->
+    <!--
+      V1 Controller 상수 → V2 KcpCertServiceImpl 환경설정. real은 운영 KCP를 사용한다.
+      거래등록 서버와 callback 처리 서버가 동일한 Redis 거래정보를 조회할 수 있어야 한다.
+    -->
+    <entry key="kcp.cert.v2.siteCd">AGSVU</entry>
+    <entry key="kcp.cert.v2.webSiteId">J21101407426</entry>
+    <entry key="kcp.cert.v2.encKey">beba66643a50ad06b9bd92b6bcf6239d8199071bc8ffd361a81441f651f8efd2</entry>
+    <entry key="kcp.cert.v2.registerUrl">https://cert.kcp.co.kr/api/reg/certDataReg.do</entry>
+    <entry key="kcp.cert.v2.queryUrl">https://cert.kcp.co.kr/api/query/getCertData.do</entry>
+    <entry key="kcp.cert.v2.returnBaseUrl">https://neo.solbipos.com</entry>
+    <entry key="kcp.cert.v2.connectTimeoutMs">5000</entry>
+    <entry key="kcp.cert.v2.readTimeoutMs">10000</entry>
+    <entry key="kcp.cert.v2.transactionTtlMinutes">15</entry>
+
 
     <!-- ====================================-->
     <!--  login Properties-->

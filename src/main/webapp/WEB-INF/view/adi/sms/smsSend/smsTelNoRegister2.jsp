@@ -6,10 +6,17 @@
 <wj-popup id="wjSmsTelNoRegister2Layer" control="wjSmsTelNoRegister2Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:830px;height:690px;" fade-in="false" fade-out="false">
     <div ng-controller="smsTelNoRegister2Ctrl">
 
+        <%-- smsSend.jsp의 두 인증 폼을 구분하도록 #smsTelNoRegister2KcpAuthForm과 form.elements를 사용한다. --%>
+        <%-- verify()가 getVerifyVal2.sb의 call_url을 action으로 지정해 reg_cert_key/kcp_page_submit_yn만 POST한다. --%>
+        <form id="smsTelNoRegister2KcpAuthForm" name="smsTelNoRegister2KcpAuthForm" method="post" style="display:none;">
+            <input type="hidden" name="reg_cert_key" />
+            <input type="hidden" name="kcp_page_submit_yn" value="N" />
+        </form>
+
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="smsTelNoRegister2.info"/>
-            <a href="#" id="btn_close" class="wj-hide btn_close" ng-click="close()"></a>
+            <a href="#" id="btnSmsTelNoRegister2Close" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
         <div style="width: 830px; height: 640px; overflow-x: auto; overflow-y: auto; border: 1px solid #e8e8e8;">
@@ -43,7 +50,7 @@
                         </tr>
                         <tr>
                             <td class="bl br">
-                                광고 및 스팸 문자 정책
+                                불법스팸 방지·서비스 이용제한 정책
                             </td>
                             <td class="br">
                                 <%-- 내용보기 --%>
@@ -122,7 +129,8 @@
                             <td class="br">
                                 <%-- 휴대폰 본인인증 --%>
                                 <div style="display:flex; align-items:center;">
-                                    <button class="btn_skyblue ml5" id="btnYfTelNo" ng-click="vfTelNo()">
+                                    <%-- vfTelNo() 처리 중에는 verifyInProgress로 getVerifyVal2.sb 중복 호출을 막는다. --%>
+                                    <button class="btn_skyblue ml5" id="btnYfTelNo" ng-click="vfTelNo()" ng-disabled="verifyInProgress">
                                         <s:message code="smsTelNoRegister2.vfTelNo" />
                                     </button>
                                     &nbsp;&nbsp;<span style="color:red; font-size:12px;"><s:message code="smsTelNoRegister2.vfTelNoGuide" /></span>
@@ -315,7 +323,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20260806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20260813.01" charset="utf-8"></script>
 
 <%-- SMS 개인정보취급방침 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/contentPop1.jsp">

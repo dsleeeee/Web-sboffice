@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+/*
+ * [발신번호 등록 팝업의 KCP 처리]
+ * $scope.getVal()이 KCP 거래를 등록하고 telNoRequest()가 인증 폼을 제출한다.
+ * 일반번호 CERT_ID 채번은 getVal.sb, 휴대폰 KCP 거래등록은 getKcpVerifyVal.sb가 담당한다.
+ */
+
 /**
  *  발신번호 사전등록 팝업 조회 그리드 생성
  */
@@ -41,26 +47,65 @@ app.controller('smsTelNoRegisterCtrl', ['$scope', '$http', function ($scope, $ht
         event.preventDefault();
     };
 
-    // 값가져오기
+    // KCP 본인확인 거래를 등록하고 인증 폼에 필요한 값을 설정한다.
     $scope.getVal = function() {
-        // 발신번호 등록됬는지 확인
-        // $scope._inquirySub("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null, function (response){});
+        var authForm = document.getElementById("smsTelNoRegisterKcpAuthForm");
+        if (!authForm) {
+            $scope._popMsg("본인확인 요청 화면을 초기화하지 못했습니다. 화면을 새로고침 후 다시 시도해주세요.");
+            return;
+        }
 
-        $.postJSON("/adi/sms/smsTelNoManage/smsTelNoManage/getVal.sb", null, function(result) {
+        // $scope.getVal() 재호출 전 #smsTelNoRegisterKcpAuthForm과 #smsTelNoRegisterOrdrIdxx를 초기화한다.
+        authForm.reset();
+        authForm.removeAttribute("action");
+        authForm.removeAttribute("target");
+        delete authForm.dataset.callUrl;
+        $("#smsTelNoRegisterOrdrIdxx").val("");
+
+        var requestHandled = false;
+        // KCP 거래를 등록하고 인증 폼 제출값을 요청한다.
+        var request = $.postJSON("/adi/sms/smsTelNoManage/smsTelNoManage/getKcpVerifyVal.sb", null, function(result) {
+                requestHandled = true;
                 var data = result.data;
-                console.log(data);
-                $("#site_cd").val(data.siteCd);
-                $("#web_siteid").val(data.webSiteid);
-                $("#gw_url").val(data.gwUrl);
-                $("#Ret_URL").val(data.retUrl);
-                $("#ordr_idxx").val(data.ordrIdxx);
-                $("#up_hash").val(data.upHash);
-                $("#sessionId").val(data.sessionId);
+
+                if (!data || data.error || !data.callUrl || !data.regCertKey || !data.ordrIdxx) {
+                    authForm.reset();
+                    authForm.removeAttribute("action");
+                    authForm.removeAttribute("target");
+                    delete authForm.dataset.callUrl;
+                    $("#smsTelNoRegisterOrdrIdxx").val("");
+                    $scope._popMsg((data && data.error) || "본인확인 요청 준비 중 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+                    return;
+                }
+
+                // callUrl은 dataset에 보관하고 인증 폼에는 KCP 제출 필드만 채운다.
+                authForm.dataset.callUrl = data.callUrl;
+                authForm.elements["reg_cert_key"].value = data.regCertKey;
+                authForm.elements["kcp_page_submit_yn"].value = data.kcpPageSubmitYn || "N";
+                // ordrIdxx는 getSmsTelNoManageSave.sb의 CERT_ID로만 사용한다.
+                $("#smsTelNoRegisterOrdrIdxx").val(data.ordrIdxx);
+            },
+            function (result) {
+                requestHandled = true;
+                authForm.reset();
+                authForm.removeAttribute("action");
+                authForm.removeAttribute("target");
+                $("#smsTelNoRegisterOrdrIdxx").val("");
+                $scope._popMsg(result.message);
             }
         );
+
+        request.always(function () {
+            if (!requestHandled) {
+                authForm.reset();
+                authForm.removeAttribute("action");
+                authForm.removeAttribute("target");
+                $("#smsTelNoRegisterOrdrIdxx").val("");
+            }
+        });
     };
 
-    // 일반번호 인증요청
+    // 일반번호 서류인증 신청 팝업을 연다.
     $scope.smsGeneralNoRequest = function() {
         $scope.wjSmsGeneralNoRegisterLayer.show(true);
         event.preventDefault();

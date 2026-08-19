@@ -36,6 +36,16 @@
       <mvc:exclude-mapping path="/mobile/auth/log*.sb" />
       <mvc:exclude-mapping path="/mobile/user/*.sb" />
       <mvc:exclude-mapping path="/mobile/direct/mobileDirectLogin.sb" />
+
+      <!-- NHN KCP 본인확인 V2 결과 콜백 (인증 팝업 브라우저가 Ret_URL로 POST) -->
+      <!--
+        V1 Ret_URL의 sid 세션복원 → V2 KcpCertService.getTransaction()의 요청자 검증.
+        callback만 AuthenticationInterceptor에서 제외하며 거래등록 API는 로그인 세션이 필요하다.
+      -->
+      <mvc:exclude-mapping path="/adi/sms/smsUserRegist/smsUserRegist/updateVerify.sb" />
+      <mvc:exclude-mapping path="/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb" />
+      <mvc:exclude-mapping path="/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb" />
+      <mvc:exclude-mapping path="/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb" />
 	  
       <bean class="kr.co.common.interceptor.AuthenticationInterceptor" />
     </mvc:interceptor>

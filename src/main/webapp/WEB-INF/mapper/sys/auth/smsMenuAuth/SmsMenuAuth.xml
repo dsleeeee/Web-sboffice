@@ -20,21 +20,19 @@
     -->
     <select id="getSmsMenuList" parameterType="smsMenuAuthVO" resultType="DefaultMap">
         /* SmsMenuAuthMapper.getSmsMenuList */
-        SELECT  A.RESRCE_CD
-        ,       A.RESRCE_NM
-        FROM    TB_WB_RESRCE_INFO A
-        WHERE   A.USE_YN = 'Y'
-        AND     A.RESRCE_FG = 'M'
+        SELECT 	A.NMCODE_NM     AS RESRCE_CD
+        ,       A.NMCODE_ITEM_1 AS RESRCE_NM
+        FROM 	TB_CM_NMCODE A
+        WHERE 	A.PARENT_CD     =	'250'
+        AND     A.NMCODE_ITEM_2  =   'Y'
         <if test="resrceCd != null and resrceCd != ''">
-            AND A.RESRCE_CD LIKE '%'||#{resrceCd}||'%'
+            AND A.NMCODE_NM LIKE '%'||#{resrceCd}||'%'
         </if>
         <if test="resrceNm != null and resrceNm != ''">
-            AND A.RESRCE_NM LIKE '%'||#{resrceNm}||'%'
+            AND A.NMCODE_ITEM_1 LIKE '%'||#{resrceNm}||'%'
         </if>
-        START WITH A.P_RESRCE IN ('000064', '002579', '005259')
-        CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
         ORDER
-        BY      A.RESRCE_CD
+        BY      A.NMCODE_NM
     </select>
 
     <!-- SMS 메뉴에 등록된 사용자 조회 -->

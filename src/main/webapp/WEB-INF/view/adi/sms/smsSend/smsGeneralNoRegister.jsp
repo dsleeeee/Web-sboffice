@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%-- #wjSmsGeneralNoRegisterLayer는 KCP form 없이 getValSmsGeneralNo()가 getVal.sb의 CERT_ID만 사용한다. --%>
 <wj-popup id="wjSmsGeneralNoRegisterLayer" control="wjSmsGeneralNoRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:570px;height:240px;" fade-in="false" fade-out="false">
     <div ng-controller="smsGeneralNoRegisterCtrl">
 
@@ -59,4 +60,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsGeneralNoRegister.js?ver=20220201.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsGeneralNoRegister.js?ver=20260813.01" charset="utf-8"></script>
