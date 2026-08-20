@@ -80,11 +80,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 파일업로드시 파일사이즈 변경
   $scope.uploadChange = function(){
     $scope.$apply(function() {
+      // 기본 20MB 제한. 단 DS079 본사의 파일타입(013)은 클라이언트 용량 제한 없음(서버 상한만 적용)
       var maxSize = 20 * 1024 * 1024;
+      var noLimit = (hqOfficeCd === "DS079" && $scope.versionFileTypeCombo.selectedValue === "013");
       var fileSize = document.getElementById("file").files[0].size;
 
-      if(fileSize > maxSize) {
-        alert("첨부파일 사이즈는 20MB 이내로 등록 가능합니다.    ");
+      if(!noLimit && fileSize > maxSize) {
+        alert("첨부파일 사이즈는 " + (maxSize / 1024 / 1024) + "MB 이내로 등록 가능합니다.");
 
         // 첨부파일 리셋
         var agent = navigator.userAgent.toLowerCase();
@@ -180,6 +182,21 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["media.fileChk.msg"] + $scope.getFileType() + messages["media.fileChk.msg2"]);
         return;
       }
+    }
+
+    // 파일타입 변경 등으로 제한이 달라질 수 있어 저장 직전 용량 재확인 (DS079+013만 제한 없음, 그 외 20MB)
+    var saveMaxSize = (hqOfficeCd === "DS079" && $scope.versionFileTypeCombo.selectedValue === "013")
+                      ? Infinity : 20 * 1024 * 1024;
+    var saveFileSize = 0;
+    var fileEl = document.getElementById("file");
+    if (fileEl && fileEl.files && fileEl.files.length > 0) {
+      saveFileSize = fileEl.files[0].size;                 // 새로 선택한 파일
+    } else if ($scope.version && $scope.version.fileSizeByte) {
+      saveFileSize = Number($scope.version.fileSizeByte);  // 수정 시 기존 파일
+    }
+    if (saveFileSize > saveMaxSize) {
+      $scope._popMsg("첨부파일 사이즈는 " + (saveMaxSize / 1024 / 1024) + "MB 이내로 등록 가능합니다.");
+      return;
     }
     $scope.chkRegist();
   }
@@ -392,7 +409,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#fileOrgH").show();
       $("#fileOrgD").show();
 
-      // 파일사이즈 변환하여 표기
+      // 파일사이즈: 저장 시 용량 재확인에 쓰도록 원본 바이트 보관 후 표기용으로 변환
+      $scope.version.fileSizeByte = $scope.version.fileSize;
       $scope.version.fileSize = getfileSize($scope.version.fileSize);
 
       // 언어구분 값이 없는경우, '국문'으로 기본 셋팅
