@@ -418,6 +418,9 @@ public class MarketingSmsSendController {
         // 콜백 결과코드와 거래키 수신
         String resCd = trim(request.getParameter("res_cd"));
         String regCertKey = trim(request.getParameter("reg_cert_key"));
+        // 콜백 수신 확인용(개인정보 아님). site_cd/cert_no/enc_cert_data2/up_hash/dn_hash는 V2에서 없어졌다.
+        LOGGER.info("KCP V2 콜백 수신 [화면={}, res_cd={}, res_msg={}, reg_cert_key={}]",
+                purpose, resCd, trim(request.getParameter("res_msg")), regCertKey);
 
         // 실패 거래 복원 및 결과 저장
         if (!"0000".equals(resCd)) {

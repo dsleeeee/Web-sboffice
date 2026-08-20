@@ -102,6 +102,10 @@ public class KcpCertServiceImpl implements KcpCertService {
         // KCP 콜백 URL 생성
         String returnUrl = makeReturnUrl(returnPath);
 
+        // 어떤 설정(siteCd/registerUrl)으로 거래등록을 호출하는지 남긴다. encKey는 비밀키라 마스킹한다.
+        LOGGER.info("KCP V2 거래등록 [인증목적={}, 주문번호={}, siteCd={}, registerUrl={}, encKey={}]",
+                purpose, ordrIdxx, siteCd, registerUrl, maskKey(encKey));
+
         // KCP 거래등록 요청 JSON 구성
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("site_cd", siteCd);
@@ -446,5 +450,15 @@ public class KcpCertServiceImpl implements KcpCertService {
     /** KCP JSON 값을 null-safe 문자열로 변환한다. */
     private String stringValue(Object value) {
         return value == null ? "" : String.valueOf(value);
+    }
+
+    /** 비밀키(encKey)는 전체를 로그에 남기지 않고 길이와 뒤 4자리만 마스킹해 반환한다. */
+    private String maskKey(String key) {
+        if (key == null || key.isEmpty()) {
+            return "(none)";
+        }
+        int len = key.length();
+        String last4 = len >= 4 ? key.substring(len - 4) : key;
+        return "****..." + last4 + "(len=" + len + ")";
     }
 }
