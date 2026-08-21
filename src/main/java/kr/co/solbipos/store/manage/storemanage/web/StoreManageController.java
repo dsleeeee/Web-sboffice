@@ -113,6 +113,8 @@ public class StoreManageController {
             model.addAttribute("erpLinkHq", CmmUtil.nvl(service.getErpLinkHq(storeManageVO, sessionInfoVO), ""));
             // 브랜드사용여부
             model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+            // 매장복사필수여부 [0:미사용(기본) / 1:사용]
+            model.addAttribute("hqEnvst1262", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1262"), "0"));
             // 사용자별 브랜드 콤보박스 조회
             DayProdVO dayProdVO = new DayProdVO();
             model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));

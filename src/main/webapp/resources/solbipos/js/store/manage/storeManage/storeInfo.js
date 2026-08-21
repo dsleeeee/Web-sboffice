@@ -1432,6 +1432,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           }
 
           $("#envst1262").val(hqScope.getHq().envst1262);
+          // [1262] 값에 따라 복사항목 체크 초기화 (관리자 : 본사 선택 후)
+          $scope.setCopyChkByEnvst1262();
 
         }
       });
@@ -1440,6 +1442,18 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       hqScope.setHq("");
     });
     event.preventDefault();
+  };
+
+  /** [1262] 매장복사필수여부에 따라 본사 확정 시점에 복사항목 체크 초기화
+   *  - 사용(1) : 복사 가능한 항목 전체 체크 (기본값 제공, 이후 사용자 개별 해제 가능)
+   *  - 미사용(0) : 전체 체크 해제 (본사 변경 등으로 남은 체크 초기화)
+   *  ※ 복사원본 매장 변경 시에는 호출하지 않으므로 사용자 조정은 보존됨 **/
+  $scope.setCopyChkByEnvst1262 = function(){
+    if($("#envst1262").val() === "1"){
+      $("input[name=copyChk]").not(":disabled").prop("checked", true);
+    } else {
+      $("input[name=copyChk]").prop("checked", false);
+    }
   };
 
   /** 매장환경복사 체크 disabled **/
@@ -1877,6 +1891,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     }else{
       $("#addr").attr("readonly", true);
     }
+
+    // [1262] 매장복사필수여부 (본사 로그인 등록 경로에서도 저장 차단이 동작하도록 세팅)
+    $("#envst1262").val(hqEnvst1262);
+    // [1262] 값에 따라 복사항목 체크 초기화 (본사 로그인 : 화면 진입 시)
+    $scope.setCopyChkByEnvst1262();
 
     // [1250 맘스터치]
     $("#hdMomsEnvstVal").val(momsEnvstVal);

@@ -6470,4 +6470,91 @@
         AND     B.MAPPING_STRING IS NULL
     </select>
 
+    <!-- 키오스크 테마설정 - 컬러테마(envst 1357) 저장 (본사 H / 매장 S 분기) -->
+    <insert id="saveKioskTheme" parameterType="kioskKeyMapVO">
+        /* KioskKeyMap.saveKioskTheme */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_ENVST
+                USING DUAL
+                ON  (
+                            HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND ENVST_CD     = '1357'
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                        ENVST_VAL   = #{envstVal}
+                ,       MOD_DT      = #{modDt}
+                ,       MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        HQ_OFFICE_CD
+                ,       ENVST_CD
+                ,       ENVST_VAL
+                ,       DIRCT_IN_YN
+                ,       USE_YN
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                )
+                VALUES
+                (
+                        #{hqOfficeCd}
+                ,       '1357'
+                ,       #{envstVal}
+                ,       'N'
+                ,       'Y'
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_STORE_ENVST
+                USING DUAL
+                ON  (
+                            STORE_CD    = #{storeCd}
+                        AND ENVST_CD    = '1357'
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                        ENVST_VAL   = #{envstVal}
+                ,       MOD_DT      = #{modDt}
+                ,       MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        STORE_CD
+                ,       ENVST_CD
+                ,       ENVST_VAL
+                ,       DIRCT_IN_YN
+                ,       USE_YN
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                )
+                VALUES
+                (
+                        #{storeCd}
+                ,       '1357'
+                ,       #{envstVal}
+                ,       'N'
+                ,       'Y'
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
 </mapper>

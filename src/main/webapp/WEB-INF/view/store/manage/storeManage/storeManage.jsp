@@ -231,6 +231,8 @@
   var momsEnvstVal = "${momsEnvstVal}"; // [1250 맘스터치] 환경설정값
   // 브랜드 사용여부
   var brandUseFg = "${brandUseFg}";
+  // 매장복사필수여부 [0:미사용(기본) / 1:사용]
+  var hqEnvst1262 = "${hqEnvst1262}";
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
   // KOCES 총판 및 하위 대리점 코드

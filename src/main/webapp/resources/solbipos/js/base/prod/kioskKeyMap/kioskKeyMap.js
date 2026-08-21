@@ -8,15 +8,18 @@ app.controller('kioskKeyMapManageCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#kioskKeyMapRegistView").show();
         $("#kioskKeyMapCopyView").hide();
+        $("#kioskThemeView").hide();
     };
 
     // 키오스크키맵등록 탭 보이기
     $scope.kioskKeyMapRegistShow = function () {
         $("#kioskKeyMapRegistTab").addClass("on");
         $("#kioskKeyMapCopyTab").removeClass("on");
+        $("#kioskThemeTab").removeClass("on");
 
         $("#kioskKeyMapRegistView").show();
         $("#kioskKeyMapCopyView").hide();
+        $("#kioskThemeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("kioskKeyMapRegistCtrl");
@@ -27,9 +30,11 @@ app.controller('kioskKeyMapManageCtrl', ['$scope', function ($scope) {
     $scope.kioskKeyMapCopyShow = function () {
         $("#kioskKeyMapRegistTab").removeClass("on");
         $("#kioskKeyMapCopyTab").addClass("on");
+        $("#kioskThemeTab").removeClass("on");
 
         $("#kioskKeyMapRegistView").hide();
         $("#kioskKeyMapCopyView").show();
+        $("#kioskThemeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("kioskKeyMapCopyCtrl");
@@ -37,5 +42,16 @@ app.controller('kioskKeyMapManageCtrl', ['$scope', function ($scope) {
 
         var scope2 = agrid.getScope("kioskKeyMapCopy2Ctrl");
         scope2.flex.refresh();
+    };
+
+    // 키오스크테마설정 탭 보이기
+    $scope.kioskThemeShow = function () {
+        $("#kioskKeyMapRegistTab").removeClass("on");
+        $("#kioskKeyMapCopyTab").removeClass("on");
+        $("#kioskThemeTab").addClass("on");
+
+        $("#kioskKeyMapRegistView").hide();
+        $("#kioskKeyMapCopyView").hide();
+        $("#kioskThemeView").show();
     };
 }]);
