@@ -1324,8 +1324,8 @@
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.STORE_NM
+                ORDER BY SUM(tsdt.REAL_SALE_AMT) DESC
             )
-            ORDER BY REAL_SALE_AMT DESC
         )
         WHERE 1=1
         <![CDATA[
@@ -1359,8 +1359,8 @@
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.STORE_NM
+                ORDER BY SUM(tsdt.REAL_SALE_AMT) DESC
             )
-            ORDER BY REAL_SALE_AMT DESC
         )
         WHERE 1=1
         <![CDATA[
@@ -1394,8 +1394,8 @@
                 AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
                 AND tms.STORE_CD = tsdt.STORE_CD
                 GROUP BY tms.STORE_NM
+                ORDER BY SUM(tsdt.REAL_SALE_AMT) DESC
             )
-            ORDER BY REAL_SALE_AMT DESC
         )
         WHERE 1=1
         <![CDATA[
