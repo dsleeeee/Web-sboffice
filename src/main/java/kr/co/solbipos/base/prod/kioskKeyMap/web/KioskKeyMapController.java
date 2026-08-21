@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -318,6 +319,27 @@ public class KioskKeyMapController {
             model.addAttribute("salePriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0045") , "1"));
             model.addAttribute("coercionFg", "0");
         }
+
+        // 키오스크컬러테마
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("kioskThemeVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1357"), "LYNK1"));
+        } else {
+            model.addAttribute("kioskThemeVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1357"), "LYNK1"));
+        }
+
+        // 키오스크테마설정 탭 노출여부 : 포스프로그램구분(1014) == '2' 이고, 제외 본사가 아닌 경우
+        // (본사 로그인 : HQ envst / 매장 로그인 : STORE envst)
+        String posPgmFg = (sessionInfoVO.getOrgnFg() == OrgnFg.HQ)
+                ? CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1014"), "")
+                : CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1014"), "");
+        List<String> kioskThemeExceptHqList = Arrays.asList(
+                "H0393", "H0514", "H0614", "H0616", "A0001", "DS079", "H0665", "H0345", "H0168", "H0268");
+        boolean kioskThemeUseFg = sessionInfoVO.getOrgnFg() == OrgnFg.STORE   // 매장 화면만 노출
+                && "2".equals(posPgmFg)
+                && !kioskThemeExceptHqList.contains(CmmUtil.nvl(sessionInfoVO.getHqOfficeCd(), ""));
+        model.addAttribute("kioskThemeUseFg", kioskThemeUseFg);
+
+
         model.addAttribute("pageFg","0");
 
         return "base/prod/kioskKeyMap/kioskKeyMap";
@@ -1644,5 +1666,26 @@ public class KioskKeyMapController {
         List<DefaultMap<String>> list = kioskKeyMapService.getChkProdMappingFg(kioskKeyMapVOs, sessionInfoVO);
 
         return returnJson(Status.OK, list);
+    }
+
+    /**
+     * 키오스크 테마설정 - 컬러테마(envst 1357) 저장
+     *
+     * @param   kioskKeyMapVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveKioskTheme.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskTheme(@RequestBody KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveKioskTheme(kioskKeyMapVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

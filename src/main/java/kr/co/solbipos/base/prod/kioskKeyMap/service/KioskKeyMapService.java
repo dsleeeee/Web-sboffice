@@ -133,4 +133,7 @@ public interface KioskKeyMapService {
 
     /** 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크 */
     List<DefaultMap<String>> getChkProdMappingFg(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 테마설정 - 컬러테마(envst 1357) 저장 */
+    int saveKioskTheme(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 }

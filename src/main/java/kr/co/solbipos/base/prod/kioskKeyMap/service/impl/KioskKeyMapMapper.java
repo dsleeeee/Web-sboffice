@@ -308,4 +308,7 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크키맵 - 아티제 LYNK상품 매핑여부 체크 */
     List<DefaultMap<String>> getChkProdMappingFg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 테마설정 - 컬러테마(envst 1357) 저장 (본사/매장 분기는 XML) */
+    int saveKioskTheme(KioskKeyMapVO kioskKeyMapVO);
 }

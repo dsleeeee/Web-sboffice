@@ -13,6 +13,12 @@
             <li>
                 <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
             </li>
+            <%-- 키오스크테마설정 탭 (포스프로그램구분 1014=2, 제외본사 아닌 경우만 노출) --%>
+            <c:if test="${kioskThemeUseFg}">
+            <li>
+                <a id="kioskThemeTab" href="#" ng-click="kioskThemeShow()"><s:message code="kioskKeyMap.kioskTheme"/></a>
+            </li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -41,6 +47,9 @@
     var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
     var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
+    // 저장된 컬러테마 값 (초기 선택값 : "1"~"4")
+    var kioskThemeComboList = ${cnv.getEnvCodeExcpAll("1357")};
+    var kioskThemeVal = "${kioskThemeVal}";
 
     // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
     var referrer = document.referrer;
@@ -61,7 +70,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20230406.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20260821.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크키맵등록 레이어 --%>
@@ -72,6 +81,12 @@
 
 <%-- 키오스크키맵복사 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapCopy.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 키오스크테마설정 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskTheme.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

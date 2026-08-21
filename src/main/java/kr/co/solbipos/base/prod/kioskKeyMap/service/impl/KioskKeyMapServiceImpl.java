@@ -1504,4 +1504,22 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         return kioskKeyMapMapper.getChkProdMappingFg(chkKioskKeyMapVO);
     }
+
+    /** 키오스크 테마설정 - 컬러테마(envst 1357) 저장 */
+    @Override
+    public int saveKioskTheme(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        // 본사(H) : TB_HQ_ENVST(HQ_OFFICE_CD) / 매장(S) : TB_MS_STORE_ENVST(STORE_CD) - 분기는 매퍼 XML에서 처리
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        kioskKeyMapVO.setRegDt(currentDt);
+        kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+        kioskKeyMapVO.setModDt(currentDt);
+        kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+        return kioskKeyMapMapper.saveKioskTheme(kioskKeyMapVO);
+    }
 }
