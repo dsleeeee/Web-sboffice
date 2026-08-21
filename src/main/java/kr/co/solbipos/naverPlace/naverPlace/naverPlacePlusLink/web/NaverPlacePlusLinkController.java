@@ -205,14 +205,17 @@ public class NaverPlacePlusLinkController {
         naverPlacePlusApiVO.setCode(request.getParameter("code"));
         naverPlacePlusApiVO.setState(request.getParameter("state"));
 
-        String uniqueId = naverPlacePlusLinkService.saveNaverUniqueId(naverPlacePlusApiVO);
+        DefaultMap<Object> result = naverPlacePlusLinkService.saveNaverUniqueId(naverPlacePlusApiVO);
 
         // 네.아.로 Unique ID
-        model.addAttribute("uniqueId", uniqueId);
+        model.addAttribute("uniqueId", result.getStr("uniqueId"));
 
         // 연동 단계 파악을 위한 화면 정보 셋팅
         model.addAttribute("prePage", "login");
-        return "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
+
+        // 페이지 이동
+        String callbackPage = result.getStr("callbackPage");
+        return (callbackPage != null && !callbackPage.isEmpty()) ? callbackPage : "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
     }
 
     /**

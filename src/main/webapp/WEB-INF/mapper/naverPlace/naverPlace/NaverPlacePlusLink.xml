@@ -25,6 +25,7 @@
         ,   STORE_CD
         ,   USER_ID
         ,   STATE
+        ,   CALLBACK_PAGE
         ,   REG_DT
         ,   REG_ID
         )
@@ -34,6 +35,7 @@
         ,   #{storeCd}
         ,   #{userId}
         ,   #{state}
+        ,   #{callbackPage}
         ,   #{regDt}
         ,   #{regId}
         )
@@ -51,6 +53,7 @@
         ,       STORE_CD
         ,       USER_ID
         ,       STATE
+        ,       CALLBACK_PAGE
         FROM    TB_TMP_NAVER_STATE
         WHERE   STATE = #{state}
     </select>

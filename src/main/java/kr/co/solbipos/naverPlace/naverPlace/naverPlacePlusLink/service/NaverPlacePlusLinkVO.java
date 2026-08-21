@@ -55,6 +55,8 @@ public class NaverPlacePlusLinkVO extends PageVO {
     private String etc10;
     /** 네이버로그인후 기존세션 확인을 위한 임의값 */
     private String state;
+    /** 네이버로그인후 네아로 저장 후 이동 화면 */
+    private String callbackPage;
     /** 사용자아이디 */
     private String userId;
     /** 네이버 매장명 */
@@ -200,6 +202,14 @@ public class NaverPlacePlusLinkVO extends PageVO {
 
     public void setEtc10(String etc10) {
         this.etc10 = etc10;
+    }
+
+    public String getCallbackPage() {
+        return callbackPage;
+    }
+
+    public void setCallbackPage(String callbackPage) {
+        this.callbackPage = callbackPage;
     }
 
     public String getState() {

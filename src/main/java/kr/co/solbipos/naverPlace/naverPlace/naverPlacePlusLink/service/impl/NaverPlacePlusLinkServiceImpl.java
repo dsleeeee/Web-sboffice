@@ -196,7 +196,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
      * @return
      */
     @Override
-    public String saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO) {
+    public DefaultMap<Object> saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO) {
 
         // 1. [네이버 회원 프로필 조회 API] 사용을 위한 Access Token 조회
         String accessToken = "";
@@ -236,7 +236,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         }
 
         // 2. [네이버 회원 프로필 조회 API] 조회(회원 프로필에 Unique ID 있음)
-        String uniqueId = "";
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
         apiUrl = "https://openapi.naver.com/v1/nid/me";
         String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
 
@@ -264,21 +264,24 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
                 naverPlacePlusLinkVO.setStoreCd(result.getStr("storeCd"));
                 naverPlacePlusLinkVO.setUniqueId(jsonNode.get("response").get("id").asText());
                 naverPlacePlusLinkVO.setLastResponseDt(dt);
-                naverPlacePlusLinkVO.setMpNo(jsonNode.get("response").get("mobile").asText());
+                //naverPlacePlusLinkVO.setMpNo(jsonNode.get("response").get("mobile").asText());
                 naverPlacePlusLinkVO.setRegDt(dt);
                 naverPlacePlusLinkVO.setRegId(result.getStr("userId"));
                 naverPlacePlusLinkVO.setModDt(dt);
                 naverPlacePlusLinkVO.setModId(result.getStr("userId"));
 
                 naverPlacePlusLinkMapper.saveNaverUniqueId(naverPlacePlusLinkVO);
-                uniqueId = naverPlacePlusLinkVO.getUniqueId();
+
+                // return data setting
+                resultMap.put("uniqueId", naverPlacePlusLinkVO.getUniqueId());
+                resultMap.put("callbackPage", result.getStr("callbackPage"));
             }
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return uniqueId;
+        return resultMap;
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders) {

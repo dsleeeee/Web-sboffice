@@ -89,6 +89,16 @@ app.controller('naverPlaceStatusResetCtrl', ['$scope', '$http', function ($scope
                     }, 1000);
                 }
 
+                // 3) 네이버 주문연동
+                if ($scope.selectedStore.resrceCd === "006985") {
+
+                    setTimeout(function() {
+                        // 부모창 재조회
+                        const bc = new BroadcastChannel('refresh_channel');
+                        bc.postMessage('refresh');
+                    }, 1000);
+                }
+
                 // 팝업 닫기
                 $scope.wjNaverPlaceStatusResetLayer.hide(true);
             });

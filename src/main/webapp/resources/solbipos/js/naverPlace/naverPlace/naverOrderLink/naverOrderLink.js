@@ -1,42 +1,36 @@
 /****************************************************************
  *
- * 파일명 : naverPlacePlusLink.js
- * 설  명 : 네이버플레이스 > 네이버플레이스 > 네이버플레이스 플러스 연동 JavaScript
+ * 파일명 : naverOrderLink.js
+ * 설  명 : 네이버플레이스 > 네이버플레이스 > 네이버 주문연동 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2026.02.23     이다솜      1.0
+ * 2026.08.13     이다솜      1.0
  *
  * **************************************************************/
 
-/**
- * get application
- */
 var app = agrid.getApp();
 
-/** 네이버플레이스 연동 controller */
-app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('naverOrderLinkCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('naverPlacePlusLinkCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('naverOrderLinkCtrl', $scope, $http, false));
 
-    $scope.$on("naverPlacePlusLinkCtrl", function (event, data) {
+    $scope.$on("naverOrderLinkCtrl", function (event, data) {
 
     });
 
-    // 네이버 스마트 플레이스 연동 버튼 클릭
-    $scope.btn1 = function () {
+    // 네이버 주문연동 버튼 클릭
+    $scope.btnLink = function () {
 
         var params = {};
 
-        // 다시 한번 상태 체크
-        $scope._postJSONQuery.withOutPopUp('/naverPlace/naverPlace/naverPlacePlusLink/getStatus.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp('/naverPlace/naverPlace/naverOrderLink/getStatus.sb', params, function (response) {
 
             // 네.아.로 uniqueId
             uniqueId = response.data.data.uniqueId;
             // 약관동의 여부
             agreeYn = JSON.parse(response.data.data.agreeYn);
-            // 네이버 플레이스 연동여부
+            // 네이버 주문연동 여부
             linkYn = JSON.parse(response.data.data.linkYn);
             // 연동 단계
             linkStep = 0;
@@ -44,8 +38,8 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
             // 연동 단계 파악
             // 0 : 네.아.로 로그인 미완료
             // 1 : 네.아.로 로그인 완료, 동의 미완료
-            // 2 : 동의 완료, 매장연동 미완료
-            // 3 : 매장연동 완료
+            // 2 : 동의 완료, 주문연동 미완료
+            // 3 : 주문연동 완료
             if (uniqueId != "" && uniqueId != null) {
                 linkStep = 1;
 
@@ -68,7 +62,7 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
                             linkStep = 2;
 
                             if (linkYn != null && linkYn != undefined) {
-                                if (linkYn.placeId != null && linkYn.placeId != undefined && linkYn.placeId != "") {
+                                if (linkYn.status === 200 && linkYn.data) {
                                     linkStep = 3;
                                 }
                             }
@@ -77,7 +71,7 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
                 }
             }
 
-            console.log("연동단계2 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 매장연동 :" + linkYn.placeId);
+            console.log("연동단계2 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 주문연동 :" + linkYn.placeId);
 
             setTimeout(function() {
 
@@ -90,7 +84,7 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
                     // state값 DB 저장
                     var params = {};
                     params.state = state;
-                    params.callbackPage = "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
+                    params.callbackPage = "naverPlace/naverPlace/naverOrderLink/popup/naverOrderPop";
 
                     $scope._postJSONSave.withOutPopUp("/naverPlace/naverPlace/naverPlacePlusLink/saveNaverState.sb", params, function (response) {
 
@@ -111,68 +105,86 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
 
                 // 네.아.로 로그인 완료, 동의 미완료
                 if(linkStep === 1){
-                    //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-                    var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
+                    //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverOrderLink/naverOrderPop.sb");
+                    var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverOrderLink/naverOrderPop.sb");
                     var popupUrl = popUrl + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
                     var popup = window.open(popupUrl, "popup", "width=750, height=1000");
                 }
 
-                // 동의 완료, 매장연동 미완료 시
-                if(linkStep === 2){
+                // 동의 완료, 주문연동 미완료 시
+                /*if(linkStep === 2){
                     if(uniqueId != ""){
-                        var popup = window.open("/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId, "popup", "width=750, height=1000");
+                        $("#divView1").css("display", "none");
+                        $("#divView2").css("display", "");
+                        $("#divView3").css("display", "none");
+
                     }else{
                         $scope._popMsg("연동 불가");
                     }
-                }
+                }*/
 
             }, 1000);
 
         });
     };
 
-    // 연동 해지
-    $scope.btn2 = function () {
+    // 수정
+    $scope.btnEdit = function () {
 
-        // 연동을 해지하시겠습니까?
-        $scope._popConfirm(messages["naverPlacePlusLink.withdraw.confirm"], function () {
+        var params = {};
+        params.boardCd = "01";
+        params.boardSeqNo = 11;
+        params.userId = "PASS"; // 읽기만가능(PASS 명칭 의미없음)
 
-            // 연동 해지 API 호출
+        $scope.wjNaverOrderInfoLayer.show(true);
+        $scope._broadcast('naverOrderInfoCtrl', params);
+        //$scope.wjNaverOrderTypeLayer.show(true);
+        //$scope._broadcast('naverOrderTypeCtrl', params);
+        event.preventDefault();
+    };
+
+    // 연동해지
+    $scope.btnWithdraw = function () {
+
+        $scope._popConfirm(messages["naverOrderLink.withdraw.confirm"], function () {
+
             var params = {};
             params.placeId = $("#txtPlaceId").val();
-            $scope._postJSONQuery.withOutPopUp("/naverPlace/naverPlace/naverPlacePlusLink/unMappingPlace.sb", params, function (response) {
+            $scope._postJSONQuery.withOutPopUp("/naverPlace/naverPlace/naverOrderLink/unMappingPlace.sb", params, function (response) {
                 var data = response.data.data.list;
-                if (JSON.stringify(data) === "{}") { // 정상인 경우, 빈값 return
-                    // 재조회
+                if (JSON.stringify(data) === "{}") {
                     location.reload();
                 } else {
-                    // 연동 해지 도중 문제가 발생하였습니다.
-                    $scope._popMsg( messages["naverPlacePlusLink.withdraw.error"] + "</br>JSON.stringify(data)");
+                    $scope._popMsg(messages["naverOrderLink.withdraw.error"] + "<br/>" + JSON.stringify(data));
                 }
             });
         });
     };
 
-    // 로그아웃
-    $scope.btn3 = function () {
+    // 로그아웃 (초기화)
+    $scope.btnLogout = function () {
 
         var params = {};
         params.hqOfficeCd = hqOfficeCd;
         params.storeCd = storeCd;
         params.resrceCd = menuCd;
-        params.pathNm = "네이버플레이스-네이버플레이스-네이버플레이스 플러스 연동-초기화 팝업";
+        params.pathNm = "네이버플레이스-네이버플레이스-네이버 주문연동-초기화 팝업";
 
-        // 초기화 팝업
         $scope.wjNaverPlaceStatusResetLayer.show(true);
         $scope._broadcast('naverPlaceStatusResetCtrl', params);
 
-        // 사용자 행위 기록
         var actParams = {};
         actParams.resrceCd = menuCd;
-        actParams.pathNm = "네이버플레이스-네이버플레이스-네이버플레이스 플러스 연동";
+        actParams.pathNm = "네이버플레이스-네이버플레이스-네이버 주문연동";
         actParams.contents = "'로그아웃' 버튼 클릭 시";
 
-        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
-    }
-    
+        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function (response) {
+        });
+    };
+
 }]);
+
+// 연동하기
+function btnLinkStore(channelShopId) {
+    alert(channelShopId);
+}

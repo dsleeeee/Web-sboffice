@@ -255,7 +255,7 @@ public class NaverPlaceLinkServiceImpl implements NaverPlaceLinkService {
                 naverPlaceLinkVO.setStoreCd(result.getStr("storeCd"));
                 naverPlaceLinkVO.setUniqueId(jsonNode.get("response").get("id").asText());
                 naverPlaceLinkVO.setLastResponseDt(dt);
-                naverPlaceLinkVO.setMpNo(jsonNode.get("response").get("mobile").asText());
+                //naverPlaceLinkVO.setMpNo(jsonNode.get("response").get("mobile").asText());
                 naverPlaceLinkVO.setRegDt(dt);
                 naverPlaceLinkVO.setRegId(result.getStr("userId"));
                 naverPlaceLinkVO.setModDt(dt);

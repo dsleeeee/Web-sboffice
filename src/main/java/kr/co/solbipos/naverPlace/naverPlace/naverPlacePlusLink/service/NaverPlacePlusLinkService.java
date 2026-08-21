@@ -52,7 +52,7 @@ public interface NaverPlacePlusLinkService {
      * @param naverPlacePlusApiVO
      * @return
      */
-    String saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO);
+    DefaultMap<Object> saveNaverUniqueId(NaverPlacePlusApiVO naverPlacePlusApiVO);
 
     /**
      * 네이버 플레이스 연동매장 조회

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NaverOrderLink.xml
+    [네이버플레이스] - [네이버플레이스] - [네이버 주문연동] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.08.13
+-->
+<mapper namespace="kr.co.solbipos.naverPlace.naverPlace.naverOrderLink.service.impl.NaverOrderLinkMapper">
+
+    <!-- 개발/운영 Api URL 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 개발/운영 Api URL을 조회한다.
+    -->
+    <select id="getApiUrl" parameterType="naverOrderLinkVO" resultType="DefaultMap">
+        /* USE : NaverOrderLinkMapper.getApiUrl */
+        SELECT  FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiUrl}) AS ${apiUrl}
+        ,       FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiKey}) AS ${apiKey}
+        FROM    DUAL
+    </select>
+
+    <!-- 네.아.로 Unique ID 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 네.아.로 Unique ID를 조회한다.
+    -->
+    <select id="getNaverUniqueId" parameterType="naverOrderLinkVO" resultType="String">
+         /* NaverOrderLinkMapper.getNaverUniqueId */
+        SELECT  UNIQUE_ID
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD     = #{storeCd}
+    </select>
+
+    <!-- 네이버 동의여부 저장 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK_AGREEMENT
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 네이버 동의여부를 저장한다.
+    -->
+    <update id="saveNaverAgreement" parameterType="naverOrderLinkVO">
+        /* NaverOrderLinkMapper.saveNaverAgreement */
+        MERGE INTO TB_CM_NAVER_LINK_AGREEMENT A
+        USING DUAL
+        ON (
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.STORE_CD     = #{storeCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+           SET A.UNIQUE_ID         = #{uniqueId}
+        ,      A.LAST_RESPONSE_DT  = #{lastResponseDt}
+        ,      A.AGREEMENT_TYPE    = #{agreementType}
+        ,      A.MOD_DT            = #{modDt}
+        ,      A.MOD_ID            = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT (
+            A.HQ_OFFICE_CD
+        ,   A.STORE_CD
+        ,   A.UNIQUE_ID
+        ,   A.LAST_RESPONSE_DT
+        ,   A.AGREEMENT_TYPE
+        ,   A.REG_DT
+        ,   A.REG_ID
+        ,   A.MOD_DT
+        ,   A.MOD_ID
+        )
+        VALUES (
+            #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{uniqueId}
+        ,   #{lastResponseDt}
+        ,   #{agreementType}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </update>
+
+</mapper>

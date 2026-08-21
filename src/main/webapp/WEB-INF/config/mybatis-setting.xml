@@ -1457,6 +1457,11 @@
     <!-- 네이버플레이스 > 네이버플레이스 > 네이버플레이스 플러스 연동 -->
     <typeAlias alias="naverPlacePlusLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusLinkVO"/>
     <typeAlias alias="naverPlacePlusApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO"/>
+    <!-- 네이버플레이스 > 네이버플레이스 > 네이버 주문연동 -->
+    <typeAlias alias="naverOrderLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverOrderLink.service.NaverOrderLinkVO"/>
+    <typeAlias alias="naverOrderApiVO" type="kr.co.solbipos.naverPlace.naverPlace.naverOrderLink.service.NaverOrderApiVO"/>
+    <!-- 네이버플레이스 > 네이버플레이스 > 네이버 메뉴 관리 -->
+    <typeAlias alias="naverMenuLinkVO" type="kr.co.solbipos.naverPlace.naverPlace.naverMenuLink.service.NaverMenuLinkVO"/>
 
     <!-- 벤슨 > 매출분석 > 상품 ABC분석 -->
     <typeAlias alias="abcBensonVO" type="kr.co.solbipos.sale.anals.abcBenson.service.AbcBensonVO"/>
