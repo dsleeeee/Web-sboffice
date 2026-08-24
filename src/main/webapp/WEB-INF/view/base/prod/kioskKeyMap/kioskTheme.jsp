@@ -51,25 +51,30 @@
                 <%-- 컬러테마 --%>
                 <th><s:message code="kioskKeyMap.colorTheme"/></th>
                 <td>
-                    <div class="sb-select" style="width:200px; float:left;">
-                        <wj-combo-box
-                                id="colorTheme"
-                                ng-model="colorTheme"
-                                items-source="themeComboList"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="colorThemeCombo"
-                                selected-index-changed="changeTheme(s)">
-                        </wj-combo-box>
+                    <div style="display:flex; align-items:center;">
+                        <div class="sb-select" style="width:200px;">
+                            <wj-combo-box
+                                    id="colorTheme"
+                                    ng-model="colorTheme"
+                                    items-source="themeComboList"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="colorThemeCombo"
+                                    selected-index-changed="changeTheme(s)">
+                            </wj-combo-box>
+                        </div>
+                        <%-- 컬러 예시 (선택 테마 대표색) --%>
+                        <span id="colorThemeSwatch" style="width:16px; height:16px; margin-left:10px; border:1px solid #ccc; border-radius:3px; flex-shrink:0;"></span>
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
 
-        <%-- 프리뷰 화면 --%>
-        <div id="kioskThemePreview" class="mt20">
+        <%-- 프리뷰 화면(왼쪽) + 안내문구(오른쪽) --%>
+        <div class="mt20" style="display:flex; align-items:flex-start; gap:30px;">
+        <div id="kioskThemePreview">
             <div id="viewport">
 
                 <%-- ① 인트로 --%>
@@ -282,12 +287,13 @@
                 <button id="nextBtn">→</button>
             </div>
             <p id="stepLabel"></p>
+        </div>
 
-            <%-- 안내 문구 --%>
-            <div class="mt10" style="font-size:12px; line-height:1.6;">
-                <p style="margin:0; color:#212121;"><span style="color:#e0392b;">❗</span>컬러를 변경하면 미리보기 색상이 바뀌며, 하단 화살표 버튼으로 화면을 확인 할 수 있습니다.</p>
-                <p style="margin:8px 0 0; color:#212121;">저장한 컬러는 기본 모드 키오스크에만 적용되며, 마스터수신 후 반영됩니다.</p>
-            </div>
+        <%-- 안내 문구 (프리뷰 오른쪽) --%>
+        <div style="flex:1; font-size:12px; line-height:1.6; padding-top:8px;">
+            <p style="margin:0; color:#212121;"><span style="color:#e0392b;">❗</span>컬러를 변경하면 미리보기 색상이 바뀌며, 하단 화살표 버튼으로 화면을 확인 할 수 있습니다.</p>
+            <p style="margin:8px 0 0; color:#212121;">저장한 컬러는 기본 모드 키오스크에만 적용되며, 마스터수신 후 반영됩니다.</p>
+        </div>
         </div>
     </div>
 </div>
@@ -297,4 +303,4 @@
     var kioskThemeImgBase = "${imgBase}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskTheme.js?ver=20260821.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskTheme.js?ver=20260824.01" charset="utf-8"></script>

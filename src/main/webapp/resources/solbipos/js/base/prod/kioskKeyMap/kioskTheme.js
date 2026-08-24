@@ -15,17 +15,25 @@ app.controller('kioskThemeCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 선택된 컬러테마 (서버 저장값 kioskThemeVal, 없으면 기본 LYNK1 블루)
     $scope.colorTheme = (typeof kioskThemeVal !== "undefined" && kioskThemeVal) ? String(kioskThemeVal) : "LYNK1";
 
+    // 컬러 예시 사각형 색상 세팅 (선택 테마 대표색)
+    $scope.setColorSwatch = function (n) {
+        $("#colorThemeSwatch").css("background-color", kioskThemePreview.getPrimary(n));
+    };
+
     $scope.init = function () {
         // 프리뷰 데이터 렌더링
         kioskThemePreview.render();
         // 기본 테마 적용
         kioskThemePreview.applyPreset($scope.colorTheme);
+        // 컬러 예시 사각형
+        $scope.setColorSwatch($scope.colorTheme);
     };
 
     // 컬러테마 변경 시 프리뷰에 즉시 반영
     $scope.changeTheme = function (s) {
         if (s && s.selectedValue) {
             kioskThemePreview.applyPreset(s.selectedValue);
+            $scope.setColorSwatch(s.selectedValue);
         }
     };
 
@@ -246,6 +254,8 @@ var kioskThemePreview = (function () {
             renderOrder();
             initNav();
         },
-        applyPreset: applyPreset
+        applyPreset: applyPreset,
+        // 테마 대표색(primary) 반환 (컬러 예시 사각형용)
+        getPrimary: function (n) { return (presets[n] || presets["LYNK1"]).primary; }
     };
 })();
