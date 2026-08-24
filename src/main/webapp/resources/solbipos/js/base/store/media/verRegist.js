@@ -80,12 +80,12 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 파일업로드시 파일사이즈 변경
   $scope.uploadChange = function(){
     $scope.$apply(function() {
-      // 기본 20MB 제한. 단 DS079 본사의 파일타입(013)은 클라이언트 용량 제한 없음(서버 상한만 적용)
-      var maxSize = 20 * 1024 * 1024;
-      var noLimit = (hqOfficeCd === "DS079" && $scope.versionFileTypeCombo.selectedValue === "013");
+      // 기본 20MB 제한. 단 DS079 본사의 파일타입(013 키오스크 인트로중간광고)은 600MB 까지 허용
+      var maxSize = (hqOfficeCd === "DS079" && $scope.versionFileTypeCombo.selectedValue === "013")
+                    ? 600 * 1024 * 1024 : 20 * 1024 * 1024;
       var fileSize = document.getElementById("file").files[0].size;
 
-      if(!noLimit && fileSize > maxSize) {
+      if(fileSize > maxSize) {
         alert("첨부파일 사이즈는 " + (maxSize / 1024 / 1024) + "MB 이내로 등록 가능합니다.");
 
         // 첨부파일 리셋
@@ -184,9 +184,9 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    // 파일타입 변경 등으로 제한이 달라질 수 있어 저장 직전 용량 재확인 (DS079+013만 제한 없음, 그 외 20MB)
+    // 파일타입 변경 등으로 제한이 달라질 수 있어 저장 직전 용량 재확인 (DS079+013만 600MB, 그 외 20MB)
     var saveMaxSize = (hqOfficeCd === "DS079" && $scope.versionFileTypeCombo.selectedValue === "013")
-                      ? Infinity : 20 * 1024 * 1024;
+                      ? 600 * 1024 * 1024 : 20 * 1024 * 1024;
     var saveFileSize = 0;
     var fileEl = document.getElementById("file");
     if (fileEl && fileEl.files && fileEl.files.length > 0) {
