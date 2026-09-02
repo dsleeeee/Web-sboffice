@@ -95,7 +95,7 @@
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20241029.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20260902.01" charset="utf-8"></script>
 
 <%-- 매장선택 --%>
 <c:import url="/WEB-INF/view/pos/confg/func/store.jsp">

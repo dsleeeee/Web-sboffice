@@ -197,6 +197,9 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
             noRegScope._gridDataInit();
           });
 
+          // 선택한 기능키 정보 표시(기능적용매장 팝업)
+          $("#lblFnkeyInfo").text("[" + selectedRow.fnkeyNo + "] " + selectedRow.fnkeyNm);
+
           event.preventDefault();
         }
       }

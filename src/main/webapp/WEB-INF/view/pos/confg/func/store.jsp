@@ -64,6 +64,14 @@
         <div class="mt10 tr">
           <button class="btn_skyblue" id="btnStoreSearch" onclick="search()"><s:message code="cmm.search" /></button>
         </div>
+        <%-- 선택한 기능키 정보 표시 --%>
+        <ul class="txtSty">
+          <li>
+            <p>
+              <span><label id="lblFnkeyInfo"></label></span>
+            </p>
+          </li>
+        </ul>
 
         <%-- 등록 매장 그리드 --%>
         <div class="oh mt40 w50 fl"  >

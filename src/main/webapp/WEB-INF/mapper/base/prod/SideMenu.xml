@@ -1340,6 +1340,7 @@
                         </foreach>
                     </if>
                 </if>
+                AND thp.PROD_TYPE_FG NOT IN ('3') -- 저울상품제외
                 ORDER BY
                     thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -1415,6 +1416,7 @@
                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
                     )
                 </if>
+                AND tmp.PROD_TYPE_FG NOT IN ('3') -- 저울상품제외
                 ORDER BY
                     tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
