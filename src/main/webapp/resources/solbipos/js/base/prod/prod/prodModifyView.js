@@ -1423,6 +1423,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages["prod.prodNmTextChk.msg"]); // 상품명에 큰따옴표(")를 입력할 수 없습니다.
             return false;
         }
+        // 바코드 숫자/영문만 입력 (화면 keyup 필터 우회 방지용 저장 전 재검증)
+        if(!isNull(vParams.barCd) && !/^[A-Za-z0-9]+$/.test(vParams.barCd)){
+            $scope._popMsg(messages["prod.barCdInChk"]); // 바코드 숫자/영문만 입력해주세요.
+            return false;
+        }
         // 판매단가
         if (isNull(vParams.saleUprc)) {
             $scope._popMsg(messages["prod.saleUprcChk.msg"]);

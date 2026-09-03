@@ -445,9 +445,9 @@
                         </th>
                         <td colspan="3">
                             <div id="divChkMinSaleAmt" style="display: none;">
-                                <div style="float: left;"><input type="text" class="sb-input w150px" id="minSaleAmt" ng-model="minSaleAmt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
+                                <div style="float: left;"><input type="text" class="sb-input w150px" id="minSaleAmt" ng-model="minSaleAmt" maxlength="9" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
                                 <div style="float: left; padding-top: 5px; padding-left:5px; padding-right:5px;"><label>~</label></div>
-                                <div style="float: left;"><input type="text" class="sb-input w150px" id="maxSaleAmt" ng-model="maxSaleAmt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
+                                <div style="float: left;"><input type="text" class="sb-input w150px" id="maxSaleAmt" ng-model="maxSaleAmt" maxlength="9" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
                             </div>
                         </td>
                     </tr>
