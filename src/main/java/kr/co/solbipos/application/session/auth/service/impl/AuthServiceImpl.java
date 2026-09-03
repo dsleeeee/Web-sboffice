@@ -5,7 +5,9 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
+import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
 import kr.co.solbipos.application.session.auth.enums.UserStatFg;
@@ -95,8 +97,25 @@ public class AuthServiceImpl implements AuthService {
 
     /** SMS 인증 DB 함수 호출 결과를 코드, 메시지, 발송 여부로 변환 */
     private SmsVfcResultVO callSmsVfcCode(String userId, String opFg1, String opFg2) {
+
+        // 접속 IP - DB 함수 4번째 인자(기존 미사용 opFg3 자리)로 전달한다.
+        // 웹 요청 컨텍스트가 없는 경우(배치 등)를 대비해 예외 시 빈값 처리.
+        String ip = "";
+        try {
+            ip = HttpUtils.getClientIp(WebUtil.getRequest());
+        } catch (Exception e) {
+            LOGGER.warn("SMS 인증 접속 IP 조회 실패. userId:{}, opFg1:{}", userId, opFg1);
+        }
+
         // DB 함수의 원본 반환값으로 "결과코드|메시지" 형식이다.
-        String value = authMapper.getSmsVfcCode(userId, opFg1, opFg2, "");
+        // (2026.09.02) DB 함수 오류가 로그인 전체 예외로 전파되지 않도록 실패 시 오류코드로 반환한다.
+        String value;
+        try {
+            value = authMapper.getSmsVfcCode(userId, opFg1, opFg2, ip);
+        } catch (Exception e) {
+            LOGGER.error("SMS 인증 DB 함수 호출 실패. userId:{}, opFg1:{}", userId, opFg1, e);
+            return new SmsVfcResultVO("99", "SMS 인증 처리 중 오류가 발생했습니다.");
+        }
         if (value == null) {
             return new SmsVfcResultVO("99", "SMS 인증 처리 중 오류가 발생했습니다.");
         }

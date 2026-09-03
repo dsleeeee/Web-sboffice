@@ -64,4 +64,13 @@ public interface SmsTelNoManageService {
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
     DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo);
 
+    /** 음성파일등록 - 목록 조회 */
+    List<DefaultMap<Object>> getVoiceFileList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 음성파일등록 - 파일 저장(multipart) */
+    int saveVoiceFile(org.springframework.web.multipart.MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
+
+    /** 음성파일등록 - 삭제 */
+    int delVoiceFile(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
 }

@@ -604,10 +604,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.srchMomsStoreManageTypeCombo.selectedValue = vMomsStoreManageType;
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
           $scope.srchMomsStoreFg01Combo.selectedValue = vMomsStoreFg01;
-          $scope.srchMomsStoreFg02Combo.selectedValue = vMomsStoreFg02;
-          $scope.srchMomsStoreFg03Combo.selectedValue = vMomsStoreFg03;
-          $scope.srchMomsStoreFg04Combo.selectedValue = vMomsStoreFg04;
-          $scope.srchMomsStoreFg05Combo.selectedValue = vMomsStoreFg05;
+          if($scope.srchMomsStoreFg02Combo) $scope.srchMomsStoreFg02Combo.selectedValue = vMomsStoreFg02;
+          if($scope.srchMomsStoreFg03Combo) $scope.srchMomsStoreFg03Combo.selectedValue = vMomsStoreFg03;
+          if($scope.srchMomsStoreFg04Combo) $scope.srchMomsStoreFg04Combo.selectedValue = vMomsStoreFg04;
+          if($scope.srchMomsStoreFg05Combo) $scope.srchMomsStoreFg05Combo.selectedValue = vMomsStoreFg05;
         } else if($("#envst1114").val() === "1") {
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
         }
@@ -658,13 +658,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       // 본사를 선택해주세요.
       var msg = messages["storeManage.hqOffice"] + messages["cmm.require.select"];
       if (isNull($scope.store.hqOfficeCd) || isNull($scope.store.hqOfficeNm) || isNull($scope.store.storeCdInputType)) {
-        $scope._popMsg(msg);
-        return false;
-      }
-
-      // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
-      var msg = messages["storeManage.1262.msg"];
-      if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
         $scope._popMsg(msg);
         return false;
       }
@@ -774,6 +767,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope._popMsg(msg);
           return false;
         }
+      }
+
+      // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
+      var msg = messages["storeManage.1262.msg"];
+      if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
+        $scope._popMsg(msg);
+        return false;
       }
 
     }
@@ -1391,10 +1391,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
             $scope.srchHqBrandCdCombo.selectedIndex = 0;
             $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
-            $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
-            $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
-            $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
-            $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
+            if($scope.srchMomsStoreFg02Combo) $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+            if($scope.srchMomsStoreFg03Combo) $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+            if($scope.srchMomsStoreFg04Combo) $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+            if($scope.srchMomsStoreFg05Combo) $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
             $("#divMrpizzaEnvst").css("display", "none");
           } else {
             if($("#envst1114").val() === "1") {
@@ -1926,10 +1926,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
       $scope.srchHqBrandCdCombo.selectedIndex = 0;
       $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
-      $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
-      $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
-      $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
-      $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
+      if($scope.srchMomsStoreFg02Combo) $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+      if($scope.srchMomsStoreFg03Combo) $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+      if($scope.srchMomsStoreFg04Combo) $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+      if($scope.srchMomsStoreFg05Combo) $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
       $("#divMrpizzaEnvst").css("display", "none");
     } else {
       if($("#envst1114").val() === "1") {

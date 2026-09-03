@@ -59,6 +59,7 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
 
         $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
+        $scope.uploadFailFg = false; // (2026.09.02) 분할 업로드 실패 여부
 
         // 선택한 파일이 있으면
         if ($('#storeExcelUpFile')[0].files[0]) {
@@ -69,6 +70,13 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
+                // 엑셀 파싱(동기, 대용량 시 오래 걸림) 구간부터 화면 클릭 차단
+                //  - 해제는 배치 저장 완료/에러 시 excelUploadingPopup(false)에서 처리됨
+                var uploadOverlay = document.getElementById('loadingOverlay');
+                if (uploadOverlay) uploadOverlay.classList.add('active');
+                document.addEventListener('contextmenu', contextMenuHandler);
+                window.addEventListener('beforeunload', beforeUnloadHandler);
 
                 // $timeout(function () {
                 //     var flex = $scope.flex;
@@ -82,57 +90,76 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
                 //     );
                 // }, 10);
 
+                // (2026.09.02) 파싱 실패 시 정리 : 차단 해제 + 파일선택 초기화 + 그리드/TEMP 정리 + 오류 안내
+                //  - 여기서 해제하지 않으면 투명 오버레이가 남아 화면 전체가 클릭 불능이 된다.
+                var parseFailClear = function () {
+                    $scope.excelUploadingPopup(false);        // 오버레이/우클릭/새로고침 차단 해제 + 팝업 닫기
+                    $("#storeExcelUpFile").val('');           // 같은 파일 재선택 가능하도록 input 비움
+                    $scope.uploadFailClear();                 // 그리드 로컬 클리어 + TEMP 삭제
+                    $scope._popMsg(messages['cmm.saveFail']); // 저장에 실패하였습니다
+                };
+
                 // excel file read
                 var reader = new FileReader();
                 var arr = [];
+                reader.onerror = function(){
+                    // (2026.09.02) 파일 읽기 자체 실패(파일 잠김 등) 시 정리
+                    parseFailClear();
+                };
                 reader.onload = function(){
-                    var fileData = reader.result;
-                    var wb = XLSX.read(fileData, {type : 'binary'});
-                    wb.SheetNames.forEach(function(sheetName) {
-                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+                    try {
+                        var fileData = reader.result;
+                        var wb = XLSX.read(fileData, {type : 'binary'});
+                        wb.SheetNames.forEach(function(sheetName) {
+                            arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
-                        // key명 변경
-                        arr.forEach(function(item){
-                            // 엑셀 헤더 key 공백 제거
-                            Object.keys(item).forEach(function(key){
-                                var trimmedKey = key.trim();
-                                if (trimmedKey !== key) {
-                                    item[trimmedKey] = item[key];
-                                    delete item[key];
-                                }
-                            });
-
-                            renameKey(item, '매장코드', 'storeCd');
-                            renameKey(item, '그룹', 'branchCd');
-                            renameKey(item, '팀별', 'momsTeam');
-                            renameKey(item, 'AC점포별', 'momsAcShop');
-                            renameKey(item, '지역구분', 'momsAreaFg');
-                            renameKey(item, '상권', 'momsCommercial');
-                            renameKey(item, '점포유형', 'momsShopType');
-                            renameKey(item, '매장관리타입', 'momsStoreManageType');
-                            renameKey(item, '매장그룹', 'momsStoreFg01');
-                            renameKey(item, '매장그룹2', 'momsStoreFg02');
-                            renameKey(item, '매장그룹3', 'momsStoreFg03');
-                            renameKey(item, '매장그룹4', 'momsStoreFg04');
-                            renameKey(item, '매장그룹5', 'momsStoreFg05');
-
-                            // 공백, ' 제거
-                            Object.keys(item).forEach(function(key){
-                                if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
-                                    if (typeof item[key] === 'string') {
-                                        item[key] = item[key].trim().replaceAll('\'', '');
+                            // key명 변경
+                            arr.forEach(function(item){
+                                // 엑셀 헤더 key 공백 제거
+                                Object.keys(item).forEach(function(key){
+                                    var trimmedKey = key.trim();
+                                    if (trimmedKey !== key) {
+                                        item[trimmedKey] = item[key];
+                                        delete item[key];
                                     }
-                                }
+                                });
+
+                                renameKey(item, '매장코드', 'storeCd');
+                                renameKey(item, '그룹', 'branchCd');
+                                renameKey(item, '팀별', 'momsTeam');
+                                renameKey(item, 'AC점포별', 'momsAcShop');
+                                renameKey(item, '지역구분', 'momsAreaFg');
+                                renameKey(item, '상권', 'momsCommercial');
+                                renameKey(item, '점포유형', 'momsShopType');
+                                renameKey(item, '매장관리타입', 'momsStoreManageType');
+                                renameKey(item, '매장그룹', 'momsStoreFg01');
+                                renameKey(item, '매장그룹2', 'momsStoreFg02');
+                                renameKey(item, '매장그룹3', 'momsStoreFg03');
+                                renameKey(item, '매장그룹4', 'momsStoreFg04');
+                                renameKey(item, '매장그룹5', 'momsStoreFg05');
+
+                                // 공백, ' 제거
+                                Object.keys(item).forEach(function(key){
+                                    if (item[key] !== null && item[key] !== undefined && item[key] !== "") {
+                                        if (typeof item[key] === 'string') {
+                                            item[key] = item[key].trim().replaceAll('\'', '');
+                                        }
+                                    }
+                                });
                             });
+
+                            console.log(arr);
+                            //console.log(JSON.stringify(arr, null, 2));
+
+                            $timeout(function () {
+                                $scope.save(arr);
+                            }, 10);
                         });
-
-                        console.log(arr);
-                        //console.log(JSON.stringify(arr, null, 2));
-
-                        $timeout(function () {
-                            $scope.save(arr);
-                        }, 10);
-                    })
+                    } catch (e) {
+                        // (2026.09.02) 손상 파일 등 파싱 실패 시 정리 (미처리 시 오버레이가 남아 화면 클릭 불능)
+                        parseFailClear();
+                        return false;
+                    }
                 };
                 reader.readAsBinaryString(file);
             } else {
@@ -220,10 +247,20 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
                     // 저장기능 수행후 재조회
                     $scope._broadcast('storeExcelUploadCtrl');
                 }
+            } else {
+                // (2026.09.02) 응답 상태 실패(세션만료 등) 시 업로드 중단 및 정리
+                $scope.uploadFailFg = true;
+                $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+                $scope.uploadFailClear();
             }
         }, function errorCallback(response) {
+            // (2026.09.02) 업로드 실패 시 중단 및 정리
+            //  - 그리드에 이전 업로드 내용이 남은 채 TEMP만 바뀐 상태로 저장되는 것 방지
+            $scope.uploadFailFg = true;
             $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-            if (response.data.message) {
+            $scope.uploadFailClear();
+            // (2026.09.02) 통신 단절 오류는 response.data가 null이므로 가드 (미가드 시 TypeError로 팝업이 안 뜸)
+            if (response.data && response.data.message) {
                 $scope._popMsg(response.data.message);
             } else {
                 $scope._popMsg(messages['cmm.saveFail']);
@@ -232,7 +269,8 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
         }).then(function () {
             // 'complete' code here
             // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
-            if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
+            // (2026.09.02) 실패 시에는 다음 청크를 호출하지 않음 (실패 청크만 누락된 채 계속 적재되는 것 방지)
+            if (!$scope.uploadFailFg && parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
                 // 처리된 숫자 변경
                 $scope.progressCnt = loopCnt;
                 // 팝업의 progressCnt 값 변경
@@ -242,9 +280,30 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
         });
     };
 
+    // (2026.09.02) 업로드 실패 시 정리
+    //  - 그리드는 서버 재조회가 아닌 로컬 클리어로 즉시 비운다 (네트워크 단절 상태에서도 동작).
+    //    그리드가 비면 저장 시 "엑셀업로드 된 데이터가 없습니다" 가드에 걸려 저장이 차단된다.
+    //  - 부분 적재된 TEMP 삭제는 통신 가능할 때만 수행되는 보조 처리 (실패해도 다음 업로드 시작 시 deleteExl이 재삭제)
+    $scope.uploadFailClear = function () {
+        // 메인탭 그리드 로컬 클리어 (storeExcelUploadGridClear 리스너)
+        $scope._broadcast('storeExcelUploadGridClear');
+        // 부분 적재된 TEMP 삭제
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getStoreExcelUploadCheckDeleteAll.sb", {}, function(){});
+    };
+
     // 업로딩 팝업 열기
     $scope.excelUploadingPopup = function (showFg) {
+
+        // 전체 화면 클릭 차단 오버레이 (저장탭 JSP에 c:import 되어 같은 문서의 #loadingOverlay/핸들러를 공유)
+        var overlay = document.getElementById('loadingOverlay');
+
         if (showFg) {
+            // 우클릭 차단 등록
+            document.addEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 등록
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 활성화 (클릭 차단)
+            if (overlay) overlay.classList.add('active');
             // 팝업내용 동적 생성
             var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['empCardInfo.excelUploading'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 업로드 중...</div>';
@@ -254,6 +313,12 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
             // 팝업 show
             $scope._loadingPopup.show(true);
         } else {
+            // 우클릭 차단 해제
+            document.removeEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 해제
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 비활성화
+            if (overlay) overlay.classList.remove('active');
             $scope._loadingPopup.hide(true);
         }
     };

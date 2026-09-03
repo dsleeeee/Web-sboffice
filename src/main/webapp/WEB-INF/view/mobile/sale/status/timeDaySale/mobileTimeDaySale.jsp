@@ -235,4 +235,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20230905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20260821.01" charset="utf-8"></script>

@@ -21,9 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,7 +137,8 @@ public class SmsSendServiceImpl implements SmsSendService {
             // URL 차단 - 악성문자차단관리(X-Ray)
             boolean sendYn = true;
             boolean anyBlack = false;
-            Set<String> urlSet = new LinkedHashSet<>();
+            // (2026.08.26) Set → List 변경 : 동일 URL이 여러 번 등장해도 등장 횟수만큼 이력 저장 (금칙어 이력과 동일 기준)
+            List<String> urlSet = new ArrayList<>();
 
             Matcher matcher = URL_PATTERN.matcher(smsSendVOs[0].getContent() == null ? "" : smsSendVOs[0].getContent());
 
@@ -438,7 +438,8 @@ public class SmsSendServiceImpl implements SmsSendService {
             // URL 차단 - 악성문자차단관리(X-Ray)
             boolean sendYn = true;
             boolean anyBlack = false;
-            Set<String> urlSet = new LinkedHashSet<>();
+            // (2026.08.26) Set → List 변경 : 동일 URL이 여러 번 등장해도 등장 횟수만큼 이력 저장 (금칙어 이력과 동일 기준)
+            List<String> urlSet = new ArrayList<>();
 
             Matcher matcher = URL_PATTERN.matcher(smsSendVO.getContent() == null ? "" : smsSendVO.getContent());
 

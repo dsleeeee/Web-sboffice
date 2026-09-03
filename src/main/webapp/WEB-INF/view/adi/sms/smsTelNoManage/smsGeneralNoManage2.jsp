@@ -126,6 +126,9 @@
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.returnRemark"/>" binding="returnRemark" width="95" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.remark"/>" binding="remark" width="95" align="center"></wj-flex-grid-column>
 
+                        <%-- 음성파일등록 --%>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.voiceFileRegist"/>" binding="voiceFileCnt" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+
                         <%--저장시 필요--%>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.certId"/>" binding="certId" width="160" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.fileName1"/>" binding="fileName1" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -165,8 +168,12 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260824.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">
+</c:import>
+
+<%-- 음성파일 등록 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/voiceFilePopup.jsp">
 </c:import>

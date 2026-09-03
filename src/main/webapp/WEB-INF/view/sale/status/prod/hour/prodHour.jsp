@@ -220,4 +220,4 @@
 <script type="text/javascript">
     var s_orgnCd = "${orgnCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20260604.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20260821.01" charset="utf-8"></script>

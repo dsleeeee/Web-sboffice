@@ -76,4 +76,19 @@ public interface SmsTelNoManageMapper {
 
     /** 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 */
     int getAddProcFgCnt(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 음성파일등록 - 목록 조회 */
+    List<DefaultMap<Object>> getVoiceFileList(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 음성파일등록 - BOARD_SEQ_NO 채번(신청건 식별) */
+    String getVoiceFileSeqNo(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 음성파일등록 - IDX 채번(신청건 내 파일순번) */
+    String getVoiceFileIdx(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 음성파일등록 - 저장(INSERT) */
+    int insertVoiceFile(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** 음성파일등록 - 삭제(USE_YN='N') */
+    int deleteVoiceFile(SmsTelNoManageVO smsTelNoManageVO);
 }

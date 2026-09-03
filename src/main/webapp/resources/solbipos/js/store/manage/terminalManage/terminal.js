@@ -681,6 +681,16 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
+        // (2026.08.26) 구분셀 붙여넣기 차단
+        //  - 붙여넣기는 beginningEdit 이벤트를 타지 않아 위의 편집 차단/상세 초기화가 모두 우회됨
+        //  - 구분에 잘못된 값이 들어가면 상세와 조합이 꼬여 저장 시 VENDOR_CD NULL(ORA-01400) 발생
+        s.pastingCell.addHandler(function (sender, e) {
+            var col = sender.columns[e.col];
+            if (col.binding === "vendorFg") {
+                e.cancel = true;
+            }
+        });
+
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
