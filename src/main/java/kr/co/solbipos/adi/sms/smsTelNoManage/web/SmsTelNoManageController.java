@@ -613,6 +613,67 @@ public class SmsTelNoManageController {
         }
     }
 
+    /** 음성파일등록 - 목록 조회 */
+    @RequestMapping(value = "/smsGeneralNoManage2/getVoiceFileList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVoiceFileList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<Object>> result = smsTelNoManageService.getVoiceFileList(smsTelNoManageVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, result, smsTelNoManageVO);
+    }
+
+    /** 음성파일등록 - 저장(multipart) */
+    @RequestMapping(value = "/smsGeneralNoManage2/saveVoiceFile.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveVoiceFile(org.springframework.web.multipart.MultipartHttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = smsTelNoManageService.saveVoiceFile(request, sessionInfoVO);
+        return returnJson(Status.OK, result);
+    }
+
+    /** 음성파일등록 - 삭제 */
+    @RequestMapping(value = "/smsGeneralNoManage2/delVoiceFile.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delVoiceFile(@RequestBody SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = smsTelNoManageService.delVoiceFile(smsTelNoManageVO, sessionInfoVO);
+        return returnJson(Status.OK, result);
+    }
+
+    /** 음성파일등록 - 다운로드 (게시판과 동일 /FileRoot/board/) */
+    @RequestMapping(value = "/smsGeneralNoManage2/downloadVoiceFile.sb")
+    @ResponseBody
+    public void downloadVoiceFile(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                  HttpServletResponse response) throws Exception {
+        // (2026.09.03) 게시판 다운로드와 동일하게 파일명에서 경로 문자를 제거 : 상위 폴더 접근(경로 조작) 방지
+        String fileNm = smsTelNoManageVO.getFileName();
+
+        if (fileNm == null) { fileNm = ""; }
+
+        fileNm = fileNm.replaceAll("../", "").replaceAll("/", "").replaceAll("\\\\", "");
+
+        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", fileNm);
+
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+        
+        String header = request.getHeader("User-Agent");
+        String fileName;
+
+        if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+            fileName = URLEncoder.encode(smsTelNoManageVO.getDownloadFileName(), "UTF-8");
+        } else {
+            fileName = new String(smsTelNoManageVO.getDownloadFileName().getBytes("UTF-8"), "iso-8859-1");
+        }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        FileCopyUtils.copy(in, response.getOutputStream());
+        in.close();
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+    }
+
     /** KCP 결과 코드가 있을 때만 사용자 안내 문구 뒤에 붙일 문자열을 만든다. */
     private String codeSuffix(String code) {
         return isBlank(code) ? "" : " (" + code + ")";

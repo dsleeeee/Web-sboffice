@@ -76,6 +76,9 @@
         ,		A.USE_YN
         FROM 	TB_CM_EMPLOYEE A
         WHERE 	A.ADMIN_FG	=	'A'
+        AND 	A.WEB_USE_YN 	=	'Y'
+        AND 	A.SERVICE_FG 	=	'1'
+        AND 	A.USE_YN 		=	'Y'
         AND     NOT EXISTS  (
                                 SELECT  1
                                 FROM    TB_WB_AUTHOR_USER_IN_EX B

@@ -110,6 +110,13 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                         wijmo.addClass(e.cell, 'wijLink');
                     }
                 }
+
+                // 음성파일등록 : "음성파일등록( N 건 )" 표기 + 링크
+                if (col.binding === "voiceFileCnt") {
+                    var vItem = s.rows[e.row].dataItem;
+                    e.cell.innerHTML = messages["smsGeneralNoManage2.voiceFileRegist"] + "( " + nvl(vItem["voiceFileCnt"], 0) + " 건 )";
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
             }
         });
 
@@ -202,6 +209,17 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                         event.preventDefault();
                     }
                 }
+
+                // 음성파일등록 클릭 → 음성파일 팝업 오픈 (매번 해당 신청건 키로 조회)
+                if (col.binding === "voiceFileCnt") {
+                    var voiceParams = {};
+                    voiceParams.orgnCd = selectedRow.orgnCd;
+                    voiceParams.userId = selectedRow.userId;
+                    voiceParams.certId = selectedRow.certId;
+                    $scope._broadcast('voiceFileCtrl', voiceParams);
+                    $scope.wjVoiceFileLayer.show(true);
+                    event.preventDefault();
+                }
             }
         });
     };
@@ -212,11 +230,14 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
         event.preventDefault();
     });
 
-    $scope.searchSmsGeneralNoManage = function(){
+    $scope.searchSmsGeneralNoManage = function(silent){
         var params = {};
 
         $scope._inquiryMain("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getSmsGeneralNoManage2List.sb", params, function() {
-            $scope._popMsg(messages["smsGeneralNoManage2.popMsg"]);
+            // silent=true(음성파일 재조회 등)면 조회 완료 메시지 생략
+            if (!silent) {
+                $scope._popMsg(messages["smsGeneralNoManage2.popMsg"]);
+            }
         }, false);
     };
     // <-- //검색 호출 -->
@@ -241,6 +262,12 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                             $scope._popMsg(rowContent + messages["smsGeneralNoManage2.authTelNoRegMsg"] + "</br> (발신번호: " + $scope.flex.collectionView.items[i].telNo + ", 휴대폰본인인증번호: " + $scope.flex.collectionView.items[i].vfTelNo + ")");
                             return false;
                         }
+                    }
+
+                    // 처리구분 완료 시 음성파일 필수 등록
+                    if (Number(nvl($scope.flex.collectionView.items[i].voiceFileCnt, 0)) <= 0) {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.voiceFileRequired"]);
+                        return false;
                     }
                 }
 

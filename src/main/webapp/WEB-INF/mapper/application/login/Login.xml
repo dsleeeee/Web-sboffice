@@ -147,10 +147,10 @@
 
     </select>
 
-    <!-- SMS 인증 함수 호출 -->
+    <!-- SMS 인증 함수 호출 (4번째 인자 : 접속 IP - 2026.08.28 기존 미사용 opFg3 자리를 IP로 재활용) -->
     <select id="getSmsVfcCode" resultType="String">
         /* AuthMapper.getSmsVfcCode */
-        SELECT  FN_GET_TB_CM_SMS_VFC_CODE(#{userId}, #{opFg1}, #{opFg2}, #{opFg3})
+        SELECT  FN_GET_TB_CM_SMS_VFC_CODE(#{userId}, #{opFg1}, #{opFg2}, #{ip})
         FROM    DUAL
     </select>
 

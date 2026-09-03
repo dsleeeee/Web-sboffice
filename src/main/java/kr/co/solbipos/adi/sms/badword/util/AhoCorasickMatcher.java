@@ -70,11 +70,38 @@ public class AhoCorasickMatcher {
         for (int i = 0; i < normalizedText.length(); i++) {
             char c = normalizedText.charAt(i);
             cur = step(cur, c);
-            if (cur.output != null) {
-                return cur.output;
+            // 이 위치에서 끝나는 패턴이 있는지 failure 체인으로 확인
+            for (Node t = cur; t != root; t = t.failure) {
+                if (t.output != null) {
+                    return t.output;
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * normalizedText 에서 매치된 금칙어를 "전부" 반환한다. (2026.08.26 다건 이력 저장 대응)
+     *  - 각 위치에서 failure 체인을 따라가며 겹치는/포함된 패턴까지 모두 수집
+     *  - 동일 금칙어가 여러 번 등장하면 "등장 횟수만큼" 리스트에 담긴다 (이력도 등장 횟수만큼 저장)
+     *  - 반환 순서는 본문에서 발견된 순서
+     * 없으면 빈 리스트.
+     */
+    public List<BadwordVO> findAll(String normalizedText) {
+        List<BadwordVO> hits = new ArrayList<>();
+        Node cur = root;
+        for (int i = 0; i < normalizedText.length(); i++) {
+            char c = normalizedText.charAt(i);
+            cur = step(cur, c);
+            // 현재 노드부터 failure 체인을 따라가며 이 위치에서 끝나는 패턴을 모두 수집
+            // (노드마다 자기 패턴만 갖고 있으므로 한 위치에서 같은 패턴이 이중 집계되지 않음)
+            for (Node t = cur; t != root; t = t.failure) {
+                if (t.output != null) {
+                    hits.add(t.output);
+                }
+            }
+        }
+        return hits;
     }
 
     // ------------------------------------------------------------------ //
@@ -125,10 +152,11 @@ public class AhoCorasickMatcher {
                     child.failure = root;
                 }
 
-                // output link: failure 노드가 출력을 가지면 이어받음
-                if (child.output == null && child.failure.output != null) {
-                    child.output = child.failure.output;
-                }
+                // (2026.08.26) output link 상속 제거
+                //  - 기존: failure 노드의 출력을 자식이 이어받음 → 등장 횟수 집계 시
+                //    같은 위치에서 동일 패턴이 이중 집계되는 문제 발생
+                //  - 검색(findFirst/findAll)에서 failure 체인을 직접 따라가며 수집하므로
+                //    상속 없이도 겹치는/포함된 패턴 탐지에 누락 없음
 
                 queue.add(child);
             }

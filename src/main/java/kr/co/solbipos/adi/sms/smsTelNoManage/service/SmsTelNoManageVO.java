@@ -209,4 +209,39 @@ public class SmsTelNoManageVO extends PageVO {
     public String getTelFg() { return telFg; }
 
     public void setTelFg(String telFg) { this.telFg = telFg; }
+
+    /* ===== 음성파일등록 (TB_WB_BOARD_ATCH 재사용) ===== */
+    /** 신청건 식별번호(BOARD_SEQ_NO 역할) */
+    private String boardSeqNo;
+    /** 첨부 인덱스(신청건 내 파일순번) */
+    private String idx;
+    /** 파일 경로 */
+    private String filePath;
+    /** 저장 파일명 */
+    private String fileNm;
+    /** 원본 파일명 */
+    private String orginlFileNm;
+    /** 파일 확장자 */
+    private String fileExt;
+    /** 임시경로(키 저장용 : ORGN_CD|USER_ID|CERT_ID) */
+    private String tempPath;
+    /** 음성파일 건수 */
+    private String voiceFileCnt;
+
+    public String getBoardSeqNo() { return boardSeqNo; }
+    public void setBoardSeqNo(String boardSeqNo) { this.boardSeqNo = boardSeqNo; }
+    public String getIdx() { return idx; }
+    public void setIdx(String idx) { this.idx = idx; }
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+    public String getFileNm() { return fileNm; }
+    public void setFileNm(String fileNm) { this.fileNm = fileNm; }
+    public String getOrginlFileNm() { return orginlFileNm; }
+    public void setOrginlFileNm(String orginlFileNm) { this.orginlFileNm = orginlFileNm; }
+    public String getFileExt() { return fileExt; }
+    public void setFileExt(String fileExt) { this.fileExt = fileExt; }
+    public String getTempPath() { return tempPath; }
+    public void setTempPath(String tempPath) { this.tempPath = tempPath; }
+    public String getVoiceFileCnt() { return voiceFileCnt; }
+    public void setVoiceFileCnt(String voiceFileCnt) { this.voiceFileCnt = voiceFileCnt; }
 }

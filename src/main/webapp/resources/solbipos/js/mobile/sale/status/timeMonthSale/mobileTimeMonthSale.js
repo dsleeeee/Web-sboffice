@@ -68,10 +68,8 @@ app.controller('mobileTimeMonthSaleDateTimeCtrl', ['$scope', '$http', '$timeout'
             var end = parseInt(data.endTime) + 1;
 
             if($("input[name=optionFg]:checked").val() == "time") { // 시간대
-                // 컬럼 총갯수
-                var columnsCnt = 25;
-
-                for (var i = 1; i < columnsCnt; i++) {
+                // 시간대분류 컬럼까지 함께 숨기기 위해 전체 컬럼 순회 (범위 밖 -> 숨김)
+                for (var i = 1; i < columns.length; i++) {
                     if (i >= start && i <= end) {
                         columns[i].visible = true;
                     } else {
@@ -79,7 +77,7 @@ app.controller('mobileTimeMonthSaleDateTimeCtrl', ['$scope', '$http', '$timeout'
                     }
                 }
             } else if($("input[name=optionFg]:checked").val() == "timeSlot") {   // 시간대분류
-                for (var i = start; i < columns.length; i++) {
+                for (var i = 1; i < columns.length; i++) {
                     columns[i].visible = false;
                     for (var j = 0; j < timeSlotColList.length; j++) {
                         if ($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === "") {

@@ -386,6 +386,14 @@
         tcasn.REMARK,
         tcasn.CERT_ID,
         tcasn.USER_ID,
+        /* 음성파일 건수 (TB_WB_BOARD_ATCH, BOARD_CD='ADDSMSVO', TEMP_PATH=ORGN_CD|USER_ID|CERT_ID) */
+        (
+            SELECT COUNT(*)
+            FROM   TB_WB_BOARD_ATCH twbav
+            WHERE  twbav.BOARD_CD = 'ADDSMSVO'
+            AND    twbav.TEMP_PATH = tcasn.ORGN_CD || '|' || tcasn.USER_ID || '|' || tcasn.CERT_ID
+            AND    twbav.USE_YN = 'Y'
+        ) AS VOICE_FILE_CNT,
         tcasn.FILE_NM AS FILE_NAME1,
         tcasn.FILE_NM2 AS FILE_NAME2,
         tcasn.FILE_NM3 AS FILE_NAME3,
@@ -498,4 +506,93 @@
         AND     A.TEL_FG        = #{telFg}
         AND     A.ADD_PROC_FG   = '2'
     </select>
+
+    <!-- ========== 음성파일등록 (TB_WB_BOARD_ATCH 재사용, BOARD_CD='ADDSMSVO') ========== -->
+    <!-- 음성파일 목록 조회 -->
+    <select id="getVoiceFileList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getVoiceFileList */
+        SELECT  IDX,
+                FILE_PATH,
+                FILE_NM,
+                (ORGINL_FILE_NM || '.' || FILE_EXT) AS ORGINL_FILE_NM,
+                FILE_EXT,
+                '다운로드' AS DOWNLOAD,
+                '삭제'     AS DEL
+        FROM    TB_WB_BOARD_ATCH
+        WHERE   BOARD_CD = 'ADDSMSVO'
+        AND     TEMP_PATH = #{orgnCd} || '|' || #{userId} || '|' || #{certId}
+        AND     USE_YN = 'Y'
+        ORDER BY IDX
+    </select>
+
+    <!-- 음성파일 BOARD_SEQ_NO 채번 (신청건에 파일 있으면 그 SEQ 재사용, 없으면 신규) -->
+    <select id="getVoiceFileSeqNo" parameterType="SmsTelNoManageVO" resultType="String">
+        /* SmsTelNoManageMapper.getVoiceFileSeqNo */
+        SELECT NVL(
+                   (SELECT MAX(BOARD_SEQ_NO)
+                    FROM   TB_WB_BOARD_ATCH
+                    WHERE  BOARD_CD = 'ADDSMSVO'
+                    AND    TEMP_PATH = #{orgnCd} || '|' || #{userId} || '|' || #{certId}),
+                   (SELECT NVL(MAX(BOARD_SEQ_NO), 0) + 1
+                    FROM   TB_WB_BOARD_ATCH
+                    WHERE  BOARD_CD = 'ADDSMSVO')
+               )
+        FROM DUAL
+    </select>
+
+    <!-- 음성파일 IDX 채번 (신청건 SEQ 안에서 유니크) -->
+    <select id="getVoiceFileIdx" parameterType="SmsTelNoManageVO" resultType="String">
+        /* SmsTelNoManageMapper.getVoiceFileIdx */
+        SELECT  NVL(MAX(IDX), 0) + 1
+        FROM    TB_WB_BOARD_ATCH
+        WHERE   BOARD_CD = 'ADDSMSVO'
+        AND     BOARD_SEQ_NO = #{boardSeqNo}
+    </select>
+
+    <!-- 음성파일 저장(INSERT) -->
+    <insert id="insertVoiceFile" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.insertVoiceFile */
+        INSERT INTO TB_WB_BOARD_ATCH
+        (
+            BOARD_CD,
+            BOARD_SEQ_NO,
+            IDX,
+            TEMP_PATH,
+            FILE_PATH,
+            FILE_NM,
+            ORGINL_FILE_NM,
+            FILE_EXT,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            'ADDSMSVO',
+            #{boardSeqNo},
+            #{idx},
+            #{orgnCd} || '|' || #{userId} || '|' || #{certId},
+            #{filePath},
+            #{fileNm},
+            #{orginlFileNm},
+            #{fileExt},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 음성파일 삭제(USE_YN='N') -->
+    <update id="deleteVoiceFile" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.deleteVoiceFile */
+        UPDATE  TB_WB_BOARD_ATCH
+        SET     USE_YN = 'N',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+        WHERE   BOARD_CD = 'ADDSMSVO'
+        AND     TEMP_PATH = #{orgnCd} || '|' || #{userId} || '|' || #{certId}
+        AND     IDX = #{idx}
+    </update>
 </mapper>

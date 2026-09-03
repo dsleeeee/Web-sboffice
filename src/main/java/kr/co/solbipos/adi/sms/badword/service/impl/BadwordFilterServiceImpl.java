@@ -61,7 +61,16 @@ public class BadwordFilterServiceImpl implements BadwordFilterService {
     // public API
     // ------------------------------------------------------------------ //
 
-    /** 금칙어 탐지 — 캐시가 만료됐으면 자동 갱신 */
+    /**
+     * 금칙어 탐지 — 캐시가 만료됐으면 자동 갱신
+     *
+     *  2026.08.26 다건 탐지로 변경
+     *   - 기존: 첫 탐지에서 즉시 반환 → 금칙어가 여러 개여도 이력이 1건만 남음
+     *   - 변경: 3단계(contains/exact/regex)를 전부 수행해 탐지된 금칙어를 모두 수집
+     *           (URL 체크가 URL마다 이력을 남기는 것과 동일하게 금칙어도 전부 이력 저장)
+     *   - 동일 금칙어가 여러 번 등장하면 "등장 횟수만큼" 수집 → 이력도 등장 횟수만큼 저장
+     *     (contains 는 등장 위치마다 1건, exact 는 전문 일치라 1건, regex 는 키워드당 1건)
+     */
     @Override
     public FilterResult check(String msgContent) {
         if (msgContent == null || msgContent.isEmpty()) {
@@ -71,47 +80,70 @@ public class BadwordFilterServiceImpl implements BadwordFilterService {
         CacheHolder cache = getCache();
         String normalized = TextNormalizer.normalize(msgContent);
 
-        // 1) Aho-Corasick: contains 키워드 (O(n))
-        BadwordVO hit = cache.acMatcher.findFirst(normalized);
-        if (hit != null) {
-            return FilterResult.detected(hit, "keyword");
-        }
+        // 탐지 목록 (발견 순서 유지, 동일 금칙어도 등장 횟수만큼 담김)
+        List<BadwordVO> hits = new ArrayList<>();
 
-        // 2) HashSet: exact 키워드 (O(1))
+        // 1) Aho-Corasick: contains 키워드 (O(n)) — 등장 위치마다 전부 수집
+        hits.addAll(cache.acMatcher.findAll(normalized));
+
+        // 2) HashSet: exact 키워드 (O(1)) — 메시지 전문 일치이므로 1건
         BadwordVO exactHit = cache.exactMap.get(normalized);
         if (exactHit != null) {
-            return FilterResult.detected(exactHit, "keyword");
+            hits.add(exactHit);
         }
 
-        // 3) 정규식 키워드 (리스트 순차 — 통상 건수 적음, 원본 텍스트로 비교)
+        // 3) 정규식 키워드 (리스트 순차 — 통상 건수 적음, 원본 텍스트로 비교) — 매치된 키워드당 1건
         for (BadwordVO bw : cache.regexList) {
             if (matchesRegex(msgContent, bw)) {
-                return FilterResult.detected(bw, "keyword");
+                hits.add(bw);
             }
         }
 
-        return FilterResult.pass();
+        if (hits.isEmpty()) {
+            return FilterResult.pass();
+        }
+        return FilterResult.detectedAll(hits, "keyword");
     }
 
-    /** MESSAGE_BLOCK_LOG 검사 이력 저장 (탐지 여부와 관계없이 항상 호출) */
+    /**
+     * MESSAGE_BLOCK_LOG 검사 이력 저장 (탐지 여부와 관계없이 항상 호출)
+     *
+     *  2026.08.26 다건 이력 저장으로 변경
+     *   - 탐지된 금칙어가 여러 개면 금칙어마다 이력을 1건씩 저장 (URL 체크 이력과 동일한 방식)
+     *   - msgStatus 는 각 금칙어의 severity 기준으로 개별 판정
+     */
     @Override
     public void saveBlockLog(SmsSendVO smsSendVO, FilterResult result, SessionInfoVO sessionInfoVO) {
 
-        smsSendVO.setBlockType(result.isDetected() ? result.getBlockType() : "");
-        smsSendVO.setBadwordId(result.getBadwordId());
-
-        // 메시지 상태
-        String msgStatus;
-        switch (result.getSeverity()) {
-            case "block": msgStatus = "blocked"; break;
-            case "hold":  msgStatus = "held";    break;
-            case "warn":  msgStatus = "warned";  break;
-            default:      msgStatus = "allowed"; break;
+        // 미탐지 이력(allowed) — 기존 단건 저장 유지
+        if (!result.isDetected() || result.getDetectedList().isEmpty()) {
+            smsSendVO.setBlockType("");
+            smsSendVO.setBadwordId(result.getBadwordId());
+            smsSendVO.setMsgStatus(toMsgStatus(result.getSeverity()));
+            badwordFilterMapper.insertMessageBlock(smsSendVO);
+            return;
         }
-        smsSendVO.setMsgStatus(msgStatus);
 
-        // 차단이력 저장
-        badwordFilterMapper.insertMessageBlock(smsSendVO);
+        // 탐지된 금칙어마다 이력 1건씩 저장
+        for (BadwordVO bw : result.getDetectedList()) {
+            smsSendVO.setBlockType(result.getBlockType());
+            smsSendVO.setBadwordId(bw.getBadwordId());
+            smsSendVO.setMsgStatus(toMsgStatus(bw.getSeverity()));
+            badwordFilterMapper.insertMessageBlock(smsSendVO);
+        }
+    }
+
+    /** severity → 메시지 상태 변환 */
+    private String toMsgStatus(String severity) {
+        if (severity == null) {
+            return "allowed";
+        }
+        switch (severity) {
+            case "block": return "blocked";
+            case "hold":  return "held";
+            case "warn":  return "warned";
+            default:      return "allowed";
+        }
     }
 
     /** 캐시 강제 갱신 */

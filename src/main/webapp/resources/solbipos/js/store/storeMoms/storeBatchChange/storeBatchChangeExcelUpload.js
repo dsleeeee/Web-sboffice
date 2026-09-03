@@ -141,6 +141,14 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         event.preventDefault();
     });
 
+    // (2026.09.02) 업로드 실패 시 그리드 로컬 클리어 (업로드 팝업에서 broadcast)
+    //  - 서버 재조회 없이 즉시 비워서, 네트워크 단절로 재조회가 불가능한 상황에서도
+    //    이전 업로드 내용이 그리드에 남아 TEMP와 다른 데이터가 저장되는 것을 막는다.
+    $scope.$on("storeExcelUploadGridClear", function(event, data) {
+        $scope.data = new wijmo.collections.CollectionView([]);
+        event.preventDefault();
+    });
+
     // 검증결과 조회
     $scope.searchStoreExcelUploadProd = function() {
         var params = {};
@@ -204,11 +212,24 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
         // 검증을 통과한 매장정보를 저장하시겠습니까?
         $scope._popConfirm(messages["storeBatchChange.saveConfirm"], function() {
-            // 현재 세션ID 와 동일한 데이터 삭제
-            $scope.deleteExl(params);
+            // 저장 시작 즉시 로딩 팝업 + 클릭 차단
+            $scope.excelUploadingPopup(true);
+
+            // [개선] 중복 저장 로직 제거
+            //  - 업로드 시점에 검증데이터가 이미 TEMP(TB_TMP_EXCEL_STORE_INFO)에 적재돼 있고,
+            //    위에서 그리드 편집(itemsEdited) 시 저장을 막으므로 TEMP 값 = 현재 그리드 값이 보장된다.
+            //  - 따라서 저장 시 TEMP를 다시 삭제(deleteExl) 후 재적재(getDiffValSave)하던 중복 과정을 제거하고,
+            //    업로드 때 만들어진 TEMP를 그대로 본테이블에 반영한다.
+            //  - 한글→코드 변환은 본테이블 저장(getSimpleSave)의 MERGE에서 수행되므로 변환에는 영향 없다.
+            //  (기존: deleteExl → getDiffValSave → storeExcelUploadSave / 변경: storeExcelUploadSave 직접 호출)
+            $scope.storeExcelUploadSave(params);
         });
     };
 
+    // [미사용] 2026.08.25 - 저장 중복로직 제거로 더 이상 호출하지 않음
+    //  기존: save() → deleteExl(TEMP 전체삭제) → getDiffValSave(TEMP 재적재) → storeExcelUploadSave
+    //  변경: save() → storeExcelUploadSave (업로드 시 적재된 TEMP를 그대로 사용)
+    //  롤백 필요 시 save()의 storeExcelUploadSave(params) 를 deleteExl(params) 로 되돌리면 됨.
     // 현재 세션ID 와 동일한 데이터 삭제
     $scope.deleteExl = function (data) {
         var params = {};
@@ -220,6 +241,9 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
+    // [미사용] 2026.08.25 - 저장 중복로직 제거로 더 이상 호출하지 않음 (deleteExl 참고)
+    //  TEMP를 삭제 후 다시 적재(getStoreExcelUploadCheckSave 재호출)하던 단계.
+    //  업로드 시 이미 TEMP에 적재되어 있으므로 불필요하여 제거함.
     // 변경된 값만 저장
     $scope.getDiffValSave = function(data) {
         var params = data;
@@ -376,7 +400,17 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 작업내역 로딩 팝업
     $scope.excelUploadingPopup = function (showFg) {
+
+        // 전체 화면 클릭 차단 오버레이
+        var overlay = document.getElementById('loadingOverlay');
+
         if (showFg) {
+            // 우클릭 차단 등록
+            document.addEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 등록
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 활성화 (클릭 차단)
+            if (overlay) overlay.classList.add('active');
             // 팝업내용 동적 생성
             var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.saving'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 저장 진행 중...</div>';
@@ -386,6 +420,12 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
             // 팝업 show
             $scope._loadingPopup.show(true);
         } else {
+            // 우클릭 차단 해제
+            document.removeEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 해제
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 비활성화
+            if (overlay) overlay.classList.remove('active');
             $scope._loadingPopup.hide(true);
         }
     };
