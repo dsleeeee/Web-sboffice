@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javax.net.ssl.HttpsURLConnection;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -137,7 +140,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
     }
 
     /**
-     * 네.아.로 Unique ID 조회
+     * (네이버 주문연동용) 네.아.로 Unique ID 조회
      */
     @Override
     public String getNaverUniqueId(NaverOrderLinkVO naverOrderLinkVO, SessionInfoVO sessionInfoVO) {
@@ -188,7 +191,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
     }
 
     /**
-     * 업체리스트조회 API 호출
+     * 업체리스트조회
      */
     @Override
     public Map<String, Object> getPlaceList(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO) {
@@ -218,7 +221,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
     }
 
     /**
-     * 매장등록 API 호출
+     * 매장등록
      */
     @Override
     public Map<String, Object> regPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO){
@@ -239,13 +242,61 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
         naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
 
+        // 매장정보 조회
+        DefaultMap<Object> storeInfo = naverOrderLinkMapper.getStoreInfo(naverOrderLinkVO);
+        naverOrderApiVO.setShopName(storeInfo.getStr("storeNm"));
+        naverOrderApiVO.setTaxNo(storeInfo.getStr("bizNo"));
+        naverOrderApiVO.setCeoName(storeInfo.getStr("ownerNm"));
+        naverOrderApiVO.setShopTelNo(storeInfo.getStr("telNo"));
+        naverOrderApiVO.setCeoTelNo(storeInfo.getStr("telNo"));
+        naverOrderApiVO.setPostNo(storeInfo.getStr("postNo"));
+        naverOrderApiVO.setAddrBase(storeInfo.getStr("addr"));
+        naverOrderApiVO.setAddrDetail(storeInfo.getStr("addrDtl"));
+
         Map<String, Object> resultMap = postRequest(naverOrderApiVO, apiFullUrl);
+
+        // API 응답값 추출하여 내부 DB 저장
+        Object statusObj = resultMap.get("status");
+        int status = statusObj != null ? Integer.parseInt(statusObj.toString()) : 0;
+
+        Map<String, Object> data = (Map<String, Object>) resultMap.get("data");
+        if (status == 201 && data != null) {
+
+            String channelShopId = (String) data.get("channelShopId");
+            String tableChannelServiceId = null;
+            String pickupChannelServiceId = null;
+
+            List<Map<String, Object>> services = (List<Map<String, Object>>) data.get("services");
+            if (services != null) {
+                for (Map<String, Object> service : services) {
+
+                    String serviceType = (String) service.get("serviceType");
+                    Object channelServiceIdObj = service.get("channelServiceId");
+                    String channelServiceId = channelServiceIdObj != null ? channelServiceIdObj.toString() : null;
+
+                    if ("TABLE".equals(serviceType)) {
+                        tableChannelServiceId = channelServiceId;
+                    } else if ("PICKUP".equals(serviceType)) {
+                        pickupChannelServiceId = channelServiceId;
+                    }
+                }
+            }
+
+            // 네이버 주문연동 정보 저장
+            String dt = currentDateTimeString();
+            naverOrderLinkVO.setModDt(dt);
+            naverOrderLinkVO.setModId(sessionInfoVO.getUserId());
+            naverOrderLinkVO.setOrderBusinessId(channelShopId);
+            naverOrderLinkVO.setOrderChannelServiceIdTable(tableChannelServiceId);
+            naverOrderLinkVO.setOrderChannelServiceIdPickup(pickupChannelServiceId);
+            naverOrderLinkMapper.saveNaverOrderLink(naverOrderLinkVO);
+        }
 
         return resultMap;
     }
 
     /**
-     * 매장수정 API 호출
+     * 매장수정(미사용)
      */
     @Override
     public Map<String, Object> modPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO){
@@ -272,20 +323,10 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
     }
 
     /**
-     * 매장 단건조회 API 호출
+     * 매장 단건조회
      */
     @Override
     public Map<String, Object> getPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO) {
-
-        // 세션정보 또는 파라미터에서 받아온 정보 사용
-        /*String sStoreCd = "";
-
-        if(sessionInfoVO.getStoreCd() != null && sessionInfoVO.getStoreCd() != "") {
-            sStoreCd = sessionInfoVO.getStoreCd();
-        }else{
-            sStoreCd = naverOrderApiVO.getStoreCd();
-        }*/
-
 
         NaverOrderLinkVO naverOrderLinkVO = new NaverOrderLinkVO();
         naverOrderLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -314,7 +355,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
     }
 
     /**
-     * 서비스 활성화/비활성화 API 호출
+     * 서비스 활성화/비활성화
      */
     @Override
     public Map<String, Object> regServiceActive(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO){
@@ -335,12 +376,94 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
         naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
 
+        // 네이버 주문 유형 ChannelServiceId 조회
+        DefaultMap<Object> channelServiceIdInfo = naverOrderLinkMapper.getNaverOrderChannelServiceId(naverOrderLinkVO);
+        String tableChannelServiceId = channelServiceIdInfo.getStr("orderChannelServiceIdTable");
+        String pickupChannelServiceId = channelServiceIdInfo.getStr("orderChannelServiceIdPickup");
+
+        // API 호출 데이터 셋팅
+        if (naverOrderApiVO.getServices() != null) {
+            for (NaverOrderApiVO.ServiceItem service : naverOrderApiVO.getServices()) {
+                if ("TABLE".equals(service.getServiceType())) {
+                    service.setChannelServiceId(Long.valueOf(tableChannelServiceId));
+                } else if ("PICKUP".equals(service.getServiceType())) {
+                    service.setChannelServiceId(Long.valueOf(pickupChannelServiceId));
+                }
+            }
+        }
+
         Map<String, Object> resultMap = postRequest(naverOrderApiVO, apiFullUrl);
 
         return resultMap;
     }
 
+    /**
+     * 매핑해제
+     */
+    @Override
+    public Map<String, Object> delPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO){
 
+        // 네.아.로 Unique ID 조회
+        NaverOrderLinkVO naverOrderLinkVO = new NaverOrderLinkVO();
+        naverOrderLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        naverOrderLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
+
+        // 개발/운영 Api URL 조회
+        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiUrl("API_URL");
+        naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
+
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/api/v1/external/pos-server/shops/channel-mapping";
+
+        naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
+
+        Map<String, Object> resultMap = deleteRequest(naverOrderApiVO, apiFullUrl);
+
+        // 매핑해제 성공 시, 주문연동 매핑 정보 초기화
+        Object statusObj = resultMap.get("status");
+        int status = statusObj != null ? Integer.parseInt(statusObj.toString()) : 0;
+
+        if (status == 200) {
+            String dt = currentDateTimeString();
+            naverOrderLinkVO.setModDt(dt);
+            naverOrderLinkVO.setModId(sessionInfoVO.getUserId());
+            naverOrderLinkVO.setOrderBusinessId(null);
+            naverOrderLinkVO.setOrderChannelServiceIdTable(null);
+            naverOrderLinkVO.setOrderChannelServiceIdPickup(null);
+            naverOrderLinkMapper.saveNaverOrderLink(naverOrderLinkVO);
+        }
+
+        return resultMap;
+    }
+
+    /**
+     * 서비스별 일시중지 상태 조회
+     */
+    @Override
+    public Map<String, Object> getServiceActive(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO) {
+
+        // 네.아.로 Unique ID 조회
+        NaverOrderLinkVO naverOrderLinkVO = new NaverOrderLinkVO();
+        naverOrderLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        naverOrderLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
+
+        // 개발/운영 Api URL 조회
+        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiUrl("API_URL");
+        naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
+        DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
+
+        String apiFullUrl = apiInfo.getStr("apiUrl") + "/pos-server/shops/" + sessionInfoVO.getStoreCd() + "/naver/services";
+
+        naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
+
+        Map<String, Object> resultMap = getRequest(naverOrderApiVO, apiFullUrl, "ORDERPICK");
+
+        return resultMap;
+    }
 
     // ==================== HTTP 공통 메서드 ====================
     /**
@@ -514,7 +637,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
             // 2. HttpURLConnection 객체 생성 및 설정
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("PATCH");
+            setPatchMethod(connection);
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + naverOrderApiVO.getAccessToken());
@@ -655,6 +778,39 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
         //
         return resultMap;
+    }
+
+    /**
+     * JDK의 HttpURLConnection은 PATCH 메서드를 화이트리스트에 두지 않아
+     * setRequestMethod("PATCH") 호출 시 ProtocolException이 발생한다.
+     * 리플렉션으로 내부 method 필드를 직접 세팅해서 우회한다.
+     */
+    private void setPatchMethod(HttpURLConnection connection) throws Exception {
+
+        Object target = connection;
+
+        // HTTPS 연결은 실제 method 필드가 내부 delegate 객체에 있음
+        if (connection instanceof HttpsURLConnection) {
+            try {
+                Field delegateField = connection.getClass().getDeclaredField("delegate");
+                delegateField.setAccessible(true);
+                target = delegateField.get(connection);
+            } catch (NoSuchFieldException e) {
+                Field delegateField = connection.getClass().getSuperclass().getDeclaredField("delegate");
+                delegateField.setAccessible(true);
+                target = delegateField.get(connection);
+            }
+        }
+
+        try {
+            Field methodField = HttpURLConnection.class.getDeclaredField("method");
+            methodField.setAccessible(true);
+            methodField.set(target, "PATCH");
+        } catch (NoSuchFieldException e) {
+            Field methodField = target.getClass().getSuperclass().getDeclaredField("method");
+            methodField.setAccessible(true);
+            methodField.set(target, "PATCH");
+        }
     }
 
 }

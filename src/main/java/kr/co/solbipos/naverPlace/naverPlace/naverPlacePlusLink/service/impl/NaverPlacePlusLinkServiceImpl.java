@@ -262,7 +262,6 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
                 NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
                 naverPlacePlusLinkVO.setHqOfficeCd(result.getStr("hqOfficeCd"));
                 naverPlacePlusLinkVO.setStoreCd(result.getStr("storeCd"));
-                naverPlacePlusLinkVO.setUniqueId(jsonNode.get("response").get("id").asText());
                 naverPlacePlusLinkVO.setLastResponseDt(dt);
                 //naverPlacePlusLinkVO.setMpNo(jsonNode.get("response").get("mobile").asText());
                 naverPlacePlusLinkVO.setRegDt(dt);
@@ -270,10 +269,20 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
                 naverPlacePlusLinkVO.setModDt(dt);
                 naverPlacePlusLinkVO.setModId(result.getStr("userId"));
 
+                // 네이버 플레이스 플러스 연동인 경우
+                if (result.getStr("callbackPage").contains("/naverPlacePlusLink/popup/naverPlacePlusPop")) {
+                    naverPlacePlusLinkVO.setUniqueId(jsonNode.get("response").get("id").asText());
+                }
+
+                // 네이버 주문 연동인 경우
+                if (result.getStr("callbackPage").contains("/naverOrderLink/popup/naverOrderPop")) {
+                    naverPlacePlusLinkVO.setOrderUniqueId(jsonNode.get("response").get("id").asText());
+                }
+
                 naverPlacePlusLinkMapper.saveNaverUniqueId(naverPlacePlusLinkVO);
 
                 // return data setting
-                resultMap.put("uniqueId", naverPlacePlusLinkVO.getUniqueId());
+                resultMap.put("uniqueId", jsonNode.get("response").get("id").asText());
                 resultMap.put("callbackPage", result.getStr("callbackPage"));
             }
 

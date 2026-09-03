@@ -1,5 +1,7 @@
 package kr.co.solbipos.naverPlace.naverPlace.naverOrderLink.service;
 
+import java.util.List;
+
 /**
  * @Class Name  : NaverOrderApiVO.java
  * @Description : 네이버플레이스 > 네이버플레이스 > 네이버 주문연동 API VO
@@ -41,6 +43,67 @@ public class NaverOrderApiVO {
     private int page;
     /** 페이징 사이즈 */
     private int size;
+    /** 매장명 */
+    private String shopName;
+    /** 사업자번호 */
+    private String taxNo;
+    /** 대표자명 */
+    private String ceoName;
+    /** 매장 전화번호 */
+    private String shopTelNo;
+    /** 대표자 전화번호 */
+    private String ceoTelNo;
+    /** 우편번호 */
+    private String postNo;
+    /** 지번주소 */
+    private String jibun;
+    /** 도로명주소 */
+    private String roadAddr;
+    /** 기본주소 */
+    private String addrBase;
+    /** 상세주소 */
+    private String addrDetail;
+    /** POS 매장 ID */
+    private String posShopId;
+    /** 채널 매장 ID (비즈니스 아이디) */
+    private String channelShopId;
+    /** 서비스 활성화 목록 */
+    private List<ServiceItem> services;
+
+    /** 서비스 활성화 항목 */
+    public static class ServiceItem {
+
+        /** 서비스 유형 (TABLE, PICKUP) */
+        private String serviceType;
+        /** 채널 서비스 ID */
+        private Long channelServiceId;
+        /** 사용 여부 */
+        private Boolean useFlag;
+
+        public String getServiceType() {
+            return serviceType;
+        }
+
+        public void setServiceType(String serviceType) {
+            this.serviceType = serviceType;
+        }
+
+        public Long getChannelServiceId() {
+            return channelServiceId;
+        }
+
+        public void setChannelServiceId(Long channelServiceId) {
+            this.channelServiceId = channelServiceId;
+        }
+
+        public Boolean getUseFlag() {
+            return useFlag;
+        }
+
+        public void setUseFlag(Boolean useFlag) {
+            this.useFlag = useFlag;
+        }
+    }
 
     public String getCode() {
         return code;
@@ -128,5 +191,109 @@ public class NaverOrderApiVO {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getTaxNo() {
+        return taxNo;
+    }
+
+    public void setTaxNo(String taxNo) {
+        this.taxNo = taxNo;
+    }
+
+    public String getCeoName() {
+        return ceoName;
+    }
+
+    public void setCeoName(String ceoName) {
+        this.ceoName = ceoName;
+    }
+
+    public String getShopTelNo() {
+        return shopTelNo;
+    }
+
+    public void setShopTelNo(String shopTelNo) {
+        this.shopTelNo = shopTelNo;
+    }
+
+    public String getCeoTelNo() {
+        return ceoTelNo;
+    }
+
+    public void setCeoTelNo(String ceoTelNo) {
+        this.ceoTelNo = ceoTelNo;
+    }
+
+    public String getPostNo() {
+        return postNo;
+    }
+
+    public void setPostNo(String postNo) {
+        this.postNo = postNo;
+    }
+
+    public String getJibun() {
+        return jibun;
+    }
+
+    public void setJibun(String jibun) {
+        this.jibun = jibun;
+    }
+
+    public String getRoadAddr() {
+        return roadAddr;
+    }
+
+    public void setRoadAddr(String roadAddr) {
+        this.roadAddr = roadAddr;
+    }
+
+    public String getAddrBase() {
+        return addrBase;
+    }
+
+    public void setAddrBase(String addrBase) {
+        this.addrBase = addrBase;
+    }
+
+    public String getAddrDetail() {
+        return addrDetail;
+    }
+
+    public void setAddrDetail(String addrDetail) {
+        this.addrDetail = addrDetail;
+    }
+
+    public String getPosShopId() {
+        return posShopId;
+    }
+
+    public void setPosShopId(String posShopId) {
+        this.posShopId = posShopId;
+    }
+
+    public String getChannelShopId() {
+        return channelShopId;
+    }
+
+    public void setChannelShopId(String channelShopId) {
+        this.channelShopId = channelShopId;
+    }
+
+    public List<ServiceItem> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ServiceItem> services) {
+        this.services = services;
     }
 }

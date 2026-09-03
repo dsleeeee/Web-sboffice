@@ -14,7 +14,7 @@
         </button>
     </div>
 
-    <%-- 메인 --%>
+    <%-- 메인 화면 --%>
     <div id="divView1">
         <div class="mt10" style="text-align:center;">
             <img src="/resource/solbipos/css/img/orderkit/banner_260123@2x.png" alt="" style="width:100%; height: 100%;"/>
@@ -45,8 +45,6 @@
             <div class="updownSet oh mb10">
                 <%-- 연동 해지 --%>
                 <button class="btn_skyblue" id="btnWithdraw" ng-click="btnWithdraw();"><s:message code="naverOrderLink.withdraw" /></button>
-                <%-- 수정 --%>
-                <button class="btn_skyblue" iid="btnEdit" ng-click="btnEdit();"><s:message code="cmm.edit" /></button>
             </div>
 
             <%-- 연동 정보 섹션 --%>
@@ -88,6 +86,12 @@
                 </div>
             </div>
 
+            <%-- 버튼 영역 --%>
+            <div class="updownSet oh mb10">
+                <%-- 주문 유형 정보 수정 --%>
+                <button class="btn_skyblue" iid="btnEdit" ng-click="btnEdit();"><s:message code="cmm.edit" /></button>
+            </div>
+
             <%-- 주문 유형 정보 섹션 --%>
             <div class="info-section mt10">
                 <div class="info-section-title"><s:message code="naverOrderLink.orderTypeInfo" /></div>
@@ -95,14 +99,14 @@
                     <%-- 테이블 주문 --%>
                     <div class="order-type-cell">
                         <span class="order-type-label"><s:message code="naverOrderLink.tableOrder" /></span>
-                        <label class="radio-label"><input type="radio" name="tableOrder1" id="rdTableOrderY1" value="Y" disabled> 사용</label>
-                        <label class="radio-label"><input type="radio" name="tableOrder1" id="rdTableOrderN1" value="N" disabled> 미사용</label>
+                        <label class="radio-label"><input type="radio" name="tableOrder1" id="rdTableOrderY1" value="Y" disabled><s:message code="naverOrderLink.exposeY" /></label>
+                        <label class="radio-label"><input type="radio" name="tableOrder1" id="rdTableOrderN1" value="N" disabled><s:message code="naverOrderLink.exposeN" /></label>
                     </div>
                         <%-- 픽업 주문 --%>
                     <div class="order-type-cell">
                         <span class="order-type-label"><s:message code="naverOrderLink.pickupOrder" /></span>
-                        <label class="radio-label"><input type="radio" name="pickupOrder1" id="rdPickupOrderY1" value="Y" disabled> 사용</label>
-                        <label class="radio-label"><input type="radio" name="pickupOrder1" id="rdPickupOrderN1" value="N" disabled> 미사용</label>
+                        <label class="radio-label"><input type="radio" name="pickupOrder1" id="rdPickupOrderY1" value="Y" disabled><s:message code="naverOrderLink.exposeY" /></label>
+                        <label class="radio-label"><input type="radio" name="pickupOrder1" id="rdPickupOrderN1" value="N" disabled><s:message code="naverOrderLink.exposeN" /></label>
                     </div>
                 </div>
             </div>
@@ -165,9 +169,11 @@
     // 네.아.로 uniqueId
     var uniqueId = "${uniqueId}";
     // 약관동의 여부
-    var agreeYn = ${agreeYn};
+    //var agreeYn = ${agreeYn};
     // 네이버 주문연동 여부
     var linkYn = ${linkYn};
+    // 서비스별 활성화 여부
+    var serviceActiveYn = ${serviceActiveYn};
     // 연동 단계
     var linkStep = 0;
 
@@ -178,13 +184,13 @@
 
     // 연동 단계 파악
     // 0 : 네.아.로 로그인 미완료
-    // 1 : 네.아.로 로그인 완료, 동의 미완료
+    // 1 : 네.아.로 로그인 완료, 동의 미완료  --> 동의 받는 로직이 사라지면서 해당 단계 없어짐
     // 2 : 동의 완료, 주문연동 미완료
     // 3 : 주문연동 완료
     if (uniqueId != "" && uniqueId != null) {
-        linkStep = 1;
+        linkStep = 2; // linkStep = 1;
 
-        if (agreeYn != null && agreeYn != undefined) {
+        /*if (agreeYn != null && agreeYn != undefined) {
             if (agreeYn.ownerMemberStatus == "REGULAR" && agreeYn.isJoinedMember == true) {
                 var arr = agreeYn.agreedPlacePrivacyAgreementTypes;
                 var cnt = 0;
@@ -200,16 +206,16 @@
                 }
 
                 if (cnt => 2) {
-                    linkStep = 2;
+                    linkStep = 2;*/
 
                     if (linkYn != null && linkYn != undefined) {
                         if (linkYn.status === 200 && linkYn.data) {
                             linkStep = 3;
                         }
                     }
-                }
+                /*}
             }
-        }
+        }*/
     }
 
     // 화면 셋팅
@@ -217,11 +223,13 @@
         $("#divView1").css("display", "");
         $("#divView2").css("display", "none");
         $("#divView3").css("display", "none");
+        $("#divView4").css("display", "none");
 
     } else if (linkStep == 2) {
         $("#divView1").css("display", "none");
         $("#divView2").css("display", "");
         $("#divView3").css("display", "none");
+        $("#divView4").css("display", "none");
 
         // 업체리스트 조회
         getStoreList(0);
@@ -230,25 +238,37 @@
         $("#divView1").css("display", "none");
         $("#divView2").css("display", "none");
         $("#divView3").css("display", "");
+        $("#divView4").css("display", "none");
 
         // 연동 정보 셋팅
-        $("#storeNm1").val(linkYn.name);
-        $("#businessId1").val(linkYn.channelShopId);
-        $("#serviceNm1").val("NAVER");
-        $("#phoneNo1").val(linkYn.shopTelNo);
-        $("#addr1").val(linkYn.roadAddr ? linkYn.addressJson.roadAddr : "");
-        $("#addrDtl1").val(linkYn.addrDetail ? linkYn.addressJson.addrDetail : "");
+        $("#storeNm1").val(linkYn.data.name);
+        $("#businessId1").val(linkYn.data.channelShopId);
+        $("#serviceNm1").val(linkYn.data.serviceName);
+        $("#phoneNo1").val(linkYn.data.shopTelNo);
+        $("#addr1").val(linkYn.data.roadAddr ? linkYn.data.roadAddr : "");
+        $("#addrDtl1").val(linkYn.data.addrDetail ? linkYn.data.addrDetail : "");
 
         // 주문 유형 정보 셋팅
-        if (linkYn.tableOrderYn) {
-            $("input[name='tableOrder1'][value='Y']").prop("checked", true);
-        } else {
-            $("input[name='tableOrder1'][value='N']").prop("checked", true);
-        }
-        if (linkYn.pickupOrderYn) {
-            $("input[name='pickupOrder1'][value='Y']").prop("checked", true);
-        } else {
-            $("input[name='pickupOrder1'][value='N']").prop("checked", true);
+        $("input[name='tableOrder1'][value='N']").prop("checked", true);
+        $("input[name='pickupOrder1'][value='N']").prop("checked", true);
+
+        var serviceList = (serviceActiveYn && serviceActiveYn.data) ? serviceActiveYn.data : [];
+        for (var i = 0; i < serviceList.length; i++) {
+            var serviceItem = serviceList[i];
+
+            if (serviceItem.service === "TABLE") {
+                if (serviceItem.useFlag) {
+                    $("input[name='tableOrder1'][value='Y']").prop("checked", true);
+                } else {
+                    $("input[name='tableOrder1'][value='N']").prop("checked", true);
+                }
+            } else if (serviceItem.service === "PICKUP") {
+                if (serviceItem.useFlag) {
+                    $("input[name='pickupOrder1'][value='Y']").prop("checked", true);
+                } else {
+                    $("input[name='pickupOrder1'][value='N']").prop("checked", true);
+                }
+            }
         }
     }
 
@@ -282,7 +302,7 @@
 
     /*{"ownerMemberStatus":"NONMEMBER","isJoinedMember":false,"isWithdrawing":false}*/
 
-    console.log("연동단계1 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId + "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes + " / 주문연동 :" + linkYn.placeId);
+    console.log("연동단계1 :" + linkStep + " / 네.아.로 아이디 :" + uniqueId /*+ "/ 동의 :" + agreeYn.agreedPlacePrivacyAgreementTypes*/ + " / 주문연동 :" + linkYn.placeId);
 
     // 로그아웃 버튼 오픈
     var clickCnt = 0;
@@ -310,9 +330,7 @@
         var params = {};
         params.channelType = "NAVER";
         params.page = currentPage;
-        params.size = 5;
-        //params.storeCd = storeCd;
-        //params.uniqueId = uniqueId;
+        params.size = 10;
 
         var url = "/naverPlace/naverPlace/naverOrderLink/getPlaceList.sb";
         // 가상로그인시 세션활용
@@ -327,14 +345,14 @@
             dataType: 'json',
             url: url,
             data: params,
-            error: function (xhr, status, error) {
-                console.log("AJAX 에러:", status, error, xhr.responseText);
-            },
             success: function (data) {
                 if (data.status === "OK") {
                     var arr = data.data.list.data;
                     var innerHtml = "<h3 class=\"store-list-title\">네이버 주문에 연동하실 매장을 선택 해주세요.</h3>";
                     var pagingHtml = "";
+
+                    // 조회된 전체 매장정보 갖고있기(연동 시 사용)
+                    window.storeList = arr;
 
                     if (arr != null && arr.length > 0) {
 
@@ -358,7 +376,7 @@
                             innerHtml += "</div>";
 
                             // 연동하기 버튼
-                            innerHtml += "<button class=\"btn-link\" onclick=\"btnLinkStore(\'" + item.channelShopId + "\')\">연동하기</button>";
+                            innerHtml += "<button class=\"btn-link\" onclick=\"btnLinkStore(" + i + ")\">연동하기</button>";
                             innerHtml += "</div>";
                         }
 
@@ -372,11 +390,11 @@
                         if (currentPage > 0) {
                             // 다음 페이지 결과 없음
                             noMorePages = true;
-                            alert("마지막 페이지 입니다.");
+                            s_alert.pop("마지막 페이지 입니다.");
                             getStoreList(currentPage - 1);
                             return false;
                         } else {
-                            // 첫 페이지에서 결과 없으면 페이징 숨김
+                            // 조회 결과 없을 때
                             innerHtml += "<div class=\"store-card-none\">";
                             innerHtml += "<p class=\"store-none-msg\">등록된 매장이 없습니다.<br/>신규 등록을 진행 해주세요.</p>";
                             innerHtml += "</div>";
@@ -386,13 +404,16 @@
                     $("#divStoreList").html(innerHtml);
                     $("#divPaging").html(pagingHtml);
                 }
+            },
+            error: function (xhr, status, error) {
+                console.log("AJAX 에러:", status, error, xhr.responseText);
             }
         });
     }
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderLink.js?ver=20260423.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderLink.js?ver=20260831.01" charset="utf-8"></script>
 
 <%-- 네이버주문연동 정보 수정 팝업--%>
 <c:import url="/WEB-INF/view/naverPlace/naverPlace/naverOrderLink/naverOrderInfo.jsp">

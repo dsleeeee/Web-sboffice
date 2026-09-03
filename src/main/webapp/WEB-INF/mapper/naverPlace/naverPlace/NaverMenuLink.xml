@@ -4,4 +4,269 @@
 
 <mapper namespace="kr.co.solbipos.naverPlace.naverPlace.naverMenuLink.service.impl.NaverMenuLinkMapper">
 
+    <!-- 개발/운영 Api URL 조회 -->
+    <!--
+        TABLE    : TB_CM_API_LINK_INFO
+        PARAM    : naverMenuLinkVO
+        COMMENTS : 개발/운영 Api URL을 조회한다.
+    -->
+    <select id="getApiUrl" parameterType="naverMenuLinkVO" resultType="DefaultMap">
+        /* USE : NaverMenuLinkMapper.getApiUrl */
+        SELECT  FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiUrl}) AS ${apiUrl}
+        ,       FN_GET_API_URL(#{storeCd}, #{apiInfo}, #{apiKey}) AS ${apiKey}
+        FROM    DUAL
+    </select>
+
+    <!-- (네이버 주문연동용) 네.아.로 Unique ID 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverMenuLinkVO
+        COMMENTS : (네이버 주문연동용) 네.아.로 Unique ID를 조회한다.
+    -->
+    <select id="getNaverUniqueId" parameterType="naverMenuLinkVO" resultType="String">
+         /* NaverMenuLinkMapper.getNaverUniqueId */
+        SELECT  ORDER_UNIQUE_ID AS UNIQUE_ID
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD     = #{storeCd}
+    </select>
+
+    <!-- 네이버 메뉴(옵션)목록 사용여부 초기화 -->
+    <!--
+        TABLE    : TB_CM_NAVER_ORDER_OPTION
+        PARAM    : naverMenuLinkVO
+        COMMENTS : API 재동기화 전, 해당 매장의 옵션을 전부 미사용(N) 처리한다.
+    -->
+    <update id="resetMenuOptionUseYn" parameterType="naverMenuLinkVO">
+        /* USE : NaverMenuLinkMapper.resetMenuOptionUseYn */
+        UPDATE TB_CM_NAVER_ORDER_OPTION
+        SET    USE_YN = 'N'
+        WHERE  POS_SHOP_ID = #{posShopId}
+    </update>
+
+    <!-- 네이버 메뉴(옵션)목록 저장 -->
+    <!--
+        TABLE    : TB_CM_NAVER_ORDER_OPTION
+        PARAM    : List&lt;naverMenuLinkVO&gt;
+        COMMENTS : 조회해온 네이버 메뉴(옵션)목록을 저장한다. (API 응답에 있는 옵션만 USE_YN = 'Y' 처리)
+    -->
+    <insert id="saveMenuOptionList" parameterType="java.util.List">
+        /* USE : NaverMenuLinkMapper.saveMenuOptionList */
+        BEGIN
+        <foreach collection="list" item="item" separator="">
+            MERGE INTO TB_CM_NAVER_ORDER_OPTION A
+            USING DUAL
+            ON (
+                    A.POS_SHOP_ID = #{item.posShopId}
+                AND A.OPTION_ID   = #{item.optionId}
+            )
+            WHEN MATCHED THEN
+            UPDATE
+               SET A.NAME = #{item.name}
+               ,   A.AGENCY_KEY = #{item.agencyKey}
+               ,   A.USE_YN = 'Y'
+               ,   A.MOD_DT = #{item.modDt}
+               ,   A.MOD_ID = #{item.modId}
+            WHEN NOT MATCHED THEN
+            INSERT (
+                A.POS_SHOP_ID,
+                A.OPTION_ID,
+                A.NAME,
+                A.AGENCY_KEY,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            )
+            VALUES (
+                #{item.posShopId},
+                #{item.optionId},
+                #{item.name},
+                #{item.agencyKey},
+                'Y',
+                #{item.regDt},
+                #{item.regId},
+                #{item.modDt},
+                #{item.modId}
+            );
+        </foreach>
+        END;
+    </insert>
+
+    <!-- 네이버 메뉴(옵션)목록 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_ORDER_OPTION
+        PARAM    : naverMenuLinkVO
+        COMMENTS : 저장된 네이버 메뉴(옵션)목록을 조회한다. (사용중인 옵션만)
+    -->
+    <select id="getMenuOptionList" parameterType="naverMenuLinkVO" resultType="DefaultMap">
+        /* USE : NaverMenuLinkMapper.getMenuOptionList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.OPTION_ID AS OPTION_ID_CLICK
+        ,       A.POS_SHOP_ID
+        ,       A.OPTION_ID
+        ,       A.NAME
+        ,       A.AGENCY_KEY
+        ,       B.PROD_CD
+        ,       B.PROD_NM
+        ,       B.SDSEL_GRP_CD
+        ,       CASE
+                    WHEN A.AGENCY_KEY IS NOT NULL AND B.SDSEL_GRP_CD IS NOT NULL THEN '사이드모상품'
+                    WHEN A.AGENCY_KEY IS NOT NULL AND B.SDSEL_GRP_CD IS NULL THEN '일반판매상품'
+                END AS SIDE_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_CM_NAVER_ORDER_OPTION A
+        LEFT OUTER JOIN TB_MS_PRODUCT B
+                     ON  B.STORE_CD = A.POS_SHOP_ID
+                     AND B.PROD_CD  = A.AGENCY_KEY
+        WHERE   A.POS_SHOP_ID = #{posShopId}
+        AND     A.USE_YN = 'Y'
+        <if test='naverMenuLinkYn != null and naverMenuLinkYn == "Y"'>
+        AND     A.AGENCY_KEY IS NOT NULL
+        </if>
+        <if test='naverMenuLinkYn != null and naverMenuLinkYn == "N"'>
+        AND     A.AGENCY_KEY IS NULL
+        </if>
+        ORDER BY A.OPTION_ID
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품목록조회 -->
+    <!--
+        TABLE    :
+        PARAM    : naverMenuLinkVO
+        COMMENTS : 상품목록을 조회한다.
+    -->
+    <select id="getProdList" parameterType="naverMenuLinkVO" resultType="DefaultMap">
+        /* USE : NaverMenuLinkMapper.getProdList */
+        <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+        WITH MATCH_PROD_CD AS (
+            SELECT DISTINCT T.GRP_PROD_CD AS PROD_CD
+            FROM (
+                -- 모상품 자신
+                SELECT p.PROD_CD AS GRP_PROD_CD
+                ,      p.PROD_CD AS ROW_PROD_CD
+                ,      p.PROD_NM AS ROW_PROD_NM
+                FROM   TB_MS_PRODUCT p
+                WHERE  p.STORE_CD = #{storeCd}
+                UNION ALL
+                -- 사이드(하위) 상품
+                SELECT p.PROD_CD  AS GRP_PROD_CD
+                ,      p2.PROD_CD AS ROW_PROD_CD
+                ,      p2.PROD_NM AS ROW_PROD_NM
+                FROM   TB_MS_PRODUCT p
+                INNER JOIN TB_MS_PRODUCT_SDSEL_CLASS sg
+                        ON  sg.STORE_CD     = p.STORE_CD
+                        AND sg.SDSEL_GRP_CD = p.SDSEL_GRP_CD
+                        AND sg.USE_YN       = 'Y'
+                INNER JOIN TB_MS_PRODUCT_SDSEL_PROD sp
+                        ON  sp.STORE_CD       = sg.STORE_CD
+                        AND sp.SDSEL_CLASS_CD = sg.SDSEL_CLASS_CD
+                        AND sp.USE_YN         = 'Y'
+                INNER JOIN TB_MS_PRODUCT p2
+                        ON  p2.STORE_CD = sp.STORE_CD
+                        AND p2.PROD_CD  = sp.PROD_CD
+                WHERE  p.STORE_CD = #{storeCd}
+            ) T
+            WHERE  1=1
+            <if test="prodCd != null and prodCd != ''">
+            AND    T.ROW_PROD_CD LIKE '%'||#{prodCd}||'%'
+            </if>
+            <if test="prodNm != null and prodNm != ''">
+            AND    T.ROW_PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+        )
+        </if>
+        SELECT *
+        FROM (
+            SELECT y.*
+            ,      MAX(IDX) OVER () AS TOT_CNT
+            FROM (
+                    SELECT DENSE_RANK() OVER (ORDER BY PROD_CD) AS IDX
+                    ,      PROD_CD
+                    ,      PROD_NM
+                    ,      PROD_CLASS_NM
+                    ,      SDSEL_GRP_CD
+                    ,      SDSEL_CLASS_CD
+                    ,      SIDE_PROD_CD
+                    ,      SIDE_PROD_NM
+                    ,      NVL(SIDE_PROD_NM, PROD_NM) AS DISP_PROD_NM
+                    ,      NVL(SIDE_PROD_CD, PROD_CD) AS DISP_PROD_CD
+                    ,      ROW_TYPE
+                    ,      CLASS_SORT
+                    ,      SIDE_SORT
+                    FROM (
+                    -- 모상품 헤더 라인
+                    SELECT tmp.PROD_CD
+                    ,      tmp.PROD_NM
+                    ,      ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                    ,      tmp.SDSEL_GRP_CD
+                    ,      NULL AS SDSEL_CLASS_CD
+                    ,      NULL AS SDSEL_CLASS_NM
+                    ,      NULL AS CLASS_DISP_SEQ
+                    ,      NULL AS SIDE_PROD_CD
+                    ,      NULL AS SIDE_PROD_NM
+                    ,      NULL AS SIDE_PROD_DISP_SEQ
+                    ,      0    AS ROW_TYPE
+                    ,      0    AS CLASS_SORT
+                    ,      0    AS SIDE_SORT
+                    FROM   TB_MS_PRODUCT tmp
+                    INNER JOIN TB_MS_STORE tms ON tms.STORE_CD = tmp.STORE_CD
+                    WHERE  tmp.STORE_CD = #{storeCd}
+                    <if test="!chkDt">
+                        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND    tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                        </if>
+                    </if>
+                    <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+                    AND    tmp.PROD_CD IN (SELECT PROD_CD FROM MATCH_PROD_CD)
+                    </if>
+                    UNION ALL
+                    -- 하위(사이드) 상품 상세 라인
+                    SELECT tmp.PROD_CD
+                    ,      tmp.PROD_NM
+                    ,      ( SELECT SF_GET_PROD_CLASSES('S', tmp2.STORE_CD, tmp2.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                    ,      tmp.SDSEL_GRP_CD
+                    ,      tmpsg.SDSEL_CLASS_CD
+                    ,      tmpsg.SDSEL_CLASS_NM
+                    ,      tmpsg.DISP_SEQ AS CLASS_DISP_SEQ
+                    ,      tmpsp.PROD_CD  AS SIDE_PROD_CD
+                    ,      tmp2.PROD_NM   AS SIDE_PROD_NM
+                    ,      tmpsp.DISP_SEQ AS SIDE_PROD_DISP_SEQ
+                    ,      1 AS ROW_TYPE
+                    ,      tmpsg.DISP_SEQ AS CLASS_SORT
+                    ,      tmpsp.DISP_SEQ AS SIDE_SORT
+                    FROM   TB_MS_PRODUCT tmp
+                    INNER JOIN TB_MS_STORE tms ON tms.STORE_CD = tmp.STORE_CD
+                    INNER JOIN TB_MS_PRODUCT_SDSEL_CLASS tmpsg
+                    ON  tmpsg.STORE_CD     = tmp.STORE_CD
+                    AND tmpsg.SDSEL_GRP_CD = tmp.SDSEL_GRP_CD
+                    AND tmpsg.USE_YN       = 'Y'
+                    INNER JOIN TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                    ON  tmpsp.STORE_CD       = tmpsg.STORE_CD
+                    AND tmpsp.SDSEL_CLASS_CD = tmpsg.SDSEL_CLASS_CD
+                    AND tmpsp.USE_YN         = 'Y'
+                    LEFT JOIN TB_MS_PRODUCT tmp2
+                    ON  tmp2.STORE_CD = tmpsp.STORE_CD
+                    AND tmp2.PROD_CD  = tmpsp.PROD_CD
+                    WHERE  tmp.STORE_CD = #{storeCd}
+                    <if test="!chkDt">
+                        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND    tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                        </if>
+                    </if>
+                    <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+                    AND    tmp.PROD_CD IN (SELECT PROD_CD FROM MATCH_PROD_CD)
+                    </if>
+                ) X
+            ) y
+        ) z
+        WHERE IDX BETWEEN #{offset} AND #{limit}
+        ORDER BY PROD_CD, ROW_TYPE, CLASS_SORT, SIDE_SORT
+    </select>
 </mapper>

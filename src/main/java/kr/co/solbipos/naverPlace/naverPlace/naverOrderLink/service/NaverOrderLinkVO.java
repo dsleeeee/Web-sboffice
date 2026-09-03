@@ -69,6 +69,12 @@ public class NaverOrderLinkVO extends PageVO {
     private String apiUrl;
     /** api key */
     private String apiKey;
+    /** 네이버 주문연동 businessId */
+    private String orderBusinessId;
+    /** 네이버 주문연동 channelServiceId - table */
+    private String orderChannelServiceIdTable;
+    /** 네이버 주문연동 channelServiceId = pickup */
+    private String orderChannelServiceIdPickup;
 
     public String getHqOfficeCd() { return hqOfficeCd; }
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -141,4 +147,28 @@ public class NaverOrderLinkVO extends PageVO {
 
     public String getApiKey() { return apiKey; }
     public void setApiKey(String apiKey) { this.apiKey = apiKey; }
+
+    public String getOrderBusinessId() {
+        return orderBusinessId;
+    }
+
+    public void setOrderBusinessId(String orderBusinessId) {
+        this.orderBusinessId = orderBusinessId;
+    }
+
+    public String getOrderChannelServiceIdTable() {
+        return orderChannelServiceIdTable;
+    }
+
+    public void setOrderChannelServiceIdTable(String orderChannelServiceIdTable) {
+        this.orderChannelServiceIdTable = orderChannelServiceIdTable;
+    }
+
+    public String getOrderChannelServiceIdPickup() {
+        return orderChannelServiceIdPickup;
+    }
+
+    public void setOrderChannelServiceIdPickup(String orderChannelServiceIdPickup) {
+        this.orderChannelServiceIdPickup = orderChannelServiceIdPickup;
+    }
 }

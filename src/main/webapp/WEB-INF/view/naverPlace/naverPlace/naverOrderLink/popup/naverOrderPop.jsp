@@ -14,9 +14,14 @@
     var prePage = "${prePage}";
 
     if (prePage == "login") {
-        goAgreePop();
+        /*goAgreePop();*/
 
-    } else if (prePage == "agree") {
+        if (window.opener && !window.opener.closed) {
+            window.opener.location.reload();
+        }
+        window.close();
+
+    } /*else if (prePage == "agree") {
         if (window.opener && !window.opener.closed) {
             window.opener.location.reload();
         }
@@ -31,6 +36,6 @@
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverOrderLink/naverOrderPop.sb");
         var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
-    }
+    }*/
 
 </script>

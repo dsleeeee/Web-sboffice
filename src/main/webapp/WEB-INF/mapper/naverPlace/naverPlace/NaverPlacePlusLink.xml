@@ -74,7 +74,8 @@
         )
         WHEN MATCHED THEN
         UPDATE
-           SET A.UNIQUE_ID = #{uniqueId},
+           SET A.UNIQUE_ID = NVL(#{uniqueId}, A.UNIQUE_ID),
+               A.ORDER_UNIQUE_ID = NVL(#{orderUniqueId}, A.ORDER_UNIQUE_ID),
                A.LAST_RESPONSE_DT = #{lastResponseDt},
                A.MP_NO = #{mpNo},
                A.ETC01 = #{etc01},
@@ -94,6 +95,7 @@
             A.HQ_OFFICE_CD,
             A.STORE_CD,
             A.UNIQUE_ID,
+            A.ORDER_UNIQUE_ID,
             A.LAST_RESPONSE_DT,
             A.MP_NO,
             A.ETC01,
@@ -115,6 +117,7 @@
             #{hqOfficeCd},
             #{storeCd},
             #{uniqueId},
+            #{orderUniqueId},
             #{lastResponseDt},
             #{mpNo},
             #{etc01},

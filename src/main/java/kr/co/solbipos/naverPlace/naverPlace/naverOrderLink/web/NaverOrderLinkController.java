@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,6 +67,7 @@ public class NaverOrderLinkController {
         NaverOrderApiVO naverOrderApiVO = new NaverOrderApiVO();
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultMap2 = new HashMap<>();
+        Map<String, Object> resultMap3 = new HashMap<>();
 
         // 개발/운영 Api URL 조회
         naverOrderLinkVO.setApiInfo("NAVER_PLACE_POP_URL");
@@ -74,7 +76,7 @@ public class NaverOrderLinkController {
         DefaultMap<Object> apiInfo = naverOrderLinkService.getApiUrl(naverOrderLinkVO, sessionInfoVO);
         model.addAttribute("popUrl", apiInfo.getStr("apiUrl"));
 
-        // 네.아.로 Unique ID 조회
+        // (네이버 주문연동용) 네.아.로 Unique ID 조회
         String uniqueId = naverOrderLinkService.getNaverUniqueId(naverOrderLinkVO, sessionInfoVO);
         model.addAttribute("uniqueId", uniqueId);
 
@@ -84,16 +86,21 @@ public class NaverOrderLinkController {
             naverOrderApiVO.setChannelType("NAVER");
 
             // 동의여부확인 API 호출
-            resultMap = naverOrderLinkService.getAgreeYn(naverOrderApiVO, sessionInfoVO);
+            //resultMap = naverOrderLinkService.getAgreeYn(naverOrderApiVO, sessionInfoVO);
 
-            // 매장 단건조회 API 호출(주문연동 매장 유무 확인)
+            // 매장 단건조회(주문연동 매장 유무 확인)
             resultMap2 = naverOrderLinkService.getPlace(naverOrderApiVO, sessionInfoVO);
+
+            // 서비스별 일시중지 상태 조회
+            resultMap3 = naverOrderLinkService.getServiceActive(naverOrderApiVO, sessionInfoVO);
         }
 
-        model.addAttribute("agreeYn", convertToJson(resultMap));
+        //model.addAttribute("agreeYn", convertToJson(resultMap));
         model.addAttribute("linkYn", convertToJson(resultMap2));
-        LOGGER.info("동의여부확인 API: " + resultMap);
+        model.addAttribute("serviceActiveYn", convertToJson(resultMap3));
+        //LOGGER.info("동의여부확인 API: " + resultMap);
         LOGGER.info("주문연동여부: " + resultMap2);
+        LOGGER.info("서비스별 활성화 여부: " + resultMap3);
 
         return "naverPlace/naverPlace/naverOrderLink/naverOrderLink";
     }
@@ -110,8 +117,9 @@ public class NaverOrderLinkController {
         NaverOrderApiVO naverOrderApiVO = new NaverOrderApiVO();
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultMap2 = new HashMap<>();
+        Map<String, Object> resultMap3 = new HashMap<>();
 
-        // 네.아.로 Unique ID 조회
+        // (네이버 주문연동용) 네.아.로 Unique ID 조회
         String uniqueId = naverOrderLinkService.getNaverUniqueId(naverOrderLinkVO, sessionInfoVO);
 
         if (uniqueId != null && !uniqueId.isEmpty()) {
@@ -120,22 +128,26 @@ public class NaverOrderLinkController {
             naverOrderApiVO.setChannelType("NAVER");
 
             // 동의여부확인 API 호출
-            resultMap = naverOrderLinkService.getAgreeYn(naverOrderApiVO, sessionInfoVO);
+           //resultMap = naverOrderLinkService.getAgreeYn(naverOrderApiVO, sessionInfoVO);
 
-            // 매장 단건조회 API 호출(주문연동 매장 유무 확인)
+            // 매장 단건조회(주문연동 매장 유무 확인)
             resultMap2 = naverOrderLinkService.getPlace(naverOrderApiVO, sessionInfoVO);
+
+            // 서비스별 일시중지 상태 조회
+            resultMap3 = naverOrderLinkService.getServiceActive(naverOrderApiVO, sessionInfoVO);
         }
 
-        DefaultMap<String> resultMap3 = new DefaultMap<>();
-        resultMap3.put("uniqueId", uniqueId);
-        resultMap3.put("agreeYn", convertToJson(resultMap));
-        resultMap3.put("linkYn", convertToJson(resultMap2));
+        DefaultMap<String> resultMap4= new DefaultMap<>();
+        resultMap4.put("uniqueId", uniqueId);
+        //resultMap4.put("agreeYn", convertToJson(resultMap));
+        resultMap4.put("linkYn", convertToJson(resultMap2));
+        resultMap4.put("serviceActiveYn", convertToJson(resultMap3));
 
-        return ReturnUtil.returnJson(Status.OK, resultMap3);
+        return ReturnUtil.returnJson(Status.OK, resultMap4);
     }
 
     /**
-     * 업체리스트조회 API 호출
+     * 업체리스트조회
      */
     @RequestMapping(value = "/getPlaceList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -150,7 +162,7 @@ public class NaverOrderLinkController {
     }
 
     /**
-     * 매장등록 API 호출
+     * 매장등록
      */
     @RequestMapping(value = "/regPlace.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -165,9 +177,9 @@ public class NaverOrderLinkController {
     }
 
     /**
-     * 매장수정 API 호출
+     * 매장수정
      */
-    @RequestMapping(value = "/modPlace.sb", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/modPlace.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result modPlace(NaverOrderApiVO naverOrderApiVO, HttpServletRequest request,
                            HttpServletResponse response, Model model) {
@@ -177,10 +189,10 @@ public class NaverOrderLinkController {
         Map<String, Object> resultMap = naverOrderLinkService.modPlace(naverOrderApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
-    }
+    }*/
 
     /**
-     * 매장 단건조회 API 호출
+     * 매장 단건조회
      */
     @RequestMapping(value = "/getPlace.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -194,17 +206,50 @@ public class NaverOrderLinkController {
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
 
+    /**
+     * 서비스 활성화/비활성화
+     */
+    @RequestMapping(value = "/regServiceActive.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result regServiceActive(@RequestBody NaverOrderApiVO naverOrderApiVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        Map<String, Object> resultMap = naverOrderLinkService.regServiceActive(naverOrderApiVO, sessionInfoVO);
 
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
 
+    /**
+     * 매핑해제
+     */
+    @RequestMapping(value = "/delPlace.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delPlace(@RequestBody NaverOrderApiVO naverOrderApiVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        Map<String, Object> resultMap = naverOrderLinkService.delPlace(naverOrderApiVO, sessionInfoVO);
 
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
 
+    /**
+     * 서비스별 일시중지 상태 조회
+     */
+    @RequestMapping(value = "/getServiceActive.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getServiceActive(NaverOrderApiVO naverOrderApiVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        Map<String, Object> resultMap = naverOrderLinkService.getServiceActive(naverOrderApiVO, sessionInfoVO);
 
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
 
     /**
      * 연동 팝업 화면 호출

@@ -34,7 +34,7 @@ public interface NaverOrderLinkService {
     Map<String, Object> getAccessToken(String storeCd);
 
     /**
-     * 네.아.로 Unique ID 조회
+     * (네이버 주문연동용) 네.아.로 Unique ID 조회
      */
     String getNaverUniqueId(NaverOrderLinkVO naverOrderLinkVO, SessionInfoVO sessionInfoVO);
 
@@ -44,33 +44,38 @@ public interface NaverOrderLinkService {
     Map<String, Object> getAgreeYn(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 업체리스트조회 API 호출
+     * 업체리스트조회
      */
     Map<String, Object> getPlaceList(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 매장등록 API 호출
+     * 매장등록
      */
     Map<String, Object> regPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 매장수정 API 호출
+     * 매장수정(미사용)
      */
     Map<String, Object> modPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 매장 단건조회 API 호출
+     * 매장 단건조회
      */
     Map<String, Object> getPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
-     * 서비스 활성화/비활성화 API 호출
+     * 서비스 활성화/비활성화
      */
     Map<String, Object> regServiceActive(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 매핑해제
      */
-    /*Map<String, Object> delUnmapping(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);*/
+    Map<String, Object> delPlace(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 서비스별 일시중지 상태 조회
+     */
+    Map<String, Object> getServiceActive(NaverOrderApiVO naverOrderApiVO, SessionInfoVO sessionInfoVO);
 
 }

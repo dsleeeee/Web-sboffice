@@ -24,15 +24,15 @@
         FROM    DUAL
     </select>
 
-    <!-- 네.아.로 Unique ID 조회 -->
+    <!-- (네이버 주문연동용) 네.아.로 Unique ID 조회 -->
     <!--
         TABLE    : TB_CM_NAVER_LINK
         PARAM    : naverOrderLinkVO
-        COMMENTS : 네.아.로 Unique ID를 조회한다.
+        COMMENTS : (네이버 주문연동용) 네.아.로 Unique ID를 조회한다.
     -->
     <select id="getNaverUniqueId" parameterType="naverOrderLinkVO" resultType="String">
          /* NaverOrderLinkMapper.getNaverUniqueId */
-        SELECT  UNIQUE_ID
+        SELECT  ORDER_UNIQUE_ID AS UNIQUE_ID
         FROM    TB_CM_NAVER_LINK
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD     = #{storeCd}
@@ -83,5 +83,64 @@
         ,   #{modId}
         )
     </update>
+
+    <!-- 매장정보 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 매장정보를 조회한다.
+    -->
+    <select id="getStoreInfo" parameterType="naverOrderLinkVO" resultType="DefaultMap">
+        /* USE : NaverOrderLinkMapper.getStoreInfo */
+        SELECT  tms.STORE_CD,
+                tms.STORE_NM,
+                tms.OWNER_NM,
+                tms.HQ_OFFICE_CD,
+                tms.BIZ_NO,
+                SUBSTR(tms.BIZ_NO, 0, 3) AS BIZ_NO1,
+                SUBSTR(tms.BIZ_NO, 4, 2) AS BIZ_NO2,
+                SUBSTR(tms.BIZ_NO, 6, 5) AS BIZ_NO3,
+                REGEXP_REPLACE(tms.TEL_NO, '[^0-9]', '') AS TEL_NO,
+                tms.MP_NO,
+                tms.POST_NO,
+                tms.ADDR,
+                tms.ADDR_DTL
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 네이버 주문연동 정보 저장 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 네이버 주문연동 정보를 저장한다.
+    -->
+    <update id="saveNaverOrderLink" parameterType="naverOrderLinkVO">
+        /* USE : NaverOrderLinkMapper.saveNaverOrderLink */
+        UPDATE TB_CM_NAVER_LINK
+        SET    ORDER_BUSINESS_ID = #{orderBusinessId}
+        ,      ORDER_CHANNEL_SERVICE_ID_TABLE = #{orderChannelServiceIdTable}
+        ,      ORDER_CHANNEL_SERVICE_ID_PICKUP = #{orderChannelServiceIdPickup}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    STORE_CD = #{storeCd}
+    </update>
+
+    <!-- 네이버 주문 유형 ChannelServiceId 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverOrderLinkVO
+        COMMENTS : 네이버 주문 유형 ChannelServiceId를 조회한다.
+    -->
+    <select id="getNaverOrderChannelServiceId" parameterType="naverOrderLinkVO" resultType="DefaultMap">
+         /* NaverOrderLinkMapper.getNaverOrderChannelServiceId */
+        SELECT  ORDER_CHANNEL_SERVICE_ID_TABLE
+        ,       ORDER_CHANNEL_SERVICE_ID_PICKUP
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD     = #{storeCd}
+    </select>
 
 </mapper>

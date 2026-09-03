@@ -69,11 +69,11 @@ public class NaverPlaceStatusServiceImpl implements NaverPlaceStatusService {
 
         // 네.아.로 ID, 네이버플레이스 연동매장 삭제
         result = naverPlaceStatusMapper.deleteNaverLink(naverPlaceStatusVO);
-        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // 네이버 동의항목 삭제
         result = naverPlaceStatusMapper.deleteNaverAgreement(naverPlaceStatusVO);
-        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         return result;
     }

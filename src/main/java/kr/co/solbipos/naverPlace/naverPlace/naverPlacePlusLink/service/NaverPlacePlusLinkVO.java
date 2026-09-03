@@ -75,6 +75,8 @@ public class NaverPlacePlusLinkVO extends PageVO {
     private String personalInfoProvision;
     /** 개인(신용)정보 제3자 제공 동의 일시 */
     private String personalInfoProvisionDt;
+    /** 네이버 주문 연동용 UNIQUE ID */
+    private String orderUniqueId;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -290,5 +292,13 @@ public class NaverPlacePlusLinkVO extends PageVO {
 
     public void setPersonalInfoProvisionDt(String personalInfoProvisionDt) {
         this.personalInfoProvisionDt = personalInfoProvisionDt;
+    }
+
+    public String getOrderUniqueId() {
+        return orderUniqueId;
+    }
+
+    public void setOrderUniqueId(String orderUniqueId) {
+        this.orderUniqueId = orderUniqueId;
     }
 }

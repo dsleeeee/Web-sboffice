@@ -28,9 +28,18 @@ public interface NaverOrderLinkMapper {
     /** 개발/운영 Api URL 조회 */
     DefaultMap<Object> getApiUrl(NaverOrderLinkVO naverOrderLinkVO);
 
-    /** 네.아.로 Unique ID 조회 */
+    /** (네이버 주문연동용) 네.아.로 Unique ID 조회 */
     String getNaverUniqueId(NaverOrderLinkVO naverOrderLinkVO);
 
     /** 네이버 동의여부 저장 */
     int saveNaverAgreement(NaverOrderLinkVO naverOrderLinkVO);
+
+    /** 매장정보 조회 */
+    DefaultMap<Object> getStoreInfo(NaverOrderLinkVO naverOrderLinkVO);
+
+    /** 네이버 주문연동 정보 저장 */
+    int saveNaverOrderLink(NaverOrderLinkVO naverOrderLinkVO);
+
+    /** 네이버 주문 유형 ChannelServiceId 조회 */
+    DefaultMap<Object> getNaverOrderChannelServiceId(NaverOrderLinkVO naverOrderLinkVO);
 }
