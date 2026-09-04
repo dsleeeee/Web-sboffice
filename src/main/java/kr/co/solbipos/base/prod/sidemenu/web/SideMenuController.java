@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -989,5 +990,16 @@ public class SideMenuController {
 
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 프론트 임시 디버깅 로그 - 전달받은 메시지를 catalina.out 에 출력
+     * (선택분류/선택상품 복사 재호출 원인 파악용 임시, 확인 후 제거 대상)
+     */
+    @RequestMapping(value = "/menuClass/sysLog.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result sysLog(@RequestParam(value = "msg", required = false) String msg) {
+        CmmUtil.frontLog(msg);
+        return returnJson(Status.OK);
     }
 }

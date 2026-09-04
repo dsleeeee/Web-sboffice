@@ -289,6 +289,11 @@ public class CmmUtil {
         return value == null ? replacement : value;
     }
 
+    /** 프론트 임시 디버깅 로그 - catalina.out 에 출력 (원인 파악용 임시, 확인 후 제거 대상) */
+    public static void frontLog(String msg) {
+        System.out.println("[FRONT_LOG] " + msg);
+    }
+
     /** object 자체 null 대체값 반환 */
     public static String checkNull(Object obj) {
         return obj == null ? "" : (String.valueOf(obj));
