@@ -21,6 +21,13 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('sdselProdCopyCtrl', $scope, $http, false));
 
+    // 임시 디버깅 로그 : catalina.out 에 실행순서대로 남긴다(동기 호출이라 순서 보장, 원인 파악 후 제거)
+    var sysLog = function (msg) {
+        try {
+            $.ajax({ url: "/base/prod/sideMenu/menuClass/sysLog.sb", type: "POST", async: false, data: { msg: msg } });
+        } catch (e) {}
+    };
+
     // 콤보박스 데이터 Set
     $scope._setComboData("srchCopyTypeSelGroup", vSrchTypeSelGroup);
     $scope._setComboData("srchCopyTypeSelProd", vSrchTypeSelProd);
@@ -65,7 +72,9 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
         //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까? 데이터양에 따라 5-10초에서 수분이 걸릴 수도 있습니다.
         var msg = $("#srchApplyClassProd").val() + " " + messages["sideMenu.sdselProdCopy.prodCopySaveConfirm"]
             + "</br>" + messages["sideMenu.sdselProdCopy.prodCopySaveConfirm2"];
+        sysLog("[상품복사] 1. prodCopySave 진입(확인전)");
         $scope._popConfirm(msg, function() {
+            sysLog("[상품복사] 2. 확인(OK) 콜백 진입");
 
             var scopeGroup = agrid.getScope("sdselProdCopyGroupCtrl");
             var scopeClass = agrid.getScope("sdselProdCopyClassCtrl");
@@ -84,7 +93,10 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                 }
             }
 
+            sysLog("[상품복사] 3. params 구성완료 건수=" + params.length + " / 오버레이active=" + (document.getElementById('loadingOverlay') ? document.getElementById('loadingOverlay').classList.contains('active') : "null"));
+
             if(params.length <= 0) {
+                sysLog("[상품복사] 3-1. 선택없음 return");
                 s_alert.pop(messages["cmm.not.select"]);
                 return;
             }
@@ -116,6 +128,7 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
             }
 
             // 전체 데이터를 한 번에 전송
+            sysLog("[상품복사] 4. getSdselProdCopySave 호출 직전");
             $http({
                 method: 'POST',
                 url: '/base/prod/sideMenu/menuClass/getSdselProdCopySave.sb',
@@ -123,6 +136,7 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                 params: sParam,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function successCallback(response) {
+                sysLog("[상품복사] 5. 저장 성공콜백 진입");
                 if ($scope._httpStatusCheck(response, true)) {
                     // 작업내역 로딩 팝업 닫기
                     $scope.excelUploadingPopup(false);
@@ -146,6 +160,7 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                     $scope.excelUploadingPopup(false);
                 }
             }, function errorCallback(response) {
+                sysLog("[상품복사] 5-1. 저장 에러콜백 진입");
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 if (response.data.message) {
                     $scope._popMsg(response.data.message);
@@ -153,6 +168,7 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                     $scope._popMsg(messages['cmm.saveFail']);
                 }
             }).then(function () {
+                sysLog("[상품복사] 6. 저장 complete(then) 진입");
             });
         });
     };
@@ -162,6 +178,8 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
 
         // 전체 화면 클릭 차단 오버레이
         var overlay = document.getElementById('loadingOverlay');
+
+        sysLog("[상품복사] 오버레이 " + (showFg ? "등록(ON)" : "해제(OFF)") + " 요청 / 현재active=" + (overlay ? overlay.classList.contains('active') : "null"));
 
         if (showFg) {
             // 우클릭 차단 등록

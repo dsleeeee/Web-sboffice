@@ -655,11 +655,17 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                 // 해당 키맵그룹의 중분류 사용여부 조회
                 List<DefaultMap<Object>> list = kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
+                // 임시 디버깅 : 조회 원본값 확인 (set 전, ORA-12899 원인 포착)
+                System.out.println("[KIOSK_TUMCLSFG] saveKioskKeyMapStore(조회) / storeCd=" + kioskKeyMapVO.getStoreCd()
+                        + ", tuClsType=" + kioskKeyMapVO.getTuClsType() + ", listSize=" + list.size()
+                        + ", 조회값=[" + (list.size() > 0 ? list.get(0).getStr("tuMClsFg") : "(없음)") + "]");
                 if(list.size() > 0){
                     kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
                 }else{
                     kioskKeyMapVO.setTuMClsFg("0");
                 }
+                // 임시 디버깅 : merge 에 실제 들어갈 값 확인 (set 후)
+                System.out.println("[KIOSK_TUMCLSFG] saveKioskKeyMapStore(세팅후) / tuMClsFg=[" + kioskKeyMapVO.getTuMClsFg() + "]");
 
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
@@ -820,11 +826,17 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                 // 해당 키맵그룹의 중분류 사용여부 조회
                 List<DefaultMap<Object>> list = kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
+                // 임시 디버깅 : 조회 원본값 확인 (set 전, ORA-12899 원인 포착)
+                System.out.println("[KIOSK_TUMCLSFG] saveStoreKioskKeyMap(조회) / storeCd=" + kioskKeyMapVO.getStoreCd()
+                        + ", tuClsType=" + kioskKeyMapVO.getTuClsType() + ", listSize=" + list.size()
+                        + ", 조회값=[" + (list.size() > 0 ? list.get(0).getStr("tuMClsFg") : "(없음)") + "]");
                 if(list.size() > 0){
                     kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
                 }else{
                     kioskKeyMapVO.setTuMClsFg("0");
                 }
+                // 임시 디버깅 : merge 에 실제 들어갈 값 확인 (set 후)
+                System.out.println("[KIOSK_TUMCLSFG] saveStoreKioskKeyMap(세팅후) / tuMClsFg=[" + kioskKeyMapVO.getTuMClsFg() + "]");
 
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
