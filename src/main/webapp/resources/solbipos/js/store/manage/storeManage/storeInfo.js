@@ -768,14 +768,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
       }
-
-      // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
-      var msg = messages["storeManage.1262.msg"];
-      if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
-        $scope._popMsg(msg);
-        return false;
-      }
-
     }
 
     // 매장명을 입력해주세요.
@@ -1054,6 +1046,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["storeManage.terminalManage"] + "는 [008] KOCES" + messages["cmm.require.select"]);
         return false;
       }
+    }
+
+    // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
+    var msg = messages["storeManage.1262.msg"];
+    if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
+      $scope._popMsg(msg);
+      return false;
     }
 
     // 매장환경복사 체크값이 있을때
