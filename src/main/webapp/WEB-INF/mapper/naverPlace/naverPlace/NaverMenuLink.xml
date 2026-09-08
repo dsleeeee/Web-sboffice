@@ -269,4 +269,18 @@
         WHERE IDX BETWEEN #{offset} AND #{limit}
         ORDER BY PROD_CD, ROW_TYPE, CLASS_SORT, SIDE_SORT
     </select>
+
+    <!-- 상품명 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : naverMenuLinkVO
+        COMMENTS : 상품명을 조회한다.
+    -->
+    <select id="getProdNm" parameterType="naverMenuLinkVO" resultType="String">
+        /* USE : NaverMenuLinkMapper.getProdNm */
+        SELECT  PROD_NM
+        FROM    TB_MS_PRODUCT
+        WHERE   STORE_CD = #{storeCd}
+        AND     PROD_CD  = #{prodCd}
+    </select>
 </mapper>

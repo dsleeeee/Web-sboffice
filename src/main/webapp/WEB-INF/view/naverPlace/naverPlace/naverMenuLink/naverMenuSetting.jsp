@@ -31,13 +31,13 @@
                                 id="wjGridNaverMenuSetting1">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.posShopId"/>" binding="posShopId" width="150" align="center" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.optionId"/>" binding="optionId" width="145" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.optionNm"/>" binding="name" width="180" align="left"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionCategoryId"/>" binding="subOptionCategoryId" width="150" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionItemSeq"/>" binding="subOptionItemSeq" width="150" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.prodCd"/>" binding="prodCd" width="145" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="naverMenuLink.prodNm"/>" binding="prodNm" width="180" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.posShopId"/>" binding="posShopId" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.optionId"/>" binding="optionId" width="145" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.optionNm"/>" binding="name" width="180" align="left" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionCategoryId"/>" binding="subOptionCategoryId" width="150" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionItemSeq"/>" binding="subOptionItemSeq" width="150" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.prodCd"/>" binding="prodCd" width="145" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="naverMenuLink.prodNm"/>" binding="prodNm" width="180" is-read-only="true" visible="false"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -65,13 +65,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.posShopId"/>" binding="posShopId" width="150" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.optionId"/>" binding="optionId" width="145" align="center"  visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.optionNm"/>" binding="name" width="180" align="left" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionCategoryId"/>" binding="subOptionCategoryId" width="150" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionItemSeq"/>" binding="subOptionItemSeq" width="150" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.prodCd"/>" binding="prodCd" width="130"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="naverMenuLink.prodNm"/>" binding="prodNm" width="160"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.posShopId"/>" binding="posShopId" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.optionId"/>" binding="optionId" width="145" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.optionNm"/>" binding="name" width="180" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionCategoryId"/>" binding="subOptionCategoryId" width="150" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.subOptionItemSeq"/>" binding="subOptionItemSeq" width="150" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.prodCd"/>" binding="prodCd" width="130" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="naverMenuLink.prodNm"/>" binding="prodNm" width="160" is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -193,4 +193,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuSetting.js?ver=20260831.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuSetting.js?ver=20260908.01" charset="utf-8"></script>

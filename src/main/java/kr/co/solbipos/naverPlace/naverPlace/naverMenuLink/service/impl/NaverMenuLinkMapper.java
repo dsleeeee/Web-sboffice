@@ -43,4 +43,7 @@ public interface NaverMenuLinkMapper {
 
     /** 상품목록조회 */
     List<DefaultMap<Object>> getProdList(NaverMenuLinkVO naverMenuLinkVO);
+
+    /** 상품명 조회 */
+    String getProdNm(NaverMenuLinkVO naverMenuLinkVO);
 }

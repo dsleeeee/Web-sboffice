@@ -37,14 +37,14 @@ app.controller('naverMenuLinkCtrl', ['$scope', '$http', '$timeout', function ($s
                 var col = s.columns[e.col];
                 if (col.binding === "optionIdClick") {
                     var item = s.rows[e.row].dataItem;
-                    if (item.agencyKey === null) {
+                    if (item.agencyKey === null || item.agencyKey === "" || item.agencyKey === undefined) {
                         wijmo.addClass(e.cell, 'red');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        item.optionIdClick = "미연동";
+                        e.cell.textContent = "미연동";
                     } else {
                         wijmo.addClass(e.cell, 'wijLink');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        item.optionIdClick = item.optionId;
+                        e.cell.textContent = item.optionId;
                     }
                 }
             }

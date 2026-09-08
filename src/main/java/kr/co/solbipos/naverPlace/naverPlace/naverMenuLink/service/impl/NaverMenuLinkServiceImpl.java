@@ -177,13 +177,25 @@ public class NaverMenuLinkServiceImpl implements NaverMenuLinkService {
                     List<Map<String, Object>> items = (List<Map<String, Object>>) category.get("items");
                     if (items != null) {
                         for (Map<String, Object> item : items) {
+
+                            String agencyKey = (String) item.get("agencyKey");
+
+                            // 링크포스 상품명 조회
+                            String prodNm = "";
+                            if (agencyKey != null && !agencyKey.isEmpty()) {
+                                NaverMenuLinkVO prodVO = new NaverMenuLinkVO();
+                                prodVO.setStoreCd(naverMenuLinkVO.getStoreCd());
+                                prodVO.setProdCd(agencyKey);
+                                prodNm = naverMenuLinkMapper.getProdNm(prodVO);
+                            }
+
                             DefaultMap<Object> row = new DefaultMap<>();
                             row.put("posShopId", naverMenuLinkVO.getStoreCd());
                             row.put("optionId", naverMenuLinkVO.getOptionId());
                             row.put("name", item.get("name"));
-                            row.put("agencyKey", item.get("agencyKey"));
-                            row.put("prodCd", item.get("agencyKey"));
-                            row.put("prodNm", ""); // 이름 조회해 와야 함
+                            row.put("agencyKey", agencyKey);
+                            row.put("prodCd", agencyKey);
+                            row.put("prodNm", prodNm);
                             row.put("subOptionCategoryId", subOptionCategoryId);
                             row.put("subOptionItemSeq", item.get("subOptionItemSeq"));
                             subOptionList.add(row);
