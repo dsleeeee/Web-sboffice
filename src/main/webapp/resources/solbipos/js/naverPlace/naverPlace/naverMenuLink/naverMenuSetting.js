@@ -25,6 +25,7 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
 
     $scope.$on("naverMenuSetting1Ctrl", function (event, data) {
 
+        // 메뉴연동 팝업 show
         $scope.wjNaverMenuSettingLayer.show(true);
 
         // 조회
@@ -37,6 +38,7 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
 
     // 조회
     $scope.getSubMenuOptionList = function (data) {
+
         var params = data;
 
         $.postJSON("/naverPlace/naverPlace/naverMenuLink/getSubMenuOptionList.sb", params, function(result) {
@@ -49,7 +51,8 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
                 var list = result.data.list;
                 if (list && list.length > 0 && list[0].agencyKey) {
                     var theGrid2 = new wijmo.Control.getControl('#wjGridNaverMenuSetting2');
-                    theGrid2.itemsSource = new wijmo.collections.CollectionView(list);
+                    // grid1과 배열을 공유하지 않도록 복사해서 바인딩 (rowDel 등으로 한쪽만 변경되어야 함)
+                    theGrid2.itemsSource = new wijmo.collections.CollectionView(list.slice());
                     theGrid2.collectionView.trackChanges = true;
                 }
             },
@@ -78,6 +81,9 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
         vScope3.isChecked = true;
         vScope3.srchStartDate.isReadOnly = true;
         vScope3.srchEndDate.isReadOnly = true;
+
+        // 메뉴연동 팝업 hide
+        $scope.wjNaverMenuSettingLayer.hide();
     };
 
     // 저장
@@ -97,7 +103,7 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
 
         // 모상품(첫번째 row) 정보 추출
         var naverMenu = theGrid1.collectionView.items[0];
-        var lynkMenu  = theGrid2.collectionView.items[0];
+        var lynkMenu = theGrid2.collectionView.items[0];
 
         // 필요한 값 확인
         if (!naverMenu || !naverMenu.optionId) {
@@ -109,33 +115,45 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
             return false;
         }
 
-        // 메뉴(모상품) 연동
-        var params = [{
-            optionId: naverMenu.optionId,
-            posNo: lynkMenu.prodCd,
-            status: "MAPPED"
-        }];
+        // 연동하시겠습니까?
+        $scope._popConfirm(messages["naverMenuLink.mapping.confirm"], function () {
 
-        $scope._postJSONSave.withOutPopUp("/naverPlace/naverPlace/naverMenuLink/mappingMenuOption.sb", params, function (response) {
-            var result = response.data.data;
-            var check = $scope._checkMappingResult(result);
+            // 메뉴(모상품) 연동
+            var params = [{
+                optionId: naverMenu.optionId,
+                posNo: lynkMenu.prodCd,
+                status: "MAPPED"
+            }];
 
-            if (check.success) {
+            $scope._postJSONSave.withOutPopUp("/naverPlace/naverPlace/naverMenuLink/mappingMenuOption.sb", params, function (response) {
+                var result = response.data.data;
+                var check = $scope._checkMappingResult(result);
 
-                // 모상품 연동 성공 시, 하위 사이드 상품이 있는 경우에만 연동 진행
-                if (grid1Cnt > 1) {
-                    $scope.mappingSubMenuOption(theGrid1, theGrid2);
+                if (check.success) {
+
+                    // 모상품 연동 성공 시, 하위 사이드 상품이 있는 경우에만 연동 진행
+                    if (grid1Cnt > 1) {
+                        $scope.mappingSubMenuOption(theGrid1, theGrid2);
+                    } else {
+                        // 연동에 성공했습니다.
+                        $scope._popMsg(messages["naverMenuLink.mapping.ok"]);
+                        setTimeout(function () {
+                            // 재조회
+                            var vScope = agrid.getScope('naverMenuLinkCtrl');
+                            vScope.$apply(function () {
+                                vScope._pageView('naverMenuLinkCtrl', 1);
+                            });
+
+                            $scope.close();
+
+                        }, 1000);
+                    }
                 } else {
-                    $scope._popMsg(messages["naverMenuLink.mapping.ok"]);
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
+                    // 연동에 실패했습니다.
+                    $scope._popMsg(check.message);
+                    return false;
                 }
-            } else {
-                // 연동에 실패했습니다.
-                $scope._popMsg(check.message);
-                return false;
-            }
+            });
         });
     };
 
@@ -178,10 +196,15 @@ app.controller('naverMenuSetting1Ctrl', ['$scope', '$http', '$timeout', function
             if (check.success) {
                 // 연동에 성공했습니다.
                 $scope._popMsg(messages["naverMenuLink.mapping.ok"]);
-
                 setTimeout(function () {
                     // 재조회
-                    location.reload();
+                    var vScope = agrid.getScope('naverMenuLinkCtrl');
+                    vScope.$apply(function () {
+                        vScope._pageView('naverMenuLinkCtrl', 1);
+                    });
+
+                    $scope.close();
+
                 }, 1000);
             } else {
                 // 연동에 실패했습니다.
@@ -239,9 +262,74 @@ app.controller('naverMenuSetting2Ctrl', ['$scope', '$http', '$timeout', function
 
     angular.extend(this, new RootController('naverMenuSetting2Ctrl', $scope, $http, false));
 
+    $scope.initGrid = function (s, e) {
+
+        // 첫번째 row(모상품)는 gChk 체크박스를 숨김
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "gChk") {
+                    if (e.row === 0) {
+                        e.cell.innerHTML = "";
+                    }
+                }
+            }
+        });
+    };
+
     $scope.$on("naverMenuSetting2Ctrl", function (event, data) {
 
     });
+
+    // 위로 옮기기 이동
+    $scope.rowMoveUp = function () {
+        var movedRows = 0;
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            // 첫번째 row(모상품)는 고정 : i - 1(이동 대상 위치)이 0이 되면 안됨
+            if (i > 1 && item.gChk) {
+                if (!$scope.flex.collectionView.items[i - 1].gChk) {
+                    movedRows = i - 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
+    };
+
+    // 아래로 옮기기 이동
+    $scope.rowMoveDown = function () {
+        var movedRows = 0;
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+            // 첫번째 row(모상품)는 고정 : i가 0이면 이동 대상에서 제외
+            if (i > 0 && (i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+                if (!$scope.flex.collectionView.items[i + 1].gChk) {
+                    movedRows = i + 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
+    };
+
+    // 삭제
+    $scope.rowDel = function () {
+        // 첫번째 row(모상품)는 전체선택으로 체크되어도 삭제 대상에서 제외
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i > 0; i--) {
+            if ($scope.flex.collectionView.items[i].gChk === true) {
+                $scope.flex.itemsSource.removeAt(i);
+            }
+        }
+    };
 
 }]);
 
@@ -282,6 +370,28 @@ app.controller('naverMenuSetting3Ctrl', ['$scope', '$http', '$timeout', function
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
             s.allowSorting = false;
+        });
+
+        // gChk 단일 선택 처리 : 체크 시 다른 행의 체크는 자동 해제
+        s.cellEditEnded.addHandler(function (s, e) {
+            var col = s.columns[e.col];
+            if (col.binding === "gChk") {
+                var checkedItem = s.rows[e.row].dataItem;
+                if (checkedItem.gChk) {
+                    var items = s.collectionView.items;
+                    var changed = false;
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i] !== checkedItem && items[i].gChk) {
+                            items[i].gChk = false;
+                            changed = true;
+                        }
+                    }
+                    if (changed) {
+                        // collectionView.refresh()만으로는 이미 그려진 체크박스 셀이 갱신 안될 수 있어 grid를 강제로 다시 그림
+                        s.refresh(true);
+                    }
+                }
+            }
         });
 
         // 헤더머지
