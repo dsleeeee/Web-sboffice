@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -1594,6 +1595,45 @@ public class StoreManageServiceImpl implements StoreManageService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+    }
+
+    /** 주방프린터상품 복사 - 기준프린터 상품을 대상프린터들에 복사(덮어쓰기) */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int copyKitchenPrintProduct(StoreProductVO[] storeProductVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        // storeProductVOs : 대상프린터 목록 (각 원소에 orgStoreCd/orgPrterNo=기준, storeCd/prterNo=대상)
+        for (StoreProductVO targetVO : storeProductVOs) {
+
+            targetVO.setRegDt(dt);
+            targetVO.setRegId(sessionInfoVO.getUserId());
+            targetVO.setModDt(dt);
+            targetVO.setModId(sessionInfoVO.getUserId());
+
+            // 1) 대상프린터 기존 출력상품 전체 삭제 (덮어쓰기)
+            mapper.deleteKitchenPrintProductByPrter(targetVO);
+
+            // 2) 기준프린터의 출력상품코드 목록 조회
+            List<DefaultMap<String>> prodList = mapper.getKitchenPrintCopyProdList(targetVO);
+
+            // 3) 대상프린터에 기준 상품 INSERT
+            for (DefaultMap<String> prod : prodList) {
+                StoreProductVO insVO = new StoreProductVO();
+                insVO.setStoreCd(targetVO.getStoreCd());
+                insVO.setPrterNo(targetVO.getPrterNo());
+                insVO.setProdCd(prod.getStr("prodCd"));
+                insVO.setRegDt(dt);
+                insVO.setRegId(sessionInfoVO.getUserId());
+                insVO.setModDt(dt);
+                insVO.setModId(sessionInfoVO.getUserId());
+                procCnt += mapper.insertKitchenPrintProduct(insVO);
+            }
+        }
+
+        return procCnt;
     }
 
     /**

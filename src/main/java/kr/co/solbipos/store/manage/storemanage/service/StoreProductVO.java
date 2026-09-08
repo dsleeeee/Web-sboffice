@@ -29,6 +29,10 @@ public class StoreProductVO extends CmmVO {
     private String prterNo;
     /** 상품코드 */
     private String prodCd;
+    /** 주방프린터상품 복사 - 기준매장코드 */
+    private String orgStoreCd;
+    /** 주방프린터상품 복사 - 기준프린터번호 */
+    private String orgPrterNo;
     /** 상품명 */
     private String prodNm;
     /** 상품분류코드 */
@@ -566,5 +570,18 @@ public class StoreProductVO extends CmmVO {
 
     public void setArrProdClassCd(String[] arrProdClassCd) {
         this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String getOrgStoreCd() {
+        return orgStoreCd;
+    }
+    public void setOrgStoreCd(String orgStoreCd) {
+        this.orgStoreCd = orgStoreCd;
+    }
+    public String getOrgPrterNo() {
+        return orgPrterNo;
+    }
+    public void setOrgPrterNo(String orgPrterNo) {
+        this.orgPrterNo = orgPrterNo;
     }
 }

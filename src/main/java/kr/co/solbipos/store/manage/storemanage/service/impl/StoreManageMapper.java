@@ -384,6 +384,12 @@ public interface StoreManageMapper {
     /** 주방프린터 출력상품 삭제 */
     int deleteKitchenPrintProduct(StoreProductVO storeProductVO);
 
+    /** 주방프린터상품 복사 - 기준프린터의 출력상품코드 목록 조회 */
+    List<DefaultMap<String>> getKitchenPrintCopyProdList(StoreProductVO storeProductVO);
+
+    /** 주방프린터상품 복사 - 대상프린터의 출력상품 전체 삭제(덮어쓰기용) */
+    int deleteKitchenPrintProductByPrter(StoreProductVO storeProductVO);
+
     /** 터치키 복사할 본사 목록 조회 */
     List<DefaultMap<String>> getHqList();
 

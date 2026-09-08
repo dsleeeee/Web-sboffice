@@ -127,6 +127,19 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     }
   };
 
+  // 주방프린터상품연결 복사 팝업 오픈 (현재매장 정보 전달)
+  //  - 팝업 레이어(control)는 부모 컨트롤러 scope 에 바인딩되므로 $scope 로 직접 접근한다.
+  //    (자식 scope 를 getScope 로 잡으면 팝업 닫힘 시 DOM 이동으로 undefined 가 됨)
+  $scope.copyKitchenPrintProductShow = function(){
+    var storeScope = agrid.getScope('storeManageCtrl');
+    var curStore   = storeScope.getSelectedStore();
+    $scope.copyKitchenPrintProductLayer.show(true);
+    $scope._broadcast('copyKitchenPrintProductCtrl', {
+      hqOfficeCd : curStore.hqOfficeCd,
+      storeCd    : curStore.storeCd
+    });
+  };
+
   /*********************************************************
    * 주방프린터 목록 조회
    * *******************************************************/

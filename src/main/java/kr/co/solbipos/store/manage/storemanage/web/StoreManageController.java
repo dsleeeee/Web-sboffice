@@ -636,6 +636,26 @@ public class StoreManageController {
    }
 
    /**
+    * 주방프린터상품연결 복사 - 기준프린터 상품을 대상프린터들에 복사(덮어쓰기)
+    * @param storeProductVOs 대상프린터 목록(각 원소에 기준매장/프린터 orgStoreCd/orgPrterNo 포함)
+    * @param request
+    * @param response
+    * @param model
+    * @return
+    */
+   @RequestMapping(value = "storeManage/copyKitchenPrintProduct.sb", method = RequestMethod.POST)
+   @ResponseBody
+   public Result copyKitchenPrintProduct(@RequestBody StoreProductVO[] storeProductVOs, HttpServletRequest request,
+           HttpServletResponse response, Model model) {
+
+       SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+       int result = service.copyKitchenPrintProduct(storeProductVOs, sessionInfoVO);
+
+       return returnJson(Status.OK, result);
+   }
+
+   /**
     * 터치키 복사할 본사 목록 조회
     * @param
     * @param request

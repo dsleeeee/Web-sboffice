@@ -17,6 +17,12 @@
     <button type="button" class="btn_skyblue ml5" ng-click="searchProdNm()">
       <s:message code="cmm.search"/>
     </button>
+    <%-- 주방프린터상품연결 복사 (본사 DS053, DS062 인 경우에만 노출) --%>
+    <c:if test="${sessionScope.sessionInfo.hqOfficeCd == 'DS053' or sessionScope.sessionInfo.hqOfficeCd == 'DS062'}">
+    <button type="button" class="btn_skyblue fr" ng-click="copyKitchenPrintProductShow()">
+      <s:message code="storeManage.copyKitchenPrintProduct"/>
+    </button>
+    </c:if>
   </div>
 
   <div class="wj-TblWrap mt20 mb40">
@@ -96,5 +102,9 @@
       </div>
     </div>
   </div>
+
+  <%-- 주방프린터상품연결 복사 팝업 --%>
+  <c:import url="/WEB-INF/view/store/manage/storeManage/copyKitchenPrintProduct.jsp">
+  </c:import>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=20241210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=20260904.01" charset="utf-8"></script>

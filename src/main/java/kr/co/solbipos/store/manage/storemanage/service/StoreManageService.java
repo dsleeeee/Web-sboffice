@@ -92,6 +92,9 @@ public interface StoreManageService {
     /** 주방프린터 출력상품 목록 저장 */
     int saveKitchenPrintProduct(StoreProductVO[] storeProductVOs, SessionInfoVO sessionInfoVO);
 
+    /** 주방프린터상품 복사 - 기준프린터 상품을 대상프린터들에 복사(덮어쓰기) */
+    int copyKitchenPrintProduct(StoreProductVO[] storeProductVOs, SessionInfoVO sessionInfoVO);
+
     /** 터치키 복사할 본사 목록 조회 */
     List<DefaultMap<String>> getHqList();
 
