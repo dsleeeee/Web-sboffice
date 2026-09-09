@@ -35,16 +35,20 @@ app.controller('naverMenuLinkCtrl', ['$scope', '$http', '$timeout', function ($s
         s.formatItem.addHandler(function (s, e) {
             if (e.panel == s.cells) {
                 var col = s.columns[e.col];
+                // 옵션ID 팝업 링크
                 if (col.binding === "optionIdClick") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                }
+                // 연동여부 표시(binding 없는 컬럼 헤더로 식별)
+                if (col.header === messages["naverMenuLink.linkYn"]) {
                     var item = s.rows[e.row].dataItem;
-                    if (item.agencyKey === null || item.agencyKey === "" || item.agencyKey === undefined) {
+                    if (item.agencyKey) {
+                        e.cell.textContent = "연동완료";
+                    } else {
                         wijmo.addClass(e.cell, 'red');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                         e.cell.textContent = "미연동";
-                    } else {
-                        wijmo.addClass(e.cell, 'wijLink');
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        e.cell.textContent = item.optionId;
                     }
                 }
             }

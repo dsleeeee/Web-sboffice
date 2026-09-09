@@ -77,6 +77,7 @@
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.agencyKey"/>" binding="agencyKey" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.optionId"/>" binding="optionIdClick" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.optionNm"/>" binding="name" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverMenuLink.linkYn"/>" binding="" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverMenuLink.sideYn"/>" binding="sideYn" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -97,7 +98,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuLink.js?ver=20260908.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuLink.js?ver=20260909.01" charset="utf-8"></script>
 
 <%-- 네이버 메뉴 연동 팝업--%>
 <c:import url="/WEB-INF/view/naverPlace/naverPlace/naverMenuLink/naverMenuSetting.jsp">

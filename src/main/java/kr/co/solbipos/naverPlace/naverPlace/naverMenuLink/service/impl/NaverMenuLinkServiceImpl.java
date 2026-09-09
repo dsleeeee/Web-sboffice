@@ -149,14 +149,23 @@ public class NaverMenuLinkServiceImpl implements NaverMenuLinkService {
         // 응답값에서 서브메뉴(옵션) 목록 추출
         List<DefaultMap<Object>> subOptionList = new ArrayList<>();
 
-        // 모상품(옵션) 정보(맨 첫줄)
+        // 모상품 정보(맨 첫줄) 링크포스 상품명 조회
+        String prodCd = naverMenuLinkVO.getProdCd();
+        String prodNm = "";
+        if (prodCd != null && !prodCd.isEmpty()) {
+            NaverMenuLinkVO prodVO = new NaverMenuLinkVO();
+            prodVO.setStoreCd(naverMenuLinkVO.getStoreCd());
+            prodVO.setProdCd(prodCd);
+            prodNm = naverMenuLinkMapper.getProdNm(prodVO);
+        }
+
         DefaultMap<Object> optionRow = new DefaultMap<>();
         optionRow.put("posShopId", naverMenuLinkVO.getStoreCd());
         optionRow.put("optionId", naverMenuLinkVO.getOptionId());
         optionRow.put("name", naverMenuLinkVO.getName());
         optionRow.put("agencyKey", naverMenuLinkVO.getAgencyKey());
-        optionRow.put("prodCd", naverMenuLinkVO.getProdCd());
-        optionRow.put("prodNm", naverMenuLinkVO.getProdNm());
+        optionRow.put("prodCd", prodCd);
+        optionRow.put("prodNm", prodNm);
         optionRow.put("subOptionCategoryId", "");
         optionRow.put("subOptionItemSeq", "");
 
@@ -180,13 +189,13 @@ public class NaverMenuLinkServiceImpl implements NaverMenuLinkService {
 
                             String agencyKey = (String) item.get("agencyKey");
 
-                            // 링크포스 상품명 조회
-                            String prodNm = "";
+                            // 사이드상품 링크포스 상품명 조회
+                            String sideProdNm = "";
                             if (agencyKey != null && !agencyKey.isEmpty()) {
                                 NaverMenuLinkVO prodVO = new NaverMenuLinkVO();
                                 prodVO.setStoreCd(naverMenuLinkVO.getStoreCd());
                                 prodVO.setProdCd(agencyKey);
-                                prodNm = naverMenuLinkMapper.getProdNm(prodVO);
+                                sideProdNm = naverMenuLinkMapper.getProdNm(prodVO);
                             }
 
                             DefaultMap<Object> row = new DefaultMap<>();
@@ -195,7 +204,7 @@ public class NaverMenuLinkServiceImpl implements NaverMenuLinkService {
                             row.put("name", item.get("name"));
                             row.put("agencyKey", agencyKey);
                             row.put("prodCd", agencyKey);
-                            row.put("prodNm", prodNm);
+                            row.put("prodNm", sideProdNm);
                             row.put("subOptionCategoryId", subOptionCategoryId);
                             row.put("subOptionItemSeq", item.get("subOptionItemSeq"));
                             subOptionList.add(row);
