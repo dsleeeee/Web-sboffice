@@ -165,7 +165,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
           if (b_env === "" || b_env !== list[j].envstCd) {
             if (storeEnvCnt === 0 || storeEnvCnt % 2 === 0) storeEnvHtml += '<tr>';
 
-            if(list[j].remark !== null && list[j].remark !== "" && list[j].remark !== undefined){
+            if(list[j].envstRemark !== null && list[j].envstRemark !== "" && list[j].envstRemark !== undefined){
               storeEnvHtml += '  <th class=\"tc\" style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\',\'' + envType + '\')\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</a></th>';
               storeEnvHtml += '  <td style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\',\'' + envType + '\')\">' + list[j].envstNm + '</a></td>';
             }else{
@@ -193,7 +193,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\"   id=\"oldEnvstVal' + list[j].envstCd + '\"   value=\"' + list[j].selEnvstVal + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValCd\"  id=\"hqEnvstValCd' + list[j].envstCd + '\"  value=\"' + list[j].hqEnvstValCd + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"hqEnvstValNm\"  id=\"hqEnvstValNm' + list[j].envstCd + '\"  value=\"' + list[j].hqEnvstValNm + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"remark\"         id=\"remark' + list[j].envstCd + '\"         value=\"' + list[j].remark + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstRemark\"    id=\"envstRemark' + list[j].envstCd + '\"    value=\"' + list[j].envstRemark + '\">';
               storeEnvHtml += '  </td>';
             } else if(envType === "P") { // 포스환경 환경변수 그리기
               if (list[j].dirctInYn === "Y") { // 직접입력
@@ -212,7 +212,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\"   id=\"pos_oldEnvstVal' + list[j].envstCd + '\"    value=\"' + list[j].selEnvstVal + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValCd\"  id=\"pos_hqEnvstValCd' + list[j].envstCd + '\"   value=\"' + list[j].hqEnvstValCd + '\">';
               storeEnvHtml += '    <input type=\"hidden\" name=\"pos_hqEnvstValNm\"  id=\"pos_hqEnvstValNm' + list[j].envstCd + '\"   value=\"' + list[j].hqEnvstValNm + '\">';
-              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_remark\"         id=\"pos_remark' + list[j].envstCd + '\"          value=\"' + list[j].remark + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstRemark\"    id=\"pos_envstRemark' + list[j].envstCd + '\"    value=\"' + list[j].envstRemark + '\">';
               storeEnvHtml += '  </td>';
             }
             //--------------------------------------------------------
@@ -379,7 +379,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var params    = {};
     params.envstCd = $("#" + (envType === "P" ? "pos_" : "") + "envstCd" + envstCd).val();
     params.envstNm = $("#" + (envType === "P" ? "pos_" : "") + "envstNm" + envstCd).val();
-    params.remark = $("#" + (envType === "P" ? "pos_" : "") + "remark" + envstCd).val();
+    params.remark = $("#" + (envType === "P" ? "pos_" : "") + "envstRemark" + envstCd).val();
 
     $scope.envRemarkPopLayer.show(true);
     $scope._broadcast('envRemarkPopCtrl', params);

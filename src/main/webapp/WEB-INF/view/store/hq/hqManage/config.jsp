@@ -126,8 +126,8 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            if(list[j].remark !== null && list[j].remark !== "" && list[j].remark !== undefined){
-              console.log(list[j].envstCd + " : " + list[j].remark);
+            if(list[j].envstRemark !== null && list[j].envstRemark !== "" && list[j].envstRemark !== undefined){
+              console.log(list[j].envstCd + " : " + list[j].envstRemark);
               envHtml += '  <th style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\')\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</a></th>';
               envHtml += '  <td style=\"color:blue;\"><a href=\"#\" onclick=\"envRemarkPop(\'' + list[j].envstCd + '\')\">' + list[j].envstNm + '</a></td>';
             } else {
@@ -151,7 +151,7 @@ function getConfigList(){
             envHtml += "        <input type='hidden' name='dirctInYn'   id='dirctInYn"+ list[j].envstCd   + "' value='"+ list[j].dirctInYn +"'>";
             envHtml += "        <input type='hidden' name='oldEnvstVal' id='oldEnvstVal"+ list[j].envstCd + "' value='"+ list[j].selEnvstVal +"'>";
             envHtml += "        <input type='hidden' name='targtFg'     id='targtFg"+ list[j].envstCd     + "' value='"+ list[j].targtFg +"'>";
-            envHtml += "        <input type='hidden' name='remark'      id='remark"+ list[j].envstCd      + "' value='"+ list[j].remark +"'>";
+            envHtml += "        <input type='hidden' name='envstRemark' id='envstRemark"+ list[j].envstCd + "' value='"+ list[j].envstRemark +"'>";
             envHtml += "      </td>";
 
             envSub = list[j].envstCd;
@@ -257,7 +257,7 @@ function envRemarkPop(envstCd) {
   var params    = {};
   params.envstCd = $("#" + "envstCd" + envstCd).val();
   params.envstNm = $("#" + "envstNm" + envstCd).val();
-  params.remark = $("#" + "remark" + envstCd).val();
+  params.remark = $("#" + "envstRemark" + envstCd).val();
 
   // 선택한 환경설정코드 및 명칭 셋팅
   $("#envTitle").text("[" + params.envstCd + "] " + params.envstNm);

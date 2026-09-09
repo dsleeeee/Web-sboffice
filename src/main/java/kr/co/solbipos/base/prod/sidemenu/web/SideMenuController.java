@@ -629,6 +629,11 @@ public class SideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 저장요청 수신 로그 : 같은 tabId + 같은 nonce 가 다시 들어오면 자동 재전송(사용자 조작 없이 중복) 확정용
+        CmmUtil.frontLog("[분류복사][저장수신] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
+                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + request.getHeader("X-Nonce")
+                + " 건수=" + (sideMenuSelClassVOs != null ? sideMenuSelClassVOs.length : 0));
+
         int result = sideMenuService.getSdselClassCopySave(sideMenuSelClassVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
@@ -963,6 +968,11 @@ public class SideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 저장요청 수신 로그 : 같은 tabId + 같은 nonce 가 다시 들어오면 자동 재전송(사용자 조작 없이 중복) 확정용
+        CmmUtil.frontLog("[상품복사][저장수신] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
+                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + request.getHeader("X-Nonce")
+                + " 건수=" + (sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0));
+
         int result = sideMenuService.getSdselProdCopySave(sideMenuSelProdVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
@@ -998,8 +1008,13 @@ public class SideMenuController {
      */
     @RequestMapping(value = "/menuClass/sysLog.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result sysLog(@RequestParam(value = "msg", required = false) String msg) {
-        CmmUtil.frontLog(msg);
+    public Result sysLog(@RequestParam(value = "msg", required = false) String msg,
+                         @RequestParam(value = "tabId", required = false) String tabId,
+                         @RequestParam(value = "nonce", required = false) String nonce,
+                         HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String userId = (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?");
+        CmmUtil.frontLog("[" + userId + "][tab:" + tabId + "][nonce:" + nonce + "] " + msg);
         return returnJson(Status.OK);
     }
 }

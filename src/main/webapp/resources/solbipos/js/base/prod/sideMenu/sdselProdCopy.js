@@ -22,9 +22,19 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
     angular.extend(this, new RootController('sdselProdCopyCtrl', $scope, $http, false));
 
     // 임시 디버깅 로그 : catalina.out 에 실행순서대로 남긴다(동기 호출이라 순서 보장, 원인 파악 후 제거)
+    // 탭 식별 ID : sessionStorage 라 같은 탭 새로고침엔 유지, 새 탭엔 새로 생성 (진단용)
+    var _tabId = (function () {
+        try {
+            var t = sessionStorage.getItem('sbTabId');
+            if (!t) { t = 'T' + (new Date().getTime()).toString(36) + Math.random().toString(36).slice(2, 8); sessionStorage.setItem('sbTabId', t); }
+            return t;
+        } catch (e) { return 'T-noss'; }
+    })();
+    // 복사 실행 식별용 nonce : 진입 시마다 새로 발급(재전송이면 같은 값이 다시 들어옴)
+    var _reqNonce = "";
     var sysLog = function (msg) {
         try {
-            $.ajax({ url: "/base/prod/sideMenu/menuClass/sysLog.sb", type: "POST", async: false, data: { msg: msg } });
+            $.ajax({ url: "/base/prod/sideMenu/menuClass/sysLog.sb", type: "POST", async: false, data: { msg: msg, tabId: _tabId, nonce: _reqNonce } });
         } catch (e) {}
     };
 
@@ -72,7 +82,8 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
         //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까? 데이터양에 따라 5-10초에서 수분이 걸릴 수도 있습니다.
         var msg = $("#srchApplyClassProd").val() + " " + messages["sideMenu.sdselProdCopy.prodCopySaveConfirm"]
             + "</br>" + messages["sideMenu.sdselProdCopy.prodCopySaveConfirm2"];
-        sysLog("[상품복사] 1. prodCopySave 진입(확인전)");
+        _reqNonce = 'N' + (new Date().getTime()).toString(36) + Math.random().toString(36).slice(2, 8); // 이번 복사 실행 식별값
+        sysLog("[상품복사] 1. prodCopySave 진입(확인전) nonce=" + _reqNonce);
         $scope._popConfirm(msg, function() {
             sysLog("[상품복사] 2. 확인(OK) 콜백 진입");
 
@@ -134,7 +145,7 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                 url: '/base/prod/sideMenu/menuClass/getSdselProdCopySave.sb',
                 data: params,  // 전체 전송
                 params: sParam,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
+                headers: {'Content-Type': 'application/json; charset=utf-8', 'X-Tab-Id': _tabId, 'X-Nonce': _reqNonce}
             }).then(function successCallback(response) {
                 sysLog("[상품복사] 5. 저장 성공콜백 진입");
                 if ($scope._httpStatusCheck(response, true)) {
