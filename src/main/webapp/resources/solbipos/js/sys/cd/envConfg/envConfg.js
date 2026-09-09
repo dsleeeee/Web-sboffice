@@ -212,6 +212,14 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
                 return false;
             }
 
+            // 비고 길이 체크 : 직접입력 항목의 기본값으로 사용되어 환경설정값(ENVST_VAL VARCHAR2(100)) 에 저장되므로 100byte 로 제한
+            if(nvl(item.remark, '').getByteLengthForOracle() > 100){
+                var msg = messages["envConfg.remark"] + messages["cmm.overLength"] + " 100 "  +
+                    ", 현재 : " + nvl(item.remark, '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                $scope._popMsg(msg); // 비고 길이가 너무 깁니다.
+                return false;
+            }
+
             if (arr.indexOf(item.envstCd) !== -1) {
                 $scope._popMsg(messages["cd.detail.require.nmcodeCdChk"]); // 코드가 중복되었습니다.
                 return false;

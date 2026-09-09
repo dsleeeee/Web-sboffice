@@ -22,9 +22,19 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', '$timeout', funct
     angular.extend(this, new RootController('sdselClassCopySingleCtrl', $scope, $http, false));
 
     // 임시 디버깅 로그 : catalina.out 에 실행순서대로 남긴다(동기 호출이라 순서 보장, 원인 파악 후 제거)
+    // 탭 식별 ID : sessionStorage 라 같은 탭 새로고침엔 유지, 새 탭엔 새로 생성 (진단용)
+    var _tabId = (function () {
+        try {
+            var t = sessionStorage.getItem('sbTabId');
+            if (!t) { t = 'T' + (new Date().getTime()).toString(36) + Math.random().toString(36).slice(2, 8); sessionStorage.setItem('sbTabId', t); }
+            return t;
+        } catch (e) { return 'T-noss'; }
+    })();
+    // 복사 실행 식별용 nonce : 진입 시마다 새로 발급(재전송이면 같은 값이 다시 들어옴)
+    var _reqNonce = "";
     var sysLog = function (msg) {
         try {
-            $.ajax({ url: "/base/prod/sideMenu/menuClass/sysLog.sb", type: "POST", async: false, data: { msg: msg } });
+            $.ajax({ url: "/base/prod/sideMenu/menuClass/sysLog.sb", type: "POST", async: false, data: { msg: msg, tabId: _tabId, nonce: _reqNonce } });
         } catch (e) {}
     };
 
@@ -71,7 +81,8 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', '$timeout', funct
         //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까? 데이터양에 따라 5-10초에서 수분이 걸릴 수도 있습니다.
         var msg = $("#srchApplySingleGroupSingle").val() + " " + messages["sideMenu.sdselClassCopy.classCopySaveConfirm"]
             + "</br>" + messages["sideMenu.sdselClassCopy.classCopySaveConfirm3"];
-        sysLog("[분류복사S] 1. classSingleCopySave 진입(확인전)");
+        _reqNonce = 'N' + (new Date().getTime()).toString(36) + Math.random().toString(36).slice(2, 8); // 이번 복사 실행 식별값
+        sysLog("[분류복사S] 1. classSingleCopySave 진입(확인전) nonce=" + _reqNonce);
         $scope._popConfirm(msg, function() {
             sysLog("[분류복사S] 2. 확인(OK) 콜백 진입");
 
@@ -229,7 +240,7 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', '$timeout', funct
             url: '/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb',
             data: orgParams,  // 전체 전송
             params: sParam,
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
+            headers: {'Content-Type': 'application/json; charset=utf-8', 'X-Tab-Id': _tabId, 'X-Nonce': _reqNonce}
         }).then(function successCallback(response) {
             sysLog("[분류복사S] 9. 저장 성공콜백 진입");
             if ($scope._httpStatusCheck(response, true)) {
