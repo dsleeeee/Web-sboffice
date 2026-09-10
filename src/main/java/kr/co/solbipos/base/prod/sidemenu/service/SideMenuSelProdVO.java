@@ -144,6 +144,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 상품분류 수량 */
     private String sdselQty;
 
+    /** 선택상품복사 매장반영 대기 배치 묶음키 */
+    private Long copySeq;
+
     /**
      * @return the hqOfficeCd
      */
@@ -523,5 +526,13 @@ public class SideMenuSelProdVO extends PageVO {
 
     public void setSdselQty(String sdselQty) {
         this.sdselQty = sdselQty;
+    }
+
+    public Long getCopySeq() {
+        return copySeq;
+    }
+
+    public void setCopySeq(Long copySeq) {
+        this.copySeq = copySeq;
     }
 }

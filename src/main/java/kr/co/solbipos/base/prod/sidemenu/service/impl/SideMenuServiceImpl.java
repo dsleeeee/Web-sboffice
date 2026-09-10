@@ -642,6 +642,12 @@ public class SideMenuServiceImpl implements SideMenuService {
         String classCds = "";
         SideMenuSelClassVO countChkVO = new SideMenuSelClassVO();
 
+        // 선택분류복사 매장반영 대기 배치 묶음키 채번
+        Long copySeq = null;
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            copySeq = sideMenuMapper.getNextSdselStoreProcCopySeq();
+        }
+
 //        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
 //            classCds += sideMenuSelClassVO.getCopySdselClassCd() + ",";
 //            countChkVO.setApplySdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
@@ -726,6 +732,14 @@ public class SideMenuServiceImpl implements SideMenuService {
             /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 procCnt = sideMenuMapper.getSdselClassCopySaveMergeProdStore(sideMenuSelClassVO);
             }*/
+
+            // 본사에서 접속시 - 매장반영은 스케줄러가 처리하도록 선택분류/선택상품을 대기 테이블에 등록
+            // (매장반영 스케쥴러 전환 전까지 병행 유지)
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                sideMenuSelClassVO.setCopySeq(copySeq);
+                sideMenuMapper.insertSdselStoreProcClass(sideMenuSelClassVO);
+                sideMenuMapper.insertSdselStoreProcProd(sideMenuSelClassVO);
+            }
         }
         // 본사에서 접속시
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -933,6 +947,12 @@ public class SideMenuServiceImpl implements SideMenuService {
         String prodCds = "";
         SideMenuSelProdVO countChkVO = new SideMenuSelProdVO();
 
+        // 선택상품복사 매장반영 대기 배치 묶음키 채번
+        Long copySeq = null;
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            copySeq = sideMenuMapper.getNextSdselStoreProcCopySeq();
+        }
+
         for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
             prodCds += sideMenuSelProdVO.getProdCd() + ",";
             countChkVO.setApplySdselClassCd(sideMenuSelProdVO.getApplySdselClassCd());
@@ -982,6 +1002,13 @@ public class SideMenuServiceImpl implements SideMenuService {
             /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 procCnt = sideMenuMapper.getSdselProdCopySaveMergeStore(sideMenuSelProdVO);
             }*/
+
+            // 본사에서 접속시 - 매장반영은 스케줄러가 처리하도록 선택상품을 대기 테이블에 등록
+            // (매장반영 스케쥴러 전환 전까지 병행 유지)
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                sideMenuSelProdVO.setCopySeq(copySeq);
+                sideMenuMapper.insertSdselStoreProcProdOnly(sideMenuSelProdVO);
+            }
         }
         // 본사에서 접속시
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

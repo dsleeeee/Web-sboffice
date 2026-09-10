@@ -187,6 +187,15 @@ public interface SideMenuMapper {
     /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 매장에 내려줌 */
     int getSdselClassCopySaveMergeProdStore(@Param("sideMenuSelClassVOs") SideMenuSelClassVO[] sideMenuSelClassVOs);
 
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 배치 묶음키 채번 */
+    Long getNextSdselStoreProcCopySeq();
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 등록(선택분류) */
+    int insertSdselStoreProcClass(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 등록(선택상품) */
+    int insertSdselStoreProcProd(SideMenuSelClassVO sideMenuSelClassVO);
+
     /** 선택분류 적용매장등록 팝업 - 선택분류 조회 */
     List<DefaultMap<Object>> getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO);
 
@@ -231,6 +240,9 @@ public interface SideMenuMapper {
 
     /** 선택상품복사 팝업 - 매장에 내려줌 */
     int getSdselProdCopySaveMergeStore(@Param("sideMenuSelProdVOs") SideMenuSelProdVO[] sideMenuSelProdVOs);
+
+    /** 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 매장반영 대기 등록(선택상품) */
+    int insertSdselStoreProcProdOnly(SideMenuSelProdVO sideMenuSelProdVO);
 
     /** 선택상품 생성시 표기순번 자동채번 */
     String getDispSeqCodeProd(SideMenuSelProdVO sideMenuSelProdVO);
