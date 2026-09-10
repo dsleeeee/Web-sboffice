@@ -132,6 +132,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 영수증적용 */
     private String receiptApplyYn;
 
+    /** 선택분류복사 매장반영 대기 배치 묶음키 */
+    private Long copySeq;
+
     /**
      * @return the hqOfficeCd
      */
@@ -424,5 +427,13 @@ public class SideMenuSelClassVO extends CmmVO {
 
     public void setReceiptApplyYn(String receiptApplyYn) {
         this.receiptApplyYn = receiptApplyYn;
+    }
+
+    public Long getCopySeq() {
+        return copySeq;
+    }
+
+    public void setCopySeq(Long copySeq) {
+        this.copySeq = copySeq;
     }
 }

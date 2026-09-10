@@ -2546,6 +2546,91 @@
             )
     </insert>
 
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 배치 묶음키 채번 -->
+    <select id="getNextSdselStoreProcCopySeq" resultType="Long">
+        /* SideMenuMapper.getNextSdselStoreProcCopySeq */
+        SELECT TB_HQ_PRODUCT_SDSEL_STORE_PROC_COPY_SEQ.NEXTVAL FROM DUAL
+    </select>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 등록(선택분류)
+        TABLE    : TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류복사 시, 매장반영은 스케줄러가 처리하도록 선택분류 정보를 대기 테이블에 등록한다.
+    -->
+    <insert id="insertSdselStoreProcClass" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.insertSdselStoreProcClass */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        (
+            SEQ,
+            HQ_OFFICE_CD,
+            COPY_SEQ,
+            SDSEL_GRP_CD,
+            SDSEL_CLASS_CD,
+            PROD_CD,
+            IN_FG,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            TB_HQ_PRODUCT_SDSEL_STORE_PROC_SEQ.NEXTVAL,
+            #{hqOfficeCd},
+            #{copySeq},
+            #{applySdselGrpCd},
+            #{applySdselClassCd},
+            NULL,
+            'CLASS',
+            'I',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 매장반영 대기 등록(선택상품)
+        TABLE    : TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류복사 시, 매장반영은 스케줄러가 처리하도록 선택상품 정보를 대기 테이블에 등록한다.
+    -->
+    <insert id="insertSdselStoreProcProd" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.insertSdselStoreProcProd */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        (
+            SEQ,
+            HQ_OFFICE_CD,
+            COPY_SEQ,
+            SDSEL_GRP_CD,
+            SDSEL_CLASS_CD,
+            PROD_CD,
+            IN_FG,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT
+            TB_HQ_PRODUCT_SDSEL_STORE_PROC_SEQ.NEXTVAL,
+            C.HQ_OFFICE_CD,
+            #{copySeq},
+            #{applySdselGrpCd},
+            C.SDSEL_CLASS_CD,
+            C.PROD_CD,
+            'PROD',
+            'I',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        FROM TB_HQ_PRODUCT_SDSEL_PROD C
+        WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND   C.SDSEL_CLASS_CD = #{applySdselClassCd}
+    </insert>
+
     <!-- 선택분류 적용매장등록 팝업 - 선택분류 조회 -->
     <!--
         TABLE    :
@@ -3289,6 +3374,46 @@
             ,      B.SOLD_OUT_YN
             ,      B.PRINT_YN
             )
+    </insert>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 매장반영 대기 등록(선택상품)
+        TABLE    : TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 선택상품복사 시, 매장반영은 스케줄러가 처리하도록 선택상품 정보를 대기 테이블에 등록한다.
+    -->
+    <insert id="insertSdselStoreProcProdOnly" parameterType="sideMenuSelProdVO">
+        /* SideMenuMapper.insertSdselStoreProcProdOnly */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_STORE_PROC
+        (
+            SEQ,
+            HQ_OFFICE_CD,
+            COPY_SEQ,
+            SDSEL_GRP_CD,
+            SDSEL_CLASS_CD,
+            PROD_CD,
+            IN_FG,
+            PROC_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT
+            TB_HQ_PRODUCT_SDSEL_STORE_PROC_SEQ.NEXTVAL,
+            #{hqOfficeCd},
+            #{copySeq},
+            D.SDSEL_GRP_CD,
+            #{applySdselClassCd},
+            #{copySdselProdCd},
+            'PROD',
+            'I',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        FROM TB_HQ_PRODUCT_SDSEL_CLASS D
+        WHERE D.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND   D.SDSEL_CLASS_CD = #{applySdselClassCd}
     </insert>
 
     <!-- 선택상품 생성시 표기순번 자동채번 -->
