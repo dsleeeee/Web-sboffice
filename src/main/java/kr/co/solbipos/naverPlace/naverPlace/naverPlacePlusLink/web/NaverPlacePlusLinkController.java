@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.naverPlace.naverPlace.naverPlacePlusLink.service.NaverPlacePlusApiVO;
@@ -84,26 +85,39 @@ public class NaverPlacePlusLinkController {
         DefaultMap<Object> apiInfo = naverPlacePlusLinkService.getApiUrl(naverPlacePlusLinkVO);
         model.addAttribute("popUrl", apiInfo.getStr("apiUrl"));
 
-        // 네.아.로 Unique ID 조회
-        String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
-        model.addAttribute("uniqueId", uniqueId);
+        // 연동 매장 정보 조회(DB) : 가입경로(IN_TYPE : LYNK/NAVER)를 먼저 확인한다
+        DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+        String inType = (result != null) ? result.getStr("inType") : null;
+        model.addAttribute("inType", inType);
 
-        if (uniqueId != null && uniqueId != "") {
+        if ("NAVER".equals(inType)) {
+            // 간편연동(엑셀업로드)으로 가입된 매장은 네.아.로 로그인 이력이 없어 실시간 연동조회 API를 탈 수 없으므로
+            // DB(TB_CM_NAVER_LINK)에 저장된 정보로 바로 연동완료 화면을 구성한다
+            resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+            resultMap2.put("placeId", result.getStr("naverPlaceId"));
+            resultMap2.put("regDateTime", DateUtil.date2string(DateUtil.getDatetime(result.getStr("naverLinkDt")), "yyyy-MM-dd'T'HH:mm:ss.SSS"));
 
-            // 동의여부확인 API 호출
-            resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+        } else {
 
-            // 연동 매장 정보 조회(DB)
-            DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+            // 네.아.로 Unique ID 조회
+            String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
+            model.addAttribute("uniqueId", uniqueId);
 
-            if (result != null && result.size() > 0 && !result.isEmpty()) {
-                if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+            if (uniqueId != null && uniqueId != "") {
 
-                    // 진짜 연동이 되어있는지 연동 조회 API 호출
-                    naverPlacePlusApiVO.setProjections(""); // 초기화
-                    naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
-                    resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
-                    resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+                // 동의여부확인 API 호출
+                resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+
+                // DB에서 조회해 온 연동 매장 정보로 서버 연동 확인
+                if (result != null && result.size() > 0 && !result.isEmpty()) {
+                    if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+
+                        // 진짜 연동이 되어있는지 연동 조회 API 호출
+                        naverPlacePlusApiVO.setProjections(""); // 초기화
+                        naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
+                        resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
+                        resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+                    }
                 }
             }
         }
@@ -134,32 +148,45 @@ public class NaverPlacePlusLinkController {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         Map<String, Object> resultMap2 = new HashMap<String, Object>();
 
-        // 네.아.로 Unique ID 조회
-        String uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
-        model.addAttribute("uniqueId", uniqueId);
+        // 연동 매장 정보 조회(DB) : 가입경로(IN_TYPE : LYNK/NAVER)를 먼저 확인한다
+        DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+        String inType = (result != null) ? result.getStr("inType") : null;
+        String uniqueId = null;
 
-        if (uniqueId != null && uniqueId != "") {
+        if ("NAVER".equals(inType)) {
+            // 간편연동(엑셀업로드)으로 가입된 매장은 네.아.로 로그인 이력이 없어 실시간 연동조회 API를 탈 수 없으므로
+            // DB(TB_CM_NAVER_LINK)에 저장된 정보로 바로 연동완료 화면을 구성한다
+            resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+            resultMap2.put("placeId", result.getStr("naverPlaceId"));
+            resultMap2.put("regDateTime", DateUtil.date2string(DateUtil.getDatetime(result.getStr("naverLinkDt")), "yyyy-MM-dd'T'HH:mm:ss.SSS"));
 
-            // 동의여부확인 API 호출
-            resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+        } else {
 
-            // 연동 매장 정보 조회(DB)
-            DefaultMap<String> result = naverPlacePlusLinkService.getNaverStore(naverPlacePlusLinkVO, sessionInfoVO);
+            // 네.아.로 Unique ID 조회
+            uniqueId = naverPlacePlusLinkService.getNaverUniqueId(naverPlacePlusLinkVO, sessionInfoVO);
 
-            if (result != null && result.size() > 0 && !result.isEmpty()) {
-                if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+            if (uniqueId != null && uniqueId != "") {
 
-                    // 진짜 연동이 되어있는지 연동 조회 API 호출
-                    naverPlacePlusApiVO.setProjections(""); // 초기화
-                    naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
-                    resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
-                    resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+                // 동의여부확인 API 호출
+                resultMap = naverPlacePlusLinkService.getAgreeYn(naverPlacePlusApiVO, sessionInfoVO);
+
+                // DB에서 조회해 온 연동 매장 정보로 서버 연동 확인
+                if (result != null && result.size() > 0 && !result.isEmpty()) {
+                    if (result.getStr("naverPlaceId") != null && result.getStr("naverPlaceId") != "") {
+
+                        // 진짜 연동이 되어있는지 연동 조회 API 호출
+                        naverPlacePlusApiVO.setProjections(""); // 초기화
+                        naverPlacePlusApiVO.setPlaceId(result.getStr("naverPlaceId"));
+                        resultMap2 = naverPlacePlusLinkService.getNaverLinkYn(naverPlacePlusApiVO, sessionInfoVO);
+                        resultMap2.put("storeNm", result.getStr("naverStoreNm"));
+                    }
                 }
             }
         }
 
         // return 값 셋팅
         DefaultMap<String> resultMap3 = new DefaultMap<String>();
+        resultMap3.put("inType", inType);
         resultMap3.put("uniqueId", uniqueId);
         resultMap3.put("agreeYn", convertToJson(resultMap));
         resultMap3.put("linkYn", convertToJson(resultMap2));

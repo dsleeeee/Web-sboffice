@@ -32,6 +32,8 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
         // 다시 한번 상태 체크
         $scope._postJSONQuery.withOutPopUp('/naverPlace/naverPlace/naverPlacePlusLink/getStatus.sb', params, function (response) {
 
+            // 가입경로 (LYNK/NAVER)
+            inType = response.data.data.inType;
             // 네.아.로 uniqueId
             uniqueId = response.data.data.uniqueId;
             // 약관동의 여부
@@ -45,8 +47,11 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
             // 0 : 네.아.로 로그인 미완료
             // 1 : 네.아.로 로그인 완료, 동의 미완료
             // 2 : 동의 완료, 매장연동 미완료
-            // 3 : 매장연동 완료
-            if (uniqueId != "" && uniqueId != null) {
+            // 3 : 매장연동 완료 or 가입경로 '네이버'
+            if (inType === "NAVER") {
+                // 간편연동(엑셀업로드)으로 가입된 매장은 네.아.로 로그인/동의 절차 없이 바로 연동완료 처리
+                linkStep = 3;
+            } else if (uniqueId != "" && uniqueId != null) {
                 linkStep = 1;
 
                 if (agreeYn != null && agreeYn != undefined) {
@@ -133,6 +138,13 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
 
     // 연동 해지
     $scope.btn2 = function () {
+
+        // 간편연동(엑셀업로드)으로 가입된 매장은 포스 백오피스에서 연동 해지 불가
+        if (inType === "NAVER") {
+            // 이 매장은 네이버플레이스플러스를 통해 연동되어, 포스 백오피스에서는 연동 해제가 불가합니다.</br>연동 해제를 원하시면 네이버 스마트플레이스에서 해제해 주세요.
+            $scope._popMsg(messages["naverPlacePlusLink.withdraw.notAllowed"]);
+            return false;
+        }
 
         // 연동을 해지하시겠습니까?
         $scope._popConfirm(messages["naverPlacePlusLink.withdraw.confirm"], function () {

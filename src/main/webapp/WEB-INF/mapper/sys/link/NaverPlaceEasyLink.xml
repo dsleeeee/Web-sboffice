@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NaverPlaceEasyLink.xml
+    네이버플레이스 간편연동 등록 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.09.10      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.link.naverPlaceEasyLink.service.impl.NaverPlaceEasyLinkMapper">
+
+    <!-- 사용자현황 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK, TB_CM_NAVER_LINK_AGREEMENT
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 사용자현황을 조회한다.
+    -->
+    <select id="getNaverPlaceUserList" parameterType="naverPlaceEasyLinkVO" resultType="DefaultMap">
+    /* USE : NaverPlaceEasyLinkMapper.getNaverPlaceUserList */
+        SELECT  A.HQ_OFFICE_CD
+ 		,       C.HQ_OFFICE_NM
+        ,       A.STORE_CD
+        ,       D.STORE_NM
+        ,       D.SYS_STAT_FG
+        ,       D.BIZ_NO
+        ,       A.IN_TYPE
+        ,       A.UNIQUE_ID
+        ,       TO_CHAR(TO_DATE(A.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LAST_RESPONSE_DT
+        ,       A.MP_NO
+        ,       A.ETC01
+        ,       A.ETC02
+        ,       A.ETC03
+        ,       A.ETC04
+        ,       A.ETC05
+        ,       A.ETC06
+        ,       A.ETC07
+        ,       A.ETC08
+        ,       A.ETC09
+        ,       A.ETC10
+        ,       A.NAVER_STORE_NM
+        ,       A.NAVER_PLACE_ID
+        ,       TO_CHAR(TO_DATE(A.NAVER_LINK_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS NAVER_LINK_DT
+        ,       TO_CHAR(TO_DATE(B.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS AGREEMENT_LAST_RESPONSE_DT
+        ,       B.AGREEMENT_TYPE
+        ,       A.ORDER_UNIQUE_ID
+        ,       A.ORDER_BUSINESS_ID
+        ,       A.ORDER_CHANNEL_SERVICE_ID_TABLE
+        ,       A.ORDER_CHANNEL_SERVICE_ID_PICKUP
+        FROM    TB_CM_NAVER_LINK A
+        ,       TB_CM_NAVER_LINK_AGREEMENT B
+        ,       TB_HQ_OFFICE C
+        ,       TB_MS_STORE D
+        WHERE   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD(+)
+        AND     A.STORE_CD = B.STORE_CD(+)
+        AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+        AND     A.STORE_CD = D.STORE_CD
+        <if test="inType != null and inType != ''">
+        AND     A.IN_TYPE = #{inType}
+        </if>
+        <if test='bizNo != null and bizNo != ""'>
+            AND D.BIZ_NO LIKE '%'||#{bizNo}||'%'
+        </if>
+        ORDER
+        BY      A.HQ_OFFICE_CD, A.STORE_CD
+    </select>
+
+    <!-- 간편연동 업로드 검증 및 임시데이터 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_NAVER_LINK
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 네이버플레이스 간편연동 업로드
+    -->
+    <insert id="saveNaverPlaceEasyLinkExcelCheck" parameterType="naverPlaceEasyLinkVO">
+        /* USE : NaverPlaceEasyLinkMapper.saveNaverPlaceEasyLinkExcelCheck */
+        INSERT INTO TB_TMP_EXCEL_NAVER_LINK
+        (
+             SESSION_ID,
+             SEQ,
+             PLACE_ID,
+             BUSINESS_NAME,
+             BUSINESS_NUMBER,
+             HQ_OFFICE_CD,
+             STORE_CD,
+             RESULT
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{placeId},
+            #{businessName},
+            #{businessNumber},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{result}
+        )
+    </insert>
+
+    <!-- 간편연동 업로드 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_NAVER_LINK, TB_HQ_OFFICE, TB_MS_STORE
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 네이버플레이스 간편연동 업로드 검증결과를 조회한다.
+    -->
+    <select id="getNaverPlaceEasyLinkExcelList" parameterType="naverPlaceEasyLinkVO" resultType="DefaultMap">
+        /* USE : NaverPlaceEasyLinkMapper.getNaverPlaceEasyLinkExcelList */
+        SELECT  A.SESSION_ID
+        ,       A.SEQ
+        ,       A.PLACE_ID
+        ,       A.BUSINESS_NAME
+        ,       A.BUSINESS_NUMBER
+        ,       A.HQ_OFFICE_CD
+        ,       C.HQ_OFFICE_NM
+        ,       A.STORE_CD
+        ,       D.STORE_NM
+        ,       D.SYS_STAT_FG
+        ,       A.RESULT
+        ,       (
+                    SELECT  TO_CHAR(TO_DATE(MAX(S.SALE_DATE), 'YYYYMMDD'), 'YYYY-MM-DD')
+                    FROM    TB_SL_SALE_HDR S
+                    WHERE   S.STORE_CD = A.STORE_CD
+                    AND     S.SALE_YN = 'Y'
+                    AND     S.SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                 ) AS LAST_SALE_DATE
+        FROM    TB_TMP_EXCEL_NAVER_LINK A
+        LEFT JOIN TB_HQ_OFFICE C ON A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+        LEFT JOIN TB_MS_STORE D ON A.STORE_CD = D.STORE_CD
+        WHERE   A.SESSION_ID = #{sessionId}
+        ORDER
+        BY      A.SEQ
+    </select>
+
+    <!-- 간편연동 업로드 임시데이터 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_NAVER_LINK
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 네이버플레이스 간편연동 업로드 임시데이터를 세션 기준으로 전체 삭제한다.
+    -->
+    <delete id="deleteNaverPlaceEasyLinkExcelAll" parameterType="naverPlaceEasyLinkVO">
+        /* USE : NaverPlaceEasyLinkMapper.deleteNaverPlaceEasyLinkExcelAll */
+        DELETE
+        FROM    TB_TMP_EXCEL_NAVER_LINK
+        WHERE   SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 간편연동 업로드 임시데이터 개별 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_NAVER_LINK
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 네이버플레이스 간편연동 업로드 임시데이터를 세션ID+순번 기준으로 한 건 삭제한다.
+    -->
+    <delete id="deleteNaverPlaceEasyLinkExcel" parameterType="naverPlaceEasyLinkVO">
+        /* USE : NaverPlaceEasyLinkMapper.deleteNaverPlaceEasyLinkExcel */
+        DELETE
+        FROM    TB_TMP_EXCEL_NAVER_LINK
+        WHERE   SESSION_ID = #{sessionId}
+        AND     SEQ = #{seq}
+    </delete>
+
+    <!-- 사업자번호로 매장 정보 조회(검증용) -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 사업자번호(BIZ_NO)와 일치하는 매장을 조회한다.
+    -->
+    <select id="getStoreByBizNo" parameterType="naverPlaceEasyLinkVO" resultType="DefaultMap">
+        /* USE : NaverPlaceEasyLinkMapper.getStoreByBizNo */
+        SELECT  HQ_OFFICE_CD
+        ,       STORE_CD
+        FROM    TB_MS_STORE
+        WHERE   BIZ_NO = #{businessNumber}
+        AND     ROWNUM = 1
+    </select>
+
+    <!-- 기등록 매장여부 조회 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 이미 네이버플레이스로 등록된 매장인지 조회한다.
+    -->
+    <select id="getNaverLinkRegCnt" parameterType="naverPlaceEasyLinkVO" resultType="int">
+        /* USE : NaverPlaceEasyLinkMapper.getNaverLinkRegCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_NAVER_LINK
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+        AND     NAVER_PLACE_ID IS NOT NULL
+        AND     IN_TYPE IS NOT NULL
+    </select>
+
+    <!-- 매장코드로 매장명 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 업체명이 없을 때 대체할 매장명을 매장코드로 조회한다.
+    -->
+    <select id="getStoreNm" parameterType="naverPlaceEasyLinkVO" resultType="String">
+        /* USE : NaverPlaceEasyLinkMapper.getStoreNm */
+        SELECT  STORE_NM
+        FROM    TB_MS_STORE
+        WHERE   STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 간편연동 업로드 검증성공 데이터 저장 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 검증성공한 간편연동업로드 데이터를 TB_CM_NAVER_LINK에 반영한다.
+    -->
+    <update id="saveNaverPlaceEasyLinkExcel" parameterType="naverPlaceEasyLinkVO">
+        /* USE : NaverPlaceEasyLinkMapper.saveNaverPlaceEasyLinkExcel */
+        MERGE INTO TB_CM_NAVER_LINK A
+        USING DUAL
+        ON (
+            A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.STORE_CD = #{storeCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE SET
+                A.NAVER_STORE_NM = #{businessName},
+                A.NAVER_PLACE_ID = #{placeId},
+                A.NAVER_LINK_DT  = #{modDt},
+                A.IN_TYPE        = 'NAVER',
+	            A.MOD_DT         = #{modDt},
+	            A.MOD_ID         = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                HQ_OFFICE_CD,
+                STORE_CD,
+                NAVER_STORE_NM,
+                NAVER_PLACE_ID,
+                NAVER_LINK_DT,
+                IN_TYPE,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{storeCd},
+                #{businessName},
+                #{placeId},
+                #{modDt},
+                'NAVER',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </update>
+
+</mapper>

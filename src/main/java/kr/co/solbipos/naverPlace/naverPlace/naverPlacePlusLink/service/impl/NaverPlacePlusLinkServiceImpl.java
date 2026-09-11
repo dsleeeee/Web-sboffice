@@ -526,6 +526,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         naverPlacePlusLinkVO.setNaverStoreNm(naverPlacePlusApiVO.getBusinessName());
         naverPlacePlusLinkVO.setNaverPlaceId(resultMap.get("placeId").toString());
         naverPlacePlusLinkVO.setNaverLinkDt(regDateTime);
+        naverPlacePlusLinkVO.setInType("LYNK");
         naverPlacePlusLinkVO.setRegDt(dt);
         naverPlacePlusLinkVO.setRegId(naverPlacePlusApiVO.getUserId());
         naverPlacePlusLinkVO.setModDt(dt);
@@ -575,6 +576,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         naverPlacePlusLinkVO.setNaverStoreNm(null);
         naverPlacePlusLinkVO.setNaverPlaceId(null);
         naverPlacePlusLinkVO.setNaverLinkDt(null);
+        naverPlacePlusLinkVO.setInType(null);
         naverPlacePlusLinkVO.setModDt(dt);
         naverPlacePlusLinkVO.setModId(sessionInfoVO.getUserId());
 

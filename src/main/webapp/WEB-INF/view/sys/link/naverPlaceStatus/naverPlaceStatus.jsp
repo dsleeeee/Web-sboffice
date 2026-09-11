@@ -50,8 +50,19 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <%-- 사업자번호 --%>
+            <th><s:message code="naverPlaceStatus.bizNo"/></th>
+            <td>
+                <input type="text" class="sb-input w100" id="srchBizNo" onkeyup="fnNxBtnSearch();"/>
+            </td>
+        </tr>
         </tbody>
     </table>
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+    </div>
     <div class="w100 mt10">
         <%--사용자현황 테이블--%>
         <div class="wj-gridWrap" id="wjGridUser" style="height: 380px; overflow-x: hidden; overflow-y: hidden; display: block;">
@@ -59,7 +70,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="flex"
+                    control="flexUser"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter">
@@ -69,7 +80,9 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.hqOfficeNm"/>" binding="hqOfficeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.bizNo"/>" binding="bizNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.reset"/>" binding="reset" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.inType"/>" binding="inType" data-map="inTypeDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.uniqueId"/>" binding="uniqueId" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.lastResponseDt"/>" binding="lastResponseDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -88,6 +101,11 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverLinkDt"/>" binding="naverLinkDt" width="180" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.agreementLastResponseDt"/>" binding="agreementLastResponseDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.agreementType"/>" binding="agreementType" width="250" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.orderUniqueId"/>" binding="orderUniqueId" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.orderBusinessId"/>" binding="orderBusinessId" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.orderChannelServiceIdTable"/>" binding="orderChannelServiceIdTable" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.orderChannelServiceIdPickup"/>" binding="orderChannelServiceIdPickup" width="210" align="center" is-read-only="true"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
         <%--//사용자현황 테이블--%>
@@ -98,7 +116,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="flex"
+                    control="flexConnect"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter">
@@ -111,6 +129,7 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.hqOfficeNm"/>" binding="hqOfficeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.bizNo"/>" binding="bizNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.orgnFg"/>" binding="orgnFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.userId"/>" binding="userId" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.userNm"/>" binding="userNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -125,7 +144,7 @@
     var menuCd = "${menuCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260423.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260911.01" charset="utf-8"></script>
 
 <%-- 네이버플레이스 연동 초기화 팝업 --%>
 <c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">

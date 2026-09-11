@@ -276,6 +276,8 @@
     <typeAlias alias="kcpqrUseStatusVO" type="kr.co.solbipos.sys.link.kcpqrUseStatus.service.KcpqrUseStatusVO"/>
     <!-- 시스템관리 > 연동 > 네이버플레이스현황 -->
     <typeAlias alias="naverPlaceStatusVO" type="kr.co.solbipos.sys.link.naverPlaceStatus.service.NaverPlaceStatusVO"/>
+    <!-- 시스템관리 > 연동 > 네이버플레이스 간편연동 등록 -->
+    <typeAlias alias="naverPlaceEasyLinkVO" type="kr.co.solbipos.sys.link.naverPlaceEasyLink.service.NaverPlaceEasyLinkVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--

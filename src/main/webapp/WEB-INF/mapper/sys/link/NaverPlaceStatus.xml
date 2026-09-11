@@ -23,6 +23,8 @@
  		,       C.HQ_OFFICE_NM
         ,       A.STORE_CD
         ,       D.STORE_NM
+        ,       D.BIZ_NO
+        ,       A.IN_TYPE
         ,       A.UNIQUE_ID
         ,       TO_CHAR(TO_DATE(A.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LAST_RESPONSE_DT
         ,       A.MP_NO
@@ -41,6 +43,10 @@
         ,       TO_CHAR(TO_DATE(A.NAVER_LINK_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS NAVER_LINK_DT
         ,       TO_CHAR(TO_DATE(B.LAST_RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS AGREEMENT_LAST_RESPONSE_DT
         ,       B.AGREEMENT_TYPE
+        ,       A.ORDER_UNIQUE_ID
+        ,       A.ORDER_BUSINESS_ID
+        ,       A.ORDER_CHANNEL_SERVICE_ID_TABLE
+        ,       A.ORDER_CHANNEL_SERVICE_ID_PICKUP
         FROM    TB_CM_NAVER_LINK A
         ,       TB_CM_NAVER_LINK_AGREEMENT B
         ,       TB_HQ_OFFICE C
@@ -49,6 +55,9 @@
         AND     A.STORE_CD = B.STORE_CD(+)
         AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
         AND     A.STORE_CD = D.STORE_CD
+        <if test='bizNo != null and bizNo != ""'>
+        AND     D.BIZ_NO LIKE '%'||#{bizNo}||'%'
+        </if>
         ORDER
         BY      A.HQ_OFFICE_CD, A.STORE_CD
     </select>
@@ -71,6 +80,7 @@
                 HQ_OFFICE_NM,
                 STORE_CD,
                 STORE_NM,
+                BIZ_NO,
                 ORGN_FG,
                 USER_ID,
                 USER_NM,
@@ -87,6 +97,7 @@
                     tce.HQ_OFFICE_NM,
                     tce.STORE_CD,
                     tce.STORE_NM,
+                    tce.BIZ_NO,
                     (CASE WHEN tce.ORGN_FG = 'H' THEN '본사'
                     WHEN tce.ORGN_FG = 'S' THEN '매장'
                     WHEN tce.ORGN_FG = 'M' THEN '관리자'
@@ -116,6 +127,7 @@
                                     A.EMP_NO,
                                     '' AS STORE_CD,
                                     '' AS STORE_NM,
+                                    '' AS BIZ_NO,
                                     A.HQ_OFFICE_CD,
                                     B.HQ_OFFICE_NM,
                                     A.HQ_OFFICE_CD AS ORGN_GRP_CD,
@@ -137,6 +149,7 @@
                                     A.EMP_NO,
                                     A.STORE_CD AS STORE_CD,
                                     B.STORE_NM AS STORE_NM,
+                                    B.BIZ_NO AS BIZ_NO,
                                     C.HQ_OFFICE_CD,
                                     C.HQ_OFFICE_NM,
                                     DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
@@ -160,6 +173,7 @@
                                     A.EMP_NO,
                                     '' AS STORE_CD,
                                     '' AS STORE_NM,
+                                    '' AS BIZ_NO,
                                     '' AS HQ_OFFICE_CD,
                                     '' AS HQ_OFFICE_NM,
                                     A.AGENCY_CD AS ORGN_GRP_CD,
@@ -176,14 +190,17 @@
             AND   tce.USER_ID (+)= twmu.USER_ID
             AND   twmu.USE_DATE BETWEEN #{startDate} AND #{endDate}
             GROUP
-            BY    twri_P.PATH, tce.HQ_OFFICE_CD, tce.HQ_OFFICE_NM, tce.STORE_CD, tce.STORE_NM, tce.ORGN_FG, twmu.USER_ID,tce.USER_NM
+            BY    twri_P.PATH, tce.HQ_OFFICE_CD, tce.HQ_OFFICE_NM, tce.STORE_CD, tce.STORE_NM, tce.BIZ_NO, tce.ORGN_FG, twmu.USER_ID,tce.USER_NM
             ORDER
             BY    tce.HQ_OFFICE_CD, tce.STORE_CD, twmu.USER_ID
         )
         WHERE  1=1
         AND    LEVEL3 = #{resrceCd}
+        <if test='bizNo != null and bizNo != ""'>
+        AND    BIZ_NO LIKE '%'||#{bizNo}||'%'
+        </if>
         GROUP
-        BY     HQ_OFFICE_CD, HQ_OFFICE_NM, STORE_CD, STORE_NM, ORGN_FG, USER_ID, USER_NM, LEVEL1, LEVEL1_NM, LEVEL2, LEVEL2_NM, LEVEL3, LEVEL3_NM
+        BY     HQ_OFFICE_CD, HQ_OFFICE_NM, STORE_CD, STORE_NM, BIZ_NO, ORGN_FG, USER_ID, USER_NM, LEVEL1, LEVEL1_NM, LEVEL2, LEVEL2_NM, LEVEL3, LEVEL3_NM
         ORDER
         BY     HQ_OFFICE_CD, STORE_CD, ORGN_FG
     </select>

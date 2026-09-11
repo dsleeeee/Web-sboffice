@@ -148,6 +148,7 @@
         SELECT  NAVER_STORE_NM
         ,       NAVER_PLACE_ID
         ,       NAVER_LINK_DT
+        ,       IN_TYPE
         FROM    TB_CM_NAVER_LINK
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD = #{storeCd}
@@ -225,6 +226,7 @@
         SET    NAVER_STORE_NM = #{naverStoreNm}
         ,      NAVER_PLACE_ID = #{naverPlaceId}
         ,      NAVER_LINK_DT = #{naverLinkDt}
+        ,      IN_TYPE = #{inType}
         ,      MOD_DT = #{modDt}
         ,      MOD_ID = #{modId}
         WHERE  1=1

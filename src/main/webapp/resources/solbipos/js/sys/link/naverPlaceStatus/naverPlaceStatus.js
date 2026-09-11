@@ -18,10 +18,17 @@ var viewFgComboData = [
     {"name":"접속현황","value":"connect"}
 ];
 
+var inTypeComboData = [
+    {"name":"전체","value":""},
+    {"name":"링크연동","value":"LYNK"},
+    {"name":"간편연동","value":"NAVER"}
+];
+
+
 /**
  *  네이버플레이스현황 그리드 생성
  */
-app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('naverPlaceStatusCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('naverPlaceStatusCtrl', $scope, $http, false));
@@ -34,6 +41,8 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $ht
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        $scope.inTypeDataMap = new wijmo.grid.DataMap(inTypeComboData, 'value', 'name'); // 구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -89,11 +98,13 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $ht
 
         if ($scope.viewFgCombo.selectedValue === "user") { // 사용자현황 조회
             url = url + "/getUserStatusList.sb";
+            params.bizNo = $("#srchBizNo").val();
             $("#wjGridUser").css("display", "");
             $("#wjGridConnect").css("display", "none");
         }
         if ($scope.viewFgCombo.selectedValue === "connect") { // 접속현황 조회
             url = url + "/getConnectStatusList.sb";
+            params.bizNo = $("#srchBizNo").val();
             params.resrceNm = '네이버플레이스 플러스 연동';
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
@@ -116,6 +127,42 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', function ($scope, $ht
             $("#thSrchDate").css("display", "");
             $("#tdSrchDate").css("display", "");
         }
+    };
+
+    // 엑셀다운로드
+    $scope.excelDownload = function () {
+
+        // 화면에 조회되어 표시중인 그리드 기준으로 다운로드 대상 결정
+        var targetFlex;
+        var fileNm;
+
+        if ($("#wjGridConnect").css("display") !== "none") { // 접속현황이 표시중
+            targetFlex = $scope.flexConnect;
+            fileNm = '네이버플레이스현황(접속현황)_' + getToday() + '.xlsx';
+        } else { // 사용자현황이 표시중
+            targetFlex = $scope.flexUser;
+            fileNm = '네이버플레이스현황(사용자현황)_' + getToday() + '.xlsx';
+        }
+
+        if (!targetFlex || targetFlex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(targetFlex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, fileNm, function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
     };
 
 }]);

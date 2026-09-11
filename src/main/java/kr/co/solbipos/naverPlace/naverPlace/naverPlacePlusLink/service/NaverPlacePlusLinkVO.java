@@ -77,6 +77,8 @@ public class NaverPlacePlusLinkVO extends PageVO {
     private String personalInfoProvisionDt;
     /** 네이버 주문 연동용 UNIQUE ID */
     private String orderUniqueId;
+    /** 네이버 플레이스 플러스 유입경로 [LYNK, NAVER] */
+    private String inType;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -300,5 +302,13 @@ public class NaverPlacePlusLinkVO extends PageVO {
 
     public void setOrderUniqueId(String orderUniqueId) {
         this.orderUniqueId = orderUniqueId;
+    }
+
+    public String getInType() {
+        return inType;
+    }
+
+    public void setInType(String inType) {
+        this.inType = inType;
     }
 }

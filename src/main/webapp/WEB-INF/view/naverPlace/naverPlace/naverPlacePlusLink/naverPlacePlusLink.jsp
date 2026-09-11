@@ -79,6 +79,8 @@
     var hqOfficeCd = "${hqOfficeCd}";
     // 팝업 Url
     var popUrl = "${popUrl}";
+    // 가입경로 (LYNK/NAVER)
+    var inType = "${inType}";
     // 네.아.로 uniqueId
     var uniqueId = "${uniqueId}";
     // 약관동의 여부
@@ -97,8 +99,11 @@
     // 0 : 네.아.로 로그인 미완료
     // 1 : 네.아.로 로그인 완료, 동의 미완료
     // 2 : 동의 완료, 매장연동 미완료
-    // 3 : 매장연동 완료
-    if (uniqueId != "" && uniqueId != null) {
+    // 3 : 매장연동 완료 or 가입경로 '네이버'
+    if (inType === "NAVER") {
+        // 간편연동(엑셀업로드)으로 가입된 매장은 네.아.로 로그인/동의 절차 없이 바로 연동완료 처리
+        linkStep = 3;
+    } else if (uniqueId != "" && uniqueId != null) {
         linkStep = 1;
 
         if (agreeYn != null && agreeYn != undefined) {
@@ -187,7 +192,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260820.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusLink.js?ver=20260911.03" charset="utf-8"></script>
 
 <%-- 네이버플레이스 연동 초기화 팝업 --%>
 <c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">
