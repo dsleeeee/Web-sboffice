@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayCashSaleBensonMapper.xml
+    벤슨 > 매출현황2 > 일별(현금)현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.dayCashSaleBenson.service.impl.DayCashSaleBensonMapper">
+
+    <!-- 일별(현금)현황 - 결제수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayCashSaleBensonVO
+        COMMENTS : 일별(현금)현황 - 결제수단 컬럼 리스트를 조회한다.
+    -->
+    <select id="getPayColList" parameterType="dayCashSaleBensonVO" resultType="DefaultMap">
+        /* USE : DayCashSaleBensonMapper.getPayColList */
+        <choose>
+        <when test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS001")'>
+            SELECT  tcn.NMCODE_CD AS PAY_CD, DECODE(tcn.NMCODE_CD,'06','VMEM 전자상품권',tcn.NMCODE_NM) AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM    TB_CM_NMCODE tcn
+            WHERE   tcn.NMCODE_GRP_CD   =   '024'
+            AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+            ORDER
+            BY      tcn.NMCODE_CD
+        </when>
+        <otherwise>
+            SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM    TB_CM_NMCODE tcn
+            WHERE   tcn.NMCODE_GRP_CD   =   '024'
+            AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+            ORDER
+            BY      tcn.NMCODE_CD
+        </otherwise>
+        </choose>
+    </select>
+
+    <!-- 일별(현금)현황 - 할인 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayCashSaleBensonVO
+        COMMENTS : 일별(현금)현황 - 할인 컬럼 리스트를 조회한다.
+    -->
+    <select id="getDcColList" parameterType="dayCashSaleBensonVO" resultType="DefaultMap">
+        /* USE : DayCashSaleBensonMapper.getDcColList */
+        SELECT  tcn.NMCODE_CD AS DC_CD
+        ,        tcn.NMCODE_NM AS DC_NM
+        ,        (CASE WHEN tcn.NMCODE_CD IN ('12','13') THEN 'COUPN' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '041'
+        ORDER
+        BY      tcn.NMCODE_CD
+    </select>
+
+    <!-- 일별(현금)현황 - 객수 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : dayCashSaleBensonVO
+        COMMENTS : 일별(현금)현황 - 객수 컬럼 리스트를 조회한다.
+    -->
+    <select id="getGuestColList" parameterType="dayCashSaleBensonVO" resultType="DefaultMap">
+        /* USE : DayCashSaleBensonMapper.getGuestColList */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    SELECT
+                    A.NMCODE_CD AS GUEST_CD,
+                    NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_HQ_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    SELECT
+                    A.NMCODE_CD AS GUEST_CD,
+                    NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                    FROM TB_CM_NMCODE A,
+                    TB_MS_STORE_NMCODE B
+                    WHERE 1=1
+                    AND A.NMCODE_GRP_CD = '119'
+                    AND B.STORE_CD (+)= #{storeCd}
+                    AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                    AND B.NMCODE_CD (+)= A.NMCODE_CD
+                    ORDER BY A.NMCODE_CD
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 일별(현금)현황 - 일별종합(현금) 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_DTL_DLVR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DLVR, TB_MS_STORE
+        PARAM    : dayCashSaleBensonVO
+        COMMENTS : 일별(현금)현황 - 일별종합(현금) 리스트를 매장별로 조회한다.
+                   (원본 DayMapper.getDayCashTotalList 에서 매장코드/매장명 컬럼 추가, 매장별 행 분리)
+    -->
+    <select id="getDayCashTotalBensonList" parameterType="dayCashSaleBensonVO" resultType="DefaultMap">
+        /* USE : DayCashSaleBensonMapper.getDayCashTotalBensonList */
+        SELECT  tsshp.STORE_CD
+        ,       tms.STORE_NM
+        ,       TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       tsshp.TOT_SALE_AMT
+        ,       tsshp.TOT_DC_AMT
+        ,       tsshp.REAL_SALE_AMT
+        ,       tsshp.GA_AMT
+        ,       tsshp.VAT_AMT
+        ,       tsshp.TOT_TIP_AMT
+        ,       tsshp.TOT_ETC_AMT
+        ,       tsshp.CUP_AMT
+        ,       tsshp.BILL_CNT
+        ,       tsshp.BILL_UPRC
+        ,       tssddp.GEN_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.GEN_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
+        ,       tssddp.DLVR_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.DLVR_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
+        ,       tssddp.PACK_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.PACK_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> + NVL(tsshpd.PAY0, 0) + NVL(tsshpd.PAY1, 0) + NVL(tsshpd.PAY3, 0) + NVL(tsshpd.PAY4, 0) AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       tsshpd.PAY0 -- 현금(매장)
+        ,       tsshpd.PAY1 -- 현금(CID)
+        ,       tsshpd.PAY3 -- 현금(배민)
+        ,       tsshpd.PAY4 -- 현금(요기요)
+        FROM    (
+                    SELECT  SALE_DATE
+                    ,       STORE_CD
+                    ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT
+                    ,       SUM(VAT_AMT) AS VAT_AMT
+                    ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
+                    ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(CUP_AMT) AS CUP_AMT
+                    ,       SUM(BILL_CNT) AS BILL_CNT
+                    ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(PAY_AMT_${item}) AS PAY${item}
+                            </foreach>
+                    FROM    TB_SL_DAILY_TOTAL tsdt
+                    WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdt.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+                    AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP BY SALE_DATE, STORE_CD
+                ) tsshp
+        ,       (   SELECT	tssd.SALE_DATE
+                    , tssd.STORE_CD
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_ORDER_FG = '3' OR tssd.DLVR_ORDER_FG = '4' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    FROM	TB_SL_DAILY_DTL_DLVR tssd
+                    WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tssd.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+                    AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY      tssd.SALE_DATE, tssd.STORE_CD
+                ) tssddp
+        ,       (
+                    SELECT 	tsshp.SALE_DATE,
+                            tsshp.STORE_CD,
+                            SUM(PAY_AMT) - NVL(SUM(CASE tsshd.DLVR_IN_FG WHEN '1' THEN PAY_AMT WHEN '3' THEN PAY_AMT WHEN '4' THEN PAY_AMT END), 0) AS PAY0,
+                            SUM(CASE tsshd.DLVR_IN_FG WHEN '1' THEN PAY_AMT END) AS PAY1,
+                            SUM(CASE tsshd.DLVR_IN_FG WHEN '3' THEN PAY_AMT END) AS PAY3,
+                            SUM(CASE tsshd.DLVR_IN_FG WHEN '4' THEN PAY_AMT END) AS PAY4
+                    FROM 	TB_SL_SALE_HDR_PAY tsshp
+                    LEFT JOIN TB_SL_SALE_HDR_DLVR tsshd
+                    ON      tsshd.STORE_CD = tsshp.STORE_CD
+                    AND     tsshd.SALE_DATE = tsshp.SALE_DATE
+                    AND     tsshd.POS_NO = tsshp.POS_NO
+                    AND     tsshd.BILL_NO = tsshp.BILL_NO
+                    WHERE 	tsshp.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                    AND 	tsshp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND 	tsshp.PAY_CD = '02'
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsshp.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR  tsshp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                    </if>
+                    GROUP
+                    BY      tsshp.SALE_DATE, tsshp.STORE_CD
+                ) tsshpd
+        ,       TB_MS_STORE tms
+        WHERE   tssddp.SALE_DATE (+) = tsshp.SALE_DATE
+        AND     tssddp.STORE_CD (+) = tsshp.STORE_CD
+        AND     tsshpd.SALE_DATE (+) = tsshp.SALE_DATE
+        AND     tsshpd.STORE_CD (+) = tsshp.STORE_CD
+        AND     tms.HQ_OFFICE_CD (+) = #{hqOfficeCd}
+        AND     tms.STORE_CD (+) = tsshp.STORE_CD
+        ORDER
+        BY      tsshp.STORE_CD, tsshp.SALE_DATE DESC
+    </select>
+</mapper>

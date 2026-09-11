@@ -823,6 +823,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                                     $scope.setConfigProdLayer.show(true);
                                     $scope._broadcast('setConfigProdCtrl', params);
+                                    // 신규 저장 완료 후에는 상품등록 팝업을 닫아 재저장(중복 등록)을 막는다. (구성상품 팝업만 남김)
+                                    $scope.prodModifyLayer.hide();
                                 }
                             }
 

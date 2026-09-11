@@ -369,11 +369,11 @@ app.controller('monthSaleStoreBensonExcelCtrl', ['$scope', '$http', '$timeout', 
             $scope.searchExcelList(data);
         } else {
             // 엑셀다운로드 진행 사용자 현재 인원수 체크
-            data.downloadFg = "0"; // 다운로드 구분 (0:간소화화면, 1:상품매출분석)
+            data.downloadFg = "8"; // 다운로드 구분 (7:벤슨_상품매출분석, 8:벤슨_간소화화면)
             data.resrceCd = menuCd;
             data.resrceNm = menuNm;
             data.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
-            data.downloadNo = "11"; // 다운로드 화면구분번호
+            data.downloadNo = "6"; // 다운로드 화면구분번호
 
             $.postJSON('/sale/benson/prodSaleMonthStoreBenson/prodSaleMonthStoreBenson/getDivisionExcelDownloadCntChk.sb', data, function (response) {
                 if (response.data.list === 0) {

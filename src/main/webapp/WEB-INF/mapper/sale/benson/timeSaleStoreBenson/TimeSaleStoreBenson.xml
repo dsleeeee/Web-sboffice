@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TimeSaleStoreBenson.xml
+    (벤슨) 시간대매출(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.09     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.timeSaleStoreBenson.service.impl.TimeSaleStoreBensonMapper">
+
+    <!-- 시간대매출(매장) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreBensonList" parameterType="TimeSaleStoreBensonVO" resultType="DefaultMap">
+        /* TimeSaleStoreBensonMapper.getTimeSaleStoreBensonList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_DAILY_TIME_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdtd.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD, tms.STORE_NM
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 시간대매출(매장) - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreBensonExcelList" parameterType="TimeSaleStoreBensonVO" resultType="DefaultMap">
+        /* TimeSaleStoreBensonMapper.getTimeSaleStoreBensonExcelList */
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        FROM TB_SL_DAILY_TIME_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdtd.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD, tms.STORE_NM
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+    </select>
+
+    <!-- 시간대매출(매장) - 분할 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreBensonExcelDivisionList" parameterType="TimeSaleStoreBensonVO" resultType="DefaultMap">
+        /* TimeSaleStoreBensonMapper.getTimeSaleStoreBensonExcelDivisionList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        FROM TB_SL_DAILY_TIME_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdtd.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD, tms.STORE_NM
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>

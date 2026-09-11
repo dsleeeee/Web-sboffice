@@ -1,0 +1,333 @@
+package kr.co.solbipos.sale.benson.timeProdChannelBenson.service;
+
+import kr.co.solbipos.application.common.service.PageVO;
+
+/**
+ * @Class Name : TimeProdChannelBensonVO.java
+ * @Description : (벤슨) 상품매출분석 > 상품별시간대매출(채널별)
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2026.09.09  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2026.09.09
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public class TimeProdChannelBensonVO extends PageVO {
+
+    private static final long serialVersionUID = 9077739931898086579L;
+
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 매장코드 */
+    private String storeCd;
+
+    /** 매장코드 리스트 */
+    private String[] storeCdList;
+
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
+    /** 상품코드 */
+    private String[] prodCdList;
+
+    /** 상품코드 */
+    private String prodCds;
+
+    /** 상품분류 */
+    private String prodClassCd;
+
+    /** 상품표시옵션 */
+    private String prodOption;
+
+    /** 일자표시옵션 */
+    private String dayOption;
+
+    /** 상품코드 */
+    private String prodCd;
+
+    /** 상품명 */
+    private String prodNm;
+
+    /** 동적 컬럼 생성을 위한 쿼리 문자열*/
+    private String sQuery1;
+    private String sQuery2;
+
+    /** 주문채널 구분자 컬럼 */
+    private String dlvrInFgCol;
+
+    /** 주문채널 구분자 array */
+    private String arrDlvrInFgCol[];
+
+    /** 검색 시작 시간 */
+    private String startTime;
+
+    /** 검색 종료 시간 */
+    private String endTime;
+
+    /** 검색옵션 */
+    private String optionFg;
+
+    /** 시간대분류 */
+    private String timeSlot;
+
+    /** 시간대 */
+    private String timeCol;
+
+    /** 시간대 Array */
+    private String[] arrTimeCol;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
+    /** 상품(멀티) 조회를 위한 쿼리 문자열*/
+    private String prodCdQuery;
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String[] getProdCdList() {
+        return prodCdList;
+    }
+
+    public void setProdCdList(String[] prodCdList) {
+        this.prodCdList = prodCdList;
+    }
+
+    public String getProdCds() {
+        return prodCds;
+    }
+
+    public void setProdCds(String prodCds) {
+        this.prodCds = prodCds;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String getProdOption() {
+        return prodOption;
+    }
+
+    public void setProdOption(String prodOption) {
+        this.prodOption = prodOption;
+    }
+
+    public String getDayOption() {
+        return dayOption;
+    }
+
+    public void setDayOption(String dayOption) {
+        this.dayOption = dayOption;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    public String getsQuery1() {
+        return sQuery1;
+    }
+
+    public void setsQuery1(String sQuery1) {
+        this.sQuery1 = sQuery1;
+    }
+
+    public String getsQuery2() {
+        return sQuery2;
+    }
+
+    public void setsQuery2(String sQuery2) {
+        this.sQuery2 = sQuery2;
+    }
+
+    public String getDlvrInFgCol() {
+        return dlvrInFgCol;
+    }
+
+    public void setDlvrInFgCol(String dlvrInFgCol) {
+        this.dlvrInFgCol = dlvrInFgCol;
+    }
+
+    public String[] getArrDlvrInFgCol() {
+        return arrDlvrInFgCol;
+    }
+
+    public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
+        this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getOptionFg() {
+        return optionFg;
+    }
+
+    public void setOptionFg(String optionFg) {
+        this.optionFg = optionFg;
+    }
+
+    public String getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public String getTimeCol() {
+        return timeCol;
+    }
+
+    public void setTimeCol(String timeCol) {
+        this.timeCol = timeCol;
+    }
+
+    public String[] getArrTimeCol() {
+        return arrTimeCol;
+    }
+
+    public void setArrTimeCol(String[] arrTimeCol) {
+        this.arrTimeCol = arrTimeCol;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getProdCdQuery() {
+        return prodCdQuery;
+    }
+
+    public void setProdCdQuery(String prodCdQuery) {
+        this.prodCdQuery = prodCdQuery;
+    }
+}

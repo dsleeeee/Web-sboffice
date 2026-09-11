@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.benson.orderEmpBenson.service.impl.OrderEmpBensonMapper">
+
+	<!-- 기간별탭 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 기간별탭 매출을 조회한다.
+    -->
+    <select id="getOrderEmpPeriodList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/** OrderEmpBensonMapper.getOrderEmpPeriodList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tssd.STORE_CD,
+               	tms.STORE_NM,
+				tssd.ORDER_EMP_NO,
+				tme.EMP_NM,
+				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+		<include refid="CmmSQL.PagingTemplateCount"/>
+	 	FROM 	TB_SL_SALE_DTL tssd,
+				TB_MS_EMPLOYEE tme,
+				TB_MS_STORE tms
+		WHERE 	tme.STORE_CD = tssd.STORE_CD
+		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
+		AND		tms.STORE_CD = tssd.STORE_CD
+		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tssd.STORE_CD IN (${storeCdQuery})
+                </if>
+				<if test='orgnFg != null and orgnFg == "H"'>
+					AND (
+							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+						OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+						)
+				</if>
+				<if test='startDate != null and startDate != ""'>
+			    AND tssd.SALE_DATE >= #{startDate}
+			    </if>
+			    <if test='endDate != null and endDate != ""'>
+			    AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+			    </if>
+		GROUP BY tssd.STORE_CD, tms.STORE_NM, tssd.ORDER_EMP_NO, tme.EMP_NM
+		ORDER BY tssd.STORE_CD, tssd.ORDER_EMP_NO
+	    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+	<!-- 기간별탭 엑셀 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 기간별탭 엑셀 매출을 조회한다.
+    -->
+    <select id="getOrderEmpPeriodExcelList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/** OrderEmpBensonMapper.getOrderEmpPeriodExcelList */
+		SELECT tssd.STORE_CD,
+				tms.STORE_NM,
+				tssd.ORDER_EMP_NO,
+				tme.EMP_NM,
+				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM 	TB_SL_SALE_DTL tssd,
+				TB_MS_EMPLOYEE tme,
+				TB_MS_STORE tms
+		WHERE 	tme.STORE_CD = tssd.STORE_CD
+		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
+		AND		tms.STORE_CD = tssd.STORE_CD
+		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
+		<if test='orgnFg != null and orgnFg == "H"'>
+			AND (
+			'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+			OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+			)
+		</if>
+		<if test='startDate != null and startDate != ""'>
+			AND tssd.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+		</if>
+		GROUP BY tssd.STORE_CD, tms.STORE_NM, tssd.ORDER_EMP_NO, tme.EMP_NM
+		ORDER BY tssd.STORE_CD, tssd.ORDER_EMP_NO
+    </select>
+
+	<!-- 기간별탭 상세 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 기간별탭 상세 매출을 조회한다.
+    -->
+	<select id="getOrderEmpPeriodDtlList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/** OrderEmpBensonMapper.getOrderEmpPeriodDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+             , tssd.STORE_CD
+		     , tssd.POS_NO
+		     , tssd.BILL_NO
+		     , DECODE(tssd.SALE_YN,'Y','매출','반품') AS SALE_YN
+			 , (SELECT	'['||TSSH.TBL_CD||']'||tmt.TBL_NM
+				FROM 	TB_MS_TABLE_V01 tmt,
+						TB_SL_SALE_HDR tssh
+				WHERE 	tmt.STORE_CD = TSSH.STORE_CD
+				AND 	tmt.TBL_CD = TSSH.TBL_CD
+				AND 	TSSH.STORE_CD = tssd.STORE_CD
+				AND 	TSSH.SALE_DATE = tssd.SALE_DATE
+				AND 	TSSH.POS_NO = tssd.POS_NO
+				AND 	TSSH.BILL_NO = tssd.BILL_NO) AS TBL_CD
+             , TO_CHAR(TO_DATE(tssd.BILL_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS BILL_DT
+		     , SUM(tssd.SALE_AMT) AS TOT_SALE_AMT
+		     , SUM(tssd.DC_AMT) AS TOT_DC_AMT
+		     , SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+	   <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM TB_SL_SALE_DTL tssd
+		WHERE 1=1
+		AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		 <if test='storeCd != null and storeCd != ""'>
+		 AND tssd.STORE_CD = #{storeCd}
+		 </if>
+		 <if test='startDate != null and startDate != ""'>
+		 AND tssd.SALE_DATE >= #{startDate}
+		 </if>
+		 <if test='endDate != null and endDate != ""'>
+         AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+         </if>
+		 AND tssd.ORDER_EMP_NO = #{empNo}
+        GROUP BY SALE_DATE, STORE_CD, POS_NO, BILL_NO, SALE_YN, BILL_DT
+		 ORDER BY tssd.SALE_DATE DESC, tssd.POS_NO, tssd.BILL_NO
+	   <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+	<!-- 기간별탭 상세 엑셀 -->
+	<!--
+        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 기간별탭 상세 엑셀 매출을 조회한다.
+    -->
+     <select id="getOrderEmpPeriodDtlExcelList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		 /** OrderEmpBensonMapper.getOrderEmpPeriodDtlExcelList */
+		 SELECT TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		 , 		tssd.STORE_CD
+		 , 		tssd.POS_NO
+		 , 		tssd.BILL_NO
+		 , 		DECODE(tssd.SALE_YN,'Y','매출','반품') AS SALE_YN
+		 , (SELECT	'['||TSSH.TBL_CD||']'||tmt.TBL_NM
+			 FROM 	TB_MS_TABLE_V01 tmt,
+			 TB_SL_SALE_HDR tssh
+			 WHERE 	tmt.STORE_CD = TSSH.STORE_CD
+			 AND 	tmt.TBL_CD = TSSH.TBL_CD
+			 AND 	TSSH.STORE_CD = tssd.STORE_CD
+			 AND 	TSSH.SALE_DATE = tssd.SALE_DATE
+			 AND 	TSSH.POS_NO = tssd.POS_NO
+			 AND 	TSSH.BILL_NO = tssd.BILL_NO) AS TBL_CD
+		 , 		TO_CHAR(TO_DATE(tssd.BILL_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS BILL_DT
+		 , 		SUM(tssd.SALE_AMT) AS TOT_SALE_AMT
+		 , 		SUM(tssd.DC_AMT) AS TOT_DC_AMT
+		 , 		SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+		 FROM 	TB_SL_SALE_DTL tssd
+		 WHERE 	1=1
+		 AND 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		 <if test='storeCd != null and storeCd != ""'>
+			 AND tssd.STORE_CD = #{storeCd}
+		 </if>
+		 <if test='startDate != null and startDate != ""'>
+			 AND tssd.SALE_DATE >= #{startDate}
+		 </if>
+		 <if test='endDate != null and endDate != ""'>
+			 AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+		 </if>
+		 AND 	tssd.ORDER_EMP_NO = #{empNo}
+		 GROUP BY SALE_DATE, STORE_CD, POS_NO, BILL_NO, SALE_YN, BILL_DT
+		 ORDER BY tssd.SALE_DATE DESC, tssd.POS_NO, tssd.BILL_NO
+    </select>
+
+	<!-- 일자별탭 리스트 조회 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_STORE
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 일자별탭 리스트를 조회한다.
+                   2026.09.10 김유승 : 매장코드/매장명 추가(매장별 행 분리)
+    -->
+	<select id="getOrderEmpDayList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/* USE : OrderEmpBensonMapper.getOrderEmpDayList */
+		<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT 	A.STORE_CD
+		, 		(SELECT TMS.STORE_NM FROM TB_MS_STORE TMS WHERE TMS.STORE_CD = A.STORE_CD) AS STORE_NM
+		, 		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		, 		A.STORE_CNT
+		, 		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
+		, 		SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+		, 		SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
+				${sQuery1}
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM
+		(
+		SELECT tssd.SALE_DATE
+			, tssd.STORE_CD
+			,( SELECT COUNT(TMS.STORE_CD)
+			FROM TB_MS_STORE TMS
+			WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TMS.STORE_CD IN (${storeCdQuery})
+            </if>
+			) AS STORE_CNT
+		, SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+		, COUNT(tssd.BILL_NO) AS TOT_BILL_CNT
+		${sQuery2}
+		FROM TB_SL_SALE_DTL tssd
+		WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
+		<if test='startDate != null and startDate != ""'>
+			AND tssd.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND tssd.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		</if>
+		GROUP BY tssd.SALE_DATE, tssd.ORDER_EMP_NO, tssd.STORE_CD
+		ORDER BY tssd.SALE_DATE ASC
+		) A
+		WHERE 1 = 1
+		GROUP BY A.SALE_DATE, A.STORE_CNT, A.STORE_CD
+		ORDER BY A.STORE_CD, A.SALE_DATE
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+	</select>
+
+	<!-- 일자별탭 리스트(엑셀) 조회 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_STORE
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 일자별탭 리스트(엑셀)를 조회한다.
+                   2026.09.10 김유승 : 매장코드/매장명 추가(매장별 행 분리)
+    -->
+	<select id="getOrderEmpDayExcelList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/* USE : OrderEmpBensonMapper.getOrderEmpDayExcelList */
+		SELECT 	A.STORE_CD
+		, 		(SELECT TMS.STORE_NM FROM TB_MS_STORE TMS WHERE TMS.STORE_CD = A.STORE_CD) AS STORE_NM
+		, 		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		, 		A.STORE_CNT
+		, 		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
+		, 		SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+		, 		SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
+		${sQuery1}
+		FROM
+		(
+		SELECT tssd.SALE_DATE
+		, tssd.STORE_CD
+		,( SELECT COUNT(TMS.STORE_CD)
+		FROM TB_MS_STORE TMS
+		WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMS.STORE_CD IN (${storeCdQuery})
+        </if>
+		) AS STORE_CNT
+		, SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+		, COUNT(tssd.BILL_NO) AS TOT_BILL_CNT
+		${sQuery2}
+		FROM TB_SL_SALE_DTL tssd
+		WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
+		<if test='startDate != null and startDate != ""'>
+			AND tssd.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND tssd.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		</if>
+		GROUP BY tssd.SALE_DATE, tssd.ORDER_EMP_NO, tssd.STORE_CD
+		ORDER BY tssd.SALE_DATE ASC
+		) A
+		WHERE 1 = 1
+		GROUP BY A.SALE_DATE, A.STORE_CNT, A.STORE_CD
+		ORDER BY A.STORE_CD, A.SALE_DATE
+	</select>
+
+	<!-- 판매자 리스트 조회 -->
+	<!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_STORE
+        PARAM    : orderEmpBensonVO
+        COMMENTS : 일자별탭 동적 컬럼 생성을 위한 판매자 리스트를 조회한다.
+    -->
+	<select id="getEmpMebList" parameterType="orderEmpBensonVO" resultType="DefaultMap">
+		/* USE : OrderEmpBensonMapper.getEmpMebList */
+		SELECT TMS.STORE_CD
+		, TMS.STORE_NM||'('||TMS.STORE_CD||')' AS STORE_NM
+		, EMP_NO AS  NMCODE_CD
+		, (EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
+		FROM TB_MS_EMPLOYEE TME
+		, TB_MS_STORE TMS
+		WHERE TME.STORE_CD = TMS.STORE_CD
+		AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TME.STORE_CD IN (${storeCdQuery})
+        </if>
+		<if test='empChk != "Y"'>
+			AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z
+			WHERE Z.store_cd = TME.STORE_CD
+			AND Z.EMP_NO = TME.EMP_NO
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND Z.STORE_CD IN (${storeCdQuery})
+            </if>
+			<if test='startDate != null and startDate != ""'>
+				AND Z.SALE_DATE >= #{startDate}
+			</if>
+			<if test='endDate != null and endDate != ""'>
+				AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+			</if>
+			)
+		</if>
+		ORDER BY TMS.STORE_CD
+	</select>
+</mapper>

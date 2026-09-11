@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreTimeSaleBenson.xml
+    (벤슨) 매출조회 > 지정가맹점_시간대별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.storeTimeSaleBenson.service.impl.StoreTimeSaleBensonMapper">
+
+    <!-- 지정가맹점_시간대별 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : 지정 매장의 기간내 시간대별 매출 요약 조회
+    -->
+    <select id="getStoreTimeSaleBensonList" parameterType="storeTimeSaleBensonVO" resultType="DefaultMap">
+        /* StoreTimeSaleBensonMapper.getStoreTimeSaleBensonList */
+        SELECT
+               tsdt.SALE_HOUR,
+               SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
+               SUM(tsdt.REAL_SALE_CNT) AS BILL_CNT,
+               SUM(tsdt.GUEST_CNT_1)   AS GUEST_CNT
+          FROM TB_SL_DAILY_TIME tsdt
+         WHERE tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tsdt.STORE_CD     = #{storeCd}
+           AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+           AND tsdt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+         GROUP BY tsdt.SALE_HOUR
+         ORDER BY tsdt.SALE_HOUR
+    </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayTimeSaleBenson.xml
+    (벤슨) 일별시간대별매출조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.dayTimeSaleBenson.service.impl.DayTimeSaleBensonMapper">
+
+    <!-- 일별시간대별매출조회 - 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TIME
+        COMMENTS : 일자별(행) X 시간대별(열) 순매출 매트릭스 조회
+    -->
+    <select id="getDayTimeSaleBensonList" parameterType="dayTimeSaleBensonVO" resultType="DefaultMap">
+        /* DayTimeSaleBensonMapper.getDayTimeSaleBensonList */
+        SELECT
+        TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdt.SALE_HOUR = #{item} THEN tsdt.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item}
+        </foreach>
+        FROM TB_SL_DAILY_TIME tsdt
+        WHERE 1=1
+        AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdt.STORE_CD = #{storeCd}
+        AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+        GROUP BY tsdt.SALE_DATE
+        ORDER BY tsdt.SALE_DATE DESC
+    </select>
+
+</mapper>

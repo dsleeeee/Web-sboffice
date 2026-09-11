@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PayFgBenson.xml
+    벤슨 결제수단별 일 매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.payFgBenson.service.impl.PayFgBensonMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayFgBensonList" parameterType="payFgBensonVO" resultType="DefaultMap">
+        /* PayFgBensonMapper.getPayFgBensonList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  amt.PAY_CD
+        ,		cnt.PAY_CNT
+        ,		amt.PAY_AMT
+        ,		ROUND(RATIO_TO_REPORT(amt.PAY_AMT) OVER(), 4) * 100 AS RATE
+        <if test='option != null and option != "" and option == "branch"'>
+        ,       amt.BRANCH_CD
+        ,		amt.BRANCH_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+        ,       amt.BRANCH_CD
+        ,		amt.BRANCH_NM
+        ,		amt.STORE_CD
+        ,		amt.STORE_NM
+        </if>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	(
+                SELECT	*
+                FROM    (
+                        SELECT 	<foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(tsdt.PAY_AMT_${item}) AS PAY_AMT_${item}
+                                </foreach>
+                        <if test='option != null and option != "" and option == "branch"'>
+                        ,        tms.BRANCH_CD
+                        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                        </if>
+                        <if test='option != null and option != "" and option == "store"'>
+                        ,        tms.BRANCH_CD
+                        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                        ,       tsdt.STORE_CD
+                        ,		tms.STORE_NM
+                        </if>
+                        FROM 	TB_SL_DAILY_TOTAL tsdt
+                        ,		TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND  	tsdt.STORE_CD = tms.STORE_CD
+                        AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+                        AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='option != null and option != "" and option == "branch"'>
+                        GROUP BY tms.BRANCH_CD
+                        </if>
+                        <if test='option != null and option != "" and option == "store"'>
+                        GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, tms.STORE_NM
+                        </if>
+                        )
+                UNPIVOT
+                    (
+                        PAY_AMT
+                        FOR PAY_CD IN (
+                            <foreach collection="arrPayCol" item="item" separator=",">
+                                PAY_AMT_${item} AS '${item}'
+                            </foreach>
+                        )
+                    )
+                ) AMT
+                ,
+                (
+                SELECT  *
+                FROM    (
+                        SELECT 	<foreach collection="arrPayCol" item="item" separator=",">
+                                    SUM(tsdt.PAY_CNT_${item}) AS PAY_CNT_${item}
+                                </foreach>
+                        <if test='option != null and option != "" and option == "branch"'>
+                        ,        tms.BRANCH_CD
+                        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                        </if>
+                        <if test='option != null and option != "" and option == "store"'>
+                        ,        tms.BRANCH_CD
+                        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                        ,       tsdt.STORE_CD
+                        ,		tms.STORE_NM
+                        </if>
+                        FROM 	TB_SL_DAILY_TOTAL tsdt
+                        ,		TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND  	tsdt.STORE_CD = tms.STORE_CD
+                        AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+                        AND 	tsdt.HQ_OFFICE_CD =  #{hqOfficeCd}
+                        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='option != null and option != "" and option == "branch"'>
+                        GROUP BY tms.BRANCH_CD
+                        </if>
+                        <if test='option != null and option != "" and option == "store"'>
+                        GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, tms.STORE_NM
+                        </if>
+                        )
+                    UNPIVOT
+                        (
+                            PAY_CNT
+                            FOR PAY_CD IN (
+                                            <foreach collection="arrPayCol" item="item" separator=",">
+                                                PAY_CNT_${item} AS '${item}'
+                                            </foreach>
+                            )
+                        )
+                ) CNT
+        WHERE 	AMT.PAY_CD = CNT.PAY_CD
+        <if test='option != null and option != "" and option == "store"'>
+        AND 	AMT.STORE_CD = CNT.STORE_CD
+        AND 	AMT.STORE_NM = CNT.STORE_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ORDER
+            BY      AMT.STORE_CD
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 엑셀 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayFgBensonExcelList" parameterType="payFgBensonVO" resultType="DefaultMap">
+        /* PayFgBensonMapper.getPayFgBensonExcelList */
+        SELECT  amt.PAY_CD
+        ,		cnt.PAY_CNT
+        ,		amt.PAY_AMT
+        ,		ROUND(RATIO_TO_REPORT(amt.PAY_AMT) OVER(), 4) * 100 AS RATE
+        <if test='option != null and option != "" and option == "branch"'>
+            ,       amt.BRANCH_CD
+            ,		amt.BRANCH_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ,       amt.BRANCH_CD
+            ,		amt.BRANCH_NM
+            ,		amt.STORE_CD
+            ,		amt.STORE_NM
+        </if>
+        FROM 	(
+        SELECT	*
+        FROM    (
+        SELECT 	<foreach collection="arrPayCol" item="item" separator=",">
+        SUM(tsdt.PAY_AMT_${item}) AS PAY_AMT_${item}
+    </foreach>
+        <if test='option != null and option != "" and option == "branch"'>
+            ,        tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ,        tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+            ,       tsdt.STORE_CD
+            ,		tms.STORE_NM
+        </if>
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND  	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+        AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='option != null and option != "" and option == "branch"'>
+            GROUP BY tms.BRANCH_CD
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, tms.STORE_NM
+        </if>
+        )
+        UNPIVOT
+        (
+        PAY_AMT
+        FOR PAY_CD IN (
+        <foreach collection="arrPayCol" item="item" separator=",">
+            PAY_AMT_${item} AS '${item}'
+        </foreach>
+        )
+        )
+        ) AMT
+        ,
+        (
+        SELECT  *
+        FROM    (
+        SELECT 	<foreach collection="arrPayCol" item="item" separator=",">
+        SUM(tsdt.PAY_CNT_${item}) AS PAY_CNT_${item}
+    </foreach>
+        <if test='option != null and option != "" and option == "branch"'>
+            ,        tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ,        tms.BRANCH_CD
+            ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+            ,       tsdt.STORE_CD
+            ,		tms.STORE_NM
+        </if>
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND  	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+        AND 	tsdt.HQ_OFFICE_CD =  #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='option != null and option != "" and option == "branch"'>
+            GROUP BY tms.BRANCH_CD
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, tms.STORE_NM
+        </if>
+        )
+        UNPIVOT
+        (
+        PAY_CNT
+        FOR PAY_CD IN (
+        <foreach collection="arrPayCol" item="item" separator=",">
+            PAY_CNT_${item} AS '${item}'
+        </foreach>
+        )
+        )
+        ) CNT
+        WHERE 	AMT.PAY_CD = CNT.PAY_CD
+        <if test='option != null and option != "" and option == "store"'>
+            AND 	AMT.STORE_CD = CNT.STORE_CD
+            AND 	AMT.STORE_NM = CNT.STORE_NM
+        </if>
+        <if test='option != null and option != "" and option == "store"'>
+            ORDER
+            BY      AMT.STORE_CD
+        </if>
+    </select>
+
+</mapper>

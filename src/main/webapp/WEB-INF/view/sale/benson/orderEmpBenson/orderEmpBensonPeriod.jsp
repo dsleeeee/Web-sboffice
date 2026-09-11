@@ -1,0 +1,220 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+
+<div id="orderEmpBensonPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="orderEmpBensonPeriodCtrl">
+    <div class="searchBar">
+      <a href="#" class="open fl"><s:message code="orderEmpBenson.orderEmpPeriod"/></a>
+      <%-- 조회 --%>
+      <button class="btn_blue fr mt5 mr10" id="btnOrderEmpBensonPeriodSearch" ng-click="_broadcast('orderEmpBensonPeriodMainCtrlSrch')">
+        <s:message code="cmm.search"/>
+      </button>
+    </div>
+    <table class="searchTbl">
+      <colgroup>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
+      	</colgroup>
+      <tbody>
+      <tr>
+            <%-- 조회일자 --%>
+            <th><s:message code="cmm.search.date" /></th>
+        	<td colspan="3">
+          	<div class="sb-select">
+       		    <span class="txtIn"><input id="srchOrderEmpBensonPeriodStartDate" class="w110px"></span>
+                <span class="rg">~</span>
+                <span class="txtIn"><input id="srchOrderEmpBensonPeriodEndDate" class="w110px"></span>
+            	<span class="chk ml10" style="display: none;">
+					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	              	<label for="chkDt">
+                		<s:message code="cmm.all.day" />
+              		</label>
+            	</span>
+          	</div>
+        	</td>
+        </tr>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
+            <%-- 매장선택 --%>
+            <th><s:message code="cmm.store.select"/></th>
+            <td>
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
+                    <jsp:param name="targetId" value="orderEmpBensonPeriodSelectStore"/>
+                </jsp:include>
+                <%--// 매장선택 모듈 사용시 include --%>
+            </td>
+          </c:if>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="orderEmpBensonPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
+          </c:if>
+      </tr>
+      </tbody>
+    </table>
+    <div style="clear: both;"></div>
+
+    <div id="gridRepresent" class="w50 fl" style="width:49%;">
+     <%-- 판매자별 --%>
+     <div class="w100 mt10" ng-controller="orderEmpBensonPeriodMainCtrl">
+       <div class="oh sb-select mb10">
+         <span class="fl bk lh30"><s:message code='orderEmp.orderEmp'/></span>
+
+         <%-- 엑셀다운로드 --%>
+         <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriod()"><s:message code="cmm.excel.down" />
+         </button>
+       </div>
+      <%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType1">
+      <div class="wj-gridWrap col2-t2" style="height:420px;">
+        <wj-flex-grid
+          id="orderEmpBensonPeriodGrid"
+          loaded-rows="loadedRows(s,e)"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="flex"
+          initialized="initGrid(s,e)"
+          is-read-only="false"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.orderEmpNo"/>"     binding="orderEmpNo"        width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.billCnt"/>"        binding="billCnt"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+        <%-- ColumnPicker 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+          <jsp:param name="pickerTarget" value="orderEmpBensonPeriodMainCtrl"/>
+        </jsp:include>
+        <%--// ColumnPicker 사용시 include --%>
+      </div>
+      </div>
+      <%--//위즈모 테이블--%>
+
+      <%--페이지 리스트--%>
+      <div class="pageNum3 mt10">
+      	<%-- id --%>
+      	<ul id="orderEmpBensonPeriodMainCtrlPager" data-size="10"></ul>
+      </div>
+      <%--//페이지 리스트--%>
+      <%-- 엑셀 리스트 --%>
+      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpBensonPeriodExcelCtrl">
+        <div class="wj-gridWrap">
+          <wj-flex-grid
+          id="orderEmpBensonPeriodExcelGrid"
+          loaded-rows="loadedRows(s,e)"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="false"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.orderEmpNo"/>"     binding="orderEmpNo"        width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.billCnt"/>"        binding="billCnt"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+        </div>
+  	 </div>
+  	 <%--//엑셀 리스트 --%>
+     </div>
+    </div>
+
+
+    <div id="gridDetail" class="w50 fr" style="width:49%;">
+     <%-- 코너별 --%>
+     <div class="w100 mt10" ng-controller="orderEmpBensonPeriodDtlCtrl">
+       <div class="oh sb-select mb10">
+         <span class="fl bk lh30"><s:message code='orderEmp.saleDtl'/></span>
+
+         <%-- 코너별 매출 상세 엑셀다운로드 --%>
+         <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriodDtl()"><s:message code="cmm.excel.down" />
+         </button>
+       </div>
+      <%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType1">
+      <div class="wj-gridWrap col2-t2" style="height:420px;">
+        <wj-flex-grid
+          id="orderEmpBensonPeriodDtlGrid"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="flex"
+          initialized="initGrid(s,e)"
+          is-read-only="false"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.saleDate"/>"    binding="saleDate"         width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.posNo"/>"       binding="posNo"            width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.billNo"/>"      binding="billNo"           width="80" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.saleFg"/>"      binding="saleYn"           width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.tblCd"/>"       binding="tblCd"            width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.dcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmpBenson.realSaleAmt"/>" binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+        <%-- ColumnPicker 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+          <jsp:param name="pickerTarget" value="orderEmpBensonPeriodDtlCtrl"/>
+        </jsp:include>
+        <%--// ColumnPicker 사용시 include --%>
+      </div>
+      </div>
+      <%--//위즈모 테이블--%>
+
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum3 mt10">
+      	<%-- id --%>
+      	<ul id="orderEmpBensonPeriodDtlCtrlPager" data-size="10"></ul>
+      </div>
+      <%--//페이지 리스트--%>
+
+  	  <%-- 엑셀 리스트 --%>
+      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpBensonPeriodDtlExcelCtrl">
+        <div class="wj-gridWrap">
+            <wj-flex-grid
+              id="orderEmpBensonPeriodDtlExcelGrid"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="excelFlex"
+              initialized="initGrid(s,e)"
+              is-read-only="false"
+              item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.saleDate"/>"    binding="saleDate"         width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.posNo"/>"       binding="posNo"            width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.billNo"/>"      binding="billNo"           width="80" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.saleFg"/>"      binding="saleYn"           width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.tblCd"/>"       binding="tblCd"            width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.dcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmpBenson.realSaleAmt"/>" binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+        </div>
+  	 </div>
+  	 <%--//엑셀 리스트 --%>
+     </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/benson/orderEmpBenson/orderEmpBensonPeriod.js?ver=20260910.02" charset="utf-8"></script>
