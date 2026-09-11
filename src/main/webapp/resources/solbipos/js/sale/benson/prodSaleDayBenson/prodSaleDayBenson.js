@@ -1,0 +1,420 @@
+/****************************************************************
+ *
+ * 파일명 : prodSaleDayBenson.js
+ * 설  명 : (벤슨) 간소화화면 > 상품매출일별 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2026.09.09     김유승      1.0
+ *
+ * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
+
+/**
+ *  상품매출일별 그리드 생성
+ */
+app.controller('prodSaleDayBensonCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodSaleDayBensonCtrl', $scope, $http, false));
+
+    // 검색조건에 조회기간
+    var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    var endDate = wcombo.genDateVal("#srchEndDate", gvEndDate);
+
+    // 콤보박스 셋팅
+    $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+    $scope._setComboData("prodHqBrandCdCombo", momsHqBrandCdComboList); // 상품브랜드
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // add the new GroupRow to the grid's 'columnFooters' panel
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        // add a sigma to the header to show that this is a summary row
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.saleDate = messages["prodSaleDayBenson.saleDate"];
+        dataItem.prodNm = messages["prodSaleDayBenson.prodNm"];
+        dataItem.saleQty1 = messages["prodSaleDayBenson.saleQty"];
+        dataItem.totSaleAmt1 = messages["prodSaleDayBenson.totSaleAmt"];
+        dataItem.realSaleAmt1 = messages["prodSaleDayBenson.realSaleAmt"];
+        dataItem.genSaleQty = messages["prodSaleDayBenson.gen"];
+        dataItem.genTotSaleAmt = messages["prodSaleDayBenson.gen"];
+        dataItem.genRealSaleAmt = messages["prodSaleDayBenson.gen"];
+        dataItem.dlvrSaleQty = messages["prodSaleDayBenson.dlvr"];
+        dataItem.dlvrTotSaleAmt = messages["prodSaleDayBenson.dlvr"];
+        dataItem.dlvrRealSaleAmt = messages["prodSaleDayBenson.dlvr"];
+        dataItem.packSaleQty = messages["prodSaleDayBenson.pack"];
+        dataItem.packTotSaleAmt = messages["prodSaleDayBenson.pack"];
+        dataItem.packRealSaleAmt = messages["prodSaleDayBenson.pack"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("prodSaleDayBensonCtrl", function (event, data) {
+        $scope.searchProdSaleDayBensonList();
+        event.preventDefault();
+    });
+
+    $scope.searchProdSaleDayBensonList = function () {
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            return false;
+        }
+
+        // 파라미터
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        // params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
+        params.storeHqBrandCd = $scope.storeHqBrandCd;
+        params.storeCds = $("#prodSaleDayBensonStoreCd").val();
+        params.prodCds = $("#prodSaleDayBensonSelectCd").val();
+        params.prodHqBrandCd = $scope.prodHqBrandCd;
+        // '전체' 일때
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            var momsHqBrandCd = "";
+            for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                if(momsHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = momsHqBrandCd;
+        }
+        params.listScale = 500;
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sale/benson/prodSaleDayBenson/prodSaleDayBenson/getProdSaleDayBensonList.sb", params, function (){
+
+        });
+    };
+    // <-- //검색 호출 -->
+
+    // 상품선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.prodSaleDayBensonSelectShow = function () {
+        $scope._broadcast('prodSaleDayBensonSelectCtrl');
+    };
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function() {
+
+        // 선택취소 값 전달
+        $scope._broadcast('prodClassCheckPopUpCtrl', {
+            selectCancelFg: $("#_selectCancelFg").val()
+        });
+        var popUp = $scope.prodClassCheckPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassCheckPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd[0];
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
+                    function(response){
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function(){
+        $scope.prodClassCd = "";
+        $scope.prodClassCdNm = "";
+        $("#_selectCancelFg").val("Y");
+    };
+
+    // 조회조건 엑셀다운로드
+    $scope.excelDownload = function (excelType) {
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            return false;
+        }
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        // params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
+        params.storeHqBrandCd = $scope.storeHqBrandCd;
+        params.storeCds = $("#prodSaleDayBensonStoreCd").val();
+        params.prodCds = $("#prodSaleDayBensonSelectCd").val();
+        params.prodHqBrandCd = $scope.prodHqBrandCd;
+        // '전체' 일때
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            var momsHqBrandCd = "";
+            for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                if(momsHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = momsHqBrandCd;
+        }
+        params.excelType = excelType;
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('prodSaleDayBensonExcelCtrl', params);
+        });
+    };
+
+    // 현재화면 엑셀다운로드
+    $scope.excelDownload2 = function () {
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            return false;
+        }
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                "상품매출일별_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
+}]);
+
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('prodSaleDayBensonExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodSaleDayBensonExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // add the new GroupRow to the grid's 'columnFooters' panel
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        // add a sigma to the header to show that this is a summary row
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.saleDate = messages["prodSaleDayBenson.saleDate"];
+        dataItem.prodNm = messages["prodSaleDayBenson.prodNm"];
+        dataItem.saleQty1 = messages["prodSaleDayBenson.saleQty"];
+        dataItem.totSaleAmt1 = messages["prodSaleDayBenson.totSaleAmt"];
+        dataItem.realSaleAmt1 = messages["prodSaleDayBenson.realSaleAmt"];
+        dataItem.genSaleQty = messages["prodSaleDayBenson.gen"];
+        dataItem.genTotSaleAmt = messages["prodSaleDayBenson.gen"];
+        dataItem.genRealSaleAmt = messages["prodSaleDayBenson.gen"];
+        dataItem.dlvrSaleQty = messages["prodSaleDayBenson.dlvr"];
+        dataItem.dlvrTotSaleAmt = messages["prodSaleDayBenson.dlvr"];
+        dataItem.dlvrRealSaleAmt = messages["prodSaleDayBenson.dlvr"];
+        dataItem.packSaleQty = messages["prodSaleDayBenson.pack"];
+        dataItem.packTotSaleAmt = messages["prodSaleDayBenson.pack"];
+        dataItem.packRealSaleAmt = messages["prodSaleDayBenson.pack"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("prodSaleDayBensonExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $.postJSON("/sale/benson/prodSaleDayBenson/prodSaleDayBenson/getProdSaleDayBensonExcelList.sb", params, function(response) {
+            var grid = $scope.excelFlex;
+            grid.itemsSource = response.data.list;
+            grid.itemsSource.trackChanges = true;
+
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "상품매출일별_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+    // <-- //검색 호출 -->
+
+}]);

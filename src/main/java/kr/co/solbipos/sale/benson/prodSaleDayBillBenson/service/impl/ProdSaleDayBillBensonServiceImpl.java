@@ -1,0 +1,324 @@
+package kr.co.solbipos.sale.benson.prodSaleDayBillBenson.service.impl;
+
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.sale.benson.prodSaleDayBillBenson.service.ProdSaleDayBillBensonService;
+import kr.co.solbipos.sale.benson.prodSaleDayBillBenson.service.ProdSaleDayBillBensonVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * @Class Name : ProdSaleDayBillBensonServiceImpl.java
+ * @Description : 벤슨 > 간소화화면 > 상품매출일별(영수)
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2026.09.09  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2026.09.09
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+@Service("prodSaleDayBillBensonService")
+@Transactional
+public class ProdSaleDayBillBensonServiceImpl implements ProdSaleDayBillBensonService {
+    private final ProdSaleDayBillBensonMapper prodSaleDayBillBensonMapper;
+    private final PopupMapper popupMapper;
+
+    /**
+     * Constructor Injection
+     */
+    @Autowired
+    public ProdSaleDayBillBensonServiceImpl(ProdSaleDayBillBensonMapper prodSaleDayBillBensonMapper, PopupMapper popupMapper) {
+        this.prodSaleDayBillBensonMapper = prodSaleDayBillBensonMapper;
+        this.popupMapper = popupMapper;
+    }
+
+    /** 상품매출일별(영수) - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDayBillBensonList(ProdSaleDayBillBensonVO prodSaleDayBillBensonVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayBillBensonVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodSaleDayBillBensonVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getStoreCds(), 3900));
+            prodSaleDayBillBensonVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getProdCds(), 3900));
+            prodSaleDayBillBensonVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodSaleDayBillBensonVO.getStoreHqBrandCd() == "" || prodSaleDayBillBensonVO.getStoreHqBrandCd() == null || prodSaleDayBillBensonVO.getProdHqBrandCd() == "" || prodSaleDayBillBensonVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodSaleDayBillBensonVO.getUserBrands().split(",");
+                prodSaleDayBillBensonVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 동적 컬럼 생성을 위한 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        // 기간선택 두 날짜 사이 모든날짜 구하기
+        List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillBensonVO);
+
+        // 집계쿼리 생성
+        for (int i = 0; i < dateArr.size(); i++) {
+
+            // 검색기간의 첫날짜와 끝날짜 다시 셋팅
+            if (i == 0) {
+                prodSaleDayBillBensonVO.setStartDate(dateArr.get(i).get("sDate"));
+            }
+            if (i == dateArr.size() - 1) {
+                prodSaleDayBillBensonVO.setEndDate(dateArr.get(i).get("eDate"));
+            }
+
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS BILL_CNT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+        }
+
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS TOT_BILL_CNT1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS TOT_SALE_QTY1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS TOT_REAL_SALE_AMT1" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.PAY_CNT_"  + (j < 10 ? "0" + j : j) + " END)";
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT1";
+
+        prodSaleDayBillBensonVO.setsQuery1(sQuery1);
+        prodSaleDayBillBensonVO.setsQuery2(sQuery2);
+
+        return prodSaleDayBillBensonMapper.getProdSaleDayBillBensonList(prodSaleDayBillBensonVO);
+    }
+
+    /** 상품매출일별(영수) - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDayBillBensonExcelList(ProdSaleDayBillBensonVO prodSaleDayBillBensonVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayBillBensonVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodSaleDayBillBensonVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getStoreCds(), 3900));
+            prodSaleDayBillBensonVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getProdCds(), 3900));
+            prodSaleDayBillBensonVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodSaleDayBillBensonVO.getStoreHqBrandCd() == "" || prodSaleDayBillBensonVO.getStoreHqBrandCd() == null || prodSaleDayBillBensonVO.getProdHqBrandCd() == "" || prodSaleDayBillBensonVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodSaleDayBillBensonVO.getUserBrands().split(",");
+                prodSaleDayBillBensonVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 동적 컬럼 생성을 위한 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        // 기간선택 두 날짜 사이 모든날짜 구하기
+        List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillBensonVO);
+
+        // 집계쿼리 생성
+        for (int i = 0; i < dateArr.size(); i++) {
+
+            // 검색기간의 첫날짜와 끝날짜 다시 셋팅
+            if (i == 0) {
+                prodSaleDayBillBensonVO.setStartDate(dateArr.get(i).get("sDate"));
+            }
+            if (i == dateArr.size() - 1) {
+                prodSaleDayBillBensonVO.setEndDate(dateArr.get(i).get("eDate"));
+            }
+
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS BILL_CNT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+        }
+
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS TOT_BILL_CNT1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS TOT_SALE_QTY1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS TOT_REAL_SALE_AMT1" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.PAY_CNT_"  + (j < 10 ? "0" + j : j) + " END)";
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT1";
+
+        prodSaleDayBillBensonVO.setsQuery1(sQuery1);
+        prodSaleDayBillBensonVO.setsQuery2(sQuery2);
+
+        return prodSaleDayBillBensonMapper.getProdSaleDayBillBensonExcelList(prodSaleDayBillBensonVO);
+    }
+
+    /** 상품매출일별(영수) - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDayBillBensonExcelDivisionList(ProdSaleDayBillBensonVO prodSaleDayBillBensonVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayBillBensonVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodSaleDayBillBensonVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getStoreCds(), 3900));
+            prodSaleDayBillBensonVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillBensonVO.getProdCds()).equals("")) {
+            ProdVO prodVO = new ProdVO();
+            prodVO.setArrSplitProdCd(CmmUtil.splitText(prodSaleDayBillBensonVO.getProdCds(), 3900));
+            prodSaleDayBillBensonVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodSaleDayBillBensonVO.getStoreHqBrandCd() == "" || prodSaleDayBillBensonVO.getStoreHqBrandCd() == null || prodSaleDayBillBensonVO.getProdHqBrandCd() == "" || prodSaleDayBillBensonVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodSaleDayBillBensonVO.getUserBrands().split(",");
+                prodSaleDayBillBensonVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 동적 컬럼 생성을 위한 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        // 기간선택 두 날짜 사이 모든날짜 구하기
+        List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillBensonVO);
+
+        // 집계쿼리 생성
+        for (int i = 0; i < dateArr.size(); i++) {
+
+            // 검색기간의 첫날짜와 끝날짜 다시 셋팅
+            if (i == 0) {
+                prodSaleDayBillBensonVO.setStartDate(dateArr.get(i).get("sDate"));
+            }
+            if (i == dateArr.size() - 1) {
+                prodSaleDayBillBensonVO.setEndDate(dateArr.get(i).get("eDate"));
+            }
+
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS BILL_CNT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
+        }
+
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.BILL_CNT1 ELSE 0 END) AS TOT_BILL_CNT1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.SALE_QTY1 ELSE 0 END) AS TOT_SALE_QTY1" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdps.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdps.REAL_SALE_AMT1 ELSE 0 END) AS TOT_REAL_SALE_AMT1" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.PAY_CNT_"  + (j < 10 ? "0" + j : j) + " END)";
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT1";
+
+        prodSaleDayBillBensonVO.setsQuery1(sQuery1);
+        prodSaleDayBillBensonVO.setsQuery2(sQuery2);
+
+        return prodSaleDayBillBensonMapper.getProdSaleDayBillBensonExcelDivisionList(prodSaleDayBillBensonVO);
+    }
+
+    /** 기간선택 두 날짜 사이 모든날짜 구하기 */
+    @Override
+    public List<HashMap<String, String>> getDateDiff(ProdSaleDayBillBensonVO prodSaleDayBillBensonVO) {
+
+        // 시작기간 ~ 종료기간 사이의 날짜계산
+        String datePattrn = "";
+        if("day".equals(prodSaleDayBillBensonVO.getDayGubun())){
+            datePattrn = "yyyyMMdd";
+        }else if("month".equals(prodSaleDayBillBensonVO.getDayGubun())){
+            datePattrn = "yyyyMM";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattrn);
+        List<HashMap<String, String>> dateArr = new ArrayList<HashMap<String, String>>();
+        Date startDate = new Date();
+        Date endDate = new Date();
+
+        try {
+            startDate = dateFormat.parse(prodSaleDayBillBensonVO.getStartDate());
+            endDate = dateFormat.parse(prodSaleDayBillBensonVO.getEndDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date currentDate = startDate;
+
+        while (currentDate.compareTo(endDate) <= 0) {
+            HashMap<String, String> m = new HashMap<>();
+            if("day".equals(prodSaleDayBillBensonVO.getDayGubun())){
+                m.put("sOrgDate", dateFormat.format(currentDate));
+                m.put("sDate", dateFormat.format(currentDate));
+                m.put("eDate", dateFormat.format(currentDate));
+                dateArr.add(m);
+            }else if("month".equals(prodSaleDayBillBensonVO.getDayGubun())){
+                m.put("sOrgDate", dateFormat.format(currentDate));
+                m.put("sDate", dateFormat.format(currentDate));
+                m.put("eDate", dateFormat.format(currentDate));
+                dateArr.add(m);
+            }
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(currentDate);
+
+            if("day".equals(prodSaleDayBillBensonVO.getDayGubun())){
+                c.add(Calendar.DATE, 1);
+            }else if("month".equals(prodSaleDayBillBensonVO.getDayGubun())){
+                c.add(Calendar.MONTH, 1);
+            }
+
+            currentDate = c.getTime();
+        }
+
+        return dateArr;
+    }
+}

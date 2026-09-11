@@ -369,7 +369,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 }
                 var now = year + "" + month + "" + day;
 
-                if(orgnFg === "STORE") { // 매장권한 일 때
+                if(viewOnlyFg === 'Y'){ // 조회전용 메뉴로 진입한 경우 생성/수정 불가
+                    $scope.setButtonVisible("N");
+                }else if(orgnFg === "STORE") { // 매장권한 일 때
                     if(storePromoRegYnVal === '0'){ // 본사 환경변수(매장프로모션생성 - 1253)이 '미사용'인 경우 프로모션 생성, 수정 불가
                         $scope.setButtonVisible("N");
                     } else {
@@ -1500,6 +1502,12 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
             // 상세조회 화면에서 프로모션 종류 변경 시
             if(vPromotionType !== s.selectedValue){
+
+                // 조회전용 메뉴에서는 프로모션 종류 변경 불가(변경 시 기본값 저장이 발생하므로 원복)
+                if(viewOnlyFg === 'Y'){
+                    s.selectedValue = vPromotionType;
+                    return false;
+                }
 
                 // 프로모션 종류 변경시 권한, 프로모션기간, 환경설정값에 따른 변경 가능/금지 처리
                 if(orgnFg === "STORE") { // 매장권한 일 때

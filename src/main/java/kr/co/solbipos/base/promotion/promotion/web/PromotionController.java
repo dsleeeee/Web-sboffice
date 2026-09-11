@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
@@ -189,6 +190,39 @@ public class PromotionController {
     }
 
     /**
+     * 프로모션관리 화면이동(조회전용 메뉴)
+     * - 동일 화면을 조회전용으로만 사용하는 메뉴의 진입 URL. 수정성 기능은 화면(viewOnlyFg) 및 서버(chkEditAuth)에서 차단된다.
+     * @param model
+     * @author 김유승
+     * @since 2026.09.10
+     * @return
+     */
+    @RequestMapping(value = "/viewReadOnly.sb", method = RequestMethod.GET)
+    public String viewReadOnly(HttpServletRequest request, Model model) {
+
+        String viewName = view(request, model);
+        model.addAttribute("viewOnlyFg", "Y");
+
+        return viewName;
+    }
+
+    /**
+     * 수정 권한 체크(조회전용 메뉴로 진입한 화면의 저장성 호출 차단)
+     * - 조회전용 진입(viewReadOnly.sb) 페이지에서 발생한 요청(Referer 기준)은 거부한다. (탭 단위로 정확)
+     * @param request
+     * @author 김유승
+     * @since 2026.09.10
+     */
+    private void chkEditAuth(HttpServletRequest request) {
+
+        // 조회전용 메뉴로 진입한 페이지에서 보낸 요청인지 확인 (개발자도구 등 우회 호출 포함 차단)
+        String referer = StringUtil.getOrBlank(request.getHeader("referer"));
+        if (referer.contains("/base/promotion/promotion/viewReadOnly.sb")) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
+        }
+    }
+
+    /**
      * 프로모션관리 리스트 조회
      *
      * @param request
@@ -223,6 +257,8 @@ public class PromotionController {
     @ResponseBody
     public Result savePromotion(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
+
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -329,6 +365,8 @@ public class PromotionController {
     public Result savePromotionProd(@RequestBody PromotionVO[] promotionVOs, HttpServletRequest request,
                                     HttpServletResponse response, Model model) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = promotionService.savePromotionProd(promotionVOs, sessionInfoVO);
@@ -394,6 +432,8 @@ public class PromotionController {
     public Result insertPromotionStoreAll(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
                                           HttpServletResponse response, Model model) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result= promotionService.insertPromotionStoreAll(promotionVO, sessionInfoVO);
@@ -416,6 +456,8 @@ public class PromotionController {
     @ResponseBody
     public Result savePromotionStore(@RequestBody PromotionVO[] promotionVOs, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
+
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -482,6 +524,8 @@ public class PromotionController {
     public Result savePromotionPresent(@RequestBody PromotionVO[] promotionVOs, HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = promotionService.savePromotionPresent(promotionVOs, sessionInfoVO);
@@ -503,6 +547,8 @@ public class PromotionController {
     @ResponseBody
     public Result savePromotionDefaultSet(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
+
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -526,6 +572,8 @@ public class PromotionController {
     public Result deletePromotionStoreAll(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = promotionService.deletePromotionStoreAll(promotionVO, sessionInfoVO);
@@ -548,6 +596,8 @@ public class PromotionController {
     public Result excelUploadPromotionStore(@RequestBody PromotionVO[] promotionVOs, HttpServletRequest request,
                                   HttpServletResponse response, Model model) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = promotionService.excelUploadPromotionStore(promotionVOs, sessionInfoVO);
@@ -567,6 +617,8 @@ public class PromotionController {
     @ResponseBody
     public Result excelUploadPromotionStore2(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
                                           HttpServletResponse response, Model model) {
+
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -606,6 +658,8 @@ public class PromotionController {
     @ResponseBody
     public Result savePromotionBanner(MediaVO mediaVO, MultipartHttpServletRequest request) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
         String result = promotionService.savePromotionBanner(request, mediaVO, sessionInfo);
@@ -633,6 +687,8 @@ public class PromotionController {
     @ResponseBody
     public Result delPromotionBanner(MediaVO mediaVO, HttpServletRequest request) {
 
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         if(promotionService.delPromotionBanner(mediaVO, sessionInfoVO)) {
@@ -654,6 +710,8 @@ public class PromotionController {
     @ResponseBody
     public Result modPromotionBanner(@RequestBody MediaVO mediaVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
+
+        chkEditAuth(request); // 조회전용 메뉴 사용자 저장 차단
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

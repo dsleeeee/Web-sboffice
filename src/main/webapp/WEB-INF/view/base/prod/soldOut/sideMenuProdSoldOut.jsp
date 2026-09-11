@@ -148,7 +148,7 @@
       </tbody>
     </table>
 
-    <c:if test="${hqOfficeCd != 'DS021' and hqOfficeCd != 'DS034' and hqOfficeCd != 'H0393'}">
+    <c:if test="${hqOfficeCd != 'DS021' and hqOfficeCd != 'DS034' and hqOfficeCd != 'H0393' and hqOfficeCd != 'DS079' and hqOfficeCd != 'H0665'}">
       <%-- 일괄적용 --%>
       <table class="searchTbl mt10">
           <colgroup>
@@ -224,7 +224,7 @@
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.addProdQty"/>" binding="addProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.fixProdFg"/>" binding="fixProdFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center" <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393'}">is-read-only="true"</c:if>></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center" <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393' or hqOfficeCd == 'DS079' or hqOfficeCd == 'H0665'}">is-read-only="true"</c:if>></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="soldOut.selfappYn"/>" binding="selfappYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>

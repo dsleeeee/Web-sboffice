@@ -19,7 +19,7 @@
         <a href="#" class="fl"><s:message code="promotion.manage"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue" id="btnRegist" ng-click="openPromotionReg()" <c:if test="${orgnFg == 'STORE' && storePromoRegYnVal == '0'}">style="display: none;"</c:if>>
+            <button class="btn_blue" id="btnRegist" ng-click="openPromotionReg()" <c:if test="${(orgnFg == 'STORE' && storePromoRegYnVal == '0') || viewOnlyFg == 'Y'}">style="display: none;"</c:if>>
                 <s:message code="cmm.new.add" />
             </button>
             <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('promotionCtrl',1)">
@@ -866,6 +866,8 @@
     var momsEnvstVal = "${momsEnvstVal}";
     // [1253 매장프로모션생성] 환경설정값 조회
     var storePromoRegYnVal = "${storePromoRegYnVal}";
+    // 조회전용 메뉴 진입 여부 (Y: 조회전용 - 생성/수정 UI 차단)
+    var viewOnlyFg = "${viewOnlyFg}";
 
     // 맘스터치 적용매장추가 조회조건 콤보박스 데이터
     var momsStoreHqBrand = ${momsStoreHqBrand};
@@ -907,7 +909,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20260327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20260910.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

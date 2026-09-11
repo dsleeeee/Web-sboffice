@@ -195,4 +195,4 @@
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/benson/daySaleStoreBenson/daySaleStoreBenson.js?ver=20260708.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/benson/daySaleStoreBenson/daySaleStoreBenson.js?ver=20260910.02" charset="utf-8"></script>

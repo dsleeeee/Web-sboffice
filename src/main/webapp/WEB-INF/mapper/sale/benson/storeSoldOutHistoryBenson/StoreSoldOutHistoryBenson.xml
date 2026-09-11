@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreSoldOutHistoryBenson.xml
+    (벤슨) 매장품절현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.09     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.storeSoldOutHistoryBenson.service.impl.StoreSoldOutHistoryBensonMapper">
+
+    <!-- 매장품절현황 - 조회 -->
+    <!--
+        TABLE    : TB_LG_PRODUCT_SOLD_OUT_HISTORY
+        PARAM    : StoreSoldOutHistoryBensonVO
+        COMMENTS :
+    -->
+    <select id="getSearchSoldOutHistory" parameterType="storeSoldOutHistoryBensonVO" resultType="DefaultMap">
+        /* USE : StoreSoldOutHistoryBensonMapper.getSearchSoldOutHistory */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.STORE_CD                                                                  AS STORE_CD
+        ,       A.STORE_NM                                                                  AS STORE_NM
+        ,       A.PROD_CD                                                                   AS PROD_CD
+        ,       A.PROD_NM                                                                   AS PROD_NM
+        ,       TO_CHAR(TO_DATE(A.SOLD_OUT_Y,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')  AS SOLD_OUT_DT
+        ,       TO_CHAR(TO_DATE(A.SOLD_OUT_N,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')  AS SOLD_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    (
+                    SELECT  A.STORE_CD
+                    ,       B.STORE_NM
+                    ,       A.PROD_CD
+                    ,       C.PROD_NM
+                    ,       A.SOLD_OUT_DT   AS PROC_DT
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_Y
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_N
+                    FROM    TB_LG_PRODUCT_SOLD_OUT_HISTORY A
+                    ,       TB_MS_STORE B
+                    ,       TB_MS_PRODUCT C
+                    ,		TB_MS_STORE_INFO D
+                    WHERE   1=1
+                    AND     B.STORE_CD      =   A.STORE_CD
+                    AND     C.STORE_CD      =   A.STORE_CD
+                    AND     C.PROD_CD       =   A.PROD_CD
+                    AND    	D.STORE_CD 	(+) =	A.STORE_CD
+                    AND     A.STORE_CD      IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND     A.SYS_DATE      BETWEEN #{startDate}    AND #{endDate}
+                    AND     A.SOLD_OUT_FG   =   '1'
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='prodCdQuery != null and prodCdQuery != ""'>
+                        AND A.PROD_CD IN (${prodCdQuery})
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND B.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND B.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                        AND C.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                    </if>
+                    <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 상품브랜드 전체일때
+                            AND C.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test="arrProdClassCd != null and arrProdClassCd != ''">
+                        AND C.PROD_CLASS_CD IN
+                        <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                ) A
+        ORDER
+        BY      A.STORE_CD
+        ,       A.PROD_CD
+        ,       A.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장품절현황 - 엑셀조회 -->
+    <!--
+        TABLE    : TB_LG_PRODUCT_SOLD_OUT_HISTORY
+        PARAM    : StoreSoldOutHistoryBensonVO
+        COMMENTS :
+    -->
+    <select id="getStoreSoldOutHistoryBensonExcelList" parameterType="storeSoldOutHistoryBensonVO" resultType="DefaultMap">
+        /* USE : StoreSoldOutHistoryBensonMapper.getStoreSoldOutHistoryBensonExcelList */
+        SELECT  A.STORE_CD                                                                  AS STORE_CD
+        ,       A.STORE_NM                                                                  AS STORE_NM
+        ,       A.PROD_CD                                                                   AS PROD_CD
+        ,       A.PROD_NM                                                                   AS PROD_NM
+        ,       TO_CHAR(TO_DATE(A.SOLD_OUT_Y,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')  AS SOLD_OUT_DT
+        ,       TO_CHAR(TO_DATE(A.SOLD_OUT_N,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')  AS SOLD_DT
+        FROM    (
+                    SELECT  A.STORE_CD
+                    ,       B.STORE_NM
+                    ,       A.PROD_CD
+                    ,       C.PROD_NM
+                    ,       A.SOLD_OUT_DT   AS PROC_DT
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'N' AND NVL(A.SOLD_OUT_YN, 'N') = 'Y' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_Y
+                    ,       CASE WHEN NVL(A.B_SOLD_OUT_YN, 'N') = 'Y' AND NVL(A.SOLD_OUT_YN, 'N') = 'N' THEN A.SOLD_OUT_DT ELSE '' END AS SOLD_OUT_N
+                    FROM    TB_LG_PRODUCT_SOLD_OUT_HISTORY A
+                    ,       TB_MS_STORE B
+                    ,       TB_MS_PRODUCT C
+                    ,		TB_MS_STORE_INFO D
+                    WHERE   1=1
+                    AND     B.STORE_CD      =   A.STORE_CD
+                    AND     C.STORE_CD      =   A.STORE_CD
+                    AND     C.PROD_CD       =   A.PROD_CD
+                    AND    	D.STORE_CD 	(+) =	A.STORE_CD
+                    AND     A.STORE_CD      IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND     A.SYS_DATE      BETWEEN #{startDate}    AND #{endDate}
+                    AND     A.SOLD_OUT_FG   =   '1'
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='prodCdQuery != null and prodCdQuery != ""'>
+                        AND A.PROD_CD IN (${prodCdQuery})
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND B.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND B.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                        AND C.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                    </if>
+                    <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 상품브랜드 전체일때
+                            AND C.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test="arrProdClassCd != null and arrProdClassCd != ''">
+                        AND C.PROD_CLASS_CD IN
+                        <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                ) A
+        ORDER
+        BY      A.STORE_CD
+        ,       A.PROD_CD
+        ,       A.PROC_DT
+    </select>
+
+</mapper>

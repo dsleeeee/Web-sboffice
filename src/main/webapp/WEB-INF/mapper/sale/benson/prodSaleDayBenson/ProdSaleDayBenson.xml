@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdSaleDayBenson.xml
+    (벤슨) 상품매출일별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.09.09     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.benson.prodSaleDayBenson.service.impl.ProdSaleDayBensonMapper">
+
+    <!-- 상품매출일별 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDayBensonList" parameterType="ProdSaleDayBensonVO" resultType="DefaultMap">
+        /* ProdSaleDayBensonMapper.getProdSaleDayBensonList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tmp.PROD_NM,
+        SUM(tsdps.TOT_SALE_QTY)     AS SALE_QTY1,
+        SUM(tsdps.TOT_SALE_AMT)     AS TOT_SALE_AMT1,
+        SUM(tsdps.REAL_SALE_AMT)    AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.TOT_SALE_QTY ELSE 0 END)     AS GEN_SALE_QTY,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.TOT_SALE_AMT ELSE 0 END)     AS GEN_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.REAL_SALE_AMT ELSE 0 END)    AS GEN_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.TOT_SALE_QTY ELSE 0 END)     AS DLVR_SALE_QTY,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.TOT_SALE_AMT ELSE 0 END)     AS DLVR_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.REAL_SALE_AMT ELSE 0 END)    AS DLVR_REAL_SALE_AMT,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.TOT_SALE_QTY ELSE 0 END)  AS PACK_SALE_QTY,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.TOT_SALE_AMT ELSE 0 END)  AS PACK_TOT_SALE_AMT,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.REAL_SALE_AMT ELSE 0 END)  AS PACK_REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        TB_SL_DAILY_PROD_SDSEL_DLVR_MOMS_V04 tsdps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmp.STORE_CD = 'S615806' -- 속도를 위해 상품 매장코드 고정(벤슨 기준매장)
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tmp.PROD_CD IN (${prodCdQuery})
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품매출일별 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleDayBensonExcelList" parameterType="ProdSaleDayBensonVO" resultType="DefaultMap">
+        /* ProdSaleDayBensonMapper.getProdSaleDayBensonExcelList */
+        SELECT
+        TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tmp.PROD_NM,
+        SUM(tsdps.TOT_SALE_QTY)     AS SALE_QTY1,
+        SUM(tsdps.TOT_SALE_AMT)     AS TOT_SALE_AMT1,
+        SUM(tsdps.REAL_SALE_AMT)    AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.TOT_SALE_QTY ELSE 0 END)     AS GEN_SALE_QTY,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.TOT_SALE_AMT ELSE 0 END)     AS GEN_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '1' THEN tsdps.REAL_SALE_AMT ELSE 0 END)    AS GEN_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.TOT_SALE_QTY ELSE 0 END)     AS DLVR_SALE_QTY,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.TOT_SALE_AMT ELSE 0 END)     AS DLVR_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdps.DLVR_ORDER_FG = '2' THEN tsdps.REAL_SALE_AMT ELSE 0 END)    AS DLVR_REAL_SALE_AMT,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.TOT_SALE_QTY ELSE 0 END)  AS PACK_SALE_QTY,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.TOT_SALE_AMT ELSE 0 END)  AS PACK_TOT_SALE_AMT,
+        SUM(CASE WHEN (tsdps.DLVR_ORDER_FG = '3' OR tsdps.DLVR_ORDER_FG = '4') THEN tsdps.REAL_SALE_AMT ELSE 0 END)  AS PACK_REAL_SALE_AMT
+        FROM
+        TB_SL_DAILY_PROD_SDSEL_DLVR_MOMS_V04 tsdps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmp.STORE_CD = 'S615806' -- 속도를 위해 상품 매장코드 고정(벤슨 기준매장)
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCdQuery != null and prodCdQuery != ""'>
+            AND tmp.PROD_CD IN (${prodCdQuery})
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
+    </select>
+
+</mapper>

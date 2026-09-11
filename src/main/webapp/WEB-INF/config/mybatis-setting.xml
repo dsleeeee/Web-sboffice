@@ -1495,6 +1495,49 @@
     <typeAlias alias="daySaleStoreBensonVO" type="kr.co.solbipos.sale.benson.daySaleStoreBenson.service.DaySaleStoreBensonVO"/>
     <!-- 벤슨 > 간소화화면 > 월별매출(매장) -->
     <typeAlias alias="monthSaleStoreBensonVO" type="kr.co.solbipos.sale.benson.monthSaleStoreBenson.service.MonthSaleStoreBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 시간대매출 -->
+    <typeAlias alias="timeSaleSmpBensonVO" type="kr.co.solbipos.sale.benson.timeSaleSmpBenson.service.TimeSaleSmpBensonVO"/>
+    <!-- 벤슨 > 매장분석 > 매장 오픈/마감 현황 -->
+    <typeAlias alias="storeOpenCloseBensonVO" type="kr.co.solbipos.sale.benson.storeOpenCloseBenson.service.StoreOpenCloseBensonVO"/>
+    <!-- 벤슨 > 매장분석 > 다국어사용현황 -->
+    <typeAlias alias="storeLangUseBensonVO" type="kr.co.solbipos.sale.benson.storeLangUseBenson.service.StoreLangUseBensonVO"/>
+    <!-- 벤슨 > 매장분석 > 매장품절현황 -->
+    <typeAlias alias="storeSoldOutHistoryBensonVO" type="kr.co.solbipos.sale.benson.storeSoldOutHistoryBenson.service.StoreSoldOutHistoryBensonVO"/>
+    <!-- 벤슨 > 상품매출분석 > 상품별시간대매출 -->
+    <typeAlias alias="timeProdBensonVO" type="kr.co.solbipos.sale.benson.timeProdBenson.service.TimeProdBensonVO"/>
+    <!-- 벤슨 > 상품매출분석 > 상품별시간대매출(채널별) -->
+    <typeAlias alias="timeProdChannelBensonVO" type="kr.co.solbipos.sale.benson.timeProdChannelBenson.service.TimeProdChannelBensonVO"/>
+    <!-- 벤슨 > 결제수단별 매출 > 결제수단별 일 매출현황 -->
+    <typeAlias alias="payFgBensonVO" type="kr.co.solbipos.sale.benson.payFgBenson.service.PayFgBensonVO"/>
+    <!-- 벤슨 > 결제수단매출 > 매장-일별결제수단매출 -->
+    <typeAlias alias="storePayDayBensonVO" type="kr.co.solbipos.sale.benson.storePayDayBenson.service.StorePayDayBensonVO"/>
+    <!-- 벤슨 > 결제수단매출 > 매장-월별결제수단매출 -->
+    <typeAlias alias="storePayMonthBensonVO" type="kr.co.solbipos.sale.benson.storePayMonthBenson.service.StorePayMonthBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 상품매출일별 -->
+    <typeAlias alias="prodSaleDayBensonVO" type="kr.co.solbipos.sale.benson.prodSaleDayBenson.service.ProdSaleDayBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 상품매출일별(영수) -->
+    <typeAlias alias="prodSaleDayBillBensonVO" type="kr.co.solbipos.sale.benson.prodSaleDayBillBenson.service.ProdSaleDayBillBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 상품매출(P.MIX) -->
+    <typeAlias alias="prodSalePmixBensonVO" type="kr.co.solbipos.sale.benson.prodSalePmixBenson.service.ProdSalePmixBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 상품매출(P.MIX 매장) -->
+    <typeAlias alias="prodSalePmixStoreBensonVO" type="kr.co.solbipos.sale.benson.prodSalePmixStoreBenson.service.ProdSalePmixStoreBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 시간대매출(매장) -->
+    <typeAlias alias="timeSaleStoreBensonVO" type="kr.co.solbipos.sale.benson.timeSaleStoreBenson.service.TimeSaleStoreBensonVO"/>
+    <!-- 벤슨 > 매출조회 > 지정가맹점_시간대별 -->
+    <typeAlias alias="storeTimeSaleBensonVO" type="kr.co.solbipos.sale.benson.storeTimeSaleBenson.service.StoreTimeSaleBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 일별시간대별매출조회 -->
+    <typeAlias alias="dayTimeSaleBensonVO" type="kr.co.solbipos.sale.benson.dayTimeSaleBenson.service.DayTimeSaleBensonVO"/>
+    <!-- 벤슨 > 간소화화면 > 영수건별매출 -->
+    <typeAlias alias="billSaleBensonVO" type="kr.co.solbipos.sale.benson.billSaleBenson.service.BillSaleBensonVO"/>
+    <!-- 벤슨 > 매출현황2 > 상품별 -->
+    <typeAlias alias="sideBensonVO" type="kr.co.solbipos.sale.benson.sideBenson.service.SideBensonVO"/>
+    <!-- 벤슨 > 매출현황2 > 일별(현금)현황 -->
+    <typeAlias alias="dayCashSaleBensonVO" type="kr.co.solbipos.sale.benson.dayCashSaleBenson.service.DayCashSaleBensonVO"/>
+    <!-- 벤슨 > 매출현황2 > 주문자현황 -->
+    <typeAlias alias="orderEmpBensonVO" type="kr.co.solbipos.sale.benson.orderEmpBenson.service.OrderEmpBensonVO"/>
+    <!-- 벤슨 > 매출분석 > 매출추이분석 -->
+    <typeAlias alias="saleTrnsitnBensonVO" type="kr.co.solbipos.sale.benson.saleTrnsitnBenson.service.SaleTrnsitnBensonVO"/>
+    <typeAlias alias="saleTrnsitnBensonDatesVO" type="kr.co.solbipos.sale.benson.saleTrnsitnBenson.service.SaleTrnsitnBensonDatesVO"/>
     <!-- 벤슨 > 회계관리 > 회계관리 -->
     <typeAlias alias="accountingMainVO" type="kr.co.solbipos.accounting.accountingMain.service.AccountingMainVO"/>
     <!-- 벤슨 > 회계관리 > 배달비현황 -->
