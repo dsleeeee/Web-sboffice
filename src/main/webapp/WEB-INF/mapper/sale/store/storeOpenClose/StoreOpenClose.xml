@@ -611,6 +611,9 @@
                         ,       TB_MS_STORE_INFO tmsi
                         WHERE   tms.HQ_OFFICE_CD      =   'H0393'
                         AND     tmsi.STORE_CD      (+) =   tms.STORE_CD
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tms.STORE_CD IN (${storeCdQuery})
+                        </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
                         </if>

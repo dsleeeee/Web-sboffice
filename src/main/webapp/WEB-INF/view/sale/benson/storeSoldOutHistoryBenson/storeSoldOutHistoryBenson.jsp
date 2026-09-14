@@ -197,7 +197,7 @@
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/benson/storeSoldOutHistoryBenson/storeSoldOutHistoryBenson.js?ver=20260910.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/benson/storeSoldOutHistoryBenson/storeSoldOutHistoryBenson.js?ver=20260914.01" charset="utf-8"></script>
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">
 </c:import>

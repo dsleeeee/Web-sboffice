@@ -432,6 +432,8 @@ app.controller('storeSoldOutHistoryExcelCtrl', ['$scope', '$http', '$timeout', f
         // 전체 데이터 수 조회
         params.limit = 1;
         params.offset = 1;
+        params.resrceCd = menuCd;
+        params.resrceNm = menuNm;
         $.postJSON( "/sale/store/storeSoldOutHistory/storeSoldOutHistory/getSearchSoldOutHistory.sb", params, function(response){
 
             listSize = response.data.list[0].totCnt;
