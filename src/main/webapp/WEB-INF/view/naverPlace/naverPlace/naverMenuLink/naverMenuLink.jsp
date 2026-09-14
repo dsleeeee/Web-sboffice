@@ -9,7 +9,7 @@
         <a href="#" class="open fl"><s:message code="naverMenuLink.naverMenuLink" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('naverMenuLinkCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('naverMenuLinkCtrl',1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
