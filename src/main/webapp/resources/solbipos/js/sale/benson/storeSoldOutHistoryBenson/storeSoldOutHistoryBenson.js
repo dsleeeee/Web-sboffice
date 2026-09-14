@@ -325,6 +325,8 @@ app.controller('storeSoldOutHistoryBensonExcelCtrl', ['$scope', '$http', '$timeo
         // 전체 데이터 수 조회
         params.limit = 1;
         params.offset = 1;
+        params.resrceCd = menuCd;
+        params.resrceNm = menuNm;
         $.postJSON( "/sale/benson/storeSoldOutHistoryBenson/storeSoldOutHistoryBenson/getSearchSoldOutHistory.sb", params, function(response){
 
             listSize = response.data.list[0].totCnt;

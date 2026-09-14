@@ -239,7 +239,7 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', '$timeout', function ($
             params: sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8', 'X-Tab-Id': _tabId, 'X-Nonce': _reqNonce}
         }).then(function successCallback(response) {
-            sysLog("[분류복사] 9. 저장 성공콜백 진입");
+            sysLog("[분류복사] 9. 저장 콜백 진입 status=" + (response.data && response.data.status) + ((response.data && response.data.message) ? " / msg=" + response.data.message : ""));
             if ($scope._httpStatusCheck(response, true)) {
                 // 작업내역 로딩 팝업 닫기
                 $scope.excelUploadingPopup(false);
@@ -256,7 +256,7 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', '$timeout', function ($
                 $scope.excelUploadingPopup(false);
             }
         }, function errorCallback(response) {
-            sysLog("[분류복사] 9-1. 저장 에러콜백 진입");
+            sysLog("[분류복사] 9-1. 저장 에러콜백 진입 httpStatus=" + response.status + ((response.data && response.data.message) ? " / msg=" + response.data.message : ""));
             $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
             if (response.data.message) {
                 $scope._popMsg(response.data.message);

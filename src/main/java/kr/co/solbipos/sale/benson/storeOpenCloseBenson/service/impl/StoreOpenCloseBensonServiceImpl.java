@@ -105,8 +105,11 @@ public class StoreOpenCloseBensonServiceImpl implements StoreOpenCloseBensonServ
         storeOpenCloseBensonVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        /*String[] storeCds = storeOpenCloseBensonVO.getStoreCds().split(",");
-        storeOpenCloseBensonVO.setStoreCdList(storeCds);*/
+        if(!StringUtil.getOrBlank(storeOpenCloseBensonVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeOpenCloseBensonVO.getStoreCds(), 3900));
+            storeOpenCloseBensonVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

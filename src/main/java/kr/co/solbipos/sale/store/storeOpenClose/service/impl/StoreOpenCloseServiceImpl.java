@@ -106,8 +106,11 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        /*String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
-        storeOpenCloseVO.setStoreCdList(storeCds);*/
+        if(!StringUtil.getOrBlank(storeOpenCloseVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeOpenCloseVO.getStoreCds(), 3900));
+            storeOpenCloseVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
