@@ -115,6 +115,19 @@
             ENVST_CD = #{envstCd}
     </update>
 
+    <!-- 대표명칭 코드 중복여부 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST
+        PARAM    : envstVO
+        COMMENTS : 신규 등록 전 동일 환경설정코드가 이미 존재하는지 확인한다. (중복 등록 방지)
+    -->
+    <select id="getEnvstDupCnt" parameterType="envstVO" resultType="int">
+        /* USE : EnvConfgMapper.getEnvstDupCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ENVST
+        WHERE   ENVST_CD = #{envstCd}
+    </select>
+
     <!-- 대표명칭 생성 -->
     <!--
         TABLE    : TB_CM_ENVST
@@ -198,6 +211,20 @@
             ENVST_CD = #{envstCd}
             AND ENVST_VAL_CD = #{envstValCd}
     </update>
+
+    <!-- 세부명칭 코드 중복여부 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : envstDtlVO
+        COMMENTS : 신규 등록 전 동일 환경설정코드/설정값코드가 이미 존재하는지 확인한다. (중복 등록 방지)
+    -->
+    <select id="getEnvstDtlDupCnt" parameterType="envstDtlVO" resultType="int">
+        /* USE : EnvConfgMapper.getEnvstDtlDupCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ENVST_DTL
+        WHERE   ENVST_CD     = #{envstCd}
+        AND     ENVST_VAL_CD = #{envstValCd}
+    </select>
 
     <!-- 세부명칭 생성 -->
     <!--

@@ -43,7 +43,55 @@ public class CdVO extends CmmVO {
     private String useYn;
     /** 세부명칭갯수 */
     private String cnt;
+    /** 매장수정 허용 - 추가(I) 허용여부 */
+    private String insYn;
+    /** 매장수정 허용 - 수정(U) 허용여부 */
+    private String updYn;
+    /** 매장수정 허용 - 삭제(D) 허용여부 */
+    private String delYn;
 
+
+    /**
+     * @return the insYn
+     */
+    public String getInsYn() {
+        return insYn;
+    }
+
+    /**
+     * @param insYn the insYn to set
+     */
+    public void setInsYn(String insYn) {
+        this.insYn = insYn;
+    }
+
+    /**
+     * @return the updYn
+     */
+    public String getUpdYn() {
+        return updYn;
+    }
+
+    /**
+     * @param updYn the updYn to set
+     */
+    public void setUpdYn(String updYn) {
+        this.updYn = updYn;
+    }
+
+    /**
+     * @return the delYn
+     */
+    public String getDelYn() {
+        return delYn;
+    }
+
+    /**
+     * @param delYn the delYn to set
+     */
+    public void setDelYn(String delYn) {
+        this.delYn = delYn;
+    }
 
     /**
      * @return the orgnFg

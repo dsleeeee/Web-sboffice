@@ -35,9 +35,11 @@ public interface SystemCdMapper {
     
     /** 코드목록 추가 */
     int insertNmcodeCdList(SystemCdVO systemCdVO);
-    
+
     /** 코드목록 저장 */
     int updateNmcodeCdList(SystemCdVO systemCdVO);
-    
-    
+
+    /** 코드 중복여부 조회 */
+    int getNmcodeCdDupCnt(SystemCdVO systemCdVO);
+
 }

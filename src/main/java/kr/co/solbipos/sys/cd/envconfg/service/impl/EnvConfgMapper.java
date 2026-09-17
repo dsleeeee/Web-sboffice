@@ -34,6 +34,9 @@ public interface EnvConfgMapper {
     /** 대표명칭 코드목록 조회 */
     List<DefaultMap<String>> getEnvstList(EnvstVO envstVO);
 
+    /** 대표명칭 코드 중복여부 조회 */
+    int getEnvstDupCnt(EnvstVO envstVO);
+
     /** 대표명칭 코드 생성 */
     int insertEnvst(EnvstVO envConfigVO);
 
@@ -42,6 +45,9 @@ public interface EnvConfgMapper {
 
     /** 세부명칭 코드목록 조회 */
     List<DefaultMap<String>> getEnvstDtlList(EnvstDtlVO envstDtlVO);
+
+    /** 세부명칭 코드 중복여부 조회 */
+    int getEnvstDtlDupCnt(EnvstDtlVO envstDtlVO);
 
     /** 세부명칭 코드 생성 */
     int insertEnvstDtl(EnvstDtlVO envConfigVO);

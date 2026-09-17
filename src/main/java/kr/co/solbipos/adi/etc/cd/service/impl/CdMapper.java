@@ -41,5 +41,23 @@ public interface CdMapper {
 
     /** 코드목록 삭제 */
     int deleteNmcodeCdList(CdVO cdVO);
-    
+
+    /** 세부명칭 코드 중복여부 조회 */
+    int getNmcodeCdDupCnt(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 대표명칭(공통) 목록 조회 */
+    List<DefaultMap<String>> getCdStoreAllowGrpList(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 매장목록/설정 조회 */
+    List<DefaultMap<String>> getCdStoreAllowList(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 중복설정 존재여부 조회 */
+    int getCdStoreAllowDupCnt(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 코드 채번 */
+    String getCdStoreAllowMaxCd(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 매장 허용값 조회 */
+    DefaultMap<String> getCdStoreAllowItem(CdVO cdVO);
+
 }

@@ -138,4 +138,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/benson/storeTimeSaleBenson/storeTimeSaleBenson.js?ver=20260910.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/benson/storeTimeSaleBenson/storeTimeSaleBenson.js?ver=20260915.02" charset="utf-8"></script>

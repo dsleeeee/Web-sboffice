@@ -80,9 +80,9 @@ app.controller('storeTimeSaleBensonCtrl', ['$scope', '$http', '$timeout', functi
             return false;
         }
 
-        // 조회일자 최대 31일(1달) 제한
-        if (diffDay > 30) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+        // 조회일자 최대 186일(6달) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
             return false;
         }
 

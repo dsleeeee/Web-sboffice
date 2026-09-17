@@ -20,6 +20,10 @@
       <button class="btn_blue fr" ng-click="_broadcast('representCtrl')" id="nxBtnSearch">
         <s:message code="cmm.search" />
       </button>
+      <%-- 본사권한 매장사용 공통코드 매장수정 허용 (기본 히든 - 코드란에 현재 년월일시(yyyymmddHH) 입력 후 조회 시 표시) --%>
+      <button class="btn_blue mr5 fr" id="btnStoreAllow" style="display: none;" ng-click="_broadcast('cdStoreAllowOpen')">
+        <s:message code="cd.storeAllow" />
+      </button>
     </div>
   </div>
   <table class="searchTbl">
@@ -193,4 +197,76 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20260306.01" charset="utf-8"></script>
+
+<%-- 본사권한 매장사용 공통코드 매장수정 허용 팝업 --%>
+<wj-popup control="cdStoreAllowLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div class="wj-dialog wj-dialog-columns" ng-controller="cdStoreAllowCtrl">
+
+    <%-- header --%>
+    <div class="wj-dialog-header wj-dialog-header-font">
+      <s:message code="cd.storeAllow"/>
+      <a href="" class="wj-hide btn_close" ng-click="close()"></a>
+    </div>
+
+    <div class="wj-dialog-body">
+      <%-- 설명 --%>
+      <div class="mt5 mb10">
+        <span class="bk s12"><s:message code="cd.storeAllow.desc"/></span>
+        <div class="mt5 mb5">
+          <span class="bk s12"><s:message code="cd.storeAllow.desc2"/></span>
+        </div>
+      </div>
+
+      <div class="oh">
+        <%-- 좌측 : 대표명칭(공통) 리스트 --%>
+        <div class="fl" style="width: 38%;">
+          <div class="oh mb5">
+            <span class="fl bk lh30"><s:message code='cd.grpGridNm' /></span>
+          </div>
+          <div class="wj-gridWrap" style="height: 400px;">
+            <wj-flex-grid
+              autoGenerateColumns="false"
+              control="grpFlex"
+              initialized="initGrpGrid(s,e)"
+              selection-mode="Row"
+              items-source="grpData"
+              is-editable="false"
+              item-formatter="_itemFormatter">
+              <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="180" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
+
+        <%-- 우측 : 매장 리스트 --%>
+        <div class="fr" style="width: 60%;">
+          <div class="oh mb5">
+            <span class="fl bk lh30"><s:message code='cd.storeAllow.storeGridNm' /></span>
+            <button class="btn_skyblue fr" id="btnStoreAllowSave" ng-click="saveStoreAllow()">
+              <s:message code="cmm.save" />
+            </button>
+          </div>
+          <div class="wj-gridWrap" style="height: 400px;">
+            <wj-flex-grid
+              autoGenerateColumns="false"
+              control="storeFlex"
+              initialized="initStoreGrid(s,e)"
+              selection-mode="Row"
+              items-source="storeData"
+              is-editable="true"
+              item-formatter="_itemFormatter">
+              <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="150" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.add"/>" binding="iChk" width="60" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.delete"/>" binding="dChk" width="60" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.save"/>" binding="uChk" width="60" align="center"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</wj-popup>
+<%--// 본사권한 매장사용 공통코드 매장수정 허용 팝업 --%>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20260911.07" charset="utf-8"></script>

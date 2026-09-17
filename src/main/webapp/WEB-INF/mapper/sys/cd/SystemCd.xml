@@ -98,6 +98,20 @@
             AND NMCODE_CD = #{nmcodeCd}
     </update>
 
+    <!-- 코드 중복여부 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : systemCdVO
+        COMMENTS : 신규 등록 전 동일 그룹/코드가 이미 존재하는지 확인한다. (중복 등록 방지)
+    -->
+    <select id="getNmcodeCdDupCnt" parameterType="systemCdVO" resultType="int">
+        /* USE : SystemCdMapper.getNmcodeCdDupCnt */
+        SELECT  COUNT(*)
+        FROM    TB_CM_NMCODE
+        WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+        AND     NMCODE_CD     = #{nmcodeCd}
+    </select>
+
     <!-- 코드목록 생성 -->
     <!--
         TABLE    : TB_CM_NMCODE

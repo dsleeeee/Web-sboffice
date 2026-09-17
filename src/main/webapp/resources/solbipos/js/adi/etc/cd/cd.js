@@ -96,6 +96,20 @@ app.controller('representCtrl', ['$scope', '$http', '$timeout', function ($scope
       //$("#btnDelRepresent").show();
       //$("#btnSaveRepresent").show();
     });
+
+    // [본사권한 매장사용 공통코드 매장수정 허용] 버튼 표시 제어
+    // 본사 로그인 + 코드 검색란에 현재 년월일시(yyyymmddHH)를 입력하고 조회한 경우에만 표시
+    var d = new Date();
+    var nowYmdH = d.getFullYear().toString()
+        + ("0" + (d.getMonth() + 1)).slice(-2)
+        + ("0" + d.getDate()).slice(-2)
+        + ("0" + d.getHours()).slice(-2);
+    if (gvOrgnFg === "H" && $("#srchNmcodeCd").val() === nowYmdH) {
+      $("#btnStoreAllow").show();
+    } else {
+      $("#btnStoreAllow").hide();
+    }
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -136,6 +150,27 @@ app.controller('representCtrl', ['$scope', '$http', '$timeout', function ($scope
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
       params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
+    // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+    for (var b = 0; b < params.length; b++) {
+      var chkItem = params[b];
+      if (nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() > 4) {
+        $scope._popMsg(messages["cd.nmcodeCd"] + messages["cmm.overLength"] + " 4 " + ", 현재 : " + nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["cd.nmcodeNm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["cd.nmcodeItem1"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["cd.nmcodeItem2"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/adi/etc/cd/cd/save.sb", params);
   }
@@ -258,6 +293,52 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.$on("init", function() {
     $scope._gridDataInit();
   });
+  // 세부명칭 그리드 버튼 표시 제어
+  // 기본 표시조건 외에, 가맹점의 공통(C) 코드는 본사 허용설정(TB_HQ_NMCODE 251)의 I/U/D에 따라 버튼을 개별 표시한다.
+  $scope.setDetailBtns = function(params) {
+    $scope.allowChkYn = "N";  // 허용설정 검증 대상 여부
+    $scope.allowInsYn = "Y";  // 추가(I) 허용여부 (기본 허용)
+    $scope.allowUpdYn = "Y";  // 수정(U) 허용여부 (기본 허용)
+    $scope.allowDelYn = "Y";  // 삭제(D) 허용여부 (기본 허용)
+    if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
+    ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
+    ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "C" && gvHqOfficeCd == "00000"      )   )
+      )
+    {
+      $("#btnAddDetail").show();
+      $("#btnDelDetail").show();
+      $("#btnSaveDetail").show();
+    }
+    else if (gvOrgnFg == "S" && params.nmcodeItem1 == "C")
+    {
+      // 가맹점의 공통(C) 코드 : 본사 허용설정 조회 후 허용된 버튼만 표시
+      $("#btnAddDetail").hide();
+      $("#btnDelDetail").hide();
+      $("#btnSaveDetail").hide();
+      $.postJSON("/adi/etc/cd/cd/getCdStoreAllowItem.sb", {nmcodeNm: params.nmcodeGrpCd}, function (response) {
+        // 응답 도착 시점에 다른 그룹으로 이동했으면 무시 (응답 역전 방지)
+        if (params.nmcodeGrpCd !== $("#s_nmcodeCd").val()) {
+          return false;
+        }
+        var allow = response.data || {};
+        $scope.allowChkYn = "Y";
+        $scope.allowInsYn = nvl(allow.iYn, "N");
+        $scope.allowUpdYn = nvl(allow.uYn, "N");
+        $scope.allowDelYn = nvl(allow.dYn, "N");
+        if ($scope.allowInsYn === "Y") { $("#btnAddDetail").show(); }
+        if ($scope.allowDelYn === "Y") { $("#btnDelDetail").show(); }
+        // 저장버튼은 추가(I) 또는 수정(U) 허용 시 표시 (추가분 저장도 저장버튼으로 수행되므로)
+        if ($scope.allowInsYn === "Y" || $scope.allowUpdYn === "Y") { $("#btnSaveDetail").show(); }
+      });
+    }
+    else
+    {
+      $("#btnAddDetail").hide();
+      $("#btnDelDetail").hide();
+      $("#btnSaveDetail").hide();
+    }
+  };
+
   // 세부명칭 그리드 조회
   $scope.$on("detailCtrl", function(event, data) {
     // 파라미터
@@ -268,21 +349,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
     $scope._inquirySub("/adi/etc/cd/cd/list.sb", params, function() {
       // 세부명칭 그리드 버튼 show
-        if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
-        ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
-        ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "C" && gvHqOfficeCd == "00000"      )   )
-          )
-        {
-          $("#btnAddDetail").show();
-          $("#btnDelDetail").show();
-          $("#btnSaveDetail").show();
-        }
-        else
-        {
-          $("#btnAddDetail").hide();
-          $("#btnDelDetail").hide();
-          $("#btnSaveDetail").hide();
-        }
+      $scope.setDetailBtns(params);
     });
 
     $("#s_nmcodeCd").val(data.nmcodeCd);
@@ -301,29 +368,8 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
         $scope._inquirySub("/adi/etc/cd/cd/list.sb", params, function() {
           // 세부명칭 그리드 버튼 show
-            if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
-            ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
-            ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "C" && gvHqOfficeCd == "00000"      )   )
-              )
-            {
-              $("#btnAddDetail").show();
-              $("#btnDelDetail").show();
-              $("#btnSaveDetail").show();
-            }
-            else
-            {
-              $("#btnAddDetail").hide();
-              $("#btnDelDetail").hide();
-              $("#btnSaveDetail").hide();
-            }
+          $scope.setDetailBtns(params);
         });
-
-        // $("#s_nmcodeCd").val(data.nmcodeCd);
-        // $("#s_nmcodeItem1").val(data.nmcodeItem1);
-        // $("#s_nmcodeItem2").val(data.nmcodeItem2);
-
-        // 기능수행 종료 : 반드시 추가
-        // event.preventDefault();
     };
 
   // 세부명칭 그리드 행 추가
@@ -343,6 +389,18 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 세부명칭 그리드 저장
   $scope.save = function() {
+
+    // 가맹점 공통(C) 코드 : 본사 허용설정(I/U)에 따른 저장 검증
+    if ($scope.allowChkYn === "Y") {
+      if ($scope.flex.collectionView.itemsAdded.length > 0 && $scope.allowInsYn !== "Y") {
+        $scope._popMsg(messages["cd.storeAllow.noAddAuth"]); // 추가 권한이 없습니다.
+        return false;
+      }
+      if ($scope.flex.collectionView.itemsEdited.length > 0 && $scope.allowUpdYn !== "Y") {
+        $scope._popMsg(messages["cd.storeAllow.noModAuth"]); // 수정 권한이 없습니다.
+        return false;
+      }
+    }
 
     $scope._popConfirm(messages["cmm.choo.save"], function() {
       // 파라미터 설정
@@ -420,6 +478,27 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
       }
+      // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+      for (var b = 0; b < params.length; b++) {
+        var chkItem = params[b];
+        if (nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() > 4) {
+          $scope._popMsg(messages["cd.nmcodeCd"] + messages["cmm.overLength"] + " 4 " + ", 현재 : " + nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+          return false;
+        }
+        if (nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() > 50) {
+          $scope._popMsg(messages["cd.nmcodeNm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+          return false;
+        }
+        if (nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["cd.nmcodeItem1"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+          return false;
+        }
+        if (nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["cd.nmcodeItem2"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+          return false;
+        }
+      }
+
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save("/adi/etc/cd/cd/save.sb", params, function () {
         $scope.allSearch()
@@ -435,6 +514,12 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   }
   // 세부명칭 그리드 행 삭제
   $scope.deleteRow = function() {
+        // 가맹점 공통(C) 코드 : 본사 허용설정(D)에 따른 삭제 검증
+        if ($scope.allowChkYn === "Y" && $scope.allowDelYn !== "Y") {
+          $scope._popMsg(messages["cd.storeAllow.noDelAuth"]); // 삭제 권한이 없습니다.
+          return false;
+        }
+
         $scope._popConfirm(messages["cd.detail.require.delConfirm"], function() {
           var params = new Array();
           for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -456,5 +541,149 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
 
         });
   }
+
+}]);
+
+/**
+ * 본사권한 매장사용 공통코드 매장수정 허용 팝업
+ */
+app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('cdStoreAllowCtrl', $scope, $http, false));
+
+  // 선택된 공통코드그룹
+  $scope.selGrpCd = "";
+
+  // 대표명칭(공통) 그리드 초기화
+  $scope.initGrpGrid = function (s, e) {
+    // ReadOnly 배경 + 코드 셀 링크 효과
+    s.formatItem.addHandler(function (s2, e2) {
+      if (e2.panel === s2.cells) {
+        var col = s2.columns[e2.col];
+        wijmo.addClass(e2.cell, 'wj-custom-readonly');
+        if (col.binding === "nmcodeCd") {
+          wijmo.addClass(e2.cell, 'wijLink');
+        }
+      }
+    });
+    // 행 클릭 시 해당 그룹의 매장 허용설정 조회
+    s.hostElement.addEventListener('mousedown', function (e2) {
+      var ht = s.hitTest(e2);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var selectedRow = s.rows[ht.row].dataItem;
+        if (selectedRow) {
+          $scope.searchStoreAllowList(selectedRow.nmcodeCd);
+        }
+      }
+    });
+  };
+
+  // 매장 그리드 초기화
+  $scope.initStoreGrid = function (s, e) {
+    // 공용 _save가 $scope.flex 기준으로 동작(저장 후 clearChanges/콜백)하므로 매장 그리드를 연결
+    $scope.flex = s;
+  };
+
+  // 팝업 열기
+  $scope.$on("cdStoreAllowOpen", function (event, data) {
+    $scope.selGrpCd = "";
+    if ($scope.storeFlex) {
+      $scope.storeFlex.itemsSource = new wijmo.collections.CollectionView([]);
+    }
+
+    // 대표명칭(공통 C) 목록 조회 (전용 쿼리 - 서버에서 C 구분 필터)
+    $.postJSON("/adi/etc/cd/cd/getCdStoreAllowGrpList.sb", {}, function (response) {
+      var list = response.data.list;
+      if (list === undefined || list === null) {
+        list = [];
+      }
+      $scope.grpFlex.itemsSource = new wijmo.collections.CollectionView(list);
+    });
+
+    $scope.cdStoreAllowLayer.show(true);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 선택 그룹의 매장 허용설정 조회
+  $scope.searchStoreAllowList = function (grpCd) {
+    $scope.selGrpCd = grpCd;
+    $.postJSON("/adi/etc/cd/cd/getCdStoreAllowList.sb", {nmcodeNm: grpCd}, function (response) {
+      var list = response.data.list;
+      if (list === undefined || list === null) {
+        list = [];
+      }
+      var rows = [];
+      for (var i = 0; i < list.length; i++) {
+        rows.push({
+          storeCd: list[i].storeCd,
+          storeNm: list[i].storeNm,
+          orgNmcodeCd: nvl(list[i].nmcodeCd, ""), // 기존 251 설정 코드(없으면 신규)
+          orgInsYn: list[i].iYn,                  // 기존 허용여부(변경 비교용)
+          orgDelYn: list[i].dYn,
+          orgUpdYn: list[i].uYn,
+          iChk: list[i].iYn === "Y",
+          dChk: list[i].dYn === "Y",
+          uChk: list[i].uYn === "Y"
+        });
+      }
+      var cv = new wijmo.collections.CollectionView(rows);
+      cv.trackChanges = true;
+      $scope.storeFlex.itemsSource = cv;
+    });
+  };
+
+  // 허용설정 저장 (변경분만 : 신규=I(코드 서버채번), 변경=U, 전부해제=D)
+  $scope.saveStoreAllow = function () {
+    if ($scope.selGrpCd === "") {
+      $scope._popMsg(messages["cd.storeAllow.selectGrp"]); // 대표명칭을 선택해주세요.
+      return false;
+    }
+
+    // 편집 중인 체크박스 값 커밋 (마지막 클릭 미반영 방지)
+    $scope.storeFlex.finishEditing();
+
+    var items = $scope.storeFlex.collectionView.items;
+    var params = new Array();
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var insYn = item.iChk ? "Y" : "N";
+      var updYn = item.uChk ? "Y" : "N";
+      var delYn = item.dChk ? "Y" : "N";
+      if (insYn === item.orgInsYn && updYn === item.orgUpdYn && delYn === item.orgDelYn) {
+        continue; // 변경 없음
+      }
+      var row = {};
+      row.nmcodeNm = $scope.selGrpCd;   // 공통코드그룹코드
+      row.nmcodeItem1 = item.storeCd;   // 매장코드
+      row.insYn = insYn;                // 허용액션 Y/N (NMCODE_ITEM_2 조립은 서버에서 수행)
+      row.updYn = updYn;
+      row.delYn = delYn;
+      if (item.orgNmcodeCd === "") {
+        row.status = "I";               // 신규 (코드는 서버에서 MAX+1 채번)
+      } else {
+        row.nmcodeCd = item.orgNmcodeCd;
+        // 전부 해제 시 설정 삭제
+        row.status = (insYn === "N" && updYn === "N" && delYn === "N") ? "D" : "U";
+      }
+      params.push(row);
+    }
+
+    if (params.length === 0) {
+      $scope._popMsg(messages["cd.storeAllow.noChange"]); // 변경된 내용이 없습니다.
+      return false;
+    }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/adi/etc/cd/cd/saveCdStoreAllow.sb", params, function () {
+      $scope.searchStoreAllowList($scope.selGrpCd); // 재조회
+    });
+  };
+
+  // 팝업 닫기
+  $scope.close = function () {
+    $scope.cdStoreAllowLayer.hide();
+  };
 
 }]);

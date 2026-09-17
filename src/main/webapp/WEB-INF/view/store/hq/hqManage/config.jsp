@@ -300,6 +300,13 @@ $("#envLayer #btnSave").click(function(){
       return false;
     }
 
+    // 환경설정값 길이(Byte) 체크 : 오라클 한글 3Byte 기준 (ENVST_VAL 100Byte)
+    if ((objEnvstValCd[i].value + '').getByteLengthForOracle() > 100) {
+      s_alert.pop("[" + objEnvstCd[i].value + "] " + objEnvstNm[i].value + "<s:message code='cmm.overLength' /> 100 " +
+          ", 현재 : " + (objEnvstValCd[i].value + '').getByteLengthForOracle() + "<s:message code='cmm.bateLengthInfo' />");
+      return false;
+    }
+
     if(objEnvstCd[i].value == "0047") {
       if(objEnvstValCd[i].value.length > 6 ) {
         s_alert.pop("[0047] 상품코드PREFIX 는 6자리 이하로 설정하여 주십시오.");

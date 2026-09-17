@@ -143,9 +143,9 @@ app.controller('dayCashTotalBensonCtrl', ['$scope', '$http', '$timeout', functio
       return false;
     }
 
-    // 조회일자 최대 1년(365일) 제한
-    if (diffDay > 365) {
-      s_alert.pop(messages['cmm.dateOver.1year.error']);
+    // 조회일자 최대 3달(93일) 제한
+    if (diffDay > 93) {
+      s_alert.pop(messages['cmm.dateOver.3month.error']);
       return false;
     }
 
