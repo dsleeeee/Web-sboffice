@@ -28,6 +28,12 @@ public interface PrepaidCardStatusService {
     /** 선불카드 사용 현황 - 조회 */
     List<DefaultMap<Object>> getPrepaidCardUseStatus(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO);
 
+    /** 선불카드 충전 현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getPrepaidCardChargeStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 선불카드 사용 현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getPrepaidCardUseStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO);
+
     /** 선불카드 충전 현황 - 상세 조회 */
     List<DefaultMap<Object>> getPrepaidCardChargeStatusDtl(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO);
 

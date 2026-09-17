@@ -313,6 +313,13 @@
         </c:if>
     </c:if>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 조회조건 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+        <%-- 현재화면 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
+    </div>
+
     <div class="w100 mt10">
         <%--선불카드 사용 현황 테이블--%>
         <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:500px;">
@@ -358,12 +365,47 @@
 
 </div>
 
+<%--엑셀 리스트--%>
+<div class="w100 mt10" style="display:none;" ng-controller="prepaidCardUseStatusExcelCtrl">
+    <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
+        <wj-flex-grid
+                autoGenerateColumns="false"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                ime-enabled="true"
+                id="wjGridUseExcelList">
+            <!-- define columns -->
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.branchCd"/>" binding="branchCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.branchNm"/>" binding="branchNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="giftCalc.brandCd"/>" binding="brandCd" data-map="brandCdDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prepaidCardStatus.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            </c:if>
+            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.useCnt"/>" binding="useCnt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.totUseAmt"/>" binding="totUseAmt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.useCancelCnt"/>" binding="useCancelCnt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prepaidCardStatus.totUseCancelAmt"/>" binding="totUseCancelAmt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+        </wj-flex-grid>
+    </div>
+</div>
+<%--//엑셀 리스트--%>
 
 <script type="text/javascript">
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prepaidCardStatus/prepaidCardUseStatus.js?ver=20260416.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prepaidCardStatus/prepaidCardUseStatus.js?ver=20260917.02" charset="utf-8"></script>
 
 <%--선불카드 사용 현황 상세--%>
 <c:import url="/WEB-INF/view/sale/status/prepaidCardStatus/prepaidCardUseStatusDtl.jsp">

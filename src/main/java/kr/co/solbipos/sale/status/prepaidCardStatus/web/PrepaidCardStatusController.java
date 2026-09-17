@@ -204,6 +204,50 @@ public class PrepaidCardStatusController {
     }
 
     /**
+     * 선불카드 충전 현황 - 엑셀다운로드 조회
+     * @param prepaidCardStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2026.09.16
+     */
+    @RequestMapping(value = "/getPrepaidCardChargeStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPrepaidCardChargeStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prepaidCardStatusService.getPrepaidCardChargeStatusExcelList(prepaidCardStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prepaidCardStatusVO);
+    }
+
+    /**
+     * 선불카드 사용 현황 - 엑셀다운로드 조회
+     * @param prepaidCardStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2026.09.16
+     */
+    @RequestMapping(value = "/getPrepaidCardUseStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPrepaidCardUseStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prepaidCardStatusService.getPrepaidCardUseStatusExcelList(prepaidCardStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prepaidCardStatusVO);
+    }
+
+    /**
      * 선불카드 충전 현황 - 상세 조회
      * @param prepaidCardStatusVO
      * @param request

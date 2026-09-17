@@ -203,7 +203,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -233,7 +233,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -308,7 +308,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -339,7 +339,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         }
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -367,7 +367,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -410,7 +410,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);
@@ -451,7 +451,7 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         naverOrderApiVO.setUniqueId(naverOrderLinkMapper.getNaverUniqueId(naverOrderLinkVO));
 
         // 개발/운영 Api URL 조회
-        naverOrderLinkVO.setApiInfo("OMS_API_URL");
+        naverOrderLinkVO.setApiInfo("NAVER_ORDER_API_URL");
         naverOrderLinkVO.setApiUrl("API_URL");
         naverOrderLinkVO.setApiKey("ACCESS_TOKEN");
         DefaultMap<Object> apiInfo = naverOrderLinkMapper.getApiUrl(naverOrderLinkVO);

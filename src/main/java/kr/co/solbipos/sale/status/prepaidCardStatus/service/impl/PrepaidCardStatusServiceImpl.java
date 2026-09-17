@@ -116,6 +116,74 @@ public class PrepaidCardStatusServiceImpl implements PrepaidCardStatusService {
     }
 
     /**
+     * 선불카드 충전 현황 - 엑셀다운로드 조회
+     * @param prepaidCardStatusVO
+     * @param sessionInfoVO
+     * @return
+     */
+    @Override
+    public List<DefaultMap<Object>> getPrepaidCardChargeStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO) {
+
+        prepaidCardStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prepaidCardStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prepaidCardStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prepaidCardStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prepaidCardStatusVO.getStoreCds(), 3900));
+            prepaidCardStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드가 '전체' 일때
+            if (prepaidCardStatusVO.getStoreHqBrandCd() == "" || prepaidCardStatusVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prepaidCardStatusVO.getUserBrands().split(",");
+                prepaidCardStatusVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return prepaidCardStatusMapper.getPrepaidCardChargeStatusExcelList(prepaidCardStatusVO);
+    }
+
+    /**
+     * 선불카드 사용 현황 - 엑셀다운로드 조회
+     * @param prepaidCardStatusVO
+     * @param sessionInfoVO
+     * @return
+     */
+    @Override
+    public List<DefaultMap<Object>> getPrepaidCardUseStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO, SessionInfoVO sessionInfoVO) {
+
+        prepaidCardStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prepaidCardStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prepaidCardStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prepaidCardStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prepaidCardStatusVO.getStoreCds(), 3900));
+            prepaidCardStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드가 '전체' 일때
+            if (prepaidCardStatusVO.getStoreHqBrandCd() == "" || prepaidCardStatusVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prepaidCardStatusVO.getUserBrands().split(",");
+                prepaidCardStatusVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return prepaidCardStatusMapper.getPrepaidCardUseStatusExcelList(prepaidCardStatusVO);
+    }
+
+    /**
      * 선불카드 충전 현황 - 상세 조회
      * @param prepaidCardStatusVO
      * @param sessionInfoVO

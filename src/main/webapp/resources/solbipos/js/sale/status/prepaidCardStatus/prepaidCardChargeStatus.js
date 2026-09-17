@@ -184,4 +184,147 @@ app.controller('prepaidCardChargeStatusCtrl', ['$scope', '$http', '$timeout', fu
         }
     };
 
+    // 현재화면 엑셀다운로드
+    $scope.excelDownload2 = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                "선불카드 충전 현황(현재화면)" + '_' + getCurDateTime() + '.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
+    // 조회조건 엑셀다운로드
+    $scope.excelDownload = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.saleYn = $scope.chargeFgCombo.selectedValue;
+        params.storeCds = $("#prepaidCardChargeStatusStoreCd").val();
+
+        if(momsEnvstVal === "1" && orgnFg === "HQ") { // 확장조회는 본사권한이면서 맘스터치만 사용
+            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
+            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
+            params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
+            params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
+            params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
+            params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
+            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
+        }
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('prepaidCardChargeStatusExcelCtrl', params);
+        });
+    };
+
+}]);
+
+app.controller('prepaidCardChargeStatusExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prepaidCardChargeStatusExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        // 그리드 DataMap 설정
+        $scope.brandCdDataMap = new wijmo.grid.DataMap(userHqBrandCdComboList, 'value', 'name');
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prepaidCardChargeStatusExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sale/status/prepaidCardStatus/getPrepaidCardChargeStatusExcelList.sb", params, function() {
+
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles: false
+                }, "선불카드 충전 현황(조회조건)" + '_' + getCurDateTime() + '.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
 }]);

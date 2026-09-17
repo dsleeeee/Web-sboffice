@@ -32,6 +32,12 @@ public interface PrepaidCardStatusMapper {
     /** 선불카드 사용 현황 - 조회 */
     List<DefaultMap<Object>> getPrepaidCardUseStatus(PrepaidCardStatusVO prepaidCardStatusVO);
 
+    /** 선불카드 충전 현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getPrepaidCardChargeStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO);
+
+    /** 선불카드 사용 현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getPrepaidCardUseStatusExcelList(PrepaidCardStatusVO prepaidCardStatusVO);
+
     /** 선불카드 충전 현황 - 상세 조회 */
     List<DefaultMap<Object>> getPrepaidCardChargeStatusDtl(PrepaidCardStatusVO prepaidCardStatusVO);
 
