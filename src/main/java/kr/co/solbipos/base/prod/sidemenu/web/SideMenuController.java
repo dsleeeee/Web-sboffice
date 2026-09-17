@@ -1017,4 +1017,57 @@ public class SideMenuController {
         CmmUtil.frontLog("[" + userId + "][tab:" + tabId + "][nonce:" + nonce + "] " + msg);
         return returnJson(Status.OK);
     }
+
+    /** 재전송 테스트 동시 실행 수 (스레드풀 보호용, 최대 2개 초과분은 sleep 없이 즉시 응답) */
+    private static final java.util.concurrent.atomic.AtomicInteger RESEND_TEST_RUNNING = new java.util.concurrent.atomic.AtomicInteger(0);
+
+    /**
+     * 재전송 확인용 임시 테스트 - 응답 없이 sleepSec 동안 침묵 후 응답 (DB 접근 없음)
+     * 같은 token 의 [도착] 로그가 2번 찍히면 중간 경로 어딘가가 재전송하는 것
+     * (재전송 원인 확인 후 제거 대상)
+     */
+    @RequestMapping(value = "/menuClass/resendTest.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result resendTest(@RequestParam(value = "token", required = false) String token,
+                             @RequestParam(value = "sleepSec", required = false, defaultValue = "300") int sleepSec,
+                             HttpServletRequest request) {
+        // 워커스레드 장시간 점유 방지 상한
+        if (sleepSec > 330) {
+            sleepSec = 330;
+        }
+
+        // 동시 실행 2개 초과 시 sleep 없이 즉시 응답 (스레드풀 고갈 방지)
+        if (RESEND_TEST_RUNNING.incrementAndGet() > 2) {
+            RESEND_TEST_RUNNING.decrementAndGet();
+            CmmUtil.frontLog("[재전송테스트][거부-동시초과] token=" + token + " remoteAddr=" + request.getRemoteAddr());
+            return returnJson(Status.FAIL);
+        }
+
+        try {
+            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+            String userId = (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?");
+            long recvTime = System.currentTimeMillis();
+
+            CmmUtil.frontLog("[재전송테스트][도착] token=" + token + " sleepSec=" + sleepSec
+                    + " 계정=" + userId
+                    + " remoteAddr=" + request.getRemoteAddr()
+                    + " xff=" + request.getHeader("X-Forwarded-For")
+                    + " ua=" + request.getHeader("User-Agent")
+                    + " recvTime=" + recvTime);
+
+            try {
+                Thread.sleep(sleepSec * 1000L);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                CmmUtil.frontLog("[재전송테스트][중단] token=" + token + " elapsedMs=" + (System.currentTimeMillis() - recvTime));
+                return returnJson(Status.FAIL);
+            }
+
+            CmmUtil.frontLog("[재전송테스트][완료] token=" + token + " elapsedMs=" + (System.currentTimeMillis() - recvTime));
+
+            return returnJson(Status.OK);
+        } finally {
+            RESEND_TEST_RUNNING.decrementAndGet();
+        }
+    }
 }
