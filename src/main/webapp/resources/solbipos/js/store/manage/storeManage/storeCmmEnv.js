@@ -215,6 +215,13 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
+      // 환경설정값 길이(Byte) 체크 : 오라클 한글 3Byte 기준 (ENVST_VAL 100Byte)
+      if ((objEnvstValCd[i].value + '').getByteLengthForOracle() > 100) {
+        $scope._popMsg("[" + objEnvstCd[i].value + "] " + objEnvstNm[i].value + messages["cmm.overLength"] + " 100 " +
+            ", 현재 : " + (objEnvstValCd[i].value + '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+
       if(objhqOfficeCd !== "00000" && objTargtFg[i].value === "X" && objHqEnvstValCd[i].value !== objEnvstValCd[i].value){
         var msgStr = "["
             + objEnvstCd[i].value + "] "

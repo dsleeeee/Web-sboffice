@@ -186,6 +186,31 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       item.status = "I";
       params.push(item);
     }
+    // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+    for (var b = 0; b < params.length; b++) {
+      var chkItem = params[b];
+      if (nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() > 4) {
+        $scope._popMsg(messages["systemCd.nmcodeCd"] + messages["cmm.overLength"] + " 4 " + ", 현재 : " + nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["systemCd.nmcodeNm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["systemCd.nmcodeItem1"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["systemCd.nmcodeItem2"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.useColNm + '', '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["systemCd.useColNm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + nvl(chkItem.useColNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function(){
       $scope._broadcast('representCtrl');
@@ -331,6 +356,27 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       item.status = "I";
       params.push(item);
     }
+    // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+    for (var b = 0; b < params.length; b++) {
+      var chkItem = params[b];
+      if (nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() > 4) {
+        $scope._popMsg(messages["systemCd.nmcodeCd"] + messages["cmm.overLength"] + " 4 " + ", 현재 : " + nvl(chkItem.nmcodeCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+        if (nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["systemCd.nmcodeNm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + nvl(chkItem.nmcodeNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["systemCd.nmcodeItem1"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem1 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+      if (nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() > 200) {
+        $scope._popMsg(messages["systemCd.nmcodeItem2"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + nvl(chkItem.nmcodeItem2 + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+        return false;
+      }
+    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/cd/systemCd/systemCd/save.sb", params, function() {
       var scope = agrid.getScope('representCtrl');

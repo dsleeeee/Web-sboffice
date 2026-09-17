@@ -10,7 +10,9 @@ import kr.co.solbipos.sys.cd.envconfg.service.EnvConfgService;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstDtlVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class EnvConfgServiceImpl implements EnvConfgService {
     }
 
     /** 대표명칭 코드 저장 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int saveEnvstList(EnvstVO[] envstVOs, SessionInfoVO sessionInfoVO) {
 
@@ -74,7 +77,17 @@ public class EnvConfgServiceImpl implements EnvConfgService {
             // 추가
             if ( envstVO.getStatus() == GridDataFg.INSERT ) {
 
-                result += envConfgMapper.insertEnvst(envstVO);
+                // 동일 환경설정코드 존재 시 명시적 실패 처리 (중복 등록 방지)
+                if ( envConfgMapper.getEnvstDupCnt(envstVO) > 0 ) {
+                    throw new JsonException(Status.SERVER_ERROR, "[" + envstVO.getEnvstCd() + "] " + messageService.get("envConfg.dupCd"));
+                }
+
+                try {
+                    result += envConfgMapper.insertEnvst(envstVO);
+                } catch (DuplicateKeyException e) {
+                    // 사전 체크와 INSERT 사이에 동시 등록된 경우
+                    throw new JsonException(Status.SERVER_ERROR, "[" + envstVO.getEnvstCd() + "] " + messageService.get("envConfg.dupCd"));
+                }
             // 수정
             } else if ( envstVO.getStatus() == GridDataFg.UPDATE ) {
 
@@ -101,6 +114,7 @@ public class EnvConfgServiceImpl implements EnvConfgService {
     }
 
     /** 세부명칭 코드 저장 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int saveEnvstDtlList(EnvstDtlVO[] envstDtlVOs, SessionInfoVO sessionInfoVO) {
 
@@ -117,7 +131,17 @@ public class EnvConfgServiceImpl implements EnvConfgService {
             // 추가
             if ( envstDtlVO.getStatus() == GridDataFg.INSERT ) {
 
-                result += envConfgMapper.insertEnvstDtl(envstDtlVO);
+                // 동일 환경설정코드/설정값코드 존재 시 명시적 실패 처리 (중복 등록 방지)
+                if ( envConfgMapper.getEnvstDtlDupCnt(envstDtlVO) > 0 ) {
+                    throw new JsonException(Status.SERVER_ERROR, "[" + envstDtlVO.getEnvstValCd() + "] " + messageService.get("envConfg.dupCd"));
+                }
+
+                try {
+                    result += envConfgMapper.insertEnvstDtl(envstDtlVO);
+                } catch (DuplicateKeyException e) {
+                    // 사전 체크와 INSERT 사이에 동시 등록된 경우
+                    throw new JsonException(Status.SERVER_ERROR, "[" + envstDtlVO.getEnvstValCd() + "] " + messageService.get("envConfg.dupCd"));
+                }
             // 수정
             } else if ( envstDtlVO.getStatus() == GridDataFg.UPDATE ) {
 

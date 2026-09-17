@@ -31,5 +31,17 @@ public interface CdService {
     
     /** 코드목록 저장 */
     int saveNmcodeCdList(CdVO[] cdVOs, SessionInfoVO sessionInfoVO);
-    
+
+    /** 본사권한 공통코드 매장수정 허용 - 대표명칭(공통) 목록 조회 */
+    List<DefaultMap<String>> getCdStoreAllowGrpList(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 매장목록/설정 조회 */
+    List<DefaultMap<String>> getCdStoreAllowList(CdVO cdVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 저장 */
+    int saveCdStoreAllowList(CdVO[] cdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 본사권한 공통코드 매장수정 허용 - 매장 허용값 조회 */
+    DefaultMap<String> getCdStoreAllowItem(CdVO cdVO);
+
 }

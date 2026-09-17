@@ -298,6 +298,27 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
             item.status = "I";
             params.push(item);
         }
+        // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+        for (var b = 0; b < params.length; b++) {
+            var chkItem = params[b];
+            if (nvl(chkItem.envstCd + '', '').getByteLengthForOracle() > 4) {
+                $scope._popMsg(messages["envConfg.envstCd"] + messages["cmm.overLength"] + " 4 " + ", 현재 : " + nvl(chkItem.envstCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+            if (nvl(chkItem.envstNm + '', '').getByteLengthForOracle() > 100) {
+                $scope._popMsg(messages["envConfg.envstNm"] + messages["cmm.overLength"] + " 100 " + ", 현재 : " + nvl(chkItem.envstNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+            if (nvl(chkItem.remark + '', '').getByteLengthForOracle() > 500) {
+                $scope._popMsg(messages["envConfg.remark"] + messages["cmm.overLength"] + " 500 " + ", 현재 : " + nvl(chkItem.remark + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+            if (nvl(chkItem.envstRemark + '', '').getByteLengthForOracle() > 4000) {
+                $scope._popMsg(messages["envConfg.envstRemark"] + messages["cmm.overLength"] + " 4000 " + ", 현재 : " + nvl(chkItem.envstRemark + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/sys/cd/envConfg/envConfg/envst/save.sb", params, function () {
             $scope._broadcast('representCtrl', true);
@@ -467,6 +488,19 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
             item.status = "I";
             params.push(item);
         }
+        // 컬럼 길이(Byte) 체크 : 오라클 한글 3Byte 기준
+        for (var b = 0; b < params.length; b++) {
+            var chkItem = params[b];
+            if (nvl(chkItem.envstValCd + '', '').getByteLengthForOracle() > 10) {
+                $scope._popMsg(messages["envConfg.envstValCd"] + messages["cmm.overLength"] + " 10 " + ", 현재 : " + nvl(chkItem.envstValCd + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+            if (nvl(chkItem.envstValNm + '', '').getByteLengthForOracle() > 100) {
+                $scope._popMsg(messages["envConfg.envstValNm"] + messages["cmm.overLength"] + " 100 " + ", 현재 : " + nvl(chkItem.envstValNm + '', '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+                return false;
+            }
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/sys/cd/envConfg/envConfg/envstDtl/save.sb", params, function () {
             $scope._broadcast('detailCtrl', true);

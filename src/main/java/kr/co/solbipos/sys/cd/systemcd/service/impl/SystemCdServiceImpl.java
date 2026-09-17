@@ -9,7 +9,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdService;
 import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,6 +59,7 @@ public class SystemCdServiceImpl implements SystemCdService {
     }
     
     /** 코드목록 저장 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int saveNmcodeCdList(SystemCdVO[] systemCdVOs, SessionInfoVO sessionInfoVO) {
         
@@ -72,8 +75,18 @@ public class SystemCdServiceImpl implements SystemCdService {
             
             // 추가
             if ( systemCdVO.getStatus() == GridDataFg.INSERT ) {
-                
-                result += systemCdMapper.insertNmcodeCdList(systemCdVO);
+
+                // 동일 그룹/코드 존재 시 명시적 실패 처리 (중복 등록 방지)
+                if ( systemCdMapper.getNmcodeCdDupCnt(systemCdVO) > 0 ) {
+                    throw new JsonException(Status.SERVER_ERROR, "[" + systemCdVO.getNmcodeCd() + "] " + messageService.get("systemCd.dupNmcodeCd"));
+                }
+
+                try {
+                    result += systemCdMapper.insertNmcodeCdList(systemCdVO);
+                } catch (DuplicateKeyException e) {
+                    // 사전 체크와 INSERT 사이에 동시 등록된 경우
+                    throw new JsonException(Status.SERVER_ERROR, "[" + systemCdVO.getNmcodeCd() + "] " + messageService.get("systemCd.dupNmcodeCd"));
+                }
             // 수정
             } else if ( systemCdVO.getStatus() == GridDataFg.UPDATE ) {
                 

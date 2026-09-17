@@ -93,7 +93,7 @@ public class CdController {
             cdVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
 
-        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>(); 
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // Parameter 값으로 대표/세부 명칭 코드목록을 조회 분기처리
         if ( "000".equals(cdVO.getNmcodeGrpCd()) ) {
             // 대표명칭 코드목록 조회
@@ -124,11 +124,94 @@ public class CdController {
             HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         int result = cdService.saveNmcodeCdList(cdVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
-    
-    
+
+    /**
+     * 본사권한 공통코드 매장수정 허용 - 대표명칭(공통) 목록 조회 (본사)
+     * @param   request - HttpServletRequest
+     * @param   cdVO - CdVO
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 09. 11.
+     */
+    @RequestMapping(value = "/cd/getCdStoreAllowGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCdStoreAllowGrpList(HttpServletRequest request, HttpServletResponse response,
+            CdVO cdVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        cdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+
+        List<DefaultMap<String>> list = cdService.getCdStoreAllowGrpList(cdVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, cdVO);
+    }
+
+    /**
+     * 본사권한 공통코드 매장수정 허용 - 매장목록/설정 조회 (본사)
+     * @param   request - HttpServletRequest
+     * @param   cdVO - CdVO (nmcodeNm = 공통코드그룹코드)
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 09. 11.
+     */
+    @RequestMapping(value = "/cd/getCdStoreAllowList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCdStoreAllowList(HttpServletRequest request, HttpServletResponse response,
+            CdVO cdVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        cdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+
+        List<DefaultMap<String>> list = cdService.getCdStoreAllowList(cdVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, cdVO);
+    }
+
+    /**
+     * 본사권한 공통코드 매장수정 허용 - 저장 (본사)
+     * @param   cdVOs - CdVO[]
+     * @param   request - HttpServletRequest
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 09. 11.
+     */
+    @RequestMapping(value = "/cd/saveCdStoreAllow.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveCdStoreAllow(@RequestBody CdVO[] cdVOs, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = cdService.saveCdStoreAllowList(cdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 본사권한 공통코드 매장수정 허용 - 매장 허용값 조회 (매장)
+     * @param   request - HttpServletRequest
+     * @param   cdVO - CdVO (nmcodeNm = 공통코드그룹코드)
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 09. 11.
+     */
+    @RequestMapping(value = "/cd/getCdStoreAllowItem.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCdStoreAllowItem(HttpServletRequest request, HttpServletResponse response,
+            CdVO cdVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        cdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        cdVO.setStoreCd(sessionInfoVO.getOrgnCd());
+
+        DefaultMap<String> allowItem = cdService.getCdStoreAllowItem(cdVO);
+
+        return returnJson(Status.OK, allowItem);
+    }
+
 }

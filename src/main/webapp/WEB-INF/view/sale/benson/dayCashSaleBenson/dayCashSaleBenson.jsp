@@ -62,7 +62,7 @@
 </c:import>
 <%-- //탭페이지 레이어 --%>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/benson/dayCashSaleBenson/dayCashSaleBenson.js?ver=20260910.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/benson/dayCashSaleBenson/dayCashSaleBenson.js?ver=20260917.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>

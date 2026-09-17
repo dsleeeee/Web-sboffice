@@ -189,9 +189,9 @@ app.controller('orderEmpBensonDayCtrl', ['$scope', '$http', '$timeout', function
 		  return false;
 	  }
 
-	  // 조회일자 최대 1년(365일) 제한
-	  if (diffDay > 365) {
-		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+	  // 조회일자 최대 6달(186일) 제한
+	  if (diffDay > 186) {
+		  $scope._popMsg(messages['cmm.dateOver.6month.error']);
 		  return false;
 	  }
 
@@ -348,9 +348,9 @@ app.controller('orderEmpBensonDayCtrl', ['$scope', '$http', '$timeout', function
 		  return false;
 	  }
 
-	  // 조회일자 최대 1년(365일) 제한
-	  if (diffDay > 365) {
-		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+	  // 조회일자 최대 6달(186일) 제한
+	  if (diffDay > 186) {
+		  $scope._popMsg(messages['cmm.dateOver.6month.error']);
 		  return false;
 	  }
 	    // 파라미터
