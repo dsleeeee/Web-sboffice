@@ -22,7 +22,7 @@
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="sideBenson.prodClass"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="nxBtnSearch1" ng-click="_broadcast('sideBensonProdClassCtrl')">
+        <button class="btn_blue fr mt5 mr10" id="nxBtnSearch1" ng-click="_pageView('sideBensonProdClassCtrl',1)">
             <s:message code="cmm.search"/>
         </button>
     </div>

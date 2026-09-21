@@ -12,7 +12,7 @@
 	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="empsale.day"/></a>
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnOrderEmpBensonDaySearch" ng-click="_broadcast('orderEmpBensonDayCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnOrderEmpBensonDaySearch" ng-click="_pageView('orderEmpBensonDayCtrl', 1)">
     		<s:message code="cmm.search"/>
     	</button>
 	</div>
