@@ -313,7 +313,7 @@
         </c:if>
     </c:if>
 
-    <div class="mt10 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr" style="display: none;">
         <%-- 조회조건 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
         <%-- 현재화면 엑셀다운로드 --%>
