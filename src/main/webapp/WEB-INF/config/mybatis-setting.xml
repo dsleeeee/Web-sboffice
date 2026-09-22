@@ -1264,6 +1264,10 @@
     <typeAlias alias="timeprodSalePmixMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixMoms.service.TimeProdSalePmixMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 시간대별 상품매출(P.MIX 매장) -->
     <typeAlias alias="timeProdSalePmixStoreMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixStoreMoms.service.TimeProdSalePmixStoreMomsVO"/>
+    <!-- 맘스터치 > 정산 > POS내역수신(매출) -->
+    <typeAlias alias="posRcvSaleMomsVO" type="kr.co.solbipos.sale.moms.posRcvSaleMoms.service.PosRcvSaleMomsVO"/>
+    <!-- 맘스터치 > 정산 > POS내역수신(결제) -->
+    <typeAlias alias="posRcvPayMomsVO" type="kr.co.solbipos.sale.moms.posRcvPayMoms.service.PosRcvPayMomsVO"/>
 
     <!-- 미스터피자 > 매장관리 > 매장정보일괄변경 -->
     <typeAlias alias="storeMrpizzaBatchChangeVO" type="kr.co.solbipos.store.storeMrpizza.storeMrpizzaBatchChange.service.StoreMrpizzaBatchChangeVO"/>

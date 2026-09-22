@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PosRcvPayMoms.xml
+    POS내역수신(결제)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.09.18     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.moms.posRcvPayMoms.service.impl.PosRcvPayMomsMapper">
+
+    <!-- POS내역수신(결제) - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_SEQ, TB_SL_SALE_HDR, TB_SL_SALE_PAY_CARD, TB_SL_SALE_PAY_CASH, TB_SL_SALE_PAY_MCOUPN, TB_SL_SALE_PAY_PAYCO, TB_SL_SALE_PAY_MPAY, TB_CM_NMCODE, TB_MS_STORE
+        PARAM    : posRcvPayMomsVO (saleDate, storeCd 둘 다 필수)
+        COMMENTS : POS내역수신(결제) - 리스트를 조회한다. 페이징 없이 전체 표시.
+    -->
+    <select id="getPosRcvPayMomsList" parameterType="PosRcvPayMomsVO" resultType="DefaultMap">
+        /* PosRcvPayMomsMapper.getPosRcvPayMomsList */
+        <![CDATA[
+        SELECT  tssps.STORE_CD
+        ,       TO_CHAR(TO_DATE(tssps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       tssps.POS_NO
+        ,       tssps.BILL_NO
+        ,       tssps.SALE_YN
+        ,       tssps.PAY_SEQ
+        ,       CASE WHEN tssps.PAY_CD IN ('05','12') THEN '할인내역' ELSE '결제내역' END AS PAY_FG
+        ,       tssps.PAY_CD
+        ,       CASE WHEN tssps.PAY_CD ='01' AND tsspc.CARD_NO              IS NOT NULL THEN tsspc.CARD_NO
+                     WHEN tssps.PAY_CD ='02' AND tsspca.CASH_BILL_CARD_NO   IS NOT NULL THEN tsspca.CASH_BILL_CARD_NO
+                     WHEN tssps.PAY_CD ='03' AND tsppc.PAYCO_BARCD_NO       IS NOT NULL THEN tsppc.PAYCO_BARCD_NO
+                     WHEN tssps.PAY_CD ='07' AND tsspmp.MPAY_BARCD_NO       IS NOT NULL THEN tsspmp.MPAY_BARCD_NO
+                     WHEN tssps.PAY_CD ='08' AND tsspmc.MCOUPN_BARCD_NO     IS NOT NULL THEN tsspmc.MCOUPN_BARCD_NO
+                     ELSE '' END AS PAY_CD_NO
+        ,       TO_CHAR(TO_DATE(
+                    CASE WHEN tssps.PAY_CD ='01' AND tsspc.APPR_DT   IS NOT NULL THEN tsspc.APPR_DT
+                         WHEN tssps.PAY_CD ='02' AND tsspca.APPR_DT  IS NOT NULL THEN tsspca.APPR_DT
+                         WHEN tssps.PAY_CD ='03' AND tsppc.APPR_DT   IS NOT NULL THEN tsppc.APPR_DT
+                         WHEN tssps.PAY_CD ='07' AND tsspmp.APPR_DT  IS NOT NULL THEN tsspmp.APPR_DT
+                         WHEN tssps.PAY_CD ='08' AND tsspmc.APPR_DT  IS NOT NULL THEN tsspmc.APPR_DT
+                         ELSE NULL END
+                , 'yyyymmddhh24miss'), 'yyyy-mm-dd') AS APPR_DATE
+        ,       TO_CHAR(TO_DATE(
+                    CASE WHEN tssps.PAY_CD ='01' AND tsspc.APPR_DT   IS NOT NULL THEN tsspc.APPR_DT
+                         WHEN tssps.PAY_CD ='02' AND tsspca.APPR_DT  IS NOT NULL THEN tsspca.APPR_DT
+                         WHEN tssps.PAY_CD ='03' AND tsppc.APPR_DT   IS NOT NULL THEN tsppc.APPR_DT
+                         WHEN tssps.PAY_CD ='07' AND tsspmp.APPR_DT  IS NOT NULL THEN tsspmp.APPR_DT
+                         WHEN tssps.PAY_CD ='08' AND tsspmc.APPR_DT  IS NOT NULL THEN tsspmc.APPR_DT
+                         ELSE NULL END
+                , 'yyyymmddhh24miss'), 'hh24:mi:ss') AS APPR_TIME
+        ,       CASE WHEN tssps.PAY_CD ='01' AND tsspc.APPR_NO   IS NOT NULL THEN tsspc.APPR_NO
+                     WHEN tssps.PAY_CD ='02' AND tsspca.APPR_NO  IS NOT NULL THEN tsspca.APPR_NO
+                     WHEN tssps.PAY_CD ='03' AND tsppc.APPR_NO   IS NOT NULL THEN tsppc.APPR_NO
+                     WHEN tssps.PAY_CD ='07' AND tsspmp.APPR_NO  IS NOT NULL THEN tsspmp.APPR_NO
+                     WHEN tssps.PAY_CD ='08' AND tsspmc.APPR_NO  IS NOT NULL THEN tsspmc.APPR_NO
+                     ELSE NULL END AS APPR_NO
+        ,       CASE WHEN tssps.PAY_CD IN ('01','03','07','08') AND tssps.SALE_FG = '1'  THEN '승인'
+                     WHEN tssps.PAY_CD IN ('01','03','07','08') AND tssps.SALE_FG = '-1' THEN '취소'
+                     WHEN tssps.PAY_CD = '02' AND tsspca.CASH_BILL_CARD_NO IS NOT NULL AND tssps.SALE_FG = '1'  THEN '승인'
+                     WHEN tssps.PAY_CD = '02' AND tsspca.CASH_BILL_CARD_NO IS NOT NULL AND tssps.SALE_FG = '-1' THEN '취소'
+                     ELSE NULL END AS APPR_FG
+        ,       CASE WHEN tssps.PAY_CD NOT IN ('05','12') THEN tssps.PAY_AMT ELSE 0 END AS TOT_SALE_AMT
+        ,       CASE WHEN tssps.PAY_CD NOT IN ('05','12') THEN tssps.PAY_AMT ELSE 0 END AS REAL_SALE_AMT
+        ,       CASE WHEN tssps.PAY_CD IN ('05','12') THEN tssps.PAY_AMT ELSE 0 END AS TOT_DC_AMT
+        ,       CASE WHEN tssps.PAY_CD NOT IN ('05','12') THEN tssps.PAY_AMT - tssps.VAT_AMT ELSE 0 END AS GA_AMT
+        ,       tssps.VAT_AMT
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.INST_CNT ELSE NULL END AS INST_CNT
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.ACQUIRE_CD ELSE NULL END AS ACQUIRE_CD
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.ACQUIRE_NM ELSE NULL END AS ACQUIRE_NM
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.ISSUE_CD ELSE NULL END AS ISSUE_CD
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.ISSUE_NM ELSE NULL END AS ISSUE_NM
+        ,       CASE WHEN tssps.PAY_CD ='01' THEN (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tsspc.VAN_CD AND VAN_FG = '01') ELSE NULL END AS VAN_NM
+        ,       CASE WHEN tssps.PAY_CD IN ('05','08','12') THEN tssps.PAY_AMT ELSE NULL END AS COUPON_AMT
+                -- 원거래승인번호
+        ,       CASE WHEN tssps.PAY_CD = '01' AND tsspc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_CARD
+                          WHERE HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD AND STORE_CD = tsspc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspc.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '02' AND tsspca.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_CASH
+                          WHERE HQ_OFFICE_CD = tsspca.HQ_OFFICE_CD AND STORE_CD = tsspca.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspca.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspca.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspca.ORG_BILL_NO,-4)
+                            AND APPR_PROC_FG IN ('1','2','4'))
+                     WHEN tssps.PAY_CD = '03' AND tsppc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_PAYCO
+                          WHERE HQ_OFFICE_CD = tsppc.HQ_OFFICE_CD AND STORE_CD = tsppc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsppc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsppc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsppc.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '07' AND tsspmp.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_MPAY
+                          WHERE HQ_OFFICE_CD = tsspmp.HQ_OFFICE_CD AND STORE_CD = tsspmp.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspmp.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmp.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmp.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '08' AND tsspmc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_MCOUPN
+                          WHERE HQ_OFFICE_CD = tsspmc.HQ_OFFICE_CD AND STORE_CD = tsspmc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspmc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmc.ORG_BILL_NO,-4))
+                     ELSE NULL END AS ORG_APPR_NO
+                -- 원거래승인일자
+        ,       TO_CHAR(TO_DATE(
+                    CASE WHEN tssps.PAY_CD = '01' AND tsspc.ORG_BILL_NO IS NOT NULL THEN
+                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_CARD
+                              WHERE HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD AND STORE_CD = tsspc.STORE_CD
+                                AND SALE_DATE = SUBSTR(tsspc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspc.ORG_BILL_NO,-4))
+                         WHEN tssps.PAY_CD = '02' AND tsspca.ORG_BILL_NO IS NOT NULL THEN
+                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_CASH
+                              WHERE HQ_OFFICE_CD = tsspca.HQ_OFFICE_CD AND STORE_CD = tsspca.STORE_CD
+                                AND SALE_DATE = SUBSTR(tsspca.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspca.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspca.ORG_BILL_NO,-4)
+                                AND APPR_PROC_FG IN ('1','2','4'))
+                         WHEN tssps.PAY_CD = '03' AND tsppc.ORG_BILL_NO IS NOT NULL THEN
+                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_PAYCO
+                              WHERE HQ_OFFICE_CD = tsppc.HQ_OFFICE_CD AND STORE_CD = tsppc.STORE_CD
+                                AND SALE_DATE = SUBSTR(tsppc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsppc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsppc.ORG_BILL_NO,-4))
+                         WHEN tssps.PAY_CD = '07' AND tsspmp.ORG_BILL_NO IS NOT NULL THEN
+                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_MPAY
+                              WHERE HQ_OFFICE_CD = tsspmp.HQ_OFFICE_CD AND STORE_CD = tsspmp.STORE_CD
+                                AND SALE_DATE = SUBSTR(tsspmp.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmp.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmp.ORG_BILL_NO,-4))
+                         WHEN tssps.PAY_CD = '08' AND tsspmc.ORG_BILL_NO IS NOT NULL THEN
+                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_MCOUPN
+                              WHERE HQ_OFFICE_CD = tsspmc.HQ_OFFICE_CD AND STORE_CD = tsspmc.STORE_CD
+                                AND SALE_DATE = SUBSTR(tsspmc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmc.ORG_BILL_NO,-4))
+                         ELSE NULL END
+                , 'yyyymmddhh24miss'), 'yyyy-mm-dd') AS ORG_APPR_DATE
+        FROM    TB_SL_SALE_PAY_SEQ tssps
+        ,       TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_PAY_CARD tsspc
+        ,       TB_SL_SALE_PAY_CASH tsspca
+        ,       TB_SL_SALE_PAY_PAYCO tsppc
+        ,       TB_SL_SALE_PAY_MPAY tsspmp
+        ,       TB_SL_SALE_PAY_MCOUPN tsspmc
+        WHERE   tssps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssps.STORE_CD     = #{storeCd}
+        AND     tssps.SALE_DATE    = #{saleDate}
+        AND     tssh.HQ_OFFICE_CD = tssps.HQ_OFFICE_CD
+        AND     tssh.STORE_CD     = tssps.STORE_CD
+        AND     tssh.SALE_DATE    = tssps.SALE_DATE
+        AND     tssh.POS_NO       = tssps.POS_NO
+        AND     tssh.BILL_NO      = tssps.BILL_NO
+        AND     tsspc.HQ_OFFICE_CD (+) = tssps.HQ_OFFICE_CD
+        AND     tsspc.STORE_CD     (+) = tssps.STORE_CD
+        AND     tsspc.SALE_DATE    (+) = tssps.SALE_DATE
+        AND     tsspc.POS_NO       (+) = tssps.POS_NO
+        AND     tsspc.BILL_NO      (+) = tssps.BILL_NO
+        AND     tsspc.LINE_NO      (+) = tssps.LINE_NO
+        AND     tsspca.HQ_OFFICE_CD (+) = tssps.HQ_OFFICE_CD
+        AND     tsspca.STORE_CD     (+) = tssps.STORE_CD
+        AND     tsspca.SALE_DATE    (+) = tssps.SALE_DATE
+        AND     tsspca.POS_NO       (+) = tssps.POS_NO
+        AND     tsspca.BILL_NO      (+) = tssps.BILL_NO
+        AND     tsspca.LINE_NO      (+) = tssps.LINE_NO
+        AND     tsspca.APPR_PROC_FG (+) IN ('1','2','4')
+        AND     tsppc.HQ_OFFICE_CD  (+) = tssps.HQ_OFFICE_CD
+        AND     tsppc.STORE_CD      (+) = tssps.STORE_CD
+        AND     tsppc.SALE_DATE     (+) = tssps.SALE_DATE
+        AND     tsppc.POS_NO        (+) = tssps.POS_NO
+        AND     tsppc.BILL_NO       (+) = tssps.BILL_NO
+        AND     tsppc.LINE_NO       (+) = tssps.LINE_NO
+        AND     tsspmp.HQ_OFFICE_CD (+) = tssps.HQ_OFFICE_CD
+        AND     tsspmp.STORE_CD     (+) = tssps.STORE_CD
+        AND     tsspmp.SALE_DATE    (+) = tssps.SALE_DATE
+        AND     tsspmp.POS_NO       (+) = tssps.POS_NO
+        AND     tsspmp.BILL_NO      (+) = tssps.BILL_NO
+        AND     tsspmp.LINE_NO      (+) = tssps.LINE_NO
+        AND     tsspmc.HQ_OFFICE_CD (+) = tssps.HQ_OFFICE_CD
+        AND     tsspmc.STORE_CD     (+) = tssps.STORE_CD
+        AND     tsspmc.SALE_DATE    (+) = tssps.SALE_DATE
+        AND     tsspmc.POS_NO       (+) = tssps.POS_NO
+        AND     tsspmc.BILL_NO      (+) = tssps.BILL_NO
+        AND     tsspmc.LINE_NO      (+) = tssps.LINE_NO
+        ORDER
+        BY      tssps.POS_NO, tssps.BILL_NO, tssps.PAY_SEQ
+        ]]>
+    </select>
+
+</mapper>

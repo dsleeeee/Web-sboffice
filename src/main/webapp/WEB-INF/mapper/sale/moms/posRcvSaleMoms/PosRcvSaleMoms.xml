@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PosRcvSaleMoms.xml
+    POS내역수신(매출)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2026.09.18     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.moms.posRcvSaleMoms.service.impl.PosRcvSaleMomsMapper">
+
+    <!-- POS내역수신(매출) - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_DLVR, TB_SL_SALE_DTL, TB_MS_TABLE_V01, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : posRcvSaleMomsVO
+        COMMENTS : POS내역수신(매출) 리스트를 조회한다.
+    -->
+    <select id="getPosRcvSaleMomsList" parameterType="PosRcvSaleMomsVO" resultType="DefaultMap">
+        /* USE : PosRcvSaleMomsMapper.getPosRcvSaleMomsList */
+        <![CDATA[
+        SELECT  tssh.STORE_CD
+        ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       tssh.POS_NO
+        ,       tssh.BILL_NO
+        ,       tssh.SALE_YN
+        ,       NVL(tsshd.CHANNEL_ORDER_NO, tssh.STORE_CD || tssh.SALE_DATE || tssh.ORDER_NO) AS CHANNEL_ORDER_NO
+        ,       tssh.PAGER_NO AS CHANNEL_ORDER_NO2
+        ,       tssh.DLVR_IN_FG AS CHANNEL_TYPE
+        ,       tssh.DLVR_ORDER_FG AS DLVR_ORDER_FG
+        ,       CASE
+                    WHEN tssh.TBL_CD = '000' THEN 'POS'
+                    WHEN tssh.TBL_CD = '998' THEN 'KIOSK'
+                    WHEN tssh.TBL_CD = '997' THEN 'DT'
+                    WHEN tssh.DLVR_IN_FG = '1' THEN 'CID'
+                    WHEN tsshd.DLVR_IN_SVC_NM IS NOT NULL THEN tsshd.DLVR_IN_SVC_NM
+                    ELSE NULL
+                END AS CHANNEL_SERVICE_TYPE
+        ,       tssd.PROD_CD
+        ,       tmp.PROD_NM
+        ,       tssd.SALE_QTY
+        ,       tssd.SALE_AMT
+        ,       tssd.REAL_SALE_AMT
+        ,       tssd.DC_AMT
+        ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
+        ,       tssd.VAT_AMT
+        ,       TO_CHAR(TO_DATE(SUBSTR(tssh.ORG_BILL_NO,-14,8), 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_SALE_DATE
+        ,       SUBSTR(tssh.ORG_BILL_NO,-6,2) AS ORG_POS_NO
+        ,       SUBSTR(tssh.ORG_BILL_NO,-4) AS ORG_BILL_NO
+        FROM    TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_HDR_DLVR tsshd
+        ,       TB_SL_SALE_DTL tssd
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.STORE_CD     = #{storeCd}
+        AND     tssh.SALE_DATE    = #{saleDate}
+        AND     tssd.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         = tssh.STORE_CD
+        AND     tssd.SALE_DATE        = tssh.SALE_DATE
+        AND     tssd.POS_NO           = tssh.POS_NO
+        AND     tssd.BILL_NO          = tssh.BILL_NO
+        AND     tsshd.HQ_OFFICE_CD (+) = tssh.HQ_OFFICE_CD
+        AND     tsshd.STORE_CD     (+) = tssh.STORE_CD
+        AND     tsshd.SALE_DATE    (+) = tssh.SALE_DATE
+        AND     tsshd.POS_NO       (+) = tssh.POS_NO
+        AND     tsshd.BILL_NO      (+) = tssh.BILL_NO
+        AND     tmp.STORE_CD      (+) = tssd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.PROD_CD       (+) = tssd.PROD_CD  /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tssh.POS_NO, tssh.BILL_NO, tssd.BILL_DTL_NO
+        ]]>
+    </select>
+
+</mapper>
