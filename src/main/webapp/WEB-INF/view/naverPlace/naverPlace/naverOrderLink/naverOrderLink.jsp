@@ -366,7 +366,6 @@
                             // 매장 정보
                             innerHtml += "<div class=\"store-info\">";
                             innerHtml += "<p class=\"store-name\">" + (item.name || "") + "</p>";
-                            innerHtml += "<p class=\"store-detail\">" + (item.ceoName || "") + "</p>";
                             innerHtml += "<p class=\"store-detail\">" + (item.roadAddr || "");
                             if (item.addressDetail) innerHtml += "<br/>" + item.addressDetail;
                             innerHtml += "</p>";

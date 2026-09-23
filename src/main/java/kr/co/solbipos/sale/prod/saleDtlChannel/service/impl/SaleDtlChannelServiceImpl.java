@@ -1,6 +1,8 @@
 package kr.co.solbipos.sale.prod.saleDtlChannel.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.BizException;
 import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
@@ -49,11 +51,19 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
     /** 매출상세현황(채널별) 조회 */
     @Override
     public List<DefaultMap<String>> getSaleDtlChannelList(SaleDtlChannelVO saleDtlChannelVO, SessionInfoVO sessionInfoVO){
+
         saleDtlChannelVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         saleDtlChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             saleDtlChannelVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 필수값 확인
+        if (saleDtlChannelVO.getStartDate() == null || saleDtlChannelVO.getStartDate().trim().isEmpty()
+                || saleDtlChannelVO.getEndDate() == null || saleDtlChannelVO.getEndDate().trim().isEmpty()
+                || saleDtlChannelVO.getStoreCds() == null || saleDtlChannelVO.getStoreCds().trim().isEmpty()) {
+            throw new BizException(Status.FAIL, "조회일자와 매장코드는 필수입니다.");
         }
 
         // 매장 array 값 세팅

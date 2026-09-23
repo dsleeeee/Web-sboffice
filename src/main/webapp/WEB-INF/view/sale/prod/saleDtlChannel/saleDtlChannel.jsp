@@ -100,7 +100,7 @@
                     <td>
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                            <jsp:param name="targetTypeFg" value="M"/>
+                            <jsp:param name="targetTypeFg" value="S"/>
                             <jsp:param name="targetId" value="saleDtlChannelStore"/>
                         </jsp:include>
                         <%--// 매장선택 모듈 사용시 include --%>
@@ -380,6 +380,14 @@
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.posNo"/>" binding="posNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelOrderNo"/>" binding="channelOrderNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelOrderNo2"/>" binding="channelOrderNo2" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelType"/>" binding="channelType" width="90" align="center" data-map="dlvrInFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.serviceType"/>" binding="dlvrOrderFg2" width="90" align="center" data-map="dlvrOrderFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelServiceType"/>" binding="channelServiceType" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgSaleDate"/>" binding="orgSaleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgPosNo"/>" binding="orgPosNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgBillNo"/>" binding="orgBillNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.tblNm"/>" binding="tblNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.billDt"/>" binding="billDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="saleDtlChannel.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -492,6 +500,14 @@
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.posNo"/>" binding="posNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelOrderNo"/>" binding="channelOrderNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelOrderNo2"/>" binding="channelOrderNo2" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelType"/>" binding="channelType" width="90" align="center" data-map="dlvrInFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.serviceType"/>" binding="dlvrOrderFg" width="90" align="center" data-map="dlvrOrderFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.channelServiceType"/>" binding="channelServiceType" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgSaleDate"/>" binding="orgSaleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgPosNo"/>" binding="orgPosNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="saleDtlChannel.orgBillNo"/>" binding="orgBillNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.tblNm"/>" binding="tblNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.billDt"/>" binding="billDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="saleDtlChannel.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -579,7 +595,11 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannel.js?ver=20260130.02" charset="utf-8"></script>
+<script type="text/javascript">
+    var dlvrInFg = ${ccu.getCommCodeExcpAll("112")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannel.js?ver=20260922.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">

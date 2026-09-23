@@ -193,4 +193,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuSetting.js?ver=20260908.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverMenuLink/naverMenuSetting.js?ver=20260922.02" charset="utf-8"></script>

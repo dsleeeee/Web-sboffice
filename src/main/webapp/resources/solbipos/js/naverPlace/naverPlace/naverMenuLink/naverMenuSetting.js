@@ -265,7 +265,7 @@ app.controller('naverMenuSetting2Ctrl', ['$scope', '$http', '$timeout', function
     $scope.initGrid = function (s, e) {
 
         // 첫번째 row(모상품)는 gChk 체크박스를 숨김
-        s.formatItem.addHandler(function (s, e) {
+        /*s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "gChk") {
@@ -274,6 +274,12 @@ app.controller('naverMenuSetting2Ctrl', ['$scope', '$http', '$timeout', function
                     }
                 }
             }
+        });*/
+
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
         });
     };
 
@@ -323,8 +329,16 @@ app.controller('naverMenuSetting2Ctrl', ['$scope', '$http', '$timeout', function
 
     // 삭제
     $scope.rowDel = function () {
-        // 첫번째 row(모상품)는 전체선택으로 체크되어도 삭제 대상에서 제외
-        for (var i = $scope.flex.itemsSource.itemCount - 1; i > 0; i--) {
+        // 모상품(첫번째 row) 삭제 시, 하위 상품까지 전체 삭제
+        if ($scope.flex.collectionView.items.length > 0 && $scope.flex.collectionView.items[0].gChk === true) {
+            for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+                $scope.flex.itemsSource.removeAt(i);
+            }
+            return;
+        }
+
+        // 체크된 row 삭제
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
             if ($scope.flex.collectionView.items[i].gChk === true) {
                 $scope.flex.itemsSource.removeAt(i);
             }
