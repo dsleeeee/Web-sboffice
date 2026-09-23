@@ -131,6 +131,7 @@
                 L.BLOCK_TYPE,
                 L.BADWORD_ID,
                 B.KEYWORD,
+                B.CATEGORY,
                 L.URL_CHECK_ID,
                 C.URL,
                 C.URL_CHECK_SOURCE,
@@ -170,13 +171,10 @@
         <if test='triggeredKeyword != null and triggeredKeyword != ""'>
             AND B.KEYWORD LIKE '%' || #{triggeredKeyword} || '%'
         </if>
-        <if test='triggeredUrl != null and triggeredUrl != ""'>
-            AND C.URL LIKE '%' || #{triggeredUrl} || '%'
-        </if>
         <if test='msgStatus != null and msgStatus != ""'>
             AND L.MSG_STATUS = #{msgStatus}
         </if>
-        ORDER BY L.REG_DT DESC
+        ORDER BY L.MSG_BLOCK_ID DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

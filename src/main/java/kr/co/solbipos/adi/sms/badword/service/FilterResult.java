@@ -35,7 +35,7 @@ public class FilterResult {
      */
     private String severity;
 
-    /** 탐지된 금칙어 전체 목록 (본문 발견 순서, 동일 금칙어가 여러 번 등장하면 등장 횟수만큼 포함) */
+    /** 탐지된 금칙어 전체 목록 (본문 발견 순서, 2026.09.21 부터 규칙당 1건으로 중복 제거되어 담김) */
     private List<BadwordVO> detectedList = Collections.emptyList();
 
     /** 정상 통과 결과 */

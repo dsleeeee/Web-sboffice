@@ -9,6 +9,7 @@
     ======================================================
     1       노현수     2018.09.13      최초작성
     2       이다솜     2019.07.23      명칭관리 코드삭제
+    3       yskim      2026.09.21      코드항목1(NMCODE_ITEM_1) 조합값(C/H/S|본사·매장코드) 지원 — 토큰 기준 조회(입력 순서 무관)
 -->
 <mapper namespace="kr.co.solbipos.adi.etc.cd.service.impl.CdMapper">
 
@@ -26,7 +27,11 @@
                 SELECT  NMCODE_GRP_CD
                 ,       NMCODE_CD
                 ,       NMCODE_NM
-                ,       NMCODE_ITEM_1
+                /* (2026.09.21) 코드항목1 조합값은 C/H/S 토큰만 내림(입력 순서 무관) — 화면/버튼 로직 호환 유지 */
+                ,       CASE WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|C|%' THEN 'C'
+                             WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|H|%' THEN 'H'
+                             WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|S|%' THEN 'S'
+                             ELSE NMCODE_ITEM_1 END AS NMCODE_ITEM_1
                 ,       NMCODE_ITEM_2
                 ,       USE_COL_NM
                 ,       USE_TARGET_FG
@@ -37,7 +42,8 @@
                 ,       MOD_ID
                 FROM    TB_CM_NMCODE
                 WHERE   NMCODE_GRP_CD   =   '999'
-                AND     NMCODE_ITEM_1   IN  ('C', 'H')
+                /* (2026.09.21) 코드항목1 조합 지원 — C/H 토큰 포함 시 표시(입력 순서 무관). 본사/매장코드만 있는 값(C/H/S 없음)은 부가서비스 화면 미표시 */
+                AND     ( '|' || NMCODE_ITEM_1 || '|' LIKE '%|C|%' OR '|' || NMCODE_ITEM_1 || '|' LIKE '%|H|%' )
                 AND     NMCODE_CD NOT IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V02 WHERE HQ_OFFICE_CD = #{hqOfficeCd} ) -- 맘스터치 본사 미사용 공통코드
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
@@ -57,7 +63,11 @@
                 SELECT  NMCODE_GRP_CD
                 ,       NMCODE_CD
                 ,       NMCODE_NM
-                ,       NMCODE_ITEM_1
+                /* (2026.09.21) 코드항목1 조합값은 C/H/S 토큰만 내림(입력 순서 무관) — 화면/버튼 로직 호환 유지 */
+                ,       CASE WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|C|%' THEN 'C'
+                             WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|H|%' THEN 'H'
+                             WHEN '|' || NMCODE_ITEM_1 || '|' LIKE '%|S|%' THEN 'S'
+                             ELSE NMCODE_ITEM_1 END AS NMCODE_ITEM_1
                 ,       NMCODE_ITEM_2
                 ,       USE_COL_NM
                 ,       USE_TARGET_FG
@@ -68,7 +78,8 @@
                 ,       MOD_ID
                 FROM    TB_CM_NMCODE
                 WHERE   NMCODE_GRP_CD   =   '999'
-                AND     NMCODE_ITEM_1   IN  ('C', 'S')
+                /* (2026.09.21) 코드항목1 조합 지원 — C/S 토큰 포함 시 표시(입력 순서 무관). 본사/매장코드만 있는 값(C/H/S 없음)은 부가서비스 화면 미표시 */
+                AND     ( '|' || NMCODE_ITEM_1 || '|' LIKE '%|C|%' OR '|' || NMCODE_ITEM_1 || '|' LIKE '%|S|%' )
                 AND     NMCODE_CD NOT IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V03 WHERE STORE_CD = #{storeCd} ) -- 맘스터치 매장 미사용 공통코드
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
@@ -294,7 +305,7 @@
         ,       NMCODE_NM
         FROM    TB_CM_NMCODE
         WHERE   NMCODE_GRP_CD   =   '999'
-        AND     NMCODE_ITEM_1   =   'C'  -- C:공통(본사기준, 단독매장수정가능)
+        AND     '|' || NMCODE_ITEM_1 || '|' LIKE '%|C|%'  -- C:공통(본사기준, 단독매장수정가능) / (2026.09.21) 조합값은 C 토큰 포함 시(순서 무관)
         AND     NMCODE_CD NOT IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V02 WHERE HQ_OFFICE_CD = #{hqOfficeCd} ) -- 본사 미사용 공통코드 제외
         ORDER
         BY      NMCODE_CD

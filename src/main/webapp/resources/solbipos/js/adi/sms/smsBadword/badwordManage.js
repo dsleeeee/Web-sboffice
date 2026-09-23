@@ -22,7 +22,17 @@ var categoryFg = [
     {"name":"스미싱/피싱","value":"phishing"},
     {"name":"불법의약품/마약","value":"illegal_drug"},
     {"name":"불법사기","value":"scam"},
-    {"name":"기타","value":"other"}
+    {"name":"기타","value":"other"},
+    {"name":"대출/금융 다중구성","value":"loan_multi"},
+    {"name":"불법도박 다중구성","value":"gambling_multi"},
+    {"name":"성인/음란 다중구성","value":"adult_multi"},
+    {"name":"스미싱/피싱 다중구성","value":"phishing_multi"},
+    {"name":"불법의약품/마약 다중구성","value":"illegal_drug_multi"},
+    {"name":"불법사기 다중구성","value":"scam_multi"},
+    {"name":"기타 다중구성","value":"other_multi"},
+    {"name":"조합 다중구성","value":"multi_com"},
+    {"name":"URL","value":"url"},
+    {"name":"전화번호","value":"telNo"}
 ];
 
 // 매칭방식

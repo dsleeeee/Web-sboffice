@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<wj-popup id="wjSmsGeneralNoManage2Layer" control="wjSmsGeneralNoManage2Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:530px;" fade-in="false" fade-out="false">
+<wj-popup id="wjSmsGeneralNoManage2Layer" control="wjSmsGeneralNoManage2Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:970px;height:560px;" fade-in="false" fade-out="false">
     <div ng-controller="smsGeneralNoManage2Ctrl">
 
         <%-- header --%>
@@ -80,13 +80,14 @@
             </table>
 
             <div class="mt10 oh">
-                <p class="tl s14 mt5 lh15">- 계정당 휴대폰번호는 최대 2건, 유선번호는 최대 5건까지 승인할 수 있습니다.</p>
+                <p class="tl s12 mt5 lh15">- 계정당 휴대폰번호는 최대 2건, 유선번호는 최대 5건까지 승인할 수 있습니다.</p>
+                <p class="tl s12 mt5 lh15">- 유선 발신번호는 최대 5회선 범위에서, 법인의 경우 제출서류를 확인하여 종사자 수를 초과하지 않도록 승인합니다.</p>
             </div>
 
             <div class="oh">
                 <%--조회--%>
                 <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('smsGeneralNoManage2Ctrl', 1)"><s:message code="cmm.search" /></button>
-                <p class="tl s14 mt5 lh15">- 통화일시는 녹취확인용으로 반드시 년/월/일 시간 정보로 필수 입력해주세요.</p>
+                <p class="tl s12 mt5 lh15">- 통화일시는 녹취확인용으로 반드시 년/월/일 시간 정보로 필수 입력해주세요.</p>
             </div>
 
             <%-- 그리드 --%>
