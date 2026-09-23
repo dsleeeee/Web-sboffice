@@ -67,6 +67,7 @@ app.controller('naverPlaceStatusResetCtrl', ['$scope', '$http', function ($scope
             var params = {};
             params.hqOfficeCd = $scope.selectedStore.hqOfficeCd;
             params.storeCd = $scope.selectedStore.storeCd;
+            params.inFg = $scope.selectedStore.inFg;
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/sys/link/naverPlaceStatus/naverPlaceStatusReset.sb", params, function () {

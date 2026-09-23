@@ -30,11 +30,6 @@
         ,      SIDE_P_DTL_NO
         ,      BILL_DTL_NO
         ,      SALE_YN
-        ,      CHANNEL_ORDER_NO
-        ,      CHANNEL_ORDER_NO2
-        ,      CHANNEL_TYPE
-        ,      DLVR_ORDER_FG2
-        ,      CHANNEL_SERVICE_TYPE
         ,      TBL_NM
         ,      BILL_DT
         ,      L_CLASS_CD
@@ -65,9 +60,6 @@
         ,      VAT_AMT1
         ,      VAT_AMT2
         ,      VAT_AMT3
-        ,      ORG_SALE_DATE
-        ,      ORG_POS_NO
-        ,      ORG_BILL_NO
         ${sQuery1}
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM   (
@@ -81,11 +73,6 @@
                     ,      tsdpsd.SIDE_P_DTL_NO
                     ,      tsdpsd.BILL_DTL_NO
                     ,      tsdpsd.SALE_YN
-                    ,      tsdpsd.CHANNEL_ORDER_NO
-                    ,      tsdpsd.CHANNEL_ORDER_NO2
-                    ,      tsdpsd.CHANNEL_TYPE
-                    ,      tsdpsd.DLVR_ORDER_FG2
-                    ,      tsdpsd.CHANNEL_SERVICE_TYPE
                     ,      tsdpsd.TBL_NM
                     ,      tsdpsd.BILL_DT
                     ,      tmpcv.L_CLASS_CD
@@ -95,9 +82,6 @@
                     ,	   tmpcv.S_CLASS_CD
                     ,	   tmpcv.S_CLASS_NM
                     ,      tsdpsd.PROD_CD
-                    ,      tsdpsd.ORG_SALE_DATE
-                    ,      tsdpsd.ORG_POS_NO
-                    ,      tsdpsd.ORG_BILL_NO
                     ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG
                     ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN tsdpsd.SIDE_PROD_CD END) AS SIDE_PROD_CD
                     ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS PROD_NM
@@ -131,17 +115,6 @@
                                 ,       tssd.SIDE_P_DTL_NO
                                 ,       tssd.BILL_DTL_NO
                                 ,       tssh.SALE_YN
-                                ,       NVL(tsshd.CHANNEL_ORDER_NO, tssh.STORE_CD || tssh.SALE_DATE || tssh.ORDER_NO) AS CHANNEL_ORDER_NO
-                                ,       tssh.PAGER_NO AS CHANNEL_ORDER_NO2
-                                ,       tssh.DLVR_IN_FG AS CHANNEL_TYPE
-                                ,       tssh.DLVR_ORDER_FG AS DLVR_ORDER_FG2
-                                ,       CASE WHEN tssh.TBL_CD = '000' THEN 'POS'
-                                             WHEN tssh.TBL_CD = '998' THEN 'KIOSK'
-                                             WHEN tssh.TBL_CD = '997' THEN 'DT'
-                                             WHEN tssh.DLVR_IN_FG = '1' THEN 'CID'
-                                             WHEN tsshd.DLVR_IN_SVC_NM IS NOT NULL THEN tsshd.DLVR_IN_SVC_NM
-                                             ELSE NULL
-                                        END  AS CHANNEL_SERVICE_TYPE
                                 ,       tmt.TBL_NM AS TBL_NM
                                 , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
                                 ,       tssd.SALE_QTY
@@ -183,11 +156,7 @@
                                               THEN 	PROD_CD
                                               ELSE 	PROD_CD
                                               END AS SIDE_PROD_CD
-                                ,       TO_CHAR(TO_DATE(SUBSTR(tssh.ORG_BILL_NO,-14,8), 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_SALE_DATE
-                                ,       SUBSTR(tssh.ORG_BILL_NO,-6,2) AS ORG_POS_NO
-                                ,       SUBSTR(tssh.ORG_BILL_NO,-4) AS ORG_BILL_NO
                                 FROM    TB_SL_SALE_HDR tssh
-                                ,       TB_SL_SALE_HDR_DLVR tsshd
                                 ,       TB_SL_SALE_DTL tssd
                                 ,       TB_MS_TABLE_V01 tmt
                                 ,       TB_MS_STORE tms
@@ -197,11 +166,6 @@
                                 AND     tssd.SALE_DATE        = tssh.SALE_DATE
                                 AND     tssd.POS_NO           = tssh.POS_NO
                                 AND     tssd.BILL_NO          = tssh.BILL_NO
-                                AND     tsshd.HQ_OFFICE_CD (+) = tssh.HQ_OFFICE_CD
-                                AND     tsshd.STORE_CD     (+) = tssh.STORE_CD
-                                AND     tsshd.SALE_DATE    (+) = tssh.SALE_DATE
-                                AND     tsshd.POS_NO       (+) = tssh.POS_NO
-                                AND     tsshd.BILL_NO      (+) = tssh.BILL_NO
                                 AND     tmt.STORE_CD      (+) = tssd.STORE_CD
                                 AND     tmt.TBL_CD        (+) = tssh.TBL_CD
                                 AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}

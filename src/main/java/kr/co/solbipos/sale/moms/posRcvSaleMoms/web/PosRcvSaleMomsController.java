@@ -9,6 +9,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.moms.posRcvSaleMoms.service.PosRcvSaleMomsService;
 import kr.co.solbipos.sale.moms.posRcvSaleMoms.service.PosRcvSaleMomsVO;
 
+import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelService;
+import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,11 +43,13 @@ public class PosRcvSaleMomsController {
 
     private final SessionService sessionService;
     private final PosRcvSaleMomsService posRcvSaleMomsService;
+    private final StoreChannelService storeChannelService;
 
     @Autowired
-    public PosRcvSaleMomsController(SessionService sessionService, PosRcvSaleMomsService posRcvSaleMomsService) {
+    public PosRcvSaleMomsController(SessionService sessionService, PosRcvSaleMomsService posRcvSaleMomsService, StoreChannelService storeChannelService) {
         this.sessionService = sessionService;
         this.posRcvSaleMomsService = posRcvSaleMomsService;
+        this.storeChannelService = storeChannelService;
     }
 
     /**
@@ -57,6 +61,24 @@ public class PosRcvSaleMomsController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String posRcvSaleMomsView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 주문채널 구분자 조회
+        StoreChannelVO storeChannelVO = new StoreChannelVO();
+        List<DefaultMap<String>> dlvrInFgColList = storeChannelService.getDlvrInFgColList(storeChannelVO, sessionInfoVO);
+
+        // 주문채널 코드를 , 로 연결하는 문자열 생성
+        String dlvrInFgCol = "";
+        String dlvrInFgColNm = "";
+        for(int i=0; i < dlvrInFgColList.size(); i++) {
+            dlvrInFgCol += (dlvrInFgCol.equals("") ? "" : ",") + dlvrInFgColList.get(i).getStr("dlvrInFg");
+            dlvrInFgColNm += (dlvrInFgColNm.equals("") ? "" : ",") + dlvrInFgColList.get(i).getStr("dlvrInFgNm");
+        }
+        model.addAttribute("dlvrInFgColList", dlvrInFgColList);
+        model.addAttribute("dlvrInFgCol", dlvrInFgCol);
+        model.addAttribute("dlvrInFgColNm", dlvrInFgColNm);
+
         return "sale/moms/posRcvSaleMoms/posRcvSaleMoms";
     }
 

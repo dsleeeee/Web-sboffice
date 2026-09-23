@@ -47,6 +47,62 @@ public class PosRcvSaleMomsServiceImpl implements PosRcvSaleMomsService {
             throw new BizException(Status.FAIL, "조회일자와 매장코드는 필수입니다.");
         }
 
+        // 동적 컬럼 생성을 위한 쿼리 변수;
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        String[] arrDlvrInFgCol = posRcvSaleMomsVO.getDlvrInFgCol().split(",");
+
+        if(arrDlvrInFgCol.length > 0){
+            if(arrDlvrInFgCol[0] != null && !"".equals(arrDlvrInFgCol[0])){
+                posRcvSaleMomsVO.setArrDlvrInFgCol(arrDlvrInFgCol);
+            }
+        }
+
+        String[] orderFg = {"STIN","DLVR","PACK"}; // 내점, 배달, 포장
+        String[] list = posRcvSaleMomsVO.getArrDlvrInFgCol(); // 주문채널
+
+
+        // 내점, 배달, 포장의 수량과 실매출액
+        for(int j = 1; j <= orderFg.length; j++) {
+            sQuery1 += ", " + orderFg[j-1] + "_SALE_QTY1" + "\n";
+            sQuery1 += ", " + orderFg[j-1] + "_SALE_QTY2" + "\n";
+            sQuery1 += ", " + orderFg[j-1] + "_SALE_QTY3" + "\n";
+            sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
+            sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
+            sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
+
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY3" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
+        }
+
+        // 내점, 배달, 포장의 주문채널별 수량과 실매출액
+        for(int j = 1; j <= orderFg.length; j++) {
+            for (int i = 0; i < list.length; i++) {
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
+                sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
+
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN SALE_QTY END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN SALE_QTY END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN SALE_QTY END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
+                sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
+
+            }
+        }
+
+        posRcvSaleMomsVO.setsQuery1(sQuery1);
+        posRcvSaleMomsVO.setsQuery2(sQuery2);
+
         posRcvSaleMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return posRcvSaleMomsMapper.getPosRcvSaleMomsList(posRcvSaleMomsVO);
     }

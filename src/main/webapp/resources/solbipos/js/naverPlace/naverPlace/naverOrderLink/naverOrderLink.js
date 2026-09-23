@@ -217,6 +217,7 @@ app.controller('naverOrderLinkCtrl', ['$scope', '$http', '$timeout', function ($
         params.storeCd = storeCd;
         params.resrceCd = menuCd;
         params.pathNm = "네이버플레이스-네이버플레이스-네이버주문연동-초기화 팝업";
+        params.inFg = "naverOrder";
 
         $scope.wjNaverPlaceStatusResetLayer.show(true);
         $scope._broadcast('naverPlaceStatusResetCtrl', params);

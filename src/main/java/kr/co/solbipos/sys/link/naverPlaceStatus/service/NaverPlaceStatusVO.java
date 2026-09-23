@@ -35,6 +35,8 @@ public class NaverPlaceStatusVO extends PageVO {
     private String storeCd;
     /** 사업자번호 */
     private String bizNo;
+    /** 유입경로 */
+    private String inFg;
 
     @Override
     public String getStartDate() {
@@ -94,5 +96,13 @@ public class NaverPlaceStatusVO extends PageVO {
 
     public void setBizNo(String bizNo) {
         this.bizNo = bizNo;
+    }
+
+    public String getInFg() {
+        return inFg;
+    }
+
+    public void setInFg(String inFg) {
+        this.inFg = inFg;
     }
 }

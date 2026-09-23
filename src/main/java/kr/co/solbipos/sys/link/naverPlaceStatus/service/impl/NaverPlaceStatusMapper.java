@@ -35,9 +35,12 @@ public interface NaverPlaceStatusMapper {
     /** 메뉴 리소스코드 조회*/
     String getMenuResrceCd(NaverPlaceStatusVO naverPlaceStatusVO);
 
-    /** 네.아.로 ID, 네이버플레이스 연동매장 삭제 */
-    int deleteNaverLink(NaverPlaceStatusVO naverPlaceStatusVO);
+    /** 네이버플레이스 연동정보 초기화 */
+    int updateNaverPlaceLink(NaverPlaceStatusVO naverPlaceStatusVO);
 
     /** 네이버 동의항목 삭제 */
     int deleteNaverAgreement(NaverPlaceStatusVO naverPlaceStatusVO);
+
+    /** 네이버주문연동 연동정보 초기화 */
+    int updateNaverOrderLink(NaverPlaceStatusVO naverPlaceStatusVO);
 }

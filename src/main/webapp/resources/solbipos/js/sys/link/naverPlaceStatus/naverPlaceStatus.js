@@ -48,9 +48,9 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', '$timeout', function 
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === 'reset') {
+                if (col.binding === 'reset' || col.binding === 'resetOrder') {
                     wijmo.addClass(e.cell, 'red');
-                    e.cell.textContent = '초기화';
+                    e.cell.textContent = messages["naverPlaceStatus.reset"]; // 초기화
                 }
             }
         });
@@ -60,10 +60,13 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', '$timeout', function 
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
+                
+                // 네이버플레이스 초기화
                 if (col.binding === "reset") {
 
                     selectedRow.resrceCd = menuCd;
-                    selectedRow.pathNm = "시스템관리-연동-네이버플레이스현황-초기화 팝업";
+                    selectedRow.pathNm = "시스템관리-연동-네이버플레이스현황-초기화 팝업(네이버플레이스)";
+                    selectedRow.inFg = "naverPlace";
 
                     // 초기화 팝업
                     $scope.wjNaverPlaceStatusResetLayer.show(true);
@@ -73,7 +76,27 @@ app.controller('naverPlaceStatusCtrl', ['$scope', '$http', '$timeout', function 
                     var actParams = {};
                     actParams.resrceCd = menuCd;
                     actParams.pathNm = "시스템관리-연동-네이버플레이스현황";
-                    actParams.contents = "'초기화' 컬럼 클릭 시";
+                    actParams.contents = "'네이버플레이스 초기화' 컬럼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+                }
+                
+                // 네이버주문연동 초기화
+                if (col.binding === "resetOrder") {
+
+                    selectedRow.resrceCd = menuCd;
+                    selectedRow.pathNm = "시스템관리-연동-네이버플레이스현황-초기화 팝업(네이버주문연동)";
+                    selectedRow.inFg = "naverOrder";
+
+                    // 초기화 팝업
+                    $scope.wjNaverPlaceStatusResetLayer.show(true);
+                    $scope._broadcast('naverPlaceStatusResetCtrl', selectedRow);
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "시스템관리-연동-네이버플레이스현황";
+                    actParams.contents = "'네이버주문연동 초기화' 컬럼 클릭 시";
 
                     $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                 }

@@ -173,6 +173,7 @@ app.controller('naverPlacePlusLinkCtrl', ['$scope', '$http', '$timeout', functio
         params.storeCd = storeCd;
         params.resrceCd = menuCd;
         params.pathNm = "네이버플레이스-네이버플레이스-네이버플레이스 플러스 연동-초기화 팝업";
+        params.inFg = "naverPlace";
 
         // 초기화 팝업
         $scope.wjNaverPlaceStatusResetLayer.show(true);

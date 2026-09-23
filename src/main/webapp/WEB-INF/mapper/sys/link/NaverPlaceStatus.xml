@@ -219,19 +219,23 @@
         AND     DISP_LEVEL = 3
     </select>
 
-    <!-- 네.아.로 ID, 네이버플레이스 연동매장 삭제 -->
+    <!-- 네이버플레이스 연동정보 초기화 -->
     <!--
         TABLE    : TB_CM_NAVER_LINK
         PARAM    : naverPlaceStatusVO
-        COMMENTS : 네.아.로 ID, 네이버플레이스 연동매장 정보 삭제
+        COMMENTS : 네이버플레이스 관련 정보를 NULL 처리한다.
     -->
-    <delete id="deleteNaverLink" parameterType="naverPlaceStatusVO">
-        /* NaverPlaceStatusMapper.deleteNaverLink */
-        DELETE
-        FROM    TB_CM_NAVER_LINK
+    <update id="updateNaverPlaceLink" parameterType="naverPlaceStatusVO">
+        /* NaverPlaceStatusMapper.updateNaverPlaceLink */
+        UPDATE  TB_CM_NAVER_LINK
+        SET     UNIQUE_ID      = NULL
+        ,       NAVER_STORE_NM = NULL
+        ,       NAVER_PLACE_ID = NULL
+        ,       NAVER_LINK_DT  = NULL
+        ,       IN_TYPE        = NULL
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD = #{storeCd}
-    </delete>
+    </update>
 
     <!-- 네이버 동의항목 삭제 -->
     <!--
@@ -246,5 +250,22 @@
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD = #{storeCd}
     </delete>
+
+    <!-- 네이버주문연동 연동정보 초기화 -->
+    <!--
+        TABLE    : TB_CM_NAVER_LINK
+        PARAM    : naverPlaceStatusVO
+        COMMENTS : 네이버주문연동 관련 정보를 NULL 처리한다.
+    -->
+    <update id="updateNaverOrderLink" parameterType="naverPlaceStatusVO">
+        /* NaverPlaceStatusMapper.updateNaverOrderLink */
+        UPDATE  TB_CM_NAVER_LINK
+        SET     ORDER_UNIQUE_ID                 = NULL
+        ,       ORDER_BUSINESS_ID                = NULL
+        ,       ORDER_CHANNEL_SERVICE_ID_TABLE   = NULL
+        ,       ORDER_CHANNEL_SERVICE_ID_PICKUP  = NULL
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </update>
 
 </mapper>

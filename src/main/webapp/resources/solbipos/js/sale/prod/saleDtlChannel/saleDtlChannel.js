@@ -22,13 +22,6 @@ var prodOptionComboData = [
     {"name":"모두표시","value":"4"}
 ];
 
-var dlvrOrderFgData = [
-    {"name": "일반", "value": "1"},
-    {"name": "배달", "value": "2"},
-    {"name": "온라인포장", "value": "3"},
-    {"name": "내점포장", "value": "4"}
-];
-
 /**
  *  매출상세현황(채널별) 그리드 생성
  */
@@ -123,9 +116,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-        $scope.dlvrInFgDataMap = new wijmo.grid.DataMap(dlvrInFg, 'value', 'name'); // 채널타입
-        $scope.dlvrOrderFgDataMap = new wijmo.grid.DataMap(dlvrOrderFgData, 'value', 'name'); // 배달구분
-
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
           if (e.panel == s.cells) {
@@ -155,14 +145,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
         dataItem.posNo          = messages["todayBillSaleDtl.posNo"];
         dataItem.billNo         = messages["todayBillSaleDtl.billNo"];
         dataItem.saleYn         = messages["todayBillSaleDtl.saleYn"];
-        dataItem.channelOrderNo     = messages["saleDtlChannel.channelOrderNo"];
-        dataItem.channelOrderNo2    = messages["saleDtlChannel.channelOrderNo2"];
-        dataItem.channelType        = messages["saleDtlChannel.channelType"];
-        dataItem.dlvrOrderFg2       = messages["saleDtlChannel.serviceType"];
-        dataItem.channelServiceType = messages["saleDtlChannel.channelServiceType"];
-        dataItem.orgSaleDate = messages["saleDtlChannel.orgSaleDate"];
-        dataItem.orgPosNo    = messages["saleDtlChannel.orgPosNo"];
-        dataItem.orgBillNo   = messages["saleDtlChannel.orgBillNo"];
         dataItem.tblNm          = messages["todayBillSaleDtl.tblNm"];
         dataItem.billDt         = messages["todayBillSaleDtl.billDt"];
         dataItem.lClassCd       = messages["saleDtlChannel.lClassCd"];
@@ -231,14 +213,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
         dataItem1.posNo          = messages["todayBillSaleDtl.posNo"];
         dataItem1.billNo         = messages["todayBillSaleDtl.billNo"];
         dataItem1.saleYn         = messages["todayBillSaleDtl.saleYn"];
-        dataItem1.channelOrderNo     = messages["saleDtlChannel.channelOrderNo"];
-        dataItem1.channelOrderNo2    = messages["saleDtlChannel.channelOrderNo2"];
-        dataItem1.channelType        = messages["saleDtlChannel.channelType"];
-        dataItem1.dlvrOrderFg2       = messages["saleDtlChannel.serviceType"];
-        dataItem1.channelServiceType = messages["saleDtlChannel.channelServiceType"];
-        dataItem1.orgSaleDate = messages["saleDtlChannel.orgSaleDate"];
-        dataItem1.orgPosNo    = messages["saleDtlChannel.orgPosNo"];
-        dataItem1.orgBillNo   = messages["saleDtlChannel.orgBillNo"];
         dataItem1.tblNm          = messages["todayBillSaleDtl.tblNm"];
         dataItem1.billDt         = messages["todayBillSaleDtl.billDt"];
         dataItem1.lClassCd       = messages["saleDtlChannel.lClassCd"];
@@ -408,12 +382,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            return false;
        }
 
-        // 매장선택 필수 체크
-        if (!$("#saleDtlChannelStoreCd").val()) {
-            $scope._popMsg(messages['cmm.require.selectStore']);
-            return false;
-        }
-
        // 파라미터
        var params = {};
        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -514,8 +482,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
 
            // 컬럼 총갯수
            var columnsCnt = columns.length;
-           // 내점/배달/포장 1,2,3 그룹 컬럼이 시작되는 인덱스 (saleQty1 위치)
-           var tripleGroupStart = 27;
 
            for (var i = 0; i < columnsCnt; i++) {
                columns[i].visible = true;
@@ -524,22 +490,22 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            // 상품표시옵션에 따른 컬럼 제어
            if(params.prodOption === "1"){  // 단품+세트
                // 내점,포장,배달 계
-               for(j = tripleGroupStart ; j < columnsCnt; j++){
-                   if((j - tripleGroupStart) % 3 !== 0){
+               for(j = 19 ; j < columnsCnt; j++){
+                   if(j%3 !== 1){
                        columns[j].visible = false;
                    }
                }
            }else if(params.prodOption === "2"){   // 단품+구성
                // 내점,포장,배달 계
-               for(j = tripleGroupStart ; j < columnsCnt; j++){
-                   if((j - tripleGroupStart) % 3 !== 1){
+               for(j = 19 ; j < columnsCnt; j++){
+                   if(j%3 < 2){
                        columns[j].visible = false;
                    }
                }
            }else if(params.prodOption === "3") {  // 단품+세트+구성
                // 내점,포장,배달 계
-               for(j = tripleGroupStart ; j < columnsCnt; j++){
-                   if((j - tripleGroupStart) % 3 !== 2){
+               for(j = 19 ; j < columnsCnt; j++){
+                   if(0 < j%3){
                        columns[j].visible = false;
                    }
                }
@@ -563,11 +529,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
        // 조회일자 최대 1일 제한
        if (diffDay > 0) {
            s_alert.pop(messages['cmm.dateOver.1day.error']);
-           return false;
-       }
-       // 매장선택 필수 체크
-       if (!$("#saleDtlChannelStoreCd").val()) {
-           $scope._popMsg(messages['cmm.require.selectStore']);
            return false;
        }
         if ($scope.flex.rows.length <= 0) {
@@ -647,11 +608,6 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
         if (diffDay > 0) {
            $scope._popMsg(messages['cmm.dateOver.1day.error']);
            return false;
-        }
-        // 매장선택 필수 체크
-        if (!$("#saleDtlChannelStoreCd").val()) {
-            $scope._popMsg(messages['cmm.require.selectStore']);
-            return false;
         }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -736,9 +692,6 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-        $scope.dlvrInFgDataMap = new wijmo.grid.DataMap(dlvrInFg, 'value', 'name'); // 채널타입
-        $scope.dlvrOrderFgDataMap = new wijmo.grid.DataMap(dlvrOrderFgData, 'value', 'name'); // 배달구분
-
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
           if (e.panel == s.cells) {
@@ -768,14 +721,6 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
         dataItem.posNo          = messages["todayBillSaleDtl.posNo"];
         dataItem.billNo         = messages["todayBillSaleDtl.billNo"];
         dataItem.saleYn         = messages["todayBillSaleDtl.saleYn"];
-        dataItem.channelOrderNo     = messages["saleDtlChannel.channelOrderNo"];
-        dataItem.channelOrderNo2    = messages["saleDtlChannel.channelOrderNo2"];
-        dataItem.channelType        = messages["saleDtlChannel.channelType"];
-        dataItem.dlvrOrderFg        = messages["saleDtlChannel.serviceType"];
-        dataItem.channelServiceType = messages["saleDtlChannel.channelServiceType"];
-        dataItem.orgSaleDate = messages["saleDtlChannel.orgSaleDate"];
-        dataItem.orgPosNo    = messages["saleDtlChannel.orgPosNo"];
-        dataItem.orgBillNo   = messages["saleDtlChannel.orgBillNo"];
         dataItem.tblNm          = messages["todayBillSaleDtl.tblNm"];
         dataItem.billDt         = messages["todayBillSaleDtl.billDt"];
         dataItem.lClassCd       = messages["saleDtlChannel.lClassCd"];
@@ -844,14 +789,6 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
         dataItem1.posNo          = messages["todayBillSaleDtl.posNo"];
         dataItem1.billNo         = messages["todayBillSaleDtl.billNo"];
         dataItem1.saleYn         = messages["todayBillSaleDtl.saleYn"];
-        dataItem1.channelOrderNo     = messages["saleDtlChannel.channelOrderNo"];
-        dataItem1.channelOrderNo2    = messages["saleDtlChannel.channelOrderNo2"];
-        dataItem1.channelType        = messages["saleDtlChannel.channelType"];
-        dataItem1.dlvrOrderFg        = messages["saleDtlChannel.serviceType"];
-        dataItem1.channelServiceType = messages["saleDtlChannel.channelServiceType"];
-        dataItem1.orgSaleDate = messages["saleDtlChannel.orgSaleDate"];
-        dataItem1.orgPosNo    = messages["saleDtlChannel.orgPosNo"];
-        dataItem1.orgBillNo   = messages["saleDtlChannel.orgBillNo"];
         dataItem1.tblNm          = messages["todayBillSaleDtl.tblNm"];
         dataItem1.billDt         = messages["todayBillSaleDtl.billDt"];
         dataItem1.lClassCd       = messages["saleDtlChannel.lClassCd"];
@@ -1048,8 +985,6 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
 
             // 컬럼 총갯수
             var columnsCnt = columns.length - 2; // totCnt, rnum뺌
-            // 내점/배달/포장 1,2,3 그룹 컬럼이 시작되는 인덱스 (saleQty1 위치)
-            var tripleGroupStart = 27;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -1058,22 +993,22 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
             // 상품표시옵션에 따른 컬럼 제어
             if (params.prodOption === "1") {  // 단품+세트
                 // 내점,포장,배달 계
-                for (j = tripleGroupStart; j < columnsCnt; j++) {
-                    if ((j - tripleGroupStart) % 3 !== 0) {
+                for (j = 19; j < columnsCnt; j++) {
+                    if (j % 3 !== 1) {
                         columns[j].visible = false;
                     }
                 }
             } else if (params.prodOption === "2") {   // 단품+구성
                 // 내점,포장,배달 계
-                for (j = tripleGroupStart; j < columnsCnt; j++) {
-                    if ((j - tripleGroupStart) % 3 !== 1) {
+                for (j = 19; j < columnsCnt; j++) {
+                    if (j % 3 < 2) {
                         columns[j].visible = false;
                     }
                 }
             } else if (params.prodOption === "3") {  // 단품+세트+구성
                 // 내점,포장,배달 계
-                for (j = tripleGroupStart; j < columnsCnt; j++) {
-                    if ((j - tripleGroupStart) % 3 !== 2) {
+                for (j = 19; j < columnsCnt; j++) {
+                    if (0 < j % 3) {
                         columns[j].visible = false;
                     }
                 }
@@ -1190,8 +1125,6 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
 
                                         // 컬럼 총갯수
                                         var columnsCnt = columns.length - 2; // totCnt, rnum뺌
-                                        // 내점/배달/포장 1,2,3 그룹 컬럼이 시작되는 인덱스 (saleQty1 위치)
-                                        var tripleGroupStart = 27;
 
                                         for (var i = 0; i < columnsCnt; i++) {
                                             columns[i].visible = true;
@@ -1200,22 +1133,22 @@ app.controller('saleDtlChannelExcelCtrl2', ['$scope', '$http', '$timeout', funct
                                         // 상품표시옵션에 따른 컬럼 제어
                                         if (params.prodOption === "1") {  // 단품+세트
                                             // 내점,포장,배달 계
-                                            for (j = tripleGroupStart; j < columnsCnt; j++) {
-                                                if ((j - tripleGroupStart) % 3 !== 0) {
+                                            for (j = 19; j < columnsCnt; j++) {
+                                                if (j % 3 !== 1) {
                                                     columns[j].visible = false;
                                                 }
                                             }
                                         } else if (params.prodOption === "2") {   // 단품+구성
                                             // 내점,포장,배달 계
-                                            for (j = tripleGroupStart; j < columnsCnt; j++) {
-                                                if ((j - tripleGroupStart) % 3 !== 1) {
+                                            for (j = 19; j < columnsCnt; j++) {
+                                                if (j % 3 < 2) {
                                                     columns[j].visible = false;
                                                 }
                                             }
                                         } else if (params.prodOption === "3") {  // 단품+세트+구성
                                             // 내점,포장,배달 계
-                                            for (j = tripleGroupStart; j < columnsCnt; j++) {
-                                                if ((j - tripleGroupStart) % 3 !== 2) {
+                                            for (j = 19; j < columnsCnt; j++) {
+                                                if (0 < j % 3) {
                                                     columns[j].visible = false;
                                                 }
                                             }

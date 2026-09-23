@@ -81,7 +81,8 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.bizNo"/>" binding="bizNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.reset"/>" binding="reset" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverPlaceReset"/>" binding="reset" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverOrderReset"/>" binding="resetOrder" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.inType"/>" binding="inType" data-map="inTypeDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.uniqueId"/>" binding="uniqueId" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.lastResponseDt"/>" binding="lastResponseDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -144,7 +145,7 @@
     var menuCd = "${menuCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260911.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceStatus/naverPlaceStatus.js?ver=20260923.01" charset="utf-8"></script>
 
 <%-- 네이버플레이스 연동 초기화 팝업 --%>
 <c:import url="/WEB-INF/view/sys/link/naverPlaceStatus/naverPlaceStatusReset.jsp">
