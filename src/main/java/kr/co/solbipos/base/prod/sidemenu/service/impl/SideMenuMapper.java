@@ -258,4 +258,16 @@ public interface SideMenuMapper {
 
     /** 선택그룹 하프앤하프 여부 확인 */
     String getChkHalfAndHalfYn(SideMenuSelClassVO countChkVO);
+
+    /** 사이드메뉴-복사요청 nonce 선점(멱등) - 최초 INSERT (PK중복이면 재전송) */
+    int insertSdselCopyReq(SideMenuCopyReqVO sideMenuCopyReqVO);
+
+    /** 사이드메뉴-복사요청 처리상태 갱신(DONE/ERR) */
+    int updateSdselCopyReqStatus(SideMenuCopyReqVO sideMenuCopyReqVO);
+
+    /** 사이드메뉴-복사요청 자동 재전송(차단) 횟수 증가 */
+    int updateSdselCopyReqResend(SideMenuCopyReqVO sideMenuCopyReqVO);
+
+    /** 사이드메뉴-복사요청 처리상태 조회 (ING/DONE/ERR) */
+    String getSdselCopyReqProcStatus(SideMenuCopyReqVO sideMenuCopyReqVO);
 }

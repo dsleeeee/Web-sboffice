@@ -6,6 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.adi.sms.badword.service.BadwordFilterService;
+import kr.co.common.service.alert.DoorayAlertService;
 import kr.co.solbipos.adi.sms.badword.service.FilterResult;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendService;
 import kr.co.solbipos.adi.sms.smsSend.service.SmsSendVO;
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +51,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class SmsSendServiceImpl implements SmsSendService {
     private final SmsSendMapper smsSendMapper;
     private final BadwordFilterService badwordFilterService;
+    private final DoorayAlertService doorayAlertService;
     private final MessageService messageService;
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -60,9 +64,10 @@ public class SmsSendServiceImpl implements SmsSendService {
      * Constructor Injection
      */
     @Autowired
-    public SmsSendServiceImpl(SmsSendMapper smsSendMapper, BadwordFilterService badwordFilterService, MessageService messageService) {
+    public SmsSendServiceImpl(SmsSendMapper smsSendMapper, BadwordFilterService badwordFilterService, DoorayAlertService doorayAlertService, MessageService messageService) {
         this.smsSendMapper = smsSendMapper;
         this.badwordFilterService = badwordFilterService;
+        this.doorayAlertService = doorayAlertService;
         this.messageService = messageService;
     }
 
@@ -137,8 +142,10 @@ public class SmsSendServiceImpl implements SmsSendService {
             // URL 차단 - 악성문자차단관리(X-Ray)
             boolean sendYn = true;
             boolean anyBlack = false;
-            // (2026.08.26) Set → List 변경 : 동일 URL이 여러 번 등장해도 등장 횟수만큼 이력 저장 (금칙어 이력과 동일 기준)
-            List<String> urlSet = new ArrayList<>();
+            // (2026.09.21) List → LinkedHashSet 변경 : 동일 URL은 1건만 이력 저장 (금칙어 이력 "규칙당 1건" 기준과 통일, 발견 순서 유지)
+            Set<String> urlSet = new LinkedHashSet<>();
+            // (2026.09.21) 메신저 알림용 차단 URL 목록 (블랙/그레이)
+            List<String> urlAlerts = new ArrayList<>();
 
             Matcher matcher = URL_PATTERN.matcher(smsSendVOs[0].getContent() == null ? "" : smsSendVOs[0].getContent());
 
@@ -186,6 +193,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                         allWhite = false;
                     }
 
+                    // (2026.09.21) 메신저 알림 대상 수집 (블랙/그레이)
+                    if ("B".equals(urlType)) {
+                        urlAlerts.add(url + "(블랙)");
+                    } else if ("G".equals(urlType)) {
+                        urlAlerts.add(url + "(그레이)");
+                    }
+
                     // URL 체크 이력 저장 (전송/차단 여부와 무관하게 항상)
                     chkUrlVO.setUrlType(urlType);
                     chkUrlVO.setXrayId(xrayId);
@@ -204,35 +218,23 @@ public class SmsSendServiceImpl implements SmsSendService {
                 }
             }
 
+            // (2026.09.21) URL 차단(블랙/그레이) 발생 시 메신저 알림 — 금칙어 알림과 별개로 전송
+            if (!sendYn) {
+                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVOs[0].getContent(), sessionInfoVO);
+            }
+
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
             FilterResult filterResult = badwordFilterService.check(smsSendVOs[0].getContent());
 
-            // URL 문제(블랙/그레이 모두) - 금칙어 여부와 무관하게 최우선 차단, 금칙어 동시탐지시 이력도 같이 저장. 예외 대신 procCnt=-1 플래그로 처리(트랜잭션 롤백에 이력이 사라지지 않도록)
-            if (!sendYn) {
+            // (2026.09.21) 차단 사유 우선순위 변경: URL 우선 → 금칙어 우선
+            //  - 금칙어 탐지 시 URL 문제 여부와 무관하게 금칙어 차단으로 안내 (URL 검사·XRAY 이력은 위에서 이미 수행/저장됨)
+            //  - 금칙어가 없고 URL 문제(블랙/그레이)만 있으면 URL 차단으로 안내
+            //  - 예외 대신 procCnt=-1 플래그로 처리 (트랜잭션 롤백에 이력이 사라지지 않도록)
+            if (filterResult.isDetected()) {
+                // (2026.09.21) 금칙어 차단 메신저 알림 (수신자 수와 무관하게 전송 요청당 1건)
+                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVOs[0].getContent(), sessionInfoVO);
 
-                // 금칙어도 함께 검출된 경우 금칙어 이력도 같이 저장
-                if (filterResult.isDetected()) {
-                    for (SmsSendVO smsSendVO : smsSendVOs) {
-                        smsSendVO.setRegDt(currentDt);
-                        smsSendVO.setRegId(sessionInfoVO.getUserId());
-                        smsSendVO.setModDt(currentDt);
-                        smsSendVO.setModId(sessionInfoVO.getUserId());
-                        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-                        smsSendVO.setSsOrgnCd(sessionInfoVO.getOrgnCd());
-                        smsSendVO.setSsOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-                        smsSendVO.setSsUserId(sessionInfoVO.getUserId());
-                        smsSendVO.setKeyword(filterResult.getKeyword());
-                        badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
-                    }
-                }
-
-                for (SmsSendVO smsSendVO : smsSendVOs) {
-                    smsSendVO.setBlockType("URL");
-                }
-                procCnt = -1;
-
-            } else if (filterResult.isDetected()) {
-                // URL 문제 없이 금칙어만 탐지된 경우 - 이력만 남기고 SMS 미전송
+                // 금칙어 탐지 - 이력만 남기고 SMS 미전송
                 for (SmsSendVO smsSendVO : smsSendVOs) {
                     smsSendVO.setRegDt(currentDt);
                     smsSendVO.setRegId(sessionInfoVO.getUserId());
@@ -282,6 +284,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                     badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
                 }
 
+                procCnt = -1;
+
+            } else if (!sendYn) {
+                // 금칙어 없이 URL 문제(블랙/그레이)만 있는 경우 - URL 차단
+                for (SmsSendVO smsSendVO : smsSendVOs) {
+                    smsSendVO.setBlockType("URL");
+                }
                 procCnt = -1;
 
             } else {
@@ -438,8 +447,10 @@ public class SmsSendServiceImpl implements SmsSendService {
             // URL 차단 - 악성문자차단관리(X-Ray)
             boolean sendYn = true;
             boolean anyBlack = false;
-            // (2026.08.26) Set → List 변경 : 동일 URL이 여러 번 등장해도 등장 횟수만큼 이력 저장 (금칙어 이력과 동일 기준)
-            List<String> urlSet = new ArrayList<>();
+            // (2026.09.21) List → LinkedHashSet 변경 : 동일 URL은 1건만 이력 저장 (금칙어 이력 "규칙당 1건" 기준과 통일, 발견 순서 유지)
+            Set<String> urlSet = new LinkedHashSet<>();
+            // (2026.09.21) 메신저 알림용 차단 URL 목록 (블랙/그레이)
+            List<String> urlAlerts = new ArrayList<>();
 
             Matcher matcher = URL_PATTERN.matcher(smsSendVO.getContent() == null ? "" : smsSendVO.getContent());
 
@@ -481,6 +492,13 @@ public class SmsSendServiceImpl implements SmsSendService {
                         allWhite = false;
                     }
 
+                    // (2026.09.21) 메신저 알림 대상 수집 (블랙/그레이)
+                    if ("B".equals(urlType)) {
+                        urlAlerts.add(url + "(블랙)");
+                    } else if ("G".equals(urlType)) {
+                        urlAlerts.add(url + "(그레이)");
+                    }
+
                     // URL 체크 이력 저장 (전송/차단 여부와 무관하게 항상)
                     chkUrlVO.setUrlType(urlType);
                     chkUrlVO.setXrayId(xrayId);
@@ -499,29 +517,33 @@ public class SmsSendServiceImpl implements SmsSendService {
                 }
             }
 
+            // (2026.09.21) URL 차단(블랙/그레이) 발생 시 메신저 알림 — 금칙어 알림과 별개로 전송
+            if (!sendYn) {
+                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVO.getContent(), sessionInfoVO);
+            }
+
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
             FilterResult filterResult = badwordFilterService.check(smsSendVO.getContent());
 
-            // URL 문제(블랙/그레이 모두) - 금칙어 여부와 무관하게 최우선 차단, 금칙어 동시탐지시 이력도 같이 저장. 예외 대신 procCnt=-1 플래그로 처리(트랜잭션 롤백에 이력이 사라지지 않도록)
-            if (!sendYn) {
+            // (2026.09.21) 차단 사유 우선순위 변경: URL 우선 → 금칙어 우선
+            //  - 금칙어 탐지 시 URL 문제 여부와 무관하게 금칙어 차단으로 안내 (URL 검사·XRAY 이력은 위에서 이미 수행/저장됨)
+            //  - 금칙어가 없고 URL 문제(블랙/그레이)만 있으면 URL 차단으로 안내
+            //  - 예외 대신 procCnt=-1 플래그로 처리 (트랜잭션 롤백에 이력이 사라지지 않도록)
+            if (filterResult.isDetected()) {
 
-                // 금칙어도 함께 검출된 경우 금칙어 이력도 같이 저장
-                if (filterResult.isDetected()) {
-                    smsSendVO.setKeyword(filterResult.getKeyword());
-                    badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
-                }
+                // (2026.09.21) 금칙어 차단 메신저 알림 (전송 요청당 1건)
+                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVO.getContent(), sessionInfoVO);
 
-                smsSendVO.setBlockType("URL");
-                procCnt = -1;
-
-            } else if (filterResult.isDetected()) {
-
-                // URL 문제 없이 금칙어만 탐지된 경우
+                // 금칙어 탐지 - 이력만 남기고 SMS 미전송
                 smsSendVO.setKeyword(filterResult.getKeyword());
-
-                // 이력만 남기고 SMS 미전송
                 badwordFilterService.saveBlockLog(smsSendVO, filterResult, sessionInfoVO);
 
+                procCnt = -1;
+
+            } else if (!sendYn) {
+
+                // 금칙어 없이 URL 문제(블랙/그레이)만 있는 경우 - URL 차단
+                smsSendVO.setBlockType("URL");
                 procCnt = -1;
 
             } else {

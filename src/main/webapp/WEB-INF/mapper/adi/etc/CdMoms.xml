@@ -8,6 +8,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김설아     2022.10.27      최초작성
+    2       yskim      2026.09.21      대표명칭 조회를 전용테이블(V01) → 코드항목1(NMCODE_ITEM_1) 조합 기준으로 변경
 -->
 <mapper namespace="kr.co.solbipos.adi.etc.cdMoms.service.impl.CdMomsMapper">
 
@@ -38,7 +39,9 @@
                 FROM TB_CM_NMCODE
                 WHERE 1=1
                 AND NMCODE_GRP_CD = '999'
-                AND NMCODE_CD IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V01)
+                /* (2026.09.21) 전용테이블(V01) → 코드항목1 조합(| 구분) 기준으로 변경 — 내 본사코드가 토큰으로 포함 + 매장전용(S 토큰) 제외 */
+                AND '|' || NMCODE_ITEM_1 || '|' LIKE '%|' || #{hqOfficeCd} || '|%'
+                AND '|' || NMCODE_ITEM_1 || '|' NOT LIKE '%|S|%'
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
@@ -68,7 +71,9 @@
                 FROM TB_CM_NMCODE
                 WHERE 1=1
                 AND NMCODE_GRP_CD = '999'
-                AND NMCODE_CD IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V01)
+                /* (2026.09.21) 전용테이블(V01) → 코드항목1 조합(| 구분) 기준으로 변경 — 내 매장코드가 토큰으로 포함 + 본사전용(H 토큰) 제외 */
+                AND '|' || NMCODE_ITEM_1 || '|' LIKE '%|' || #{storeCd} || '|%'
+                AND '|' || NMCODE_ITEM_1 || '|' NOT LIKE '%|H|%'
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>

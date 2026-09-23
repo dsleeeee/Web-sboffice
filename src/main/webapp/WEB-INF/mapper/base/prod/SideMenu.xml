@@ -3615,4 +3615,67 @@
             </when>
         </choose>
     </select>
+
+    <!-- 사이드메뉴-복사요청 nonce 선점(멱등)
+        TABLE    : TB_HQ_PRODUCT_SDSEL_COPY_REQ
+        PARAM    : sideMenuCopyReqVO
+        COMMENTS : 선택분류/선택상품 복사 저장 진입 시 nonce 를 선점 INSERT 한다.
+                   같은 nonce 자동 재전송이면 PK(REQ_NONCE) 중복(ORA-00001)으로 튕겨 차단된다.
+                   ※ 반드시 REQUIRES_NEW 로 즉시 커밋되어야 오래 걸리는 저장 도중 들어온 2차가 차단됨.
+    -->
+    <insert id="insertSdselCopyReq" parameterType="kr.co.solbipos.base.prod.sidemenu.service.SideMenuCopyReqVO">
+        /* SideMenuMapper.insertSdselCopyReq */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_COPY_REQ
+        (
+            REQ_NONCE,
+            HQ_OFFICE_CD,
+            USER_ID,
+            REQ_TYPE,
+            REQ_CNT,
+            STATUS,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{reqNonce},
+            #{hqOfficeCd},
+            #{userId},
+            #{reqType},
+            #{reqCnt},
+            'ING',
+            TO_CHAR(SYSDATE, 'yyyymmddhh24miss'),
+            #{userId},
+            TO_CHAR(SYSDATE, 'yyyymmddhh24miss'),
+            #{userId}
+        )
+    </insert>
+
+    <!-- 사이드메뉴-복사요청 처리상태 갱신(DONE/ERR) -->
+    <update id="updateSdselCopyReqStatus" parameterType="kr.co.solbipos.base.prod.sidemenu.service.SideMenuCopyReqVO">
+        /* SideMenuMapper.updateSdselCopyReqStatus */
+        UPDATE TB_HQ_PRODUCT_SDSEL_COPY_REQ
+        SET    STATUS = #{procStatus},
+               MOD_DT = TO_CHAR(SYSDATE, 'yyyymmddhh24miss')
+        WHERE  REQ_NONCE = #{reqNonce}
+    </update>
+
+    <!-- 사이드메뉴-복사요청 자동 재전송(차단) 횟수 증가 : 재전송 감지 시 원본 행에 누적 -->
+    <update id="updateSdselCopyReqResend" parameterType="kr.co.solbipos.base.prod.sidemenu.service.SideMenuCopyReqVO">
+        /* SideMenuMapper.updateSdselCopyReqResend */
+        UPDATE TB_HQ_PRODUCT_SDSEL_COPY_REQ
+        SET    RESEND_CNT = NVL(RESEND_CNT, 0) + 1,
+               MOD_DT = TO_CHAR(SYSDATE, 'yyyymmddhh24miss')
+        WHERE  REQ_NONCE = #{reqNonce}
+    </update>
+
+    <!-- 사이드메뉴-복사요청 처리상태 조회 (재전송 차단 후 화면 폴링용) -->
+    <select id="getSdselCopyReqProcStatus" parameterType="kr.co.solbipos.base.prod.sidemenu.service.SideMenuCopyReqVO" resultType="String">
+        /* SideMenuMapper.getSdselCopyReqProcStatus */
+        SELECT STATUS
+        FROM   TB_HQ_PRODUCT_SDSEL_COPY_REQ
+        WHERE  REQ_NONCE = #{reqNonce}
+    </select>
 </mapper>

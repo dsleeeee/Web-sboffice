@@ -2,6 +2,8 @@ package kr.co.solbipos.base.prod.sidemenu.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
+import kr.co.common.service.alert.DoorayAlertService;
+import org.springframework.dao.DuplicateKeyException;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
@@ -56,6 +58,8 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 public class SideMenuController {
 
     private final SideMenuService sideMenuService;
+    private final SideMenuCopyReqService sideMenuCopyReqService;
+    private final DoorayAlertService doorayAlertService;
     private final StoreTypeService storeTypeService;
     private final DayProdService dayProdService;
     private final SessionService sessionService;
@@ -64,8 +68,10 @@ public class SideMenuController {
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+    public SideMenuController(SideMenuService sideMenuService, SideMenuCopyReqService sideMenuCopyReqService, DoorayAlertService doorayAlertService, StoreTypeService storeTypeService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sideMenuService = sideMenuService;
+        this.sideMenuCopyReqService = sideMenuCopyReqService;
+        this.doorayAlertService = doorayAlertService;
         this.storeTypeService = storeTypeService;
         this.dayProdService = dayProdService;
         this.sessionService = sessionService;
@@ -629,14 +635,56 @@ public class SideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        String nonce = request.getHeader("X-Nonce");
+
         // 저장요청 수신 로그 : 같은 tabId + 같은 nonce 가 다시 들어오면 자동 재전송(사용자 조작 없이 중복) 확정용
         CmmUtil.frontLog("[분류복사][저장수신] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
-                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + request.getHeader("X-Nonce")
+                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + nonce
                 + " 건수=" + (sideMenuSelClassVOs != null ? sideMenuSelClassVOs.length : 0));
 
-        int result = sideMenuService.getSdselClassCopySave(sideMenuSelClassVOs, sessionInfoVO);
+        // 자동 재전송 차단(멱등) : 같은 nonce 가 이미 처리 중/처리됨이면 저장 로직을 타지 않고 차단
+        // (nonce 없는 요청은 기존 동작대로 통과. 사용자 재클릭은 nonce 가 달라 정상 처리됨)
+        boolean claimed = false;
+        if (nonce != null && !nonce.isEmpty()) {
+            SideMenuCopyReqVO reqVO = new SideMenuCopyReqVO();
+            reqVO.setReqNonce(nonce);
+            reqVO.setHqOfficeCd(sessionInfoVO != null ? sessionInfoVO.getHqOfficeCd() : null);
+            reqVO.setUserId(sessionInfoVO != null ? sessionInfoVO.getUserId() : null);
+            reqVO.setReqType("CLASS_COPY");
+            reqVO.setReqCnt(sideMenuSelClassVOs != null ? sideMenuSelClassVOs.length : 0);
+            try {
+                sideMenuCopyReqService.claim(reqVO);
+                claimed = true;
+            } catch (DuplicateKeyException e) {
+                // 같은 nonce 가 이미 처리 중/처리됨 = 자동 재전송 → 차단
+                CmmUtil.frontLog("[분류복사][재전송차단] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
+                        + " nonce=" + nonce);
+                // 재전송 횟수 기록(실패해도 차단은 유효하므로 무시)
+                try { sideMenuCopyReqService.markResend(nonce); } catch (Exception ignore) {}
+                // 사내 메신저(두레이) 알림 - 비동기, 실패 무시
+                doorayAlertService.notifySideMenuResendBlock("CLASS_COPY", nonce,
+                        sideMenuSelClassVOs != null ? sideMenuSelClassVOs.length : 0, sessionInfoVO);
+                // 오류가 아닌 전용 표식으로 응답 → 화면 JS 는 이 표식을 받으면 팝업 없이 로딩 유지 + 상태폴링으로 전환
+                return returnJson(Status.OK, "RESEND_BLOCKED");
+            }
+        }
 
-        return returnJson(Status.OK, result);
+        // 기본 ERR 로 두고 저장이 정상 완료된 경우에만 DONE 으로 기록 (어떤 예외/에러로 중단돼도 ERR 보장)
+        String procStatus = "ERR";
+        try {
+            int result = sideMenuService.getSdselClassCopySave(sideMenuSelClassVOs, sessionInfoVO);
+            procStatus = "DONE";
+            return returnJson(Status.OK, result);
+        } finally {
+            if (claimed) {
+                // 상태갱신 실패가 본 요청 결과를 덮어쓰지 않도록 방어(선점행은 이미 남아있어 재전송 차단은 유효)
+                try {
+                    sideMenuCopyReqService.finish(nonce, procStatus);
+                } catch (Exception ignore) {
+                    CmmUtil.frontLog("[분류복사][상태갱신실패] nonce=" + nonce + " status=" + procStatus);
+                }
+            }
+        }
     }
 
     /**
@@ -968,14 +1016,55 @@ public class SideMenuController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        String nonce = request.getHeader("X-Nonce");
+
         // 저장요청 수신 로그 : 같은 tabId + 같은 nonce 가 다시 들어오면 자동 재전송(사용자 조작 없이 중복) 확정용
         CmmUtil.frontLog("[상품복사][저장수신] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
-                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + request.getHeader("X-Nonce")
+                + " tabId=" + request.getHeader("X-Tab-Id") + " nonce=" + nonce
                 + " 건수=" + (sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0));
 
-        int result = sideMenuService.getSdselProdCopySave(sideMenuSelProdVOs, sessionInfoVO);
+        // 자동 재전송 차단(멱등) : 같은 nonce 가 이미 처리 중/처리됨이면 저장 로직을 타지 않고 차단
+        boolean claimed = false;
+        if (nonce != null && !nonce.isEmpty()) {
+            SideMenuCopyReqVO reqVO = new SideMenuCopyReqVO();
+            reqVO.setReqNonce(nonce);
+            reqVO.setHqOfficeCd(sessionInfoVO != null ? sessionInfoVO.getHqOfficeCd() : null);
+            reqVO.setUserId(sessionInfoVO != null ? sessionInfoVO.getUserId() : null);
+            reqVO.setReqType("PROD_COPY");
+            reqVO.setReqCnt(sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0);
+            try {
+                sideMenuCopyReqService.claim(reqVO);
+                claimed = true;
+            } catch (DuplicateKeyException e) {
+                // 같은 nonce 가 이미 처리 중/처리됨 = 자동 재전송 → 차단
+                CmmUtil.frontLog("[상품복사][재전송차단] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
+                        + " nonce=" + nonce);
+                // 재전송 횟수 기록(실패해도 차단은 유효하므로 무시)
+                try { sideMenuCopyReqService.markResend(nonce); } catch (Exception ignore) {}
+                // 사내 메신저(두레이) 알림 - 비동기, 실패 무시
+                doorayAlertService.notifySideMenuResendBlock("PROD_COPY", nonce,
+                        sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0, sessionInfoVO);
+                // 오류가 아닌 전용 표식으로 응답 → 화면 JS 는 이 표식을 받으면 팝업 없이 로딩 유지 + 상태폴링으로 전환
+                return returnJson(Status.OK, "RESEND_BLOCKED");
+            }
+        }
 
-        return returnJson(Status.OK, result);
+        // 기본 ERR 로 두고 저장이 정상 완료된 경우에만 DONE 으로 기록 (어떤 예외/에러로 중단돼도 ERR 보장)
+        String procStatus = "ERR";
+        try {
+            int result = sideMenuService.getSdselProdCopySave(sideMenuSelProdVOs, sessionInfoVO);
+            procStatus = "DONE";
+            return returnJson(Status.OK, result);
+        } finally {
+            if (claimed) {
+                // 상태갱신 실패가 본 요청 결과를 덮어쓰지 않도록 방어(선점행은 이미 남아있어 재전송 차단은 유효)
+                try {
+                    sideMenuCopyReqService.finish(nonce, procStatus);
+                } catch (Exception ignore) {
+                    CmmUtil.frontLog("[상품복사][상태갱신실패] nonce=" + nonce + " status=" + procStatus);
+                }
+            }
+        }
     }
 
     /**
@@ -1003,6 +1092,22 @@ public class SideMenuController {
     }
 
     /**
+     * 사이드메뉴-복사요청 처리상태 조회 (재전송 차단 후 화면 폴링용)
+     * - 화면 JS 가 RESEND_BLOCKED 표식을 받으면 로딩을 유지한 채 이 API 로
+     *   원본 요청(nonce)의 처리상태(ING/DONE/ERR)를 주기 조회한다.
+     */
+    @RequestMapping(value = "/menuClass/getSdselCopyReqStatus.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselCopyReqStatus(@RequestParam(value = "nonce", required = false) String nonce,
+                                        HttpServletRequest request) {
+        String procStatus = null;
+        if (nonce != null && !nonce.isEmpty()) {
+            procStatus = sideMenuCopyReqService.getProcStatus(nonce);
+        }
+        return returnJson(Status.OK, procStatus == null ? "NONE" : procStatus);
+    }
+
+    /**
      * 프론트 임시 디버깅 로그 - 전달받은 메시지를 catalina.out 에 출력
      * (선택분류/선택상품 복사 재호출 원인 파악용 임시, 확인 후 제거 대상)
      */
@@ -1018,56 +1123,4 @@ public class SideMenuController {
         return returnJson(Status.OK);
     }
 
-    /** 재전송 테스트 동시 실행 수 (스레드풀 보호용, 최대 2개 초과분은 sleep 없이 즉시 응답) */
-    private static final java.util.concurrent.atomic.AtomicInteger RESEND_TEST_RUNNING = new java.util.concurrent.atomic.AtomicInteger(0);
-
-    /**
-     * 재전송 확인용 임시 테스트 - 응답 없이 sleepSec 동안 침묵 후 응답 (DB 접근 없음)
-     * 같은 token 의 [도착] 로그가 2번 찍히면 중간 경로 어딘가가 재전송하는 것
-     * (재전송 원인 확인 후 제거 대상)
-     */
-    @RequestMapping(value = "/menuClass/resendTest.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result resendTest(@RequestParam(value = "token", required = false) String token,
-                             @RequestParam(value = "sleepSec", required = false, defaultValue = "300") int sleepSec,
-                             HttpServletRequest request) {
-        // 워커스레드 장시간 점유 방지 상한
-        if (sleepSec > 330) {
-            sleepSec = 330;
-        }
-
-        // 동시 실행 2개 초과 시 sleep 없이 즉시 응답 (스레드풀 고갈 방지)
-        if (RESEND_TEST_RUNNING.incrementAndGet() > 2) {
-            RESEND_TEST_RUNNING.decrementAndGet();
-            CmmUtil.frontLog("[재전송테스트][거부-동시초과] token=" + token + " remoteAddr=" + request.getRemoteAddr());
-            return returnJson(Status.FAIL);
-        }
-
-        try {
-            SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-            String userId = (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?");
-            long recvTime = System.currentTimeMillis();
-
-            CmmUtil.frontLog("[재전송테스트][도착] token=" + token + " sleepSec=" + sleepSec
-                    + " 계정=" + userId
-                    + " remoteAddr=" + request.getRemoteAddr()
-                    + " xff=" + request.getHeader("X-Forwarded-For")
-                    + " ua=" + request.getHeader("User-Agent")
-                    + " recvTime=" + recvTime);
-
-            try {
-                Thread.sleep(sleepSec * 1000L);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                CmmUtil.frontLog("[재전송테스트][중단] token=" + token + " elapsedMs=" + (System.currentTimeMillis() - recvTime));
-                return returnJson(Status.FAIL);
-            }
-
-            CmmUtil.frontLog("[재전송테스트][완료] token=" + token + " elapsedMs=" + (System.currentTimeMillis() - recvTime));
-
-            return returnJson(Status.OK);
-        } finally {
-            RESEND_TEST_RUNNING.decrementAndGet();
-        }
-    }
 }

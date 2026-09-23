@@ -30,6 +30,28 @@ var msgStatusFg = [
     {"name":"허용","value":"allowed"}
 ];
 
+// 카테고리
+var categoryFg = [
+    {"name":"전체","value":""},
+    {"name":"대출/금융","value":"loan"},
+    {"name":"불법도박","value":"gambling"},
+    {"name":"성인/음란","value":"adult"},
+    {"name":"스미싱/피싱","value":"phishing"},
+    {"name":"불법의약품/마약","value":"illegal_drug"},
+    {"name":"불법사기","value":"scam"},
+    {"name":"기타","value":"other"},
+    {"name":"대출/금융 다중구성","value":"loan_multi"},
+    {"name":"불법도박 다중구성","value":"gambling_multi"},
+    {"name":"성인/음란 다중구성","value":"adult_multi"},
+    {"name":"스미싱/피싱 다중구성","value":"phishing_multi"},
+    {"name":"불법의약품/마약 다중구성","value":"illegal_drug_multi"},
+    {"name":"불법사기 다중구성","value":"scam_multi"},
+    {"name":"기타 다중구성","value":"other_multi"},
+    {"name":"조합 다중구성","value":"multi_com"},
+    {"name":"URL","value":"url"},
+    {"name":"전화번호","value":"telNo"}
+];
+
 app.controller('msgBlockLogCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -48,6 +70,7 @@ app.controller('msgBlockLogCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.initGrid = function (s, e) {
         $scope.blockTypeDataMap  = new wijmo.grid.DataMap(blockTypeFg.slice(1),  'value', 'name');      // 차단 원인 유형
         $scope.msgStatusDataMap  = new wijmo.grid.DataMap(msgStatusFg.slice(1),  'value', 'name');      // 메시지 상태
+        $scope.categoryDataMap  = new wijmo.grid.DataMap(categoryFg.slice(1),  'value', 'name'); // 카테고리
     };
 
     $scope.$on("msgBlockLogCtrl", function (event, data) {
@@ -63,7 +86,6 @@ app.controller('msgBlockLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
         params.blockType = $scope.blockTypeCombo.selectedValue;
         params.triggeredKeyword = $("#triggeredKeyword").val();
-        params.triggeredUrl = $("#triggeredUrl").val();
         params.msgStatus = $scope.msgStatusCombo.selectedValue;
         params.listScale = $scope.listScale;
 

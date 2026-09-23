@@ -138,6 +138,48 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                 sParam['sid'] = document.getElementsByName('sessionId')[0].value;
             }
 
+            // 자동 재전송 차단(RESEND_BLOCKED) 수신 시 : 원본 요청이 서버에서 처리 중이므로
+            // 로딩을 유지한 채 원본(nonce)의 처리상태를 주기 조회하고, 완료되면 정상 저장과 동일하게 마무리한다.
+            var POLL_INTERVAL_MS = 30000; // 폴링 주기 30초
+            var POLL_MAX_CNT = 90;        // 최대 45분
+            var pollCopyStatus = function (cnt) {
+                if (cnt >= POLL_MAX_CNT) {
+                    sysLog("[상품복사] 5-P. 폴링 상한 초과 nonce=" + _reqNonce);
+                    $scope.excelUploadingPopup(false);
+                    $scope._popMsg(messages["sideMenu.copy.polling.timeout"] || "저장 처리가 계속 진행 중입니다. 잠시 후 조회하여 결과를 확인해주세요.");
+                    return;
+                }
+                setTimeout(function () {
+                    $http({
+                        method: 'POST',
+                        url: '/base/prod/sideMenu/menuClass/getSdselCopyReqStatus.sb',
+                        params: angular.extend({nonce: _reqNonce}, sParam)
+                    }).then(function (res) {
+                        var st = res.data && res.data.data;
+                        sysLog("[상품복사] 5-P. 폴링 " + (cnt + 1) + "회 status=" + st);
+                        if (st === 'DONE') {
+                            // 원본 저장 완료 → 정상 저장과 동일하게 마무리
+                            $scope.excelUploadingPopup(false);
+                            $scope._popMsg(messages["cmm.saveSucc"]);
+                            var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
+                            var selectedSelProd = prodGrid.getSelectedSdselProd();
+                            $scope._broadcast('sideMenuSelectProdCtrl', selectedSelProd);
+                            var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+                            var selectedSelGroup = grpGrid.getSelectedSelGroup();
+                            $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+                            $scope.close();
+                        } else if (st === 'ERR') {
+                            $scope.excelUploadingPopup(false);
+                            $scope._popMsg(messages['cmm.saveFail']);
+                        } else {
+                            pollCopyStatus(cnt + 1); // ING 등 → 계속 대기
+                        }
+                    }, function () {
+                        pollCopyStatus(cnt + 1); // 폴링 요청 실패(순단) → 다음 주기 재시도
+                    });
+                }, POLL_INTERVAL_MS);
+            };
+
             // 전체 데이터를 한 번에 전송
             sysLog("[상품복사] 4. getSdselProdCopySave 호출 직전");
             $http({
@@ -148,6 +190,12 @@ app.controller('sdselProdCopyCtrl', ['$scope', '$http', '$timeout', function ($s
                 headers: {'Content-Type': 'application/json; charset=utf-8', 'X-Tab-Id': _tabId, 'X-Nonce': _reqNonce}
             }).then(function successCallback(response) {
                 sysLog("[상품복사] 5. 저장 콜백 진입 status=" + (response.data && response.data.status) + ((response.data && response.data.message) ? " / msg=" + response.data.message : ""));
+                // 자동 재전송이 차단된 응답 → 팝업 없이 로딩 유지 + 원본 처리상태 폴링으로 전환
+                if (response.data && response.data.data === 'RESEND_BLOCKED') {
+                    sysLog("[상품복사] 5-P. 재전송 차단응답 수신 → 상태폴링 전환 nonce=" + _reqNonce);
+                    pollCopyStatus(0);
+                    return;
+                }
                 if ($scope._httpStatusCheck(response, true)) {
                     // 작업내역 로딩 팝업 닫기
                     $scope.excelUploadingPopup(false);

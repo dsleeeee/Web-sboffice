@@ -123,6 +123,7 @@
                 initialized="initComboBox(s)">
         </wj-combo-box>--%>
             <%-- 조회조건 엑셀다운로드 --%>
+            <label class="btn_skyblue ml5 fl s14" >금칙어 다중구성 시 구분자(&&)</label>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
             <button class="btn_skyblue ml5 fr" ng-click="del()"><s:message code='cmm.del'/></button>
             <button class="btn_skyblue ml5 fr" ng-click="save()"><s:message code='cmm.save'/></button>
@@ -162,4 +163,4 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/badwordManage.js?ver=20260707.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsBadword/badwordManage.js?ver=20260917.01" charset="utf-8"></script>
