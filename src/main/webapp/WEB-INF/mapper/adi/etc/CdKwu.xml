@@ -59,7 +59,7 @@
                 NMCODE_GRP_CD,
                 NMCODE_CD,
                 NMCODE_NM,
-                'C' AS NMCODE_ITEM_1,
+                'S' AS NMCODE_ITEM_1,
                 NMCODE_ITEM_2,
                 USE_COL_NM,
                 USE_TARGET_FG,
