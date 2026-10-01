@@ -58,7 +58,11 @@
 		, TMP.POS_NM AS POS_NM
 		, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
 		FROM    TB_MS_POS TMP
-		WHERE	1=1
+		, TB_MS_STORE TMS
+		WHERE	TMP.STORE_CD = TMS.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND TMP.STORE_CD IN (${storeCdQuery})
         </if>

@@ -346,7 +346,7 @@
             url: url,
             data: params,
             success: function (data) {
-                if (data.status === "OK") {
+                if (data.data.list.status === 200) {
                     var arr = data.data.list.data;
                     var innerHtml = "<h3 class=\"store-list-title\">네이버 주문에 연동하실 매장을 선택 해주세요.</h3>";
                     var pagingHtml = "";
@@ -402,6 +402,41 @@
 
                     $("#divStoreList").html(innerHtml);
                     $("#divPaging").html(pagingHtml);
+
+                } else if (data.data.list.status === 409) {
+
+                    // 사업자 정보제공 동의 url
+                    var url = data.data.list.data.consentPageUrl;
+
+                    if (url !== null && url !== "" && url !== undefined) { // 사업자 정보제공 동의가 안되어 있는경우, 동의 팝업 오픈
+                        var popup = window.open(url, "popup", "width=750, height=1000");
+
+                        // 자식창(동의 화면)이 부모창을 새로고침해주지 않으므로, 팝업이 닫히는 것 자체를 감지해서 부모창을 새로고침한다.
+                        var popupCheckTimer = setInterval(function () {
+                            if (!popup || popup.closed) {
+                                clearInterval(popupCheckTimer);
+                                location.reload();
+                            }
+                        }, 500);
+
+                    } else { // 사업자 정보제공 동의는 되어 있는데 이 파트너사에서 조회 가능한 업체가 없는 상태
+                        /*url = "https://partner.booking.naver.com/agency-consents?agencyId=102&agencyType=AGENCY";
+                        var popup = window.open(url, "popup", "width=750, height=1000");
+                        // 자식창(동의 화면)이 부모창을 새로고침해주지 않으므로, 팝업이 닫히는 것 자체를 감지해서 부모창을 새로고침한다.
+                        var popupCheckTimer = setInterval(function () {
+                            if (!popup || popup.closed) {
+                                clearInterval(popupCheckTimer);
+                                location.reload();
+                            }
+                        }, 500);*/
+
+                        var innerHtml = "<h3 class=\"store-list-title\">네이버 주문에 연동하실 매장을 선택 해주세요.</h3>";
+                        innerHtml += "<div class=\"store-card-none\">";
+                        innerHtml += "<p class=\"store-none-msg\">등록된 매장이 없습니다.<br/>신규 등록을 진행 해주세요.</p>";
+                        innerHtml += "</div>";
+                        $("#divStoreList").html(innerHtml);
+                        $("#divPaging").html("");
+                    }
                 }
             },
             error: function (xhr, status, error) {

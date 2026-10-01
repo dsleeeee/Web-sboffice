@@ -70,7 +70,7 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 웹메뉴조회
     $scope.searchWebMenu = function () {
-        var params = [];
+        var params = {};
         params.sMenuNm = $scope.sMenuNm;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수

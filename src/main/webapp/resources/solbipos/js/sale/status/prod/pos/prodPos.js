@@ -211,6 +211,14 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 // 		var comboParams     = {};
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
+
+		// 매장 미선택 시 포스 조회하지 않음
+		if (storeCd === '') {
+			$("#posProdSelectPosCd").val("");
+			$("#posProdSelectPosName").val("");
+			return false;
+		}
+
 		$scope.getRePosNmList(storeCd,posCd,false)
 	};
 
@@ -389,6 +397,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	  };
 
 	 $scope.excelDownloadPos = function () {
+
+		 if ($("#posProdSelectStoreCd").val() === '') {
+			 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+			 return false;
+		 }
 
 		 var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
 		 var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));

@@ -261,29 +261,44 @@ function btnLinkStore(index) {
             data: params,
             success: function (data) {
                 console.log(JSON.stringify(data));
-                if (data.status === "OK") {
-                    if (data.data.list.status === 201) {
+                if (data.data.list.status === 201) {
 
-                        // 연동 매장 정보 셋팅
-                        /*var vScope2 = agrid.getScope('naverOrderLinkCtrl');
-                        vScope2.$apply(function () {
-                            vScope2.btnLink();
-                        });*/
-                        
-                        // 서비스 활성화/비활성화 팝업 띄우기
-                        var vScope = agrid.getScope('naverOrderTypeCtrl');
-                        vScope.$apply(function () {
-                            vScope.wjNaverOrderTypeLayer.show(true);
-                            vScope._broadcast('naverOrderTypeCtrl', data.data.list.data.services);
-                        });
+                    // 연동 매장 정보 셋팅
+                    /*var vScope2 = agrid.getScope('naverOrderLinkCtrl');
+                    vScope2.$apply(function () {
+                        vScope2.btnLink();
+                    });*/
 
-                    } else {
-                        // 연동 실패 div 띄우기
-                        $("#divView1").css("display", "none");
-                        $("#divView2").css("display", "none");
-                        $("#divView3").css("display", "none");
-                        $("#divView4").css("display", "");
-                    }
+                    // 서비스 활성화/비활성화 팝업 띄우기
+                    var vScope = agrid.getScope('naverOrderTypeCtrl');
+                    vScope.$apply(function () {
+                        vScope.wjNaverOrderTypeLayer.show(true);
+                        vScope._broadcast('naverOrderTypeCtrl', data.data.list.data.services);
+                    });
+
+                } else if (data.data.list.status === 409) {
+
+                    // 사업자 정보제공 동의 url
+                    var url = data.data.list.data.consentPageUrl;
+                    // var url = "https://partner.booking.naver.com/agency-consents?agencyId=102&agencyType=AGENCY";
+
+                    // 사업자 정보제공 동의가 안되어 있는경우, 동의 팝업 오픈
+                    var popup = window.open(url, "popup", "width=750, height=1000");
+
+                    // 자식창(동의 화면)이 부모창을 새로고침해주지 않으므로, 팝업이 닫히는 것 자체를 감지해서 부모창을 새로고침한다.
+                    var popupCheckTimer = setInterval(function () {
+                        if (!popup || popup.closed) {
+                            clearInterval(popupCheckTimer);
+                            location.reload();
+                        }
+                    }, 500);
+
+                } else {
+                    // 연동 실패 div 띄우기
+                    $("#divView1").css("display", "none");
+                    $("#divView2").css("display", "none");
+                    $("#divView3").css("display", "none");
+                    $("#divView4").css("display", "");
                 }
             },
             error: function (xhr, status, error) {

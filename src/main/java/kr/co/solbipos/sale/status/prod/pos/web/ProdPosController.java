@@ -152,13 +152,19 @@ public class ProdPosController {
         	 prodPosVO.setArrPosNo(arrPosNo);
         	 prodPosVO.setArrStorePos(arrPosNo);
         } else {
-        	String[] arrStoreCd = prodPosVO.getStoreCd().split(",");
+//        	String[] arrStoreCd = prodPosVO.getStoreCd().split(",");
+//
+//        	if (arrStoreCd.length > 0) {
+//        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+//        			prodPosVO.setArrStoreCd(arrStoreCd);
+//        		}
+//        	}
 
-        	if (arrStoreCd.length > 0) {
-        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-        			prodPosVO.setArrStoreCd(arrStoreCd);
-        		}
-        	}
+            if(!StringUtil.getOrBlank(prodPosVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodPosVO.getStoreCd(), 3900));
+                prodPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
 
             List<DefaultMap<String>> list = prodPosService.getPosNmList(prodPosVO, sessionInfoVO);
 
