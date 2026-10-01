@@ -91,7 +91,7 @@
                 </td>
             </tr>
             <tr>
-                <%--  가상로그인아이디 --%>
+                <%--  가상로그인아이디 --%>
                 <th>
                     <s:message code="userWebHist.vUserId" />
                 </th>
@@ -112,6 +112,8 @@
         <div class="mt10 oh sb-select">
             <%-- 현재화면 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent" /></button>
+            <%-- 조회정보(조회건수) 팝업 --%>
+            <button class="btn_blue ml5 fr" ng-click="openChkCntInfo()">조회정보</button>
         </div>
 
         <%-- 그리드 --%>
@@ -157,10 +159,16 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebHist.js?ver=20260331.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebHist.js?ver=20260922.01" charset="utf-8"></script>
 
 <%-- 쿠폰순서 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/sys/stats/userWebHist/userWebSessionDelPw.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 조회정보(조회건수) 팝업 --%>
+<c:import url="/WEB-INF/view/sys/stats/userWebHist/userWebChkCnt.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

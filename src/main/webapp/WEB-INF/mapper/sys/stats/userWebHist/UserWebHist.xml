@@ -8,6 +8,8 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김유승     2024.01.15     최초작성
+    2       김유승     2026.09.22     조회정보(조회건수) 팝업 조회 추가 (ETC050_01.JSP chkcnt / chkcnt_ip 이관)
+    3       김유승     2026.09.23     로그인 유형별 · 로그인IP수 · 현재메뉴 불일치 · ③ 메뉴(URL)별 건수(URLD) 추가
 -->
 <mapper namespace="kr.co.solbipos.sys.stats.userWebHist.service.impl.UserWebHistMapper">
 
@@ -20,77 +22,77 @@
     <select id="getUserWebHistList" parameterType="userWebHistVO" resultType="DefaultMap">
         /* UserWebHistMapper.getUserWebHistList */
         SELECT  A.H_DATE
-                ,  A.H_DT
-                ,  A.USER_ID
-                ,  B.USER_NM
-                ,  B.HQ_OFFICE_CD
-                ,  B.HQ_OFFICE_NM
-                ,  B.STORE_CD
-                ,  B.STORE_NM
-                ,  (CASE WHEN A.LM_FG = 'L' THEN '로그인'
-                        WHEN A.LM_FG = 'M' THEN '메뉴'
-                        ELSE null END
-                    ) AS LM_FG
-                ,  A.STAT_CD
-                ,  A.LOGIN_ORGN
-                ,  A.V_USER_ID
-                ,  D.USER_NM AS V_USER_NM
-                ,  A.RESRCE_CD
-                ,  REPLACE(SUBSTR(C.PATH, 0, 7) ,'/','') AS LEVEL1
-                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
-                ,  REPLACE(SUBSTR(C.PATH, 8, 7) ,'/','') AS LEVEL2
-                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
-                ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
-                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
-                ,  A.LOGIN_IP
-                ,  A.BRWSR_INFO
-                ,  A.SESSION_ID
-                ,  '일시정지'   AS PAUSE
-                ,  '해제'      AS RESUME
+        ,  A.H_DT
+        ,  A.USER_ID
+        ,  B.USER_NM
+        ,  B.HQ_OFFICE_CD
+        ,  B.HQ_OFFICE_NM
+        ,  B.STORE_CD
+        ,  B.STORE_NM
+        ,  (CASE WHEN A.LM_FG = 'L' THEN '로그인'
+        WHEN A.LM_FG = 'M' THEN '메뉴'
+        ELSE null END
+        ) AS LM_FG
+        ,  A.STAT_CD
+        ,  A.LOGIN_ORGN
+        ,  A.V_USER_ID
+        ,  D.USER_NM AS V_USER_NM
+        ,  A.RESRCE_CD
+        ,  REPLACE(SUBSTR(C.PATH, 0, 7) ,'/','') AS LEVEL1
+        ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
+        ,  REPLACE(SUBSTR(C.PATH, 8, 7) ,'/','') AS LEVEL2
+        ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
+        ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
+        ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
+        ,  A.LOGIN_IP
+        ,  A.BRWSR_INFO
+        ,  A.SESSION_ID
+        ,  '일시정지'   AS PAUSE
+        ,  '해제'      AS RESUME
         FROM
-            (
-                (
-                    SELECT LOGIN_DATE AS H_DATE,
-                            TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
-                            USER_ID,
-                            'L' AS LM_FG,
-                            STAT_CD AS STAT_CD,
-                            LOGIN_ORGN AS LOGIN_ORGN,
-                            V_USER_ID AS V_USER_ID,
-                            '' AS RESRCE_CD,
-                            LOGIN_IP,
-                            BRWSR_INFO,
-                            SESSION_ID
-                    FROM TB_WB_LOGIN_HIST
-                    WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
-                )
-                UNION ALL
-                (
-                    SELECT USE_DATE AS H_DATE,
-                            TO_CHAR(TO_DATE(USE_DATE || SUBSTR(USE_DT,0,6), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
-                            USER_ID,
-                            'M' AS LM_FG,
-                            '' AS STAT_CD,
-                            '' AS LOGIN_ORGN,
-                            V_USER_ID,
-                            RESRCE_CD AS RESRCE_CD,
-                            LOGIN_IP,
-                            BRWSR_INFO,
-                            '' AS SESSION_ID
-                    FROM TB_WB_MENU_USE_HIST
-                    WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
-                )
-            ) A
-            ,   TB_WB_USER_INFO_DTL_V01 B
-            ,   (
-                    SELECT  RESRCE_CD,
-                            SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
-                    FROM    TB_WB_RESRCE_INFO
-                    WHERE 1=1
-                    START WITH P_RESRCE = '000000'
-                    CONNECT BY P_RESRCE = PRIOR RESRCE_CD
-                ) C
-            ,    TB_WB_USER_INFO_DTL_V01 D
+        (
+        (
+        SELECT LOGIN_DATE AS H_DATE,
+        TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+        USER_ID,
+        'L' AS LM_FG,
+        STAT_CD AS STAT_CD,
+        LOGIN_ORGN AS LOGIN_ORGN,
+        V_USER_ID AS V_USER_ID,
+        '' AS RESRCE_CD,
+        LOGIN_IP,
+        BRWSR_INFO,
+        SESSION_ID
+        FROM TB_WB_LOGIN_HIST
+        WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
+        )
+        UNION ALL
+        (
+        SELECT USE_DATE AS H_DATE,
+        TO_CHAR(TO_DATE(USE_DATE || SUBSTR(USE_DT,0,6), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+        USER_ID,
+        'M' AS LM_FG,
+        '' AS STAT_CD,
+        '' AS LOGIN_ORGN,
+        V_USER_ID,
+        RESRCE_CD AS RESRCE_CD,
+        LOGIN_IP,
+        BRWSR_INFO,
+        '' AS SESSION_ID
+        FROM TB_WB_MENU_USE_HIST
+        WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
+        )
+        ) A
+        ,   TB_WB_USER_INFO_DTL_V01 B
+        ,   (
+        SELECT  RESRCE_CD,
+        SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
+        FROM    TB_WB_RESRCE_INFO
+        WHERE 1=1
+        START WITH P_RESRCE = '000000'
+        CONNECT BY P_RESRCE = PRIOR RESRCE_CD
+        ) C
+        ,    TB_WB_USER_INFO_DTL_V01 D
         WHERE   A.H_DATE BETWEEN #{startDate} AND #{endDate}
         AND 	B.USER_ID   (+) =   A.USER_ID
         AND     C.RESRCE_CD (+) =   A.RESRCE_CD
@@ -123,11 +125,6 @@
     </select>
 
     <!-- 사용자 아이디 일시정지 -->
-    <!--
-        TABLE    : TB_WB_USER_INFO
-        PARAM    : userWebHistVO
-        COMMENTS : 사용자 정보를 일시정지 처리한다.
-    -->
     <update id="getPauseUserId" parameterType="userWebHistVO">
         /* USE : UserWebHistMapper.getPauseUserId */
         UPDATE  TB_WB_USER_INFO
@@ -139,11 +136,6 @@
     </update>
 
     <!-- 사용자 아이디 일시정지 해제 -->
-    <!--
-        TABLE    : TB_WB_USER_INFO
-        PARAM    : userWebHistVO
-        COMMENTS : 사용자 정보를 일시정지 해제한다.
-    -->
     <update id="getResumeUserId" parameterType="userWebHistVO">
         /* USE : UserWebHistMapper.getResumeUserId */
         UPDATE  TB_WB_USER_INFO
@@ -153,4 +145,1099 @@
         WHERE   USER_ID         =   #{userId}
         AND     USER_STAT_FG    = '50'
     </update>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         조회건수 예외 URL — menu_chk_monitor_webhook.sh 의
+         CHK_EXC_URL_EQ_LIST / CHK_EXC_URL_PREFIX_LIST 와 반드시 동일하게 유지
+         · 조각 안에서는 정규화된 URL 컬럼명 NURL (스킴·호스트·쿼리스트링 제거) 을 참조
+         ══════════════════════════════════════════════════════════════════ -->
+    <sql id="chkExcUrlEqList">
+        '/main.sb'
+        , '/popup/getProdClassTree.sb'
+        , '/common/getComboData.sb'
+        , '/mobile/menu/menuList.sb'
+        , '/mobile/main.sb'
+        , '/adi/sms/sendStatus/cmmMainTopSmsSend/getCmmMainTopStoreCount.sb'
+        , '/store/manage/storeManage/storeManage/getHqNmcodeComboList.sb'
+        , '/common/getDeployNoticeStatus.sb'
+        , '/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb'
+    </sql>
+    <!-- 예외 여부 (boolean 조건식) -->
+    <sql id="chkExcUrlIsExc">
+        (   NURL IN ( <include refid="chkExcUrlEqList"/> )
+        OR NURL LIKE '/application/main%'
+        OR NURL LIKE '/sale/main/mainContext%'
+        OR NURL LIKE '/base/prod%'
+        OR NURL LIKE '/mobile/application/main%'
+        OR NURL LIKE '/common/popup/selectStore%'
+        )
+    </sql>
+    <!-- 예외 규칙 라벨 (예외 아니면 NULL) -->
+    <sql id="chkExcUrlRule">
+        CASE WHEN NURL IN ( <include refid="chkExcUrlEqList"/> ) THEN '완전일치'
+        WHEN NURL LIKE '/application/main%'         THEN '앞자리 /application/main'
+        WHEN NURL LIKE '/sale/main/mainContext%'    THEN '앞자리 /sale/main/mainContext'
+        WHEN NURL LIKE '/base/prod%'                THEN '앞자리 /base/prod'
+        WHEN NURL LIKE '/mobile/application/main%'  THEN '앞자리 /mobile/application/main'
+        WHEN NURL LIKE '/common/popup/selectStore%' THEN '앞자리 /common/popup/selectStore'
+        ELSE NULL
+        END
+    </sql>
+
+    <!-- [조회정보 팝업] 조회건수 USER_ID 종합 조회 -->
+    <!--
+        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_BLOCK, TB_WB_LOGIN_HIST_CHK
+        PARAM    : userWebHistVO
+        COMMENTS : ETC050 조회건수 탭 ① USER_ID 종합과 동일.
+                   조회건수 집계 / 로그인 시도 집계(유형별) / 현재메뉴 불일치 알림 +
+                   TB_WB_LOGIN_HIST_BLOCK(국외IP) + TB_WB_LOGIN_HIST_CHK(로그인IP수) 를 USER_ID 로 결합.
+                   임계치(0 이하 = 미사용)는 OR 조건, chkUserId 입력 시 임계치 미적용 LIKE 검색.
+    -->
+    <select id="getUserWebChkCntList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserWebChkCntList */
+        <![CDATA[
+        WITH P AS (
+            SELECT  #{chkDay1}                                        AS DT_FROM8
+            ,       #{chkDay2}                                        AS DT_TO8
+            ,       TO_CHAR(SYSDATE -  5 / 1440 , 'YYYYMMDDHH24MISS') AS BEF_5M
+            ,       TO_CHAR(SYSDATE - 10 / 1440 , 'YYYYMMDDHH24MISS') AS BEF_10M
+            FROM    DUAL
+        )
+        , CHK_RAW AS (
+            SELECT  UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)) AS USER_KEY
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})', 1, 1, NULL, 1)  AS CHK_DATE
+            ,       A.SRC_SYSTEM
+            ,       A.REG_DT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *D_TOT:([0-9]+)' , 1, 1, NULL, 1)) AS D_TOT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *D_EXC:([0-9]+)' , 1, 1, NULL, 1)) AS D_EXC
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *D_REAL:([0-9]+)', 1, 1, NULL, 1)) AS D_REAL
+            ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *IP:([^|]+)'     , 1, 1, NULL, 1)) AS CHK_IP
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *IP_CNT:([0-9]+)', 1, 1, NULL, 1)) AS CHK_IP_CNT
+            ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *IPS:([^|]+)'    , 1, 1, NULL, 1)) AS CHK_IPS
+            ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *FIRST:([^|]+)'  , 1, 1, NULL, 1)  AS FIRST_TS
+            ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *LAST:([^|]+)'   , 1, 1, NULL, 1)  AS LAST_TS
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%조회건수%집계%'
+        )
+        , CHK_TODAY AS (
+            SELECT  R.USER_KEY
+            ,       MIN(R.USER_ID)                      AS USER_ID
+            ,       NVL(SUM(R.D_TOT) , 0)               AS TODAY_TOT
+            ,       NVL(SUM(R.D_EXC) , 0)               AS TODAY_EXC
+            ,       NVL(SUM(R.D_REAL), 0)               AS TODAY_REAL
+            ,       MIN(NVL(R.FIRST_TS, R.LAST_TS))     AS CHK_FIRST_TS
+            ,       MAX(R.LAST_TS)                      AS CHK_LAST_TS
+            ,       MAX(R.REG_DT)                       AS CHK_LAST_RECV
+            ,       COUNT(DISTINCT R.SRC_SYSTEM)        AS WAS_CNT
+            ,       MAX(R.CHK_IP) KEEP (DENSE_RANK LAST ORDER BY R.REG_DT) AS CHK_LAST_IP
+            ,       MAX(R.CHK_IP_CNT)                   AS CHK_IP_CNT
+            FROM    CHK_RAW R
+            ,       P
+            WHERE   R.USER_KEY IS NOT NULL
+            AND     R.CHK_DATE  BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.USER_KEY
+        )
+        , CHK_5M AS (
+            SELECT  R.USER_KEY
+            ,       NVL(SUM(R.D_TOT) , 0)               AS M5_TOT
+            ,       NVL(SUM(R.D_EXC) , 0)               AS M5_EXC
+            ,       NVL(SUM(R.D_REAL), 0)               AS M5_REAL
+            FROM    CHK_RAW R
+            ,       P
+            WHERE   R.USER_KEY IS NOT NULL
+            AND     R.REG_DT   >= P.BEF_5M
+            GROUP
+            BY      R.USER_KEY
+        )
+        , CHK_5M_IP AS (
+            SELECT  D.USER_KEY
+            ,       LISTAGG(D.CHK_IPS, ',') WITHIN GROUP (ORDER BY D.CHK_IPS) AS M5_IPS
+            FROM    (
+                    SELECT  DISTINCT R.USER_KEY, R.CHK_IPS
+                    FROM    CHK_RAW R
+                    ,       P
+                    WHERE   R.USER_KEY IS NOT NULL
+                    AND     R.REG_DT   >= P.BEF_5M
+                    AND     R.CHK_IPS  IS NOT NULL
+                    AND     R.CHK_IPS  <> '-'
+                    ) D
+            GROUP
+            BY      D.USER_KEY
+        )
+        , BLK_IPSET AS (
+            SELECT  DISTINCT UPPER(B.USER_ID) AS USER_KEY, B.REAL_IP AS IPV
+            FROM    TB_WB_LOGIN_HIST_BLOCK B, P
+            WHERE   SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8 AND B.REAL_IP  IS NOT NULL
+            UNION
+            SELECT  DISTINCT UPPER(B.USER_ID), B.LOGIN_IP
+            FROM    TB_WB_LOGIN_HIST_BLOCK B, P
+            WHERE   SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8 AND B.LOGIN_IP IS NOT NULL
+        )
+        , CHK_IP_HIT AS (
+            SELECT  DISTINCT C.USER_KEY
+            FROM    CHK_TODAY C
+            ,       BLK_IPSET S
+            WHERE   S.USER_KEY = C.USER_KEY
+            AND     S.IPV      = C.CHK_LAST_IP
+        )
+        , LOGIN_RAW AS (
+            SELECT  UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)) AS USER_KEY
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})', 1, 1, NULL, 1)  AS LGN_DATE
+            ,       A.SRC_SYSTEM
+            ,       A.REG_DT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *TOT:([0-9]+)'    , 1, 1, NULL, 1)) AS LGN_TOT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *SUCC:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_SUCC
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR1:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E1
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR2:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E2
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR3:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E3
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR4:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E4
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR5:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E5
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR_TOT:([0-9]+)', 1, 1, NULL, 1)) AS LGN_ERR
+            ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *FIRST:([^|]+)'   , 1, 1, NULL, 1)  AS LGN_FIRST_TS
+            ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *LAST:([^|]+)'    , 1, 1, NULL, 1)  AS LGN_LAST_TS
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%로그인 시도%집계%'
+        )
+        , LOGIN_SRC AS (
+            /* 로그인 알림은 WAS·일자별 당일누적값 → MAX 가 그날 최종값 */
+            SELECT  R.USER_KEY
+            ,       MIN(R.USER_ID)                                          AS USER_ID
+            ,       R.SRC_SYSTEM
+            ,       MAX(R.LGN_TOT)                                          AS TOT_CUM
+            ,       MAX(R.LGN_SUCC)                                         AS SUCC_CUM
+            ,       MAX(R.LGN_E1)                                           AS E1_CUM
+            ,       MAX(R.LGN_E2)                                           AS E2_CUM
+            ,       MAX(R.LGN_E3)                                           AS E3_CUM
+            ,       MAX(R.LGN_E4)                                           AS E4_CUM
+            ,       MAX(R.LGN_E5)                                           AS E5_CUM
+            ,       MAX(R.LGN_ERR)                                          AS ERR_CUM
+            ,       MAX(CASE WHEN R.REG_DT < P.BEF_5M THEN R.LGN_TOT  END)  AS TOT_BASE_5M
+            ,       MAX(CASE WHEN R.REG_DT < P.BEF_5M THEN R.LGN_SUCC END)  AS SUCC_BASE_5M
+            ,       MAX(CASE WHEN R.REG_DT < P.BEF_5M THEN R.LGN_ERR  END)  AS ERR_BASE_5M
+            ,       MIN(NVL(R.LGN_FIRST_TS, R.LGN_LAST_TS))                 AS FIRST_TS
+            ,       MAX(R.LGN_LAST_TS)                                      AS LAST_TS
+            FROM    LOGIN_RAW R
+            ,       P
+            WHERE   R.USER_KEY IS NOT NULL
+            AND     R.LGN_DATE  BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.USER_KEY
+            ,       R.SRC_SYSTEM
+            ,       R.LGN_DATE
+        )
+        , LOGIN_TODAY AS (
+            SELECT  S.USER_KEY
+            ,       MIN(S.USER_ID)                              AS USER_ID
+            ,       SUM(S.TOT_CUM)                              AS LGN_TODAY_TOT
+            ,       SUM(S.SUCC_CUM)                             AS LGN_TODAY_SUCC
+            ,       SUM(NVL(S.E1_CUM, 0))                       AS LGN_TODAY_E1
+            ,       SUM(NVL(S.E2_CUM, 0))                       AS LGN_TODAY_E2
+            ,       SUM(NVL(S.E3_CUM, 0))                       AS LGN_TODAY_E3
+            ,       SUM(NVL(S.E4_CUM, 0))                       AS LGN_TODAY_E4
+            ,       SUM(NVL(S.E5_CUM, 0))                       AS LGN_TODAY_E5
+            ,       SUM(S.ERR_CUM)                              AS LGN_TODAY_ERR
+            ,       SUM(S.TOT_CUM  - NVL(S.TOT_BASE_5M , 0))    AS LGN_5M_TOT
+            ,       SUM(S.SUCC_CUM - NVL(S.SUCC_BASE_5M, 0))    AS LGN_5M_SUCC
+            ,       SUM(S.ERR_CUM  - NVL(S.ERR_BASE_5M , 0))    AS LGN_5M_ERR
+            ,       MIN(S.FIRST_TS)                             AS LGN_FIRST_TS
+            ,       MAX(S.LAST_TS)                              AS LGN_LAST_TS
+            FROM    LOGIN_SRC S
+            GROUP
+            BY      S.USER_KEY
+        )
+        , LIP_TODAY AS (
+            /* 로그인 IP수 — 로그인 집계 메시지엔 IP 가 없어 TB_WB_LOGIN_HIST_CHK.LOGIN_IP 기준 */
+            SELECT  UPPER(X.USER_ID)                    AS USER_KEY
+            ,       COUNT(DISTINCT X.LOGIN_IP)          AS LGN_IP_CNT
+            FROM    TB_WB_LOGIN_HIST_CHK X
+            ,       P
+            WHERE   X.PROC_DT  BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959999999'
+            AND     X.LOGIN_IP IS NOT NULL
+            GROUP
+            BY      UPPER(X.USER_ID)
+        )
+        , ME_RAW AS (
+            SELECT  UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'   , 1, 1, NULL, 1)) AS USER_KEY
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'   , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})' , 1, 1, NULL, 1)  AS ME_DATE
+            ,       NVL(  REGEXP_SUBSTR(A.ALARM_MSG, '\| *MIN:([0-9]{12})' , 1, 1, NULL, 1), '-') AS ME_MIN
+            ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *URL:([^|]+)'     , 1, 1, NULL, 1)) AS ME_URL
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *CNT:([0-9]+)', 1, 1, NULL, 1)) AS ME_CNT
+            ,       A.SRC_SYSTEM
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%현재메뉴 불일치%'
+        )
+        , ME_KEY AS (
+            /* 같은 (WAS·1분구간·아이디·URL) 키는 재전송될수록 CNT 가 커짐 → MAX 가 최종값 */
+            SELECT  R.USER_KEY
+            ,       MIN(R.USER_ID)                      AS USER_ID
+            ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '') AS NURL
+            ,       MAX(R.ME_CNT)                       AS ME_CNT
+            FROM    ME_RAW R
+            ,       P
+            WHERE   R.USER_KEY IS NOT NULL
+            AND     R.ME_URL   IS NOT NULL
+            AND     R.ME_DATE  BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.USER_KEY, R.SRC_SYSTEM, R.ME_DATE, R.ME_MIN
+            ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '')
+        )
+        , ME_TODAY AS (
+            SELECT  K.USER_KEY
+            ,       MIN(K.USER_ID)                      AS USER_ID
+            ,       NVL(SUM(K.ME_CNT), 0)               AS ME_TOT
+            ,       NVL(SUM(CASE WHEN ]]><include refid="chkExcUrlIsExc"/><![CDATA[ THEN K.ME_CNT ELSE 0 END), 0) AS ME_EXC
+            FROM    ME_KEY K
+            GROUP
+            BY      K.USER_KEY
+        )
+        , BLK_TODAY AS (
+            SELECT  UPPER(B.USER_ID)                    AS USER_KEY
+            ,       COUNT(*)                            AS BLK_TODAY_CNT
+            ,       COUNT(DISTINCT B.REAL_IP)           AS BLK_IP_CNT
+            ,       COUNT(DISTINCT B.COUNTRY_CODE)      AS BLK_CC_CNT
+            ,       MAX(SUBSTR(B.PROC_DT, 1, 14))       AS BLK_LAST_DT
+            ,       MIN(SUBSTR(B.PROC_DT, 1, 14))       AS BLK_FIRST_DT
+            FROM    TB_WB_LOGIN_HIST_BLOCK B
+            ,       P
+            WHERE   SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      UPPER(B.USER_ID)
+        )
+        , BLK_10M AS (
+            SELECT  UPPER(B.USER_ID)                    AS USER_KEY
+            ,       COUNT(*)                            AS BLK_10M_CNT
+            FROM    TB_WB_LOGIN_HIST_BLOCK B
+            ,       P
+            WHERE   SUBSTR(B.PROC_DT, 1, 14) >= P.BEF_10M
+            GROUP
+            BY      UPPER(B.USER_ID)
+        )
+        , BLK_INFO AS (
+            SELECT  *
+            FROM    (
+                    SELECT  UPPER(B.USER_ID)            AS USER_KEY
+                    ,       B.USER_ID                   AS BLK_USER_ID
+                    ,       B.STAT_CD
+                    ,       B.LOGIN_ORGN
+                    ,       B.ORGN_CD
+                    ,       B.LOGIN_IP
+                    ,       B.REAL_IP
+                    ,       B.COUNTRY_CODE
+                    ,       B.BLOCK_REASON
+                    ,       B.V_USER_ID
+                    ,       B.USERENV_IP_ADDRESS
+                    ,       SUBSTR(B.BRWSR_INFO, 1, 120) AS BRWSR_INFO
+                    ,       ROW_NUMBER() OVER (PARTITION BY UPPER(B.USER_ID) ORDER BY B.PROC_DT DESC) AS RN
+                    FROM    TB_WB_LOGIN_HIST_BLOCK B
+                    ,       P
+                    WHERE   SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8
+                    )
+            WHERE   RN = 1
+        )
+        , USERS AS (
+            SELECT USER_KEY FROM CHK_TODAY
+            UNION
+            SELECT USER_KEY FROM LOGIN_TODAY
+            UNION
+            SELECT USER_KEY FROM BLK_TODAY
+            UNION
+            SELECT USER_KEY FROM ME_TODAY
+        )
+        SELECT  NVL(C.USER_ID, NVL(L.USER_ID, NVL(E.USER_ID, NVL(I.BLK_USER_ID, U.USER_KEY)))) AS USER_ID
+        ,       NVL(C.TODAY_TOT , 0)        AS TODAY_TOT
+        ,       NVL(C.TODAY_EXC , 0)        AS TODAY_EXC
+        ,       NVL(C.TODAY_REAL, 0)        AS TODAY_REAL
+        ,       NVL(E.ME_TOT , 0)           AS ME_TOT
+        ,       NVL(E.ME_EXC , 0)           AS ME_EXC
+        ,       NVL(E.ME_TOT , 0) - NVL(E.ME_EXC, 0) AS ME_REAL
+        ,       NVL(M.M5_TOT , 0)           AS MIN5_TOT
+        ,       NVL(M.M5_EXC , 0)           AS MIN5_EXC
+        ,       NVL(M.M5_REAL, 0)           AS MIN5_REAL
+        ,       NVL(L.LGN_TODAY_TOT , 0)    AS LGN_TODAY_TOT
+        ,       NVL(L.LGN_TODAY_SUCC, 0)    AS LGN_TODAY_SUCC
+        ,       NVL(L.LGN_TODAY_E1  , 0)    AS LGN_TODAY_E1
+        ,       NVL(L.LGN_TODAY_E2  , 0)    AS LGN_TODAY_E2
+        ,       NVL(L.LGN_TODAY_E3  , 0)    AS LGN_TODAY_E3
+        ,       NVL(L.LGN_TODAY_E4  , 0)    AS LGN_TODAY_E4
+        ,       NVL(L.LGN_TODAY_E5  , 0)    AS LGN_TODAY_E5
+        ,       NVL(L.LGN_TODAY_ERR , 0)    AS LGN_TODAY_ERR
+        ,       NVL(LP.LGN_IP_CNT   , 0)    AS LGN_IP_CNT
+        ,       NVL(L.LGN_5M_TOT , 0)       AS LGN_MIN5_TOT
+        ,       NVL(L.LGN_5M_SUCC, 0)       AS LGN_MIN5_SUCC
+        ,       NVL(L.LGN_5M_ERR , 0)       AS LGN_MIN5_ERR
+        ,       NVL(B.BLK_TODAY_CNT, 0)     AS BLK_TODAY_CNT
+        ,       NVL(T.BLK_10M_CNT  , 0)     AS BLK_MIN10_CNT
+        ,       NVL(B.BLK_IP_CNT   , 0)     AS BLK_IP_CNT
+        ,       NVL(C.CHK_LAST_IP, '-')     AS CHK_LAST_IP
+        ,       NVL(C.CHK_IP_CNT , 0)       AS CHK_IP_CNT
+        ,       NVL(P5.M5_IPS    , '-')     AS MIN5_IPS
+        ,       CASE WHEN H.USER_KEY IS NOT NULL THEN 'Y' ELSE 'N' END AS IP_HIT
+        ,       NVL(I.COUNTRY_CODE, '-')    AS COUNTRY_CODE
+        ,       NVL(I.REAL_IP, '-')         AS BLK_REAL_IP
+        ,       NVL(I.STAT_CD, '-')         AS BLK_STAT_CD
+        ,       NVL(I.LOGIN_ORGN, '-')      AS BLK_LOGIN_ORGN
+        ,       NVL(I.ORGN_CD, '-')         AS BLK_ORGN_CD
+        ,       NVL(I.V_USER_ID, '-')       AS BLK_V_USER_ID
+        ,       NVL(I.BLOCK_REASON, '-')    AS BLOCK_REASON
+        ,       NVL(TO_CHAR(TO_DATE(B.BLK_FIRST_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS BLK_FIRST_F
+        ,       NVL(TO_CHAR(TO_DATE(B.BLK_LAST_DT ,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS BLK_LAST_F
+        ,       NVL(C.CHK_FIRST_TS, '-')    AS CHK_FIRST_TS
+        ,       NVL(L.LGN_FIRST_TS, '-')    AS LGN_FIRST_TS
+        ,       NVL(C.CHK_LAST_TS, '-')     AS CHK_LAST_TS
+        ,       NVL(L.LGN_LAST_TS, '-')     AS LGN_LAST_TS
+        ,       NVL(C.WAS_CNT, 0)           AS WAS_CNT
+        ,       CASE WHEN H.USER_KEY IS NOT NULL AND NVL(M.M5_REAL, 0) > 0    THEN 'A'
+                     WHEN NVL(T.BLK_10M_CNT, 0) > 0 AND NVL(M.M5_REAL, 0) > 0 THEN 'B'
+                     WHEN NVL(T.BLK_10M_CNT, 0) > 0                           THEN 'C'
+                     WHEN NVL(L.LGN_5M_ERR , 0) > 0 AND NVL(B.BLK_TODAY_CNT,0) > 0 THEN 'D'
+                     WHEN NVL(B.BLK_TODAY_CNT, 0) > 0                         THEN 'E'
+                     WHEN NVL(L.LGN_5M_ERR , 0) > 0                           THEN 'F'
+                     ELSE '-'
+                END                         AS RISK
+        FROM            USERS       U
+        LEFT OUTER JOIN CHK_TODAY   C  ON C.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN CHK_5M      M  ON M.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN CHK_5M_IP   P5 ON P5.USER_KEY = U.USER_KEY
+        LEFT OUTER JOIN CHK_IP_HIT  H  ON H.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN LOGIN_TODAY L  ON L.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN LIP_TODAY   LP ON LP.USER_KEY = U.USER_KEY
+        LEFT OUTER JOIN ME_TODAY    E  ON E.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN BLK_TODAY   B  ON B.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN BLK_10M     T  ON T.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN BLK_INFO    I  ON I.USER_KEY  = U.USER_KEY
+        ]]>
+        <choose>
+            <!-- USER_ID 포함검색 - 임계치(OR 조건) 미적용 -->
+            <when test='chkUserId != null and chkUserId != ""'>
+                WHERE   UPPER(U.USER_KEY) LIKE '%'||UPPER(#{chkUserId})||'%'
+            </when>
+            <!-- 임계치 OR 조건 (0 이하 = 해당 조건 미사용, 전부 미사용이면 전체 조회) -->
+            <otherwise>
+                <trim prefix="WHERE (" suffix=")" prefixOverrides="OR">
+                    <if test='thChkToday gt 0'> OR NVL(C.TODAY_REAL   , 0) &gt;= #{thChkToday}</if>
+                    <if test='thChk5m gt 0'>    OR NVL(M.M5_REAL      , 0) &gt;= #{thChk5m}</if>
+                    <if test='thBlkToday gt 0'> OR NVL(B.BLK_TODAY_CNT, 0) &gt;= #{thBlkToday}</if>
+                    <if test='thBlk10m gt 0'>   OR NVL(T.BLK_10M_CNT  , 0) &gt;= #{thBlk10m}</if>
+                    <if test='thLgnToday gt 0'> OR NVL(L.LGN_TODAY_TOT, 0) &gt;= #{thLgnToday}</if>
+                    <if test='thLgn5m gt 0'>    OR NVL(L.LGN_5M_TOT   , 0) &gt;= #{thLgn5m}</if>
+                </trim>
+            </otherwise>
+        </choose>
+        ORDER
+        BY      CASE WHEN H.USER_KEY IS NOT NULL      THEN 0
+        WHEN NVL(T.BLK_10M_CNT, 0)   &gt; 0 THEN 1
+        WHEN NVL(B.BLK_TODAY_CNT, 0) &gt; 0 THEN 2
+        ELSE 3
+        END
+        ,       NVL(M.M5_REAL   , 0) DESC
+        ,       NVL(L.LGN_5M_TOT, 0) DESC
+        ,       NVL(C.TODAY_REAL, 0) DESC
+        ,       USER_ID
+    </select>
+
+    <!-- [조회정보 팝업] 조회건수 USER_ID + IP별 상세 조회 -->
+    <!--
+        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_BLOCK
+        PARAM    : userWebHistVO
+        COMMENTS : ETC050 조회건수 탭 ② USER_ID + IP별 상세와 동일 (USER_ID 1명).
+                   IPD(IP별 건수) 파싱 + 구버전(IPD 없음) 알림은 마지막 IP 에 귀속(근사),
+                   국외IP(TB_WB_LOGIN_HIST_BLOCK) 및 ORA-20001 Login Blocked(SecViol) 결합.
+                   로그인 집계(유형별) · 현재메뉴 불일치는 IP 가 없어 GUBUN='L' 행 1개에 표시.
+    -->
+    <select id="getUserWebChkCntIpList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserWebChkCntIpList */
+        <![CDATA[
+        WITH P AS (
+            SELECT  #{chkDay1}                                        AS DT_FROM8
+            ,       #{chkDay2}                                        AS DT_TO8
+            ,       TO_CHAR(SYSDATE -  5 / 1440 , 'YYYYMMDDHH24MISS') AS BEF_5M
+            ,       TO_CHAR(SYSDATE - 10 / 1440 , 'YYYYMMDDHH24MISS') AS BEF_10M
+            ,       UPPER(TRIM(#{ipUserId}))                          AS TGT_UID
+            FROM    DUAL
+        )
+        , CHK_RAW AS (
+            SELECT  UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)) AS USER_KEY
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})', 1, 1, NULL, 1)  AS CHK_DATE
+            ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *IPD:([^|]+)'    , 1, 1, NULL, 1)) AS CHK_IPD
+            ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *IP:([^|]+)'     , 1, 1, NULL, 1)) AS CHK_IP
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *D_TOT:([0-9]+)' , 1, 1, NULL, 1)) AS D_TOT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *D_REAL:([0-9]+)', 1, 1, NULL, 1)) AS D_REAL
+            ,       A.SRC_SYSTEM
+            ,       A.REG_DT
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%조회건수%집계%'
+            AND     UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+        )
+        , CHK_PAIR AS (
+            SELECT  R.USER_KEY
+            ,       R.USER_ID
+            ,       R.CHK_DATE
+            ,       R.SRC_SYSTEM
+            ,       R.REG_DT
+            ,       TRIM(REGEXP_SUBSTR(R.CHK_IPD, '[^,]+', 1, L.LV)) AS PAIR
+            FROM    CHK_RAW R
+            ,       (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 50) L
+            WHERE   R.CHK_IPD IS NOT NULL
+            AND     R.CHK_IPD <> '-'
+            AND     L.LV      <= REGEXP_COUNT(R.CHK_IPD, ',') + 1
+        )
+        , CHK_IP AS (
+            SELECT  Q.USER_KEY
+            ,       Q.USER_ID
+            ,       Q.CHK_DATE
+            ,       Q.SRC_SYSTEM
+            ,       Q.REG_DT
+            ,       SUBSTR(Q.PAIR, 1, INSTR(Q.PAIR, '=', -1) - 1)                        AS IPV
+            ,       TO_NUMBER(REGEXP_SUBSTR(Q.PAIR, '=([0-9]+)/[0-9]+$', 1, 1, NULL, 1)) AS D_TOT
+            ,       TO_NUMBER(REGEXP_SUBSTR(Q.PAIR, '/([0-9]+)$'       , 1, 1, NULL, 1)) AS D_REAL
+            ,       0                                                                     AS IS_APPROX
+            FROM    CHK_PAIR Q
+            WHERE   Q.PAIR IS NOT NULL
+            AND     REGEXP_LIKE(Q.PAIR, '=[0-9]+/[0-9]+$')
+            UNION ALL
+            SELECT  R.USER_KEY
+            ,       R.USER_ID
+            ,       R.CHK_DATE
+            ,       R.SRC_SYSTEM
+            ,       R.REG_DT
+            ,       CASE WHEN R.CHK_IP IS NULL OR R.CHK_IP = '-' THEN 'NOIP' ELSE R.CHK_IP END AS IPV
+            ,       NVL(R.D_TOT , 0)                                                      AS D_TOT
+            ,       NVL(R.D_REAL, 0)                                                      AS D_REAL
+            ,       1                                                                     AS IS_APPROX
+            FROM    CHK_RAW R
+            WHERE   (R.CHK_IPD IS NULL OR R.CHK_IPD = '-')
+            AND     NVL(R.D_TOT, 0) > 0
+        )
+        , CHK_IP_TODAY AS (
+            SELECT  C.USER_KEY
+            ,       MIN(C.USER_ID)                  AS USER_ID
+            ,       C.IPV
+            ,       SUM(C.D_TOT)                    AS TODAY_TOT
+            ,       SUM(C.D_TOT) - SUM(C.D_REAL)    AS TODAY_EXC
+            ,       SUM(C.D_REAL)                   AS TODAY_REAL
+            ,       MAX(C.REG_DT)                   AS LAST_RECV
+            ,       COUNT(DISTINCT C.SRC_SYSTEM)    AS WAS_CNT
+            ,       MAX(C.IS_APPROX)                AS IS_APPROX
+            FROM    CHK_IP C
+            ,       P
+            WHERE   C.CHK_DATE BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      C.USER_KEY
+            ,       C.IPV
+        )
+        , CHK_IP_5M AS (
+            SELECT  C.USER_KEY
+            ,       C.IPV
+            ,       SUM(C.D_TOT)                    AS M5_TOT
+            ,       SUM(C.D_REAL)                   AS M5_REAL
+            FROM    CHK_IP C
+            ,       P
+            WHERE   C.REG_DT >= P.BEF_5M
+            GROUP
+            BY      C.USER_KEY
+            ,       C.IPV
+        )
+        , BLK_GEO AS (
+            SELECT  UPPER(B.USER_ID)                AS USER_KEY
+            ,       B.USER_ID                       AS USER_ID
+            ,       NVL(B.REAL_IP, B.LOGIN_IP)      AS IPV
+            ,       SUBSTR(B.PROC_DT, 1, 14)        AS EVT_DT
+            ,       'GEO'                           AS SRC
+            ,       NVL(B.COUNTRY_CODE,'UNKNOWN')   AS COUNTRY_CODE
+            ,       B.STAT_CD
+            ,       B.LOGIN_ORGN
+            ,       B.ORGN_CD
+            ,       B.LOGIN_IP
+            ,       B.V_USER_ID
+            ,       B.BLOCK_REASON
+            ,       SUBSTR(B.BRWSR_INFO,1,120)      AS BRWSR_INFO
+            FROM    TB_WB_LOGIN_HIST_BLOCK B
+            ,       P
+            WHERE   SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8
+            AND     UPPER(B.USER_ID)        = P.TGT_UID
+        )
+        , BLK_SEC AS (
+            SELECT  P.TGT_UID                           AS USER_KEY
+            ,       REGEXP_SUBSTR(A.ALARM_MSG, 'Login Blocked: [^],]+,([^],]+),', 1, 1, 'i', 1) AS USER_ID
+            ,       REGEXP_SUBSTR(A.ALARM_MSG, 'Login Blocked: [^],]+,[^],]+,([^],]+)', 1, 1, 'i', 1) AS IPV
+            ,       A.REG_DT                        AS EVT_DT
+            ,       'SEC'                           AS SRC
+            ,       '-'                             AS COUNTRY_CODE
+            ,       REGEXP_SUBSTR(A.ALARM_MSG, 'Login Blocked: [^],]+,[^],]+,[^],]+,([^],]+)', 1, 1, 'i', 1) AS STAT_CD
+            ,       '-'                             AS LOGIN_ORGN
+            ,       '-'                             AS ORGN_CD
+            ,       REGEXP_SUBSTR(A.ALARM_MSG, 'Login Blocked: [^],]+,[^],]+,([^],]+)', 1, 1, 'i', 1) AS LOGIN_IP
+            ,       '-'                             AS V_USER_ID
+            ,       'ORA-20001 ' || REGEXP_SUBSTR(A.ALARM_MSG, '(Login Blocked: [^],]+)', 1, 1, 'i', 1) AS BLOCK_REASON
+            ,       '-'                             AS BRWSR_INFO
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%Oracle Job%'
+            AND     UPPER(A.ALARM_MSG) LIKE '%LOGIN BLOCKED%'
+            AND     UPPER(A.ALARM_MSG) LIKE '%,' || P.TGT_UID || ',%'
+        )
+        , BLK_ALL AS (
+            SELECT * FROM BLK_GEO
+            UNION ALL
+            SELECT * FROM BLK_SEC WHERE IPV IS NOT NULL
+        )
+        , BLK_IP_TODAY AS (
+            SELECT  B.USER_KEY
+            ,       MIN(B.USER_ID)                  AS USER_ID
+            ,       B.IPV
+            ,       COUNT(*)                        AS BLK_TODAY_CNT
+            ,       SUM(CASE WHEN B.EVT_DT >= P.BEF_10M THEN 1 ELSE 0 END) AS BLK_10M_CNT
+            ,       SUM(CASE WHEN B.SRC = 'GEO' THEN 1 ELSE 0 END) AS GEO_CNT
+            ,       SUM(CASE WHEN B.SRC = 'SEC' THEN 1 ELSE 0 END) AS SEC_CNT
+            ,       COUNT(DISTINCT B.COUNTRY_CODE)  AS CC_CNT
+            ,       MIN(B.EVT_DT)                   AS BLK_FIRST_DT
+            ,       MAX(B.EVT_DT)                   AS BLK_LAST_DT
+            ,       MAX(B.COUNTRY_CODE) KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS COUNTRY_CODE
+            ,       MAX(B.STAT_CD)      KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS STAT_CD
+            ,       MAX(B.LOGIN_ORGN)   KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS LOGIN_ORGN
+            ,       MAX(B.ORGN_CD)      KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS ORGN_CD
+            ,       MAX(B.LOGIN_IP)     KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS LOGIN_IP
+            ,       MAX(B.V_USER_ID)    KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS V_USER_ID
+            ,       MAX(B.BLOCK_REASON) KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS BLOCK_REASON
+            ,       MAX(B.BRWSR_INFO)   KEEP (DENSE_RANK LAST ORDER BY B.EVT_DT) AS BRWSR_INFO
+            FROM    BLK_ALL B
+            ,       P
+            GROUP
+            BY      B.USER_KEY
+            ,       B.IPV
+        )
+        , LGN_RAW AS (
+            SELECT        REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'  , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})', 1, 1, NULL, 1)  AS LGN_DATE
+            ,       A.SRC_SYSTEM
+            ,       A.REG_DT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *TOT:([0-9]+)'    , 1, 1, NULL, 1)) AS LGN_TOT
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *SUCC:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_SUCC
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR1:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E1
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR2:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E2
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR3:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E3
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR4:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E4
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR5:([0-9]+)'   , 1, 1, NULL, 1)) AS LGN_E5
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *ERR_TOT:([0-9]+)', 1, 1, NULL, 1)) AS LGN_ERR
+            ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *LAST:([^|]+)'    , 1, 1, NULL, 1)  AS LGN_LAST_TS
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%로그인 시도%집계%'
+            AND     UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+        )
+        , LGN_SRC AS (
+            SELECT  MIN(R.USER_ID)                                          AS USER_ID
+            ,       R.SRC_SYSTEM
+            ,       MAX(R.LGN_TOT)                                          AS TOT_CUM
+            ,       MAX(R.LGN_SUCC)                                         AS SUCC_CUM
+            ,       MAX(R.LGN_E1)                                           AS E1_CUM
+            ,       MAX(R.LGN_E2)                                           AS E2_CUM
+            ,       MAX(R.LGN_E3)                                           AS E3_CUM
+            ,       MAX(R.LGN_E4)                                           AS E4_CUM
+            ,       MAX(R.LGN_E5)                                           AS E5_CUM
+            ,       MAX(R.LGN_ERR)                                          AS ERR_CUM
+            ,       MAX(CASE WHEN R.REG_DT < P.BEF_5M THEN R.LGN_TOT  END)  AS TOT_BASE_5M
+            ,       MAX(CASE WHEN R.REG_DT < P.BEF_5M THEN R.LGN_ERR  END)  AS ERR_BASE_5M
+            ,       MAX(R.LGN_LAST_TS)                                      AS LAST_TS
+            FROM    LGN_RAW R
+            ,       P
+            WHERE   R.LGN_DATE BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.SRC_SYSTEM
+            ,       R.LGN_DATE
+        )
+        , LGN_ONE AS (
+            SELECT  MIN(S.USER_ID)                                  AS USER_ID
+            ,       SUM(S.TOT_CUM)                                  AS LGN_TODAY_TOT
+            ,       SUM(S.SUCC_CUM)                                 AS LGN_TODAY_SUCC
+            ,       SUM(NVL(S.E1_CUM, 0))                           AS LGN_TODAY_E1
+            ,       SUM(NVL(S.E2_CUM, 0))                           AS LGN_TODAY_E2
+            ,       SUM(NVL(S.E3_CUM, 0))                           AS LGN_TODAY_E3
+            ,       SUM(NVL(S.E4_CUM, 0))                           AS LGN_TODAY_E4
+            ,       SUM(NVL(S.E5_CUM, 0))                           AS LGN_TODAY_E5
+            ,       SUM(S.ERR_CUM)                                  AS LGN_TODAY_ERR
+            ,       SUM(S.TOT_CUM - NVL(S.TOT_BASE_5M, 0))          AS LGN_5M_TOT
+            ,       SUM(S.ERR_CUM - NVL(S.ERR_BASE_5M, 0))          AS LGN_5M_ERR
+            ,       MAX(S.LAST_TS)                                  AS LGN_LAST_TS
+            FROM    LGN_SRC S
+        )
+        , ME_RAW AS (
+            SELECT        REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)'   , 1, 1, NULL, 1)  AS USER_ID
+            ,             REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})' , 1, 1, NULL, 1)  AS ME_DATE
+            ,       NVL(  REGEXP_SUBSTR(A.ALARM_MSG, '\| *MIN:([0-9]{12})' , 1, 1, NULL, 1), '-') AS ME_MIN
+            ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *URL:([^|]+)'     , 1, 1, NULL, 1)) AS ME_URL
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *CNT:([0-9]+)', 1, 1, NULL, 1)) AS ME_CNT
+            ,       A.SRC_SYSTEM
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%현재메뉴 불일치%'
+            AND     UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+        )
+        , ME_KEY AS (
+            SELECT  MIN(R.USER_ID)                      AS USER_ID
+            ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '') AS NURL
+            ,       MAX(R.ME_CNT)                       AS ME_CNT
+            FROM    ME_RAW R
+            ,       P
+            WHERE   R.ME_URL  IS NOT NULL
+            AND     R.ME_DATE BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.SRC_SYSTEM, R.ME_DATE, R.ME_MIN
+            ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '')
+        )
+        , ME_ONE AS (
+            SELECT  MIN(K.USER_ID)                      AS USER_ID
+            ,       NVL(SUM(K.ME_CNT), 0)               AS ME_TOT
+            ,       NVL(SUM(CASE WHEN ]]><include refid="chkExcUrlIsExc"/><![CDATA[ THEN K.ME_CNT ELSE 0 END), 0) AS ME_EXC
+            FROM    ME_KEY K
+        )
+        SELECT  NVL(C.USER_ID, K.USER_ID)       AS USER_ID
+        ,       NVL(C.IPV    , K.IPV)           AS IPV
+        ,       NVL(C.TODAY_TOT , 0)            AS TODAY_TOT
+        ,       NVL(C.TODAY_EXC , 0)            AS TODAY_EXC
+        ,       NVL(C.TODAY_REAL, 0)            AS TODAY_REAL
+        ,       NVL(M.M5_TOT    , 0)            AS MIN5_TOT
+        ,       NVL(M.M5_REAL   , 0)            AS MIN5_REAL
+        ,       NVL(K.BLK_TODAY_CNT, 0)         AS BLK_TODAY_CNT
+        ,       NVL(K.BLK_10M_CNT  , 0)         AS BLK_MIN10_CNT
+        ,       NVL(K.GEO_CNT      , 0)         AS GEO_CNT
+        ,       NVL(K.SEC_CNT      , 0)         AS SEC_CNT
+        ,       NVL(K.COUNTRY_CODE , '-')       AS COUNTRY_CODE
+        ,       NVL(K.STAT_CD      , '-')       AS STAT_CD
+        ,       NVL(K.LOGIN_ORGN   , '-')       AS LOGIN_ORGN
+        ,       NVL(K.ORGN_CD      , '-')       AS ORGN_CD
+        ,       NVL(K.V_USER_ID    , '-')       AS V_USER_ID
+        ,       NVL(K.BLOCK_REASON , '-')       AS BLOCK_REASON
+        ,       NVL(K.BRWSR_INFO   , '-')       AS BRWSR_INFO
+        ,       NVL(TO_CHAR(TO_DATE(K.BLK_FIRST_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS BLK_FIRST_F
+        ,       NVL(TO_CHAR(TO_DATE(K.BLK_LAST_DT ,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS BLK_LAST_F
+        ,       0                               AS LGN_TODAY_TOT
+        ,       0                               AS LGN_TODAY_SUCC
+        ,       0                               AS LGN_TODAY_ERR
+        ,       0                               AS LGN_MIN5_TOT
+        ,       0                               AS LGN_MIN5_ERR
+        ,       '-'                             AS LGN_LAST_TS
+        ,       0                               AS LGN_TODAY_E1
+        ,       0                               AS LGN_TODAY_E2
+        ,       0                               AS LGN_TODAY_E3
+        ,       0                               AS LGN_TODAY_E4
+        ,       0                               AS LGN_TODAY_E5
+        ,       0                               AS ME_TOT
+        ,       0                               AS ME_EXC
+        ,       0                               AS ME_REAL
+        ,       NVL(C.IS_APPROX, 0)             AS IS_APPROX
+        ,       CASE WHEN NVL(C.IPV,K.IPV) = 'NOIP' THEN 'N'
+                     WHEN NVL(C.IPV,K.IPV) = 'ETC'  THEN 'T'
+                     WHEN C.IPV IS NOT NULL AND K.IPV IS NOT NULL AND NVL(M.M5_REAL,0) > 0 THEN 'A'
+                     WHEN C.IPV IS NOT NULL AND K.IPV IS NOT NULL THEN 'B'
+                     WHEN K.IPV IS NOT NULL THEN 'C'
+                     ELSE '-'
+                END                             AS GUBUN
+        ,       CASE WHEN C.IPV IS NOT NULL AND K.IPV IS NOT NULL THEN 0
+                     WHEN K.IPV IS NOT NULL                       THEN 1
+                     ELSE 2
+                END                             AS ORD
+        FROM               CHK_IP_TODAY C
+        FULL OUTER JOIN    BLK_IP_TODAY K ON  K.USER_KEY = C.USER_KEY
+                                          AND K.IPV      = C.IPV
+        LEFT OUTER JOIN    CHK_IP_5M    M ON  M.USER_KEY = C.USER_KEY
+                                          AND M.IPV      = C.IPV
+        CROSS JOIN         P
+        WHERE   NVL(C.USER_KEY, K.USER_KEY) = P.TGT_UID
+        UNION ALL
+        /* 로그인 집계 + 현재메뉴 불일치 — 메시지에 IP 가 없으므로 IP '-' 행 1개로 표시 */
+        SELECT  NVL(L.USER_ID, E.USER_ID)       AS USER_ID
+        ,       '-'                             AS IPV
+        ,       0, 0, 0, 0, 0
+        ,       0, 0, 0, 0
+        ,       '-', '-', '-', '-', '-', '-', '-'
+        ,       '-', '-'
+        ,       NVL(L.LGN_TODAY_TOT , 0)
+        ,       NVL(L.LGN_TODAY_SUCC, 0)
+        ,       NVL(L.LGN_TODAY_ERR , 0)
+        ,       NVL(L.LGN_5M_TOT    , 0)
+        ,       NVL(L.LGN_5M_ERR    , 0)
+        ,       NVL(L.LGN_LAST_TS   , '-')
+        ,       NVL(L.LGN_TODAY_E1  , 0)
+        ,       NVL(L.LGN_TODAY_E2  , 0)
+        ,       NVL(L.LGN_TODAY_E3  , 0)
+        ,       NVL(L.LGN_TODAY_E4  , 0)
+        ,       NVL(L.LGN_TODAY_E5  , 0)
+        ,       NVL(E.ME_TOT, 0)
+        ,       NVL(E.ME_EXC, 0)
+        ,       NVL(E.ME_TOT, 0) - NVL(E.ME_EXC, 0)
+        ,       0                               AS IS_APPROX
+        ,       'L'                             AS GUBUN
+        ,       3                               AS ORD
+        FROM    LGN_ONE L
+        CROSS JOIN ME_ONE E
+        WHERE   L.USER_ID IS NOT NULL
+        OR      NVL(E.ME_TOT, 0) > 0
+        ORDER
+        BY      ORD
+        ,       BLK_MIN10_CNT DESC
+        ,       MIN5_REAL     DESC
+        ,       TODAY_REAL    DESC
+        ,       IPV
+        ]]>
+    </select>
+
+    <!-- [조회정보 팝업] ③ 메뉴(URL)별 건수 (USER_ID 1명) -->
+    <!--
+        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_CHK
+        PARAM    : userWebHistVO (chkDay1, chkDay2, ipUserId)
+        COMMENTS : ETC050 조회건수 탭 ③ 메뉴(URL)별 건수와 동일.
+                   · 웹훅 총/실 = 조회건수 집계 URLD 필드 분해 (스크립트 v3, 전체 사용자)
+                   · HIST 호출건수 · IP목록 = TB_WB_LOGIN_HIST_CHK(PROC_FG='C') BRWSR_INFO 별 (기록 대상만)
+                   · 불일치건수 = 현재메뉴 불일치 알림 URL 별
+                   · EXC_RULE = 예외 URL 판정 규칙 (NULL 이면 실조회)
+    -->
+    <select id="getUserWebChkCntMenuList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserWebChkCntMenuList */
+        <![CDATA[
+        WITH P AS (
+            SELECT  #{chkDay1}                   AS DT_FROM8
+            ,       #{chkDay2}                   AS DT_TO8
+            ,       UPPER(TRIM(#{ipUserId}))     AS TGT_UID
+            FROM    DUAL
+        )
+        , HC AS (
+            SELECT  REGEXP_REPLACE(REGEXP_REPLACE(NVL(X.BRWSR_INFO, '-'), '^[A-Za-z]+://[^/]+', ''), '\?.*$', '') AS NURL
+            ,       X.LOGIN_IP
+            ,       SUBSTR(X.PROC_DT, 1, 14) AS EVT_DT
+            FROM    TB_WB_LOGIN_HIST_CHK X
+            ,       P
+            WHERE   X.PROC_FG = 'C'
+            AND     X.PROC_DT BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959999999'
+            AND     UPPER(X.USER_ID) = P.TGT_UID
+        )
+        , HI AS (
+            SELECT  NURL
+            ,       NVL(LOGIN_IP, 'NOIP')    AS LOGIN_IP
+            ,       COUNT(*)                 AS CNT
+            ,       MIN(EVT_DT)              AS FIRST_DT
+            ,       MAX(EVT_DT)              AS LAST_DT
+            FROM    HC
+            GROUP
+            BY      NURL, NVL(LOGIN_IP, 'NOIP')
+        )
+        , HG AS (
+            SELECT  NURL
+            ,       SUM(CNT)                 AS CHK_CNT
+            ,       COUNT(*)                 AS IP_CNT
+            ,       LISTAGG(LOGIN_IP || '(' || CNT || ')', ', ') WITHIN GROUP (ORDER BY CNT DESC, LOGIN_IP) AS IP_LIST
+            ,       MIN(FIRST_DT)            AS FIRST_DT
+            ,       MAX(LAST_DT)             AS LAST_DT
+            FROM    HI
+            GROUP
+            BY      NURL
+        )
+        , MR AS (
+            SELECT        REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})' , 1, 1, NULL, 1)  AS ME_DATE
+            ,       NVL(  REGEXP_SUBSTR(A.ALARM_MSG, '\| *MIN:([0-9]{12})' , 1, 1, NULL, 1), '-') AS ME_MIN
+            ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *URL:([^|]+)'     , 1, 1, NULL, 1)) AS ME_URL
+            ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *CNT:([0-9]+)', 1, 1, NULL, 1)) AS ME_CNT
+            ,       A.SRC_SYSTEM
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%현재메뉴 불일치%'
+            AND     UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+        )
+        , MK AS (
+            SELECT  REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '') AS NURL
+            ,       MAX(R.ME_CNT)            AS ME_CNT
+            FROM    MR R
+            ,       P
+            WHERE   R.ME_URL  IS NOT NULL
+            AND     R.ME_DATE BETWEEN P.DT_FROM8 AND P.DT_TO8
+            GROUP
+            BY      R.SRC_SYSTEM, R.ME_DATE, R.ME_MIN
+            ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '')
+        )
+        , MG AS (
+            SELECT  NURL, SUM(ME_CNT) AS ME_CNT
+            FROM    MK
+            GROUP
+            BY      NURL
+        )
+        , UR AS (
+            SELECT  TRIM(REGEXP_SUBSTR(A.ALARM_MSG, '\| *URLD:([^|]+)'   , 1, 1, NULL, 1)) AS URLD
+            ,            REGEXP_SUBSTR(A.ALARM_MSG, '\| *DATE:([0-9]{8})', 1, 1, NULL, 1)  AS CHK_DATE
+            FROM    TB_MONITOR_ALARM A
+            ,       P
+            WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
+            AND     A.ALARM_TITLE LIKE '%조회건수%집계%'
+            AND     A.ALARM_MSG   LIKE '%| URLD:%'
+            AND     UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+        )
+        , UP AS (
+            SELECT  TRIM(REGEXP_SUBSTR(R.URLD, '[^,]+', 1, L.LV)) AS PAIR
+            FROM    UR R
+            ,       P
+            ,       (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 60) L
+            WHERE   R.CHK_DATE BETWEEN P.DT_FROM8 AND P.DT_TO8
+            AND     R.URLD IS NOT NULL
+            AND     R.URLD <> '-'
+            AND     L.LV   <= REGEXP_COUNT(R.URLD, ',') + 1
+        )
+        , UG AS (
+            SELECT  SUBSTR(Q.PAIR, 1, INSTR(Q.PAIR, '=', -1) - 1)                             AS NURL
+            ,       SUM(TO_NUMBER(REGEXP_SUBSTR(Q.PAIR, '=([0-9]+)/[0-9]+$', 1, 1, NULL, 1))) AS WH_TOT
+            ,       SUM(TO_NUMBER(REGEXP_SUBSTR(Q.PAIR, '/([0-9]+)$'       , 1, 1, NULL, 1))) AS WH_REAL
+            FROM    UP Q
+            WHERE   Q.PAIR IS NOT NULL
+            AND     REGEXP_LIKE(Q.PAIR, '=[0-9]+/[0-9]+$')
+            GROUP
+            BY      SUBSTR(Q.PAIR, 1, INSTR(Q.PAIR, '=', -1) - 1)
+        )
+        , UU AS (
+            /* URL 합집합 + 예외 URL 판정 — 조인 전에 판정해 NURL 모호성(ORA-00918) 방지 */
+            SELECT  X.NURL
+            ,       CASE WHEN X.NURL = 'NOURL' THEN 'YN 호출(URL 없음)'
+                         WHEN X.NURL = 'ETC'   THEN 'URL 표기초과 합산'
+                         ELSE ]]><include refid="chkExcUrlRule"/><![CDATA[
+                    END                          AS EXC_RULE
+            ,       CASE WHEN X.NURL IN ('NOURL','ETC') THEN 'N'
+                         WHEN ]]><include refid="chkExcUrlIsExc"/><![CDATA[ THEN 'Y'
+                         ELSE 'N'
+                    END                          AS IS_EXC
+            FROM    (
+                    SELECT NURL FROM HG
+                    UNION
+                    SELECT NURL FROM UG
+                    UNION
+                    SELECT NURL FROM MG
+                    ) X
+        )
+        SELECT  U.NURL                       AS URL
+        ,       NVL(G.CHK_CNT, 0)            AS CHK_CNT
+        ,       NVL(W.WH_TOT , 0)            AS WH_TOT
+        ,       NVL(W.WH_REAL, 0)            AS WH_REAL
+        ,       NVL(M.ME_CNT , 0)            AS ME_CNT
+        ,       NVL(G.IP_CNT , 0)            AS IP_CNT
+        ,       NVL(G.IP_LIST, '-')          AS IP_LIST
+        ,       U.EXC_RULE                   AS EXC_RULE
+        ,       U.IS_EXC                     AS IS_EXC
+        ,       NVL(TO_CHAR(TO_DATE(G.FIRST_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS FIRST_F
+        ,       NVL(TO_CHAR(TO_DATE(G.LAST_DT ,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS'),'-') AS LAST_F
+        FROM            UU U
+        LEFT OUTER JOIN HG G ON G.NURL = U.NURL
+        LEFT OUTER JOIN UG W ON W.NURL = U.NURL
+        LEFT OUTER JOIN MG M ON M.NURL = U.NURL
+        WHERE   U.NURL IS NOT NULL
+        ORDER
+        BY      NVL(W.WH_TOT, 0) + NVL(G.CHK_CNT, 0) + NVL(M.ME_CNT, 0) DESC
+        ,       1
+        ]]>
+    </select>
+
+    <!-- [조회정보 팝업] ② IP별 상세 0건 시 원천 데이터 진단 (ETC050 chkcnt_ip 0건 진단과 동일) -->
+    <!--
+        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_BLOCK
+        PARAM    : userWebHistVO (chkDay1, chkDay2, ipUserId)
+        COMMENTS : 조회건수 알림 / IPD 포함 알림 / 로그인 시도 알림 / 국외IP(기간·전체) / SecViol 차단 건수
+    -->
+    <select id="getUserWebChkCntIpDiag" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserWebChkCntIpDiag */
+        <![CDATA[
+        WITH P AS (
+            SELECT  #{chkDay1}              AS DT_FROM8
+            ,       #{chkDay2}              AS DT_TO8
+            ,       #{chkDay1} || '000000'  AS DT_FROM
+            ,       #{chkDay2} || '235959'  AS DT_TO
+            ,       UPPER(TRIM(#{ipUserId})) AS TGT_UID
+            FROM    DUAL
+        )
+        SELECT  ( SELECT COUNT(*)
+                  FROM   TB_MONITOR_ALARM A
+                  WHERE  A.REG_DT      BETWEEN P.DT_FROM AND P.DT_TO
+                  AND    A.ALARM_TITLE LIKE '%조회건수%집계%'
+                  AND    UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+                )                                       AS DG_CHK_ALL
+        ,       ( SELECT COUNT(*)
+                  FROM   TB_MONITOR_ALARM A
+                  WHERE  A.REG_DT      BETWEEN P.DT_FROM AND P.DT_TO
+                  AND    A.ALARM_TITLE LIKE '%조회건수%집계%'
+                  AND    A.ALARM_MSG   LIKE '%| IPD:%'
+                  AND    UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+                )                                       AS DG_CHK_IPD
+        ,       ( SELECT COUNT(*)
+                  FROM   TB_MONITOR_ALARM A
+                  WHERE  A.REG_DT      BETWEEN P.DT_FROM AND P.DT_TO
+                  AND    A.ALARM_TITLE LIKE '%로그인 시도%집계%'
+                  AND    UPPER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *USER:([^ |]+)', 1, 1, NULL, 1)) = P.TGT_UID
+                )                                       AS DG_LGN
+        ,       ( SELECT COUNT(*)
+                  FROM   TB_WB_LOGIN_HIST_BLOCK B
+                  WHERE  UPPER(B.USER_ID) = P.TGT_UID
+                  AND    SUBSTR(B.PROC_DT, 1, 8) BETWEEN P.DT_FROM8 AND P.DT_TO8
+                )                                       AS DG_BLK
+        ,       ( SELECT COUNT(*)
+                  FROM   TB_WB_LOGIN_HIST_BLOCK B
+                  WHERE  UPPER(B.USER_ID) = P.TGT_UID
+                )                                       AS DG_BLK_ALL
+        ,       ( SELECT COUNT(*)
+                  FROM   TB_MONITOR_ALARM A
+                  WHERE  A.REG_DT      BETWEEN P.DT_FROM AND P.DT_TO
+                  AND    A.ALARM_TITLE LIKE '%Oracle Job%'
+                  AND    UPPER(A.ALARM_MSG) LIKE '%LOGIN BLOCKED%'
+                  AND    UPPER(A.ALARM_MSG) LIKE '%,' || P.TGT_UID || ',%'
+                )                                       AS DG_SEC
+        FROM    P
+        ]]>
+    </select>
+
+    <!-- [일시정지 이력] 처리 전 사용자 상태 조회 -->
+    <select id="getUserStatFg" parameterType="userWebHistVO" resultType="String">
+        /* UserWebHistMapper.getUserStatFg */
+        SELECT  USER_STAT_FG
+        FROM    TB_WB_USER_INFO
+        WHERE   USER_ID = #{userId}
+    </select>
+
+    <!-- [일시정지 이력] 등록 -->
+    <!--
+        TABLE    : TB_WB_USER_PAUSE_HIST
+        PARAM    : userWebHistVO
+        COMMENTS : 조회정보 팝업에서 일시정지 시 화면 스냅샷 + 비고 + 처리 전/후 상태를 기록한다.
+    -->
+    <insert id="insertUserPauseHist" parameterType="userWebHistVO">
+        /* UserWebHistMapper.insertUserPauseHist */
+        INSERT INTO TB_WB_USER_PAUSE_HIST
+        (   PAUSE_SEQ,      USER_ID,        PROC_FG,        PROC_DT,        PROC_ID
+        ,   BEF_STAT_FG,    AFT_STAT_FG,    RESULT_FG
+        ,   CHK_DAY1,       CHK_DAY2,       RISK
+        ,   TODAY_REAL,     TODAY_TOT,      MIN5_REAL,      ME_REAL
+        ,   LGN_TODAY_TOT,  LGN_TODAY_ERR,  LGN_MIN5_ERR,   LGN_IP_CNT
+        ,   BLK_TODAY_CNT,  BLK_MIN10_CNT,  CHK_LAST_IP,    CHK_IP_CNT,     IP_HIT
+        ,   COUNTRY_CODE,   BLOCK_REASON,   SUMMARY_TXT,    REMARK
+        ,   REG_DT,         REG_ID,         MOD_DT,         MOD_ID
+        )
+        VALUES
+        (   SEQ_TB_WB_USER_PAUSE_HIST.NEXTVAL, #{userId}, #{procFg}, #{procDt}, #{procId}
+        ,   #{befStatFg},   #{aftStatFg},   #{resultFg}
+        ,   #{chkDay1},     #{chkDay2},     #{risk}
+        ,   #{todayReal},   #{todayTot},    #{min5Real},    #{meReal}
+        ,   #{lgnTodayTot}, #{lgnTodayErr}, #{lgnMin5Err},  #{lgnIpCnt}
+        ,   #{blkTodayCnt}, #{blkMin10Cnt}, #{chkLastIp},   #{chkIpCnt},    #{ipHit}
+        ,   #{countryCode}, #{blockReason}, #{summaryTxt},  #{remark}
+        ,   #{regDt},       #{regId},       #{modDt},       #{modId}
+        )
+    </insert>
+
+    <!-- [일시정지 이력] 조회 (USER_ID 기준 최근순) -->
+    <select id="getUserPauseHistList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserPauseHistList */
+        SELECT  H.PAUSE_SEQ
+        ,       H.USER_ID
+        ,       H.PROC_FG
+        ,       CASE H.PROC_FG WHEN 'P' THEN '일시정지' WHEN 'R' THEN '해제' ELSE H.PROC_FG END AS PROC_FG_NM
+        ,       TO_CHAR(TO_DATE(H.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT
+        ,       H.PROC_ID
+        ,       H.BEF_STAT_FG
+        ,       H.AFT_STAT_FG
+        ,       H.RESULT_FG
+        ,       CASE WHEN H.CHK_DAY1 = H.CHK_DAY2
+        THEN TO_CHAR(TO_DATE(H.CHK_DAY1,'YYYYMMDD'),'YYYY-MM-DD')
+        ELSE TO_CHAR(TO_DATE(H.CHK_DAY1,'YYYYMMDD'),'YYYY-MM-DD') || ' ~ ' || TO_CHAR(TO_DATE(H.CHK_DAY2,'YYYYMMDD'),'YYYY-MM-DD')
+        END                         AS CHK_PERIOD
+        ,       H.RISK
+        ,       H.TODAY_REAL
+        ,       H.MIN5_REAL
+        ,       H.ME_REAL
+        ,       H.LGN_TODAY_TOT
+        ,       H.LGN_TODAY_ERR
+        ,       H.LGN_IP_CNT
+        ,       H.BLK_TODAY_CNT
+        ,       H.BLK_MIN10_CNT
+        ,       H.CHK_LAST_IP
+        ,       H.IP_HIT
+        ,       H.COUNTRY_CODE
+        ,       H.SUMMARY_TXT
+        ,       H.REMARK
+        FROM    TB_WB_USER_PAUSE_HIST H
+        WHERE   1 = 1
+        AND     H.PROC_DT BETWEEN #{chkDay1} || '000000' AND #{chkDay2} || '235959'
+        <if test='userId != null and userId != ""'>
+            AND     UPPER(H.USER_ID) = UPPER(#{userId})
+        </if>
+        ORDER BY H.PROC_DT DESC, H.PAUSE_SEQ DESC
+    </select>
+
+    <!-- [조회정보 팝업] ⑤ 웹사용자정보변경이력 -->
+    <!--
+        TABLE    : TB_LG_WB_USER_INFO_LOG
+        PARAM    : userWebHistVO (chkDay1, chkDay2, userId)
+        COMMENTS : 사용자 정보 변경 로그. 비밀번호·자동로그인 시리얼은 값 대신 변경여부만 반환.
+                   PAUSE_CHG : '해제' = 50 → 50 아님 (사용자정보 수정 등으로 일시정지 풀림)
+                               '정지' = 50 아님 → 50
+    -->
+    <select id="getUserInfoLogList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserInfoLogList */
+        <![CDATA[
+        SELECT  TO_CHAR(TO_DATE(L.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT
+        ,       L.PROC_FG
+        ,       CASE L.PROC_FG WHEN 'I' THEN '등록' WHEN 'U' THEN '수정' WHEN 'D' THEN '삭제' ELSE L.PROC_FG END AS PROC_FG_NM
+        ,       L.USER_ID
+        ,       L.B_USER_STAT_FG
+        ,       L.USER_STAT_FG
+        ,       CASE WHEN L.B_USER_STAT_FG IS NULL THEN '-'
+                     ELSE L.B_USER_STAT_FG || '(' || DECODE(L.B_USER_STAT_FG, '00','정상', '10','로그인횟수초과', '20','비밀번호만료'
+                                                         , '30','90일경과', '31','180일경과', '40','휴면', '50','일시정지', '99','초기비밀번호', '기타') || ')'
+                END
+                || ' → ' ||
+                CASE WHEN L.USER_STAT_FG IS NULL THEN '-'
+                     ELSE L.USER_STAT_FG || '(' || DECODE(L.USER_STAT_FG, '00','정상', '10','로그인횟수초과', '20','비밀번호만료'
+                                                       , '30','90일경과', '31','180일경과', '40','휴면', '50','일시정지', '99','초기비밀번호', '기타') || ')'
+                END                                                         AS STAT_CHG
+        ,       CASE WHEN L.B_USER_STAT_FG = '50' AND NVL(L.USER_STAT_FG, '#') <> '50' THEN '해제'
+                     WHEN NVL(L.B_USER_STAT_FG, '#') <> '50' AND L.USER_STAT_FG = '50' THEN '정지'
+                     ELSE NULL
+                END                                                         AS PAUSE_CHG
+        ,       RTRIM(
+                   CASE WHEN NVL(L.B_USER_STAT_FG       , '#') <> NVL(L.USER_STAT_FG       , '#') THEN '사용자상태,'       END
+                || CASE WHEN NVL(L.B_USE_YN             , '#') <> NVL(L.USE_YN             , '#') THEN '사용여부,'         END
+                || CASE WHEN NVL(L.B_AUTH_GRP_CD        , '#') <> NVL(L.AUTH_GRP_CD        , '#') THEN '권한그룹,'         END
+                || CASE WHEN NVL(L.B_USER_PWD           , '#') <> NVL(L.USER_PWD           , '#') THEN '비밀번호,'         END
+                || CASE WHEN NVL(L.B_LAST_PWD_CHG_DT    , '#') <> NVL(L.LAST_PWD_CHG_DT    , '#') THEN '비밀번호변경일시,' END
+                || CASE WHEN NVL(L.B_LOGIN_FAIL_CNT     , -1 ) <> NVL(L.LOGIN_FAIL_CNT     , -1 ) THEN '로그인실패건수,'   END
+                || CASE WHEN NVL(L.B_LAST_LOGIN_DT      , '#') <> NVL(L.LAST_LOGIN_DT      , '#') THEN '최종로그인,'       END
+                || CASE WHEN NVL(L.B_AREA_FG            , '#') <> NVL(L.AREA_FG            , '#') THEN '지역구분,'         END
+                || CASE WHEN NVL(L.B_LOGIN_AUTO_SERIAL  , '#') <> NVL(L.LOGIN_AUTO_SERIAL  , '#') THEN '자동로그인,'       END
+                || CASE WHEN NVL(L.B_MOB_LOGIN_AUTO_SERIAL,'#')<> NVL(L.MOB_LOGIN_AUTO_SERIAL,'#') THEN '모바일자동로그인,' END
+                , ',')                                                      AS CHG_ITEMS
+        ,       NVL(L.B_USE_YN, '-')      || ' → ' || NVL(L.USE_YN, '-')                     AS USE_YN_CHG
+        ,       NVL(L.B_AUTH_GRP_CD, '-') || ' → ' || NVL(L.AUTH_GRP_CD, '-')                AS AUTH_GRP_CHG
+        ,       NVL(TO_CHAR(L.B_LOGIN_FAIL_CNT), '-') || ' → ' || NVL(TO_CHAR(L.LOGIN_FAIL_CNT), '-') AS FAIL_CNT_CHG
+        ,       CASE WHEN NVL(L.B_USER_PWD, '#') <> NVL(L.USER_PWD, '#') THEN 'Y' ELSE 'N' END AS PWD_CHG_YN
+        ,       NVL(TO_CHAR(TO_DATE(L.LAST_PWD_CHG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'), '-') AS LAST_PWD_CHG_DT
+        ,       NVL(TO_CHAR(TO_DATE(L.LAST_LOGIN_DT  , 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'), '-') AS LAST_LOGIN_DT
+        ,       NVL(L.MOD_ID, L.B_MOD_ID)                                   AS MOD_ID
+        ,       NVL(TO_CHAR(TO_DATE(NVL(L.MOD_DT, L.B_MOD_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'), '-') AS MOD_DT
+        FROM    TB_LG_WB_USER_INFO_LOG L
+        WHERE   L.PROC_DT BETWEEN #{chkDay1} || '000000' AND #{chkDay2} || '235959'
+        ]]>
+        <if test='userId != null and userId != ""'>
+            AND     UPPER(L.USER_ID) = UPPER(#{userId})
+        </if>
+        ORDER BY L.PROC_DT DESC
+    </select>
+
 </mapper>

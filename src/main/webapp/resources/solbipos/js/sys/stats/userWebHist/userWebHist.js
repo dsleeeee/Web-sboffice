@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2024.01.15     김유승      1.0
+ * 2026.09.22     김유승      1.1            조회정보(조회건수) 팝업 추가
  *
  * **************************************************************/
 /**
@@ -118,6 +119,14 @@ app.controller('userWebHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope._inquiryMain("/sys/stats/userWebHist/userWebHist/getUserWebHistList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // <-- 조회정보(조회건수) 팝업 열기 -->
+    $scope.openChkCntInfo = function () {
+        $scope.userWebChkCntLayer.show(true);
+        var scope = agrid.getScope('userWebChkCntCtrl');
+        scope.openChkCntPopup();
+    };
+    // <-- //조회정보(조회건수) 팝업 열기 -->
 
     // 엑셀 다운로드
     $scope.excelDownload = function () {
