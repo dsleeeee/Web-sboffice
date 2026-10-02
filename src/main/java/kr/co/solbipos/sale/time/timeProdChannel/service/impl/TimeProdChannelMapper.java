@@ -15,6 +15,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2023.01.20   이다솜      최초생성
+ * @ 2026.09.29   김유승      분류 하위포함 리스트 조회(getProdClassCdList) 추가
  *
  * @author 솔비포스 개발본부 WEB개발팀 이다솜
  * @since 2023.01.20
@@ -31,4 +32,7 @@ public interface TimeProdChannelMapper {
 
     /** 상품별시간대매출(채널별) 엑셀다운로드 */
     List<DefaultMap<String>> getTimeProdChannelExcelList(TimeProdChannelVO timeProdChannelVO);
+
+    /** 분류 하위포함 리스트 조회 */
+    List<String> getProdClassCdList(TimeProdChannelVO timeProdChannelVO);
 }

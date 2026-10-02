@@ -6,6 +6,8 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2020.10.14     김설아      1.0
+ * 2026.09.23     김유승      1.1            엑셀 첫 번째 시트만 업로드하도록 수정 (SEQ 중복 방지)
+ *                                           업로드 중 화면 클릭·새로고침 차단 오버레이 추가, 파싱 실패 시 정리
  *
  * **************************************************************/
 /**
@@ -73,6 +75,22 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
+                // 엑셀 파싱(동기, 대용량 시 오래 걸림) 구간부터 화면 클릭 차단
+                //  - 해제는 업로드 완료/에러 시 excelUploadingPopup(false)에서 처리됨
+                var uploadOverlay = document.getElementById('loadingOverlay');
+                if (uploadOverlay) uploadOverlay.classList.add('active');
+                document.addEventListener('contextmenu', contextMenuHandler);
+                window.addEventListener('beforeunload', beforeUnloadHandler);
+
+                // 파싱 실패 시 정리 : 차단 해제 + 파일선택 초기화 + 오류 안내
+                //  - 여기서 해제하지 않으면 투명 오버레이가 남아 화면 전체가 클릭 불능이 된다.
+                var parseFailClear = function () {
+                    $scope.excelUploadingPopup(false);        // 오버레이/우클릭/새로고침 차단 해제 + 팝업 닫기
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    $("#prodExcelUpFile").val('');            // 같은 파일 재선택 가능하도록 input 비움
+                    $scope._popMsg(messages['cmm.saveFail']); // 저장에 실패하였습니다
+                };
+
                 // $timeout(function () {
                 //     var flex = $scope.flex;
                 //     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#prodExcelUpFile')[0].files[0], {includeColumnHeaders: true}
@@ -88,10 +106,16 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
                 // excel file read
                 var reader = new FileReader();
                 var arr = [];
+                reader.onerror = function(){
+                    // 파일 읽기 자체 실패(파일 잠김 등) 시 정리
+                    parseFailClear();
+                };
                 reader.onload = function(){
+                    try {
                     var fileData = reader.result;
                     var wb = XLSX.read(fileData, {type : 'binary'});
-                    wb.SheetNames.forEach(function(sheetName) {
+                    // 첫 번째 시트만 업로드 (시트 수만큼 save 체인이 병렬 실행되어 SEQ 중복(ORA-00001) 및 데이터 유실 발생)
+                    [wb.SheetNames[0]].forEach(function(sheetName) {
                         arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
                         // key명 변경
@@ -174,6 +198,10 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
                             $scope.save(arr);
                         }, 10);
                     })
+                    } catch (e) {
+                        // 엑셀 파싱 오류(손상 파일 등) 시 정리
+                        parseFailClear();
+                    }
                 };
                 reader.readAsBinaryString(file);
 
@@ -356,7 +384,17 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
 
     // 업로딩 팝업 열기
     $scope.excelUploadingPopup = function (showFg) {
+
+        // 전체 화면 클릭 차단 오버레이 (메인 JSP에 c:import 되어 같은 문서의 #loadingOverlay/핸들러를 공유)
+        var overlay = document.getElementById('loadingOverlay');
+
         if (showFg) {
+            // 우클릭 차단 등록
+            document.addEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 등록
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 활성화 (클릭 차단)
+            if (overlay) overlay.classList.add('active');
             // 팝업내용 동적 생성
             var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['empCardInfo.excelUploading'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 업로드 중...</div>';
@@ -366,6 +404,12 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             // 팝업 show
             $scope._loadingPopup.show(true);
         } else {
+            // 우클릭 차단 해제
+            document.removeEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 해제
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 비활성화
+            if (overlay) overlay.classList.remove('active');
             $scope._loadingPopup.hide(true);
         }
     };

@@ -56,6 +56,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
+ * @ 2026.09.28  김유승      아이디 저장 쿠키 저장 시 제어문자 제거 (IllegalArgumentException 방지)
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01
@@ -378,8 +379,9 @@ public class AuthController {
             throw new AuthenticationException(messageService.get("login.fail"), "/error/403.sb");
         }
 
-        // 아이디 저장 쿠키 처리
-        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(), params.isChk() ? 30*24*60*6 : 0);
+        // 아이디 저장 쿠키 처리 (제어문자(개행·탭 등) 포함 입력 시 쿠키 저장 오류(IllegalArgumentException) 방지를 위해 제거)
+        String cookieSaveId = params.getUserId() == null ? "" : params.getUserId().replaceAll("\\p{Cntrl}", "");
+        WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, cookieSaveId, params.isChk() ? 30*24*60*6 : 0);
 
         // 웹에서 로그인 시, 모바일 로그인 여부 쿠키 제거
         WebUtil.removeCookie(WebUtils.getCookie( request, BaseEnv.SB_LOGIN_FG ));

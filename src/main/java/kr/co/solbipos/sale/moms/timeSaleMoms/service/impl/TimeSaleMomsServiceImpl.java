@@ -24,6 +24,7 @@ import java.util.*;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2024.01.03  김설아      최초생성
+ * @ 2026.09.29  김유승      분류 선택 시 하위분류 포함 리스트 사전 조회(getProdClassCdList) 후 IN 조건으로 전달 — 분류 조회 속도 개선
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2024.01.03
@@ -69,6 +70,12 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
             timeSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
+        // (2026.09.29) 분류 선택 시 하위분류 포함 리스트를 먼저 조회하여 본 조회 쿼리에 IN 조건으로 전달 (계층 서브쿼리 사용 시 실행계획 불안정으로 분류 조회 지연)
+        if(!StringUtil.getOrBlank(timeSaleMomsVO.getProdClassCd()).equals("")) {
+            List<String> prodClassCdList = timeSaleMomsMapper.getProdClassCdList(timeSaleMomsVO);
+            timeSaleMomsVO.setArrProdClassCd(prodClassCdList.toArray(new String[0]));
+        }
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 매장브랜드, 상품브랜드가 '전체' 일때
             if (timeSaleMomsVO.getStoreHqBrandCd() == "" || timeSaleMomsVO.getStoreHqBrandCd() == null || timeSaleMomsVO.getProdHqBrandCd() == "" || timeSaleMomsVO.getProdHqBrandCd() == null) {
@@ -109,6 +116,12 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
             timeSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
         }
 
+        // (2026.09.29) 분류 선택 시 하위분류 포함 리스트를 먼저 조회하여 본 조회 쿼리에 IN 조건으로 전달 (계층 서브쿼리 사용 시 실행계획 불안정으로 분류 조회 지연)
+        if(!StringUtil.getOrBlank(timeSaleMomsVO.getProdClassCd()).equals("")) {
+            List<String> prodClassCdList = timeSaleMomsMapper.getProdClassCdList(timeSaleMomsVO);
+            timeSaleMomsVO.setArrProdClassCd(prodClassCdList.toArray(new String[0]));
+        }
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 매장브랜드, 상품브랜드가 '전체' 일때
             if (timeSaleMomsVO.getStoreHqBrandCd() == "" || timeSaleMomsVO.getStoreHqBrandCd() == null || timeSaleMomsVO.getProdHqBrandCd() == "" || timeSaleMomsVO.getProdHqBrandCd() == null) {
@@ -147,6 +160,12 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
             ProdVO prodVO = new ProdVO();
             prodVO.setArrSplitProdCd(CmmUtil.splitText(timeSaleMomsVO.getProdCds(), 3900));
             timeSaleMomsVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        // (2026.09.29) 분류 선택 시 하위분류 포함 리스트를 먼저 조회하여 본 조회 쿼리에 IN 조건으로 전달 (계층 서브쿼리 사용 시 실행계획 불안정으로 분류 조회 지연)
+        if(!StringUtil.getOrBlank(timeSaleMomsVO.getProdClassCd()).equals("")) {
+            List<String> prodClassCdList = timeSaleMomsMapper.getProdClassCdList(timeSaleMomsVO);
+            timeSaleMomsVO.setArrProdClassCd(prodClassCdList.toArray(new String[0]));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

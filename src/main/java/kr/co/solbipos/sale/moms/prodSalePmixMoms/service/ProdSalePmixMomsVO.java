@@ -99,6 +99,9 @@ public class ProdSalePmixMomsVO extends PageVO {
     /** 상품분류 */
     private String prodClassCd;
 
+    /** 상품분류 하위포함 리스트 (2026.09.29 분류 선택 시 사전 조회하여 IN 조건으로 사용) */
+    private String[] arrProdClassCd;
+
     /** 사용자 아이디 */
     private String userId;
 
@@ -283,6 +286,14 @@ public class ProdSalePmixMomsVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
     }
 
     public String getUserId() {

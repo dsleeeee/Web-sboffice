@@ -8,6 +8,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김설아     2023.12.19     최초작성
+    2       김유승     2026.09.29     분류 필터를 계층 서브쿼리 → 사전 조회 리스트(getProdClassCdList) IN 바인딩으로 변경 — 대형 분류 실행계획 불안정 해소
 -->
 <mapper namespace="kr.co.solbipos.sale.moms.prodSalePmixMoms.service.impl.ProdSalePmixMomsMapper">
 
@@ -85,15 +86,12 @@
                         </foreach>
                     </if>
                 </if>
-                <if test="prodClassCd != null and prodClassCd != ''">
-                    AND tmp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                PROD_CLASS_CD
-                                                FROM TB_MS_PRODUCT_CLASS
-                                                WHERE STORE_CD = tmp.STORE_CD
-                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
-                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
-                                            )
+                <!-- (2026.09.29) 분류 하위포함 리스트를 서비스에서 사전 조회(getProdClassCdList)하여 IN 바인딩 : 계층 서브쿼리 사용 시 실행계획이 틀어져 대형 분류 조회가 수분~수십분 소요됨 -->
+                <if test="arrProdClassCd != null and arrProdClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN
+                    <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                        #{item}
+                    </foreach>
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
                     AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -246,15 +244,12 @@
                         </foreach>
                     </if>
                 </if>
-                <if test="prodClassCd != null and prodClassCd != ''">
-                    AND tmp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                PROD_CLASS_CD
-                                                FROM TB_MS_PRODUCT_CLASS
-                                                WHERE STORE_CD = tmp.STORE_CD
-                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
-                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
-                                            )
+                <!-- (2026.09.29) 분류 하위포함 리스트를 서비스에서 사전 조회(getProdClassCdList)하여 IN 바인딩 : 계층 서브쿼리 사용 시 실행계획이 틀어져 대형 분류 조회가 수분~수십분 소요됨 -->
+                <if test="arrProdClassCd != null and arrProdClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN
+                    <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                        #{item}
+                    </foreach>
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
                     AND tsdps.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -332,6 +327,20 @@
         ) B
         GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
         ORDER BY B.PROD_CLASS_CD, B.PROD_CD
+    </select>
+
+    <!-- 분류 하위포함 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS
+        COMMENTS : (2026.09.29) 분류 선택 시 하위분류 포함 코드 리스트를 사전 조회하여 본 조회 쿼리에 IN 조건으로 전달
+    -->
+    <select id="getProdClassCdList" parameterType="ProdSalePmixMomsVO" resultType="String">
+        /* ProdSalePmixMomsMapper.getProdClassCdList */
+        SELECT PROD_CLASS_CD
+        FROM TB_MS_PRODUCT_CLASS
+        WHERE STORE_CD = '000001'     -- 속도를 위해 분류 매장코드 고정
+        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = '000001'
+        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = '000001'
     </select>
 
 </mapper>

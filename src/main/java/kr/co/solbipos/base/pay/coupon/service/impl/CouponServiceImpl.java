@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.09  김지은      최초생성
+ * @ 2026.09.28  김유승      쿠폰상품 등록/삭제 계열 메서드에 트랜잭션 적용 (본사/매장 처리 원자성 확보)
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.08.09
@@ -396,6 +398,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰적용상품 등록 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int registCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
@@ -426,6 +429,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰적용상품 삭제 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
@@ -466,6 +470,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰적용매장 등록 : 해당매장에 쿠폰 + 쿠폰별상품 적용 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int registCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
@@ -504,6 +509,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰적용매장 삭제 : 해당매장에 쿠폰 + 쿠폰별상품 삭제 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
@@ -603,6 +609,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 제외상품 등록 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int registCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
         String currentDt = currentDateTimeString();
@@ -634,6 +641,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 제외상품 삭제 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
         String currentDt = currentDateTimeString();
@@ -683,6 +691,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 적용대상소분류 등록 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int registCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
         String currentDt = currentDateTimeString();
@@ -715,6 +724,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 적용대상소분류 삭제 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
         String currentDt = currentDateTimeString();
@@ -750,6 +760,7 @@ public class CouponServiceImpl implements CouponService {
 
     /** 쿠폰적용상품 엑셀 업로드 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int getExcelUploadSave(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();

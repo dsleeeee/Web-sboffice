@@ -338,7 +338,7 @@ function getToday() {
 	mm = '0' + mm;
   }
 
-  today = yyyy + mm + dd;
+  today = '' + yyyy + mm + dd;
 
   return today;
 }
@@ -417,7 +417,7 @@ function getOneMonthLater(){
         mm = '0' + mm;
     }
 
-    oneMonthLater = yyyy + mm + dd;
+    oneMonthLater = '' + yyyy + mm + dd;
 
     return oneMonthLater;
 }

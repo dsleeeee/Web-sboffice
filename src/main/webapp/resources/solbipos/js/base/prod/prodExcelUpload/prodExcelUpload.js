@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2020.09.09     김설아      1.0
+ * 2026.09.23     김유승      1.1            저장 중 화면 클릭·새로고침 차단 오버레이 추가
  *
  * **************************************************************/
 /**
@@ -842,7 +843,17 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
     // 작업내역 로딩 팝업
     $scope.excelUploadingPopup = function (showFg) {
+
+        // 전체 화면 클릭 차단 오버레이 (메인 JSP의 #loadingOverlay/핸들러를 공유)
+        var overlay = document.getElementById('loadingOverlay');
+
         if (showFg) {
+            // 우클릭 차단 등록
+            document.addEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 등록
+            window.addEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 활성화 (클릭 차단)
+            if (overlay) overlay.classList.add('active');
             // 팝업내용 동적 생성
             var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
@@ -852,6 +863,12 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
             // 팝업 show
             $scope._loadingPopup.show(true);
         } else {
+            // 우클릭 차단 해제
+            document.removeEventListener('contextmenu', contextMenuHandler);
+            // 브라우저 닫기/새로고침 차단 해제
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            // 오버레이 비활성화
+            if (overlay) overlay.classList.remove('active');
             $scope._loadingPopup.hide(true);
         }
     };

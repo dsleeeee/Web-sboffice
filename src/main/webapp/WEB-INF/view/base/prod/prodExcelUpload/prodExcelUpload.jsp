@@ -9,6 +9,9 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
+<%-- 전체 화면 클릭 차단 오버레이 --%>
+<div id="loadingOverlay" class="loading-overlay"></div>
+
 <div class="contents" id ="divProdExcelUploadAuth" style="display: none">
     <div class="elseCon">
         <p class="lgTxt">죄송합니다.<br />요청하신 페이지에 권한이 없습니다.</p>
@@ -319,7 +322,42 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20251016.01" charset="utf-8"></script>
+<%-- 저장 중 클릭/이탈 차단 핸들러 --%>
+<script type="text/javascript">
+  // 저장 중 브라우저 닫기/새로고침 차단
+  var beforeUnloadHandler = function (e) {
+      e.preventDefault();
+      e.returnValue = ''; // Chrome 필수
+      return '저장 중입니다. 페이지를 떠나면 데이터가 손실될 수 있습니다.';
+  };
+
+  // 우클릭 차단 핸들러
+  var contextMenuHandler = function (e) {
+      e.preventDefault();
+      return false;
+  };
+</script>
+
+<style type="text/css">
+  /* 전체 화면 클릭 차단 오버레이 */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0); /* 투명 (어둡게 하려면 alpha 값 조정) */
+    z-index: 9999;
+    cursor: not-allowed;
+  }
+
+  .loading-overlay.active {
+    display: block;
+  }
+</style>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20260923.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -60,7 +60,7 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
     /** 사이드메뉴 재전송차단 알림 웹훅 URL (채널 확정 시 교체) */
     private static final String SIDEMENU_RESEND_HOOK_URL = "https://nhnent.dooray.com/services/3898710244970049535/4332060267598961154/BZaRi-z-Tru2G04bmtRizg";
     /** 사이드메뉴 재전송차단 알림 봇 이름 */
-    private static final String SIDEMENU_RESEND_BOT_NAME = "사이드복사차단알림봇";
+    private static final String SIDEMENU_RESEND_BOT_NAME = "사이드메뉴차단알림봇";
 
     /** SMS 본문 미리보기 최대 길이 */
     private static final int PREVIEW_LEN = 50;
@@ -105,7 +105,7 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
             return;
         }
         send(SIDEMENU_RESEND_HOOK_URL, SIDEMENU_RESEND_BOT_NAME,
-                "[사이드복사 재전송차단] " + sideMenuReqTypeNm(reqType)
+                "[사이드메뉴 재전송차단] " + sideMenuReqTypeNm(reqType)
                         + "\norgnCd: " + orgnInfo(sessionInfoVO)
                         + "\n건수: " + reqCnt
                         + "\nnonce: " + reqNonce);

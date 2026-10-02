@@ -96,7 +96,12 @@ public class ProdImgServiceImpl implements ProdImgService {
             String dt = currentDateTimeString();
 
             // 접속권한에 따른 등록자정보 및 경로 셋팅
-            // 첨부파일 업로드 시, sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 해당 방식 사용.
+            // (2026.09.29) 화면 전송값(세션 오염에 취약) 대신 로그인 세션 기준으로 소속/코드 세팅.
+            prodImgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodImgVO.setStoreCd(sessionInfoVO.getStoreCd());
+            prodImgVO.setUserId(sessionInfoVO.getUserId());
+
             if(String.valueOf(prodImgVO.getOrgnFg()).equals("H")) {
                 prodImgVO.setModId(prodImgVO.getUserId());
                 prodImgVO.setRegId(prodImgVO.getUserId());
@@ -215,6 +220,11 @@ public class ProdImgServiceImpl implements ProdImgService {
             String path_folder = "";
 
             // 접속권한에 따른 경로 셋팅
+            // (2026.09.29) 화면 전송값 대신 로그인 세션 기준으로 소속/코드 세팅 : 저장(saveProdImg)과 동일 보정
+            prodImgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodImgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodImgVO.setStoreCd(sessionInfoVO.getStoreCd());
+
             if(String.valueOf(prodImgVO.getOrgnFg()).equals("H")) {
                 path_folder = prodImgVO.getHqOfficeCd();
 

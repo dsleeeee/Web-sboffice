@@ -23,6 +23,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2023.01.20   이다솜      최초생성
+ * @ 2026.09.29   김유승      분류 선택 시 하위분류 포함 리스트 사전 조회(getProdClassCdList) 후 IN 조건으로 전달 — 분류 조회 속도 개선
  *
  * @author 솔비포스 개발본부 WEB개발팀 이다솜
  * @since 2023.01.20
@@ -64,6 +65,12 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
             ProdVO prodVO = new ProdVO();
             prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdChannelVO.getProdCds(), 3900));
             timeProdChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        // (2026.09.29) 분류 선택 시 하위분류 포함 리스트를 먼저 조회하여 본 조회 쿼리에 IN 조건으로 전달 (매장 상관 계층 서브쿼리 사용 시 실행계획 불안정으로 분류 조회 지연)
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getProdClassCd()).equals("")) {
+            List<String> prodClassCdList = timeProdChannelMapper.getProdClassCdList(timeProdChannelVO);
+            timeProdChannelVO.setArrProdClassCd(prodClassCdList.toArray(new String[0]));
         }
 
         // 매장브랜드 '전체' 일때
@@ -155,6 +162,12 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
             ProdVO prodVO = new ProdVO();
             prodVO.setArrSplitProdCd(CmmUtil.splitText(timeProdChannelVO.getProdCds(), 3900));
             timeProdChannelVO.setProdCdQuery(popupMapper.getSearchMultiProdRtn(prodVO));
+        }
+
+        // (2026.09.29) 분류 선택 시 하위분류 포함 리스트를 먼저 조회하여 본 조회 쿼리에 IN 조건으로 전달 (매장 상관 계층 서브쿼리 사용 시 실행계획 불안정으로 분류 조회 지연)
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getProdClassCd()).equals("")) {
+            List<String> prodClassCdList = timeProdChannelMapper.getProdClassCdList(timeProdChannelVO);
+            timeProdChannelVO.setArrProdClassCd(prodClassCdList.toArray(new String[0]));
         }
 
         // 매장브랜드 '전체' 일때

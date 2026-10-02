@@ -154,6 +154,16 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(msg);
             return false;
           }
+          // 메모구분 미입력 체크 (빈값/undefined/null 모두)
+          if (nvl($scope.flex.collectionView.itemsEdited[i].memoFg, '') === '') {
+            $scope._popMsg(messages["kitchenMemo.memoFg"] + messages["kitchenMemo.inputEnv"]);
+            return false;
+          }
+          // 사용여부 미입력 체크 (빈값/undefined/null 모두)
+          if (nvl($scope.flex.collectionView.itemsEdited[i].useYn, '') === '') {
+            $scope._popMsg(messages["kitchenMemo.useYn"] + messages["kitchenMemo.inputEnv"]);
+            return false;
+          }
           $scope.flex.collectionView.itemsEdited[i].status = "U";
           params.push($scope.flex.collectionView.itemsEdited[i]);
         } else {
@@ -169,6 +179,16 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
             var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
                 ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].kitchnMemoNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
+            return false;
+          }
+          // 메모구분 미입력 체크 (빈값/undefined/null 모두)
+          if (nvl($scope.flex.collectionView.itemsAdded[i].memoFg, '') === '') {
+            $scope._popMsg(messages["kitchenMemo.memoFg"] + messages["kitchenMemo.inputEnv"]);
+            return false;
+          }
+          // 사용여부 미입력 체크 (빈값/undefined/null 모두)
+          if (nvl($scope.flex.collectionView.itemsAdded[i].useYn, '') === '') {
+            $scope._popMsg(messages["kitchenMemo.useYn"] + messages["kitchenMemo.inputEnv"]);
             return false;
           }
           $scope.flex.collectionView.itemsAdded[i].status = "I";

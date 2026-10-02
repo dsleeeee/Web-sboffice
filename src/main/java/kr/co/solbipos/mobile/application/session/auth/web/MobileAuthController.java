@@ -365,11 +365,12 @@ public class MobileAuthController {
             return "login/mlogin:Login";
         }
 
-        // 아이디 저장 쿠키 처리
+        // 아이디 저장 쿠키 처리 (제어문자(개행·탭 등) 포함 입력 시 쿠키 저장 오류(IllegalArgumentException) 방지를 위해 제거)
+        String cookieSaveId = params.getUserId() == null ? "" : params.getUserId().replaceAll("\\p{Cntrl}", "");
         if(params.isChk() || params.isChkLoginAuto()){
-            WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(),30*24*60*60);
+            WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, cookieSaveId,30*24*60*60);
         }else{
-            WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, params.getUserId(),0);
+            WebUtil.setCookie(BaseEnv.LOGIN_CHECK_ID_SAVE, cookieSaveId,0);
         }
 
         params.setLoginIp(getClientIp(request));
