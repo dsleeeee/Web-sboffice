@@ -284,6 +284,20 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
                 // return data setting
                 resultMap.put("uniqueId", jsonNode.get("response").get("id").asText());
                 resultMap.put("callbackPage", result.getStr("callbackPage"));
+
+                // 네이버 플레이스 플러스 연동인 경우, 동의여부확인 API 호출 및 동의여부 저장
+                // (최초 연동 시 TB_CM_NAVER_LINK_AGREEMENT 데이터가 없어 개인(신용)정보 제3자 제공 동의 저장 시 오류 발생 방지)
+                if (result.getStr("callbackPage").contains("/naverPlacePlusLink/popup/naverPlacePlusPop")) {
+                    try {
+                        NaverPlacePlusApiVO agreeApiVO = new NaverPlacePlusApiVO();
+                        agreeApiVO.setHqOfficeCd(result.getStr("hqOfficeCd"));
+                        agreeApiVO.setStoreCd(result.getStr("storeCd"));
+                        agreeApiVO.setUserId(result.getStr("userId"));
+                        getAgreeYn(agreeApiVO, new SessionInfoVO());
+                    } catch (Exception e) {
+                        System.out.println("동의여부확인 API 호출 오류 = " + e);
+                    }
+                }
             }
 
         } catch (Exception e) {

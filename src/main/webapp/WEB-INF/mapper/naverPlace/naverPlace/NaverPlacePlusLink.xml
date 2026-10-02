@@ -279,6 +279,7 @@
         INSERT (
             A.HQ_OFFICE_CD,
             A.STORE_CD,
+            A.UNIQUE_ID,
             A.REG_DT,
             A.REG_ID,
             A.MOD_DT,
@@ -289,6 +290,7 @@
         VALUES (
             #{hqOfficeCd},
             #{storeCd},
+            #{uniqueId},
             #{regDt},
             #{regId},
             #{modDt},

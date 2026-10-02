@@ -272,6 +272,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 상품정보 저장 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
 //    public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 //    public long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
@@ -1678,6 +1679,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 선택상품삭제 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int selectProdDelete(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO){
 
@@ -2001,6 +2003,7 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 전체상품삭제 */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int allProdDelete(ProdVO prodVO, SessionInfoVO sessionInfoVO){
 
