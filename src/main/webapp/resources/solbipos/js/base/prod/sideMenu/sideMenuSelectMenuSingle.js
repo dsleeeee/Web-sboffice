@@ -921,6 +921,108 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectProdSingleCtrl', $scope, $http, false));
 
+  // 선택상품 저장(X-Nonce 멱등) : 저장이 길어지면(약 4분) 네트워크 장비가 같은 요청을 자동 재전송해
+  // 중복 실행/ORA-00001 이 발생하므로, 요청마다 1회용 nonce 를 부여해 서버가 재전송을 차단(RESEND_BLOCKED)하게 하고
+  // 차단응답을 받으면 팝업 없이 로딩을 유지한 채 원본 요청 처리상태를 폴링해 완료 시 정상 저장과 동일하게 마무리한다.
+  $scope._saveNonce = function (url, params, callback) {
+    var sParam = {};
+    // 길이체크
+    if (params.length <= 0) {
+      // 변경사항이 없습니다.
+      $scope._popMsg(messages['cmm.not.modify']);
+      return false;
+    } else {
+      // 로딩바 show
+      $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
+      // 가상로그인 대응한 session id 설정
+      if (document.getElementsByName('sessionId')[0]) {
+        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+    }
+    // 이번 저장 실행 식별값(1회용)
+    var reqNonce = 'N' + (new Date().getTime()).toString(36) + Math.random().toString(36).slice(2, 8);
+    var POLL_INTERVAL_MS = 30000; // 폴링 주기 30초
+    var POLL_MAX_CNT = 90;        // 최대 45분
+    // 저장 완료/실패 공통 마무리 (로딩 해제 + 팝업 + 콜백)
+    var saveDone = function (succYn) {
+      $scope.$broadcast('loadingPopupInactive');
+      if (succYn) {
+        $scope._popMsg(messages['cmm.saveSucc']);
+        $scope.flex.collectionView.clearChanges();
+      } else {
+        $scope._popMsg(messages['cmm.saveFail']);
+      }
+      if (typeof callback === 'function') {
+        setTimeout(function () {
+          callback();
+        }, 10);
+      }
+    };
+    // 재전송 차단응답 수신 후 원본 요청 처리상태 폴링
+    var pollStatus = function (cnt) {
+      if (cnt >= POLL_MAX_CNT) {
+        $scope.$broadcast('loadingPopupInactive');
+        $scope._popMsg(messages['sideMenu.copy.polling.timeout'] || '저장 처리가 계속 진행 중입니다. 잠시 후 조회하여 결과를 확인해주세요.');
+        return;
+      }
+      setTimeout(function () {
+        $http({
+          method: 'POST',
+          url: '/base/prod/sideMenu/menuClass/getSdselCopyReqStatus.sb',
+          params: angular.extend({nonce: reqNonce}, sParam)
+        }).then(function (res) {
+          var st = res.data && res.data.data;
+          if (st === 'DONE') {
+            // 원본 저장 완료 → 정상 저장과 동일하게 마무리
+            saveDone(true);
+          } else if (st === 'ERR') {
+            saveDone(false);
+          } else {
+            pollStatus(cnt + 1); // ING 등 → 계속 대기
+          }
+        }, function () {
+          pollStatus(cnt + 1); // 폴링 요청 실패(순단) → 다음 주기 재시도
+        });
+      }, POLL_INTERVAL_MS);
+    };
+    // ajax 통신 설정
+    $http({
+      method: 'POST',
+      url: url,
+      data: params,
+      params: sParam,
+      headers: {'Content-Type': 'application/json; charset=utf-8', 'X-Nonce': reqNonce}
+    }).then(function successCallback(response) {
+      // 자동 재전송이 차단된 응답 → 팝업 없이 로딩 유지 + 원본 처리상태 폴링으로 전환
+      if (response.data && response.data.data === 'RESEND_BLOCKED') {
+        pollStatus(0);
+        return;
+      }
+      $scope.$broadcast('loadingPopupInactive');
+      if ($scope._httpStatusCheck(response, true)) {
+        $scope._popMsg(messages['cmm.saveSucc']);
+        $scope.flex.collectionView.clearChanges();
+      }
+      if (typeof callback === 'function') {
+        setTimeout(function () {
+          callback();
+        }, 10);
+      }
+    }, function errorCallback(response) {
+      $scope.$broadcast('loadingPopupInactive');
+      if (response.data && response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.saveFail']);
+      }
+      if (typeof callback === 'function') {
+        setTimeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+  };
+
   // 상품 본사통제구분 (H : 본사, S: 매장)
   // $scope.prodEnvstVal = prodEnvstVal;
 
@@ -1079,7 +1181,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
       }
 
       // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
+      $scope._saveNonce('/base/prod/sideMenu/menuProd/save.sb', params, function() {
 
         // 선택상품 리스트 재조회
         var params = {};
@@ -1264,7 +1366,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     // 저장
     $scope.save = function(params) {
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
+        $scope._saveNonce('/base/prod/sideMenu/menuProd/save.sb', params, function() {
 
             // 선택상품 리스트 재조회
             var params = {};

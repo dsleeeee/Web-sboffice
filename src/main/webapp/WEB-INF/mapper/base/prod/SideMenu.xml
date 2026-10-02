@@ -3620,7 +3620,8 @@
         TABLE    : TB_HQ_PRODUCT_SDSEL_COPY_REQ
         PARAM    : sideMenuCopyReqVO
         COMMENTS : 선택분류/선택상품 복사 저장 진입 시 nonce 를 선점 INSERT 한다.
-                   같은 nonce 자동 재전송이면 PK(REQ_NONCE) 중복(ORA-00001)으로 튕겨 차단된다.
+                   같은 nonce 자동 재전송 여부는 서비스(claim)에서 먼저 SELECT 로 확인해 차단하고,
+                   ms 단위 동시요청만 PK(REQ_NONCE) 충돌이 최후 방어로 잡는다.
                    ※ 반드시 REQUIRES_NEW 로 즉시 커밋되어야 오래 걸리는 저장 도중 들어온 2차가 차단됨.
     -->
     <insert id="insertSdselCopyReq" parameterType="kr.co.solbipos.base.prod.sidemenu.service.SideMenuCopyReqVO">

@@ -15,6 +15,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2023.12.19  김설아      최초생성
+ * @ 2026.09.29  김유승      분류 하위포함 리스트 조회(getProdClassCdList) 추가
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2023.12.19
@@ -31,4 +32,7 @@ public interface ProdSalePmixMomsMapper {
 
     /** 상품매출(P.MIX) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSalePmixMomsExcelList(ProdSalePmixMomsVO prodSalePmixMomsVO);
+
+    /** 분류 하위포함 리스트 조회 */
+    List<String> getProdClassCdList(ProdSalePmixMomsVO prodSalePmixMomsVO);
 }

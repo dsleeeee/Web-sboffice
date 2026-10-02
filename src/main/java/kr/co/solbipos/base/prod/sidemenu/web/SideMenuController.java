@@ -566,9 +566,52 @@ public class SideMenuController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        int result = sideMenuService.saveMenuProdList(sideMenuSelProdVOs, sessionInfoVO);
 
-        return returnJson(Status.OK, result);
+        String nonce = request.getHeader("X-Nonce");
+
+        // 자동 재전송 차단(멱등) : 같은 nonce 가 이미 처리 중/처리됨이면 저장 로직을 타지 않고 차단
+        // (nonce 없는 요청은 기존 동작대로 통과. 사용자 재클릭은 nonce 가 달라 정상 처리됨)
+        boolean claimed = false;
+        if (nonce != null && !nonce.isEmpty()) {
+            SideMenuCopyReqVO reqVO = new SideMenuCopyReqVO();
+            reqVO.setReqNonce(nonce);
+            reqVO.setHqOfficeCd(sessionInfoVO != null ? sessionInfoVO.getHqOfficeCd() : null);
+            reqVO.setUserId(sessionInfoVO != null ? sessionInfoVO.getUserId() : null);
+            reqVO.setReqType("PROD_SAVE");
+            reqVO.setReqCnt(sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0);
+            try {
+                sideMenuCopyReqService.claim(reqVO);
+                claimed = true;
+            } catch (DuplicateKeyException e) {
+                // 같은 nonce 가 이미 처리 중/처리됨 = 자동 재전송 → 차단
+                CmmUtil.frontLog("[선택상품저장][재전송차단] 계정=" + (sessionInfoVO != null ? sessionInfoVO.getUserId() : "?")
+                        + " nonce=" + nonce);
+                // 재전송 횟수 기록(실패해도 차단은 유효하므로 무시)
+                try { sideMenuCopyReqService.markResend(nonce); } catch (Exception ignore) {}
+                // 사내 메신저(두레이) 알림 - 비동기, 실패 무시
+                doorayAlertService.notifySideMenuResendBlock("PROD_SAVE", nonce,
+                        sideMenuSelProdVOs != null ? sideMenuSelProdVOs.length : 0, sessionInfoVO);
+                // 오류가 아닌 전용 표식으로 응답 → 화면 JS 는 이 표식을 받으면 팝업 없이 로딩 유지 + 상태폴링으로 전환
+                return returnJson(Status.OK, "RESEND_BLOCKED");
+            }
+        }
+
+        // 기본 ERR 로 두고 저장이 정상 완료된 경우에만 DONE 으로 기록 (어떤 예외/에러로 중단돼도 ERR 보장)
+        String procStatus = "ERR";
+        try {
+            int result = sideMenuService.saveMenuProdList(sideMenuSelProdVOs, sessionInfoVO);
+            procStatus = "DONE";
+            return returnJson(Status.OK, result);
+        } finally {
+            if (claimed) {
+                // 상태갱신 실패가 본 요청 결과를 덮어쓰지 않도록 방어(선점행은 이미 남아있어 재전송 차단은 유효)
+                try {
+                    sideMenuCopyReqService.finish(nonce, procStatus);
+                } catch (Exception ignore) {
+                    CmmUtil.frontLog("[선택상품저장][상태갱신실패] nonce=" + nonce + " status=" + procStatus);
+                }
+            }
+        }
     }
 
     /**

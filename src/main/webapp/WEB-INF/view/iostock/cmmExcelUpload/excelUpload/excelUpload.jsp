@@ -651,7 +651,9 @@
                     reader.onload = function(){
                         var fileData = reader.result;
                         var wb = XLSX.read(fileData, {type : 'binary'});
-                        wb.SheetNames.forEach(function(sheetName) {
+                        // 첫 번째 시트만 처리 (다중시트 파일 업로드 시 뒤 시트가 앞 시트를 덮어쓰는 혼선 방지)
+                        //  - .filter(Boolean) : 시트가 0개인 파일이면 반복하지 않음(기존 forEach 무해 동작 유지)
+                        [wb.SheetNames[0]].filter(Boolean).forEach(function(sheetName) {
                             arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
                             if (!arr || arr.length === 0) {
@@ -1303,7 +1305,9 @@
                     reader.onload = function(){
                         var fileData = reader.result;
                         var wb = XLSX.read(fileData, {type : 'binary'});
-                        wb.SheetNames.forEach(function(sheetName) {
+                        // 첫 번째 시트만 처리 (다중시트 파일 업로드 시 뒤 시트가 앞 시트를 덮어쓰는 혼선 방지)
+                        //  - .filter(Boolean) : 시트가 0개인 파일이면 반복하지 않음(기존 forEach 무해 동작 유지)
+                        [wb.SheetNames[0]].filter(Boolean).forEach(function(sheetName) {
                             arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
                             if (!arr || arr.length === 0) {

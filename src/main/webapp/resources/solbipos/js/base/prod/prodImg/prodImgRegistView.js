@@ -420,8 +420,14 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.$broadcast('loadingPopupActive');
 
+            // (2026.09.29) 파일 업로드(multipart)는 공통 ajax의 sid 자동첨부를 타지 않아 가상로그인 시
+            //              서버가 매장세션이 아닌 base 세션으로 풀려 매장코드가 비게 됨 → sid 명시 첨부
+            var saveProdImgUrl = "/base/prod/prodImg/prodImg/saveProdImg.sb";
+            var saveSidEl = document.getElementsByName("sessionId")[0];
+            if (saveSidEl && saveSidEl.value) saveProdImgUrl += "?sid=" + saveSidEl.value;
+
             $.ajax({
-                url: "/base/prod/prodImg/prodImg/saveProdImg.sb",
+                url: saveProdImgUrl,
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -437,8 +443,9 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope.$broadcast('loadingPopupInactive');
                     }
                     else if (result.status === "FAIL") {
-                        var msg = result.status + " : " + result.data.msg;
-                        $scope._popMsg(msg);
+                        // (2026.09.29) result.data 가 없을 때(NPE) 방어 - 저장 실패 응답 시 data 미포함
+                        var failMsg = (result.data && result.data.msg) ? result.data.msg : "저장에 실패했습니다.";
+                        $scope._popMsg(failMsg);
                         $scope.$broadcast('loadingPopupInactive');
                     }
                     else if (result.status === "SERVER_ERROR") {
@@ -506,8 +513,14 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.$broadcast('loadingPopupActive');
 
+            // (2026.09.29) 파일 업로드(multipart)는 공통 ajax의 sid 자동첨부를 타지 않아 가상로그인 시
+            //              서버가 매장세션이 아닌 base 세션으로 풀려 매장코드가 비게 됨 → sid 명시 첨부
+            var delProdImgUrl = "/base/prod/prodImg/prodImg/delProdImg.sb";
+            var delSidEl = document.getElementsByName("sessionId")[0];
+            if (delSidEl && delSidEl.value) delProdImgUrl += "?sid=" + delSidEl.value;
+
             $.ajax({
-                url: "/base/prod/prodImg/prodImg/delProdImg.sb",
+                url: delProdImgUrl,
                 type: "POST",
                 data: formData,
                 processData: false,
