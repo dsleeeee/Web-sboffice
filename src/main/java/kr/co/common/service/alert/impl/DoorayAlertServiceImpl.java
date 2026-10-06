@@ -119,6 +119,9 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
         if ("PROD_COPY".equals(reqType)) {
             return "상품복사";
         }
+        if ("PROD_SAVE".equals(reqType)) {
+            return "상품추가";
+        }
         return reqType;
     }
 

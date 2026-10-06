@@ -713,14 +713,18 @@
                             console.log(arr);
                             //console.log(JSON.stringify(arr, null, 2));
 
-                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                             $timeout(function () {
-                                if ($scope.valChk(arr, scope.isCheckedMembr)) {
-                                    scope.data = new wijmo.collections.CollectionView(arr);
-                                } else {
-                                    scope.data = new wijmo.collections.CollectionView(arr);
+                                try {
+                                    if ($scope.valChk(arr, scope.isCheckedMembr)) {
+                                        scope.data = new wijmo.collections.CollectionView(arr);
+                                    } else {
+                                        scope.data = new wijmo.collections.CollectionView(arr);
+                                    }
+                                    scope.data.trackChanges = true;
+                                } finally {
+                                    // 검증/바인딩 중 예외가 나도 로딩창이 멈춘 채 남지 않도록 항상 닫기
+                                    $scope.$broadcast('loadingPopupInactive');
                                 }
-                                scope.data.trackChanges = true;
                             }, 10);
                         })
                     };
@@ -1345,8 +1349,15 @@
                             console.log(arr);
                             //console.log(JSON.stringify(arr, null, 2));
 
-                            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-                            $scope.ajaxChk(arr);
+                            // 로딩창을 먼저 그린 뒤($timeout 한 틱 양보) 동기 검증을 수행, 끝나면 닫는다
+                            $timeout(function () {
+                                try {
+                                    $scope.ajaxChk(arr);
+                                } finally {
+                                    // 처리 중 예외가 나도 로딩창이 멈춘 채 남지 않도록 항상 닫기
+                                    $scope.$broadcast('loadingPopupInactive');
+                                }
+                            }, 10);
                         })
                     };
                     reader.readAsBinaryString(file);
