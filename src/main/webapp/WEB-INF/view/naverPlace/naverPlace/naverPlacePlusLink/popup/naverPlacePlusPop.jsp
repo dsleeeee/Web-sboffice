@@ -87,6 +87,10 @@
     // uniqueId
     var uniqueId = "${uniqueId}";
 
+    // 팝업 Url
+    // (가상로그인 시 서버 세션에 매장정보가 없어 빈 값이므로 sessionStorage 값 사용)
+    var popUrl = "${popUrl}" !== "" ? "${popUrl}" : sessionStorage.getItem("popUrl");
+
     if (prePage == "login") {
 
         // 동의여부확인 API 호출
@@ -166,7 +170,8 @@
         // 약관동의 팝업 후
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
+        //var popupUrl = sessionStorage.getItem("popUrl") + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
+        var popupUrl = popUrl + "/embed/terms?service=lynk_pos,mybiz,booking&to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
@@ -174,7 +179,8 @@
     function btnSearch() {
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/lookup?to=" + redirectURL;
+        //var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/lookup?to=" + redirectURL;
+        var popupUrl = popUrl + "/bizes/lookup?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
@@ -182,7 +188,8 @@
     function btnReg() {
         //var redirectURL = encodeURIComponent("https://neo.lynk.co.kr" + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
         var redirectURL = encodeURIComponent("http://" + window.location.host + "/naverPlace/naverPlace/naverPlacePlusLink/naverPlacePlusPop.sb?uniqueId=" + uniqueId);
-        var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/new?to=" + redirectURL;
+        //var popupUrl = sessionStorage.getItem("popUrl") + "/bizes/new?to=" + redirectURL;
+        var popupUrl = popUrl + "/bizes/new?to=" + redirectURL;
         var popup = window.open(popupUrl, "popup", "width=750, height=1000");
     }
 
@@ -192,6 +199,8 @@
         // 업체 목록 조회 API 호출
         var params = {};
         params.page = (1 > page ? 0 : page);
+        params.hqOfficeCd = sessionStorage.getItem("hqOfficeCd");
+        params.userId = sessionStorage.getItem("userId");
         params.storeCd = sessionStorage.getItem("storeCd");
         params.uniqueId = uniqueId;
 

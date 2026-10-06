@@ -90,7 +90,7 @@ app.controller('naverOrderInfoCtrl', ['$scope', '$http', '$timeout', function ($
 
         var params = {};
         params.channelType = "NAVER";
-        params.posShopId = sessionStorage.getItem("storeCd");
+        //params.posShopId = sessionStorage.getItem("storeCd"); // 서버에서 세션정보로 셋팅
         params.services = [];
 
         params.services.push({

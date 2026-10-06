@@ -449,14 +449,15 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
      * 업체목록조회 API 호출
      *
      * @param naverPlacePlusApiVO
+     * @param sessionInfoVO
      * @return
      */
     @Override
-    public List<Map<String, Object>> getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO) {
+    public List<Map<String, Object>> getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
         // 개발/운영 Api URL 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
-        naverPlacePlusLinkVO.setStoreCd(naverPlacePlusApiVO.getStoreCd());
+        naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
         naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
         naverPlacePlusLinkVO.setApiUrl("API_URL");
         naverPlacePlusLinkVO.setApiKey("");
@@ -465,7 +466,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         // url setting
         String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses";
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken(naverPlacePlusApiVO.getStoreCd()).get("token").toString());
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
 
         List<Map<String, Object>> resultMap = getListRequest(naverPlacePlusApiVO, apiFullUrl);
 
@@ -509,14 +510,15 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
      * 연동 추가 API 호출
      *
      * @param naverPlacePlusApiVO
+     * @param sessionInfoVO
      * @return
      */
     @Override
-    public Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO) {
+    public Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO) {
 
         // 개발/운영 Api URL 조회
         NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
-        naverPlacePlusLinkVO.setStoreCd(naverPlacePlusApiVO.getStoreCd());
+        naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
         naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_API_URL");
         naverPlacePlusLinkVO.setApiUrl("API_URL");
         naverPlacePlusLinkVO.setApiKey("");
@@ -525,7 +527,7 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         // url setting
         String apiFullUrl = apiInfo.getStr("apiUrl") + "/v1/custom/pos/place-businesses/place-id/" + naverPlacePlusApiVO.getPlaceId() + "/agency-mappings";
 
-        naverPlacePlusApiVO.setAccessToken(getAccessToken(naverPlacePlusApiVO.getStoreCd()).get("token").toString());
+        naverPlacePlusApiVO.setAccessToken(getAccessToken(sessionInfoVO.getStoreCd()).get("token").toString());
 
         Map<String, Object> resultMap = postRequest(naverPlacePlusApiVO, apiFullUrl);
 
@@ -542,13 +544,13 @@ public class NaverPlacePlusLinkServiceImpl implements NaverPlacePlusLinkService 
         naverPlacePlusLinkVO.setNaverLinkDt(regDateTime);
         naverPlacePlusLinkVO.setInType("LYNK");
         naverPlacePlusLinkVO.setRegDt(dt);
-        naverPlacePlusLinkVO.setRegId(naverPlacePlusApiVO.getUserId());
+        naverPlacePlusLinkVO.setRegId(sessionInfoVO.getUserId());
         naverPlacePlusLinkVO.setModDt(dt);
-        naverPlacePlusLinkVO.setModId(naverPlacePlusApiVO.getUserId());
+        naverPlacePlusLinkVO.setModId(sessionInfoVO.getUserId());
         naverPlacePlusLinkMapper.updateNaverStore(naverPlacePlusLinkVO);
 
         // 개인(신용)정보 제3자 제공 동의 저장
-        naverPlacePlusLinkVO.setHqOfficeCd(naverPlacePlusApiVO.getHqOfficeCd());
+        naverPlacePlusLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         naverPlacePlusLinkVO.setPersonalInfoProvision("Y");
         naverPlacePlusLinkVO.setPersonalInfoProvisionDt(dt);
         naverPlacePlusLinkMapper.savePersonalInfoProvision(naverPlacePlusLinkVO);

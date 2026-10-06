@@ -181,7 +181,7 @@ app.controller('naverOrderLinkCtrl', ['$scope', '$http', '$timeout', function ($
 
             var params = {};
             params.channelType = "NAVER";
-            params.posShopId = sessionStorage.getItem("storeCd");
+            //params.posShopId = sessionStorage.getItem("storeCd"); // 서버에서 세션정보로 셋팅
 
             $scope._postJSONSave.withOutPopUp("/naverPlace/naverPlace/naverOrderLink/delPlace.sb", params, function (response) {
                 var data = response.data.data.list;
@@ -243,7 +243,7 @@ function btnLinkStore(index) {
         var item = window.storeList[index];
 
         var params = {};
-        params.posShopId = sessionStorage.getItem("storeCd");
+        //params.posShopId = sessionStorage.getItem("storeCd"); // 서버에서 세션정보로 셋팅
         params.channelShopId = item.channelShopId || "";
         params.channelType = "NAVER";
 

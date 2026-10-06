@@ -94,4 +94,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderInfo.js?ver=20260831.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderInfo.js?ver=20261006.01" charset="utf-8"></script>

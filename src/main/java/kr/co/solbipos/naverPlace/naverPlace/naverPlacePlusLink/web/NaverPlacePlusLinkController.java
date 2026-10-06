@@ -242,7 +242,15 @@ public class NaverPlacePlusLinkController {
 
         // 페이지 이동
         String callbackPage = result.getStr("callbackPage");
-        return (callbackPage != null && !callbackPage.isEmpty()) ? callbackPage : "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
+        String viewPage = (callbackPage != null && !callbackPage.isEmpty()) ? callbackPage : "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
+
+        // 팝업 Url (팝업이 새 창으로 열린 경우 sessionStorage 값이 없으므로 서버에서 조회)
+        // 네이버 플레이스 플러스 연동인 경우만 조회
+        if (viewPage.contains("/naverPlacePlusLink/popup/naverPlacePlusPop")) {
+            model.addAttribute("popUrl", getPopUrl(request));
+        }
+
+        return viewPage;
     }
 
     /**
@@ -280,7 +288,9 @@ public class NaverPlacePlusLinkController {
     public Result getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
-        List<Map<String, Object>> resultMap = naverPlacePlusLinkService.getPlaceList(naverPlacePlusApiVO);
+        SessionInfoVO sessionInfoVO = getPopSessionInfo(request, naverPlacePlusApiVO);
+
+        List<Map<String, Object>> resultMap = naverPlacePlusLinkService.getPlaceList(naverPlacePlusApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -299,7 +309,9 @@ public class NaverPlacePlusLinkController {
     public Result mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
-        Map<String, Object> resultMap = naverPlacePlusLinkService.mappingPlace(naverPlacePlusApiVO);
+        SessionInfoVO sessionInfoVO = getPopSessionInfo(request, naverPlacePlusApiVO);
+
+        Map<String, Object> resultMap = naverPlacePlusLinkService.mappingPlace(naverPlacePlusApiVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -339,8 +351,62 @@ public class NaverPlacePlusLinkController {
         // 네.아.로 Unique ID
         model.addAttribute("uniqueId", request.getParameter("uniqueId"));
 
+        // 팝업 Url (팝업이 새 창으로 열린 경우 sessionStorage 값이 없으므로 서버에서 조회)
+        model.addAttribute("popUrl", getPopUrl(request));
+
         // 연동 단계 파악을 위한 화면 정보 셋팅
         model.addAttribute("prePage", "agree");
         return "naverPlace/naverPlace/naverPlacePlusLink/popup/naverPlacePlusPop";
+    }
+
+    /**
+     * 팝업 Url 조회
+     *
+     * @param request
+     * @return
+     */
+    private String getPopUrl(HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 가상로그인 시 팝업 요청에는 sid가 없어 세션에 매장정보가 없으므로, 화면(sessionStorage) 값 사용
+        if (sessionInfoVO.getStoreCd() == null || "".equals(sessionInfoVO.getStoreCd())) {
+            return "";
+        }
+
+        // 개발/운영 Api URL 조회
+        NaverPlacePlusLinkVO naverPlacePlusLinkVO = new NaverPlacePlusLinkVO();
+        naverPlacePlusLinkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        naverPlacePlusLinkVO.setApiInfo("NAVER_PLACE_POP_URL");
+        naverPlacePlusLinkVO.setApiUrl("API_URL");
+        naverPlacePlusLinkVO.setApiKey("");
+        DefaultMap<Object> apiInfo = naverPlacePlusLinkService.getApiUrl(naverPlacePlusLinkVO);
+
+        return apiInfo.getStr("apiUrl");
+    }
+
+    /**
+     * 팝업 요청 세션정보 조회
+     * - 세션정보에 매장코드가 있으면 세션정보 사용
+     * - 가상로그인 시 팝업 요청에는 sid가 없어 세션에 매장정보가 없으므로, 화면(sessionStorage)에서 넘어온 값 사용
+     *
+     * @param request
+     * @param naverPlacePlusApiVO
+     * @return
+     */
+    private SessionInfoVO getPopSessionInfo(HttpServletRequest request, NaverPlacePlusApiVO naverPlacePlusApiVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (sessionInfoVO.getStoreCd() != null && !"".equals(sessionInfoVO.getStoreCd())) {
+            return sessionInfoVO;
+        }
+
+        SessionInfoVO popSessionInfoVO = new SessionInfoVO();
+        popSessionInfoVO.setHqOfficeCd(naverPlacePlusApiVO.getHqOfficeCd());
+        popSessionInfoVO.setStoreCd(naverPlacePlusApiVO.getStoreCd());
+        popSessionInfoVO.setUserId(naverPlacePlusApiVO.getUserId());
+
+        return popSessionInfoVO;
     }
 }

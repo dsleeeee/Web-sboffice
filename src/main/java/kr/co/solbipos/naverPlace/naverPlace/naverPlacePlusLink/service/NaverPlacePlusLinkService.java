@@ -83,9 +83,10 @@ public interface NaverPlacePlusLinkService {
      * 업체목록조회 API 호출
      *
      * @param naverPlacePlusApiVO
+     * @param sessionInfoVO
      * @return
      */
-    List<Map<String, Object>> getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO);
+    List<Map<String, Object>> getPlaceList(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 연동 조회 API 호출
@@ -100,9 +101,10 @@ public interface NaverPlacePlusLinkService {
      * 연동 추가 API
      *
      * @param naverPlacePlusApiVO
+     * @param sessionInfoVO
      * @return
      */
-    Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO);
+    Map<String, Object> mappingPlace(NaverPlacePlusApiVO naverPlacePlusApiVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 연동 해지 API

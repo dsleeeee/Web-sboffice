@@ -242,6 +242,9 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
         naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
 
+        // POS 매장코드 (화면 sessionStorage 값 대신 세션정보 사용)
+        naverOrderApiVO.setPosShopId(sessionInfoVO.getStoreCd());
+
         // 매장정보 조회
         DefaultMap<Object> storeInfo = naverOrderLinkMapper.getStoreInfo(naverOrderLinkVO);
         naverOrderApiVO.setShopName(storeInfo.getStr("storeNm"));
@@ -376,6 +379,9 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
 
         naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
 
+        // POS 매장코드 (화면 sessionStorage 값 대신 세션정보 사용)
+        naverOrderApiVO.setPosShopId(sessionInfoVO.getStoreCd());
+
         // 네이버 주문 유형 ChannelServiceId 조회
         DefaultMap<Object> channelServiceIdInfo = naverOrderLinkMapper.getNaverOrderChannelServiceId(naverOrderLinkVO);
         String tableChannelServiceId = channelServiceIdInfo.getStr("orderChannelServiceIdTable");
@@ -418,6 +424,9 @@ public class NaverOrderLinkServiceImpl implements NaverOrderLinkService {
         String apiFullUrl = apiInfo.getStr("apiUrl") + "/api/v1/external/pos-server/shops/channel-mapping";
 
         naverOrderApiVO.setAccessToken(apiInfo.getStr("accessToken"));
+
+        // POS 매장코드 (화면 sessionStorage 값 대신 세션정보 사용)
+        naverOrderApiVO.setPosShopId(sessionInfoVO.getStoreCd());
 
         Map<String, Object> resultMap = deleteRequest(naverOrderApiVO, apiFullUrl);
 

@@ -447,7 +447,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderLink.js?ver=20260923.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/naverPlace/naverPlace/naverOrderLink/naverOrderLink.js?ver=20261006.01" charset="utf-8"></script>
 
 <%-- 네이버주문연동 정보 수정 팝업--%>
 <c:import url="/WEB-INF/view/naverPlace/naverPlace/naverOrderLink/naverOrderInfo.jsp">
