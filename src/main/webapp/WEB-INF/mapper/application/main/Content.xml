@@ -173,122 +173,68 @@
 
     <!-- 관리자 - 주간매출(매장수/포스수) -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_POS
-        COMMENTS : [매출]일별_종합, [매출] 일별_POS별
+        TABLE    : TB_SL_DAILY_POS
+        COMMENTS : [매출]일별_POS별
     -->
     <select id="getWeekSaleList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getWeekSaleList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(STORE_CNT) AS STORE_CNT,
-        SUM(POS_CNT) AS POS_CNT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsdt.SALE_DATE,
-                tsdt.STORE_CNT,
-                tmp.POS_CNT
-                FROM
-                (
-                    SELECT
-                    SALE_DATE,
-                    COUNT(STORE_CD) AS STORE_CNT
-                    FROM TB_SL_DAILY_TOTAL
-                    GROUP BY SALE_DATE
-                ) tsdt,
-                (
-                    SELECT
-                    SALE_DATE,
-                    COUNT(POS_NO) AS POS_CNT
-                    FROM TB_SL_DAILY_POS
-                    GROUP BY SALE_DATE
-                ) tmp
-                WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND tmp.SALE_DATE = tsdt.SALE_DATE
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
-                0 AS STORE_CNT,
-                0 AS POS_CNT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS SALE_DATE
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        P AS (
+            SELECT SALE_DATE,
+                   COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                   COUNT(*)                 AS POS_CNT
+            FROM   TB_SL_DAILY_POS
+            WHERE  SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                 AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY SALE_DATE
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        SELECT TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYYMMDD'), 'MM-DD') AS SALE_DATE,
+               NVL(P.STORE_CNT, 0) AS STORE_CNT,
+               NVL(P.POS_CNT,   0) AS POS_CNT
+        FROM   CAL C
+        LEFT   JOIN P ON P.SALE_DATE = C.SALE_DATE
+        ORDER  BY C.SALE_DATE
     </select>
 
     <!-- 총판/대리점 - 주간매출(매장수/포스수) -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_POS, TB_MS_STORE
-        COMMENTS : [매출]일별_종합, [매출] 일별_POS별, [매장]매장 정보
+        TABLE    : TB_SL_DAILY_POS, TB_MS_STORE
+        COMMENTS : [매출]일별_POS별, [매장]매장 정보
     -->
     <select id="getWeekSaleAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getWeekSaleAgencyList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(STORE_CNT) AS STORE_CNT,
-        SUM(POS_CNT) AS POS_CNT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsdt.SALE_DATE,
-                tsdt.STORE_CNT,
-                tmp.POS_CNT
-                FROM
-                (
-                    SELECT
-                    tsdt.SALE_DATE,
-                    COUNT(tsdt.STORE_CD) AS STORE_CNT
-                    FROM TB_SL_DAILY_TOTAL tsdt,
-                    TB_MS_STORE tms
-                    WHERE 1=1
-                    AND tms.AGENCY_CD = #{orgnCd}
-                    AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
-                    AND tms.STORE_CD = tsdt.STORE_CD
-                    GROUP BY tsdt.SALE_DATE
-                ) tsdt,
-                (
-                    SELECT
-                    tmp.SALE_DATE,
-                    COUNT(tmp.POS_NO) AS POS_CNT
-                    FROM TB_SL_DAILY_POS tmp,
-                    TB_MS_STORE tms
-                    WHERE 1=1
-                    AND tms.AGENCY_CD = #{orgnCd}
-                    AND tms.HQ_OFFICE_CD = tmp.HQ_OFFICE_CD
-                    AND tms.STORE_CD = tmp.STORE_CD
-                    GROUP BY SALE_DATE
-                ) tmp
-                WHERE 1=1
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND tmp.SALE_DATE = tsdt.SALE_DATE
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
-                0 AS STORE_CNT,
-                0 AS POS_CNT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS SALE_DATE
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        P AS (
+            SELECT tsdp.SALE_DATE,
+                   COUNT(DISTINCT tsdp.STORE_CD) AS STORE_CNT,
+                   COUNT(*)                      AS POS_CNT
+            FROM   TB_SL_DAILY_POS tsdp
+            JOIN   TB_MS_STORE     tms
+                   ON  tms.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+                   AND tms.STORE_CD     = tsdp.STORE_CD
+            WHERE  tms.AGENCY_CD = #{orgnCd}
+            AND    tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY tsdp.SALE_DATE
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        SELECT TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYYMMDD'), 'MM-DD') AS SALE_DATE,
+               NVL(P.STORE_CNT, 0) AS STORE_CNT,
+               NVL(P.POS_CNT,   0) AS POS_CNT
+        FROM   CAL C
+        LEFT   JOIN P ON P.SALE_DATE = C.SALE_DATE
+        ORDER  BY C.SALE_DATE
     </select>
 
     <!-- 관리자 - 공지사항(관리자) -->
@@ -525,45 +471,28 @@
     -->
     <select id="getWeekPosInstList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getWeekPosInstList */
-        SELECT
-        TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDD'), 'mm-dd') AS INST_INS_DT,
-        SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
-        SUM(INST_STORE_CNT_RE) AS INST_STORE_CNT_RE
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                INST_INS_DT,
-                SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
-                SUM(INST_STORE_CNT_RE) AS INST_STORE_CNT_RE
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tci.MOD_DT, 'YYYYMMDDHH24MISS'), 'yyyyMMdd') AS INST_INS_DT,
-                    (CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
-                    (CASE WHEN tci.INST_FG = '2' THEN 1 ELSE 0 END) AS INST_STORE_CNT_RE
-                    FROM TB_CM_INSTLL tci
-                )
-                WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd')AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY INST_INS_DT
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS INST_INS_DT,
-                0 AS INST_STORE_CNT_NEW,
-                0 AS INST_STORE_CNT_RE
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS INST_INS_DT
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        I AS (
+            SELECT SUBSTR(tci.MOD_DT, 1, 8) AS INST_INS_DT,
+                   SUM(CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
+                   SUM(CASE WHEN tci.INST_FG = '2' THEN 1 ELSE 0 END) AS INST_STORE_CNT_RE
+            FROM   TB_CM_INSTLL tci
+            WHERE  tci.MOD_DT BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD') || '000000'
+                                  AND TO_CHAR(SYSDATE,     'YYYYMMDD') || '235959'
+            GROUP  BY SUBSTR(tci.MOD_DT, 1, 8)
         )
-        GROUP BY INST_INS_DT
-        ORDER BY INST_INS_DT
+        SELECT TO_CHAR(TO_DATE(C.INST_INS_DT, 'YYYYMMDD'), 'MM-DD') AS INST_INS_DT,
+               NVL(I.INST_STORE_CNT_NEW, 0) AS INST_STORE_CNT_NEW,
+               NVL(I.INST_STORE_CNT_RE,  0) AS INST_STORE_CNT_RE
+        FROM   CAL C
+        LEFT   JOIN I ON I.INST_INS_DT = C.INST_INS_DT
+        ORDER  BY C.INST_INS_DT
     </select>
 
     <!-- 총판/대리점 - 주간 POS 설치현황(신규설치/재설치) -->
@@ -573,47 +502,29 @@
     -->
     <select id="getWeekPosInstAgencyList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getWeekPosInstAgencyList */
-        SELECT
-        TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDD'), 'mm-dd') AS INST_INS_DT,
-        SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
-        SUM(INST_STORE_CNT_RE) AS INST_STORE_CNT_RE
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                INST_INS_DT,
-                SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
-                SUM(INST_STORE_CNT_RE) AS INST_STORE_CNT_RE
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tci.MOD_DT, 'YYYYMMDDHH24MISS'), 'yyyyMMdd') AS INST_INS_DT,
-                    (CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
-                    (CASE WHEN tci.INST_FG = '2' THEN 1 ELSE 0 END) AS INST_STORE_CNT_RE
-                    FROM TB_CM_INSTLL tci
-                    WHERE 1=1
-                    AND tci.AGENCY_CD = #{orgnCd}
-                )
-                WHERE 1=1
-                AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY INST_INS_DT
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS INST_INS_DT,
-                0 AS INST_STORE_CNT_NEW,
-                0 AS INST_STORE_CNT_RE
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS INST_INS_DT
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        I AS (
+            SELECT SUBSTR(tci.MOD_DT, 1, 8) AS INST_INS_DT,
+                   SUM(CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
+                   SUM(CASE WHEN tci.INST_FG = '2' THEN 1 ELSE 0 END) AS INST_STORE_CNT_RE
+            FROM   TB_CM_INSTLL tci
+            WHERE  tci.AGENCY_CD = #{orgnCd}
+            AND    tci.MOD_DT BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD') || '000000'
+                                  AND TO_CHAR(SYSDATE,     'YYYYMMDD') || '235959'
+            GROUP  BY SUBSTR(tci.MOD_DT, 1, 8)
         )
-        GROUP BY INST_INS_DT
-        ORDER BY INST_INS_DT
+        SELECT TO_CHAR(TO_DATE(C.INST_INS_DT, 'YYYYMMDD'), 'MM-DD') AS INST_INS_DT,
+               NVL(I.INST_STORE_CNT_NEW, 0) AS INST_STORE_CNT_NEW,
+               NVL(I.INST_STORE_CNT_RE,  0) AS INST_STORE_CNT_RE
+        FROM   CAL C
+        LEFT   JOIN I ON I.INST_INS_DT = C.INST_INS_DT
+        ORDER  BY C.INST_INS_DT
     </select>
 
     <!-- 관리자 - 주간 POS 설치 상위 대리점 -->
@@ -623,43 +534,29 @@
     -->
     <select id="getWeekPosInstTopList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getWeekPosInstTopList */
-        SELECT
-        ORGN_FG,
-        AGENCY_NM,
-        TO_CHAR(INST_STORE_CNT_NEW,'999,999,999,999') AS INST_STORE_CNT_NEW,
-        TO_CHAR(STORE_CNT_CLOSE,'999,999,999,999') AS STORE_CNT_CLOSE
-        FROM
-        (
-            SELECT
-            ORGN_FG,
-            AGENCY_NM,
-            SUM(INST_STORE_CNT_NEW) AS INST_STORE_CNT_NEW,
-            SUM(STORE_CNT_CLOSE) AS STORE_CNT_CLOSE
-            FROM
-            (
-                SELECT
-                TO_CHAR(TO_DATE(tci.MOD_DT, 'YYYYMMDDHH24MISS'), 'yyyyMMdd') AS INST_INS_DT,
-                DECODE(tca.P_AGENCY_CD, null, '마스터', '00000' , '총판', '대리점') AS ORGN_FG,
-                tca.AGENCY_NM,
-                SUM(CASE WHEN tci.INST_FG = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
-                SUM(CASE WHEN tms.SYS_STAT_FG = '2' THEN 1 ELSE 0 END) AS STORE_CNT_CLOSE
-                FROM TB_CM_INSTLL tci,
-                TB_CM_AGENCY tca,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tca.AGENCY_CD = tci.AGENCY_CD
-                AND tms.AGENCY_CD = tci.AGENCY_CD
-                AND tms.STORE_CD = tci.STORE_CD
-                GROUP BY tci.MOD_DT, tca.P_AGENCY_CD, tca.AGENCY_NM
-            )
-            WHERE 1=1
-            AND INST_INS_DT BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-            GROUP BY ORGN_FG, AGENCY_NM
-            ORDER BY INST_STORE_CNT_NEW DESC, STORE_CNT_CLOSE ASC
+        SELECT ORGN_FG,
+               AGENCY_NM,
+               TO_CHAR(INST_STORE_CNT_NEW, '999,999,999,999') AS INST_STORE_CNT_NEW,
+               TO_CHAR(STORE_CNT_CLOSE,    '999,999,999,999') AS STORE_CNT_CLOSE
+        FROM (
+            SELECT DECODE(tca.P_AGENCY_CD, NULL, '마스터', '00000', '총판', '대리점') AS ORGN_FG,
+                   tca.AGENCY_NM,
+                   SUM(CASE WHEN tci.INST_FG     = '1' THEN 1 ELSE 0 END) AS INST_STORE_CNT_NEW,
+                   SUM(CASE WHEN tms.SYS_STAT_FG = '2' THEN 1 ELSE 0 END) AS STORE_CNT_CLOSE
+            FROM   TB_CM_INSTLL tci
+            JOIN   TB_CM_AGENCY tca
+                   ON  tca.AGENCY_CD = tci.AGENCY_CD
+            JOIN   TB_MS_STORE  tms
+                   ON  tms.AGENCY_CD = tci.AGENCY_CD
+                   AND tms.STORE_CD  = tci.STORE_CD
+            WHERE  tci.MOD_DT BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD') || '000000'
+                                  AND TO_CHAR(SYSDATE,     'YYYYMMDD') || '235959'
+            GROUP  BY DECODE(tca.P_AGENCY_CD, NULL, '마스터', '00000', '총판', '대리점'),
+                      tca.AGENCY_NM
+            ORDER  BY INST_STORE_CNT_NEW DESC, STORE_CNT_CLOSE ASC
         )
-        WHERE 1=1
-       <![CDATA[
-            AND ROWNUM <= 5
+        <![CDATA[
+        WHERE ROWNUM <= 5
         ]]>
     </select>
 
@@ -708,37 +605,28 @@
     -->
     <select id="getSaleWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleWeekList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsdt.SALE_DATE,
-                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY tsdt.SALE_DATE
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS SALE_DATE
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        S AS (
+            SELECT tsdt.SALE_DATE,
+                   SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_DAILY_TOTAL tsdt
+            WHERE  tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND    tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY tsdt.SALE_DATE
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        SELECT TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYYMMDD'), 'MM-DD') AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.SALE_DATE = C.SALE_DATE
+        ORDER  BY C.SALE_DATE
     </select>
 
     <!-- 매장 - 매출현황 일별(1주) -->
@@ -748,37 +636,28 @@
     -->
     <select id="getSaleWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleWeekStoreList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'mm-dd') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsdt.SALE_DATE,
-                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                GROUP BY tsdt.SALE_DATE
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level+1, 'YYYYMMDD') AS SALE_DATE,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'YYYYMMDD') AS SALE_DATE
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        S AS (
+            SELECT tsdt.SALE_DATE,
+                   SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_DAILY_TOTAL tsdt
+            WHERE  tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdt.STORE_CD     = #{storeCd}
+            AND    tsdt.SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY tsdt.SALE_DATE
         )
-        GROUP BY SALE_DATE
-        ORDER BY SALE_DATE
+        SELECT TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYYMMDD'), 'MM-DD') AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.SALE_DATE = C.SALE_DATE
+        ORDER  BY C.SALE_DATE
     </select>
 
     <!-- 본사 - 매출현황 요일별(1개월) -->
@@ -788,47 +667,30 @@
     -->
     <select id="getSaleMonthList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleMonthList */
-        SELECT
-        YOIL_NUM,
-        YOIL AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                YOIL_NUM,
-                YOIL,
-                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                    tsdt.REAL_SALE_AMT
-                    FROM TB_SL_DAILY_TOTAL tsdt
-                    WHERE 1=1
-                    AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                )
-                GROUP BY YOIL_NUM, YOIL
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level-1, 'D') AS YOIL_NUM,
-                TO_CHAR(SYSDATE-level, 'DY') AS YOIL,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL,     'D')  AS YOIL_NUM,
+                   TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'DY') AS YOIL
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        S AS (
+            SELECT TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') - 1, 'D') AS YOIL_NUM,
+                   SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_DAILY_TOTAL tsdt
+            WHERE  tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND    tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') - 1, 'D')
         )
-        GROUP BY YOIL_NUM, YOIL
-        ORDER BY YOIL_NUM, YOIL
+        SELECT C.YOIL_NUM,
+               C.YOIL AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.YOIL_NUM = C.YOIL_NUM
+        ORDER  BY C.YOIL_NUM
     </select>
 
     <!-- 매장 - 매출현황 요일별(1개월) -->
@@ -838,47 +700,30 @@
     -->
     <select id="getSaleMonthStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleMonthStoreList */
-        SELECT
-        YOIL_NUM,
-        YOIL AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                YOIL_NUM,
-                YOIL,
-                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM
-                (
-                    SELECT
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
-                    TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                    tsdt.REAL_SALE_AMT
-                    FROM TB_SL_DAILY_TOTAL tsdt
-                    WHERE 1=1
-                    AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdt.STORE_CD = #{storeCd}
-                    AND tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                )
-                GROUP BY YOIL_NUM, YOIL
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(SYSDATE-level-1, 'D') AS YOIL_NUM,
-                TO_CHAR(SYSDATE-level, 'DY') AS YOIL,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 7
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - LEVEL,     'D')  AS YOIL_NUM,
+                   TO_CHAR(TRUNC(SYSDATE) - LEVEL + 1, 'DY') AS YOIL
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 7
+            ]]>
+        ),
+        S AS (
+            SELECT TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') - 1, 'D') AS YOIL_NUM,
+                   SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_DAILY_TOTAL tsdt
+            WHERE  tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdt.STORE_CD     = #{storeCd}
+            AND    tsdt.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD') - 1, 'D')
         )
-        GROUP BY YOIL_NUM, YOIL
-        ORDER BY YOIL_NUM, YOIL
+        SELECT C.YOIL_NUM,
+               C.YOIL AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.YOIL_NUM = C.YOIL_NUM
+        ORDER  BY C.YOIL_NUM
     </select>
 
     <!-- 본사 - 매출현황 월별(1년) -->
@@ -888,36 +733,27 @@
     -->
     <select id="getSaleYearList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleYearList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'yy-MM') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsmt.SALE_YM,
-                SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_MONTHLY_TOTAL tsmt
-                WHERE 1=1
-                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'yyyyMM') AND TO_CHAR(SYSDATE, 'yyyyMM')
-                GROUP BY tsmt.SALE_YM
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(ADD_MONTHS(SYSDATE, -level+1), 'yyyyMM') AS SALE_YM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-               <![CDATA[
-                    CONNECT BY LEVEL <= 12
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -LEVEL + 1), 'YYYYMM') AS SALE_YM
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 12
+            ]]>
+        ),
+        S AS (
+            SELECT tsmt.SALE_YM,
+                   SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_MONTHLY_TOTAL tsmt
+            WHERE  tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -11), 'YYYYMM')
+                                    AND TO_CHAR(SYSDATE, 'YYYYMM')
+            GROUP  BY tsmt.SALE_YM
         )
-        GROUP BY SALE_YM
-        ORDER BY SALE_YM
+        SELECT TO_CHAR(TO_DATE(C.SALE_YM, 'YYYYMM'), 'YY-MM') AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.SALE_YM = C.SALE_YM
+        ORDER  BY C.SALE_YM
     </select>
 
     <!-- 매장 - 매출현황 월별(1년) -->
@@ -927,37 +763,28 @@
     -->
     <select id="getSaleYearStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleYearStoreList */
-        SELECT
-        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'yy-MM') AS SALE_DATE,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT
-                tsmt.SALE_YM,
-                SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
-                FROM TB_SL_MONTHLY_TOTAL tsmt
-                WHERE 1=1
-                AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsmt.STORE_CD = #{storeCd}
-                AND tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -12), 'yyyyMM') AND TO_CHAR(SYSDATE, 'yyyyMM')
-                GROUP BY tsmt.SALE_YM
-            )
-            UNION ALL
-            (
-                SELECT
-                TO_CHAR(ADD_MONTHS(SYSDATE, -level+1), 'yyyyMM') AS SALE_YM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-               <![CDATA[
-                    CONNECT BY LEVEL <= 12
-                ]]>
-            )
+        WITH CAL AS (
+            SELECT TO_CHAR(ADD_MONTHS(SYSDATE, -LEVEL + 1), 'YYYYMM') AS SALE_YM
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 12
+            ]]>
+        ),
+        S AS (
+            SELECT tsmt.SALE_YM,
+                   SUM(tsmt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM   TB_SL_MONTHLY_TOTAL tsmt
+            WHERE  tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsmt.STORE_CD     = #{storeCd}
+            AND    tsmt.SALE_YM BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -11), 'YYYYMM')
+                                    AND TO_CHAR(SYSDATE, 'YYYYMM')
+            GROUP  BY tsmt.SALE_YM
         )
-        GROUP BY SALE_YM
-        ORDER BY SALE_YM
+        SELECT TO_CHAR(TO_DATE(C.SALE_YM, 'YYYYMM'), 'YY-MM') AS SALE_DATE,
+               NVL(S.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   CAL C
+        LEFT   JOIN S ON S.SALE_YM = C.SALE_YM
+        ORDER  BY C.SALE_YM
     </select>
 
     <!-- 본사 - 매출 상위 상품 오늘 -->
@@ -967,54 +794,34 @@
     -->
     <select id="getSaleProdDayList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdDayList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
+                   AND tmp.STORE_CD    = tsdp.STORE_CD
+                   AND tmp.PROD_CD     = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND    tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 매장 - 매출 상위 상품 오늘 -->
@@ -1024,53 +831,33 @@
     -->
     <select id="getSaleProdDayStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdDayStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.STORE_CD = tsdp.STORE_CD
+                   AND tmp.PROD_CD  = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.STORE_CD     = #{storeCd}
+            AND    tsdp.SALE_DATE    = TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 본사 - 매출 상위 상품 1주일 -->
@@ -1080,54 +867,35 @@
     -->
     <select id="getSaleProdWeekList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdWeekList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
+                   AND tmp.STORE_CD    = tsdp.STORE_CD
+                   AND tmp.PROD_CD     = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND    tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 매장 - 매출 상위 상품 1주일 -->
@@ -1137,53 +905,34 @@
     -->
     <select id="getSaleProdWeekStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdWeekStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE-6, 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.STORE_CD = tsdp.STORE_CD
+                   AND tmp.PROD_CD  = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.STORE_CD     = #{storeCd}
+            AND    tsdp.SALE_DATE BETWEEN TO_CHAR(SYSDATE - 6, 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE,     'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 본사 - 매출 상위 상품 1개월 -->
@@ -1193,53 +942,34 @@
     -->
     <select id="getSaleProdMonthList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdMonthList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.HQ_BRAND_CD = tsdp.HQ_BRAND_CD
+                   AND tmp.STORE_CD    = tsdp.STORE_CD
+                   AND tmp.PROD_CD     = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 매장 - 매출 상위 상품 1개월 -->
@@ -1249,53 +979,34 @@
     -->
     <select id="getSaleProdMonthStoreList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getSaleProdMonthStoreList */
-        SELECT *
-        FROM
-        (
-            SELECT *
-            FROM
-            (
-                SELECT *
-                FROM
-                (
-                    SELECT
-                    tsdp.PROD_CD,
-                    tmp.PROD_NM,
---                     SUBSTR(tmp.PROD_NM, 0, 7) || '..' AS PROD_NM,
-                    SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp,
-                    TB_MS_PRODUCT tmp
-                    WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tsdp.STORE_CD = #{storeCd}
-                    AND tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'yyyyMMdd') AND TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND tmp.STORE_CD = tsdp.STORE_CD
-                    AND tmp.PROD_CD = tsdp.PROD_CD
-                    GROUP BY tsdp.PROD_CD, tmp.PROD_NM
-                    ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC
-                )
-                WHERE 1=1
-                <![CDATA[
-                    AND ROWNUM <= 5
-                ]]>
-            )
-            UNION ALL
-            (
-                SELECT
-                '' AS PROD_CD,
-                '-' AS PROD_NM,
-                0 AS REAL_SALE_AMT
-                FROM dual
-                <![CDATA[
-                    CONNECT BY LEVEL <= 5
-                ]]>
-            )
+        WITH SLOT AS (
+            SELECT LEVEL AS RN
+            FROM   DUAL
+            <![CDATA[
+            CONNECT BY LEVEL <= 5
+            ]]>
+        ),
+        R AS (
+            SELECT tsdp.PROD_CD,
+                   tmp.PROD_NM,
+                   SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                   ROW_NUMBER() OVER (ORDER BY SUM(tsdp.REAL_SALE_AMT) DESC, tsdp.PROD_CD) AS RN
+            FROM   TB_SL_DAILY_PROD tsdp
+            JOIN   TB_MS_PRODUCT    tmp
+                   ON  tmp.STORE_CD = tsdp.STORE_CD
+                   AND tmp.PROD_CD  = tsdp.PROD_CD
+            WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    tsdp.STORE_CD     = #{storeCd}
+            AND    tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                                      AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+            GROUP  BY tsdp.PROD_CD, tmp.PROD_NM
         )
-        WHERE 1=1
-        <![CDATA[
-            AND ROWNUM <= 5
-        ]]>
-        ORDER BY REAL_SALE_AMT DESC
+        SELECT R.PROD_CD,
+               NVL(R.PROD_NM, '-')     AS PROD_NM,
+               NVL(R.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM   SLOT S
+        LEFT   JOIN R ON R.RN = S.RN
+        ORDER  BY S.RN
     </select>
 
     <!-- 본사 - 매출 상위 가맹점 오늘 -->
@@ -1410,30 +1121,11 @@
     -->
     <select id="getDaySaleCntList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getDaySaleCntList */
-        SELECT
-        TO_CHAR(REAL_SALE_CNT_TOTAL,'999,999,999,999') AS REAL_SALE_CNT_TOTAL
-        FROM
-        (
-            (
-                SELECT
-                NVL(tsdt.REAL_SALE_CNT, 0) AS REAL_SALE_CNT_TOTAL
-                FROM TB_SL_DAILY_TOTAL tsdt
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-            )
-            UNION ALL
-            (
-                SELECT
-                0 AS REAL_SALE_CNT_TOTAL
-                FROM dual
-            )
-            ORDER BY REAL_SALE_CNT_TOTAL DESC
-        )
-       <![CDATA[
-            WHERE ROWNUM = 1
-        ]]>
+        SELECT TO_CHAR(NVL(MAX(tsdt.REAL_SALE_CNT), 0), '999,999,999,999') AS REAL_SALE_CNT_TOTAL
+        FROM   TB_SL_DAILY_TOTAL tsdt
+        WHERE  tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    tsdt.STORE_CD     = #{storeCd}
+        AND    tsdt.SALE_DATE    = TO_CHAR(SYSDATE, 'YYYYMMDD')
     </select>
 
     <!-- 매장 - 오늘의 매출금액 -->
@@ -1443,39 +1135,14 @@
     -->
     <select id="getDaySaleAmtList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* ContentMapper.getDaySaleAmtList */
-        SELECT
-        TO_CHAR(REAL_SALE_AMT_TOTAL,'999,999,999,999') AS REAL_SALE_AMT_TOTAL,
-        TO_CHAR(CARD_AMT,'999,999,999,999') AS CARD_AMT,
-        TO_CHAR(CASH_AMT,'999,999,999,999') AS CASH_AMT,
-        TO_CHAR(ETC_AMT,'999,999,999,999') AS ETC_AMT
-        FROM
-        (
-            (
-                SELECT
-                NVL(SUM(tsdp.TOT_PAY_AMT), 0) AS REAL_SALE_AMT_TOTAL,
-                NVL(SUM((CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS CARD_AMT,
-                NVL(SUM((CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS CASH_AMT,
-                NVL(SUM((CASE WHEN tsdp.PAY_CD NOT IN('01' , '02') THEN tsdp.TOT_PAY_AMT ELSE 0 END)), 0) AS ETC_AMT
-                FROM TB_SL_DAILY_PAY tsdp
-                WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdp.STORE_CD = #{storeCd}
-                AND tsdp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-            )
-            UNION ALL
-            (
-                SELECT
-                0 AS REAL_SALE_AMT_TOTAL,
-                0 AS CARD_AMT,
-                0 AS CASH_AMT,
-                0 AS ETC_AMT
-                FROM dual
-            )
-            ORDER BY REAL_SALE_AMT_TOTAL DESC
-        )
-       <![CDATA[
-            WHERE ROWNUM = 1
-        ]]>
+        SELECT TO_CHAR(NVL(SUM(tsdp.TOT_PAY_AMT), 0), '999,999,999,999') AS REAL_SALE_AMT_TOTAL,
+               TO_CHAR(NVL(SUM(CASE WHEN tsdp.PAY_CD = '01' THEN tsdp.TOT_PAY_AMT END), 0), '999,999,999,999') AS CARD_AMT,
+               TO_CHAR(NVL(SUM(CASE WHEN tsdp.PAY_CD = '02' THEN tsdp.TOT_PAY_AMT END), 0), '999,999,999,999') AS CASH_AMT,
+               TO_CHAR(NVL(SUM(CASE WHEN tsdp.PAY_CD NOT IN ('01', '02') THEN tsdp.TOT_PAY_AMT END), 0), '999,999,999,999') AS ETC_AMT
+        FROM   TB_SL_DAILY_PAY tsdp
+        WHERE  tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    tsdp.STORE_CD     = #{storeCd}
+        AND    tsdp.SALE_DATE    = TO_CHAR(SYSDATE, 'YYYYMMDD')
     </select>
 
     <!-- 메인화면매출표시 -->
