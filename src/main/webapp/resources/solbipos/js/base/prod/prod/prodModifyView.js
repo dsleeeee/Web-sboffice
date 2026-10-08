@@ -804,12 +804,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                                     $scope.setKitchenprrint(result);
                                     $scope.kitchenprintLinkLayer.show(true);
                                     var scope = agrid.getScope('kitchenprintLinkCtrl');
-                                    scope._broadcast('kitchenprintLinkCtrl');
+                                    // scope._broadcast('kitchenprintLinkCtrl');
+                                    // 상품등록 팝업이 먼저 닫혀도(DOM 제거) 저장 가능하도록 상품코드를 직접 전달
+                                    scope._broadcast('kitchenprintLinkCtrl', result);
                                 } else if (orgnFg === "HQ" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(본사만)
                                     $scope.setKitchenprrint(result);
                                     $scope.printerGroupPopupLayer.show(true);
                                     var scope = agrid.getScope('printerGroupPopupCtrl');
-                                    scope._broadcast('printerGroupPopupCtrl');
+                                    // scope._broadcast('printerGroupPopupCtrl');
+                                    // 상품등록 팝업이 먼저 닫혀도(DOM 제거) 저장 가능하도록 상품코드를 직접 전달
+                                    scope._broadcast('printerGroupPopupCtrl', result);
                                 } else if (orgnFg === "STORE" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
                                     $scope.prodModifyLayer.hide();
                                 }

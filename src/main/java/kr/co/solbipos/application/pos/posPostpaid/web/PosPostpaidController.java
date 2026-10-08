@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.log.DirectAccessLogUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidService;
 import kr.co.solbipos.application.pos.posPostpaid.service.PosPostpaidStoreVO;
@@ -114,6 +115,10 @@ public class PosPostpaidController {
                                   Model model) {
 
         String returnUrl = "";
+
+        // 직접 접속 로그 생성(catalina.base/logs/DIRECT_yyyyMMdd.OUT) - 차단/오류 건도 남기기 위해 로그인 처리 전 기록
+        SessionInfoVO prevSessionInfoVO = sessionService.getSessionInfo(request);
+        DirectAccessLogUtil.makeDirectAccessLog("후불 posLogin", request, isEmpty(prevSessionInfoVO) ? null : prevSessionInfoVO.getUserId());
 
         if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
             LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));

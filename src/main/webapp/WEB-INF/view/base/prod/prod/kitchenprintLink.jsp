@@ -45,4 +45,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/kitchenprintList.js?ver=20200213.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/kitchenprintList.js?ver=20261002.01" charset="utf-8"></script>

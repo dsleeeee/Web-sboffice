@@ -8,6 +8,7 @@ import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.log.DirectAccessLogUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -181,9 +182,19 @@ public class SimpleMemberJoinController {
 
         System.out.println("포스로그인 접속" + request.getParameter("url"));
 
+        // 직접 접속 로그 생성(catalina.base/logs/DIRECT_yyyyMMdd.OUT) - 차단/오류 건도 남기기 위해 로그인 처리 전 기록
+        SessionInfoVO prevSessionInfoVO = sessionService.getSessionInfo(request);
+        DirectAccessLogUtil.makeDirectAccessLog("공통 posLogin", request, isEmpty(prevSessionInfoVO) ? null : prevSessionInfoVO.getUserId());
+
         //if(!isEmpty(sessionInfoVO.getHwAuthKey())) {
         if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
             LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
+
+            // 예외출고(excpForward), 생산량관리(production) 화면 접속 차단
+            if(request.getParameter("url").startsWith("excpForward/") || request.getParameter("url").startsWith("production/")) {
+                LOGGER.info("posLogin blocked url : {}", request.getParameter("url"));
+                throw new AuthenticationException(messageService.get("cmm.access.denied"), "/error/application/pos/403.sb");
+            }
 
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));

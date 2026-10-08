@@ -45,7 +45,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Controller
+// 생산량관리 화면 접속 차단 - @Controller 제거하여 전체 URL(화면/조회) 미노출
+//@Controller
 @RequestMapping(value = "/application/pos/production/")
 public class ProductionController {
 

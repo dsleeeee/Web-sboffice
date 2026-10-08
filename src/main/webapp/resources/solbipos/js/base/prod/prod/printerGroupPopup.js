@@ -22,7 +22,11 @@ app.controller('printerGroupPopupCtrl', ['$scope', '$http', function ($scope, $h
     $scope.initGrid = function (s, e) {
     };
 
+    // 프린터 연결할 상품코드
+    $scope.prodCd = "";
+
     $scope.$on("printerGroupPopupCtrl", function(event, data) {
+        $scope.prodCd = data;
         $scope.getPrinterGroupList();
     });
 
@@ -43,7 +47,8 @@ app.controller('printerGroupPopupCtrl', ['$scope', '$http', function ($scope, $h
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
-                    $scope.flex.collectionView.items[i].prodCd = scope.getKitchenprrint();
+                    // $scope.flex.collectionView.items[i].prodCd = scope.getKitchenprrint();
+                    $scope.flex.collectionView.items[i].prodCd = $scope.prodCd;
                     $scope.flex.collectionView.items[i].status = 'I';
                     params.push($scope.flex.collectionView.items[i]);
                 }
@@ -51,7 +56,11 @@ app.controller('printerGroupPopupCtrl', ['$scope', '$http', function ($scope, $h
             console.log(params);
             $scope._save("/base/prod/prodKitchenprintLink/printerGroup/saveProdMapping.sb", params, function () {
                 $scope.printerGroupPopupLayer.hide();
-                scope.prodModifyLayer.hide();
+                // scope.prodModifyLayer.hide();
+                // 상품등록 팝업이 이미 닫힌 경우(세트상품 신규등록 등) scope 가 없음
+                if (scope) {
+                    scope.prodModifyLayer.hide();
+                }
             });
         }
     };
@@ -60,6 +69,10 @@ app.controller('printerGroupPopupCtrl', ['$scope', '$http', function ($scope, $h
     $scope.close = function(){
         var scope = agrid.getScope('prodModifyCtrl');
         $scope.printerGroupPopupLayer.hide();
-        scope.prodModifyLayer.hide();
+        // scope.prodModifyLayer.hide();
+        // 상품등록 팝업이 이미 닫힌 경우(세트상품 신규등록 등) scope 가 없음
+        if (scope) {
+            scope.prodModifyLayer.hide();
+        }
     }
 }]);
