@@ -29,6 +29,10 @@ public class BizHourVO extends PageVO {
     private String sysStatFg;
     /** 매장(멀티) 조회를 위한 쿼리 문자열 */
     private String storeCdQuery;
+    /** 영업시간 복사 : 복사대상(타겟) 매장(멀티) */
+    private String copyStoreCd;
+    /** 영업시간 복사 : 복사대상(타겟) 매장(멀티) 쿼리 문자열 */
+    private String copyStoreCdQuery;
 
     /** 요일구분 1:일 2:월 3:화 4:수 5:목 6:금 7:토 */
     private String dayFg;
@@ -58,6 +62,13 @@ public class BizHourVO extends PageVO {
 
     /** 시간중복 검증 제외 순번 (수정 저장 시 같은 그룹의 편집 대상 seq 전체) */
     private Integer[] arrExcludeSeq;
+
+    /** 매장영업시간관리 사용여부 값 (환경설정 ENVST_CD=1361, 0:미사용 1:사용) */
+    private String envstVal;
+    /** 사용여부 팝업 조회 : 매장코드 */
+    private String searchStoreCd;
+    /** 사용여부 팝업 조회 : 매장명 */
+    private String searchStoreNm;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -105,6 +116,22 @@ public class BizHourVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getCopyStoreCd() {
+        return copyStoreCd;
+    }
+
+    public void setCopyStoreCd(String copyStoreCd) {
+        this.copyStoreCd = copyStoreCd;
+    }
+
+    public String getCopyStoreCdQuery() {
+        return copyStoreCdQuery;
+    }
+
+    public void setCopyStoreCdQuery(String copyStoreCdQuery) {
+        this.copyStoreCdQuery = copyStoreCdQuery;
     }
 
     public String getDayFg() {
@@ -201,5 +228,29 @@ public class BizHourVO extends PageVO {
 
     public void setArrExcludeSeq(Integer[] arrExcludeSeq) {
         this.arrExcludeSeq = arrExcludeSeq;
+    }
+
+    public String getEnvstVal() {
+        return envstVal;
+    }
+
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
+    }
+
+    public String getSearchStoreCd() {
+        return searchStoreCd;
+    }
+
+    public void setSearchStoreCd(String searchStoreCd) {
+        this.searchStoreCd = searchStoreCd;
+    }
+
+    public String getSearchStoreNm() {
+        return searchStoreNm;
+    }
+
+    public void setSearchStoreNm(String searchStoreNm) {
+        this.searchStoreNm = searchStoreNm;
     }
 }

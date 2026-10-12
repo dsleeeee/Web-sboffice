@@ -25,6 +25,7 @@
         FROM TB_CM_NMCODE tcn
         WHERE 1=1
         AND tcn.NMCODE_GRP_CD = '236'
+        AND tcn.NMCODE_ITEM_2 LIKE '%' || #{hqOfficeCd} || '%'
         ORDER BY tcn.NMCODE_CD
     </select>
 

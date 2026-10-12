@@ -35,27 +35,19 @@
     </table>
   </c:if>
 
+  <%-- 안내문 --%>
+  <div class="mt10">
+    <p class="tl s13 ml5" style="color:#888;">* <s:message code="bizHour.days.gridMsg"/></p>
+  </div>
+
   <div class="mt10 oh sb-select dkbr">
-    <%-- 페이지 스케일 --%>
-    <wj-combo-box
-      class="w100px fl"
-      id="daysListScaleBox"
-      ng-model="listScale"
-      items-source="_getComboData('listScaleBox')"
-      display-member-path="name"
-      selected-value-path="value"
-      initialized="_initComboBox(s)"
-      control="conListScale"
-      is-editable="true"
-      text-changed="_checkValidation(s)">
-    </wj-combo-box>
     <div class="tr">
+      <%-- 매장영업시간관리 사용여부 (본사) --%>
+      <button class="btn_skyblue" ng-click="_broadcast('bizHourUseYnPopCtrl')">매장영업시간관리 사용여부</button>
       <%-- 신규등록 --%>
       <button class="btn_skyblue" ng-click="newDays()"><s:message code="cmm.new.add"/></button>
       <%-- 저장 --%>
       <button class="btn_skyblue" ng-click="saveDays()"><s:message code="cmm.save"/></button>
-      <%-- 삭제 --%>
-      <button class="btn_skyblue" ng-click="deleteDays()"><s:message code="cmm.del"/></button>
     </div>
   </div>
 
@@ -72,30 +64,56 @@
         item-formatter="itemFormatter"
         ime-enabled="true">
 
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>" binding="ownerNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.sysStatFg"/>" binding="sysStatFg" width="80" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.dayFg"/>" binding="dayFg" width="60" align="center" data-map="dayFgMap" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.startHour"/>" binding="startHour" width="80" align="center" data-map="timeHourMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.startMin"/>" binding="startMs" width="80" align="center" data-map="timeMsMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.endHour"/>" binding="endHour" width="80" align="center" data-map="timeHourMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="bizHour.endMin"/>" binding="endMs" width="80" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.sysStatFg"/>" binding="sysStatFg" width="70" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
+
+        <%-- 일 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourSun" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsSun"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourSun"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsSun"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 월 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourMon" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsMon"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourMon"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsMon"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 화 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourTue" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsTue"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourTue"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsTue"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 수 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourWed" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsWed"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourWed"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsWed"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 목 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourThu" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsThu"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourThu"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsThu"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 금 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourFri" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsFri"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourFri"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsFri"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <%-- 토 --%>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startHourSat" width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.startTime"/>" binding="startMsSat"   width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endHourSat"   width="55" align="center" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.endTime"/>"   binding="endMsSat"     width="55" align="center" data-map="timeMsMap"></wj-flex-grid-column>
       </wj-flex-grid>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
         <jsp:param name="pickerTarget" value="daysCtrl"/>
       </jsp:include>
     </div>
   </div>
-
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <ul id="daysCtrlPager" data-size="10"></ul>
-  </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/days.js?ver=20261001.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/days.js?ver=20261008.05" charset="utf-8"></script>
 
 <%-- 요일별 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/bizHour/daysRegist.jsp">
