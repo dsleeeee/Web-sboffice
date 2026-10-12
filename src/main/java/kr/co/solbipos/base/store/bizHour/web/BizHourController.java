@@ -66,6 +66,32 @@ public class BizHourController {
         return ReturnUtil.returnListJson(Status.OK, list, bizHourVO);
     }
 
+    /** 요일별 리스트 조회 (피벗 : 매장×요일 매트릭스) */
+    @RequestMapping(value = "/days/pivotList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result daysPivotList(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = bizHourService.getDaysPivotList(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, bizHourVO);
+    }
+
+    /** 요일별 리스트 조회 (매장 : 요일별 한 줄씩, 일~토 기본 표시) */
+    @RequestMapping(value = "/days/storeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result daysStoreList(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = bizHourService.getDaysStoreList(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, bizHourVO);
+    }
+
     /** 요일별 신규 등록 */
     @RequestMapping(value = "/days/saveNew.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -88,6 +114,19 @@ public class BizHourController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = bizHourService.saveDays(bizHourVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /** 요일별 수정 (매장 : 행 단위) */
+    @RequestMapping(value = "/days/storeSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result daysStoreSave(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody BizHourVO[] bizHourVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = bizHourService.saveDaysStore(bizHourVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -158,6 +197,71 @@ public class BizHourController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = bizHourService.deleteSpecific(bizHourVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /** 영업시간 복사 (원본 매장 → 복사대상 매장들, 요일별+특정일) */
+    @RequestMapping(value = "/bizHourCopy/copy.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result bizHourCopy(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = bizHourService.bizHourCopy(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /** 매장영업시간관리 사용여부 조회 (매장 자기 값) */
+    @RequestMapping(value = "/useYn/get.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result useYnGet(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String useYn = bizHourService.getStoreUseYn(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, useYn);
+    }
+
+    /** 매장영업시간관리 사용여부 매장목록 조회 (본사 팝업) */
+    @RequestMapping(value = "/useYn/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result useYnList(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = bizHourService.getStoreUseYnList(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, bizHourVO);
+    }
+
+    /** 매장영업시간관리 사용여부 저장 (매장) */
+    @RequestMapping(value = "/useYn/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result useYnSave(HttpServletRequest request, HttpServletResponse response,
+        Model model, BizHourVO bizHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = bizHourService.saveStoreUseYn(bizHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /** 매장영업시간관리 사용여부 일괄저장 (본사 팝업) */
+    @RequestMapping(value = "/useYn/saveList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result useYnSaveList(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody BizHourVO[] bizHourVOs) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = bizHourService.saveStoreUseYnList(bizHourVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

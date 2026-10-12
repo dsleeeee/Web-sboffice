@@ -25,6 +25,12 @@ public interface BizHourMapper {
     /** 요일별 리스트 조회 */
     List<DefaultMap<String>> getDaysList(BizHourVO bizHourVO);
 
+    /** 요일별 리스트 조회 (피벗 : 매장×요일 매트릭스) */
+    List<DefaultMap<String>> getDaysPivotList(BizHourVO bizHourVO);
+
+    /** 요일별 리스트 조회 (매장 : 요일별 한 줄씩, 일~토 기본 표시) */
+    List<DefaultMap<String>> getDaysStoreList(BizHourVO bizHourVO);
+
     /** 요일별 시간중복 건수 조회 */
     int getDaysOverlapCnt(BizHourVO bizHourVO);
 
@@ -39,6 +45,9 @@ public interface BizHourMapper {
 
     /** 요일별 삭제 */
     int deleteDays(BizHourVO bizHourVO);
+
+    /** 요일별 매장단위 전체삭제 (매트릭스 저장용) */
+    int deleteDaysByStore(BizHourVO bizHourVO);
 
     /** 특정일 리스트 조회 */
     List<DefaultMap<String>> getSpecificList(BizHourVO bizHourVO);
@@ -57,4 +66,25 @@ public interface BizHourMapper {
 
     /** 특정일 삭제 */
     int deleteSpecific(BizHourVO bizHourVO);
+
+    /** [복사] 요일별 : 타겟 매장 전체삭제 */
+    int deleteDaysByCopyStore(BizHourVO bizHourVO);
+
+    /** [복사] 요일별 : 원본→타겟 복사 */
+    int copyDaysToStore(BizHourVO bizHourVO);
+
+    /** [복사] 특정일 : 타겟 매장 전체삭제 */
+    int deleteSpecificByCopyStore(BizHourVO bizHourVO);
+
+    /** [복사] 특정일 : 원본→타겟 복사 */
+    int copySpecificToStore(BizHourVO bizHourVO);
+
+    /** 매장영업시간관리 사용여부 조회 (매장 자기 값) */
+    String getStoreUseYn(BizHourVO bizHourVO);
+
+    /** 매장영업시간관리 사용여부 매장목록 조회 (본사 팝업) */
+    List<DefaultMap<String>> getStoreUseYnList(BizHourVO bizHourVO);
+
+    /** 매장영업시간관리 사용여부 저장 (MERGE) */
+    int saveStoreUseYn(BizHourVO bizHourVO);
 }

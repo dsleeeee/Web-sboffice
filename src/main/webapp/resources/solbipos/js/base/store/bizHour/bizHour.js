@@ -22,9 +22,11 @@ app.controller('bizHourTabCtrl', ['$scope', function ($scope) {
   $scope.daysShow = function () {
     $("#daysTab").addClass("on");
     $("#specificTab").removeClass("on");
+    $("#bizHourCopyTab").removeClass("on");
 
     $("#daysView").show();
     $("#specificView").hide();
+    $("#bizHourCopyView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh() (탭 전환 시 재조회 안 함)
     var scope = agrid.getScope("daysCtrl");
@@ -35,13 +37,85 @@ app.controller('bizHourTabCtrl', ['$scope', function ($scope) {
   $scope.specificShow = function () {
     $("#daysTab").removeClass("on");
     $("#specificTab").addClass("on");
+    $("#bizHourCopyTab").removeClass("on");
 
     $("#daysView").hide();
     $("#specificView").show();
+    $("#bizHourCopyView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh() (탭 전환 시 재조회 안 함)
     var scope = agrid.getScope("specificCtrl");
     scope.flex.refresh();
   };
 
+  // 영업시간 복사 탭 보이기 (본사 전용)
+  $scope.bizHourCopyShow = function () {
+    $("#daysTab").removeClass("on");
+    $("#specificTab").removeClass("on");
+    $("#bizHourCopyTab").addClass("on");
+
+    $("#daysView").hide();
+    $("#specificView").hide();
+    $("#bizHourCopyView").show();
+
+    // angular 그리드 hide 시 깨지므로 refresh()
+    var daysScope = agrid.getScope("bizHourCopyDaysCtrl");
+    if (daysScope && daysScope.flex) daysScope.flex.refresh();
+    var speScope = agrid.getScope("bizHourCopySpecificCtrl");
+    if (speScope && speScope.flex) speScope.flex.refresh();
+  };
+
+  // 매장영업시간관리 사용여부 팝업 열기 (본사 전용)
+  $scope.useYnPopShow = function () {
+    $scope._broadcast('bizHourUseYnPopCtrl');
+  };
+
+}]);
+
+/** 매장영업시간관리 사용여부 (매장 전용 : 드롭다운 + 저장) */
+app.controller('bizHourUseYnCtrl', ['$scope', '$http', function ($scope, $http) {
+  $scope.useYn = "0";
+  $scope.useYnList = [
+    {value: "1", name: "사용"},
+    {value: "0", name: "미사용"}
+  ];
+
+  function withSid(params) {
+    if (document.getElementsByName('sessionId')[0]) {
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    return params;
+  }
+
+  // 사용여부 조회
+  $scope.loadUseYn = function () {
+    $http({
+      method : 'POST',
+      url    : baseUrl + "useYn/get.sb",
+      params : withSid({}),
+      headers: {'Content-Type': 'application/json; charset=utf-8'}
+    }).then(function (response) {
+      if (response.data && response.data.status === "OK") {
+        $scope.useYn = response.data.data || "0";
+      }
+    });
+  };
+
+  // 사용여부 저장
+  $scope.saveUseYn = function () {
+    $http({
+      method : 'POST',
+      url    : baseUrl + "useYn/save.sb",
+      params : withSid({envstVal: $scope.useYn}),
+      headers: {'Content-Type': 'application/json; charset=utf-8'}
+    }).then(function (response) {
+      if (response.data && response.data.status === "OK") {
+        s_alert.pop(messages["cmm.saveSucc"]);
+      } else {
+        s_alert.pop((response.data && response.data.message) ? response.data.message : messages["cmm.saveFail"]);
+      }
+    }, function (response) {
+      s_alert.pop(messages["cmm.saveFail"]);
+    });
+  };
 }]);

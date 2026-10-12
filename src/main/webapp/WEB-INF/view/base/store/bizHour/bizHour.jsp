@@ -20,6 +20,12 @@
       <li>
         <a id="specificTab" href="#" ng-click="specificShow()"><s:message code="bizHour.specificDate"/></a>
       </li>
+      <%-- 영업시간 복사 탭 (본사 전용) --%>
+      <c:if test="${orgnFg == 'HQ'}">
+        <li>
+          <a id="bizHourCopyTab" href="#" ng-click="bizHourCopyShow()"><s:message code="bizHour.bizHourCopy"/></a>
+        </li>
+      </c:if>
     </ul>
   </div>
 </div>
@@ -47,16 +53,42 @@
   ];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHour.js?ver=20261001.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHour.js?ver=20261008.03" charset="utf-8"></script>
 
-<%-- 요일별 레이어 --%>
-<c:import url="/WEB-INF/view/base/store/bizHour/days.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%-- 요일별 레이어 : 본사=매트릭스(days) / 매장=요일별 한 줄씩(daysStore) --%>
+<c:choose>
+  <c:when test="${orgnFg == 'HQ'}">
+    <c:import url="/WEB-INF/view/base/store/bizHour/days.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+  </c:when>
+  <c:otherwise>
+    <c:import url="/WEB-INF/view/base/store/bizHour/daysStore.jsp">
+      <c:param name="menuCd" value="${menuCd}"/>
+      <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+  </c:otherwise>
+</c:choose>
 
 <%-- 특정일 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/bizHour/specificDate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 영업시간 복사 레이어 (본사 전용) --%>
+<c:if test="${orgnFg == 'HQ'}">
+  <c:import url="/WEB-INF/view/base/store/bizHour/bizHourCopy.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+</c:if>
+
+<%-- 매장영업시간관리 사용여부 팝업 (본사 전용) --%>
+<c:if test="${orgnFg == 'HQ'}">
+  <c:import url="/WEB-INF/view/base/store/bizHour/bizHourUseYn.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+  </c:import>
+</c:if>

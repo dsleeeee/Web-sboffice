@@ -78,6 +78,7 @@
         <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>" binding="ownerNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.sysStatFg"/>" binding="sysStatFg" width="80" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.bizDate"/>" binding="bizDate" width="100" align="center" format="date" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="bizHour.dayFg"/>" binding="dayNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.bizFg"/>" binding="bizFg" width="70" align="center" data-map="bizFgMap" is-read-only="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.startHour"/>" binding="startHour" width="70" align="center" data-map="timeHourMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="bizHour.startMin"/>" binding="startMs" width="70" align="center" data-map="timeMsMap"></wj-flex-grid-column>

@@ -60,8 +60,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class SysConnectKpnController {
 
     /** TB_CM_API_LINK_INFO 에서 KPN 연동정보를 찾기 위한 API 번호 */
-    private static final String KPN_API_NO = "0026"; // 개발
-//    private static final String KPN_API_NO = "0027";  // 운영
+//    private static final String KPN_API_NO = "0026"; // 개발
+    private static final String KPN_API_NO = "0027";  // 운영
     /** KPN 토큰발급 API 요청 header 의 서비스 코드 (KPN 측 고정값) */
     private static final String KPN_SVC_CD = "pascer01u0";
 
