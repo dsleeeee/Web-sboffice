@@ -183,12 +183,12 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
         continue;
       }
       if (!startFilled || !endFilled) {          // 한쪽만 입력 = 오류
-        $scope._popMsg(rowNo + "번째 행(" + dayNm + ") : " + messages["bizHour.invalidTime"]);
+        $scope._popMsg("(" + dayNm + "요일) " + messages["bizHour.invalidTime"]);
         return false;
       }
       var st = sh + sm, et = eh + em;
       if (st >= et) {                            // 시작 >= 종료 = 오류
-        $scope._popMsg(rowNo + "번째 행(" + dayNm + ") : " + messages["bizHour.invalidTime"]);
+        $scope._popMsg("(" + dayNm + "요일) " + messages["bizHour.invalidTime"]);
         return false;
       }
       var p = {storeCd: orgnCd, dayFg: row.dayFg, startTime: st, endTime: et};
@@ -213,7 +213,7 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
       for (var a = 0; a < arr.length; a++) {
         for (var b = a + 1; b < arr.length; b++) {
           if (arr[a].st < arr[b].et && arr[a].et > arr[b].st) {
-            $scope._popMsg(arr[b].rowNo + "번째 행(" + arr[b].dayNm + ") : " + messages["bizHour.overlapTime"]);
+            $scope._popMsg("(" + arr[b].dayNm + "요일) 시간이 중복됩니다.");
             return false;
           }
         }

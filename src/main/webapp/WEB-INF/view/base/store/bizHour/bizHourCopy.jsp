@@ -36,8 +36,12 @@
               <jsp:param name="targetTypeFg" value="M"/>
               <jsp:param name="targetId" value="copyTgtStore"/>
             </jsp:include>
-            <%-- 복사 --%>
-            <a href="#" class="btn_grayS" ng-click="bizHourCopy()"><s:message code="cmm.save"/></a>
+            <%-- 복사 : 요일별 / 특정일 / 전체 --%>
+            <div class="fl ml10">
+              <a href="#" class="btn_grayS" ng-click="bizHourCopy('D')">요일별복사</a>
+              <a href="#" class="btn_grayS" ng-click="bizHourCopy('S')">특정일복사</a>
+              <a href="#" class="btn_grayS" ng-click="bizHourCopy('A')">전체복사</a>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -128,4 +132,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHourCopy.js?ver=20261006.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHourCopy.js?ver=20261013.01" charset="utf-8"></script>

@@ -63,6 +63,7 @@ app.controller('bizHourUseYnUseCtrl', ['$scope', '$http', function ($scope, $htt
     }
     $.postJSONArray(baseUrl + "useYn/saveList.sb", params,
       function (result) {
+        s_alert.pop(messages["cmm.saveSucc"]);
         $scope._broadcast('bizHourUseYnUseCtrl');
         $scope._broadcast('bizHourUseYnUnuseCtrl');
       },
@@ -112,6 +113,7 @@ app.controller('bizHourUseYnUnuseCtrl', ['$scope', '$http', function ($scope, $h
     }
     $.postJSONArray(baseUrl + "useYn/saveList.sb", params,
       function (result) {
+        s_alert.pop(messages["cmm.saveSucc"]);
         $scope._broadcast('bizHourUseYnUseCtrl');
         $scope._broadcast('bizHourUseYnUnuseCtrl');
       },

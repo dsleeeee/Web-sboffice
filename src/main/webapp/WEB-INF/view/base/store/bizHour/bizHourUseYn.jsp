@@ -88,4 +88,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHourUseYn.js?ver=20261008.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHourUseYn.js?ver=20261013.01" charset="utf-8"></script>

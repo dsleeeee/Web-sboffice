@@ -53,7 +53,7 @@
   ];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHour.js?ver=20261008.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/bizHour.js?ver=20261013.01" charset="utf-8"></script>
 
 <%-- 요일별 레이어 : 본사=매트릭스(days) / 매장=요일별 한 줄씩(daysStore) --%>
 <c:choose>

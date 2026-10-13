@@ -73,8 +73,9 @@ app.controller('bizHourTabCtrl', ['$scope', function ($scope) {
 }]);
 
 /** 매장영업시간관리 사용여부 (매장 전용 : 드롭다운 + 저장) */
-app.controller('bizHourUseYnCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('bizHourUseYnCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
   $scope.useYn = "0";
+  $scope.orgUseYn = "0";   // 진입 시 로드한 원래값(변경 여부 판단용)
   $scope.useYnList = [
     {value: "1", name: "사용"},
     {value: "0", name: "미사용"}
@@ -97,24 +98,34 @@ app.controller('bizHourUseYnCtrl', ['$scope', '$http', function ($scope, $http) 
     }).then(function (response) {
       if (response.data && response.data.status === "OK") {
         $scope.useYn = response.data.data || "0";
+        $scope.orgUseYn = $scope.useYn;
       }
     });
   };
 
   // 사용여부 저장
   $scope.saveUseYn = function () {
+    // 변경 없으면 저장 안 함
+    if ($scope.useYn === $scope.orgUseYn) {
+      s_alert.pop(messages["cmm.not.modify"]);
+      return false;
+    }
+    $rootScope.$broadcast('loadingPopupActive', messages['cmm.saving']);
     $http({
       method : 'POST',
       url    : baseUrl + "useYn/save.sb",
       params : withSid({envstVal: $scope.useYn}),
       headers: {'Content-Type': 'application/json; charset=utf-8'}
     }).then(function (response) {
+      $rootScope.$broadcast('loadingPopupInactive');
       if (response.data && response.data.status === "OK") {
+        $scope.orgUseYn = $scope.useYn;
         s_alert.pop(messages["cmm.saveSucc"]);
       } else {
         s_alert.pop((response.data && response.data.message) ? response.data.message : messages["cmm.saveFail"]);
       }
     }, function (response) {
+      $rootScope.$broadcast('loadingPopupInactive');
       s_alert.pop(messages["cmm.saveFail"]);
     });
   };

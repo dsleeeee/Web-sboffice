@@ -417,13 +417,25 @@ public class BizHourServiceImpl implements BizHourService {
         storeVO.setArrSplitStoreCd(CmmUtil.splitText(bizHourVO.getCopyStoreCd(), 3900));
         bizHourVO.setCopyStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
 
-        // 요일별 : 타겟 전체삭제 후 원본 복사
-        bizHourMapper.deleteDaysByCopyStore(bizHourVO);
-        int result = bizHourMapper.copyDaysToStore(bizHourVO);
+        // 복사 유형 (D:요일별 S:특정일 A:전체) — 미지정 시 전체
+        String copyType = StringUtil.getOrBlank(bizHourVO.getCopyType());
+        if (copyType.equals("")) {
+            copyType = "A";
+        }
 
-        // 특정일 : 타겟 전체삭제 후 원본 복사
-        bizHourMapper.deleteSpecificByCopyStore(bizHourVO);
-        result += bizHourMapper.copySpecificToStore(bizHourVO);
+        int result = 0;
+
+        // 요일별 : 타겟 전체삭제 후 원본 복사 (요일별복사 또는 전체복사)
+        if (!copyType.equals("S")) {
+            bizHourMapper.deleteDaysByCopyStore(bizHourVO);
+            result += bizHourMapper.copyDaysToStore(bizHourVO);
+        }
+
+        // 특정일 : 타겟 전체삭제 후 원본 복사 (특정일복사 또는 전체복사)
+        if (!copyType.equals("D")) {
+            bizHourMapper.deleteSpecificByCopyStore(bizHourVO);
+            result += bizHourMapper.copySpecificToStore(bizHourVO);
+        }
 
         return result;
     }

@@ -213,16 +213,16 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
         if (!anyFilled) continue;                // 빈칸 = 삭제(재삽입 안 함)
         var dayNm = getDayNm(def.fg);
         if (!startFilled || !endFilled) {        // 한쪽만 입력 = 오류
-          $scope._popMsg((i + 1) + "번째 행(" + dayNm + ") : " + messages["bizHour.invalidTime"]);
+          $scope._popMsg("[" + row.storeCd + "] " + row.storeNm + " - (" + dayNm + "요일) <br>" + messages["bizHour.invalidTime"]);
           return false;
         }
         var st = sh + sm, et = eh + em;
         if (st >= et) {                          // 시작 >= 종료 = 오류
-          $scope._popMsg((i + 1) + "번째 행(" + dayNm + ") : " + messages["bizHour.invalidTime"]);
+          $scope._popMsg("[" + row.storeCd + "] " + row.storeNm + " - (" + dayNm + "요일) <br>"+ messages["bizHour.invalidTime"]);
           return false;
         }
         var key = row.storeCd + '|' + def.fg;
-        (dayMap[key] = dayMap[key] || []).push({st: st, et: et, rowNo: (i + 1), dayNm: dayNm});
+        (dayMap[key] = dayMap[key] || []).push({st: st, et: et, storeCd: row.storeCd, storeNm: row.storeNm, dayNm: dayNm});
         params.push({storeCd: row.storeCd, dayFg: def.fg, startTime: st, endTime: et});
         markedStore[row.storeCd] = true;
       }
@@ -235,7 +235,7 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
       for (var a = 0; a < arr.length; a++) {
         for (var b = a + 1; b < arr.length; b++) {
           if (arr[a].st < arr[b].et && arr[a].et > arr[b].st) {
-            $scope._popMsg(arr[b].rowNo + "번째 행(" + arr[b].dayNm + ") : " + messages["bizHour.overlapTime"]);
+            $scope._popMsg("[" + arr[b].storeCd + "] " + arr[b].storeNm + " - (" + arr[b].dayNm + "요일) 시간이 중복됩니다.");
             return false;
           }
         }

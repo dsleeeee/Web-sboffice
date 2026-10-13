@@ -16,23 +16,34 @@ for (i = 0; i < 60; i++) {
 /** 영업시간 복사 - 오케스트레이션 */
 app.controller('bizHourCopyCtrl', ['$scope', '$http', function ($scope, $http) {
 
+  // 조회한 원본 매장코드 (조회 전이거나 조회 후 원본 매장을 바꾸면 복사 차단)
+  $scope.searchedSrcStoreCd = "";
+
   // 원본 매장 조회 → 요일별/특정일 읽기전용 그리드 로드
   $scope.search = function () {
     if ($("#copySrcStoreCd").val() === "") {
       $scope._popMsg(messages["bizHour.require.selectStore"]);
       return false;
     }
+    $scope.searchedSrcStoreCd = $("#copySrcStoreCd").val();
     $scope._broadcast('bizHourCopyDaysCtrl', {proc: "search"});
     $scope._broadcast('bizHourCopySpecificCtrl', {proc: "search"});
   };
 
-  // 복사 실행 (원본 → 타겟, 요일별+특정일 한 번에)
-  $scope.bizHourCopy = function () {
+  // 복사 실행 (원본 → 타겟, copyType : D 요일별 / S 특정일 / A 전체)
+  $scope.bizHourCopy = function (copyType) {
     var srcStoreCd = $("#copySrcStoreCd").val();
     var tgtStoreCd = $("#copyTgtStoreCd").val();
 
     if (srcStoreCd === "") {
       $scope._popMsg(messages["bizHour.require.selectStore"]);
+      return false;
+    }
+    // 기준매장 조회 후 복사 (조회 전 → 조회 안내 / 조회 후 기준매장 변경 → 재조회 안내)
+    if ($scope.searchedSrcStoreCd !== srcStoreCd) {
+      $scope._popMsg($scope.searchedSrcStoreCd === ""
+        ? messages["bizHour.require.searchFirst"]
+        : messages["bizHour.changed.reSearch"]);
       return false;
     }
     if (tgtStoreCd === "") {
@@ -45,33 +56,24 @@ app.controller('bizHourCopyCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    s_alert.popConf(messages["bizHour.confirm.copyMsg"], function () {
+    // 복사 유형별 확인 메시지 (D:요일별 / S:특정일 / A:전체)
+    var confirmMsg = copyType === 'D' ? messages["bizHour.confirm.copyDays"]
+                   : copyType === 'S' ? messages["bizHour.confirm.copySpecific"]
+                   :                    messages["bizHour.confirm.copyMsg"];
+
+    s_alert.popConf(confirmMsg, function () {
       var params = {};
       params.storeCd     = srcStoreCd;
       params.copyStoreCd = tgtStoreCd;
-      // 가상로그인 session 설정
-      if (document.getElementsByName('sessionId')[0]) {
-        params.sid = document.getElementsByName('sessionId')[0].value;
-      }
-      $http({
-        method : 'POST',
-        url    : baseUrl + "bizHourCopy/copy.sb",
-        params : params,
-        headers: {'Content-Type': 'application/json; charset=utf-8'}
-      }).then(function successCallback(response) {
-        var resData = response.data;
-        if (resData.status == "FAIL") {
-          // 원본=타겟 차단/권한 등 업무오류 : 서버 메시지 표시
-          s_alert.pop(resData.message);
-        } else if (resData.status == "SERVER_ERROR") {
-          $scope._popMsg(messages["cmm.saveFail"]);
-        } else {
-          $scope._popMsg(messages["cmm.saveSucc"]);
-        }
-      }, function errorCallback(response) {
-        $scope._popMsg((response && response.data && response.data.message) ? response.data.message : messages["cmm.saveFail"]);
-        return false;
-      });
+      params.copyType    = copyType;
+      // 로딩(#_saving)·sid·세션만료 처리는 postJSONArray가 담당, FAIL 시 서버 업무오류 메시지 표시
+      $.postJSONArray(baseUrl + "bizHourCopy/copy.sb", params,
+        function (result) {
+          s_alert.pop(messages["cmm.saveSucc"]);
+        },
+        function (result) {
+          s_alert.pop(result.message);
+        });
     });
   };
 

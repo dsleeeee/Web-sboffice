@@ -205,7 +205,7 @@ public class BizHourController {
     @RequestMapping(value = "/bizHourCopy/copy.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result bizHourCopy(HttpServletRequest request, HttpServletResponse response,
-        Model model, BizHourVO bizHourVO) {
+        Model model, @RequestBody BizHourVO bizHourVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

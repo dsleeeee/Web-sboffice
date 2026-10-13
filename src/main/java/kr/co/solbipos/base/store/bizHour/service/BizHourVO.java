@@ -33,6 +33,8 @@ public class BizHourVO extends PageVO {
     private String copyStoreCd;
     /** 영업시간 복사 : 복사대상(타겟) 매장(멀티) 쿼리 문자열 */
     private String copyStoreCdQuery;
+    /** 영업시간 복사 유형 (D:요일별 S:특정일 A:전체) */
+    private String copyType;
 
     /** 요일구분 1:일 2:월 3:화 4:수 5:목 6:금 7:토 */
     private String dayFg;
@@ -132,6 +134,14 @@ public class BizHourVO extends PageVO {
 
     public void setCopyStoreCdQuery(String copyStoreCdQuery) {
         this.copyStoreCdQuery = copyStoreCdQuery;
+    }
+
+    public String getCopyType() {
+        return copyType;
+    }
+
+    public void setCopyType(String copyType) {
+        this.copyType = copyType;
     }
 
     public String getDayFg() {

@@ -113,7 +113,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/days.js?ver=20261008.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/bizHour/days.js?ver=20261013.01" charset="utf-8"></script>
 
 <%-- 요일별 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/bizHour/daysRegist.jsp">
