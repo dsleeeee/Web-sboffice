@@ -7,143 +7,143 @@
     <select id="selectWebUser" parameterType="sessionInfoVO" resultType="sessionInfoVO">
         /* AuthMapper.selectWebUser */
         SELECT
-            twui.USER_ID,
-            twui.USER_PWD,
-            info.USER_NM,
-            twui.AUTH_GRP_CD,
-            info.ORGN_FG,
-            info.ORGN_GRP_CD,
-            info.ORGN_GRP_NM,
-            info.ORGN_CD,
-            info.ORGN_NM,
-            info.STORE_CD,
-            info.STORE_NM,
-            info.HQ_OFFICE_CD,
-            info.HQ_OFFICE_NM,
-            info.EMP_NO,
-            twui.LAST_LOGIN_DT,
-            twui.LAST_PWD_CHG_DT,
-            twui.LOGIN_FAIL_CNT,
-            twui.USER_STAT_FG,
-            info.P_AGENCY_CD,
-            twui.AREA_FG,
-            info.WEB_USE_YN,
-            #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
+        twui.USER_ID,
+        twui.USER_PWD,
+        info.USER_NM,
+        twui.AUTH_GRP_CD,
+        info.ORGN_FG,
+        info.ORGN_GRP_CD,
+        info.ORGN_GRP_NM,
+        info.ORGN_CD,
+        info.ORGN_NM,
+        info.STORE_CD,
+        info.STORE_NM,
+        info.HQ_OFFICE_CD,
+        info.HQ_OFFICE_NM,
+        info.EMP_NO,
+        twui.LAST_LOGIN_DT,
+        twui.LAST_PWD_CHG_DT,
+        twui.LOGIN_FAIL_CNT,
+        twui.USER_STAT_FG,
+        info.P_AGENCY_CD,
+        twui.AREA_FG,
+        info.WEB_USE_YN,
+        #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
-            TB_WB_USER_INFO twui
+        TB_WB_USER_INFO twui
         INNER JOIN (
-            SELECT
-                USER_ID,
-                ORGN_FG,
-                ORGN_CD,
-                ORGN_NM,
-                USER_NM,
-                EMP_NO,
-                STORE_CD,
-                STORE_NM,
-                HQ_OFFICE_CD,
-                HQ_OFFICE_NM,
-                ORGN_GRP_CD,
-                ORGN_GRP_NM,
-                P_AGENCY_CD,
-                WEB_USE_YN
-            FROM
-                (
-                SELECT
-                    A.USER_ID,
-                    'S' AS ORGN_FG,
-                    A.STORE_CD AS ORGN_CD,
-                    B.STORE_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    B.STORE_CD AS STORE_CD,
-                    B.STORE_NM AS STORE_NM,
-                    C.HQ_OFFICE_CD,
-                    C.HQ_OFFICE_NM,
-                    DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
-                    DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM,
-                    '' AS P_AGENCY_CD,
-                    A.WEB_USE_YN
-                FROM
-                    TB_MS_EMPLOYEE A,
-                    TB_MS_STORE B,
-                    TB_HQ_OFFICE C
-                WHERE
-                    A.STORE_CD = B.STORE_CD
-                    AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
-                    AND A.USER_ID = #{userId}
-                    <if test="vUserId == null or vUserId == ''">
-                        <!-- AND A.WEB_USE_YN = 'Y' -->
-                        AND A.USE_YN = 'Y'
-                        AND A.SERVICE_FG = '1'
-                        AND B.SYS_STAT_FG IN ('1', '9')
-                        AND C.SYS_STAT_FG IN ('1', '9')
-                    </if>
-            UNION ALL
-                SELECT
-                    A.USER_ID,
-                    'H' AS ORGN_FG,
-                    A.HQ_OFFICE_CD AS ORGN_CD,
-                    B.HQ_OFFICE_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    '' AS STORE_CD,
-                    '' AS STORE_NM,
-                    A.HQ_OFFICE_CD,
-                    B.HQ_OFFICE_NM,
-                    A.HQ_OFFICE_CD AS ORGN_GRP_CD,
-                    B.HQ_OFFICE_NM AS ORGN_GRP_NM,
-                    '' AS P_AGENCY_CD,
-                    A.WEB_USE_YN
-                FROM
-                    TB_HQ_EMPLOYEE A,
-                    TB_HQ_OFFICE B
-                WHERE
-                    A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                    AND A.USER_ID = #{userId}
-                    <if test="vUserId == null or vUserId == ''">
-                        <!-- AND A.WEB_USE_YN = 'Y' -->
-                        AND A.USE_YN = 'Y'
-                        AND A.SERVICE_FG = '1'
-                        AND B.SYS_STAT_FG IN ('1', '9')
-                    </if>
-            UNION ALL
-                SELECT
-                    A.USER_ID,
-                    DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
-                    A.AGENCY_CD AS ORGN_CD,
-                    B.AGENCY_NM AS ORGN_NM,
-                    A.EMP_NM AS USER_NM,
-                    A.EMP_NO,
-                    '' AS STORE_CD,
-                    '' AS STORE_NM,
-                    '' AS HQ_OFFICE_CD,
-                    '' AS HQ_OFFICE_NM,
-                    A.AGENCY_CD AS ORGN_GRP_CD,
-                    B.AGENCY_NM AS ORGN_GRP_NM,
-                    B.P_AGENCY_CD AS P_AGENCY_CD,
-                    A.WEB_USE_YN
-                FROM
-                    TB_CM_EMPLOYEE A,
-                    TB_CM_AGENCY B
-                WHERE
-                    A.AGENCY_CD = B.AGENCY_CD
-                    AND A.USER_ID = #{userId}
-                    <if test="vUserId == null or vUserId == ''">
-                        <!-- AND A.WEB_USE_YN = 'Y' -->
-                        AND A.USE_YN = 'Y'
-                        AND A.SERVICE_FG = '1'
-                        AND B.USE_YN = 'Y'
-                    </if>
-                    )
-            WHERE
-                ROWNUM = 1 ) info ON
-            twui.USER_ID = info.USER_ID
+        SELECT
+        USER_ID,
+        ORGN_FG,
+        ORGN_CD,
+        ORGN_NM,
+        USER_NM,
+        EMP_NO,
+        STORE_CD,
+        STORE_NM,
+        HQ_OFFICE_CD,
+        HQ_OFFICE_NM,
+        ORGN_GRP_CD,
+        ORGN_GRP_NM,
+        P_AGENCY_CD,
+        WEB_USE_YN
+        FROM
+        (
+        SELECT
+        A.USER_ID,
+        'S' AS ORGN_FG,
+        A.STORE_CD AS ORGN_CD,
+        B.STORE_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        B.STORE_CD AS STORE_CD,
+        B.STORE_NM AS STORE_NM,
+        C.HQ_OFFICE_CD,
+        C.HQ_OFFICE_NM,
+        DECODE( C.HQ_OFFICE_CD, '00000', A.STORE_CD, C.HQ_OFFICE_CD ) AS ORGN_GRP_CD,
+        DECODE( C.HQ_OFFICE_CD, '00000', B.STORE_NM, C.HQ_OFFICE_NM ) AS ORGN_GRP_NM,
+        '' AS P_AGENCY_CD,
+        A.WEB_USE_YN
+        FROM
+        TB_MS_EMPLOYEE A,
+        TB_MS_STORE B,
+        TB_HQ_OFFICE C
         WHERE
-            twui.USER_ID = #{userId}
-            <if test="vUserId == null or vUserId == ''">
-                AND twui.USE_YN = 'Y'
-            </if>
+        A.STORE_CD = B.STORE_CD
+        AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            <!-- AND A.WEB_USE_YN = 'Y' -->
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.SYS_STAT_FG IN ('1', '9')
+            AND C.SYS_STAT_FG IN ('1', '9')
+        </if>
+        UNION ALL
+        SELECT
+        A.USER_ID,
+        'H' AS ORGN_FG,
+        A.HQ_OFFICE_CD AS ORGN_CD,
+        B.HQ_OFFICE_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        '' AS STORE_CD,
+        '' AS STORE_NM,
+        A.HQ_OFFICE_CD,
+        B.HQ_OFFICE_NM,
+        A.HQ_OFFICE_CD AS ORGN_GRP_CD,
+        B.HQ_OFFICE_NM AS ORGN_GRP_NM,
+        '' AS P_AGENCY_CD,
+        A.WEB_USE_YN
+        FROM
+        TB_HQ_EMPLOYEE A,
+        TB_HQ_OFFICE B
+        WHERE
+        A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            <!-- AND A.WEB_USE_YN = 'Y' -->
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.SYS_STAT_FG IN ('1', '9')
+        </if>
+        UNION ALL
+        SELECT
+        A.USER_ID,
+        DECODE( A.ADMIN_FG, 'A', 'M', 'A' ) AS ORGN_FG,
+        A.AGENCY_CD AS ORGN_CD,
+        B.AGENCY_NM AS ORGN_NM,
+        A.EMP_NM AS USER_NM,
+        A.EMP_NO,
+        '' AS STORE_CD,
+        '' AS STORE_NM,
+        '' AS HQ_OFFICE_CD,
+        '' AS HQ_OFFICE_NM,
+        A.AGENCY_CD AS ORGN_GRP_CD,
+        B.AGENCY_NM AS ORGN_GRP_NM,
+        B.P_AGENCY_CD AS P_AGENCY_CD,
+        A.WEB_USE_YN
+        FROM
+        TB_CM_EMPLOYEE A,
+        TB_CM_AGENCY B
+        WHERE
+        A.AGENCY_CD = B.AGENCY_CD
+        AND A.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            <!-- AND A.WEB_USE_YN = 'Y' -->
+            AND A.USE_YN = 'Y'
+            AND A.SERVICE_FG = '1'
+            AND B.USE_YN = 'Y'
+        </if>
+        )
+        WHERE
+        ROWNUM = 1 ) info ON
+        twui.USER_ID = info.USER_ID
+        WHERE
+        twui.USER_ID = #{userId}
+        <if test="vUserId == null or vUserId == ''">
+            AND twui.USE_YN = 'Y'
+        </if>
 
     </select>
 
@@ -220,16 +220,16 @@
         /* AuthMapper.updateLoginInfo */
         UPDATE TB_WB_USER_INFO
         SET
-            LAST_LOGIN_DT = #{lastLoginDt}
-            <if test="loginFailCnt != null">
+        LAST_LOGIN_DT = #{lastLoginDt}
+        <if test="loginFailCnt != null">
             , LOGIN_FAIL_CNT = #{loginFailCnt}
-            </if><if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
-            , USER_STAT_FG = #{userStatFg}
-            </if>
-            ,  MOD_DT = #{modDt}
-            ,  MOD_ID = #{modId}
+        </if><if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
+        , USER_STAT_FG = #{userStatFg}
+    </if>
+        ,  MOD_DT = #{modDt}
+        ,  MOD_ID = #{modId}
         WHERE
-            USER_ID = #{userId}
+        USER_ID = #{userId}
     </update>
 
     <select id="getPosLoginReturnUrl" parameterType="sessionInfoVO" resultType="String">
@@ -243,4 +243,100 @@
                                 AND NMCODE_ITEM_1 = #{resrceCd}
                             )
     </select>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         로그인 화면 일시정지 본인 숫자확인 해제
+         ══════════════════════════════════════════════════════════════ -->
+
+    <!-- 로그인 화면 본인 해제 차단 사유 (NULL 이면 본인 해제 가능)
+         REPEAT : 최근 1시간 내 본인 해제 이력이 기준 이상
+
+         [보류] 고위험 정지 제외 — 검토 후 적용 시 아래 쿼리로 교체
+         SELECT  CASE WHEN S.SELF_CNT >= #{maxSelfCnt}             THEN 'REPEAT'
+                      WHEN H.RISK IN ('A', 'B') OR H.IP_HIT = 'Y'  THEN 'RISK'
+                      ELSE NULL
+                 END
+         FROM    ( SELECT COUNT(*) AS SELF_CNT
+                   FROM   TB_WB_USER_PAUSE_HIST
+                   WHERE  UPPER(USER_ID) = UPPER(#{userId})
+                   AND    PROC_FG = 'R' AND RESULT_FG = 'Y'
+                   AND    REMARK  = '로그인 화면 본인 숫자확인 해제'
+                   AND    PROC_DT >= TO_CHAR(SYSDATE - 1/24, 'YYYYMMDDHH24MISS') ) S
+         LEFT OUTER JOIN (
+                   SELECT X.RISK, X.IP_HIT
+                   FROM   TB_WB_USER_PAUSE_HIST X
+                   WHERE  X.PAUSE_SEQ = ( SELECT MAX(Y.PAUSE_SEQ)
+                                          FROM   TB_WB_USER_PAUSE_HIST Y
+                                          WHERE  UPPER(Y.USER_ID) = UPPER(#{userId})
+                                          AND    Y.PROC_FG = 'P' AND Y.RESULT_FG = 'Y' ) ) H ON 1 = 1
+    -->
+    <select id="getPauseSelfReleaseBlockReason" resultType="String">
+        /* AuthMapper.getPauseSelfReleaseBlockReason */
+        <![CDATA[
+        SELECT  CASE WHEN COUNT(*) >= #{maxSelfCnt} THEN 'REPEAT'
+                     ELSE NULL
+                END
+        FROM    TB_WB_USER_PAUSE_HIST
+        WHERE   UPPER(USER_ID) = UPPER(#{userId})
+        AND     PROC_FG   = 'R'
+        AND     RESULT_FG = 'Y'
+        AND     REMARK    = '로그인 화면 본인 숫자확인 해제'
+        AND     PROC_DT  >= TO_CHAR(SYSDATE - 1/24, 'YYYYMMDDHH24MISS')
+        ]]>
+    </select>
+
+    <!-- 로그인 화면 본인 숫자확인으로 일시정지 해제 (50 → 00) -->
+    <update id="updateUserPauseRelease">
+        /* AuthMapper.updateUserPauseRelease */
+        UPDATE  TB_WB_USER_INFO
+        SET     USER_STAT_FG    =   '00'
+        ,       MOD_ID          =   #{userId}
+        ,       MOD_DT          =   #{procDt}
+        WHERE   USER_ID         =   #{userId}
+        AND     USER_STAT_FG    =   '50'
+    </update>
+
+    <!-- 로그인 화면 본인 숫자확인 해제 이력 (스냅샷은 마지막 일시정지 이력에서 복사) -->
+    <insert id="insertUserPauseReleaseHist">
+        /* AuthMapper.insertUserPauseReleaseHist */
+        INSERT INTO TB_WB_USER_PAUSE_HIST
+        (   PAUSE_SEQ,      USER_ID,        PROC_FG,        PROC_DT,        PROC_ID
+        ,   BEF_STAT_FG,    AFT_STAT_FG,    RESULT_FG
+        ,   CHK_DAY1,       CHK_DAY2,       RISK
+        ,   TODAY_REAL,     TODAY_TOT,      MIN5_REAL,      ME_REAL
+        ,   LGN_TODAY_TOT,  LGN_TODAY_ERR,  LGN_MIN5_ERR,   LGN_IP_CNT
+        ,   BLK_TODAY_CNT,  BLK_MIN10_CNT,  CHK_LAST_IP,    CHK_IP_CNT,     IP_HIT
+        ,   COUNTRY_CODE,   BLOCK_REASON,   SUMMARY_TXT,    REMARK
+        ,   REG_DT,         REG_ID,         MOD_DT,         MOD_ID
+        )
+        SELECT  SEQ_TB_WB_USER_PAUSE_HIST.NEXTVAL, #{userId}, 'R', #{procDt}, #{userId}
+        ,       '50'
+        ,       CASE WHEN #{updCnt} > 0 THEN '00' ELSE '50' END
+        ,       CASE WHEN #{updCnt} > 0 THEN 'Y'  ELSE 'N'  END
+        ,       H.CHK_DAY1,         H.CHK_DAY2,         H.RISK
+        ,       H.TODAY_REAL,       H.TODAY_TOT,        H.MIN5_REAL,        H.ME_REAL
+        ,       H.LGN_TODAY_TOT,    H.LGN_TODAY_ERR,    H.LGN_MIN5_ERR,     H.LGN_IP_CNT
+        ,       H.BLK_TODAY_CNT,    H.BLK_MIN10_CNT,    H.CHK_LAST_IP,      H.CHK_IP_CNT,   H.IP_HIT
+        ,       H.COUNTRY_CODE,     H.BLOCK_REASON
+        ,       SUBSTR(
+                    '본인 숫자확인 해제 | 접속IP ' || NVL(#{loginIp}, '-')
+                 || CASE WHEN H.PROC_DT IS NOT NULL
+                         THEN ' | 일시정지 ' || TO_CHAR(TO_DATE(H.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')
+                              || ' (' || H.PROC_ID || ', SEQ ' || H.PAUSE_SEQ || ')'
+                    END
+                 || ' | 일시정지 비고: ' || SUBSTR(NVL(H.REMARK, '-'), 1, 300)
+                , 1, 2000)
+        ,       '로그인 화면 본인 숫자확인 해제'
+        ,       #{procDt},          #{userId},          #{procDt},          #{userId}
+        FROM    DUAL D
+        LEFT OUTER JOIN (
+                SELECT  X.*
+                FROM    TB_WB_USER_PAUSE_HIST X
+                WHERE   X.PAUSE_SEQ = ( SELECT  MAX(Y.PAUSE_SEQ)
+                                        FROM    TB_WB_USER_PAUSE_HIST Y
+                                        WHERE   UPPER(Y.USER_ID) = UPPER(#{userId})
+                                        AND     Y.PROC_FG   = 'P'
+                                        AND     Y.RESULT_FG = 'Y' )
+                ) H ON 1 = 1
+    </insert>
 </mapper>

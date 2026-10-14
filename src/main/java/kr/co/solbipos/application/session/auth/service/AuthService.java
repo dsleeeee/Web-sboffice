@@ -85,18 +85,18 @@ public interface AuthService {
     public int loginHist(SessionInfoVO sessionInfoVO);
 
     /**
-      * 로그인 히스토리 저장
-      *
-      * @param loginHistVO LoginHistVO
-      * @return
-      */
+     * 로그인 히스토리 저장
+     *
+     * @param loginHistVO LoginHistVO
+     * @return
+     */
     int loginHist(LoginHistVO loginHistVO);
 
     /**
-      * 로그인 히스토리 조회
-      * @param loginHistVO LoginHistVO
-      * @return
-      */
+     * 로그인 히스토리 조회
+     * @param loginHistVO LoginHistVO
+     * @return
+     */
     <E> List<E> selectLoginHist(LoginHistVO loginHistVO);
 
     /**
@@ -105,5 +105,11 @@ public interface AuthService {
      * @return
      */
     String getPosLoginReturnUrl(SessionInfoVO sessionInfoVO);
+
+    /** 로그인 화면 본인 해제 차단 사유 (null 이면 해제 가능) */
+    String getPauseSelfReleaseBlockReason(String userId, int maxSelfCnt);
+
+    /** 로그인 화면 본인 숫자확인으로 일시정지 해제 + 이력 등록 (반환: 해제 건수) */
+    int releasePauseBySelf(String userId, String loginIp);
 
 }

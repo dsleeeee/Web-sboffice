@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -451,6 +452,21 @@ public class AuthServiceImpl implements AuthService {
         return authMapper.getPosLoginReturnUrl(sessionInfoVO);
     }
 
+    /** 로그인 화면 본인 해제 차단 사유 (null 이면 해제 가능) */
+    @Override
+    public String getPauseSelfReleaseBlockReason(String userId, int maxSelfCnt) {
+        return authMapper.getPauseSelfReleaseBlockReason(userId, maxSelfCnt);
+    }
+
+    /** 로그인 화면 본인 숫자확인으로 일시정지 해제 + 이력 등록 */
+    @Override
+    @Transactional
+    public int releasePauseBySelf(String userId, String loginIp) {
+        String procDt = currentDateTimeString();
+        int updCnt = authMapper.updateUserPauseRelease(userId, procDt);
+        authMapper.insertUserPauseReleaseHist(userId, procDt, updCnt, loginIp);
+        return updCnt;
+    }
 }
 
 

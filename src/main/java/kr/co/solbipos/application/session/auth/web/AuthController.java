@@ -42,6 +42,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.security.SecureRandom;
+
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -98,6 +110,30 @@ public class AuthController {
     private static final long SMS_VFC_RESEND_MILLIS = 30 * 1000L;
     /** POS 자동로그인 SMS 인증 대기화면 URL */
     private static final String POS_SMS_VFC_URL = "/auth/posSmsVfc.sb";
+
+    /** 일시정지 본인 숫자확인 화면 URL */
+    private static final String PAUSE_VFC_URL = "/auth/pauseVfc.sb";
+    /** 일시정지 숫자확인 대기정보 세션 키 */
+    private static final String PAUSE_VFC_USER_ID    = "PAUSE_VFC_USER_ID";
+    private static final String PAUSE_VFC_LOGIN_IP   = "PAUSE_VFC_LOGIN_IP";
+    private static final String PAUSE_VFC_POS_AUTO   = "PAUSE_VFC_POS_AUTO";
+    private static final String PAUSE_VFC_FAIL_URL   = "PAUSE_VFC_FAIL_URL";
+    private static final String PAUSE_VFC_STARTED_AT = "PAUSE_VFC_STARTED_AT";
+    private static final String PAUSE_VFC_CODE       = "PAUSE_VFC_CODE";
+    private static final String PAUSE_VFC_ISSUED_AT  = "PAUSE_VFC_ISSUED_AT";
+    private static final String PAUSE_VFC_FAIL_CNT   = "PAUSE_VFC_FAIL_CNT";
+    private static final String PAUSE_VFC_RENEW_CNT  = "PAUSE_VFC_RENEW_CNT";
+    /** 숫자 1개 유효시간 / 대기정보 전체 유효시간: 2분 */
+    private static final long PAUSE_VFC_VALID_MILLIS   = 2 * 60 * 1000L;
+    private static final long PAUSE_VFC_CONTEXT_MILLIS = 2 * 60 * 1000L;
+    /** 숫자 표시 후 최소 입력시간 (이보다 빠르면 봇으로 보고 오입력 처리) */
+    private static final long PAUSE_VFC_MIN_INPUT_MILLIS = 1000L;
+    /** 오입력 허용 횟수 / 새 숫자 요청 허용 횟수 */
+    private static final int PAUSE_VFC_MAX_FAIL  = 5;
+    private static final int PAUSE_VFC_MAX_RENEW = 3;
+    /** 본인 해제 허용 횟수 (최근 1시간) */
+    private static final int PAUSE_VFC_MAX_SELF_RELEASE = 1;
+    private static final SecureRandom PAUSE_VFC_RANDOM = new SecureRandom();
 
     // 차단할 클라우드 IP 대역 (CIDR 형식)
     // 예: 3.0.0.0/8 -> 3.x.x.x 전체 범위
@@ -199,6 +235,8 @@ public class AuthController {
         model.addAttribute("type", isEmpty(type) ? "" : type);
         model.addAttribute("smsAuth", isEmpty(smsAuth) ? "" : smsAuth);
         setSmsVfcTimerModel(userId, request, model, LOGIN_SMS_VFC_USER_ID, LOGIN_SMS_VFC_SENT_AT);
+        // 로그인 화면으로 돌아오면 일시정지 숫자확인 대기정보 제거
+        clearPauseVfc(request);
         // 토큰 생성, 셋팅
         String token = UUID.randomUUID().toString();
         request.getSession().setAttribute("LOGIN_CHK_TOKEN", token);
@@ -623,8 +661,19 @@ public class AuthController {
             throw new AuthenticationException(messageService.get("login.pw.find.not.web.use"), returnUrl);
         }
         else if (code == LoginResult.SUSPEND_ACCOUNT){
-            returnUrl = failUrl;
-            throw new AuthenticationException(messageService.get("login.pw.find.suspend"), returnUrl);
+            // 1시간 내 본인 해제 후 다시 정지된 경우는 본인 해제를 허용하지 않고 기존 안내만 한다.
+            // (고위험 정지 제외는 보류 — AuthMapper.getPauseSelfReleaseBlockReason 주석 참고)
+            String blockReason = authService.getPauseSelfReleaseBlockReason(result.getUserId(), PAUSE_VFC_MAX_SELF_RELEASE);
+            if (blockReason != null) {
+                LOGGER.info("pause self release blocked : {} / {}", result.getUserId(), blockReason);
+                returnUrl = failUrl;
+                throw new AuthenticationException(messageService.get("login.pw.find.suspend"), returnUrl);
+            }
+
+            // 비밀번호(또는 POS accessCd)까지 확인된 계정만 숫자확인 화면으로 이동한다.
+            startPauseVfc(request, result.getUserId(), result.getLoginIp(), posAutoLogin, failUrl);
+            sw.stop();
+            return "redirect:" + PAUSE_VFC_URL;
         }
         // 로그인 실패
         else {
@@ -643,6 +692,254 @@ public class AuthController {
         LOGGER.error("로그인 성공 처리 시간 : {}", sw.getTotalTimeSeconds());
 
         return "redirect:/" + returnUrl;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       일시정지 본인 숫자확인 (해제 후 다시 로그인)
+       ══════════════════════════════════════════════════════════════ */
+
+    /** 일시정지 숫자확인 화면 */
+    @RequestMapping(value = "pauseVfc.sb", method = RequestMethod.GET)
+    public String pauseVfc(HttpServletRequest request, Model model) {
+        String userId = getPauseVfcUserId(request);
+        if (userId == null) {
+            return "redirect:/auth/login.sb";
+        }
+        HttpSession session = request.getSession();
+        if (!(session.getAttribute(PAUSE_VFC_ISSUED_AT) instanceof Long)) {
+            issuePauseVfcCode(session);
+        }
+
+        model.addAttribute("pauseVfcUserId", userId);
+        model.addAttribute("pauseVfcExpireSeconds", pauseVfcRemainSeconds(session));
+        return "application/pos/pauseVfc";
+    }
+
+    /** 일시정지 숫자 이미지 (텍스트로 노출하지 않도록 서버에서 PNG 생성) */
+    @RequestMapping(value = "pauseVfcImg.sb", method = RequestMethod.GET)
+    public void pauseVfcImg(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        Object code = session.getAttribute(PAUSE_VFC_CODE);
+        if (getPauseVfcUserId(request) == null || !(code instanceof String)) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        String no = (String) code;
+
+        int w = 200, h = 64;
+        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = img.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(new Color(244, 247, 251));
+        g.fillRect(0, 0, w, h);
+
+        // 방해선
+        for (int i = 0; i < 8; i++) {
+            g.setColor(new Color(150 + PAUSE_VFC_RANDOM.nextInt(80), 150 + PAUSE_VFC_RANDOM.nextInt(80), 150 + PAUSE_VFC_RANDOM.nextInt(80)));
+            g.setStroke(new BasicStroke(1f + PAUSE_VFC_RANDOM.nextFloat()));
+            g.drawLine(PAUSE_VFC_RANDOM.nextInt(w), PAUSE_VFC_RANDOM.nextInt(h), PAUSE_VFC_RANDOM.nextInt(w), PAUSE_VFC_RANDOM.nextInt(h));
+        }
+
+        // 숫자 (글자마다 기울기·위치·색 변화)
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
+        for (int i = 0; i < no.length(); i++) {
+            AffineTransform old = g.getTransform();
+            int x = 28 + i * 40;
+            int y = 46 + PAUSE_VFC_RANDOM.nextInt(7) - 3;
+            g.rotate(Math.toRadians(PAUSE_VFC_RANDOM.nextInt(31) - 15), x + 10, y - 12);
+            g.setColor(new Color(20 + PAUSE_VFC_RANDOM.nextInt(60), 40 + PAUSE_VFC_RANDOM.nextInt(60), 90 + PAUSE_VFC_RANDOM.nextInt(80)));
+            g.drawString(String.valueOf(no.charAt(i)), x, y);
+            g.setTransform(old);
+        }
+
+        // 점 노이즈
+        for (int i = 0; i < 120; i++) {
+            g.setColor(new Color(PAUSE_VFC_RANDOM.nextInt(256), PAUSE_VFC_RANDOM.nextInt(256), PAUSE_VFC_RANDOM.nextInt(256)));
+            g.fillRect(PAUSE_VFC_RANDOM.nextInt(w), PAUSE_VFC_RANDOM.nextInt(h), 1, 1);
+        }
+        g.dispose();
+
+        response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+        ImageIO.write(img, "png", response.getOutputStream());
+    }
+
+    /** 새 숫자 요청 */
+    @RequestMapping(value = "pauseVfcRenew.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result renewPauseVfc(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> data = new HashMap<>();
+        data.put("forceLogout", false);
+
+        if (getPauseVfcUserId(request) == null) {
+            return pauseVfcForceLogout(data, "입력시간이 지났거나 해제 요청 정보가 없습니다.\n다시 로그인해 주세요.", null);
+        }
+
+        int renewCnt = intAttr(session, PAUSE_VFC_RENEW_CNT) + 1;
+        if (renewCnt > PAUSE_VFC_MAX_RENEW) {
+            String failUrl = (String) session.getAttribute(PAUSE_VFC_FAIL_URL);
+            clearPauseVfc(request);
+            return pauseVfcForceLogout(data, "새 숫자 요청 횟수(" + PAUSE_VFC_MAX_RENEW + "회)를 초과했습니다.\n다시 로그인해 주세요.", failUrl);
+        }
+        session.setAttribute(PAUSE_VFC_RENEW_CNT, renewCnt);
+
+        issuePauseVfcCode(session);
+        data.put("expireSeconds", pauseVfcRemainSeconds(session));
+        data.put("message", "새 숫자를 표시했습니다. (" + renewCnt + "/" + PAUSE_VFC_MAX_RENEW + ")");
+        return returnJson(Status.OK, data);
+    }
+
+    /** 숫자 확인 → 일시정지 해제 → 로그인 화면으로 (다시 로그인) */
+    @RequestMapping(value = "pauseVfcVerify.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result verifyPauseVfc(String pauseVfcNo, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> data = new HashMap<>();
+        data.put("verified", false);
+        data.put("forceLogout", false);
+        data.put("renew", false);
+
+        String userId = getPauseVfcUserId(request);
+        if (userId == null) {
+            return pauseVfcForceLogout(data, "입력시간이 지났거나 해제 요청 정보가 없습니다.\n다시 로그인해 주세요.", null);
+        }
+        String failUrl = (String) session.getAttribute(PAUSE_VFC_FAIL_URL);
+
+        // 숫자 유효시간 확인
+        Object code = session.getAttribute(PAUSE_VFC_CODE);
+        Object issuedAt = session.getAttribute(PAUSE_VFC_ISSUED_AT);
+        long now = System.currentTimeMillis();
+        if (!(code instanceof String) || !(issuedAt instanceof Long)
+                || now - (Long) issuedAt >= PAUSE_VFC_VALID_MILLIS) {
+            data.put("message", "숫자 입력시간이 지났습니다.\n[새 숫자]를 눌러 다시 시도해 주세요.");
+            return returnJson(Status.OK, data);
+        }
+
+        // 숫자 표시 직후 즉시 제출(봇 의심)도 오입력으로 처리
+        boolean tooFast = (now - (Long) issuedAt) < PAUSE_VFC_MIN_INPUT_MILLIS;
+        String inputNo = pauseVfcNo == null ? "" : pauseVfcNo.trim();
+        if (tooFast || !code.equals(inputNo)) {
+            int failCnt = intAttr(session, PAUSE_VFC_FAIL_CNT) + 1;
+            session.setAttribute(PAUSE_VFC_FAIL_CNT, failCnt);
+            if (tooFast) {
+                LOGGER.info("pause self release too fast : {} / {}ms", userId, now - (Long) issuedAt);
+            }
+            if (failCnt >= PAUSE_VFC_MAX_FAIL) {
+                clearPauseVfc(request);
+                return pauseVfcForceLogout(data, "숫자를 " + PAUSE_VFC_MAX_FAIL + "회 잘못 입력하여 로그인 화면으로 이동합니다.", failUrl);
+            }
+            // 틀릴 때마다 새 숫자로 교체해 무작위 대입을 막는다.
+            issuePauseVfcCode(session);
+            data.put("renew", true);
+            data.put("expireSeconds", pauseVfcRemainSeconds(session));
+            data.put("message", (tooFast ? "입력이 너무 빠릅니다. 숫자를 확인한 뒤 입력해 주세요." : "숫자가 일치하지 않습니다.")
+                    + " (" + failCnt + "/" + PAUSE_VFC_MAX_FAIL + ")\n새로 표시된 숫자를 입력해 주세요.");
+            return returnJson(Status.OK, data);
+        }
+
+        // 숫자 일치 → 일시정지 해제 + 이력(PROC_FG='R')
+        String loginIp = (String) session.getAttribute(PAUSE_VFC_LOGIN_IP);
+        boolean posAutoLogin = Boolean.TRUE.equals(session.getAttribute(PAUSE_VFC_POS_AUTO));
+        int updCnt = authService.releasePauseBySelf(userId, loginIp);
+        clearPauseVfc(request);
+
+        if (updCnt < 1) {
+            return pauseVfcForceLogout(data, "이미 해제되었거나 계정 상태가 변경되었습니다.\n다시 로그인해 주세요.", failUrl);
+        }
+
+        // 해제만 하고 로그인 화면으로 돌려보낸다 (비밀번호 재입력)
+        data.put("verified", true);
+        data.put("message", posAutoLogin
+                ? "일시정지가 해제되었습니다.\nPOS에서 다시 접속해 주세요."
+                : "일시정지가 해제되었습니다.\n다시 로그인해 주세요.");
+        data.put("url", isEmpty(failUrl) ? "/auth/login.sb" : failUrl);
+        return returnJson(Status.OK, data);
+    }
+
+    /** 숫자확인 대기정보 저장 + 첫 숫자 발급 */
+    private void startPauseVfc(HttpServletRequest request, String userId, String loginIp,
+                               boolean posAutoLogin, String failUrl) {
+        HttpSession session = request.getSession();
+        clearPauseVfc(request);
+        session.setAttribute(PAUSE_VFC_USER_ID, userId);
+        session.setAttribute(PAUSE_VFC_LOGIN_IP, loginIp);
+        session.setAttribute(PAUSE_VFC_POS_AUTO, posAutoLogin);
+        session.setAttribute(PAUSE_VFC_FAIL_URL, failUrl);
+        session.setAttribute(PAUSE_VFC_STARTED_AT, System.currentTimeMillis());
+        session.setAttribute(PAUSE_VFC_FAIL_CNT, 0);
+        session.setAttribute(PAUSE_VFC_RENEW_CNT, 0);
+        issuePauseVfcCode(session);
+    }
+
+    /** 대기 중인 USER_ID 조회 — 2분 경과 시 폐기 */
+    private String getPauseVfcUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Object userId = session.getAttribute(PAUSE_VFC_USER_ID);
+        Object startedAt = session.getAttribute(PAUSE_VFC_STARTED_AT);
+        if (!(userId instanceof String) || !(startedAt instanceof Long)) {
+            return null;
+        }
+        if (System.currentTimeMillis() - (Long) startedAt >= PAUSE_VFC_CONTEXT_MILLIS) {
+            removePauseVfcAttrs(session);
+            return null;
+        }
+        return (String) userId;
+    }
+
+    /** 화면 타이머용 남은 초 — 숫자 유효시간과 전체 유효시간 중 짧은 쪽 */
+    private long pauseVfcRemainSeconds(HttpSession session) {
+        Object issuedAt = session.getAttribute(PAUSE_VFC_ISSUED_AT);
+        Object startedAt = session.getAttribute(PAUSE_VFC_STARTED_AT);
+        if (!(issuedAt instanceof Long) || !(startedAt instanceof Long)) {
+            return 0L;
+        }
+        long now = System.currentTimeMillis();
+        long codeRemain = PAUSE_VFC_VALID_MILLIS   - (now - (Long) issuedAt);
+        long ctxRemain  = PAUSE_VFC_CONTEXT_MILLIS - (now - (Long) startedAt);
+        long remainMillis = Math.max(0L, Math.min(codeRemain, ctxRemain));
+        return (remainMillis + 999L) / 1000L;
+    }
+
+    /** 4자리 숫자 새로 발급 */
+    private void issuePauseVfcCode(HttpSession session) {
+        session.setAttribute(PAUSE_VFC_CODE, String.format("%04d", PAUSE_VFC_RANDOM.nextInt(10000)));
+        session.setAttribute(PAUSE_VFC_ISSUED_AT, System.currentTimeMillis());
+    }
+
+    /** 대기정보 전체 제거 */
+    private void clearPauseVfc(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            removePauseVfcAttrs(session);
+        }
+    }
+
+    private void removePauseVfcAttrs(HttpSession session) {
+        session.removeAttribute(PAUSE_VFC_USER_ID);
+        session.removeAttribute(PAUSE_VFC_LOGIN_IP);
+        session.removeAttribute(PAUSE_VFC_POS_AUTO);
+        session.removeAttribute(PAUSE_VFC_FAIL_URL);
+        session.removeAttribute(PAUSE_VFC_STARTED_AT);
+        session.removeAttribute(PAUSE_VFC_CODE);
+        session.removeAttribute(PAUSE_VFC_ISSUED_AT);
+        session.removeAttribute(PAUSE_VFC_FAIL_CNT);
+        session.removeAttribute(PAUSE_VFC_RENEW_CNT);
+    }
+
+    private int intAttr(HttpSession session, String key) {
+        Object v = session.getAttribute(key);
+        return (v instanceof Integer) ? (Integer) v : 0;
+    }
+
+    /** 로그인 화면으로 돌려보내는 응답 */
+    private Result pauseVfcForceLogout(Map<String, Object> data, String message, String url) {
+        data.put("forceLogout", true);
+        data.put("message", message);
+        data.put("url", isEmpty(url) ? "/auth/login.sb" : url);
+        return returnJson(Status.OK, data);
     }
 
     /** 예외 메시지를 로그인 화면 JavaScript 문자열에서 안전하게 출력할 수 있도록 변환 */
@@ -1062,23 +1359,23 @@ public class AuthController {
         String userId = params.getUserId();
         String currentDt = DateUtil.currentDateTimeString();
         log.append("\n_login_chk_log_").append(prefix + "_").append("----------").append(userId).append(" ").append(title).append(" START----------\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n");
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",접속IP:").append(params.getLoginIp()).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",본사코드:").append(params.getHqOfficeCd()).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",매장코드:").append(params.getStoreCd()).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n");
         if (count != null) {
             log.append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",초당접속횟수:").append(count).append("\n");
         }
         log.append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",토큰정보:").append(token).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",처리여부:").append(processResult).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-           .append("_login_chk_log_").append(prefix + "_").append("----------").append(userId).append(" ").append(title).append(" END----------");
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",처리여부:").append(processResult).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                .append("_login_chk_log_").append(prefix + "_").append("----------").append(userId).append(" ").append(title).append(" END----------");
     }
 
     /**

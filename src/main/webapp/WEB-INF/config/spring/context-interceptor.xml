@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
 
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
@@ -25,6 +25,8 @@
       <mvc:exclude-mapping path="/resource/**" />
       <mvc:exclude-mapping path="/error/*.sb" />
       <mvc:exclude-mapping path="/auth/log*.sb" />
+      <!-- 일시정지 본인 숫자확인 (로그인 전 화면 · 이미지 · 새 숫자 · 확인) -->
+      <mvc:exclude-mapping path="/auth/pauseVfc*.sb" />
       <mvc:exclude-mapping path="/user/*.sb" />
 
       <mvc:exclude-mapping path="/menu/*.sb" />
@@ -32,7 +34,7 @@
       <mvc:exclude-mapping path="/system/user/info/modifyPasswd.sb" />
 
       <mvc:exclude-mapping path="/application/pos/posLogin.sb" />
-	  <mvc:exclude-mapping path="/sample/tonymory/*.sb" />
+      <mvc:exclude-mapping path="/sample/tonymory/*.sb" />
       <mvc:exclude-mapping path="/mobile/auth/log*.sb" />
       <mvc:exclude-mapping path="/mobile/user/*.sb" />
       <mvc:exclude-mapping path="/mobile/direct/mobileDirectLogin.sb" />
@@ -46,7 +48,7 @@
       <mvc:exclude-mapping path="/adi/sms/smsTelNoManage/smsTelNoManage/getSmsTelNoRegisterRequest.sb" />
       <mvc:exclude-mapping path="/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify.sb" />
       <mvc:exclude-mapping path="/adi/sms/marketingSmsSend/marketingSmsSend/updateVerify2.sb" />
-	  
+
       <bean class="kr.co.common.interceptor.AuthenticationInterceptor" />
     </mvc:interceptor>
 

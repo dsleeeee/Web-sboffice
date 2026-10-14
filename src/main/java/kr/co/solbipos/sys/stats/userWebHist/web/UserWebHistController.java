@@ -393,4 +393,22 @@ public class UserWebHistController {
         return ReturnUtil.returnListJson(Status.OK, result, userWebHistVO);
     }
 
+    /**
+     * [조회정보 팝업] ①-1 자동일시정지 내역 조회
+     *   - TB_WB_USER_PAUSE_HIST (PROC_ID = 'SP_JOB_AUTO_PAUSE')
+     *
+     * @author  김유승
+     * @since   2026. 10. 14.
+     */
+    @RequestMapping(value = "/userWebHist/getAutoPauseHistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAutoPauseHistList(@RequestBody UserWebHistVO userWebHistVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = userWebHistService.getAutoPauseHistList(userWebHistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, userWebHistVO);
+    }
 }

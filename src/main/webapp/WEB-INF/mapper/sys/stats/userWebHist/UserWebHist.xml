@@ -10,6 +10,8 @@
     1       김유승     2024.01.15     최초작성
     2       김유승     2026.09.22     조회정보(조회건수) 팝업 조회 추가 (ETC050_01.JSP chkcnt / chkcnt_ip 이관)
     3       김유승     2026.09.23     로그인 유형별 · 로그인IP수 · 현재메뉴 불일치 · ③ 메뉴(URL)별 건수(URLD) 추가
+    4       김유승     2026.10.14     ① 종합에 자동 일시정지(SP_JOB_AUTO_PAUSE_IUD01) 판정 항목 추가
+                                      ①-1 자동일시정지 내역 조회 추가
 -->
 <mapper namespace="kr.co.solbipos.sys.stats.userWebHist.service.impl.UserWebHistMapper">
 
@@ -149,6 +151,7 @@
     <!-- ══════════════════════════════════════════════════════════════════
          조회건수 예외 URL — menu_chk_monitor_webhook.sh 의
          CHK_EXC_URL_EQ_LIST / CHK_EXC_URL_PREFIX_LIST 와 반드시 동일하게 유지
+         (SP_JOB_AUTO_PAUSE_IUD01 ME 예외 URL 과도 동일)
          · 조각 안에서는 정규화된 URL 컬럼명 NURL (스킴·호스트·쿼리스트링 제거) 을 참조
          ══════════════════════════════════════════════════════════════════ -->
     <sql id="chkExcUrlEqList">
@@ -186,12 +189,14 @@
 
     <!-- [조회정보 팝업] 조회건수 USER_ID 종합 조회 -->
     <!--
-        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_BLOCK, TB_WB_LOGIN_HIST_CHK
+        TABLE    : TB_MONITOR_ALARM, TB_WB_LOGIN_HIST_BLOCK, TB_WB_LOGIN_HIST_CHK, TB_WB_USER_INFO
         PARAM    : userWebHistVO
         COMMENTS : ETC050 조회건수 탭 ① USER_ID 종합과 동일.
                    조회건수 집계 / 로그인 시도 집계(유형별) / 현재메뉴 불일치 알림 +
                    TB_WB_LOGIN_HIST_BLOCK(국외IP) + TB_WB_LOGIN_HIST_CHK(로그인IP수) 를 USER_ID 로 결합.
                    임계치(0 이하 = 미사용)는 OR 조건, chkUserId 입력 시 임계치 미적용 LIKE 검색.
+                   [2026.10.14] 자동 일시정지(SP_JOB_AUTO_PAUSE_IUD01) 판정 항목(G1·G2·B1~B5) · 제외사유 · 감시대상 추가
+                                apHitYn = 'Y' 이면 판정 해당자도 OR 조건으로 조회
     -->
     <select id="getUserWebChkCntList" parameterType="userWebHistVO" resultType="DefaultMap">
         /* UserWebHistMapper.getUserWebChkCntList */
@@ -215,6 +220,8 @@
             ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *IP:([^|]+)'     , 1, 1, NULL, 1)) AS CHK_IP
             ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *IP_CNT:([0-9]+)', 1, 1, NULL, 1)) AS CHK_IP_CNT
             ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *IPS:([^|]+)'    , 1, 1, NULL, 1)) AS CHK_IPS
+            ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *IPD:([^|]+)'    , 1, 1, NULL, 1)) AS CHK_IPD
+            ,       TRIM(     REGEXP_SUBSTR(A.ALARM_MSG, '\| *URLD:([^|]+)'   , 1, 1, NULL, 1)) AS CHK_URLD
             ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *FIRST:([^|]+)'  , 1, 1, NULL, 1)  AS FIRST_TS
             ,                 REGEXP_SUBSTR(A.ALARM_MSG, '\| *LAST:([^|]+)'   , 1, 1, NULL, 1)  AS LAST_TS
             FROM    TB_MONITOR_ALARM A
@@ -371,6 +378,7 @@
             ,       TRIM( REGEXP_SUBSTR(A.ALARM_MSG, '\| *URL:([^|]+)'     , 1, 1, NULL, 1)) AS ME_URL
             ,       TO_NUMBER(REGEXP_SUBSTR(A.ALARM_MSG, '\| *CNT:([0-9]+)', 1, 1, NULL, 1)) AS ME_CNT
             ,       A.SRC_SYSTEM
+            ,       A.REG_DT
             FROM    TB_MONITOR_ALARM A
             ,       P
             WHERE   A.REG_DT      BETWEEN P.DT_FROM8 || '000000' AND P.DT_TO8 || '235959'
@@ -453,6 +461,123 @@
             UNION
             SELECT USER_KEY FROM ME_TODAY
         )
+        /* ═══════ 자동 일시정지(SP_JOB_AUTO_PAUSE_IUD01) 판정 — SP CUR_CAND 와 동일 로직 ═══════ */
+        /* B3 : 최근 5분 조회 IP — IPS · IPD · IP 를 펼쳐 서로 다른 IP 수 */
+        , AP_IP_TOK AS (
+            SELECT  S.USER_KEY
+            ,       REGEXP_SUBSTR(TRIM(REGEXP_SUBSTR(S.IP_LIST, '[^,]+', 1, L.LV)), '^[0-9A-Fa-f:.]+') AS IPV
+            FROM    (
+                    SELECT  R.USER_KEY
+                    ,       R.CHK_IPS || ',' || R.CHK_IPD || ',' || R.CHK_IP  AS IP_LIST
+                    FROM    CHK_RAW R
+                    ,       P
+                    WHERE   R.USER_KEY IS NOT NULL
+                    AND     R.REG_DT  >= P.BEF_5M
+                    ) S
+            ,       (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 100) L
+            WHERE   L.LV <= REGEXP_COUNT(S.IP_LIST, ',') + 1
+        )
+        , AP_IP5 AS (
+            SELECT  T.USER_KEY
+            ,       COUNT(DISTINCT T.IPV)   AS M5_IP_CNT
+            FROM    AP_IP_TOK T
+            WHERE   REGEXP_LIKE(T.IPV, '^([0-9]{1,3}\.){3}[0-9]{1,3}$')
+            OR      INSTR(T.IPV, ':') > 0
+            GROUP
+            BY      T.USER_KEY
+        )
+        /* B5 : 최근 5분 URL 1개 최다 실조회 (URLD, NOURL·ETC 제외) */
+        , AP_URL_PAIR AS (
+            SELECT  R.USER_KEY
+            ,       TRIM(REGEXP_SUBSTR(R.CHK_URLD, '[^,]+', 1, L.LV))   AS PAIR
+            FROM    CHK_RAW R
+            ,       P
+            ,       (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 60) L
+            WHERE   R.USER_KEY IS NOT NULL
+            AND     R.REG_DT   >= P.BEF_5M
+            AND     R.CHK_URLD IS NOT NULL
+            AND     R.CHK_URLD <> '-'
+            AND     L.LV       <= REGEXP_COUNT(R.CHK_URLD, ',') + 1
+        )
+        , AP_URL5 AS (
+            SELECT  Q.USER_KEY
+            ,       SUBSTR(Q.PAIR, 1, INSTR(Q.PAIR, '=', -1) - 1)                           AS NURL
+            ,       SUM(TO_NUMBER(REGEXP_SUBSTR(Q.PAIR, '/([0-9]+)$', 1, 1, NULL, 1)))       AS URL_REAL
+            FROM    AP_URL_PAIR Q
+            WHERE   Q.PAIR IS NOT NULL
+            AND     REGEXP_LIKE(Q.PAIR, '=[0-9]+/[0-9]+$')
+            GROUP
+            BY      Q.USER_KEY
+            ,       SUBSTR(Q.PAIR, 1, INSTR(Q.PAIR, '=', -1) - 1)
+        )
+        , AP_URLM AS (
+            SELECT  U.USER_KEY
+            ,       MAX(U.URL_REAL)                                         AS URL_5M_MAX
+            ,       MAX(U.NURL) KEEP (DENSE_RANK LAST ORDER BY U.URL_REAL)  AS URL_5M_TOP
+            FROM    AP_URL5 U
+            WHERE   U.NURL NOT IN ('NOURL', 'ETC')
+            GROUP
+            BY      U.USER_KEY
+        )
+        /* B2 : 최근 5분 현재메뉴 불일치 실건수 (예외 URL 제외) */
+        , AP_ME5 AS (
+            SELECT  K.USER_KEY
+            ,       NVL(SUM(K.ME_CNT), 0)   AS ME_5M_REAL
+            FROM    (
+                    SELECT  R.USER_KEY
+                    ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '') AS NURL
+                    ,       MAX(R.ME_CNT)   AS ME_CNT
+                    FROM    ME_RAW R
+                    ,       P
+                    WHERE   R.USER_KEY IS NOT NULL
+                    AND     R.ME_URL   IS NOT NULL
+                    AND     R.REG_DT  >= P.BEF_5M
+                    GROUP
+                    BY      R.USER_KEY, R.SRC_SYSTEM, R.ME_DATE, R.ME_MIN
+                    ,       REGEXP_REPLACE(REGEXP_REPLACE(R.ME_URL, '^[A-Za-z]+://[^/]+', ''), '\?.*$', '')
+                    ) K
+            WHERE   K.NURL IS NOT NULL
+            AND     NOT ]]><include refid="chkExcUrlIsExc"/><![CDATA[
+            GROUP
+            BY      K.USER_KEY
+        )
+        , AP AS (
+            SELECT  U.USER_KEY
+            ,       NVL(E5.ME_5M_REAL  , 0)     AS AP_ME_5M
+            ,       NVL(I5.M5_IP_CNT   , 0)     AS AP_IP_5M
+            ,       NVL(UM.URL_5M_MAX  , 0)     AS AP_URL_5M_MAX
+            ,       NVL(UM.URL_5M_TOP  , '-')   AS AP_URL_5M_TOP
+            ,       CASE WHEN H.USER_KEY IS NOT NULL    AND NVL(M.M5_REAL, 0) > 0 THEN 'Y' ELSE 'N' END AS HIT_G1
+            ,       CASE WHEN NVL(T.BLK_10M_CNT, 0) > 0 AND NVL(M.M5_REAL, 0) > 0 THEN 'Y' ELSE 'N' END AS HIT_G2
+            ,       CASE WHEN #{apThB1} > 0 AND NVL(M.M5_REAL    , 0) >= #{apThB1} THEN 'Y' ELSE 'N' END AS HIT_B1
+            ,       CASE WHEN #{apThB2} > 0 AND NVL(E5.ME_5M_REAL, 0) >= #{apThB2} THEN 'Y' ELSE 'N' END AS HIT_B2
+            ,       CASE WHEN #{apThB3} > 0 AND NVL(I5.M5_IP_CNT , 0) >= #{apThB3} THEN 'Y' ELSE 'N' END AS HIT_B3
+            ,       CASE WHEN #{apThB4} > 0 AND NVL(L.LGN_5M_TOT , 0) >= #{apThB4} THEN 'Y' ELSE 'N' END AS HIT_B4
+            ,       CASE WHEN #{apThB5} > 0 AND NVL(UM.URL_5M_MAX, 0) >= #{apThB5} THEN 'Y' ELSE 'N' END AS HIT_B5
+            FROM            USERS       U
+            LEFT OUTER JOIN CHK_5M      M  ON M.USER_KEY  = U.USER_KEY
+            LEFT OUTER JOIN CHK_IP_HIT  H  ON H.USER_KEY  = U.USER_KEY
+            LEFT OUTER JOIN BLK_10M     T  ON T.USER_KEY  = U.USER_KEY
+            LEFT OUTER JOIN LOGIN_TODAY L  ON L.USER_KEY  = U.USER_KEY
+            LEFT OUTER JOIN AP_ME5      E5 ON E5.USER_KEY = U.USER_KEY
+            LEFT OUTER JOIN AP_IP5      I5 ON I5.USER_KEY = U.USER_KEY
+            LEFT OUTER JOIN AP_URLM     UM ON UM.USER_KEY = U.USER_KEY
+        )
+        , APX AS (
+            /* 모드 'N'(미사용) 항목은 apUseItems 에서 빠져 판정 코드에서도 제외 */
+            SELECT  A.*
+            ,       RTRIM(
+                       CASE WHEN A.HIT_G1 = 'Y' AND INSTR(Q.USE_ITEMS, ',G1,') > 0 THEN 'G1,' END
+                    || CASE WHEN A.HIT_G2 = 'Y' AND INSTR(Q.USE_ITEMS, ',G2,') > 0 THEN 'G2,' END
+                    || CASE WHEN A.HIT_B1 = 'Y' AND INSTR(Q.USE_ITEMS, ',B1,') > 0 THEN 'B1,' END
+                    || CASE WHEN A.HIT_B2 = 'Y' AND INSTR(Q.USE_ITEMS, ',B2,') > 0 THEN 'B2,' END
+                    || CASE WHEN A.HIT_B3 = 'Y' AND INSTR(Q.USE_ITEMS, ',B3,') > 0 THEN 'B3,' END
+                    || CASE WHEN A.HIT_B4 = 'Y' AND INSTR(Q.USE_ITEMS, ',B4,') > 0 THEN 'B4,' END
+                    || CASE WHEN A.HIT_B5 = 'Y' AND INSTR(Q.USE_ITEMS, ',B5,') > 0 THEN 'B5,' END
+                    , ',')                                  AS AP_HIT_CODES
+            FROM    AP A
+            ,       (SELECT ',' || REPLACE(#{apUseItems}, ' ', '') || ',' AS USE_ITEMS FROM DUAL) Q
+        )
         SELECT  NVL(C.USER_ID, NVL(L.USER_ID, NVL(E.USER_ID, NVL(I.BLK_USER_ID, U.USER_KEY)))) AS USER_ID
         ,       NVL(C.TODAY_TOT , 0)        AS TODAY_TOT
         ,       NVL(C.TODAY_EXC , 0)        AS TODAY_EXC
@@ -504,6 +629,31 @@
                      WHEN NVL(L.LGN_5M_ERR , 0) > 0                           THEN 'F'
                      ELSE '-'
                 END                         AS RISK
+        /* ── 자동 일시정지 판정 ── */
+        ,       NVL(AX.AP_HIT_CODES , '-')  AS AP_HIT_CODES
+        ,       NVL(AX.AP_ME_5M     , 0)    AS AP_ME5M
+        ,       NVL(AX.AP_IP_5M     , 0)    AS AP_IP5M
+        ,       NVL(AX.AP_URL_5M_MAX, 0)    AS AP_URL5M_MAX
+        ,       NVL(AX.AP_URL_5M_TOP, '-')  AS AP_URL5M_TOP
+        ,       NVL(W.USER_STAT_FG  , '-')  AS USER_STAT_FG
+        ,       CASE WHEN AX.AP_HIT_CODES IS NULL OR W.USER_ID IS NULL THEN '-'
+                     ELSE FN_CHK_BLOCK_TARGET_USER_YN(W.USER_ID)
+                END                         AS AP_TARGET_YN
+        ,       CASE WHEN AX.AP_HIT_CODES IS NULL               THEN NULL
+                     WHEN W.USER_ID IS NULL                     THEN '사용자없음'
+                     WHEN NVL(W.USE_YN, 'N') <> 'Y'             THEN '사용안함'
+                     WHEN NVL(W.USER_STAT_FG, '00') = '50'      THEN '이미 일시정지'
+                     WHEN EXISTS (SELECT 1 FROM TB_CM_EMPLOYEE EM
+                                  WHERE EM.USER_ID = W.USER_ID AND EM.ADMIN_FG = 'A')   THEN '관리자'
+                     WHEN EXISTS (SELECT 1 FROM TB_CM_NMCODE N
+                                  WHERE N.NMCODE_GRP_CD = '252' AND N.NMCODE_ITEM_1 = 'USER'
+                                  AND   UPPER(TRIM(N.NMCODE_NM)) = U.USER_KEY)          THEN '화이트리스트(USER)'
+                     WHEN EXISTS (SELECT 1 FROM TB_CM_NMCODE N
+                                  WHERE N.NMCODE_GRP_CD = '252' AND N.NMCODE_ITEM_1 = 'IP'
+                                  AND   TRIM(N.NMCODE_NM) IS NOT NULL
+                                  AND   NVL(C.CHK_LAST_IP, '-') LIKE TRIM(N.NMCODE_NM) || '%') THEN '화이트리스트(IP)'
+                     ELSE NULL
+                END                         AS AP_EXC
         FROM            USERS       U
         LEFT OUTER JOIN CHK_TODAY   C  ON C.USER_KEY  = U.USER_KEY
         LEFT OUTER JOIN CHK_5M      M  ON M.USER_KEY  = U.USER_KEY
@@ -515,6 +665,8 @@
         LEFT OUTER JOIN BLK_TODAY   B  ON B.USER_KEY  = U.USER_KEY
         LEFT OUTER JOIN BLK_10M     T  ON T.USER_KEY  = U.USER_KEY
         LEFT OUTER JOIN BLK_INFO    I  ON I.USER_KEY  = U.USER_KEY
+        LEFT OUTER JOIN APX         AX ON AX.USER_KEY = U.USER_KEY
+        LEFT OUTER JOIN TB_WB_USER_INFO W ON UPPER(W.USER_ID) = U.USER_KEY
         ]]>
         <choose>
             <!-- USER_ID 포함검색 - 임계치(OR 조건) 미적용 -->
@@ -530,11 +682,13 @@
                     <if test='thBlk10m gt 0'>   OR NVL(T.BLK_10M_CNT  , 0) &gt;= #{thBlk10m}</if>
                     <if test='thLgnToday gt 0'> OR NVL(L.LGN_TODAY_TOT, 0) &gt;= #{thLgnToday}</if>
                     <if test='thLgn5m gt 0'>    OR NVL(L.LGN_5M_TOT   , 0) &gt;= #{thLgn5m}</if>
+                    <if test='apHitYn == "Y"'>  OR AX.AP_HIT_CODES IS NOT NULL</if>
                 </trim>
             </otherwise>
         </choose>
         ORDER
-        BY      CASE WHEN H.USER_KEY IS NOT NULL      THEN 0
+        BY      CASE WHEN AX.AP_HIT_CODES IS NOT NULL THEN 0 ELSE 1 END
+        ,       CASE WHEN H.USER_KEY IS NOT NULL      THEN 0
         WHEN NVL(T.BLK_10M_CNT, 0)   &gt; 0 THEN 1
         WHEN NVL(B.BLK_TODAY_CNT, 0) &gt; 0 THEN 2
         ELSE 3
@@ -543,6 +697,89 @@
         ,       NVL(L.LGN_5M_TOT, 0) DESC
         ,       NVL(C.TODAY_REAL, 0) DESC
         ,       USER_ID
+    </select>
+
+    <!-- [조회정보 팝업] ①-1 자동일시정지 내역 -->
+    <!--
+        TABLE    : TB_WB_USER_PAUSE_HIST, TB_WB_USER_INFO, TB_LG_WB_USER_INFO_LOG
+        PARAM    : userWebHistVO (chkDay1, chkDay2, chkUserId, apProcFg)
+        COMMENTS : SP_JOB_AUTO_PAUSE_IUD01 이 남긴 이력 (PROC_ID = 'SP_JOB_AUTO_PAUSE').
+                   REMARK 에서 처리구분·항목코드, SUMMARY_TXT 에서 감시대상·5분 로그인·최다URL 추출.
+                   실제 정지 건은 이후 첫 '50 → 50 아님' 로그로 해제일시·해제자 표시.
+    -->
+    <select id="getAutoPauseHistList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getAutoPauseHistList */
+        SELECT  Z.*
+        ,       NVL(TO_CHAR(TO_DATE(Z.RELEASE_DT_RAW, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS'), '-') AS RELEASE_DT
+        ,       CASE WHEN Z.PROC_FG &lt;&gt; 'P' OR Z.RESULT_FG &lt;&gt; 'Y' THEN '-'
+        WHEN Z.RELEASE_DT_RAW IS NOT NULL                     THEN '해제됨'
+        WHEN Z.CUR_STAT_FG = '50'                             THEN '정지중'
+        ELSE '해제됨(로그없음)'
+        END                                                         AS AP_STATE
+        FROM    (
+        <![CDATA[
+        SELECT  H.PAUSE_SEQ
+        ,       H.USER_ID
+        ,       H.PROC_FG
+        ,       H.PROC_DT                                                   AS PROC_DT_RAW
+        ,       TO_CHAR(TO_DATE(H.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT
+        ,       H.RESULT_FG
+        ,       H.BEF_STAT_FG
+        ,       H.AFT_STAT_FG
+        ,       NVL(W.USER_STAT_FG, '-')                                    AS CUR_STAT_FG
+        ,       CASE WHEN H.PROC_FG = 'P' AND H.RESULT_FG = 'Y'     THEN '실제정지'
+                     WHEN H.PROC_FG = 'P'                           THEN '실제(미반영)'
+                     WHEN H.REMARK LIKE '%[대상외 보류]%'            THEN '대상외 보류'
+                     WHEN H.REMARK LIKE '%[인원초과 보류%'           THEN '인원초과 보류'
+                     ELSE '시험기록'
+                END                                                         AS AP_KIND
+        ,       CASE WHEN H.REMARK LIKE '자동 일시정지 [시험]%' THEN NULL
+                     ELSE REGEXP_SUBSTR(H.REMARK, '\] *([A-Z0-9,]+)', 1, 1, NULL, 1)
+                END                                                         AS AP_REAL_CODES
+        ,       REGEXP_SUBSTR(H.REMARK, '\[시험\] *([A-Z0-9,]+)', 1, 1, NULL, 1) AS AP_TEST_CODES
+        ,       NVL(REGEXP_SUBSTR(H.SUMMARY_TXT, '감시대상 ([YN])', 1, 1, NULL, 1), '-') AS TARGET_YN
+        ,       NVL(H.MIN5_REAL , 0)                                        AS MIN5_REAL
+        ,       NVL(H.ME_REAL   , 0)                                        AS ME_REAL
+        ,       NVL(H.CHK_IP_CNT, 0)                                        AS CHK_IP_CNT
+        ,       NVL(TO_NUMBER(REGEXP_SUBSTR(H.SUMMARY_TXT, '5분 로그인 ([0-9]+)', 1, 1, NULL, 1)), 0)         AS LGN_5M
+        ,       NVL(TO_NUMBER(REGEXP_SUBSTR(H.SUMMARY_TXT, '5분 최다URL [^|]* ([0-9]+)건', 1, 1, NULL, 1)), 0) AS URL_5M_MAX
+        ,       NVL(TRIM(REGEXP_SUBSTR(H.SUMMARY_TXT, '5분 최다URL ([^|]*) [0-9]+건', 1, 1, NULL, 1)), '-')    AS URL_5M_TOP
+        ,       NVL(H.BLK_TODAY_CNT, 0)                                     AS BLK_TODAY_CNT
+        ,       NVL(H.BLK_MIN10_CNT, 0)                                     AS BLK_MIN10_CNT
+        ,       NVL(H.CHK_LAST_IP  , '-')                                   AS CHK_LAST_IP
+        ,       NVL(H.IP_HIT       , '-')                                   AS IP_HIT
+        ,       NVL(H.COUNTRY_CODE , '-')                                   AS COUNTRY_CODE
+        ,       H.REMARK
+        ,       H.SUMMARY_TXT
+        ,       CASE WHEN H.PROC_FG = 'P' AND H.RESULT_FG = 'Y' THEN
+                    ( SELECT MIN(L.PROC_DT)
+                      FROM   TB_LG_WB_USER_INFO_LOG L
+                      WHERE  L.USER_ID = H.USER_ID
+                      AND    L.PROC_DT > H.PROC_DT
+                      AND    L.B_USER_STAT_FG = '50'
+                      AND    NVL(L.USER_STAT_FG, '#') <> '50' )
+                END                                                         AS RELEASE_DT_RAW
+        ,       CASE WHEN H.PROC_FG = 'P' AND H.RESULT_FG = 'Y' THEN
+                    ( SELECT MAX(NVL(L.MOD_ID, L.B_MOD_ID)) KEEP (DENSE_RANK FIRST ORDER BY L.PROC_DT)
+                      FROM   TB_LG_WB_USER_INFO_LOG L
+                      WHERE  L.USER_ID = H.USER_ID
+                      AND    L.PROC_DT > H.PROC_DT
+                      AND    L.B_USER_STAT_FG = '50'
+                      AND    NVL(L.USER_STAT_FG, '#') <> '50' )
+                END                                                         AS RELEASE_ID
+        FROM            TB_WB_USER_PAUSE_HIST H
+        LEFT OUTER JOIN TB_WB_USER_INFO       W ON W.USER_ID = H.USER_ID
+        WHERE   H.PROC_ID = 'SP_JOB_AUTO_PAUSE'
+        AND     H.PROC_DT BETWEEN #{chkDay1} || '000000' AND #{chkDay2} || '235959'
+        ]]>
+        <if test='apProcFg != null and apProcFg != ""'>
+            AND     H.PROC_FG = #{apProcFg}
+        </if>
+        <if test='chkUserId != null and chkUserId != ""'>
+            AND     UPPER(H.USER_ID) LIKE '%' || UPPER(#{chkUserId}) || '%'
+        </if>
+        ) Z
+        ORDER BY Z.PROC_DT_RAW DESC, Z.PAUSE_SEQ DESC
     </select>
 
     <!-- [조회정보 팝업] 조회건수 USER_ID + IP별 상세 조회 -->
@@ -1148,7 +1385,7 @@
         SELECT  H.PAUSE_SEQ
         ,       H.USER_ID
         ,       H.PROC_FG
-        ,       CASE H.PROC_FG WHEN 'P' THEN '일시정지' WHEN 'R' THEN '해제' ELSE H.PROC_FG END AS PROC_FG_NM
+        ,       CASE H.PROC_FG WHEN 'P' THEN '일시정지' WHEN 'R' THEN '해제' WHEN 'T' THEN '시험(미적용)' ELSE H.PROC_FG END AS PROC_FG_NM
         ,       TO_CHAR(TO_DATE(H.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT
         ,       H.PROC_ID
         ,       H.BEF_STAT_FG

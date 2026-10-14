@@ -125,6 +125,22 @@ public class UserWebHistVO extends PageVO {
     private String countryCode;
     private String blockReason;
 
+    /** [자동일시정지 판정] 임계치 (SP_JOB_AUTO_PAUSE_IUD01 C_TH_Bx 와 동일) */
+    private int    apThB1;
+    private int    apThB2;
+    private int    apThB3;
+    private int    apThB4;
+    private int    apThB5;
+
+    /** [자동일시정지 판정] 사용 항목 (모드 'N' 제외, 예: G1,G2,B1,B2,B3,B4,B5) */
+    private String apUseItems;
+
+    /** [자동일시정지 판정] 판정 해당자 OR 조회 여부 Y/N */
+    private String apHitYn;
+
+    /** [자동일시정지 내역] 처리구분 필터 (''/P/T) */
+    private String apProcFg;
+
     public String getUserId() {
         return userId;
     }
@@ -333,4 +349,21 @@ public class UserWebHistVO extends PageVO {
     public void setCountryCode(String countryCode) { this.countryCode = countryCode; }
     public String getBlockReason() { return blockReason; }
     public void setBlockReason(String blockReason) { this.blockReason = blockReason; }
+
+    public int getApThB1() { return apThB1; }
+    public void setApThB1(int apThB1) { this.apThB1 = apThB1; }
+    public int getApThB2() { return apThB2; }
+    public void setApThB2(int apThB2) { this.apThB2 = apThB2; }
+    public int getApThB3() { return apThB3; }
+    public void setApThB3(int apThB3) { this.apThB3 = apThB3; }
+    public int getApThB4() { return apThB4; }
+    public void setApThB4(int apThB4) { this.apThB4 = apThB4; }
+    public int getApThB5() { return apThB5; }
+    public void setApThB5(int apThB5) { this.apThB5 = apThB5; }
+    public String getApUseItems() { return apUseItems; }
+    public void setApUseItems(String apUseItems) { this.apUseItems = apUseItems; }
+    public String getApHitYn() { return apHitYn; }
+    public void setApHitYn(String apHitYn) { this.apHitYn = apHitYn; }
+    public String getApProcFg() { return apProcFg; }
+    public void setApProcFg(String apProcFg) { this.apProcFg = apProcFg; }
 }

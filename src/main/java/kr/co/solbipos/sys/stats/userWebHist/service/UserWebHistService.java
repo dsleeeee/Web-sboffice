@@ -56,4 +56,7 @@ public interface UserWebHistService {
 
     /** [조회정보 팝업] ⑤ 웹사용자정보변경이력 조회 */
     List<DefaultMap<Object>> getUserInfoLogList(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO);
+
+    /** [조회정보 팝업] ①-1 자동일시정지 내역 조회 */
+    List<DefaultMap<Object>> getAutoPauseHistList(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO);
 }

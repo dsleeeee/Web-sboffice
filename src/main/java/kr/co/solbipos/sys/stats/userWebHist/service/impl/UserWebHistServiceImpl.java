@@ -197,4 +197,18 @@ public class UserWebHistServiceImpl implements UserWebHistService {
         vo.setRegId(sessionInfoVO.getUserId());
         userWebHistMapper.insertUserPauseHist(vo);
     }
+
+    /** [조회정보 팝업] ①-1 자동일시정지 내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAutoPauseHistList(UserWebHistVO userWebHistVO, SessionInfoVO sessionInfoVO) {
+        setChkCntPeriodDefaults(userWebHistVO);
+        String fg = userWebHistVO.getApProcFg();
+        if (!"P".equals(fg) && !"T".equals(fg)) {
+            userWebHistVO.setApProcFg(null);
+        }
+        if (userWebHistVO.getChkUserId() != null) {
+            userWebHistVO.setChkUserId(userWebHistVO.getChkUserId().trim());
+        }
+        return userWebHistMapper.getAutoPauseHistList(userWebHistVO);
+    }
 }

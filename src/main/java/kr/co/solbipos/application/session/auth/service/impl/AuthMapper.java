@@ -85,4 +85,14 @@ public interface AuthMapper {
      * @return
      */
     String getPosLoginReturnUrl(SessionInfoVO sessionInfoVO);
+
+    /** 로그인 화면 본인 해제 차단 사유 (null 이면 해제 가능) */
+    String getPauseSelfReleaseBlockReason(@Param("userId") String userId, @Param("maxSelfCnt") int maxSelfCnt);
+
+    /** 로그인 화면 본인 숫자확인 일시정지 해제 (50 → 00) */
+    int updateUserPauseRelease(@Param("userId") String userId, @Param("procDt") String procDt);
+
+    /** 로그인 화면 본인 숫자확인 해제 이력 등록 */
+    int insertUserPauseReleaseHist(@Param("userId") String userId, @Param("procDt") String procDt,
+                                   @Param("updCnt") int updCnt, @Param("loginIp") String loginIp);
 }

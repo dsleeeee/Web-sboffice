@@ -1,15 +1,19 @@
 <%--
   ~ userWebChkCnt.jsp
   ~ 사용자웹사용이력 > [조회정보] 팝업 (ETC050 조회건수 탭 이관)
-  ~   ① USER_ID 종합 (임계치 OR 조건)
-  ~   ② USER_ID + IP별 상세
-  ~   ③ 메뉴(URL)별 건수 (웹훅 URLD · HIST · 불일치 · IP목록 · 예외여부)
+  ~   ①   USER_ID 종합 (임계치 OR 조건 + 자동일시정지 판정)
+  ~   ①-1 자동일시정지 내역 (SP_JOB_AUTO_PAUSE_IUD01)
+  ~   ②   USER_ID + IP별 상세
+  ~   ③   메뉴(URL)별 건수 (웹훅 URLD · HIST · 불일치 · IP목록 · 예외여부)
+  ~   ④   일시정지 이력
+  ~   ⑤   웹사용자정보변경이력
   ~
   ~    수정일      수정자      수정내용
   ~ ------------  ---------  ----------------------------------------
   ~  2026.09.22    김유승     최초생성 (ETC050_01.JSP chkcnt / chkcnt_ip 이관)
   ~  2026.09.23    김유승     로그인 유형별 · 로그인IP수 · 현재메뉴 불일치 · ③ 메뉴별 건수 추가
   ~  2026.09.28    김유승     ETC050 동기화 · 조회기간 달력 공통모듈(wcombo) · 컬럼명 s:message 적용
+  ~  2026.10.14    김유승     ① 자동일시정지 판정 항목 · 판정항목 설명 추가, ①-1 자동일시정지 내역 추가
   --%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
@@ -87,8 +91,26 @@
                         <span style="color:#777; font-size:11px;"><s:message code="userWebChkCnt.guide.sum" /></span>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 자동일시정지 판정 --%>
+                    <th><s:message code="userWebChkCnt.ap.title" /></th>
+                    <td colspan="3">
+                        <label style="margin-right:10px; cursor:pointer;">
+                            <input type="checkbox" ng-model="apHitYn" ng-true-value="'Y'" ng-false-value="'N'" />
+                            <s:message code="userWebChkCnt.ap.hitYn" />
+                        </label>
+                        <span ng-bind-html="apConfLine"></span>
+                        <a href="#" class="ml5" style="color:#1a5276; text-decoration:underline;" ng-click="toggleApGuide($event)">
+                            <s:message code="userWebChkCnt.ap.guide" /> {{apGuideShow ? '▲' : '▼'}}
+                        </a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
+
+            <%-- 판정항목 설명 --%>
+            <div class="mt5" ng-show="apGuideShow" ng-bind-html="apGuideHtml"
+                 style="border:1px solid #d6dde3; background:#fafbfc; padding:8px 10px;"></div>
 
             <div class="mt10 oh sb-select dkbr">
                 <span class="fl" style="font-weight:bold; color:#1a5276; line-height:26px;"><s:message code="userWebChkCnt.sec.sum" /></span>
@@ -113,6 +135,17 @@
 
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.userId"/>"          binding="userId"       width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.risk"/>"        binding="risk"         width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <%-- 자동일시정지 판정 --%>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.hitCodes"/>"     binding="apHitCodes"   width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.result"/>"       binding="apResult"     width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.targetYn"/>"     binding="apTargetYn"   width="65"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.exc"/>"          binding="apExc"        width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.userStatFg"/>"   binding="userStatFg"   width="85"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.me5m"/>"         binding="apMe5m"       width="80"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.ip5m"/>"         binding="apIp5m"       width="75"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.url5mMax"/>"     binding="apUrl5mMax"   width="80"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.url5mTop"/>"     binding="apUrl5mTop"   width="220" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <%-- 기존 --%>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.todayReal"/>"   binding="todayReal"    width="85"  is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.todayExc"/>"    binding="todayExc"     width="75"  is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.todayTot"/>"    binding="todayTot"     width="85"  is-read-only="true" align="right"></wj-flex-grid-column>
@@ -144,6 +177,53 @@
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.lgnFirstTs"/>"  binding="lgnFirstTs"   width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.chkLastTs"/>"   binding="chkLastTs"    width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.lgnLastTs"/>"   binding="lgnLastTs"    width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                </div>
+            </div>
+
+            <%-- ══════════ ①-1 자동일시정지 내역 ══════════ --%>
+            <div class="mt15 oh sb-select dkbr">
+                <span class="fl" style="font-weight:bold; color:#1a5276; line-height:26px;"><s:message code="userWebChkCnt.sec.autoPause" /></span>
+                <button class="btn_skyblue ml5 fr" ng-click="excelAutoPause()"><s:message code="cmm.excel.downCurrent" /></button>
+                <button class="btn_blue ml5 fr" ng-click="searchAutoPause()"><s:message code="cmm.search" /></button>
+                <select class="sb-input fr ml5" style="width:130px; height:26px;" ng-model="apProcFg"
+                        ng-options="o.v as o.n for o in apProcFgList" ng-change="searchAutoPause()"></select>
+            </div>
+            <div class="mt5" style="font-size:12px; color:#333;" ng-bind-html="autoPauseSummary"></div>
+
+            <div class="w100 mt5">
+                <div class="wj-gridWrap" style="height:200px; overflow-y:hidden; overflow-x:hidden;">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            control="autoPauseFlex"
+                            initialized="initAutoPauseGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="autoPauseData"
+                            item-formatter="_itemFormatter"
+                            is-read-only="true">
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.hist.procDt"/>"     binding="procDt"       width="135" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.userId"/>"          binding="userId"       width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.kind"/>"         binding="apKind"       width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.realCodes"/>"    binding="apRealCodes"  width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.testCodes"/>"    binding="apTestCodes"  width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.hist.statFg"/>"     binding="statFg"       width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.state"/>"        binding="apState"      width="95"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.releaseDt"/>"    binding="releaseDt"    width="135" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.releaseId"/>"    binding="releaseId"    width="90"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.targetYn"/>"     binding="targetYn"     width="65"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.min5Real"/>"    binding="min5Real"     width="75"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.me5m"/>"         binding="meReal"       width="80"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.ip5m"/>"         binding="chkIpCnt"     width="75"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.lgnMin5Tot"/>"  binding="lgn5m"        width="75"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.url5mMax"/>"     binding="url5mMax"     width="80"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.ap.url5mTop"/>"     binding="url5mTop"     width="200" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.blkMin10Cnt"/>" binding="blkMin10Cnt"  width="80"  is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.chkLastIp"/>"   binding="chkLastIp"    width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.sum.ipHit"/>"       binding="ipHit"        width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.countryCode"/>"     binding="countryCode"  width="60"  is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.hist.remark"/>"     binding="remark"       width="240" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebChkCnt.hist.summaryTxt"/>" binding="summaryTxt"   width="600" is-read-only="true" align="left"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -272,7 +352,7 @@
                 <span class="fl" style="font-weight:bold; color:#1a5276; line-height:26px;"><s:message code="userWebChkCnt.sec.pauseHist" /></span>
                 <button class="btn_blue ml5 fr" ng-click="searchPauseHist()"><s:message code="cmm.search" /></button>
             </div>
-            <div class="mt5" style="font-size:12px; color:#333;" ng-bind-html="pauseHistSummary"></div>   <%-- ← 추가 --%>
+            <div class="mt5" style="font-size:12px; color:#333;" ng-bind-html="pauseHistSummary"></div>
 
             <div class="w100 mt5 mb20">
                 <div class="wj-gridWrap" style="height:150px; overflow-y:hidden; overflow-x:hidden;">
@@ -382,4 +462,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebChkCnt.js?ver=20260930.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userWebHist/userWebChkCnt.js?ver=20261014.01" charset="utf-8"></script>

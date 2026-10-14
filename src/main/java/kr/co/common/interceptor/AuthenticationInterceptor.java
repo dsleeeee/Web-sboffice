@@ -32,6 +32,7 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.io.IOException;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -61,6 +62,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     private final AuthService authService;
 
     String ROOT_PATH = "/";
+
+    /** FN_GET_MENU_CHK_YN2 반환값 — 일시정지 사용자 */
+    private static final String MENU_CHK_PAUSE = "P";
+    /** 일시정지로 세션 종료 시 안내 문구 */
+    private static final String PAUSE_LOGOUT_MSG = "평소와 다른 이용이 감지되어 로그인이 일시 제한되었습니다.\n다시 로그인해 주세요.";
 
     /** Constructor Injection */
     @Autowired
@@ -285,8 +291,25 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        // 사용자 메뉴 제한여부 확인
-        if (!userMenuChkYn(request, requestURL, sessionInfoVO)) {
+        // 사용자 메뉴 제한여부 확인 (FN_GET_MENU_CHK_YN2 : Y 허용 / N 메뉴 제한 / P 일시정지)
+        String menuChkYn = getUserMenuChkYn(request, requestURL, sessionInfoVO);
+
+        // 일시정지(50) 사용자 → 세션 삭제 후 로그인 화면 (관리자 가상로그인 세션은 제외)
+        if (MENU_CHK_PAUSE.equals(menuChkYn) && isEmpty(sessionInfoVO.getvUserId())) {
+            LOGGER.info("AuthenticationInterceptor :: paused user session closed :: id : {}, url : {}",
+                    sessionInfoVO.getUserId(), requestURL);
+            sessionService.deleteSessionInfo(request);
+
+            String loginUrl = ROOT_PATH.equals("/") ? "/auth/login.sb" : ROOT_PATH + "auth/login.sb";
+            if (WebUtil.isJsonRequest(request)) {
+                // AJAX 요청은 기존 세션 만료와 같은 방식으로 처리 (공통 JS가 메시지 표시 후 이동)
+                throw new JsonException(Status.SESSION_EXFIRE, PAUSE_LOGOUT_MSG, loginUrl);
+            }
+            writePauseLogoutScript(response, loginUrl);
+            return false;
+        }
+
+        if ("N".equals(menuChkYn)) {
             // 비밀번호 확인 여부 체크
             if(sessionInfoVO.getPageAccessChkPwdYn() != null && sessionInfoVO.getPageAccessChkPwdYn().equals("Y")) {
             }else{
@@ -514,27 +537,36 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 사용자 메뉴 제한여부 확인
-     * @param request
-     * @param url
-     * @param sessionInfoVO
-     * @return
+     * 사용자 메뉴 제한여부 확인 (FN_GET_MENU_CHK_YN2)
+     * @return Y 허용 / N 메뉴 제한 / P 일시정지 사용자
      */
-    private boolean userMenuChkYn(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
+    private String getUserMenuChkYn(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
 
-        // 사용자 메뉴 제한여부 확인
         ResrceInfoVO resrceInfoVO = new ResrceInfoVO();
         resrceInfoVO.setUrl(url);
         resrceInfoVO.setUserId(sessionInfoVO.getUserId());
         resrceInfoVO.setUserIp(sessionInfoVO.getLoginIp());
 
-        if ("N".equals(cmmMenuService.userMenuChkYn(resrceInfoVO))) {
-            LOGGER.info("userMenuChkYn URL : " + url);
+        String chkYn = cmmMenuService.userMenuChkYn(resrceInfoVO);
+
+        if ("N".equals(chkYn) || MENU_CHK_PAUSE.equals(chkYn)) {
+            LOGGER.info("userMenuChkYn URL : {}, result : {}", url, chkYn);
             LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
-            return false;
         }
 
-        return true;
+        return chkYn;
+    }
+
+    /** 일시정지 세션 종료 — 화면 요청 시 안내 alert 후 최상위 창을 로그인 화면으로 이동 */
+    private void writePauseLogoutScript(HttpServletResponse response, String loginUrl) throws IOException {
+        String jsMsg = PAUSE_LOGOUT_MSG.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n");
+        response.setContentType("text/html; charset=UTF-8");
+        response.getWriter().write(
+                "<script>"
+                        + "alert('" + jsMsg + "');"
+                        + "(window.top || window).location.href='" + loginUrl + "';"
+                        + "</script>");
+        response.getWriter().flush();
     }
 
     /**
@@ -571,20 +603,20 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String userId = sessionInfoVO.getUserId();
         String currentDt = DateUtil.currentDateTimeString();
         log.append("\n----------session_token_err_").append(userId).append(" ").append(title).append(" START----------\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",VO객체 토큰정보:").append(sessionInfoVO.getLoginChkToken()).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",토큰정보:").append(request.getSession().getAttribute("LOGIN_CHK_TOKEN")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
-           .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
-           .append("----------session_token_err_").append(userId).append(" ").append(title).append(" END----------");
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",User-Agent:").append(request.getHeader("User-Agent")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Site:").append(request.getHeader("Sec-Fetch-Site")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept:").append(request.getHeader("Accept")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",referer:").append(request.getHeader("referer")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",VO객체 토큰정보:").append(sessionInfoVO.getLoginChkToken()).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",토큰정보:").append(request.getSession().getAttribute("LOGIN_CHK_TOKEN")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Accept-Language:").append(request.getHeader("Accept-Language")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Sec-Fetch-Mode:").append(request.getHeader("Sec-Fetch-Mode")).append("\n")
+                .append("session_token_err_").append(userId).append(",").append(currentDt).append(",Upgrade-Insecure-Requests:").append(request.getHeader("Upgrade-Insecure-Requests")).append("\n")
+                .append("----------session_token_err_").append(userId).append(" ").append(title).append(" END----------");
     }
 
     /**
@@ -606,14 +638,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String userId = sessionInfoVO.getUserId();
         String currentDt = DateUtil.currentDateTimeString();
         log.append("----------_menu_check_err_").append(title).append(" START----------\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label1).append(":").append(value1).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label2).append(":").append(value2).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
-           .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
-           .append("----------_menu_check_err_").append(title).append(" END----------\n");
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label1).append(":").append(value1).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",").append(label2).append(":").append(value2).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",사용자ID :").append(userId).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",접속IP:").append(sessionInfoVO.getLoginIp()).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",본사코드:").append(sessionInfoVO.getHqOfficeCd()).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",매장코드:").append(sessionInfoVO.getStoreCd()).append("\n")
+                .append("_menu_check_err_").append(userId).append(",").append(currentDt).append(",URL:").append(requestURL).append("\n")
+                .append("----------_menu_check_err_").append(title).append(" END----------\n");
     }
 
     /**

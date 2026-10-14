@@ -2,9 +2,12 @@
  *
  * 파일명 : userWebChkCnt.js
  * 설  명 : 사용자웹사용이력 > [조회정보] 팝업 (ETC050 조회건수 탭 이관)
- *          ① USER_ID 종합 (임계치 OR 조건)
- *          ② USER_ID + IP별 상세
- *          ③ 메뉴(URL)별 건수
+ *          ①   USER_ID 종합 (임계치 OR 조건 + 자동일시정지 판정)
+ *          ①-1 자동일시정지 내역
+ *          ②   USER_ID + IP별 상세
+ *          ③   메뉴(URL)별 건수
+ *          ④   일시정지 이력
+ *          ⑤   웹사용자정보변경이력
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -13,6 +16,8 @@
  * 2026.09.28     김유승      1.2            ETC050 동기화 — 임계치 초과 강조, ② 구분 태그 차단출처 반영,
  *                                          ② 0건 시 원천 데이터 진단, 안내 문구 동기화
  * 2026.09.28     김유승      1.3            조회기간 달력을 공통 모듈(wcombo.genDateVal)로 변경
+ * 2026.10.14     김유승      1.4            ① 자동일시정지(SP_JOB_AUTO_PAUSE_IUD01) 판정 항목 · 판정항목 설명,
+ *                                          ①-1 자동일시정지 내역 추가
  *
  * **************************************************************/
 var app = agrid.getApp();
@@ -38,12 +43,54 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
         'F': { txt: '최근 로그인실패',        color: C_SUB , bold: false }
     };
 
+    /* ══════════ 자동 일시정지(SP_JOB_AUTO_PAUSE_IUD01) 판정 기준 ══════════
+       ※ SP 상수(C_MODE_xx / C_TH_Bx / C_PAUSE_SCOPE / C_MAX_REAL_PER_RUN) 와 반드시 동일하게 유지
+       mode : 'Y' 실제 일시정지 / 'T' 시험(이력만) / 'N' 미사용                              */
+    var AP_CONF = {
+        scope     : 'TARGET',   // 'TARGET' 감시 대상만 / 'ALL' 전체
+        maxPerRun : 20,
+        items : [
+            { code:'G1', mode:'T', th:0  , field:'min5Real'   , col:'국외IP일치 · 5분 실건수',
+                nm:'국외IP에서 조회 중',
+                desc:'오늘 국외IP 차단 이력의 IP(REAL_IP·LOGIN_IP) 중 하나가 최근 조회 IP(조회건수 알림의 마지막 IP)와 같고, 최근 5분 실조회가 1건 이상' },
+            { code:'G2', mode:'T', th:0  , field:'blkMin10Cnt', col:'국외IP 10분 · 5분 실건수',
+                nm:'국외IP 접근 직후 조회',
+                desc:'최근 10분 안에 국외IP 차단 이력이 1건 이상이고, 최근 5분 실조회가 1건 이상' },
+            { code:'B1', mode:'T', th:200, field:'min5Real'   , col:'5분 실건수',
+                nm:'5분 대량 조회',
+                desc:'최근 5분 실조회(예외 URL 제외) 건수가 기준 이상 — 대량 조회·데이터 수집 의심' },
+            { code:'B2', mode:'T', th:30 , field:'apMe5m'     , col:'5분 불일치',
+                nm:'현재메뉴 불일치 다발',
+                desc:'최근 5분 현재메뉴 불일치 실건수(예외 URL 제외)가 기준 이상 — 화면에 열려있지 않은 메뉴 URL 을 직접 호출' },
+            { code:'B3', mode:'T', th:3  , field:'apIp5m'     , col:'5분 조회IP',
+                nm:'다중 IP 조회',
+                desc:'최근 5분 조회건수 알림의 IPS·IPD·IP 에 나온 서로 다른 IP 수가 기준 이상 — 계정 공유·탈취 의심' },
+            { code:'B4', mode:'T', th:20 , field:'lgnMin5Tot' , col:'5분 로그인',
+                nm:'로그인 반복',
+                desc:'최근 5분 로그인 시도(성공+실패) 건수가 기준 이상 — 무차별 대입·자동 로그인 의심' },
+            { code:'B5', mode:'T', th:60 , field:'apUrl5mMax' , col:'5분 같은URL',
+                nm:'같은 URL 반복 조회',
+                desc:'최근 5분 URL 1개의 실조회 건수(URLD 기준, NOURL·ETC 제외)가 기준 이상 — 스크래핑 의심' }
+        ]
+    };
+    var AP_MODE = {
+        'Y': { nm:'실제'  , bg:'#fadbd8', fg:'#c0392b' },
+        'T': { nm:'시험'  , bg:'#d6eaf8', fg:'#2471a3' },
+        'N': { nm:'미사용', bg:'#eeeeee', fg:'#999999' }
+    };
+
     $scope.chkCntData        = new wijmo.collections.CollectionView([]);
     $scope.chkCntIpData      = new wijmo.collections.CollectionView([]);
     $scope.chkCntMenuData    = new wijmo.collections.CollectionView([]);
+    $scope.autoPauseData     = new wijmo.collections.CollectionView([]);
+    $scope.pauseHistData     = new wijmo.collections.CollectionView([]);
+    $scope.userInfoLogData   = new wijmo.collections.CollectionView([]);
     $scope.chkCntSummary     = '';
     $scope.chkCntIpSummary   = '';
     $scope.chkCntMenuSummary = '';
+    $scope.autoPauseSummary  = '';
+    $scope.pauseHistSummary  = '';
+    $scope.userInfoLogSummary = '';
 
     $scope.$on("userWebChkCntCtrl", function (event, data) {
         $scope.openChkCntPopup();
@@ -92,6 +139,99 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
         return '<span style="color:' + color + ';' + (bold ? 'font-weight:bold;' : '') + '">' + txt + '</span>';
     }
 
+    /* ── 자동 일시정지 유틸 ── */
+    function apItem(code) {
+        for (var i = 0; i < AP_CONF.items.length; i++) if (AP_CONF.items[i].code === code) return AP_CONF.items[i];
+        return null;
+    }
+    function apTh(code) { var it = apItem(code); return it ? it.th : 0; }
+    function apSplit(s) {
+        return (s && s !== '-') ? String(s).split(',').filter(function (c) { return c !== ''; }) : [];
+    }
+    function apParams() {
+        var p = { apHitYn: ($scope.apHitYn === 'N' ? 'N' : 'Y') }, use = [];
+        angular.forEach(AP_CONF.items, function (it) {
+            if (it.mode !== 'N') use.push(it.code);
+            if (it.th > 0) p['apTh' + it.code] = it.th;
+        });
+        p.apUseItems = use.join(',');
+        return p;
+    }
+    /* 코드 칩 — forceMode 가 있으면 그 모드 색(이력용), 없으면 현재 설정 모드 색 */
+    function apCodesHtml(codes, forceMode) {
+        var list = apSplit(codes);
+        if (list.length === 0) return '<span style="color:#bbb;">-</span>';
+        return list.map(function (c) {
+            var it = apItem(c), m = AP_MODE[forceMode || (it ? it.mode : 'N')] || AP_MODE.N;
+            return '<span title="' + esc(it ? it.nm : c) + '" style="display:inline-block; margin-right:3px; padding:0 5px; border-radius:3px;'
+                + ' font-size:11px; font-weight:bold; background:' + m.bg + '; color:' + m.fg + ';">' + esc(c) + '</span>';
+        }).join('');
+    }
+    function apCodesTitle(item) {
+        return apSplit(item.apHitCodes).map(function (c) {
+            var it = apItem(c);
+            if (!it) return c;
+            return c + ' ' + it.nm + ' [' + AP_MODE[it.mode].nm + ']'
+                + (it.th > 0 ? ' : ' + toInt(item[it.field], 0) + ' ≥ ' + it.th : '');
+        }).join('\n');
+    }
+    /* SP STEP 3 와 같은 순서로 예상 처리 판정 (인원 초과 보류는 행 단위로 알 수 없어 요약에서 경고) */
+    function apJudge(r) {
+        var codes = apSplit(r.apHitCodes);
+        if (codes.length === 0) return { txt:'', color:C_SUB };
+        if (r.apExc)            return { txt:'제외 (' + r.apExc + ')', color:C_SUB, exc:true };
+        var real = codes.filter(function (c) { var it = apItem(c); return it && it.mode === 'Y'; });
+        var inScope = (AP_CONF.scope === 'ALL' || r.apTargetYn === 'Y');
+        if (real.length > 0 && inScope) return { txt:'실제 정지 대상', color:C_ERR , bold:true, real:true };
+        if (real.length > 0)            return { txt:'대상외 보류 (시험기록)', color:C_WARN, bold:true };
+        return { txt:'시험 기록', color:'#2471a3' };
+    }
+    function buildApGuideHtml() {
+        var th = 'style="border:1px solid #d6dde3; padding:3px 6px; background:#eef3f7; text-align:center;"';
+        var td = 'style="border:1px solid #d6dde3; padding:3px 6px;"';
+        var h = '<div style="font-size:11px; color:#444; line-height:1.7;">'
+            + '<b>자동 일시정지 Job</b> (SP_JOB_AUTO_PAUSE_IUD01, 5분 주기) 판정 항목 — '
+            + '실제 정지 범위: <b>' + (AP_CONF.scope === 'ALL' ? '전체 사용자' : '감시 대상(FN_CHK_BLOCK_TARGET_USER_YN = Y)만') + '</b>'
+            + ' · 1회 실제 정지 <b>' + AP_CONF.maxPerRun + '명</b> 초과 시 데이터 오류로 보고 전원 보류'
+            + '<table style="width:100%; border-collapse:collapse; margin:4px 0;">'
+            + '<tr><th ' + th + '>항목</th><th ' + th + '>이름</th><th ' + th + '>모드</th><th ' + th + '>기준</th>'
+            + '<th ' + th + '>판정 조건</th><th ' + th + '>① 확인 열</th></tr>';
+        angular.forEach(AP_CONF.items, function (it) {
+            var m = AP_MODE[it.mode];
+            h += '<tr><td ' + td + ' align="center"><b>' + it.code + '</b></td>'
+                + '<td ' + td + '>' + esc(it.nm) + '</td>'
+                + '<td ' + td + ' align="center"><span style="padding:0 5px; border-radius:3px; background:' + m.bg + '; color:' + m.fg + '; font-weight:bold;">' + m.nm + '</span></td>'
+                + '<td ' + td + ' align="center">' + (it.th > 0 ? it.th + ' 이상' : '&gt; 0') + '</td>'
+                + '<td ' + td + '>' + esc(it.desc) + '</td>'
+                + '<td ' + td + '>' + esc(it.col) + '</td></tr>';
+        });
+        h += '</table>'
+            + '· <b>실제(Y)</b> 항목에 하나라도 해당 + 범위 안 → USER_STAT_FG 00 → 50 (이력 PROC_FG = P)<br>'
+            + '· <b>시험(T)</b> 항목만 해당 / 범위 밖(대상외 보류) / 인원 초과(인원초과 보류) → 상태 변경 없이 이력만 기록 (PROC_FG = T, 같은 사용자 30분 내 중복 생략)<br>'
+            + '· <b>제외</b> : 이미 일시정지(50) · 사용안함 · 관리자(TB_CM_EMPLOYEE.ADMIN_FG = A) · 화이트리스트 NMCODE 252 (USER = 아이디 / IP = 최근 조회 IP 앞자리)<br>'
+            + '· <b>해제</b> : SP_JOB_CHK_LOGIN_IUD01 30분 자동 해제 또는 로그인 화면 본인 해제 — ①-1 내역의 해제일시·해제자로 확인<br>'
+            + '· 화면 값은 <b>조회 시각 기준</b> 최근 5분/10분이라 Job 실행 시각과 차이가 있을 수 있습니다. G1·G2·B4 는 조회기간을 오늘로 둘 때 SP 와 같습니다.'
+            + '</div>';
+        return h;
+    }
+
+    $scope.apHitYn      = 'Y';
+    $scope.apGuideShow  = false;
+    $scope.apGuideHtml  = $sce.trustAsHtml(buildApGuideHtml());
+    $scope.apConfLine   = $sce.trustAsHtml(
+        AP_CONF.items.map(function (it) {
+            var m = AP_MODE[it.mode];
+            return '<span title="' + esc(it.nm) + '" style="margin-right:3px; padding:0 5px; border-radius:3px; font-size:11px; font-weight:bold; background:'
+                + m.bg + '; color:' + m.fg + ';">' + it.code + ' ' + m.nm + '</span>';
+        }).join(''));
+    $scope.toggleApGuide = function (ev) {
+        if (ev) ev.preventDefault();
+        $scope.apGuideShow = !$scope.apGuideShow;
+    };
+
+    $scope.apProcFg     = '';
+    $scope.apProcFgList = [ { v:'', n:'전체' }, { v:'P', n:'실제 정지(P)' }, { v:'T', n:'시험·보류(T)' } ];
+
     /* ── 그리드 초기화 : ① USER_ID 종합 ── */
     $scope.initChkCntGrid = function (s, e) {
         s.formatItem.addHandler(function (s, e) {
@@ -131,6 +271,23 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
             if (/^lgnTodayE[1-5]$/.test(b) && v > 0) markErr(e.cell, false);
             if (b === 'lgnIpCnt'     && v > 1) markCnt(e.cell, true);
             if (b === 'ipHit'        && item.ipHit === 'Y') markErr(e.cell, true);
+
+            // 자동 일시정지 판정
+            if (b === 'apHitCodes') {
+                e.cell.innerHTML = apCodesHtml(item.apHitCodes);
+                e.cell.title     = apCodesTitle(item);
+            }
+            if (b === 'apResult' && item.apResult) {
+                var j = apJudge(item);
+                e.cell.innerHTML = tag(esc(j.txt), j.color, j.bold);
+            }
+            if (b === 'apTargetYn' && item.apTargetYn === 'Y')  markErr(e.cell, true);
+            if (b === 'apExc' && item.apExc)                     e.cell.style.color = C_SUB;
+            if (b === 'userStatFg' && item.userStatFg === '50')  e.cell.innerHTML = tag('50 (일시정지)', C_ERR, true);
+            if (b === 'apMe5m'     && apTh('B2') > 0 && v >= apTh('B2')) markErr(e.cell, true);
+            if (b === 'apIp5m'     && apTh('B3') > 0 && v >= apTh('B3')) markErr(e.cell, true);
+            if (b === 'apUrl5mMax' && apTh('B5') > 0 && v >= apTh('B5')) markErr(e.cell, true);
+            if (b === 'apUrl5mTop') e.cell.title = item.apUrl5mTop || '';
         });
 
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -262,15 +419,20 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
         chkDay2.value    = todayDate();
         $scope.chkUserId = '';
         angular.forEach(TH_DEFAULT, function (v, k) { $scope[k] = v; });
+        $scope.apHitYn     = 'Y';
+        $scope.apProcFg    = '';
+        $scope.apGuideShow = false;
         if (!$scope.ipUserId) $scope.ipUserId = '';
-        $scope.chkCntData.sourceCollection     = [];
-        $scope.chkCntIpData.sourceCollection   = [];
-        $scope.chkCntMenuData.sourceCollection = [];
-        $scope.chkCntSummary     = '';
-        $scope.chkCntIpSummary   = '';
-        $scope.chkCntMenuSummary = '';
+        $scope.chkCntData.sourceCollection      = [];
+        $scope.chkCntIpData.sourceCollection    = [];
+        $scope.chkCntMenuData.sourceCollection  = [];
+        $scope.autoPauseData.sourceCollection   = [];
         $scope.pauseHistData.sourceCollection   = [];
         $scope.userInfoLogData.sourceCollection = [];
+        $scope.chkCntSummary      = '';
+        $scope.chkCntIpSummary    = '';
+        $scope.chkCntMenuSummary  = '';
+        $scope.autoPauseSummary   = '';
         $scope.pauseHistSummary   = '';
         $scope.userInfoLogSummary = '';
         if (!$scope.$$phase) $scope.$apply();
@@ -292,22 +454,32 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
             thLgnToday : toInt($scope.thLgnToday, 0),
             thLgn5m    : toInt($scope.thLgn5m   , 0)
         };
+        angular.extend(params, apParams());
 
         $scope.$broadcast('loadingPopupActive');
         $http.post('/sys/stats/userWebHist/userWebHist/getUserWebChkCntList.sb', params)
             .then(function (res) {
                 var list = extractList(res);
-                $scope.chkCntData.sourceCollection = list;
-                $scope.chkCntData.refresh();
 
                 var blkCnt = 0, riskCnt = 0, meUserCnt = 0;
+                var apHit = 0, apReal = 0, apEtc = 0, apExc = 0;
                 angular.forEach(list, function (r) {
                     if (toInt(r.blkTodayCnt, 0) > 0) blkCnt++;
                     if (toInt(r.meTot, 0) > 0)       meUserCnt++;
                     if (r.risk === 'A' || r.risk === 'B' || r.risk === 'C' || r.risk === 'D') riskCnt++;
+                    if (r.apExc === null || r.apExc === undefined) r.apExc = '';
+                    var j = apJudge(r);
+                    r.apResult = j.txt;               // 엑셀에도 그대로 나가도록 데이터에 넣음
+                    if (apSplit(r.apHitCodes).length > 0) {
+                        apHit++;
+                        if (j.exc) apExc++; else if (j.real) apReal++; else apEtc++;
+                    }
                 });
+                $scope.chkCntData.sourceCollection = list;
+                $scope.chkCntData.refresh();
+
                 var html = '조회기간: <b>' + periodLabel() + '</b>'
-                    + (includesToday() ? '' : ' <span style="color:#c0392b;font-size:11px;">(과거 기간 — ②④⑦ 최근5분/10분 조건은 현재시각 기준이라 0 으로 나옵니다)</span>')
+                    + (includesToday() ? '' : ' <span style="color:#c0392b;font-size:11px;">(과거 기간 — ②④⑦ 최근5분/10분 조건과 자동정지 판정은 현재시각 기준이라 0 으로 나옵니다)</span>')
                     + (params.chkUserId !== ''
                         ? ' &nbsp;|&nbsp; USER_ID 검색: <b>' + esc(params.chkUserId) + '</b> <span style="color:#555;font-size:11px;">(포함 검색 · 임계치 미적용)</span>'
                         : '')
@@ -315,15 +487,108 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
                     + ' &nbsp;|&nbsp; 국외IP 이력: <b>' + blkCnt + '명</b>'
                     + ' &nbsp;|&nbsp; 현재메뉴 불일치: <b>' + meUserCnt + '명</b>'
                     + ' &nbsp;|&nbsp; <span style="color:#c0392b;font-weight:bold;">위험 ' + riskCnt + '명</span>'
+                    + ' &nbsp;|&nbsp; 자동정지 판정: <b>' + apHit + '명</b>'
+                    + ' (<span style="color:#c0392b;font-weight:bold;">실제 ' + apReal + '</span>'
+                    + ' · 시험/보류 ' + apEtc + ' · 제외 ' + apExc + ')'
+                    + (apReal > AP_CONF.maxPerRun
+                        ? ' <span style="color:#c0392b;font-weight:bold;">⚠ 실제 대상 ' + apReal + '명 &gt; ' + AP_CONF.maxPerRun + '명 — Job 은 전원 보류합니다</span>'
+                        : '')
                     + ' &nbsp;|&nbsp; <span style="color:#555;font-size:11px;">* 임계치는 OR 조건 · USER_ID 클릭 시 아래 IP별 상세·메뉴별 건수 조회'
                     + ' · 로그인IP수 = TB_WB_LOGIN_HIST_CHK.LOGIN_IP 기준 · 불일치는 스크립트 MENUERR_USER_ID_LIST 대상만 수집</span>';
                 $scope.chkCntSummary = $sce.trustAsHtml(html);
 
                 $scope.$broadcast('loadingPopupInactive');
+                $scope.searchAutoPause(true);
             }, function () {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg('조회정보(조회건수) 조회 중 오류가 발생했습니다.');
             });
+    };
+
+    /* ══════════ ①-1 자동일시정지 내역 ══════════
+       맨 위 조회기간 + ① USER_ID 검색(포함) + 구분 콤보
+       silent = true 이면 로딩 팝업 생략 (① 조회 시 연쇄 호출용) */
+    $scope.searchAutoPause = function (silent) {
+        validDates();
+        var params = {
+            chkDay1   : day1Ymd(),
+            chkDay2   : day2Ymd(),
+            chkUserId : ($scope.chkUserId || '').trim(),
+            apProcFg  : $scope.apProcFg || ''
+        };
+
+        if (!silent) $scope.$broadcast('loadingPopupActive');
+        $http.post('/sys/stats/userWebHist/userWebHist/getAutoPauseHistList.sb', params)
+            .then(function (res) {
+                var list = extractList(res);
+                angular.forEach(list, function (r) { r.statFg = (r.befStatFg || '-') + ' → ' + (r.aftStatFg || '-'); });
+                $scope.autoPauseData.sourceCollection = list;
+                $scope.autoPauseData.refresh();
+
+                var real = 0, still = 0, rel = 0, test = 0, hold = 0, users = {};
+                angular.forEach(list, function (r) {
+                    users[String(r.userId).toUpperCase()] = 1;
+                    if (r.apKind === '실제정지') { real++; if (r.apState === '정지중') still++; else rel++; }
+                    else if (r.apKind === '시험기록') test++;
+                    else if (r.apKind !== '실제(미반영)') hold++;
+                });
+                $scope.autoPauseSummary = $sce.trustAsHtml(
+                    '조회기간: <b>' + periodLabel() + '</b>'
+                    + (params.chkUserId !== '' ? ' &nbsp;|&nbsp; USER_ID 검색: <b>' + esc(params.chkUserId) + '</b>' : '')
+                    + ' &nbsp;|&nbsp; 내역 <b>' + list.length + '건</b> (' + Object.keys(users).length + '명)'
+                    + ' &nbsp;|&nbsp; <span style="color:#c0392b;font-weight:bold;">실제 정지 ' + real + '건</span>'
+                    + ' (정지중 <b>' + still + '</b> · 해제 ' + rel + ')'
+                    + ' &nbsp;|&nbsp; 보류 ' + hold + '건 &nbsp;|&nbsp; 시험기록 ' + test + '건'
+                    + ' &nbsp;|&nbsp; <span style="color:#555;font-size:11px;">* PROC_ID = SP_JOB_AUTO_PAUSE · 해제일시 = 정지 이후 첫 \'50 → 50 아님\' 사용자정보 변경 로그 · USER_ID 클릭 시 ② 상세 조회</span>');
+
+                if (!silent) $scope.$broadcast('loadingPopupInactive');
+            }, function () {
+                if (!silent) $scope.$broadcast('loadingPopupInactive');
+                $scope._popMsg('자동일시정지 내역 조회 중 오류가 발생했습니다.');
+            });
+    };
+
+    $scope.initAutoPauseGrid = function (s, e) {
+        var KIND = {
+            '실제정지'     : { c: C_ERR    , b: true  },
+            '실제(미반영)' : { c: C_SUB    , b: false },
+            '대상외 보류'  : { c: C_WARN   , b: true  },
+            '인원초과 보류': { c: C_WARN   , b: true  },
+            '시험기록'     : { c: '#2471a3', b: false }
+        };
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel !== s.cells) return;
+            var col = s.columns[e.col], item = s.rows[e.row].dataItem;
+            if (!item) return;
+            var b = col.binding;
+
+            if (b === 'userId') { wijmo.addClass(e.cell, 'wijLink'); e.cell.title = '이 사용자의 IP별 상세 / 메뉴별 건수 보기'; }
+            if (b === 'apKind') { var k = KIND[item.apKind]; if (k) e.cell.innerHTML = tag(esc(item.apKind), k.c, k.b); }
+            if (b === 'apRealCodes') e.cell.innerHTML = apCodesHtml(item.apRealCodes, 'Y');
+            if (b === 'apTestCodes') e.cell.innerHTML = apCodesHtml(item.apTestCodes, 'T');
+            if (b === 'apState') {
+                var st = item.apState || '-';
+                if (st === '정지중')               e.cell.innerHTML = tag('정지중', C_ERR, true);
+                else if (st.indexOf('해제') === 0) e.cell.innerHTML = tag(esc(st), '#1e8449', true);
+            }
+            if (b === 'targetYn' && item.targetYn === 'Y') markErr(e.cell, true);
+            if (b === 'ipHit'    && item.ipHit    === 'Y') markErr(e.cell, true);
+            if (b === 'remark' || b === 'summaryTxt' || b === 'url5mTop') e.cell.title = item[b] || '';
+
+            if (item.apKind === '실제정지') e.cell.style.background = (item.apState === '정지중') ? '#fdf2f1' : '#f4fbf6';
+        });
+
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col], row = s.rows[ht.row].dataItem;
+                if (col.binding === 'userId' && row && row.userId) {
+                    $scope.ipUserId = row.userId;
+                    $scope.searchChkCntIp();
+                    if (!$scope.$$phase) $scope.$apply();
+                }
+            }
+        });
     };
 
     /* ── ② 0건 시 원천 데이터 진단 (ETC050 동일) ── */
@@ -476,11 +741,12 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
         chkDay2.value    = todayDate();
         $scope.chkUserId = '';
         angular.forEach(TH_DEFAULT, function (v, k) { $scope[k] = v; });
+        $scope.apHitYn  = 'Y';
+        $scope.apProcFg = '';
         $scope.searchChkCnt();
     };
 
     /* ══════════ 일시정지 ══════════ */
-    $scope.pauseHistData = new wijmo.collections.CollectionView([]);
 
     /* 선택 USER_ID 의 ① 그리드 행 찾기 */
     function findSumRow(userId) {
@@ -507,7 +773,8 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
             '국외IP 기간/10분 ' + toInt(r.blkTodayCnt, 0) + '/' + toInt(r.blkMin10Cnt, 0),
             '조회 최종IP ' + (r.chkLastIp || '-') + ' (IP수 ' + toInt(r.chkIpCnt, 0) + ', 국외IP일치 ' + (r.ipHit || 'N') + ')',
             '국가 ' + (r.countryCode || '-'),
-            '사유 ' + (r.blockReason || '-')
+            '사유 ' + (r.blockReason || '-'),
+            '자동정지 판정 ' + (apSplit(r.apHitCodes).length ? r.apHitCodes + ' (' + (r.apResult || '-') + ')' : '-')
         ].join(' | ');
     }
 
@@ -535,7 +802,6 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
 
     /* ④ 일시정지 이력 조회 — 맨 위 조회기간 + ② USER_ID (비우면 전체)
        silent = true 이면 로딩 팝업 생략 (② 조회 시 연쇄 호출용) */
-    $scope.pauseHistSummary = '';
     $scope.searchPauseHist = function (silent) {
         validDates();
         var uid = ($scope.ipUserId || '').trim();
@@ -548,12 +814,16 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
                 $scope.pauseHistData.sourceCollection = list;
                 $scope.pauseHistData.refresh();
 
-                var pCnt = 0, rCnt = 0;
-                angular.forEach(list, function (r) { if (r.procFg === 'P') pCnt++; if (r.procFg === 'R') rCnt++; });
+                var pCnt = 0, rCnt = 0, tCnt = 0;
+                angular.forEach(list, function (r) {
+                    if (r.procFg === 'P') pCnt++;
+                    if (r.procFg === 'R') rCnt++;
+                    if (r.procFg === 'T') tCnt++;
+                });
                 $scope.pauseHistSummary = $sce.trustAsHtml(
                     '조회기간: <b>' + periodLabel() + '</b>'
                     + ' &nbsp;|&nbsp; USER_ID: <b>' + (uid === '' ? '전체' : esc(uid)) + '</b>'
-                    + ' &nbsp;|&nbsp; 이력 <b>' + list.length + '건</b> (일시정지 ' + pCnt + ' · 해제 ' + rCnt + ')');
+                    + ' &nbsp;|&nbsp; 이력 <b>' + list.length + '건</b> (일시정지 ' + pCnt + ' · 해제 ' + rCnt + ' · 시험 ' + tCnt + ')');
 
                 if (!silent) $scope.$broadcast('loadingPopupInactive');
             }, function () {
@@ -599,14 +869,12 @@ app.controller('userWebChkCntCtrl', ['$scope', '$http', '$timeout', '$sce', func
             });
         }, 10);
     }
-    $scope.excelChkCnt     = function () { excelDown($scope.chkCntFlex    , '조회건수_USER_ID종합'); };
-    $scope.excelChkCntIp   = function () { excelDown($scope.chkCntIpFlex  , '조회건수_IP별상세'); };
-    $scope.excelChkCntMenu = function () { excelDown($scope.chkCntMenuFlex, '조회건수_메뉴별'); };
+    $scope.excelChkCnt      = function () { excelDown($scope.chkCntFlex    , '조회건수_USER_ID종합'); };
+    $scope.excelAutoPause   = function () { excelDown($scope.autoPauseFlex , '자동일시정지내역'); };
+    $scope.excelChkCntIp    = function () { excelDown($scope.chkCntIpFlex  , '조회건수_IP별상세'); };
+    $scope.excelChkCntMenu  = function () { excelDown($scope.chkCntMenuFlex, '조회건수_메뉴별'); };
 
     /* ══════════ ⑤ 웹사용자정보변경이력 ══════════ */
-    $scope.userInfoLogData    = new wijmo.collections.CollectionView([]);
-    $scope.userInfoLogSummary = '';
-
     $scope.initUserInfoLogGrid = function (s, e) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel !== s.cells) return;
