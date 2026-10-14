@@ -132,19 +132,19 @@
 					              <td style="text-align:center;"><s:message code="goalPop.yoil7" /></td>	            
 					            </tr>
 					            <tr>
-					              <td><input type="text" id="saleGoalWeight1" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight1" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight2" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight2" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight3" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight3" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight4" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight4" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight5" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight5" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight6" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight6" style="text-align: center;"/></td>
-					              <td><input type="text" id="saleGoalWeight7" class="sb-input w100" maxlength="3" ng-model="goalModifyInfo.saleGoalWeight7" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight1" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight1" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight2" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight2" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight3" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight3" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight4" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight4" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight5" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight5" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight6" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight6" style="text-align: center;"/></td>
+					              <td><input type="text" id="saleGoalWeight7" class="sb-input w100" maxlength="3" numberOnly ng-model="goalModifyInfo.saleGoalWeight7" style="text-align: center;"/></td>
 					            </tr>
 					            <%-- 매출목표금액 --%>
 					            <tr>
 					              <th><s:message code="goalPop.saleGoalAmt" /><em class="imp">*</em></th>
 					              <td colspan="7">
-									<input type="text" class="sb-input w200" id="saleGoalAmt" maxlength="13" ng-model="saleGoalAmt" ng-change="change()" style="text-align: right;"/>
+									<input type="text" class="sb-input w200" id="saleGoalAmt" maxlength="13" numberOnly ng-model="saleGoalAmt" ng-change="change()" style="text-align: right;"/>
 					              </td>
 					            </tr>
 				          	</tbody>
@@ -227,5 +227,16 @@
 		</div>		
 	</div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/goalPop/goalPop.js?ver=201901112.15" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+		// 숫자만 입력 (요일별 매출 가중치, 매출목표금액)
+		$("input:text[numberOnly]").on("keyup paste input", function() {
+			var $this = $(this);
+			setTimeout(function() {
+				$this.val($this.val().replace(/[^0-9]/g, ""));
+			}, 0);
+		});
+	});
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/goalPop/goalPop.js?ver=20261013.02" charset="utf-8"></script>
 </wj-popup>

@@ -679,7 +679,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     // 파라미터 설정
     var params = {};
     params.sdselGrpCd = $scope.getSdselGrpCd();
-    params.sdselQty = '0';
+    params.sdselQty = 0;
     params.status = 'I';
     params.gChk = true;
     params.sdselClassCd = '자동채번';

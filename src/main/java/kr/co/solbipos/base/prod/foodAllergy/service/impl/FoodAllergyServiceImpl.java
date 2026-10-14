@@ -1,6 +1,9 @@
 package kr.co.solbipos.base.prod.foodAllergy.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.foodAllergy.service.FoodAllergyService;
@@ -33,13 +36,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class FoodAllergyServiceImpl implements FoodAllergyService {
     private final FoodAllergyMapper foodAllergyMapper;
+    private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public FoodAllergyServiceImpl(FoodAllergyMapper foodAllergyMapper) {
+    public FoodAllergyServiceImpl(FoodAllergyMapper foodAllergyMapper, MessageService messageService) {
         this.foodAllergyMapper = foodAllergyMapper;
+        this.messageService = messageService;
     }
 
     /** 식품 알레르기 정보관리 조회 */
@@ -162,6 +167,11 @@ public class FoodAllergyServiceImpl implements FoodAllergyService {
             if (foodAllergyVO.getStatus() == GridDataFg.INSERT) {
                 foodAllergyVO.setRegDt(currentDt);
                 foodAllergyVO.setRegId(sessionInfoVO.getUserId());
+
+                // 재료코드여부 확인
+                if (foodAllergyVO.getRecipesCd() == null || "".equals(foodAllergyVO.getRecipesCd()) || "자동채번".equals(foodAllergyVO.getRecipesCd())) {
+                    throw new JsonException(Status.FAIL, messageService.get("foodAllergy.recipesNotSaved"));
+                }
 
                 procCnt = foodAllergyMapper.getFoodAllergyProdSaveInsert(foodAllergyVO);
 

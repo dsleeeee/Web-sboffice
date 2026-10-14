@@ -1,6 +1,8 @@
 package kr.co.solbipos.sale.anals.goal.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
@@ -147,7 +149,26 @@ public class GoalServiceImpl implements GoalService {
     /**매출목표관리 - 매출목표 등록   */
     @Override
     public int saveSaleGoalSave(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
-    	
+
+    	// 요일별 매출 가중치 체크 (컬럼 NUMBER(3,0) : 0~999 정수, 하나 이상 0보다 커야 함)
+    	String[] weights = {goalVO.getSaleGoalWeight1(), goalVO.getSaleGoalWeight2(), goalVO.getSaleGoalWeight3(), goalVO.getSaleGoalWeight4(),
+    						goalVO.getSaleGoalWeight5(), goalVO.getSaleGoalWeight6(), goalVO.getSaleGoalWeight7()};
+    	int weightSum = 0;
+    	for (String weight : weights) {
+    		if (weight == null || !weight.matches("\\d{1,3}")) {
+    			throw new JsonException(Status.FAIL, messageService.get("goalPop.weightInteger"));
+    		}
+    		weightSum += Integer.parseInt(weight);
+    	}
+    	if (weightSum <= 0) {
+    		throw new JsonException(Status.FAIL, messageService.get("goalPop.weightZero"));
+    	}
+
+    	// 매출목표금액 필수 체크
+    	if (goalVO.getSaleGoalAmt() == null || !goalVO.getSaleGoalAmt().matches("\\d+")) {
+    		throw new JsonException(Status.FAIL, messageService.get("goalPop.saleGoalAmtBlank"));
+    	}
+
     	String currentDt = currentDateTimeString();
 
     	goalVO.setRegId(sessionInfoVO.getUserId());

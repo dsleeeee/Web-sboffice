@@ -876,6 +876,22 @@
            AND PROD_CD LIKE #{prefix} || '%'
     </select>
 
+    <!-- 본사 prefix 상품코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 상품코드를 prefix(1자리) + 숫자 MAX 채번(7자리) = 8자리로 생성한다.
+    -->
+    <select id="getHqPrefixProdCd" parameterType="prodVO" resultType="String">
+        /* ProdMapper.getHqPrefixProdCd */
+        SELECT #{prefix} || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(PROD_CD, LENGTH(#{prefix}) + 1))), 0) + 1, 8 - LENGTH(#{prefix}), '0') AS PROD_CD
+          FROM TB_HQ_PRODUCT
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD LIKE #{prefix} || '%'
+           AND LENGTH(PROD_CD) = 8
+           AND REGEXP_LIKE(SUBSTR(PROD_CD, LENGTH(#{prefix}) + 1), '^[0-9]+$')
+    </select>
+
     <!-- 상품정보 저장 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT

@@ -503,7 +503,7 @@
 	<update id="saveSaleGoalAmtTotSave" parameterType="goalVO">    
 	    /* goalMapper.saveSaleGoalAmtTotSave */
         UPDATE TB_SL_SALE_GOAL_MONTHLY
-          SET SALE_GOAL_AMT 	= (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_DAILY WHERE STORE_CD = #{storeCd} AND SALE_GOAL_YM = #{saleGoalYm})
+          SET SALE_GOAL_AMT 	= (SELECT NVL(SUM(SALE_GOAL_AMT), 0) FROM TB_SL_SALE_GOAL_DAILY WHERE STORE_CD = #{storeCd} AND SALE_GOAL_YM = #{saleGoalYm})
              ,MOD_DT 			= #{modDt}
              ,MOD_ID 			= #{modId}
           WHERE STORE_CD 	 = #{storeCd}

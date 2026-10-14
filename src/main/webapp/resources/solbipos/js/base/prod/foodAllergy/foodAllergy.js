@@ -45,8 +45,11 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 재료코드
                 if (col.binding === "recipesCd") {
-                    // var item = s.rows[e.row].dataItem;
-                    wijmo.addClass(e.cell, 'wijLink');
+                    var item = s.rows[e.row].dataItem;
+                    // 저장되지 않은 재료(자동채번)는 링크효과 제외
+                    if (!(item && item.status === "I")) {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
                 }
             }
         });
@@ -60,6 +63,12 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
                 // 재료코드 클릭시 상세정보 조회
                 if ( col.binding === "recipesCd") {
                     var selectedRow = s.rows[ht.row].dataItem;
+
+                    // 저장되지 않은 재료(자동채번)는 상세조회 제외
+                    if (selectedRow.status === "I") {
+                        return false;
+                    }
+
                     var params      = {};
                     params.recipesCd = selectedRow.recipesCd;
                     params.recipesNm = selectedRow.recipesNm;

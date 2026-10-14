@@ -1122,7 +1122,7 @@
                 SET
                     SDSEL_CLASS_NM = #{sdselClassNm},
                     DISP_SEQ = #{dispSeq},
-                    SDSEL_QTY = #{sdselQty},
+                    SDSEL_QTY = NVL(#{sdselQty}, 0),
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     REQUIRE_YN = #{requireYn},
@@ -1142,7 +1142,7 @@
                 SET
                     SDSEL_CLASS_NM = #{sdselClassNm},
                     DISP_SEQ = #{dispSeq},
-                    SDSEL_QTY = #{sdselQty},
+                    SDSEL_QTY = NVL(#{sdselQty}, 0),
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     REQUIRE_YN = #{requireYn},

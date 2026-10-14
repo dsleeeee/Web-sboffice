@@ -312,9 +312,20 @@ public class ProdServiceImpl implements ProdService {
 
             String prodCd = "";
 
-            // 프랜차이즈 매장의 경우, 본사 ([0002] 매장상품 prefix) 사용여부를 파악하여 상품코드를 생성
+            // 벤슨(H0665), 벤슨본사데모(DS079) 본사 : 프리픽스(0047, 1자리) + 숫자 MAX 채번(7자리) = 8자리
+            if("H".equals(prodVO.getOrgnFg())
+                    && ("H0665".equals(prodVO.getHqOfficeCd()) || "DS079".equals(prodVO.getHqOfficeCd()))){
 
-            if(prodVO.getOrgnFg() == "S" && prodVO.getHqOfficeCd() != "00000"){
+                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
+                // prefix 미설정시 기본값 'T'
+                if("*".equals(sPrefix) || "".equals(sPrefix)){
+                    sPrefix = "T";
+                }
+                prodVO.setPrefix(sPrefix);
+                prodCd = prodMapper.getHqPrefixProdCd(prodVO);
+
+            // 프랜차이즈 매장의 경우, 본사 ([0002] 매장상품 prefix) 사용여부를 파악하여 상품코드를 생성
+            }else if(prodVO.getOrgnFg() == "S" && prodVO.getHqOfficeCd() != "00000"){
 
 //                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
 

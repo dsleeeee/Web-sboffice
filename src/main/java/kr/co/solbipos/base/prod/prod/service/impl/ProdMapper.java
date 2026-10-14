@@ -78,6 +78,9 @@ public interface ProdMapper {
     /** prefix 상품코드 조회*/
     String getPrefixProdCd(ProdVO prodVO);
 
+    /** 본사 prefix 상품코드 조회 (프리픽스 1자리 + 숫자 7자리 MAX 채번) */
+    String getHqPrefixProdCd(ProdVO prodVO);
+
     /** 본사 상품정보 등록시 매장 상품정보에 등록 */
     String insertHqProdToStoreProd(ProdVO prodVO);
 

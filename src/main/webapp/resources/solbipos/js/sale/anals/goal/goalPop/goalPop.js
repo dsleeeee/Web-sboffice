@@ -97,21 +97,42 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
 	//매출목표등록
 	$scope.saveSaleGoalRgsr = function () {
 
+		// 요일별 매출 가중치 체크 (0~999 정수, 하나 이상 0보다 커야 함)
+		var weightSum = 0;
+		for (var i = 1; i <= 7; i++) {
+			var weight = $.trim($("#saleGoalWeight" + i).val());
+			if (!/^\d{1,3}$/.test(weight)) {
+				$scope._popMsg(messages["goalPop.weightInteger"]); // 요일별 매출 가중치는 0~999 사이의 정수만 입력 가능합니다.
+				return false;
+			}
+			weightSum += parseInt(weight, 10);
+		}
+		if (weightSum <= 0) {
+			$scope._popMsg(messages["goalPop.weightZero"]); // 요일별 매출 가중치는 하나 이상 0보다 커야 합니다.
+			return false;
+		}
+
+		// 매출목표금액 필수 체크
+		if (!/^\d+$/.test($.trim($("#saleGoalAmt").val()))) {
+			$scope._popMsg(messages["goalPop.saleGoalAmtBlank"]); // 매출목표금액을 입력해주세요.
+			return false;
+		}
+
 		// 파라미터
 		var params = {};
 			params.storeCd 		= $("#storeCd").val();
 			params.storeNm 		= $("#storeNm").val();
 			params.saleGoalYm 	= wijmo.Globalize.format($scope.startDate, 'yyyyMM');
 			
-		    params.saleGoalWeight1 = $("#saleGoalWeight1").val();
-		    params.saleGoalWeight2 = $("#saleGoalWeight2").val();
-		    params.saleGoalWeight3 = $("#saleGoalWeight3").val();
-		    params.saleGoalWeight4 = $("#saleGoalWeight4").val();
-		    params.saleGoalWeight5 = $("#saleGoalWeight5").val();
-		    params.saleGoalWeight6 = $("#saleGoalWeight6").val();
-		    params.saleGoalWeight7 = $("#saleGoalWeight7").val();
+		    params.saleGoalWeight1 = $.trim($("#saleGoalWeight1").val());
+		    params.saleGoalWeight2 = $.trim($("#saleGoalWeight2").val());
+		    params.saleGoalWeight3 = $.trim($("#saleGoalWeight3").val());
+		    params.saleGoalWeight4 = $.trim($("#saleGoalWeight4").val());
+		    params.saleGoalWeight5 = $.trim($("#saleGoalWeight5").val());
+		    params.saleGoalWeight6 = $.trim($("#saleGoalWeight6").val());
+		    params.saleGoalWeight7 = $.trim($("#saleGoalWeight7").val());
 		    
-		    params.saleGoalAmt = $("#saleGoalAmt").val();
+		    params.saleGoalAmt = $.trim($("#saleGoalAmt").val());
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._postJSONSave.withOutPopUp("/sale/anals/goal/goal/save.sb", params, function(response) {
