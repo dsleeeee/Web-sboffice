@@ -72,6 +72,9 @@
                 AND 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND 	tsdp.STORE_CD = tms.STORE_CD
                 AND     tmsi.STORE_CD (+)= tms.STORE_CD
+                <if test='bizNo != null and bizNo != ""'>
+                    AND tms.BIZ_NO LIKE '%' || REPLACE(#{bizNo}, '-', '') || '%'
+                </if>
                 <if test='gubun != null and gubun == "D"'>
                     AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -301,6 +304,9 @@
                 AND 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND 	tsdp.STORE_CD = tms.STORE_CD
                 AND     tmsi.STORE_CD (+)= tms.STORE_CD
+                <if test='bizNo != null and bizNo != ""'>
+                    AND tms.BIZ_NO LIKE '%' || REPLACE(#{bizNo}, '-', '') || '%'
+                </if>
                 <if test='gubun != null and gubun == "D"'>
                     AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
                 </if>

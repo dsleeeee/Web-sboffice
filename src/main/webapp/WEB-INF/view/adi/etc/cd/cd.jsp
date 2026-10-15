@@ -153,6 +153,7 @@
     <div class="wj-TblWrapBr pd10" style="height: 550px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='cd.gridNm' /></span>
+        <span class="fl bk lh30 ml5" id="lblRepresent"></span>
         <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
@@ -269,4 +270,4 @@
 </wj-popup>
 <%--// 본사권한 매장사용 공통코드 매장수정 허용 팝업 --%>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20260911.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20261013.01" charset="utf-8"></script>

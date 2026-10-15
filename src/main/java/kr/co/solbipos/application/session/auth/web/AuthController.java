@@ -10,6 +10,7 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.SessionUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.common.validate.Login;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
@@ -57,6 +58,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
  * @ 2026.09.28  김유승      아이디 저장 쿠키 저장 시 제어문자 제거 (IllegalArgumentException 방지)
+ * @ 2026.10.13  김유승      로그인 아이디 20바이트 초과 입력 차단 (로그인이력 USER_ID 컬럼 초과 ORA-12899 방지)
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018. 05.01
@@ -375,6 +377,11 @@ public class AuthController {
         // 아이디 정규화 : 앞뒤 공백·제어문자 제거 (실수로 붙은 공백/개행 허용, 이후 조회·쿠키에 일관 적용)
         if (params.getUserId() != null) {
             params.setUserId(params.getUserId().trim().replaceAll("\\p{Cntrl}", ""));
+        }
+
+        // 아이디 바이트 체크 : USER_ID 컬럼(20byte) 초과 값은 실패이력 INSERT 시 ORA-12899가 발생하므로 저장 전에 차단 (@Size는 글자수 기준이라 한글 입력 시 초과 가능)
+        if (StringUtil.getByteLength(params.getUserId()) > 20) {
+            throw new AuthenticationException(messageService.get("login.id.over.length"), "/auth/login.sb");
         }
 
         // 로그인 시 특정아이디 블락

@@ -79,6 +79,8 @@ app.controller('cdMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 var selectedRow = s.rows[ht.row].dataItem;
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
+                    // 선택한 대표명칭 명시
+                    $("#lblRepresent").text("[" + selectedRow.nmcodeCd + "] " + selectedRow.nmcodeNm);
                     //$scope._broadcast('cdMomsDetailCtrl', selectedRow.nmcodeCd);
                     $scope._broadcast('cdMomsDetailCtrl', selectedRow);
                 }
@@ -97,11 +99,23 @@ app.controller('cdMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $.postJSON("/adi/etc/cdMoms/cdMoms/getNmcodeCdMomsList.sb", params, function (response){
+            // 선택한 대표명칭 초기화
+            $("#lblRepresent").text("");
+            // 세부명칭 그리드 버튼 hide (재조회 시 세부명칭이 초기화되므로)
+            $("#btnAddDetail").hide();
+            $("#btnDelDetail").hide();
+            $("#btnSaveDetail").hide();
             var grid = $scope.flex;
             grid.itemsSource = response.data.list;
             grid.itemsSource.trackChanges = true;
 
         }, function (response){
+            // 선택한 대표명칭 초기화
+            $("#lblRepresent").text("");
+            // 세부명칭 그리드 버튼 hide (재조회 시 세부명칭이 초기화되므로)
+            $("#btnAddDetail").hide();
+            $("#btnDelDetail").hide();
+            $("#btnSaveDetail").hide();
             s_alert.pop(response.message);
             var grid = $scope.flex;
             grid.itemsSource = new wijmo.collections.CollectionView([]);

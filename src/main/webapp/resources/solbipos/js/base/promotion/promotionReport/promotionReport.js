@@ -331,6 +331,7 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
     params.promotionCds   = $("#promotionReportPromotionCd").val();
     params.storeCds     = $("#promotionReportStoreCd").val();
+    params.bizNo      = $scope.bizNo;
     params.momsTeam = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;
     params.momsAreaFg = $scope.momsAreaFg;

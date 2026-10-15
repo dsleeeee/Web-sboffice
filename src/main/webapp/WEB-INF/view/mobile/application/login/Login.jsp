@@ -122,6 +122,12 @@ mobile_url = request.getRequestURL().toString().replace(request.getRequestURI(),
       return false;
     }
 
+    // USER_ID 컬럼이 20바이트(한글 3byte)라 maxlength(글자수)로는 초과를 막지 못해 바이트 기준으로 차단
+    if($("#userId").val().getByteLengthForOracle() > 20){
+      alert(messages["login.id.over.length"]);
+      return false;
+    }
+
     if(isEmptyObject($("#userPwd").val())){
       alert(messages["login.pwd.empty"]);
       return false;
