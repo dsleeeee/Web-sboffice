@@ -77,6 +77,8 @@ app.controller('representCtrl', ['$scope', '$http', '$timeout', function ($scope
         var selectedRow = s.rows[ht.row].dataItem
         var col = ht.panel.columns[ht.col];
         if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
+          // 선택한 대표명칭 명시
+          $("#lblRepresent").text("[" + selectedRow.nmcodeCd + "] " + selectedRow.nmcodeNm);
           //$scope._broadcast('detailCtrl', selectedRow.nmcodeCd);
           $scope._broadcast('detailCtrl', selectedRow);
         }
@@ -91,6 +93,12 @@ app.controller('representCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.useYn = $scope.useYnFg;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/adi/etc/cd/cd/list.sb", params, function() {
+      // 선택한 대표명칭 초기화
+      $("#lblRepresent").text("");
+      // 세부명칭 그리드 버튼 hide (재조회 시 세부명칭이 초기화되므로)
+      $("#btnAddDetail").hide();
+      $("#btnDelDetail").hide();
+      $("#btnSaveDetail").hide();
       // 대표명칭 그리드 버튼 show
       //$("#btnAddRepresent").show();
       //$("#btnDelRepresent").show();

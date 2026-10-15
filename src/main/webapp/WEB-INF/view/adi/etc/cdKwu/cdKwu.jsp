@@ -122,6 +122,7 @@
         <div class="wj-TblWrapBr pd10" style="height: 550px;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='cdKwu.gridNm' /></span>
+                <span class="fl bk lh30 ml5" id="lblRepresent"></span>
                 <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
                     <s:message code="cmm.add" />
                 </button>
@@ -166,4 +167,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwu/cdKwu.js?ver=20260306.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwu/cdKwu.js?ver=20261013.01" charset="utf-8"></script>

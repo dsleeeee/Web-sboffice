@@ -1512,6 +1512,8 @@
     <typeAlias alias="storeLangUseBensonVO" type="kr.co.solbipos.sale.benson.storeLangUseBenson.service.StoreLangUseBensonVO"/>
     <!-- 벤슨 > 매장분석 > 매장품절현황 -->
     <typeAlias alias="storeSoldOutHistoryBensonVO" type="kr.co.solbipos.sale.benson.storeSoldOutHistoryBenson.service.StoreSoldOutHistoryBensonVO"/>
+    <!-- 벤슨 > 프로모션관리 > 프로모션정산 -->
+    <typeAlias alias="promotionReportBensonVO" type="kr.co.solbipos.base.promotion.promotionReportBenson.service.PromotionReportBensonVO"/>
     <!-- 벤슨 > 상품매출분석 > 상품별시간대매출 -->
     <typeAlias alias="timeProdBensonVO" type="kr.co.solbipos.sale.benson.timeProdBenson.service.TimeProdBensonVO"/>
     <!-- 벤슨 > 상품매출분석 > 상품별시간대매출(채널별) -->

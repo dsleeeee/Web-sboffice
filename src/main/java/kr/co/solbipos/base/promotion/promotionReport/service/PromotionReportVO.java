@@ -50,6 +50,9 @@ public class PromotionReportVO extends PageVO {
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
 
+    /** 사업자번호 */
+    private String bizNo;
+
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
 
@@ -179,6 +182,14 @@ public class PromotionReportVO extends PageVO {
 
     public void setStoreHqBrandCd(String storeHqBrandCd) {
         this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getBizNo() {
+        return bizNo;
+    }
+
+    public void setBizNo(String bizNo) {
+        this.bizNo = bizNo;
     }
 
     public String getNmcodeGrpCd() {
