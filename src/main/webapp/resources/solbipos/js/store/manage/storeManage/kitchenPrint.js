@@ -198,11 +198,32 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
    * 주방프린터 삭제
    * *******************************************************/
   $scope.delete = function() {
-    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-      if ($scope.flex.collectionView.items[i].gChk === true) {
-        $scope.flex.itemsSource.removeAt(i);
+
+    $scope._popConfirm(messages["cmm.choo.delete"], function () {
+
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+        if ($scope.flex.collectionView.items[i].gChk === true) {
+          $scope.flex.itemsSource.removeAt(i);
+        }
       }
-    }
+
+      var params = [];
+      var storeScope = agrid.getScope('storeManageCtrl');
+
+      for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+        $scope.flex.collectionView.itemsRemoved[d].storeCd = storeScope.selectedStore.storeCd;
+        $scope.flex.collectionView.itemsRemoved[d].status = "D";
+        params.push($scope.flex.collectionView.itemsRemoved[d]);
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintInfo.sb", params,
+          function () {
+            // 주방프린터 목록 재조회
+            $scope.getKitchenPrintList();
+          }
+      );
+    });
   };
 
   /*********************************************************

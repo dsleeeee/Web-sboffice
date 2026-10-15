@@ -137,7 +137,13 @@ public class DayServiceImpl implements DayService {
         String payCol= "";
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotPayCol = "";
-        String arrPayCol[] = dayVO.getPayCol().split(",");
+//        String arrPayCol[] = dayVO.getPayCol().split(",");
+        // 결제수단 코드는 화면에서 받은 값을 사용하지 않고 서버에서 직접 조회
+        List<DefaultMap<String>> payColAddList = getPayColAddList(dayVO, sessionInfoVO);
+        String arrPayCol[] = new String[payColAddList.size()];
+        for(int i=0; i < payColAddList.size(); i++) {
+            arrPayCol[i] = payColAddList.get(i).getStr("payCd");
+        }
         for(int i=0; i < arrPayCol.length; i++) {
             // 현금,현금영수증 제외
             if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
