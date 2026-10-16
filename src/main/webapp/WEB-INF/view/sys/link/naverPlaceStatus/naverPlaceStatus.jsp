@@ -82,8 +82,10 @@
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.bizNo"/>" binding="bizNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverPlaceReset"/>" binding="reset" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverPlacePlusStatus"/>" binding="placeStatus" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.inType"/>" binding="inType" data-map="inTypeDataMap" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverOrderReset"/>" binding="resetOrder" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.inType"/>" binding="inType" data-map="inTypeDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="naverPlaceStatus.naverOrderStatus"/>" binding="orderStatus" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.uniqueId"/>" binding="uniqueId" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.lastResponseDt"/>" binding="lastResponseDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="naverPlaceStatus.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
