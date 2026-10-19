@@ -34,7 +34,7 @@
       <!-- define columns -->
       <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.posNo"/>" binding="posNo" data-map="posDataMap" width="80" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="40" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterFg"/>" binding="prterFg" data-map="prterDataMap" width="100" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint"/>" binding="prterKindFg" data-map="prterKindDataMap" width="100" align="center"></wj-flex-grid-column>
@@ -74,4 +74,4 @@
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20261015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20261019.01" charset="utf-8"></script>

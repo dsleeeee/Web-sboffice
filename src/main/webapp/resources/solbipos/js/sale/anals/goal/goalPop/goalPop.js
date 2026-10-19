@@ -82,16 +82,46 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
 	
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("saleGoalRgsrDetl", function (event, data) {
-				  
+
+		// 동시에 호출 시 매출목표금액합계가 상세 저장 전 금액으로 계산될 수 있으므로
+		// 상세그리드1 저장 → (성공 시) 상세그리드2 저장 → (성공 시) 매출목표금액합계 저장 순서로 변경
     	//매출목표상세그리드1 저장
-		$scope._broadcast("saleGoalRgsrDetl1");
-		
+		//$scope._broadcast("saleGoalRgsrDetl1");
+
 		//매출목표상세그리드2 저장
-		$scope._broadcast("saleGoalRgsrDetl2");
-		
+		//$scope._broadcast("saleGoalRgsrDetl2");
+
 		//매출목표금액합계 저장
-		$scope.saleGoalAmtTotal();
-				  
+		//$scope.saleGoalAmtTotal();
+
+		var dtl1Scope = agrid.getScope('goalDtl1Ctrl');
+		var dtl2Scope = agrid.getScope('goalDtl2Ctrl');
+
+		// 저장 실패 시 처리 (로딩바 hide 및 메시지)
+		var fnFail = function (msg) {
+			$scope.$broadcast('loadingPopupInactive');
+			if (msg) {
+				$scope._popMsg(msg);
+			}
+		};
+
+		// 로딩바 show
+		$scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
+
+		//매출목표상세그리드1 저장
+		dtl1Scope.saleGoalRgsrDetl1(function () {
+			//매출목표상세그리드2 저장
+			dtl2Scope.saleGoalRgsrDetl2(function () {
+				//매출목표금액합계 저장
+				$scope.saleGoalAmtTotal(function () {
+					// 로딩바 hide
+					$scope.$broadcast('loadingPopupInactive');
+				}, fnFail);
+			}, fnFail);
+		}, fnFail);
+
+		// 기능수행 종료 : 반드시 추가
+		event.preventDefault();
 	});
 	
 	//매출목표등록
@@ -118,6 +148,9 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
 			return false;
 		}
 
+		// 로딩바 show
+		$scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
+
 		// 파라미터
 		var params = {};
 			params.storeCd 		= $("#storeCd").val();
@@ -136,6 +169,8 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._postJSONSave.withOutPopUp("/sale/anals/goal/goal/save.sb", params, function(response) {
+
+			$scope.$broadcast('loadingPopupInactive');
 			
             var result = response.data.data;
 
@@ -155,16 +190,21 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
 	};  		
 	
 	//매출목표합계 저장
-	$scope.saleGoalAmtTotal = function () {
+	// successCallback : 저장 응답 시 호출, failCallback : 서버 오류 시 호출
+	$scope.saleGoalAmtTotal = function (successCallback, failCallback) {
 
 		// 파라미터
 		var params = {};
 			params.storeCd 		= $("#storeCd").val();
 			params.storeNm 		= $("#storeNm").val();
 			params.saleGoalYm 	= wijmo.Globalize.format($scope.startDate, 'yyyyMM');
-					    
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._postJSONSave.withOutPopUp("/sale/anals/goal/goalAmtTot/save.sb", params, function(response) {
+
+			if (typeof successCallback === 'function') {
+				successCallback();
+			}
 
             var result = response.data.data;
 
@@ -205,8 +245,12 @@ app.controller('goalRgsrCtrl', ['$scope', '$http', '$timeout', '$filter', functi
             
     		// 기능수행 종료 : 반드시 추가
     		event.preventDefault();
-		 });
-	};  		
+		 }, function() {
+			if (typeof failCallback === 'function') {
+				failCallback(messages["cmm.saveFail"]);
+			}
+		 }, function() {});
+	};
 }]);
 
 /** 매출목표조회 controller */
@@ -371,40 +415,61 @@ app.controller('goalDtl1Ctrl', ['$scope', '$http', '$timeout', function ($scope,
 	};  
 	
 	//매출목표등록1
-	$scope.saleGoalRgsrDetl1 = function () {
-		
+	// successCallback : 저장 성공 시 호출(다음 저장 진행), failCallback : 저장 실패 시 호출
+	$scope.saleGoalRgsrDetl1 = function (successCallback, failCallback) {
+
     	if($scope.flex.rows.length == 0){
     		$scope._popMsg(messages["goalPop.nonlist"]);	//매출목표를 먼저 등록 하십시요.
+			if (typeof failCallback === 'function') {
+				failCallback();
+			}
             return false;
     	}
-		
+
         var params = new Array();
 
         for(var i=0; i<$scope.flex.collectionView.items.length; i++){
             var item = $scope.flex.collectionView.items[i];
 
-            params.push(item);	
+            params.push(item);
         }
-        			
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._postJSONSave.withOutPopUp("/sale/anals/goal/goalDeatil/save.sb", params, function(response) {
-			
-			
+
+
             var result = response.data.data;
 
             if(result < 1){
-              $scope._popMsg(messages["cmm.registFail"]);
+              //$scope._popMsg(messages["cmm.registFail"]);
+              if (typeof failCallback === 'function') {
+                failCallback(messages["cmm.registFail"]);
+              } else {
+                $scope._popMsg(messages["cmm.registFail"]);
+              }
+              return false;
 
             }else{
-              $scope._popMsg(messages["cmm.saveSucc"]);
+              // 연속 저장 중에는 마지막(매출목표금액합계) 저장 후에만 메시지 표시
+              if (typeof successCallback !== 'function') {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+              }
             }
-             
+
 	         var params       = {};
         	 params.storeCd   = $("#storeCd").val();
-            
+
 	       	 $scope._broadcast("goalDtl1Ctrl", params);
-		 });
-	};  
+
+			if (typeof successCallback === 'function') {
+				successCallback();
+			}
+		 }, function() {
+			if (typeof failCallback === 'function') {
+				failCallback(messages["cmm.saveFail"]);
+			}
+		 }, function() {});
+	};
 }]);
 
 /** 매출목표등록 controller */
@@ -461,33 +526,51 @@ app.controller('goalDtl2Ctrl', ['$scope', '$http', '$timeout', function ($scope,
 	};
 	
 	//매출목표등록2
-	$scope.saleGoalRgsrDetl2 = function () {
-				
+	// successCallback : 저장 성공 시 호출(다음 저장 진행), failCallback : 저장 실패 시 호출
+	$scope.saleGoalRgsrDetl2 = function (successCallback, failCallback) {
+
         var params = new Array();
 
         for(var i=0; i<$scope.flex.collectionView.items.length; i++){
             var item = $scope.flex.collectionView.items[i];
 
-            params.push(item);	
+            params.push(item);
         }
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._postJSONSave.withOutPopUp("/sale/anals/goal/goalDeatil/save.sb", params, function(response) {
-			
+
             var result = response.data.data;
 
             if(result < 1){
-              $scope._popMsg(messages["cmm.registFail"]);
+              //$scope._popMsg(messages["cmm.registFail"]);
+              if (typeof failCallback === 'function') {
+                failCallback(messages["cmm.registFail"]);
+              } else {
+                $scope._popMsg(messages["cmm.registFail"]);
+              }
+              return false;
 
             }else{
-              $scope._popMsg(messages["cmm.saveSucc"]);
+              // 연속 저장 중에는 마지막(매출목표금액합계) 저장 후에만 메시지 표시
+              if (typeof successCallback !== 'function') {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+              }
             }
-             
+
 	         var params       = {};
         	 params.storeCd   = $("#storeCd").val();
-            
+
 	    	 $scope._broadcast("goalDtl2Ctrl", params);
-		 });
-	};  
+
+			if (typeof successCallback === 'function') {
+				successCallback();
+			}
+		 }, function() {
+			if (typeof failCallback === 'function') {
+				failCallback(messages["cmm.saveFail"]);
+			}
+		 }, function() {});
+	};
 	
 }]);

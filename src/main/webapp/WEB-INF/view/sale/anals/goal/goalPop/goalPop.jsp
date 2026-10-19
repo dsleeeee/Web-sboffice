@@ -238,5 +238,5 @@
 		});
 	});
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/goalPop/goalPop.js?ver=20261013.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/goalPop/goalPop.js?ver=20261019.01" charset="utf-8"></script>
 </wj-popup>

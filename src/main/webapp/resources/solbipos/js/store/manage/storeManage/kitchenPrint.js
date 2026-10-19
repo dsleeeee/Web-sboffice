@@ -344,7 +344,8 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintInfo.sb", params,
       function(){
-        $scope._popMsg(messages["cmm.saveSucc"]);
+        // 주방프린터 목록 재조회
+        $scope.getKitchenPrintList();
       }
     );
 

@@ -253,8 +253,9 @@
                 OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
+        ORDER BY A.STORE_CD
     </select>
-    
+
     <!-- 매출목표관리 - 매출목표 조회 -->
     <!--
         TABLE    : TB_SL_SALE_GOAL_WEIGHT, TB_SL_SALE_GOAL_MONTHLY
