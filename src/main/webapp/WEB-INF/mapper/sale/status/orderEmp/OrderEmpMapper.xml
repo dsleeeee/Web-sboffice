@@ -17,7 +17,9 @@
                	tms.STORE_NM,
 				tssd.ORDER_EMP_NO,
 				tme.EMP_NM,
-				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				-- 영수건수 : 품목 행이 아닌 영수증(일자+포스+영수증번호) 단위로 집계 (판매 영수증 - 반품 영수증)
+				COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '1'  THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END)
+				- COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '-1' THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END) AS BILL_CNT,
 				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
 		<include refid="CmmSQL.PagingTemplateCount"/>
 	 	FROM 	TB_SL_SALE_DTL tssd,
@@ -59,7 +61,9 @@
 				tms.STORE_NM,
 				tssd.ORDER_EMP_NO,
 				tme.EMP_NM,
-				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				-- 영수건수 : 품목 행이 아닌 영수증(일자+포스+영수증번호) 단위로 집계 (판매 영수증 - 반품 영수증)
+				COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '1'  THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END)
+				- COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '-1' THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END) AS BILL_CNT,
 				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
 		FROM 	TB_SL_SALE_DTL tssd,
 				TB_MS_EMPLOYEE tme,

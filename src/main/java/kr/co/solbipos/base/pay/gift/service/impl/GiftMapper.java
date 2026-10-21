@@ -100,6 +100,9 @@ public interface GiftMapper {
     /** 매장 상품권 수정*/
     int updateStoreGift(GiftVO GiftVO);
 
+    /** 매장 상품권 순서저장 */
+    int updateStoreGiftSeq(GiftVO giftVO);
+
     /** 매장 상품권 삭제 */
     int deleteStoreGift(GiftVO GiftVO);
 

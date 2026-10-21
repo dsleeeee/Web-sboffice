@@ -1,6 +1,8 @@
 package kr.co.solbipos.base.prod.prodBatchChange.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -26,6 +28,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2021.04.28  김설아      최초생성
+ * @ 2026.10.16  김유승      getProdBatchChangeSave 가격관리구분 검증 추가 (본사 H/S, 매장 S만 허용)
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 20201.04.28
@@ -80,6 +83,14 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
             prodBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
              if(prodBatchChangeVO.getStatus() == GridDataFg.UPDATE) {
+
+                // 가격관리구분 검증 : 본사는 H/S, 매장은 S만 허용 (오류 시 전체 롤백)
+                // 그리드에서 값을 지운 경우(빈 값) 등
+                if((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(prodBatchChangeVO.getPrcCtrlFg()) && !"S".equals(prodBatchChangeVO.getPrcCtrlFg()))
+                        || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(prodBatchChangeVO.getPrcCtrlFg()))) {
+                    throw new JsonException(Status.SERVER_ERROR, "가격관리구분을 선택해주세요. [" + prodBatchChangeVO.getProdCd() + "]");
+                }
+
                 procCnt = prodBatchChangeMapper.getProdBatchChangeSaveUpdate(prodBatchChangeVO);
 
                  // ProdVO

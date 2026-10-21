@@ -39,6 +39,8 @@ public class GiftVO extends PageVO {
     private Integer giftUprc = 0;
     /** [사용여부] Y:사용 N:사용안함 */
     private String useYn;
+    /** [표시순번] */
+    private Integer dispSeq;
     /** 프로시져 실행 결과 */
     private String result;
 
@@ -160,6 +162,21 @@ public class GiftVO extends PageVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    /**
+     * @return the dispSeq
+     */
+
+    public Integer getDispSeq() {
+        return dispSeq;
+    }
+
+    /**
+     * @param dispSeq the dispSeq to set
+     */
+    public void setDispSeq(Integer dispSeq) {
+        this.dispSeq = dispSeq;
     }
 
 

@@ -39,4 +39,7 @@ public interface GiftService {
     /** 상품권 저장 */
     int saveGiftList(GiftVO[] giftVOs, SessionInfoVO sessionInfoVO);
 
+    /** 상품권 순서저장 (매장 - 본사 상품권분류) */
+    int saveGiftSeq(GiftVO[] giftVOs, SessionInfoVO sessionInfoVO);
+
 }

@@ -22,6 +22,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2022.01.21  권지현        최초생성
+ * @ 2026.10.15  김유승        기간별탭 상세 조회 시 선택한 주문자 기준으로 조회 (세션 사원번호 덮어쓰기 제거)
  *
  * @author 솔비포스 WEB개발팀 권지현
  * @since 2022.01.21
@@ -80,7 +81,7 @@ public class OrderEmpServiceImpl implements OrderEmpService {
 
         orderEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
+        // empNo는 왼쪽 그리드에서 선택한 주문자 사원번호를 그대로 사용 (세션 사원번호로 덮어쓰지 않음)
 
         return orderEmpMapper.getOrderEmpPeriodDtlList(orderEmpVO);
     }
@@ -91,7 +92,7 @@ public class OrderEmpServiceImpl implements OrderEmpService {
 
         orderEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
+        // empNo는 왼쪽 그리드에서 선택한 주문자 사원번호를 그대로 사용 (세션 사원번호로 덮어쓰지 않음)
 
         return orderEmpMapper.getOrderEmpPeriodDtlExcelList(orderEmpVO);
     }
