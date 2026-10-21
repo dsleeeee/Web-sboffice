@@ -43,6 +43,7 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2020.08.26  김설아      최초생성
+ * @ 2026.10.16  김유승      getSimpleProdCheckSave 가격관리구분 검증 추가 (본사 H/S, 매장 S만 허용)
  *
  * @author 솔비포스 개발본부 백엔드PT 김설아
  * @since 2020.08.26
@@ -145,6 +146,11 @@ public class SimpleProdServiceImpl implements SimpleProdService {
 
             // 가격관리구분
             if (simpleProdVO.getPrcCtrlFg() != null && !"".equals(simpleProdVO.getPrcCtrlFg())) {
+                // 본사는 H/S, 매장은 S만 허용
+                if ((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(simpleProdVO.getPrcCtrlFg()) && !"S".equals(simpleProdVO.getPrcCtrlFg()))
+                        || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(simpleProdVO.getPrcCtrlFg()))) {
+                    simpleProdVO.setResult("가격관리구분을 선택해주세요.");
+                }
             } else {
                 simpleProdVO.setResult("가격관리구분을 선택해주세요.");
             }

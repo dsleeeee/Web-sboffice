@@ -88,18 +88,12 @@
     <div class="wj-TblWrapBr pd10" style="height:400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)"
-                visible="false">
-        </wj-combo-box>
+        <%-- UP --%>
+        <button class="btn_up" id="btnGiftUp" ng-click="rowMoveUp()" ng-if="userUseYn"><s:message code="cmm.up" /></button>
+        <%-- DOWN --%>
+        <button class="btn_down" id="btnGiftDown" ng-click="rowMoveDown()" ng-if="userUseYn"><s:message code="cmm.down" /></button>
+        <%-- 순서저장 (매장 - 본사 상품권분류) --%>
+        <button class="btn_skyblue" id="btnGiftSeqSave" style="display: none;" ng-click="giftSeqSave()" ng-if="userUseYn"><s:message code='gift.seqSave' /></button>
         <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
@@ -126,17 +120,10 @@
           <wj-flex-grid-column header="<s:message code="gift.giftUprc"/>" binding="giftUprc" width="*" max-length="9"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" width="*" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="" binding="dispSeq" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
-
-      <%-- 페이지 리스트 --%>
-      <div class="pageNum mt10">
-        <%-- id --%>
-        <ul id="giftCtrlPager" data-size="10">
-        </ul>
-      </div>
-      <%--//페이지 리스트--%>
 
     </div>
   </div>
@@ -151,4 +138,4 @@ var baseUrl      = "${baseUrl}";
 var mappingFg = "${mappingFg}";
 var mappingCd   = ${ccu.getCommCodeExcpAll("801")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20260327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20261021.01" charset="utf-8"></script>

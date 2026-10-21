@@ -179,4 +179,26 @@ public class GiftController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 상품권 순서저장 (매장 - 본사 상품권분류)
+     * @param   giftVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2026.10.20
+     */
+    @RequestMapping(value = "/class/saveGiftSeq.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveGiftSeq(@RequestBody GiftVO[] giftVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = giftService.saveGiftSeq(giftVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

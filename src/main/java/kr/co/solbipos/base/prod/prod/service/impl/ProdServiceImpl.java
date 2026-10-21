@@ -53,6 +53,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ 2020.08.10  김설아       saveProductInfo 수정 (return : 상품코드 / int -> long -> String)
  *                            getProdImageFileSave 추가 (상품 이미지 업로드)
  * @ 2020.12.16  김설아       saveProductInfo 수정 (초기재고, 거래처 추가)
+ * @ 2026.10.16  김유승       saveProductInfo 가격관리구분 검증 추가 (본사 H/S, 매장 S만 허용)
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -386,6 +387,13 @@ public class ProdServiceImpl implements ProdService {
         // 매장에서 매장상품 등록시에 가격관리 구분 등록 -> 콤보박스 처리
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
 //        else                                        prodVO.setPrcCtrlFg("S"); //매장
+
+        // 가격관리구분 검증 : 본사는 H/S, 매장은 S만 허용
+        // 정상 화면에서는 다른 값이 올 수 없어 콤보박스 오류로 판단 -> 콤보는 화면 진입 시 조회하므로 새로고침 안내
+        if((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(prodVO.getPrcCtrlFg()) && !"S".equals(prodVO.getPrcCtrlFg()))
+                || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(prodVO.getPrcCtrlFg()))) {
+            throw new JsonException(Status.SERVER_ERROR, "가격관리구분 값이 올바르지 않습니다.<br/>화면을 새로고침한 후 다시 저장해주세요.");
+        }
 
         // 상품정보 저장
 //        int result = prodMapper.saveProductInfo(prodVO);

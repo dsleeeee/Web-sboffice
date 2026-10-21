@@ -8,6 +8,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김지은     2018.08.10     최초작성
+    2       김유승     2026.10.20     상품권 표시순서(DISP_SEQ_NO) 추가
 -->
 
 <mapper namespace="kr.co.solbipos.base.pay.gift.service.impl.GiftMapper">
@@ -302,23 +303,21 @@
     -->
     <select id="getHqGiftList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : GiftMapper.getHqGiftList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT thg.HQ_OFFICE_CD,
                thg.GIFT_CD,
                thg.GIFT_NM,
                thg.PAY_CLASS_CD,
                thg.GIFT_UPRC,
                thg.USE_YN,
-               thg.REG_ID
-      <include refid="CmmSQL.PagingTemplateCount"/>
+               thg.REG_ID,
+               thg.DISP_SEQ_NO AS DISP_SEQ
           FROM TB_HQ_GIFT thg
          WHERE thg.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thg.PAY_CLASS_CD = #{payClassCd}
         <if test='useYn != null and useYn.toString() != ""'>
            AND thg.USE_YN = #{useYn}
         </if>
-         ORDER BY thg.GIFT_CD
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+         ORDER BY thg.DISP_SEQ_NO, thg.GIFT_CD
     </select>
 
     <!-- 매장 상품권 조회 -->
@@ -328,23 +327,21 @@
     -->
     <select id="getStoreGiftList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : GiftMapper.getStoreGiftList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmg.STORE_CD,
                tmg.GIFT_CD,
                tmg.GIFT_NM,
                tmg.PAY_CLASS_CD,
                tmg.GIFT_UPRC,
                tmg.USE_YN,
-               tmg.REG_ID
-      <include refid="CmmSQL.PagingTemplateCount"/>
+               tmg.REG_ID,
+               tmg.DISP_SEQ_NO AS DISP_SEQ
           FROM TB_MS_GIFT tmg
          WHERE tmg.STORE_CD = #{storeCd}
            AND tmg.PAY_CLASS_CD = #{payClassCd}
         <if test='useYn != null and useYn.toString() != ""'>
            AND tmg.USE_YN = #{useYn}
         </if>
-         ORDER BY tmg.GIFT_CD
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+         ORDER BY tmg.DISP_SEQ_NO, tmg.GIFT_CD
     </select>
 
     <!-- 상품권 코드 조회 -->
@@ -385,7 +382,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            DISP_SEQ_NO
         )
         VALUES
         (
@@ -398,7 +396,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{dispSeq}
         )
     </insert>
 
@@ -438,7 +437,8 @@
                GIFT_UPRC = #{giftUprc},
                USE_YN = #{useYn},
                MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+               MOD_ID = #{modId},
+               DISP_SEQ_NO = #{dispSeq}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND PAY_CLASS_CD =  #{payClassCd}
            AND GIFT_CD = #{giftCd}
@@ -532,7 +532,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            DISP_SEQ_NO
         )
         VALUES
         (
@@ -545,7 +546,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{dispSeq}
       )
     </insert>
 
@@ -560,6 +562,23 @@
            SET GIFT_NM = #{giftNm},
                GIFT_UPRC = #{giftUprc},
                USE_YN = #{useYn},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId},
+               DISP_SEQ_NO = #{dispSeq}
+         WHERE STORE_CD = #{storeCd}
+           AND PAY_CLASS_CD =  #{payClassCd}
+           AND GIFT_CD = #{giftCd}
+    </update>
+
+    <!-- 매장 상품권 순서저장 -->
+    <!--
+        TABLE    : TB_MS_GIFT
+        COMMENTS : 매장에서 본사 상품권의 표시순서만 수정한다. (본사에서 해당 상품권 재수정 시 본사 순서로 덮어씀)
+    -->
+    <update id="updateStoreGiftSeq" parameterType="DefaultMap">
+        /* USE : GiftMapper.updateStoreGiftSeq */
+        UPDATE TB_MS_GIFT
+           SET DISP_SEQ_NO = #{dispSeq},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}

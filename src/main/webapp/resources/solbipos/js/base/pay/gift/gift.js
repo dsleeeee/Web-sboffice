@@ -6,6 +6,7 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2018.09.18     김지은      1.0
+ * 2026.10.20     김유승      1.1            상품권 표시순서 추가 (페이징 제거, UP/DOWN, 순서저장)
  *
  * **************************************************************/
 /**
@@ -61,11 +62,13 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
           } else if(selectedRow.useYn === "N") {
             $("#giftSubTitle").html(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm + "<label style='color: red'>(미사용)</label>");
             $("#hdPayClassCd").val(selectedRow.payClassCd);
-            $scope._pageView('giftCtrl', 1);
+            // $scope._pageView('giftCtrl', 1);
+            $scope._broadcast('giftCtrl');
           } else {
             $("#giftSubTitle").text(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm );
             $("#hdPayClassCd").val(selectedRow.payClassCd);
-            $scope._pageView('giftCtrl', 1);
+            // $scope._pageView('giftCtrl', 1);
+            $scope._broadcast('giftCtrl');
           }
         }
       }
@@ -114,6 +117,8 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
       giftScope.$apply(function(){
         giftScope._gridDataInit();
       });
+
+      $('#btnGiftSeqSave').hide();
     }, false);
   };
 
@@ -281,6 +286,10 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "giftCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
+        // 매장은 본사 상품권분류의 순서만 변경 가능 (선택 체크박스 외 수정 불가)
+        if ((orgnFg != null && orgnFg == "STORE") && $("#hdPayClassCd").val() <= 799 && col.binding !== "gChk") {
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
         // else if (col.binding === "prodCnt" || col.binding === "storeCnt") {
         //   wijmo.addClass(e.cell, 'wijLink');
         // }
@@ -294,6 +303,10 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
       // 상품권 코드는 입력 불가능
       if (col.binding === "giftCd") {
         e.cancel = false;
+      }
+      // 매장은 본사 상품권분류의 순서만 변경 가능 (선택 체크박스 외 수정 불가)
+      if ((orgnFg != null && orgnFg == "STORE") && $("#hdPayClassCd").val() <= 799 && col.binding !== "gChk") {
+        e.cancel = true;
       }
       // 데이터 조회 후 dropdown 이 readonly 되는 문제
       // if (col.binding === "giftDcFg" || col.binding === "giftApplyFg" || col.binding === "useYn") {
@@ -388,10 +401,13 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
       $('#btnGiftAdd').hide();
       $('#btnGiftDel').hide();
       $('#btnGiftSave').hide();
+      // 매장은 본사 상품권의 순서만 변경 가능 (본사에서 재수정 시 본사 순서로 덮어씀)
+      $('#btnGiftSeqSave').show();
     } else {
       $('#btnGiftAdd').show();
       $('#btnGiftDel').show();
       $('#btnGiftSave').show();
+      $('#btnGiftSeqSave').hide();
     }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getGiftList.sb", params, function(){}, false);
@@ -482,14 +498,36 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._popConfirm(messages["cmm.choo.save"], function() {
       // 파라미터 설정
       var params = new Array();
-      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-        if ($scope.flex.collectionView.itemsEdited[i].giftNm == undefined || $scope.flex.collectionView.itemsEdited[i].giftNm.length == 0) {
+
+      // dispSeq 재설정
+      for (var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+        if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+          $scope.flex.collectionView.items[s].dispSeq = num;
+          $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+          $scope.flex.collectionView.items[s].status = "U";
+          $scope.flex.collectionView.commitEdit();
+        }
+      }
+
+      // 본사 : 수정/추가가 있으면 분류 전체를 보내 매장 순서를 본사 순서로 맞춤 (추가행 제외)
+      var editList = $scope.flex.collectionView.itemsEdited;
+      if (orgnFg === "HQ" && ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0)) {
+        editList = [];
+        for (var a = 0; a < $scope.flex.collectionView.items.length; a++) {
+          if ($scope.flex.collectionView.itemsAdded.indexOf($scope.flex.collectionView.items[a]) < 0) {
+            editList.push($scope.flex.collectionView.items[a]);
+          }
+        }
+      }
+
+      for (var i = 0; i < editList.length; i++) {
+        if (editList[i].giftNm == undefined || editList[i].giftNm.length == 0) {
           $scope._popMsg(messages["gift.require.giftNm"]);
           return false;
         }
-        if ($scope.maxChk($scope.flex.collectionView.itemsEdited[i].giftNm)) {
-          $scope.flex.collectionView.itemsEdited[i].status = "U";
-          params.push($scope.flex.collectionView.itemsEdited[i]);
+        if ($scope.maxChk(editList[i].giftNm)) {
+          editList[i].status = "U";
+          params.push(editList[i]);
         } else {
           $scope._popMsg(messages["gift.giftNm"] + " " + messages["gift.maxChk"]);
           return false;
@@ -518,7 +556,71 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.searchGift();
       });
     });
-  }
+  };
+
+  // 위로 옮기기 버튼
+  $scope.rowMoveUp = function() {
+    var movedRows = 0;
+    for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+      var item = $scope.flex.collectionView.items[i];
+      if (i > 0 && item.gChk) {
+        if (!$scope.flex.collectionView.items[i - 1].gChk) {
+          movedRows = i - 1;
+          var tmpItem = $scope.flex.collectionView.items[movedRows];
+          $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+          $scope.flex.collectionView.items[i] = tmpItem;
+          $scope.flex.collectionView.commitEdit();
+          $scope.flex.collectionView.refresh();
+        }
+      }
+    }
+    $scope.flex.select(movedRows, 1);
+  };
+
+  // 아래로 옮기기 버튼
+  $scope.rowMoveDown = function() {
+    var movedRows = 0;
+    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+      var item = $scope.flex.collectionView.items[i];
+      if ((i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+        if (!$scope.flex.collectionView.items[i + 1].gChk) {
+          movedRows = i + 1;
+          var tmpItem = $scope.flex.collectionView.items[movedRows];
+          $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+          $scope.flex.collectionView.items[i] = tmpItem;
+          $scope.flex.collectionView.commitEdit();
+          $scope.flex.collectionView.refresh();
+        }
+      }
+    }
+    $scope.flex.select(movedRows, 1);
+  };
+
+  // 순서저장 (매장 - 본사 상품권분류)
+  $scope.giftSeqSave = function() {
+    // 파라미터 설정
+    var params = new Array();
+
+    // dispSeq 재설정
+    for (var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+      if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+        $scope.flex.collectionView.items[s].dispSeq = num;
+        $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+        $scope.flex.collectionView.items[s].status = "U";
+        $scope.flex.collectionView.commitEdit();
+      }
+    }
+
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[i]);
+    }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "class/saveGiftSeq.sb", params, function () {
+      $scope.searchGift();
+    });
+  };
 
 }]);
 

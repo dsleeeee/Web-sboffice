@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.09.18  김지은      최초생성
+ * @ 2026.10.20  김유승      상품권 표시순서 추가
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.09.18
@@ -226,6 +228,7 @@ public class GiftServiceImpl implements GiftService {
 
     /** 상품권 저장 */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int saveGiftList(GiftVO[] giftVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
@@ -300,6 +303,31 @@ public class GiftServiceImpl implements GiftService {
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
+        }
+        return result;
+    }
+
+    /** 상품권 순서저장 (매장 - 본사 상품권분류) */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int saveGiftSeq(GiftVO[] giftVOs, SessionInfoVO sessionInfoVO) {
+
+        // 매장에서 본사 상품권의 순서만 변경 (본사에서 재수정 시 본사 순서로 덮어씀)
+        if(sessionInfoVO.getOrgnFg() != OrgnFg.STORE) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
+        }
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for(GiftVO giftVO : giftVOs) {
+
+            giftVO.setStoreCd(sessionInfoVO.getStoreCd());
+            giftVO.setModDt(dt);
+            giftVO.setModId(sessionInfoVO.getUserId());
+
+            result = giftMapper.updateStoreGiftSeq(giftVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return result;
     }
