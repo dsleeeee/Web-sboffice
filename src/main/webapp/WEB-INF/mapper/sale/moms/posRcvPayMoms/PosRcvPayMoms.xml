@@ -73,54 +73,52 @@
         ,       CASE WHEN tssps.PAY_CD ='01' THEN tsspc.ISSUE_NM ELSE NULL END AS ISSUE_NM
         ,       CASE WHEN tssps.PAY_CD ='01' THEN (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tsspc.VAN_CD AND VAN_FG = '01') ELSE NULL END AS VAN_NM
         ,       CASE WHEN tssps.PAY_CD IN ('05','08','12') THEN tssps.PAY_AMT ELSE NULL END AS COUPON_AMT
-                -- 원거래승인번호
+                -- 원거래승인번호 (원거래 영수증에 같은 결제수단 행이 여러 건이면 LINE_NO 순으로 모두 표시)
         ,       CASE WHEN tssps.PAY_CD = '01' AND tsspc.ORG_BILL_NO IS NOT NULL THEN
-                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_CARD
+                        (SELECT LISTAGG(APPR_NO, ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_CARD
                           WHERE HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD AND STORE_CD = tsspc.STORE_CD
                             AND SALE_DATE = SUBSTR(tsspc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspc.ORG_BILL_NO,-4))
                      WHEN tssps.PAY_CD = '02' AND tsspca.ORG_BILL_NO IS NOT NULL THEN
-                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_CASH
+                        (SELECT LISTAGG(APPR_NO, ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_CASH
                           WHERE HQ_OFFICE_CD = tsspca.HQ_OFFICE_CD AND STORE_CD = tsspca.STORE_CD
                             AND SALE_DATE = SUBSTR(tsspca.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspca.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspca.ORG_BILL_NO,-4)
                             AND APPR_PROC_FG IN ('1','2','4'))
                      WHEN tssps.PAY_CD = '03' AND tsppc.ORG_BILL_NO IS NOT NULL THEN
-                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_PAYCO
+                        (SELECT LISTAGG(APPR_NO, ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_PAYCO
                           WHERE HQ_OFFICE_CD = tsppc.HQ_OFFICE_CD AND STORE_CD = tsppc.STORE_CD
                             AND SALE_DATE = SUBSTR(tsppc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsppc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsppc.ORG_BILL_NO,-4))
                      WHEN tssps.PAY_CD = '07' AND tsspmp.ORG_BILL_NO IS NOT NULL THEN
-                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_MPAY
+                        (SELECT LISTAGG(APPR_NO, ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_MPAY
                           WHERE HQ_OFFICE_CD = tsspmp.HQ_OFFICE_CD AND STORE_CD = tsspmp.STORE_CD
                             AND SALE_DATE = SUBSTR(tsspmp.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmp.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmp.ORG_BILL_NO,-4))
                      WHEN tssps.PAY_CD = '08' AND tsspmc.ORG_BILL_NO IS NOT NULL THEN
-                        (SELECT APPR_NO FROM TB_SL_SALE_PAY_MCOUPN
+                        (SELECT LISTAGG(APPR_NO, ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_MCOUPN
                           WHERE HQ_OFFICE_CD = tsspmc.HQ_OFFICE_CD AND STORE_CD = tsspmc.STORE_CD
                             AND SALE_DATE = SUBSTR(tsspmc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmc.ORG_BILL_NO,-4))
                      ELSE NULL END AS ORG_APPR_NO
-                -- 원거래승인일자
-        ,       TO_CHAR(TO_DATE(
-                    CASE WHEN tssps.PAY_CD = '01' AND tsspc.ORG_BILL_NO IS NOT NULL THEN
-                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_CARD
-                              WHERE HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD AND STORE_CD = tsspc.STORE_CD
-                                AND SALE_DATE = SUBSTR(tsspc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspc.ORG_BILL_NO,-4))
-                         WHEN tssps.PAY_CD = '02' AND tsspca.ORG_BILL_NO IS NOT NULL THEN
-                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_CASH
-                              WHERE HQ_OFFICE_CD = tsspca.HQ_OFFICE_CD AND STORE_CD = tsspca.STORE_CD
-                                AND SALE_DATE = SUBSTR(tsspca.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspca.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspca.ORG_BILL_NO,-4)
-                                AND APPR_PROC_FG IN ('1','2','4'))
-                         WHEN tssps.PAY_CD = '03' AND tsppc.ORG_BILL_NO IS NOT NULL THEN
-                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_PAYCO
-                              WHERE HQ_OFFICE_CD = tsppc.HQ_OFFICE_CD AND STORE_CD = tsppc.STORE_CD
-                                AND SALE_DATE = SUBSTR(tsppc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsppc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsppc.ORG_BILL_NO,-4))
-                         WHEN tssps.PAY_CD = '07' AND tsspmp.ORG_BILL_NO IS NOT NULL THEN
-                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_MPAY
-                              WHERE HQ_OFFICE_CD = tsspmp.HQ_OFFICE_CD AND STORE_CD = tsspmp.STORE_CD
-                                AND SALE_DATE = SUBSTR(tsspmp.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmp.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmp.ORG_BILL_NO,-4))
-                         WHEN tssps.PAY_CD = '08' AND tsspmc.ORG_BILL_NO IS NOT NULL THEN
-                            (SELECT APPR_DT FROM TB_SL_SALE_PAY_MCOUPN
-                              WHERE HQ_OFFICE_CD = tsspmc.HQ_OFFICE_CD AND STORE_CD = tsspmc.STORE_CD
-                                AND SALE_DATE = SUBSTR(tsspmc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmc.ORG_BILL_NO,-4))
-                         ELSE NULL END
-                , 'yyyymmddhh24miss'), 'yyyy-mm-dd') AS ORG_APPR_DATE
+                -- 원거래승인일자 (원거래승인번호와 같은 LINE_NO 순으로 모두 표시)
+        ,       CASE WHEN tssps.PAY_CD = '01' AND tsspc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(APPR_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd'), ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_CARD
+                          WHERE HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD AND STORE_CD = tsspc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspc.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '02' AND tsspca.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(APPR_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd'), ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_CASH
+                          WHERE HQ_OFFICE_CD = tsspca.HQ_OFFICE_CD AND STORE_CD = tsspca.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspca.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspca.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspca.ORG_BILL_NO,-4)
+                            AND APPR_PROC_FG IN ('1','2','4'))
+                     WHEN tssps.PAY_CD = '03' AND tsppc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(APPR_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd'), ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_PAYCO
+                          WHERE HQ_OFFICE_CD = tsppc.HQ_OFFICE_CD AND STORE_CD = tsppc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsppc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsppc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsppc.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '07' AND tsspmp.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(APPR_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd'), ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_MPAY
+                          WHERE HQ_OFFICE_CD = tsspmp.HQ_OFFICE_CD AND STORE_CD = tsspmp.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspmp.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmp.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmp.ORG_BILL_NO,-4))
+                     WHEN tssps.PAY_CD = '08' AND tsspmc.ORG_BILL_NO IS NOT NULL THEN
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(APPR_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd'), ',') WITHIN GROUP (ORDER BY LINE_NO) FROM TB_SL_SALE_PAY_MCOUPN
+                          WHERE HQ_OFFICE_CD = tsspmc.HQ_OFFICE_CD AND STORE_CD = tsspmc.STORE_CD
+                            AND SALE_DATE = SUBSTR(tsspmc.ORG_BILL_NO,-14,8) AND POS_NO = SUBSTR(tsspmc.ORG_BILL_NO,-6,2) AND BILL_NO = SUBSTR(tsspmc.ORG_BILL_NO,-4))
+                     ELSE NULL END AS ORG_APPR_DATE
         FROM    TB_SL_SALE_PAY_SEQ tssps
         ,       TB_SL_SALE_HDR tssh
         ,       TB_SL_SALE_PAY_CARD tsspc

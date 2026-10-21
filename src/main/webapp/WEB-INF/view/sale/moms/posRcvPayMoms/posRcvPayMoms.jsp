@@ -97,8 +97,8 @@
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.issueNm"/>" binding="issueNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.vanNm"/>" binding="vanNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.couponAmt"/>" binding="couponAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="posRcvPayMoms.orgApprNo"/>" binding="orgApprNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="posRcvPayMoms.orgApprDate"/>" binding="orgApprDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="posRcvPayMoms.orgApprNo"/>" binding="orgApprNo" width="300" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="posRcvPayMoms.orgApprDate"/>" binding="orgApprDate" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
