@@ -507,11 +507,6 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 가격관리구분
             if (prodExcelUploadVO.getPrcCtrlFg() != null && !"".equals(prodExcelUploadVO.getPrcCtrlFg())) {
-                // 본사는 H/S, 매장은 S만 허용
-                if ((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(prodExcelUploadVO.getPrcCtrlFg()) && !"S".equals(prodExcelUploadVO.getPrcCtrlFg()))
-                        || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(prodExcelUploadVO.getPrcCtrlFg()))) {
-                    prodExcelUploadVO.setResult("가격관리구분을 선택해주세요.");
-                }
             } else {
                 prodExcelUploadVO.setResult("가격관리구분을 선택해주세요.");
             }

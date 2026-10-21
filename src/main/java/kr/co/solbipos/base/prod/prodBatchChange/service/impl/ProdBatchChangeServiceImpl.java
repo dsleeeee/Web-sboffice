@@ -83,14 +83,6 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
             prodBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
              if(prodBatchChangeVO.getStatus() == GridDataFg.UPDATE) {
-
-                // 가격관리구분 검증 : 본사는 H/S, 매장은 S만 허용 (오류 시 전체 롤백)
-                // 그리드에서 값을 지운 경우(빈 값) 등
-                if((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(prodBatchChangeVO.getPrcCtrlFg()) && !"S".equals(prodBatchChangeVO.getPrcCtrlFg()))
-                        || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(prodBatchChangeVO.getPrcCtrlFg()))) {
-                    throw new JsonException(Status.SERVER_ERROR, "가격관리구분을 선택해주세요. [" + prodBatchChangeVO.getProdCd() + "]");
-                }
-
                 procCnt = prodBatchChangeMapper.getProdBatchChangeSaveUpdate(prodBatchChangeVO);
 
                  // ProdVO

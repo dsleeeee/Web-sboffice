@@ -52,7 +52,7 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
         	params.storeCd   = selectedRow.storeCd;
         	params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
-        	params.empNo     = selectedRow.orderEmpNo;
+        	params.empNo     = selectedRow.empNo;
         if (col.binding === "realSaleAmt") { // 영수증번호
             $scope._broadcast('orderEmpPeriodDtlCtrlSrch', params);
         }
@@ -157,7 +157,7 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 			params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
 			params.storeCd   = rows[0].dataItem.storeCd;
-		    params.empNo     = rows[0].dataItem.orderEmpNo;
+		    params.empNo     = rows[0].dataItem.empNo;
 		    
 		    $scope._broadcast("orderEmpPeriodDtlCtrlSrch", params);
 	    }
