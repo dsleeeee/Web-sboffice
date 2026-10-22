@@ -81,7 +81,7 @@ public class OrderEmpServiceImpl implements OrderEmpService {
 
         orderEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
+        // empNo는 왼쪽 그리드에서 선택한 주문자 사원번호를 그대로 사용 (세션 사원번호로 덮어쓰지 않음)
 
         return orderEmpMapper.getOrderEmpPeriodDtlList(orderEmpVO);
     }
@@ -92,7 +92,7 @@ public class OrderEmpServiceImpl implements OrderEmpService {
 
         orderEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
+        // empNo는 왼쪽 그리드에서 선택한 주문자 사원번호를 그대로 사용 (세션 사원번호로 덮어쓰지 않음)
 
         return orderEmpMapper.getOrderEmpPeriodDtlExcelList(orderEmpVO);
     }

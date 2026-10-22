@@ -52,7 +52,7 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
         	params.storeCd   = selectedRow.storeCd;
         	params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
-        	params.empNo     = selectedRow.empNo;
+        	params.empNo     = selectedRow.orderEmpNo;
         if (col.binding === "realSaleAmt") { // 영수증번호
             $scope._broadcast('orderEmpPeriodDtlCtrlSrch', params);
         }
@@ -97,9 +97,9 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 		  return false;
 	  }
 
-	  // 조회일자 최대 1년(365일) 제한
-	  if (diffDay > 365) {
-		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+	  // 조회일자 최대 3개월(93일) 제한
+	  if (diffDay > 93) {
+		  $scope._popMsg(messages['cmm.dateOver.3month.error']);
 		  return false;
 	  }
 
@@ -157,7 +157,7 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 			params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
 			params.storeCd   = rows[0].dataItem.storeCd;
-		    params.empNo     = rows[0].dataItem.empNo;
+		    params.empNo     = rows[0].dataItem.orderEmpNo;
 		    
 		    $scope._broadcast("orderEmpPeriodDtlCtrlSrch", params);
 	    }
@@ -183,9 +183,9 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 		  return false;
 	  }
 
-	  // 조회일자 최대 1년(365일) 제한
-	  if (diffDay > 365) {
-		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+	  // 조회일자 최대 3개월(93일) 제한
+	  if (diffDay > 93) {
+		  $scope._popMsg(messages['cmm.dateOver.3month.error']);
 		  return false;
 	  }
 		// 파라미터

@@ -351,6 +351,9 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                     $scope.reset();
                     $scope.posLogRegistLayer.hide();
                 }
+            } else {
+                $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                return false;
             }
         }, function errorCallback(response) {
             $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
@@ -360,8 +363,12 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                 $scope._popMsg(messages['cmm.saveFail']);
             }
             return false;
-        }).then(function () {
+        }).then(function (result) {
             // 'complete' code here
+            // 저장 실패 시 다음 저장 중단
+            if (result === false) {
+                return false;
+            }
             // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
             if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
                 // 처리된 숫자 변경

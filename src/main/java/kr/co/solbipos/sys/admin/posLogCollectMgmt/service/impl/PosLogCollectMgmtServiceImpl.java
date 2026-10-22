@@ -70,6 +70,14 @@ public class PosLogCollectMgmtServiceImpl implements PosLogCollectMgmtService {
 
         for(PosLogCollectMgmtVO posLogCollectMgmtVO : posLogCollectMgmtVOs){
 
+            // SQL 바이트 체크 (화면 체크 없이 직접 호출되는 경우 대비, 컬럼 VARCHAR2(4000 BYTE))
+            if(posLogCollectMgmtVO.getSql() != null) {
+                int sqlByte = posLogCollectMgmtVO.getSql().getBytes(StandardCharsets.UTF_8).length;
+                if(sqlByte > 4000) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("posLogCollectMgmt.sql") + "은 4000" + messageService.get("verManage.byte") + "제한(확인: " + sqlByte + messageService.get("verManage.byte") + ")");
+                }
+            }
+
             posLogCollectMgmtVO.setSaleDate(currentDay);
             posLogCollectMgmtVO.setRegDt(currentDt);
             posLogCollectMgmtVO.setRegId(sessionInfoVO.getUserId());

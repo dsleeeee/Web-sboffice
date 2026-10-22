@@ -388,6 +388,13 @@ public class ProdServiceImpl implements ProdService {
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
 //        else                                        prodVO.setPrcCtrlFg("S"); //매장
 
+        // 가격관리구분 검증 : 본사는 H/S, 매장은 S만 허용
+        // 정상 화면에서는 다른 값이 올 수 없어 콤보박스 오류로 판단 -> 콤보는 화면 진입 시 조회하므로 새로고침 안내
+        if((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && !"H".equals(prodVO.getPrcCtrlFg()) && !"S".equals(prodVO.getPrcCtrlFg()))
+                || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !"S".equals(prodVO.getPrcCtrlFg()))) {
+            throw new JsonException(Status.SERVER_ERROR, "가격관리구분 값이 올바르지 않습니다.<br/>화면을 새로고침한 후 다시 저장해주세요.");
+        }
+
         // 상품정보 저장
 //        int result = prodMapper.saveProductInfo(prodVO);
         long result = prodMapper.saveProductInfo(prodVO);
