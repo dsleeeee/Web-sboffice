@@ -96,6 +96,20 @@ public class SmsTelNoManageVO extends PageVO {
     /** 발신번호 유형 (0:휴대폰번호, 1:유선번호) */
     private String telFg;
 
+    /** 조회조건 - 발신번호 ([발신번호 신청현황] 탭) */
+    private String srchTelNo;
+
+    /** 조회조건 - 발신번호/본인인증번호 ([인증 처리 요청] 팝업) */
+    private String srchApplyTelNo;
+
+    public String getSrchTelNo() { return srchTelNo; }
+
+    public void setSrchTelNo(String srchTelNo) { this.srchTelNo = srchTelNo; }
+
+    public String getSrchApplyTelNo() { return srchApplyTelNo; }
+
+    public void setSrchApplyTelNo(String srchApplyTelNo) { this.srchApplyTelNo = srchApplyTelNo; }
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }

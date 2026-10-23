@@ -48,6 +48,15 @@
                     <input type="text" id="userNm2" ng-model="userNm" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
+            <tr>
+                <%-- 발신번호 --%>
+                <th><s:message code="smsUserStatus.srchTelNo"/></th>
+                <td>
+                    <input type="text" id="telNo2" ng-model="telNo" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
             <tr style="display: none;">
                 <%--SMS사용등록 구분--%>
                 <th><s:message code="smsUserStatus.fg"/></th>
@@ -102,4 +111,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsUserStatus/sendTelNo.js?ver=20260807.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsUserStatus/sendTelNo.js?ver=20261022.01" charset="utf-8"></script>

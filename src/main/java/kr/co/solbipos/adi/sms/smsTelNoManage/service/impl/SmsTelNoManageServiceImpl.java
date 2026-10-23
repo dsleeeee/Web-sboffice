@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.SmsCallbackValidator;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
@@ -262,6 +263,13 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
 
         String currentDt = currentDateTimeString();
 
+        // 처리구분 완료/반려/제한 서버 검증 (화면 검증 우회 방지, 저장 전 검증)
+        for(SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
+            if(smsTelNoManageVO.getStatus() == GridDataFg.UPDATE) {
+                chkSmsGeneralNoManage2Save(smsTelNoManageVO);
+            }
+        }
+
         for(SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
 
             // 수정된 내역이 있을때만
@@ -358,6 +366,84 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         }
 
         return procCnt;
+    }
+
+    /**
+     * 일반번호 인증요청 처리2 팝업 - 저장 전 서버 검증
+     * 완료 : 발신번호 숫자/규격, 휴대폰번호+대표자본인 시 본인인증번호 일치, 음성파일 등록, 통화일시
+     * 반려 : 통화일시, 반려사유
+     * 제한 : 반려·제한사유
+     */
+    private void chkSmsGeneralNoManage2Save(SmsTelNoManageVO smsTelNoManageVO) {
+
+        String rowInfo = "[" + smsTelNoManageVO.getOrgnCd() + " / " + smsTelNoManageVO.getUserId() + "] ";
+
+        String addProcFg = nvl(smsTelNoManageVO.getAddProcFg());
+        String telNo = nvl(smsTelNoManageVO.getTelNo());
+
+        // 처리구분 변경 여부
+        boolean procFgChanged = !addProcFg.equals(nvl(smsTelNoManageVO.getBackAddProcFg()));
+
+        // 완료
+        if ("2".equals(addProcFg)) {
+
+            // 이미 완료된 건에서 처리구분·발신번호 변경이 없으면(발신번호 삭제 및 등록 로직 안탐) 검증 제외
+            if (procFgChanged || !telNo.equals(nvl(smsTelNoManageVO.getBackTelNo()))) {
+
+                // 발신번호 숫자만 입력
+                if (!telNo.matches("\\d+")) {
+                    throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.telNoInChk"));
+                }
+
+                // 발신번호 규격
+                if (!SmsCallbackValidator.isValid(telNo)) {
+                    throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.telNoFormatErr"));
+                }
+
+                // 화면에서 넘어온 값이 아닌 DB 기준으로 확인
+                DefaultMap<String> chkInfo = smsTelNoManageMapper.getApprovalChkInfo(smsTelNoManageVO);
+                if (chkInfo == null) {
+                    throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("cmm.empty.data"));
+                }
+
+                // 휴대폰번호 + 대표자본인인 경우, 인증한 휴대폰번호만 [발신번호]에 등록 가능
+                if ("0".equals(chkInfo.getStr("telFg")) && "0".equals(chkInfo.getStr("addSmsFg"))
+                        && !telNo.equals(chkInfo.getStr("vfTelNo"))) {
+                    throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.authTelNoRegMsg"));
+                }
+
+                // 음성파일 필수 등록
+                if (chkInfo.getInt("voiceFileCnt") <= 0) {
+                    throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.voiceFileRequired"));
+                }
+            }
+
+            // 통화일시
+            if (procFgChanged && nvl(smsTelNoManageVO.getTelDt()).isEmpty()) {
+                throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.returnTelDt"));
+            }
+        }
+
+        // 반려
+        if ("3".equals(addProcFg) && procFgChanged) {
+            if (nvl(smsTelNoManageVO.getTelDt()).isEmpty()) {
+                throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.returnTelDt"));
+            }
+            if (nvl(smsTelNoManageVO.getReturnRemark()).trim().isEmpty()) {
+                throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.returnRemarkBlank"));
+            }
+        }
+
+        // 제한
+        if ("4".equals(addProcFg) && procFgChanged) {
+            if (nvl(smsTelNoManageVO.getReturnRemark()).trim().isEmpty()) {
+                throw new JsonException(Status.SERVER_ERROR, rowInfo + messageService.get("smsGeneralNoManage2.limitRemarkBlank"));
+            }
+        }
+    }
+
+    private static String nvl(String str) {
+        return str == null ? "" : str;
     }
 
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */

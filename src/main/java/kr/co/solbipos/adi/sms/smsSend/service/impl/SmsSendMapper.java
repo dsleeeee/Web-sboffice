@@ -83,6 +83,9 @@ public interface SmsSendMapper {
     /** SMS전송 - 전송, 예약 권한 확인 */
     int getChkRegUserInfo(SmsSendVO smsSendVO);
 
+    /** SMS전송 - 발송 전 SMS 사용등록 여부 확인 */
+    int getChkSmsUserRegist(SmsSendVO smsSendVO);
+
     /** SMS전송 - 서류인증신청 번호 수량 확인 */
     int getChkRegInfoCnt(SmsSendVO smsSendVO);
 }

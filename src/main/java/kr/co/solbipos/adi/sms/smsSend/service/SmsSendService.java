@@ -67,4 +67,10 @@ public interface SmsSendService {
 
     /** SMS전송 - 서류인증신청 번호 수량 확인 */
     int getChkRegInfoCnt(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * SMS전송 - 발송 전 발신자 서버 검증 (SMS 사용등록, 발신번호 규격, 승인·사용중 발신번호, 발송시간)
+     * @return 통과 시 null, 차단 시 차단사유 (NOT_REGIST, TELNO_FORMAT, TELNO, TIME)
+     */
+    String getSmsSendSenderChk(List<String> callbacks, String reserveYn, String sendDate, SessionInfoVO sessionInfoVO);
 }

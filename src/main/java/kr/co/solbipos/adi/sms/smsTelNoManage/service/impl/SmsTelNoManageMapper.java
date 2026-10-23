@@ -77,6 +77,9 @@ public interface SmsTelNoManageMapper {
     /** 일반번호 인증요청 처리2 팝업 - 계정별 처리구분 완료 개수 조회 */
     int getAddProcFgCnt(SmsTelNoManageVO smsTelNoManageVO);
 
+    /** 일반번호 인증요청 처리2 팝업 - 승인(완료) 서버 검증용 신청 정보 조회 */
+    DefaultMap<String> getApprovalChkInfo(SmsTelNoManageVO smsTelNoManageVO);
+
     /** 음성파일등록 - 목록 조회 */
     List<DefaultMap<Object>> getVoiceFileList(SmsTelNoManageVO smsTelNoManageVO);
 

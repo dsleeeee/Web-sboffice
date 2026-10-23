@@ -3,6 +3,7 @@ package kr.co.solbipos.adi.sms.smsTelNoManage.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
@@ -419,11 +420,8 @@ public class SmsTelNoManageController {
     public Result getSmsGeneralNoManageSave(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
                                             HttpServletResponse response, Model model) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = smsTelNoManageService.getSmsGeneralNoManageSave(smsTelNoManageVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
+        // 구 승인 팝업 저장은 사용하지 않음(승인 서버 검증 우회 방지) - [서류인증신청](인증 처리 요청 팝업)에서 처리
+        throw new JsonException(Status.SERVER_ERROR, "사용하지 않는 기능입니다. [발신번호 신청현황] 탭의 [서류인증신청]에서 처리해 주십시오.");
     }
 
     /**

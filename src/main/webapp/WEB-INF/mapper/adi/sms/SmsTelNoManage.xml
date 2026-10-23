@@ -50,9 +50,10 @@
                         WHEN tcasn.ADD_PROC_FG = '1' THEN '[처리중]'
                         WHEN tcasn.ADD_PROC_FG = '2' THEN '[완료]'
                         WHEN tcasn.ADD_PROC_FG = '3' THEN '[반려]'
+                        WHEN tcasn.ADD_PROC_FG = '4' THEN '[제한]'
                         ELSE null END
                 ) AS ADD_PROC_FG,
-                (CASE WHEN tcasn.ADD_PROC_FG = '3' THEN tcasn.RETURN_REMARK
+                (CASE WHEN tcasn.ADD_PROC_FG IN ('3', '4') THEN tcasn.RETURN_REMARK
                         ELSE null END
                 ) AS RETURN_REMARK,
                 tcasn.USER_ID
@@ -206,6 +207,9 @@
         </if>
         <if test='srchOrgnNm != null and srchOrgnNm != ""'>
             AND twuidv01.ORGN_NM LIKE '%'||#{srchOrgnNm}||'%'
+        </if>
+        <if test='srchTelNo != null and srchTelNo != ""'>
+            AND REPLACE(SBPENC.D(hst.TEL_NO), '-', '') LIKE '%'||REPLACE(#{srchTelNo}, '-', '')||'%'
         </if>
         AND twuidv01.ORGN_CD = hst.OGN_CD
         AND tcasn.ORGN_CD (+)  =   hst.OGN_CD
@@ -366,10 +370,8 @@
         SBPENC.D(tcasn.VF_TEL_NO) AS VF_TEL_NO,
         tcasn.TEL_FG,
         tcasn.ADD_SMS_FG,
-        (CASE WHEN tcasn.TEL_FG = '0' AND tcasn.TEL_FG = '0' THEN '휴대폰인증'
-               WHEN tcasn.TEL_FG = '0' AND tcasn.TEL_FG = '1' THEN '서류인증'
-               WHEN tcasn.TEL_FG = '1' AND tcasn.TEL_FG = '0' THEN '서류인증'
-               WHEN tcasn.TEL_FG = '1' AND tcasn.TEL_FG = '1' THEN '서류인증'
+        (CASE WHEN tcasn.TEL_FG = '0' AND tcasn.ADD_SMS_FG = '0' THEN '휴대폰인증'
+               WHEN tcasn.TEL_FG IS NOT NULL THEN '서류인증'
                ELSE '' END) AS CERTIFY_FG,
         (CASE WHEN tcasn.FILE_NM  IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW1,
         (CASE WHEN tcasn.FILE_NM2 IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW2,
@@ -424,6 +426,11 @@
         </if>
         <if test="addProcFg != null and addProcFg != ''">
             AND tcasn.ADD_PROC_FG = #{addProcFg}
+        </if>
+        <if test="srchApplyTelNo != null and srchApplyTelNo != ''">
+            AND (   REPLACE(SBPENC.D(tcasn.TEL_NO), '-', '')    LIKE '%'||REPLACE(#{srchApplyTelNo}, '-', '')||'%'
+                OR  REPLACE(SBPENC.D(tcasn.VF_TEL_NO), '-', '') LIKE '%'||REPLACE(#{srchApplyTelNo}, '-', '')||'%'
+                )
         </if>
         AND tcasn.ADD_PROC_FG NOT IN ('A')
         AND twuidv01.ORGN_CD = tcasn.ORGN_CD
@@ -505,6 +512,29 @@
         AND     A.USER_ID       = #{userId}
         AND     A.TEL_FG        = #{telFg}
         AND     A.ADD_PROC_FG   = '2'
+    </select>
+
+    <!-- 일반번호 인증요청 처리2 팝업 - 승인(완료) 서버 검증용 신청 정보 조회 -->
+    <!--
+        TABLE    : TB_CM_ADD_SMS_NO, TB_WB_BOARD_ATCH
+        COMMENTS : 화면에서 넘어온 값이 아니라 DB 기준으로 발신번호 유형·명의자·본인인증번호·음성파일 건수를 확인
+    -->
+    <select id="getApprovalChkInfo" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getApprovalChkInfo */
+        SELECT  tcasn.TEL_FG,
+                tcasn.ADD_SMS_FG,
+                REPLACE(SBPENC.D(tcasn.VF_TEL_NO), '-', '') AS VF_TEL_NO,
+                (
+                    SELECT  COUNT(*)
+                    FROM    TB_WB_BOARD_ATCH twbav
+                    WHERE   twbav.BOARD_CD = 'ADDSMSVO'
+                    AND     twbav.TEMP_PATH = tcasn.ORGN_CD || '|' || tcasn.USER_ID || '|' || tcasn.CERT_ID
+                    AND     twbav.USE_YN = 'Y'
+                ) AS VOICE_FILE_CNT
+        FROM    TB_CM_ADD_SMS_NO tcasn
+        WHERE   tcasn.ORGN_CD = #{orgnCd}
+        AND     tcasn.USER_ID = #{userId}
+        AND     tcasn.CERT_ID = #{certId}
     </select>
 
     <!-- ========== 음성파일등록 (TB_WB_BOARD_ATCH 재사용, BOARD_CD='ADDSMSVO') ========== -->

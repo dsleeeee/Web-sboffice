@@ -36,6 +36,7 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
         var params = {};
         params.srchOrgnCd = $scope.srchOrgnCd;
         params.srchOrgnNm = $scope.srchOrgnNm;
+        params.srchTelNo = $scope.srchTelNo; // 발신번호
 
         $scope._inquiryMain("/adi/sms/smsTelNoManage/smsTelNoStop/getSmsTelNoStopList.sb", params, function() {}, false);
     };

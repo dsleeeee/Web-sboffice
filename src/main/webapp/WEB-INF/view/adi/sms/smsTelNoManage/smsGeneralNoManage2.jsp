@@ -73,8 +73,13 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <%-- 발신번호 (발신번호/휴대폰본인인증번호) --%>
+                    <th>
+                        <s:message code="smsGeneralNoManage2.telNo"/>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchApplyTelNo" ng-model="srchApplyTelNo" placeholder="발신번호/휴대폰본인인증번호" />
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -169,7 +174,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20260824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20261022.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">

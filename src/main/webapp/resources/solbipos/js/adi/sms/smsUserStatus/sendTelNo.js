@@ -48,6 +48,7 @@ app.controller('sendTelNoCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.orgnNm = $scope.orgnNm;
         params.userId = $scope.userId;
         params.userNm = $scope.userNm;
+        params.telNo = $scope.telNo; // 발신번호
         params.smsUseRegFg = $scope.smsUseRegFgCombo.selectedValue;
 
         $scope._inquiryMain("/adi/sms/smsUserStatus/getSendTelNoList.sb", params, function () {}, false);

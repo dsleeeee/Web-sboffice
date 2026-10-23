@@ -577,10 +577,10 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = $("#lblMsgType").text() + messages["smsSend.smsSendConfirm"]  + " " + smsSendListCnt + messages["smsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            // 전송가능 시간 체크(09~21시)
+            // 전송가능 시간 체크(09시~21시 전, 21시대 즉시전송 차단)
             var date = new Date();
             var hh = new String(date.getHours());
-            if(parseInt(hh) < 9 || parseInt(hh) > 21) {
+            if(parseInt(hh) < 9 || parseInt(hh) >= 21) {
                 $scope._popMsg(messages["smsSend.smsSendTimeAlert"]); // 전송가능한 시간대가 아닙니다. 09~21시만 전송가능합니다.
                 return;
             }
@@ -640,7 +640,20 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(){ $scope.allSearch(); });
+        $scope._postJSONSave.withPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserveSave.sb", params, function(response){
+            // 금칙어/URL/발신자 서버 검증 차단 시 발송제한 (입력 내용 유지)
+            if (response.data.data && response.data.data.blocked) {
+                if (response.data.data.urlBlocked) {
+                    $scope._popMsg(messages["smsSend.urlExistsChk"]);
+                } else if (!response.data.data.senderBlocked) {
+                    $scope._popMsg(messages["marketingSmsSend.badword.block.msg"]);
+                }
+                // 발신자 서버 검증 차단 안내는 공통 저장함수가 서버 메시지로 표시
+                return;
+            }
+            // 갱신
+            $scope.allSearch();
+        });
     };
 
     // 재조회

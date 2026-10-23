@@ -111,6 +111,9 @@
         <if test="userNm != null and userNm != ''">
             AND EXISTS (SELECT 1 FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = tcasn.USER_ID AND USER_NM LIKE '%' || #{userNm} || '%')
         </if>
+        <if test='telNo != null and telNo != ""'>
+            AND REPLACE(SBPENC.D(hst.TEL_NO), '-', '') LIKE '%'||REPLACE(#{telNo}, '-', '')||'%'
+        </if>
         <choose>
             <when test='smsUseRegFg != null and smsUseRegFg != "" and smsUseRegFg == "Y"'>
                 AND tcasn.USER_ID IN (SELECT USER_ID FROM TB_CM_SMS_USER_REGIST)
