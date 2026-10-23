@@ -846,10 +846,10 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = $("#lblMarketingSmsSendMsgType").text() + messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendListCnt + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            // 전송가능 시간 체크(09~21시)
+            // 전송가능 시간 체크(09시~21시 전, 21시대 즉시전송 차단)
             var date = new Date();
             var hh = new String(date.getHours());
-            if(parseInt(hh) < 9 || parseInt(hh) > 21) {
+            if(parseInt(hh) < 9 || parseInt(hh) >= 21) {
                 $scope._popMsg(messages["marketingSmsSend.smsSendTimeAlert"]); // 전송가능한 시간대가 아닙니다. 09~21시만 전송가능합니다.
                 return;
             }
@@ -906,6 +906,10 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 if (response.data.data && response.data.data.blocked) {
                     if (response.data.data.urlBlocked) {
                         $scope._popMsg(messages["smsSend.urlExistsChk"]);
+                    } else if (response.data.data.senderBlocked) {
+                        // 발신자 서버 검증 차단 (입력 내용 유지)
+                        $scope._popMsg(response.data.message);
+                        return;
                     } else {
                         $scope._popMsg(messages["marketingSmsSend.badword.block.msg"]);
                     }
@@ -961,6 +965,9 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 if (response.data.data && response.data.data.blocked) {
                     if (response.data.data.urlBlocked) {
                         $scope._popMsg(messages["smsSend.urlExistsChk"]);
+                    } else if (response.data.data.senderBlocked) {
+                        // 발신자 서버 검증 차단 안내는 공통 저장함수가 서버 메시지로 표시 (입력 내용 유지)
+                        return;
                     } else {
                         $scope._popMsg(messages["marketingSmsSend.badword.block.msg"]);
                     }

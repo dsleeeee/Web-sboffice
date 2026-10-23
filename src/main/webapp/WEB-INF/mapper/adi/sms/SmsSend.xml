@@ -860,7 +860,7 @@
         FROM    TB_CM_ADD_SMS_NO tcasn
         WHERE   tcasn.ORGN_CD = #{orgnCd}
         AND     tcasn.USER_ID = #{userId}
-        AND     SBPENC.D(tcasn.TEL_NO) = #{callback}
+        AND     REPLACE(SBPENC.D(tcasn.TEL_NO), '-', '') = REPLACE(#{callback}, '-', '')
         AND     tcasn.ADD_PROC_FG = '2'
         AND     EXISTS  (
                             SELECT  1
@@ -870,6 +870,18 @@
                             AND     hst.CERT_ID = tcasn.CERT_ID
                             AND     hst.USE_YN = 'Y'
                         )
+    </select>
+
+    <!-- SMS전송 - 발송 전 SMS 사용등록 여부 확인 -->
+    <!--
+        TABLE    : TB_CM_SMS_USER_REGIST
+        COMMENTS : SMS 사용등록된 사용자만 전송,예약 가능
+    -->
+    <select id="getChkSmsUserRegist" parameterType="smsSendVO" resultType="Integer">
+        /* SmsSendMapper.getChkSmsUserRegist */
+        SELECT  COUNT(*)
+        FROM    TB_CM_SMS_USER_REGIST
+        WHERE   USER_ID = #{userId}
     </select>
 
     <!-- SMS전송 - 서류인증신청 번호 수량 확인 -->

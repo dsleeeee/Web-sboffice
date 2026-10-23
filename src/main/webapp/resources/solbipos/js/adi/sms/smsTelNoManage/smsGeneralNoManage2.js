@@ -34,7 +34,7 @@ var telFgData = [
 // 발신번호 명의자
 var addSmsFgData = [
     {"name":"대표자본인","value":"0"},
-    {"name":"대표자본인","value":"1"}
+    {"name":"기업명의","value":"1"}
 ];
 // 처리구분
 var addProcFgComboData = [
@@ -42,15 +42,36 @@ var addProcFgComboData = [
     {"name":"접수","value":"0"},
     {"name":"처리중","value":"1"},
     {"name":"완료","value":"2"},
-    {"name":"반려","value":"3"}
+    {"name":"반려","value":"3"},
+    {"name":"제한","value":"4"}
 ];
 
 var addProcFgComboData2 = [
     {"name":"접수","value":"0"},
     {"name":"처리중","value":"1"},
     {"name":"완료","value":"2"},
-    {"name":"반려","value":"3"}
+    {"name":"반려","value":"3"},
+    {"name":"제한","value":"4"}
 ];
+
+// 발신번호 규격 체크 (서버 SmsCallbackValidator 와 동일 규칙)
+// 15YY/16YY/18YY 등 대표번호 8자리, 030/050 10~12자리, 그 외 0으로 시작하는 8~11자리, 특수번호 불가
+function isValidSmsGeneralNoTelNo(telNo) {
+    var chkTelNo = nvl(telNo, "");
+    if (!/^[0-9]+$/.test(chkTelNo)) {
+        return false;
+    }
+    if (/^1[5-9][0-9]+$/.test(chkTelNo)) {
+        return chkTelNo.length === 8;
+    }
+    if (chkTelNo.indexOf("030") === 0 || chkTelNo.indexOf("050") === 0) {
+        return chkTelNo.length >= 10 && chkTelNo.length <= 12;
+    }
+    if (chkTelNo.indexOf("0") === 0) {
+        return chkTelNo.length >= 8 && chkTelNo.length <= 11;
+    }
+    return false;
+}
 
 /**
  *  일반번호 인증요청 처리2 팝업 조회 그리드 생성
@@ -232,6 +253,8 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
 
     $scope.searchSmsGeneralNoManage = function(silent){
         var params = {};
+        params.addProcFg = $scope.addProcFg; // 처리구분 (콤보는 자동 수집 안됨)
+        params.srchApplyTelNo = $scope.srchApplyTelNo; // 발신번호/휴대폰본인인증번호
 
         $scope._inquiryMain("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getSmsGeneralNoManage2List.sb", params, function() {
             // silent=true(음성파일 재조회 등)면 조회 완료 메시지 생략
@@ -254,8 +277,26 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
 
                 $scope.flex.collectionView.items[i].status = "I";
 
-                // 처리구분 완료시 (변경 여부 무관하게 무조건 체크)
-                if ($scope.flex.collectionView.items[i].addProcFg === "2") {
+                // 처리구분 완료시 (기존 완료건 중 처리구분·발신번호 변경이 없는 행은 제외 - 서버 저장 로직과 동일)
+                if ($scope.flex.collectionView.items[i].addProcFg === "2"
+                    && (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") !== "2"
+                        || nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, ""))) {
+
+                    // 발신번호 필수입력 / 숫자만 입력 / 규격 체크
+                    if (nvl($scope.flex.collectionView.items[i].telNo, "") === "") {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoBlank"]); // 발신번호를 입력해주세요.
+                        return false;
+                    }
+                    if (/[^0-9]/.test($scope.flex.collectionView.items[i].telNo)) {
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoInChk"]); // 발신번호 숫자만 입력해주세요.
+                        return false;
+                    }
+                    if (!isValidSmsGeneralNoTelNo($scope.flex.collectionView.items[i].telNo)) {
+                        // 발신번호 규격에 맞지 않습니다.
+                        $scope._popMsg(rowContent + messages["smsGeneralNoManage2.telNoFormatErr"] + "</br> (발신번호: " + $scope.flex.collectionView.items[i].telNo + ")");
+                        return false;
+                    }
+
                     if (nvl($scope.flex.collectionView.items[i].telFg, "") === "0" && nvl($scope.flex.collectionView.items[i].addSmsFg, "") === "0") {
                         if (nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].vfTelNo, "")) {
                             // 휴대폰번호 + 본인명의인 경우, 인증한 휴대폰번호만<br> [발신번호]에 등록 가능합니다.
@@ -287,6 +328,14 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     if ($scope.flex.collectionView.items[i].addProcFg === "3") {
                         if (nvl($scope.flex.collectionView.items[i].returnRemark, "") === "") {
                             $scope._popMsg(rowContent + messages["smsGeneralNoManage2.returnRemarkBlank"]); // 처리구분 반려시 반려사유를 입력해주세요.
+                            return false;
+                        }
+                    }
+
+                    // 처리구분 제한시 (거짓 표시 등 이용제한 - 발신번호 미등록 상태로 변경)
+                    if ($scope.flex.collectionView.items[i].addProcFg === "4") {
+                        if (nvl($scope.flex.collectionView.items[i].returnRemark, "") === "") {
+                            $scope._popMsg(rowContent + messages["smsGeneralNoManage2.limitRemarkBlank"]); // 처리구분 제한시 반려·제한사유를 입력해주세요.
                             return false;
                         }
                     }

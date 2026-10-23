@@ -45,6 +45,17 @@
                         <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('3');" />
                     </td>
                 </tr>
+                <tr>
+                    <%-- 발신번호 --%>
+                    <th>
+                        <s:message code="smsTelNoStop.srchTelNo"/>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStopTelNo" ng-model="srchTelNo" onkeyup="fnNxBtnSearch('3');" />
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
 
@@ -92,7 +103,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20250612.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20261022.01" charset="utf-8"></script>
 
 <%-- 일반번호 인증요청 처리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">

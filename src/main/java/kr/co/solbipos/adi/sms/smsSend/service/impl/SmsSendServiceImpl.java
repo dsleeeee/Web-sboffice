@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.SmsCallbackValidator;
 import kr.co.solbipos.adi.sms.badword.service.BadwordFilterService;
 import kr.co.common.service.alert.DoorayAlertService;
 import kr.co.solbipos.adi.sms.badword.service.FilterResult;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,6 +109,21 @@ public class SmsSendServiceImpl implements SmsSendService {
         String currentDt = currentDateTimeString();
 
         int rowCount = 1; // 홀수,짝수
+
+        // 발송 전 발신자 서버 검증 (SMS 사용등록, 발신번호 규격, 승인·사용중 발신번호, 발송시간)
+        List<String> callbacks = new ArrayList<>();
+        for (SmsSendVO smsSendVO : smsSendVOs) {
+            callbacks.add(smsSendVO.getCallback());
+        }
+        String senderBlockType = getSmsSendSenderChk(callbacks, smsSendVOs[0].getReserveYn(), smsSendVOs[0].getSendDate(), sessionInfoVO);
+        if (senderBlockType != null) {
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 발신자 검증 차단 : " + senderBlockType);
+            smsSendVOs[0].setBlockType(senderBlockType);
+            return -1;
+        }
+        for (SmsSendVO smsSendVO : smsSendVOs) {
+            smsSendVO.setCallback(SmsCallbackValidator.normalize(smsSendVO.getCallback()));
+        }
 
         // 전송이력시퀀스
         String smsSendSeq = "";
@@ -385,6 +402,15 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         int procCnt = 0;
         String currentDt = currentDateTimeString();
+
+        // 발송 전 발신자 서버 검증 (SMS 사용등록, 발신번호 규격, 승인·사용중 발신번호, 발송시간)
+        String senderBlockType = getSmsSendSenderChk(Collections.singletonList(smsSendVO.getCallback()), smsSendVO.getReserveYn(), smsSendVO.getSendDate(), sessionInfoVO);
+        if (senderBlockType != null) {
+            LOGGER.info("WEB_SMS >>> SMS전송 >>> 발신자 검증 차단 : " + senderBlockType);
+            smsSendVO.setBlockType(senderBlockType);
+            return -1;
+        }
+        smsSendVO.setCallback(SmsCallbackValidator.normalize(smsSendVO.getCallback()));
 
         smsSendVO.setRegDt(currentDt);
         smsSendVO.setRegId(sessionInfoVO.getUserId());
@@ -1006,5 +1032,69 @@ public class SmsSendServiceImpl implements SmsSendService {
         }
 
         return procCnt;
+    }
+
+    /**
+     * SMS전송 - 발송 전 발신자 서버 검증
+     * 화면(JS) 사전 확인과 별개로 저장 요청마다 서버에서 다시 확인한다. (SMS전송 팝업 등 화면 확인이 없는 경로 포함)
+     * 1. SMS 사용등록 여부
+     * 2. 발신번호 1개 여부 / 발신번호 규격
+     * 3. 본인 계정의 승인(완료)·사용중 발신번호 여부
+     * 4. 발송시간 (즉시 09시~21시 전, 예약 08시~21시 전 : 화면 기준과 동일, 21시대 발송 차단)
+     * @return 통과 시 null, 차단 시 차단사유 (NOT_REGIST, TELNO_FORMAT, TELNO, TIME)
+     */
+    @Override
+    public String getSmsSendSenderChk(List<String> callbacks, String reserveYn, String sendDate, SessionInfoVO sessionInfoVO) {
+
+        SmsSendVO chkVO = new SmsSendVO();
+        chkVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        chkVO.setUserId(sessionInfoVO.getUserId());
+
+        // 1. SMS 사용등록 여부
+        if (smsSendMapper.getChkSmsUserRegist(chkVO) <= 0) {
+            return "NOT_REGIST";
+        }
+
+        // 2. 발신번호 1개 여부 / 발신번호 규격
+        Set<String> callbackSet = new LinkedHashSet<>();
+        if (callbacks != null) {
+            for (String callback : callbacks) {
+                callbackSet.add(SmsCallbackValidator.normalize(callback));
+            }
+        }
+        if (callbackSet.size() != 1) {
+            return "TELNO";
+        }
+        String callback = callbackSet.iterator().next();
+        if (!SmsCallbackValidator.isValid(callback)) {
+            return "TELNO_FORMAT";
+        }
+
+        // 3. 본인 계정의 승인(완료)·사용중 발신번호 여부
+        chkVO.setCallback(callback);
+        if (smsSendMapper.getChkRegUserInfo(chkVO) <= 0) {
+            return "TELNO";
+        }
+
+        // 4. 발송시간
+        if (!isSendTimeAllowed(reserveYn, sendDate)) {
+            return "TIME";
+        }
+
+        return null;
+    }
+
+    /** 발송시간 확인 - 즉시 09시~21시 전, 예약 08시~21시 전 (예약일시 형식: yyyyMMddHHmmss) */
+    private boolean isSendTimeAllowed(String reserveYn, String sendDate) {
+        int startHour;
+        int hour;
+        if ("1".equals(reserveYn) && sendDate != null && sendDate.length() >= 10 && sendDate.substring(8, 10).matches("\\d{2}")) {
+            startHour = 8;
+            hour = Integer.parseInt(sendDate.substring(8, 10));
+        } else {
+            startHour = 9;
+            hour = Integer.parseInt(currentDateTimeString().substring(8, 10));
+        }
+        return hour >= startHour && hour < 21;
     }
 }

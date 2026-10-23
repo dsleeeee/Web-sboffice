@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -57,6 +59,7 @@ public class SmsSendController {
     private final SmsSendService smsSendService;
     private final SmsUserRegistService smsUserRegistService;
     private final AuthService authService;
+    private final MessageService messageService;
 
     /** 마케팅 SMS C20 인증번호를 발송한 로그인 사용자 ID */
     private static final String SMS_SEND_VFC_USER_ID = "SMS_SEND_VFC_USER_ID";
@@ -82,11 +85,13 @@ public class SmsSendController {
      */
     @Autowired
     public SmsSendController(SessionService sessionService, SmsSendService smsSendService,
-                             SmsUserRegistService smsUserRegistService, AuthService authService) {
+                             SmsUserRegistService smsUserRegistService, AuthService authService,
+                             MessageService messageService) {
         this.sessionService = sessionService;
         this.smsSendService = smsSendService;
         this.smsUserRegistService = smsUserRegistService;
         this.authService = authService;
+        this.messageService = messageService;
     }
 
     /**
@@ -282,15 +287,7 @@ public class SmsSendController {
         int result = smsSendService.getSmsSendReserveSave(smsSendVOs, sessionInfoVO);
 
         if (result == -1) {
-            HashMap<String, Object> blocked = new HashMap<String, Object>();
-            blocked.put("blocked", true);
-            // URL이 있으면 URL부터 확인
-            if ("URL".equals(smsSendVOs[0].getBlockType())) {
-                blocked.put("urlBlocked", true);
-            } else {
-                blocked.put("keyword", smsSendVOs[0].getKeyword());
-            }
-            return returnJson(Status.OK, blocked);
+            return getSmsSendBlockedResult(smsSendVOs[0].getBlockType(), smsSendVOs[0].getKeyword());
         }
         return returnJson(Status.OK, result);
     }
@@ -321,6 +318,17 @@ public class SmsSendController {
                 return returnJson(Status.FAIL, "SMS 전송정보가 올바르지 않습니다.");
             }
         }
+
+        // 발신자 서버 검증은 C21 토큰 소비 전에 수행 (차단 시 추가인증을 다시 받지 않도록)
+        List<String> callbacks = new ArrayList<String>();
+        for (SmsSendVO smsSendVO : smsSendVOs) {
+            callbacks.add(smsSendVO.getCallback());
+        }
+        String senderBlockType = smsSendService.getSmsSendSenderChk(callbacks, reserveYn, smsSendVOs[0].getSendDate(), sessionInfoVO);
+        if (senderBlockType != null) {
+            return getSmsSendBlockedResult(senderBlockType, null);
+        }
+
         // 사용자·전송구분·3분 유효시간 확인 및 1회용 C21 토큰 즉시 소비
         if (!consumeSmsSendVfcToken(smsVfcToken, reserveYn, sessionInfoVO, request)) {
             return returnJson(Status.FAIL, "추가인증이 만료되었습니다. 다시 인증해주세요.");
@@ -328,14 +336,7 @@ public class SmsSendController {
 
         int result = smsSendService.getSmsSendReserveSave(smsSendVOs, sessionInfoVO);
         if (result == -1) {
-            HashMap<String, Object> blocked = new HashMap<String, Object>();
-            blocked.put("blocked", true);
-            if ("URL".equals(smsSendVOs[0].getBlockType())) {
-                blocked.put("urlBlocked", true);
-            } else {
-                blocked.put("keyword", smsSendVOs[0].getKeyword());
-            }
-            return returnJson(Status.OK, blocked);
+            return getSmsSendBlockedResult(smsSendVOs[0].getBlockType(), smsSendVOs[0].getKeyword());
         }
         return returnJson(Status.OK, result);
     }
@@ -361,15 +362,7 @@ public class SmsSendController {
         int result = smsSendService.getSmsSendReserve1000Save(smsSendVO, sessionInfoVO);
 
         if (result == -1) {
-            HashMap<String, Object> blocked = new HashMap<String, Object>();
-            blocked.put("blocked", true);
-            // URL이 있으면 URL부터 확인
-            if ("URL".equals(smsSendVO.getBlockType())) {
-                blocked.put("urlBlocked", true);
-            } else {
-                blocked.put("keyword", smsSendVO.getKeyword());
-            }
-            return returnJson(Status.OK, blocked);
+            return getSmsSendBlockedResult(smsSendVO.getBlockType(), smsSendVO.getKeyword());
         }
         return returnJson(Status.OK, result);
     }
@@ -385,23 +378,25 @@ public class SmsSendController {
                                                      HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        if (smsSendVO == null || !"marketingSmsSend".equals(smsSendVO.getPageGubun())) {
+            return returnJson(Status.FAIL, "추가인증이 만료되었습니다. 다시 인증해주세요.");
+        }
+
+        // 발신자 서버 검증은 C21 토큰 소비 전에 수행 (차단 시 추가인증을 다시 받지 않도록)
+        String senderBlockType = smsSendService.getSmsSendSenderChk(Collections.singletonList(smsSendVO.getCallback()),
+                smsSendVO.getReserveYn(), smsSendVO.getSendDate(), sessionInfoVO);
+        if (senderBlockType != null) {
+            return getSmsSendBlockedResult(senderBlockType, null);
+        }
+
         // 사용자·전송구분·3분 유효시간 확인 및 1회용 C21 토큰 즉시 소비
-        if (smsSendVO == null || !"marketingSmsSend".equals(smsSendVO.getPageGubun())
-                || !consumeSmsSendVfcToken(smsSendVO.getSmsVfcToken(), smsSendVO.getReserveYn(),
-                sessionInfoVO, request)) {
+        if (!consumeSmsSendVfcToken(smsSendVO.getSmsVfcToken(), smsSendVO.getReserveYn(), sessionInfoVO, request)) {
             return returnJson(Status.FAIL, "추가인증이 만료되었습니다. 다시 인증해주세요.");
         }
 
         int result = smsSendService.getSmsSendReserve1000Save(smsSendVO, sessionInfoVO);
         if (result == -1) {
-            HashMap<String, Object> blocked = new HashMap<String, Object>();
-            blocked.put("blocked", true);
-            if ("URL".equals(smsSendVO.getBlockType())) {
-                blocked.put("urlBlocked", true);
-            } else {
-                blocked.put("keyword", smsSendVO.getKeyword());
-            }
-            return returnJson(Status.OK, blocked);
+            return getSmsSendBlockedResult(smsSendVO.getBlockType(), smsSendVO.getKeyword());
         }
         return returnJson(Status.OK, result);
     }
@@ -734,6 +729,50 @@ public class SmsSendController {
     /** 다건 전송 배열의 추가인증 토큰과 예약구분이 모두 같은지 비교 */
     private boolean sameValue(String first, String second) {
         return first == null ? second == null : first.equals(second);
+    }
+
+    /**
+     * 전송/예약 차단 응답
+     * - URL·금칙어 차단은 기존 응답 형식 유지 (blocked + urlBlocked / keyword)
+     * - 발신자 서버 검증 차단은 blocked + senderBlocked + 안내 메시지 (withPopUp 화면은 공통함수가 메시지를 표시)
+     */
+    private Result getSmsSendBlockedResult(String blockType, String keyword) {
+        HashMap<String, Object> blocked = new HashMap<String, Object>();
+        blocked.put("blocked", true);
+
+        // URL 차단
+        if ("URL".equals(blockType)) {
+            blocked.put("urlBlocked", true);
+            return returnJson(Status.OK, blocked);
+        }
+
+        // 발신자 서버 검증 차단
+        String senderBlockMsgKey = getSenderBlockMsgKey(blockType);
+        if (senderBlockMsgKey != null) {
+            blocked.put("senderBlocked", true);
+            blocked.put("blockType", blockType);
+            Result result = returnJson(Status.OK, blocked);
+            result.setMessage(messageService.get(senderBlockMsgKey));
+            return result;
+        }
+
+        // 금칙어 차단
+        blocked.put("keyword", keyword);
+        return returnJson(Status.OK, blocked);
+    }
+
+    /** 발신자 서버 검증 차단사유별 안내 메시지 키 */
+    private String getSenderBlockMsgKey(String blockType) {
+        if ("NOT_REGIST".equals(blockType)) {
+            return "smsUserRegist.notRegistAlert";      // SMS 사용등록 필요
+        } else if ("TELNO".equals(blockType)) {
+            return "smsSend.chkRegUserInfo";            // 등록된 사용자·발신번호만 전송 가능
+        } else if ("TELNO_FORMAT".equals(blockType)) {
+            return "smsSend.callbackFormatErr";         // 발신번호 규격 오류
+        } else if ("TIME".equals(blockType)) {
+            return "smsSend.smsSendTimeAlert";          // 전송 가능 시간 아님
+        }
+        return null;
     }
 
     /** C20 발송 사용자와 발송시각 세션값 제거 */
