@@ -328,6 +328,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#divDetailReg").css("display", "none");
         }
 
+        // [벤슨 프로모션 종류 제한] 추후 적용 예정
+        // // 이후부터 프로모션 종류 변경은 사용자 선택으로 간주
+        // $scope.promotionRegReadyFg = true;
+
     });
 
     // 기존 프로모션 상세정보 셋팅
@@ -744,6 +748,13 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
     // 프로모션 등록/수정
     $scope.savePromotion = function(){
+
+        // [벤슨 프로모션 종류 제한] 추후 적용 예정
+        // // 벤슨, 벤슨본사데모는 '적용품목할인'(101)만 저장 가능
+        // if(bensonFg && $scope.promotionTypeCombo.selectedValue !== "101"){
+        //     $scope._popMsg(messages["promotion.promotionType.denied.msg"]);
+        //     return false;
+        // }
 
         if($scope.chkValid()) {
 
@@ -1289,6 +1300,12 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#promotionNm").val(""); // 프로모션명
         $("#memo").val(""); // 메모
         $scope.useYnCombo.selectedIndex = 0; // 사용여부
+        // [벤슨 프로모션 종류 제한] 추후 적용 예정
+        // if(bensonFg){
+        //     $scope.promotionTypeCombo.selectedValue = "101"; // 프로모션 종류 (벤슨은 적용품목할인 고정)
+        // }else{
+        //     $scope.promotionTypeCombo.selectedIndex = 0; // 프로모션 종류
+        // }
         $scope.promotionTypeCombo.selectedIndex = 0; // 프로모션 종류
         $("#promotionUseYn").val("");
 
@@ -1480,6 +1497,21 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
     // 프로모션종류 선택에 따른 상세 입력 폼 셋팅
     $scope.setPromotionRegDetail = function(s){
+
+        // [벤슨 프로모션 종류 제한] 추후 적용 예정
+        // // 벤슨, 벤슨본사데모는 '적용품목할인'(101)만 선택 가능
+        // if(bensonFg && s.selectedValue !== "101"){
+        //     var isDetail = $("#hdPromotionCd").val() !== null && $("#hdPromotionCd").val() !== "";
+        //     var rollbackValue = isDetail ? vPromotionType : "101";
+        //     if(s.selectedValue !== rollbackValue){ // 원복값과 같으면 사용자 변경이 아니므로 경고 생략
+        //         // 화면 최초 진입 시 콤보 초기화로 발생한 변경은 경고 없이 원복
+        //         if($scope.promotionRegReadyFg){
+        //             $scope._popMsg(messages["promotion.promotionType.denied.msg"]);
+        //         }
+        //         s.selectedValue = rollbackValue;
+        //     }
+        //     return false;
+        // }
 
         // 오늘 날짜
         var date = new Date();

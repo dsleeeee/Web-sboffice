@@ -868,6 +868,10 @@
     var storePromoRegYnVal = "${storePromoRegYnVal}";
     // 조회전용 메뉴 진입 여부 (Y: 조회전용 - 생성/수정 UI 차단)
     var viewOnlyFg = "${viewOnlyFg}";
+    <%-- [벤슨 프로모션 종류 제한] 추후 적용 예정
+    // 벤슨(H0665), 벤슨본사데모(DS079) 여부 (프로모션 종류 '적용품목할인'만 허용)
+    var bensonFg = "${hqOfficeCd == 'H0665' or hqOfficeCd == 'DS079'}" === "true";
+    --%>
 
     // 맘스터치 적용매장추가 조회조건 콤보박스 데이터
     var momsStoreHqBrand = ${momsStoreHqBrand};

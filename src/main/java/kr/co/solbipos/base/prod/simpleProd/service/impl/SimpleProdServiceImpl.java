@@ -388,7 +388,23 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 // 자동채번인 경우 상품코드 조회
                 if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
                     // 자동채번 Start
-                    String prodCd = prodMapper.getProdCd(prodVO);
+                    //String prodCd = prodMapper.getProdCd(prodVO);
+                    String prodCd = "";
+
+                    // 벤슨(H0665), 벤슨본사데모(DS079) 본사 : 프리픽스(0047, 1자리) + 숫자 MAX 채번(7자리) = 8자리
+                    if("H".equals(prodVO.getOrgnFg())
+                            && ("H0665".equals(prodVO.getHqOfficeCd()) || "DS079".equals(prodVO.getHqOfficeCd()))){
+
+                        String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
+                        // prefix 미설정시 기본값 'T'
+                        if("*".equals(sPrefix) || "".equals(sPrefix)){
+                            sPrefix = "T";
+                        }
+                        prodVO.setPrefix(sPrefix);
+                        prodCd = prodMapper.getHqPrefixProdCd(prodVO);
+                    }else{
+                        prodCd = prodMapper.getProdCd(prodVO);
+                    }
                     prodVO.setProdCd(prodCd);
                     // 2022.03.26 - 거래처코드 있으면 엑셀업로드 후 삭제가 안 되어서 주석처리
                     if(simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd())){
