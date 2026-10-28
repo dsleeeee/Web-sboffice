@@ -142,7 +142,7 @@
                                              ELSE NULL
                                         END  AS CHANNEL_SERVICE_TYPE
                                 ,       tmt.TBL_NM AS TBL_NM
-                                , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+                                , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS BILL_DT
                                 ,       tssd.SALE_QTY
                                 ,       tssd.SALE_AMT
                                 ,       tssd.DC_AMT

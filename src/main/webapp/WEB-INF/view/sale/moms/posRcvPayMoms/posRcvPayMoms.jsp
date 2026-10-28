@@ -82,6 +82,7 @@
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.paySeq"/>" binding="paySeq" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.payFg"/>" binding="payFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.payCd"/>" binding="payCd" width="90" align="center" data-map="payCdDataMap" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="posRcvPayMoms.payDtlNm"/>" binding="payDtlNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.payCdNo"/>" binding="payCdNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.apprDate"/>" binding="apprDate" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posRcvPayMoms.apprTime"/>" binding="apprTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>

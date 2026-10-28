@@ -13,7 +13,7 @@
 
     <!-- POS내역수신(결제) - 리스트 조회 -->
     <!--
-        TABLE    : TB_SL_SALE_PAY_SEQ, TB_SL_SALE_HDR, TB_SL_SALE_PAY_CARD, TB_SL_SALE_PAY_CASH, TB_SL_SALE_PAY_MCOUPN, TB_SL_SALE_PAY_PAYCO, TB_SL_SALE_PAY_MPAY, TB_CM_NMCODE, TB_MS_STORE
+        TABLE    : TB_SL_SALE_PAY_SEQ, TB_SL_SALE_HDR, TB_SL_SALE_PAY_CARD, TB_SL_SALE_PAY_CASH, TB_SL_SALE_PAY_MCOUPN, TB_SL_SALE_PAY_PAYCO, TB_SL_SALE_PAY_MPAY, TB_SL_SALE_PAY_TEMPORARY, TB_CM_NMCODE, TB_MS_STORE
         PARAM    : posRcvPayMomsVO (saleDate, storeCd 둘 다 필수)
         COMMENTS : POS내역수신(결제) - 리스트를 조회한다. 페이징 없이 전체 표시.
     -->
@@ -28,7 +28,16 @@
         ,       tssps.PAY_SEQ
         ,       CASE WHEN tssps.PAY_CD IN ('05','12') THEN '할인내역' ELSE '결제내역' END AS PAY_FG
         ,       tssps.PAY_CD
-        ,       CASE WHEN tssps.PAY_CD ='01' AND tsspc.CARD_NO              IS NOT NULL THEN tsspc.CARD_NO
+                -- 상세결제구분 (가승인 결제의 가승인결제구분, 다건이면 LINE_SEQ_NO 순으로 모두 표시)
+        ,       (SELECT LISTAGG(tcn.NMCODE_NM, ',') WITHIN GROUP (ORDER BY tsspt.LINE_SEQ_NO)
+                   FROM TB_SL_SALE_PAY_TEMPORARY tsspt
+                   ,    TB_CM_NMCODE tcn
+                  WHERE tsspt.HQ_OFFICE_CD = tssps.HQ_OFFICE_CD AND tsspt.STORE_CD = tssps.STORE_CD
+                    AND tsspt.SALE_DATE = tssps.SALE_DATE AND tsspt.POS_NO = tssps.POS_NO AND tsspt.BILL_NO = tssps.BILL_NO
+                    AND tsspt.LINE_NO = tssps.LINE_NO
+                    AND tcn.NMCODE_GRP_CD IN ('111', '802')
+                    AND tcn.NMCODE_CD = tsspt.TEMPORARY_PAY_CD) AS PAY_DTL_NM
+        ,       CASE WHEN tssps.PAY_CD ='01' AND tsspc.CARD_NO             IS NOT NULL THEN tsspc.CARD_NO
                      WHEN tssps.PAY_CD ='02' AND tsspca.CASH_BILL_CARD_NO   IS NOT NULL THEN tsspca.CASH_BILL_CARD_NO
                      WHEN tssps.PAY_CD ='03' AND tsppc.PAYCO_BARCD_NO       IS NOT NULL THEN tsppc.PAYCO_BARCD_NO
                      WHEN tssps.PAY_CD ='07' AND tsspmp.MPAY_BARCD_NO       IS NOT NULL THEN tsspmp.MPAY_BARCD_NO

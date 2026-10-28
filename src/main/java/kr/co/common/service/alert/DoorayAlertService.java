@@ -42,4 +42,13 @@ public interface DoorayAlertService {
      * @param sessionInfoVO {@code SessionInfoVO} 세션정보 (조직코드/사용자ID 표기용)
      */
     void notifySideMenuResendBlock(String reqType, String reqNonce, int reqCnt, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 대량적용 알림 (터치키/키오스크 매장적용 등) - 시스템알림(개발1팀)
+     *
+     * @param subject       {@code String} 알림 제목
+     * @param message       {@code String} 알림 내용
+     * @param sessionInfoVO {@code SessionInfoVO} 세션정보 (조직코드/사용자ID 표기용)
+     */
+    void notifyBulkApply(String subject, String message, SessionInfoVO sessionInfoVO);
 }

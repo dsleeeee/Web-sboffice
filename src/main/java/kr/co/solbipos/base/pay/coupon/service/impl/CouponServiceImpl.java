@@ -413,12 +413,16 @@ public class CouponServiceImpl implements CouponService {
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                procCnt += couponMapper.insertHqCouponProd(couponProdVO);
+                int insCnt = couponMapper.insertHqCouponProd(couponProdVO);
+                procCnt += insCnt;
 
-                // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
-                resultVO = new CouponProdVO();
-                couponResult = couponMapper.insertHqCouponProdToStore01(couponProdVO);
-                resultVO.setResult(couponResult);
+                // 이미 등록된 상품(중복 요청)은 매장 반영 생략
+                if (insCnt > 0) {
+                    // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
+                    resultVO = new CouponProdVO();
+                    couponResult = couponMapper.insertHqCouponProdToStore01(couponProdVO);
+                    resultVO.setResult(couponResult);
+                }
 
             } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                 procCnt += couponMapper.insertStoreCouponProd(couponProdVO);

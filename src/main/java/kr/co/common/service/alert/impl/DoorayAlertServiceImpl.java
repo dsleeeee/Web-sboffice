@@ -62,6 +62,13 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
     /** 사이드메뉴 재전송차단 알림 봇 이름 */
     private static final String SIDEMENU_RESEND_BOT_NAME = "사이드메뉴차단알림봇";
 
+    /** 대량적용 알림 사용여부 */
+    private static final String BULK_APPLY_USE_YN = "Y";
+    /** 대량적용 알림 웹훅 URL - 시스템알림(개발1팀) 채널 */
+    private static final String BULK_APPLY_HOOK_URL = "https://nhnent.dooray.com/services/3898710244970049535/4347934656978591610/8Sklf5SOTfGAeNvtIxI_wg";
+    /** 대량적용 알림 봇 이름 */
+    private static final String BULK_APPLY_BOT_NAME = "대량적용알림봇";
+
     /** SMS 본문 미리보기 최대 길이 */
     private static final int PREVIEW_LEN = 50;
 
@@ -109,6 +116,17 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
                         + "\norgnCd: " + orgnInfo(sessionInfoVO)
                         + "\n건수: " + reqCnt
                         + "\nnonce: " + reqNonce);
+    }
+
+    @Override
+    public void notifyBulkApply(String subject, String message, SessionInfoVO sessionInfoVO) {
+        if (!"Y".equals(BULK_APPLY_USE_YN)) {
+            return;
+        }
+        send(BULK_APPLY_HOOK_URL, BULK_APPLY_BOT_NAME,
+                subject
+                        + "\norgnCd: " + orgnInfo(sessionInfoVO)
+                        + "\n내용: " + message);
     }
 
     /** 사이드메뉴 요청 종류 표기명 */

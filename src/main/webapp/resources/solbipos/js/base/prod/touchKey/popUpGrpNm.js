@@ -40,6 +40,16 @@ app.controller('popUpGrpNmCtrl', ['$scope', '$http', '$timeout', function ($scop
 
   $scope.saveGrpNm = function () {
 
+    // 터치키그룹명 길이 체크 (최대 50byte)
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      var item = $scope.flex.collectionView.itemsEdited[i];
+      if (nvl(item.tukeyGrpNm + '', '').getByteLengthForOracle() > 50) {
+        $scope._popMsg("[" + item.tukeyGrpCd + "] " + messages["touchKey.layer.tukeyGrpNm"] + "은(는) " + messages["cmm.max50Chk"]
+            + "<br>(현재 : " + (item.tukeyGrpNm + '').getByteLengthForOracle() + "byte)");
+        return false;
+      }
+    }
+
     $scope._popConfirm(messages["cmm.choo.save"], function() {
       // 파라미터 설정
       var params = new Array();

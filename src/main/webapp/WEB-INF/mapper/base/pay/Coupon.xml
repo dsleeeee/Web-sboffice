@@ -1100,16 +1100,22 @@
             REG_ID,
             MOD_DT,
             MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{payClassCd},
-            #{coupnCd},
-            #{prodCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
         )
+        SELECT  #{hqOfficeCd},
+                #{payClassCd},
+                #{coupnCd},
+                #{prodCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+          FROM  DUAL
+         WHERE  NOT EXISTS (SELECT 1
+                              FROM TB_HQ_COUPON_PROD
+                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND PAY_CLASS_CD = #{payClassCd}
+                               AND COUPN_CD     = #{coupnCd}
+                               AND PROD_CD      = #{prodCd})
     </insert>
 
     <!-- 매장 쿠폰적용상품 등록 -->

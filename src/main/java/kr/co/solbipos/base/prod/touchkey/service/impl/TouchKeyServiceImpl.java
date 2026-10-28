@@ -12,6 +12,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.alert.DoorayAlertService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -79,13 +80,15 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     private final MessageService messageService;
     private final TouchKeyMapper keyMapper;
     private final CmmEnvUtil cmmEnvUtil;
+    private final DoorayAlertService doorayAlertService;
 
     /** Constructor Injection */
     @Autowired
-    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper, CmmEnvUtil cmmEnvUtil) {
+    public TouchKeyServiceImpl(MessageService messageService, TouchKeyMapper keyMapper, CmmEnvUtil cmmEnvUtil, DoorayAlertService doorayAlertService) {
         this.messageService = messageService;
         this.keyMapper = keyMapper;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.doorayAlertService = doorayAlertService;
     }
 
     /** 상품목록 조회 : 판매터치키에서 사용 */
@@ -1328,9 +1331,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     }
 
     /** 알림 문자 발송  */
+    /** 대량적용 알림 발송 - 두레이 시스템알림(개발1팀)(2026.10.26 변경) */
     public void notiSmsSend(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
 
-        String currentDt = currentDateTimeString();
+        /*String currentDt = currentDateTimeString();
 
         touchKeyVO.setGubun("");
         touchKeyVO.setUserId("00001");
@@ -1348,6 +1352,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             // 알림 문자 발송
             keyMapper.notiSmsSend(touchKeyVO);
-        }
+        }*/
+
+        // 대량적용 알림
+        doorayAlertService.notifyBulkApply(touchKeyVO.getSubject(), touchKeyVO.getSmsMsg(), sessionInfoVO);
     }
 }
