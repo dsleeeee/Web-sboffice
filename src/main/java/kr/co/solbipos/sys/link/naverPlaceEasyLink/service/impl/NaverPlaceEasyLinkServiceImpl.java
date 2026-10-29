@@ -1,6 +1,8 @@
 package kr.co.solbipos.sys.link.naverPlaceEasyLink.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.link.naverPlaceEasyLink.service.NaverPlaceEasyLinkService;
 import kr.co.solbipos.sys.link.naverPlaceEasyLink.service.NaverPlaceEasyLinkVO;
@@ -67,12 +69,39 @@ public class NaverPlaceEasyLinkServiceImpl implements NaverPlaceEasyLinkService 
             /*else if (naverPlaceEasyLinkVO.getBusinessName() == null || "".equals(naverPlaceEasyLinkVO.getBusinessName()) || naverPlaceEasyLinkVO.getBusinessName().trim().isEmpty()) {
                 naverPlaceEasyLinkVO.setResult("업체명이 없습니다.");
             }*/
-            else if (naverPlaceEasyLinkVO.getBusinessNumber() == null || "".equals(naverPlaceEasyLinkVO.getBusinessNumber()) || naverPlaceEasyLinkVO.getBusinessNumber().trim().isEmpty()) {
-                naverPlaceEasyLinkVO.setResult("사업자번호가 없습니다.");
-            } else {
-                // 사업자번호로 매장 매칭
-                DefaultMap<Object> storeMap = naverPlaceEasyLinkMapper.getStoreByBizNo(naverPlaceEasyLinkVO);
-                if (storeMap != null && storeMap.get("hqOfficeCd") != null) {
+            else {
+                // 사업자번호 우선순위 : place > receipt > connect
+                String[] bizNos = {
+                    naverPlaceEasyLinkVO.getBusinessNumberPlace(),
+                    naverPlaceEasyLinkVO.getBusinessNumberReceipt(),
+                    naverPlaceEasyLinkVO.getBusinessNumberConnect()
+                };
+
+                DefaultMap<Object> storeMap = null;
+                String firstBizNo = null;   // 매칭 실패 시 화면에 표시할 번호(처음으로 값이 있는 번호)
+
+                for (String bizNo : bizNos) {
+                    if (bizNo == null || bizNo.trim().isEmpty()) {
+                        continue;
+                    }
+                    if (firstBizNo == null) {
+                        firstBizNo = bizNo.trim();
+                    }
+
+                    // 사업자번호로 매장 매칭 : 먼저 매칭된 번호를 사용
+                    naverPlaceEasyLinkVO.setBusinessNumber(bizNo.trim());
+                    storeMap = naverPlaceEasyLinkMapper.getStoreByBizNo(naverPlaceEasyLinkVO);
+                    if (storeMap != null && storeMap.get("hqOfficeCd") != null) {
+                        break;
+                    }
+                    storeMap = null;
+                }
+
+                if (firstBizNo == null) {
+                    naverPlaceEasyLinkVO.setBusinessNumber(null);
+                    naverPlaceEasyLinkVO.setResult("사업자번호가 없습니다.");
+                } else if (storeMap != null) {
+                    // businessNumber 에는 매칭된 사업자번호가 세팅된 상태
                     naverPlaceEasyLinkVO.setHqOfficeCd(String.valueOf(storeMap.get("hqOfficeCd")));
                     naverPlaceEasyLinkVO.setStoreCd(String.valueOf(storeMap.get("storeCd")));
 
@@ -84,6 +113,7 @@ public class NaverPlaceEasyLinkServiceImpl implements NaverPlaceEasyLinkService 
                         naverPlaceEasyLinkVO.setResult("정상");
                     }
                 } else {
+                    naverPlaceEasyLinkVO.setBusinessNumber(firstBizNo);
                     naverPlaceEasyLinkVO.setResult("대상 매장 없음");
                 }
             }
@@ -154,5 +184,59 @@ public class NaverPlaceEasyLinkServiceImpl implements NaverPlaceEasyLinkService 
         }
 
         return procCnt;
+    }
+
+    /** 수기등록 매장 검색 */
+    @Override
+    public List<DefaultMap<Object>> getNaverPlaceManualStoreList(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, SessionInfoVO sessionInfoVO) {
+
+        // 검색조건이 하나도 없으면 전체 매장이 조회되므로 조회하지 않는다.
+        if (isEmpty(naverPlaceEasyLinkVO.getBizNo()) && isEmpty(naverPlaceEasyLinkVO.getAddr())
+                && isEmpty(naverPlaceEasyLinkVO.getStoreCd()) && isEmpty(naverPlaceEasyLinkVO.getStoreNm())) {
+            return new ArrayList<>();
+        }
+
+        return naverPlaceEasyLinkMapper.getNaverPlaceManualStoreList(naverPlaceEasyLinkVO);
+    }
+
+    /** 수기등록 저장 */
+    @Override
+    public int saveNaverPlaceManual(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, SessionInfoVO sessionInfoVO) {
+
+        // 필수값 체크
+        if (isEmpty(naverPlaceEasyLinkVO.getPlaceId())) {
+            throw new JsonException(Status.FAIL, "네이버 플레이스ID가 없습니다.");
+        }
+        if (isEmpty(naverPlaceEasyLinkVO.getHqOfficeCd()) || isEmpty(naverPlaceEasyLinkVO.getStoreCd())) {
+            throw new JsonException(Status.FAIL, "매장을 선택해주세요.");
+        }
+
+        // 선택한 매장이 실제 존재하는지 확인
+        if (naverPlaceEasyLinkMapper.getStoreExistCnt(naverPlaceEasyLinkVO) <= 0) {
+            throw new JsonException(Status.FAIL, "대상 매장 없음");
+        }
+
+        // 기등록 매장은 등록할 수 없음
+        if (naverPlaceEasyLinkMapper.getNaverLinkRegCnt(naverPlaceEasyLinkVO) > 0) {
+            throw new JsonException(Status.FAIL, "기등록 매장은 등록할 수 없습니다.");
+        }
+
+        String dt = currentDateTimeString();
+        naverPlaceEasyLinkVO.setPlaceId(naverPlaceEasyLinkVO.getPlaceId().trim());
+        naverPlaceEasyLinkVO.setRegDt(dt);
+        naverPlaceEasyLinkVO.setRegId(sessionInfoVO.getUserId());
+        naverPlaceEasyLinkVO.setModDt(dt);
+        naverPlaceEasyLinkVO.setModId(sessionInfoVO.getUserId());
+
+        // 업체명이 없으면 매장명으로 대체
+        if (isEmpty(naverPlaceEasyLinkVO.getBusinessName())) {
+            naverPlaceEasyLinkVO.setBusinessName(naverPlaceEasyLinkMapper.getStoreNm(naverPlaceEasyLinkVO));
+        }
+
+        return naverPlaceEasyLinkMapper.saveNaverPlaceEasyLinkExcel(naverPlaceEasyLinkVO);
+    }
+
+    private boolean isEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 }

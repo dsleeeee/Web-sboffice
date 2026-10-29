@@ -183,4 +183,44 @@ public class NaverPlaceEasyLinkController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
+    /**
+     * 수기등록 매장 검색
+     * @param naverPlaceEasyLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getNaverPlaceManualStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNaverPlaceManualStoreList(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = naverPlaceEasyLinkService.getNaverPlaceManualStoreList(naverPlaceEasyLinkVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, naverPlaceEasyLinkVO);
+    }
+
+    /**
+     * 수기등록 저장
+     * @param naverPlaceEasyLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/saveNaverPlaceManual.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveNaverPlaceManual(@RequestBody NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = naverPlaceEasyLinkService.saveNaverPlaceManual(naverPlaceEasyLinkVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
 }

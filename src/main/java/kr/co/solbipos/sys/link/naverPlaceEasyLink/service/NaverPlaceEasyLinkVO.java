@@ -39,10 +39,20 @@ public class NaverPlaceEasyLinkVO extends PageVO {
     private String businessName;
     /** 사업자번호 */
     private String businessNumber;
+    /** 사업자번호(place) */
+    private String businessNumberPlace;
+    /** 사업자번호(receipt) */
+    private String businessNumberReceipt;
+    /** 사업자번호(connect) */
+    private String businessNumberConnect;
     /** 검증결과 */
     private String result;
     /** 사업자번호 */
     private String bizNo;
+    /** 주소(매장 검색용) */
+    private String addr;
+    /** 매장명 */
+    private String storeNm;
 
     public String getInType() {
         return inType;
@@ -116,6 +126,30 @@ public class NaverPlaceEasyLinkVO extends PageVO {
         this.businessNumber = businessNumber;
     }
 
+    public String getBusinessNumberPlace() {
+        return businessNumberPlace;
+    }
+
+    public void setBusinessNumberPlace(String businessNumberPlace) {
+        this.businessNumberPlace = businessNumberPlace;
+    }
+
+    public String getBusinessNumberReceipt() {
+        return businessNumberReceipt;
+    }
+
+    public void setBusinessNumberReceipt(String businessNumberReceipt) {
+        this.businessNumberReceipt = businessNumberReceipt;
+    }
+
+    public String getBusinessNumberConnect() {
+        return businessNumberConnect;
+    }
+
+    public void setBusinessNumberConnect(String businessNumberConnect) {
+        this.businessNumberConnect = businessNumberConnect;
+    }
+
     public String getResult() {
         return result;
     }
@@ -130,5 +164,21 @@ public class NaverPlaceEasyLinkVO extends PageVO {
 
     public void setBizNo(String bizNo) {
         this.bizNo = bizNo;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 }

@@ -39,4 +39,10 @@ public interface NaverPlaceEasyLinkService {
 
     /** 간편연동 업로드 검증성공 데이터 저장 */
     int saveNaverPlaceEasyLinkExcel(NaverPlaceEasyLinkVO[] naverPlaceEasyLinkVOs, SessionInfoVO sessionInfoVO);
+
+    /** 수기등록 매장 검색 */
+    List<DefaultMap<Object>> getNaverPlaceManualStoreList(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, SessionInfoVO sessionInfoVO);
+
+    /** 수기등록 저장 */
+    int saveNaverPlaceManual(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO, SessionInfoVO sessionInfoVO);
 }

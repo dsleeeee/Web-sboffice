@@ -106,10 +106,14 @@
             <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
             <p class="tl s14 mt5 lh15">4.  업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
             <p class="tl s14 mt5 lh15">- 검증결과가 '정상'인 데이터만 저장됩니다.</p>
+            <p class="tl s14 mt5 lh15">- 일치하는 사업자번호를 place ➔ receipt ➔ connect 순으로 찾으며, 먼저 매칭된 매장으로 등록됩니다.</p>
+            <p class="tl s14 mt5 lh15">- 엑셀 업로드로 확인되지 않는 경우 '수기등록' 버튼을 클릭하여 매장을 검색한 후 직접 등록할 수 있습니다.</p>
             <%-- 간편연동업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()"><s:message code="naverPlaceEasyLink.easyLinkUpload" /></button>
             <%-- 양식다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelSampleDownload()"><s:message code="cmm.excel.sampleDown" /></button>
+            <%-- 수기등록 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="manualRegist()"><s:message code="naverPlaceEasyLink.manualReg" /></button>
         </div>
         <%-- 양식 샘플 미리보기 --%>
         <div class="w100 mt10">
@@ -127,7 +131,9 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="place_id[<s:message code="naverPlaceEasyLink.naverPlaceId"/>]" binding="placeId" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="business_name[<s:message code="naverPlaceEasyLink.businessName"/>]" binding="businessName" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="business_number[<s:message code="naverPlaceEasyLink.businessNumber"/>]" binding="businessNumber" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="business_number_place[<s:message code="naverPlaceEasyLink.businessNumber"/>]" binding="businessNumberPlace" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="business_number_receipt[<s:message code="naverPlaceEasyLink.businessNumber"/>]" binding="businessNumberReceipt" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="business_number_connect[<s:message code="naverPlaceEasyLink.businessNumber"/>]" binding="businessNumberConnect" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -211,4 +217,8 @@
     var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceEasyLink/naverPlaceEasyLink.js?ver=20260911.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/naverPlaceEasyLink/naverPlaceEasyLink.js?ver=20261028.02" charset="utf-8"></script>
+
+<%-- 네이버플레이스 간편연동 수기등록 팝업 --%>
+<c:import url="/WEB-INF/view/sys/link/naverPlaceEasyLink/naverPlaceEasyLinkManual.jsp">
+</c:import>

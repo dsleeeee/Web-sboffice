@@ -95,9 +95,11 @@ app.controller('naverPlaceEasyLinkExcelSampleCtrl', ['$scope', '$http', '$timeou
     $scope.initGrid = function (s, e) {
         // 샘플 1건 추가
         $scope._addRow({
-            placeId        : '12345678',
-            businessName   : '링크카페',
-            businessNumber : '1234567890'
+            placeId               : '12345678',
+            businessName          : '링크카페',
+            businessNumberPlace   : '1234567890',
+            businessNumberReceipt : '1234567890',
+            businessNumberConnect : '1234567890'
         });
     };
 
@@ -129,6 +131,12 @@ app.controller('naverPlaceEasyLinkExcelSampleCtrl', ['$scope', '$http', '$timeou
         // 엑셀업로드 팝업
         $("#excelUpFile").val('');
         $("#excelUpFile").trigger('click');
+    };
+
+    // 수기등록 팝업 오픈
+    $scope.manualRegist = function () {
+        $scope.wjNaverPlaceEasyLinkManualLayer.show(true);
+        $scope._broadcast('naverPlaceEasyLinkManualCtrl');
     };
 }]);
 
@@ -294,6 +302,18 @@ app.controller('naverPlaceEasyLinkExcelUploadAddCtrl', ['$scope', '$http', '$tim
         });
     };
 
+    // 엑셀 헤더 key 변경 : oldKeys 중 존재하는 key 만 newKey 로 변경
+    function renameKeyIfExists(obj, oldKeys, newKey) {
+        oldKeys.forEach(function (oldKey) {
+            if (obj[oldKey] !== undefined) {
+                if (obj[newKey] === undefined) {
+                    obj[newKey] = obj[oldKey];
+                }
+                delete obj[oldKey];
+            }
+        });
+    }
+
     // 엑셀 업로드
     $scope.excelUpload = function () {
 
@@ -330,9 +350,13 @@ app.controller('naverPlaceEasyLinkExcelUploadAddCtrl', ['$scope', '$http', '$tim
                                 }
                             });
 
-                            renameKey(item, 'place_id[네이버 플레이스ID]', 'placeId');
-                            renameKey(item, 'business_name[업체명]', 'businessName');
-                            renameKey(item, 'business_number[사업자번호]', 'businessNumber');
+                            // 양식 헤더(대괄호 포함) 및 원본 헤더(대괄호 없음) 모두 허용
+                            // 사업자번호 우선순위 : place > receipt > connect (서버에서 처리)
+                            renameKeyIfExists(item, ['place_id[네이버 플레이스ID]', 'place_id'], 'placeId');
+                            renameKeyIfExists(item, ['business_name[업체명]', 'business_name'], 'businessName');
+                            renameKeyIfExists(item, ['business_number_place[사업자번호]', 'business_number_place'], 'businessNumberPlace');
+                            renameKeyIfExists(item, ['business_number_receipt[사업자번호]', 'business_number_receipt'], 'businessNumberReceipt');
+                            renameKeyIfExists(item, ['business_number_connect[사업자번호]', 'business_number_connect'], 'businessNumberConnect');
 
                             // 공백, ' 제거
                             Object.keys(item).forEach(function (key) {
@@ -346,9 +370,11 @@ app.controller('naverPlaceEasyLinkExcelUploadAddCtrl', ['$scope', '$http', '$tim
                             });
 
                             // 사업자번호 - 숫자 이외 문자(하이픈 등) 제거
-                            if (item.businessNumber !== null && item.businessNumber !== undefined) {
-                                item.businessNumber = (item.businessNumber + '').replace(/[^0-9]/g, '');
-                            }
+                            ['businessNumberPlace', 'businessNumberReceipt', 'businessNumberConnect'].forEach(function (key) {
+                                if (item[key] !== null && item[key] !== undefined) {
+                                    item[key] = (item[key] + '').replace(/[^0-9]/g, '');
+                                }
+                            });
                         });
 
                         $timeout(function () {

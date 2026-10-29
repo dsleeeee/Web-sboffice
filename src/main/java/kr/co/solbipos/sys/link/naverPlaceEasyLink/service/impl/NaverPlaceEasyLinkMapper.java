@@ -52,4 +52,10 @@ public interface NaverPlaceEasyLinkMapper {
 
     /** 간편연동 업로드 검증성공 데이터 저장 */
     int saveNaverPlaceEasyLinkExcel(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO);
+
+    /** 수기등록 매장 검색 */
+    List<DefaultMap<Object>> getNaverPlaceManualStoreList(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO);
+
+    /** 본사코드+매장코드로 매장 존재여부 조회 */
+    int getStoreExistCnt(NaverPlaceEasyLinkVO naverPlaceEasyLinkVO);
 }

@@ -249,4 +249,70 @@
             )
     </update>
 
+    <!-- 수기등록 매장 검색 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_NAVER_LINK, TB_SL_SALE_HDR
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 수기등록을 위해 조건에 맞는 매장을 조회한다.(기등록 여부/최근매출일 포함)
+    -->
+    <select id="getNaverPlaceManualStoreList" parameterType="naverPlaceEasyLinkVO" resultType="DefaultMap">
+        /* USE : NaverPlaceEasyLinkMapper.getNaverPlaceManualStoreList */
+        SELECT  X.*
+        ,       (
+                    SELECT  TO_CHAR(TO_DATE(MAX(S.SALE_DATE), 'YYYYMMDD'), 'YYYY-MM-DD')
+                    FROM    TB_SL_SALE_HDR S
+                    WHERE   S.STORE_CD = X.STORE_CD
+                    AND     S.SALE_YN = 'Y'
+                    AND     S.SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMMDD')
+                 ) AS LAST_SALE_DATE
+        FROM    (
+                    SELECT  D.HQ_OFFICE_CD
+                    ,       C.HQ_OFFICE_NM
+                    ,       D.STORE_CD
+                    ,       D.STORE_NM
+                    ,       D.BIZ_NO
+                    ,       D.ADDR || ' ' || D.ADDR_DTL AS ADDR
+                    ,       D.SYS_STAT_FG
+                    ,       CASE WHEN EXISTS (
+                                        SELECT  1
+                                        FROM    TB_CM_NAVER_LINK L
+                                        WHERE   L.HQ_OFFICE_CD = D.HQ_OFFICE_CD
+                                        AND     L.STORE_CD = D.STORE_CD
+                                        AND     L.NAVER_PLACE_ID IS NOT NULL
+                                        AND     L.IN_TYPE IS NOT NULL
+                                 ) THEN 'Y' ELSE 'N' END AS REG_YN
+                    FROM    TB_MS_STORE D
+                    ,       TB_HQ_OFFICE C
+                    WHERE   D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                    <if test='bizNo != null and bizNo != ""'>
+                    AND     D.BIZ_NO LIKE '%'||#{bizNo}||'%'
+                    </if>
+                    <if test='addr != null and addr != ""'>
+                    AND     D.ADDR || ' ' || D.ADDR_DTL LIKE '%'||#{addr}||'%'
+                    </if>
+                    <if test='storeCd != null and storeCd != ""'>
+                    AND     D.STORE_CD LIKE '%'||#{storeCd}||'%'
+                    </if>
+                    <if test='storeNm != null and storeNm != ""'>
+                    AND     D.STORE_NM LIKE '%'||#{storeNm}||'%'
+                    </if>
+                ) X
+        ORDER
+        BY      X.HQ_OFFICE_CD, X.STORE_CD
+    </select>
+
+    <!-- 본사코드+매장코드로 매장 존재여부 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : naverPlaceEasyLinkVO
+        COMMENTS : 수기등록 저장 시 선택한 매장이 실제 존재하는지 확인한다.
+    -->
+    <select id="getStoreExistCnt" parameterType="naverPlaceEasyLinkVO" resultType="int">
+        /* USE : NaverPlaceEasyLinkMapper.getStoreExistCnt */
+        SELECT  COUNT(*)
+        FROM    TB_MS_STORE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </select>
+
 </mapper>
