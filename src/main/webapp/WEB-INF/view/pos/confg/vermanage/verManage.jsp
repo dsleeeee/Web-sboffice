@@ -153,11 +153,12 @@
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
   var hqList = ${ccu.getHqOfficeList()};
   var hqOfficeCd = "${hqOfficeCd}";
+  var userId = "${sessionScope.sessionInfo.userId}";
   var nmcodeCdList = ${nmcodeCdList}
   var nmcodeCdListAll = ${nmcodeCdListAll}
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20240709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20261029.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">

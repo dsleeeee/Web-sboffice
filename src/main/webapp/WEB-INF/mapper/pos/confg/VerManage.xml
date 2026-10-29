@@ -94,7 +94,16 @@
             AND tcn.NMCODE_CD = #{progDetailFg}
         </if>
         <if test='orgnFg != null and orgnFg == "A"'>
-            AND tcpv.AGENCY_DISP_YN = 'Y'
+            AND (   tcpv.AGENCY_DISP_YN = 'Y'
+                 OR EXISTS (SELECT  1
+                            FROM    TB_CM_NMCODE nm
+                            WHERE   nm.NMCODE_GRP_CD = '408'
+                            AND     nm.NMCODE_NM     = tcpv.VER_SER_NO
+                            AND     nm.NMCODE_ITEM_1 IN (SELECT twuidv.ORGN_GRP_CD
+                                                         FROM   TB_WB_USER_INFO_DTL_V01 twuidv
+                                                         WHERE  twuidv.USER_ID = #{userId})
+                            AND     TO_CHAR(SYSDATE, 'YYYYMMDD') BETWEEN SUBSTR(nm.NMCODE_ITEM_2, 1, INSTR(nm.NMCODE_ITEM_2, '|') - 1)
+                                                                     AND SUBSTR(nm.NMCODE_ITEM_2, INSTR(nm.NMCODE_ITEM_2, '|') + 1)))
         </if>
         AND tcn.NMCODE_CD (+)= tcpv.PROG_DETAIL_FG
         ORDER

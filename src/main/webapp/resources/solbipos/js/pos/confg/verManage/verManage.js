@@ -112,6 +112,7 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     params.progFg = $scope.srchProgFgCombo.selectedValue;
     params.progDetailFg = $scope.srchProgDtlFgCombo.selectedValue;
     params.fileDesc = $scope.fileDesc;
+    params.userId = userId; // NXPOS버전관리허용(공통코드 408) 대리점 판단용
 
     $scope._inquiryMain("/pos/confg/verManage/verInfo/list.sb", params, function() {
     });
