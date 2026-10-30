@@ -122,8 +122,9 @@ public class OrderEmpBensonServiceImpl implements OrderEmpBensonService {
             sQuery1 +=", NVL(SUM(A.REAL_SALE_AMT" + i + "), 0) AS REAL_SALE_AMT" + i +  "\n";
             sQuery1 +=", NVL(SUM(A.BILL_CNT" + i + "), 0) AS BILL_CNT" + i +  "\n";
 
-            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(tssd.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
-            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) ELSE NULL END AS BILL_CNT" + i +  "\n";
+            sQuery2 +=", CASE WHEN tsdpoe.STORE_CD =" + "'"+k+"'" + " AND tsdpoe.EMP_NO = " + "'"+j+"'" + " THEN SUM(tsdpoe.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
+            // 영수건수 : 판매·반품 영수증 수
+            sQuery2 +=", CASE WHEN tsdpoe.STORE_CD =" + "'"+k+"'" + " AND tsdpoe.EMP_NO = " + "'"+j+"'" + " THEN SUM(tsdpoe.BILL_CNT) ELSE NULL END AS BILL_CNT" + i +  "\n";
         }
 
         orderEmpBensonVO.setsQuery1(sQuery1);
@@ -157,8 +158,9 @@ public class OrderEmpBensonServiceImpl implements OrderEmpBensonService {
             sQuery1 +=", NVL(SUM(A.REAL_SALE_AMT" + i + "), 0) AS REAL_SALE_AMT" + i +  "\n";
             sQuery1 +=", NVL(SUM(A.BILL_CNT" + i + "), 0) AS BILL_CNT" + i +  "\n";
 
-            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(tssd.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
-            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) ELSE NULL END AS BILL_CNT" + i +  "\n";
+            sQuery2 +=", CASE WHEN tsdpoe.STORE_CD =" + "'"+k+"'" + " AND tsdpoe.EMP_NO = " + "'"+j+"'" + " THEN SUM(tsdpoe.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
+            // 영수건수 : 판매·반품 영수증 수
+            sQuery2 +=", CASE WHEN tsdpoe.STORE_CD =" + "'"+k+"'" + " AND tsdpoe.EMP_NO = " + "'"+j+"'" + " THEN SUM(tsdpoe.BILL_CNT) ELSE NULL END AS BILL_CNT" + i +  "\n";
         }
 
         orderEmpBensonVO.setsQuery1(sQuery1);

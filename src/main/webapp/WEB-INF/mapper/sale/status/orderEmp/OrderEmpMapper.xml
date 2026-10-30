@@ -6,89 +6,87 @@
 
 	<!-- 기간별탭 -->
 	<!--
-        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        TABLE    : TB_SL_DAILY_PROD_ORD_EMPLOYEE, TB_MS_EMPLOYEE, TB_MS_STORE
         PARAM    : orderEmpVO
         COMMENTS : 기간별탭 매출을 조회한다.
     -->
     <select id="getOrderEmpPeriodList" parameterType="orderEmpVO" resultType="DefaultMap">
 		/** OrderEmpMapper.getOrderEmpPeriodList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tssd.STORE_CD,
+        SELECT tsdpoe.STORE_CD,
                	tms.STORE_NM,
-				tssd.ORDER_EMP_NO,
+				tsdpoe.EMP_NO AS ORDER_EMP_NO,
 				tme.EMP_NM,
-				-- 영수건수 : 품목 행이 아닌 영수증(일자+포스+영수증번호) 단위로 집계 (판매 영수증 - 반품 영수증)
-				COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '1'  THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END)
-				- COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '-1' THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END) AS BILL_CNT,
-				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+				-- 영수건수 : 판매·반품 영수증 수 (집계 시 영수증 첫 행의 주문자에만 건수 반영)
+				SUM(tsdpoe.BILL_CNT) AS BILL_CNT,
+				SUM(tsdpoe.REAL_SALE_AMT) AS REAL_SALE_AMT
 		<include refid="CmmSQL.PagingTemplateCount"/>
-	 	FROM 	TB_SL_SALE_DTL tssd,
+	 	FROM 	TB_SL_DAILY_PROD_ORD_EMPLOYEE tsdpoe,
 				TB_MS_EMPLOYEE tme,
 				TB_MS_STORE tms
-		WHERE 	tme.STORE_CD = tssd.STORE_CD
-		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
-		AND		tms.STORE_CD = tssd.STORE_CD
-		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		WHERE 	tme.STORE_CD = tsdpoe.STORE_CD
+		AND		tme.EMP_NO = tsdpoe.EMP_NO
+		AND		tms.STORE_CD = tsdpoe.STORE_CD
+		AND		tsdpoe.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tssd.STORE_CD IN (${storeCdQuery})
+                    AND tsdpoe.STORE_CD IN (${storeCdQuery})
                 </if>
 				<if test='orgnFg != null and orgnFg == "H"'>
 					AND (
 							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-						OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+						OR	tsdpoe.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
 						)
 				</if>
 				<if test='startDate != null and startDate != ""'>
-			    AND tssd.SALE_DATE >= #{startDate}
+			    AND tsdpoe.SALE_DATE >= #{startDate}
 			    </if>
 			    <if test='endDate != null and endDate != ""'>
-			    AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+			    AND tsdpoe.SALE_DATE <![CDATA[<= ]]>  #{endDate}
 			    </if>
-		GROUP BY tssd.STORE_CD, tms.STORE_NM, tssd.ORDER_EMP_NO, tme.EMP_NM
-		ORDER BY tssd.STORE_CD, tssd.ORDER_EMP_NO
+		GROUP BY tsdpoe.STORE_CD, tms.STORE_NM, tsdpoe.EMP_NO, tme.EMP_NM
+		ORDER BY tsdpoe.STORE_CD, tsdpoe.EMP_NO
 	    <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 	<!-- 기간별탭 엑셀 -->
 	<!--
-        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD_SDSEL, TB_MS_PRODUCT_BARCD
+        TABLE    : TB_SL_DAILY_PROD_ORD_EMPLOYEE, TB_MS_EMPLOYEE, TB_MS_STORE
         PARAM    : orderEmpVO
         COMMENTS : 기간별탭 엑셀 매출을 조회한다.
     -->
     <select id="getOrderEmpPeriodExcelList" parameterType="orderEmpVO" resultType="DefaultMap">
 		/** OrderEmpMapper.getOrderEmpPeriodExcelList */
-		SELECT tssd.STORE_CD,
+		SELECT tsdpoe.STORE_CD,
 				tms.STORE_NM,
-				tssd.ORDER_EMP_NO,
+				tsdpoe.EMP_NO AS ORDER_EMP_NO,
 				tme.EMP_NM,
-				-- 영수건수 : 품목 행이 아닌 영수증(일자+포스+영수증번호) 단위로 집계 (판매 영수증 - 반품 영수증)
-				COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '1'  THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END)
-				- COUNT(DISTINCT CASE WHEN tssd.SALE_FG = '-1' THEN tssd.SALE_DATE || tssd.POS_NO || tssd.BILL_NO END) AS BILL_CNT,
-				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-		FROM 	TB_SL_SALE_DTL tssd,
+				-- 영수건수 : 판매·반품 영수증 수 (집계 시 영수증 첫 행의 주문자에만 건수 반영)
+				SUM(tsdpoe.BILL_CNT) AS BILL_CNT,
+				SUM(tsdpoe.REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM 	TB_SL_DAILY_PROD_ORD_EMPLOYEE tsdpoe,
 				TB_MS_EMPLOYEE tme,
 				TB_MS_STORE tms
-		WHERE 	tme.STORE_CD = tssd.STORE_CD
-		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
-		AND		tms.STORE_CD = tssd.STORE_CD
-		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		WHERE 	tme.STORE_CD = tsdpoe.STORE_CD
+		AND		tme.EMP_NO = tsdpoe.EMP_NO
+		AND		tms.STORE_CD = tsdpoe.STORE_CD
+		AND		tsdpoe.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tssd.STORE_CD IN (${storeCdQuery})
+            AND tsdpoe.STORE_CD IN (${storeCdQuery})
         </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 			'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-			OR	tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+			OR	tsdpoe.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
 			)
 		</if>
 		<if test='startDate != null and startDate != ""'>
-			AND tssd.SALE_DATE >= #{startDate}
+			AND tsdpoe.SALE_DATE >= #{startDate}
 		</if>
 		<if test='endDate != null and endDate != ""'>
-			AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+			AND tsdpoe.SALE_DATE <![CDATA[<= ]]>  #{endDate}
 		</if>
-		GROUP BY tssd.STORE_CD, tms.STORE_NM, tssd.ORDER_EMP_NO, tme.EMP_NM
-		ORDER BY tssd.STORE_CD, tssd.ORDER_EMP_NO
+		GROUP BY tsdpoe.STORE_CD, tms.STORE_NM, tsdpoe.EMP_NO, tme.EMP_NM
+		ORDER BY tsdpoe.STORE_CD, tsdpoe.EMP_NO
     </select>
 
 	<!-- 기간별탭 상세 -->
@@ -131,7 +129,7 @@
 		 <if test='endDate != null and endDate != ""'>
          AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
          </if>
-		 AND tssd.ORDER_EMP_NO = #{empNo}
+		 AND NVL(TRIM(tssd.ORDER_EMP_NO), '0000') = #{empNo}
         GROUP BY SALE_DATE, STORE_CD, POS_NO, BILL_NO, SALE_YN, BILL_DT
 		 ORDER BY tssd.SALE_DATE DESC, tssd.POS_NO, tssd.BILL_NO
 	   <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -174,14 +172,14 @@
 		 <if test='endDate != null and endDate != ""'>
 			 AND tssd.SALE_DATE <![CDATA[<= ]]>  #{endDate}
 		 </if>
-		 AND 	tssd.ORDER_EMP_NO = #{empNo}
+		 AND 	NVL(TRIM(tssd.ORDER_EMP_NO), '0000') = #{empNo}
 		 GROUP BY SALE_DATE, STORE_CD, POS_NO, BILL_NO, SALE_YN, BILL_DT
 		 ORDER BY tssd.SALE_DATE DESC, tssd.POS_NO, tssd.BILL_NO
     </select>
 
 	<!-- 상품별매출 - 분류별 리스트 조회 -->
 	<!--
-        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        TABLE    : TB_SL_DAILY_PROD_ORD_EMPLOYEE, TB_MS_STORE
         PARAM    : todayBillSaleDtlVO
         COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
     -->
@@ -197,7 +195,7 @@
 		<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM
 		(
-		SELECT tssd.SALE_DATE
+		SELECT tsdpoe.SALE_DATE
 			,( SELECT COUNT(TMS.STORE_CD)
 			FROM TB_MS_STORE TMS
 			WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -205,22 +203,23 @@
                 AND TMS.STORE_CD IN (${storeCdQuery})
             </if>
 			) AS STORE_CNT
-		, SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
-		, COUNT(tssd.BILL_NO) AS TOT_BILL_CNT
+		, SUM(tsdpoe.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+		-- 영수건수 : 판매·반품 영수증 수
+		, SUM(tsdpoe.BILL_CNT) AS TOT_BILL_CNT
 		${sQuery2}
-		FROM TB_SL_SALE_DTL tssd
-		WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		FROM TB_SL_DAILY_PROD_ORD_EMPLOYEE tsdpoe
+		WHERE tsdpoe.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tssd.STORE_CD IN (${storeCdQuery})
+            AND tsdpoe.STORE_CD IN (${storeCdQuery})
         </if>
 		<if test='startDate != null and startDate != ""'>
-			AND tssd.SALE_DATE >= #{startDate}
+			AND tsdpoe.SALE_DATE >= #{startDate}
 		</if>
 		<if test='endDate != null and endDate != ""'>
-			AND tssd.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			AND tsdpoe.SALE_DATE <![CDATA[<= ]]> #{endDate}
 		</if>
-		GROUP BY tssd.SALE_DATE, tssd.ORDER_EMP_NO, tssd.STORE_CD
-		ORDER BY tssd.SALE_DATE ASC
+		GROUP BY tsdpoe.SALE_DATE, tsdpoe.EMP_NO, tsdpoe.STORE_CD
+		ORDER BY tsdpoe.SALE_DATE ASC
 		) A
 		WHERE 1 = 1
 		GROUP BY A.SALE_DATE, A.STORE_CNT
@@ -230,7 +229,7 @@
 
 	<!-- 상품별매출 - 분류별 리스트(엑셀) 조회 -->
 	<!--
-        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        TABLE    : TB_SL_DAILY_PROD_ORD_EMPLOYEE, TB_MS_STORE
         PARAM    : todayBillSaleDtlVO
         COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
     -->
@@ -244,7 +243,7 @@
 		${sQuery1}
 		FROM
 		(
-		SELECT tssd.SALE_DATE
+		SELECT tsdpoe.SALE_DATE
 		,( SELECT COUNT(TMS.STORE_CD)
 		FROM TB_MS_STORE TMS
 		WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -252,22 +251,23 @@
             AND TMS.STORE_CD IN (${storeCdQuery})
         </if>
 		) AS STORE_CNT
-		, SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
-		, COUNT(tssd.BILL_NO) AS TOT_BILL_CNT
+		, SUM(tsdpoe.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+		-- 영수건수 : 판매·반품 영수증 수
+		, SUM(tsdpoe.BILL_CNT) AS TOT_BILL_CNT
 		${sQuery2}
-		FROM TB_SL_SALE_DTL tssd
-		WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+		FROM TB_SL_DAILY_PROD_ORD_EMPLOYEE tsdpoe
+		WHERE tsdpoe.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tssd.STORE_CD IN (${storeCdQuery})
+            AND tsdpoe.STORE_CD IN (${storeCdQuery})
         </if>
 		<if test='startDate != null and startDate != ""'>
-			AND tssd.SALE_DATE >= #{startDate}
+			AND tsdpoe.SALE_DATE >= #{startDate}
 		</if>
 		<if test='endDate != null and endDate != ""'>
-			AND tssd.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			AND tsdpoe.SALE_DATE <![CDATA[<= ]]> #{endDate}
 		</if>
-		GROUP BY tssd.SALE_DATE, tssd.ORDER_EMP_NO, tssd.STORE_CD
-		ORDER BY tssd.SALE_DATE ASC
+		GROUP BY tsdpoe.SALE_DATE, tsdpoe.EMP_NO, tsdpoe.STORE_CD
+		ORDER BY tsdpoe.SALE_DATE ASC
 		) A
 		WHERE 1 = 1
 		GROUP BY A.SALE_DATE, A.STORE_CNT

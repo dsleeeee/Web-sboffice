@@ -319,6 +319,8 @@ public class RegistServiceImpl implements RegistService {
                 registVO.setCstCardIssFg("0");//신규발급
                 // 신규카드 발급소속 회원의 등록매장으로 세팅
                 registVO.setIssOrgnCd(registVO.getRegStoreCd());
+                // 신규카드 발급일자 회원 등록일자로 세팅
+                registVO.setIssDate(dt.substring(0, 8));
                 mapper.insertMembrCard(registVO);
             }
         }
@@ -703,6 +705,10 @@ public class RegistServiceImpl implements RegistService {
         registVO.setModId(sessionInfoVO.getUserId());
         // 신규 등록 시 카드상태 정상처리
         registVO.setCstCardUseFg("0");
+        // 매장은 발급소속 콤보가 없으므로 로그인 매장으로 세팅
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setIssOrgnCd(sessionInfoVO.getStoreCd());
+        }
 
         // 회원카드 등록
         int result = mapper.insertMembrCard(registVO);
@@ -731,6 +737,10 @@ public class RegistServiceImpl implements RegistService {
         registVO.setRegId(si.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(si.getUserId());
+        // 매장은 발급소속 콤보가 없으므로 로그인 매장으로 세팅
+        if (si.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setIssOrgnCd(si.getStoreCd());
+        }
 
         //기존 카드 사용여부 '중지(1)'로 변경
         registVO.setCstCardUseFg("1");

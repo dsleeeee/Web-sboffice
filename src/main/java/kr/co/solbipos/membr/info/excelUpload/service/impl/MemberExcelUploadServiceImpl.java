@@ -128,6 +128,8 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                     registVO.setModDt(dt);
                     registVO.setModId(memberExcelUploadVO.getModId());
                     registVO.setCstCardIssFg("0");
+                    // 카드상태는 회원정보 [고객카드사용구분]과 동일하게 세팅
+                    registVO.setCstCardUseFg(memberExcelUploadVO.getCstCardUseFg());
 
                     // 회원카드번호에 값이 있을때 회원카드 등록
                     if (!StringUtils.isEmpty(memberExcelUploadVO.getMembrCardNo())) {

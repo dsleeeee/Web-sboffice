@@ -627,8 +627,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
                 return;
             }
 
-            // 전송가능 시간 체크
-            if (!$scope.smsSendTimeChk()) {
+            // 전송가능 시간 체크(즉시전송만, 예약은 예약시간 선택 범위와 서버에서 확인)
+            if (reserveYn != "1" && !$scope.smsSendTimeChk()) {
                 return;
             }
 
@@ -868,8 +868,8 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = $("#lblMarketingSmsSendMsgType").text() + messages["marketingSmsSend.smsSendConfirm"]  + " " + smsSendListCnt + messages["marketingSmsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            // 전송가능 시간 체크(09시~21시 전, 21시대 즉시전송 차단)
-            if (!$scope.smsSendTimeChk()) {
+            // 전송가능 시간 체크(즉시전송만 09시~21시 전, 예약은 예약시간으로 확인)
+            if (reserveYn != "1" && !$scope.smsSendTimeChk()) {
                 return;
             }
 

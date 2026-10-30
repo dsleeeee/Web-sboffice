@@ -1084,17 +1084,14 @@ public class SmsSendServiceImpl implements SmsSendService {
         return null;
     }
 
-    /** 발송시간 확인 - 즉시 09시~21시 전, 예약 08시~21시 전 (예약일시 형식: yyyyMMddHHmmss) */
+    /** 발송시간 확인 - 즉시는 현재 시각, 예약은 예약 시각 기준 09시~21시 전 (예약일시 형식: yyyyMMddHHmmss) */
     private boolean isSendTimeAllowed(String reserveYn, String sendDate) {
-        int startHour;
         int hour;
         if ("1".equals(reserveYn) && sendDate != null && sendDate.length() >= 10 && sendDate.substring(8, 10).matches("\\d{2}")) {
-            startHour = 8;
             hour = Integer.parseInt(sendDate.substring(8, 10));
         } else {
-            startHour = 9;
             hour = Integer.parseInt(currentDateTimeString().substring(8, 10));
         }
-        return hour >= startHour && hour < 21;
+        return hour >= 9 && hour < 21;
     }
 }

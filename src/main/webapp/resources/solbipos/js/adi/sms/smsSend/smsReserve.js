@@ -23,15 +23,15 @@ var app = agrid.getApp();
 //     Hh[i] = {"name":timeVal,"value":timeVal}
 // }
 
-// 전송가능 시간 체크(08~20시)
+// 예약가능 시간(09~20시, 21시~다음날 09시 전 야간 발송 차단)
 // 시 VALUE
-var Hh = [13];
-for(i =8 ; i < 21; i++){
+var Hh = [12];
+for(i =9 ; i < 21; i++){
     var timeVal = i.toString();
     if(i>=0 && i<=9){
         timeVal = "0" + timeVal;
     }
-    Hh[i-8] = {"name":timeVal,"value":timeVal}
+    Hh[i-9] = {"name":timeVal,"value":timeVal}
 }
 
 // 분 VALUE

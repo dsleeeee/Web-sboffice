@@ -577,10 +577,10 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // SMS 전송수량은 5건 입니다. 전송하시겠습니까?
         var msg = $("#lblMsgType").text() + messages["smsSend.smsSendConfirm"]  + " " + smsSendListCnt + messages["smsSend.smsSendConfirm2"];
         if (confirm(msg)) {
-            // 전송가능 시간 체크(09시~21시 전, 21시대 즉시전송 차단)
+            // 전송가능 시간 체크(즉시전송만 09시~21시 전, 예약은 예약시간으로 확인)
             var date = new Date();
             var hh = new String(date.getHours());
-            if(parseInt(hh) < 9 || parseInt(hh) >= 21) {
+            if(reserveYn != "1" && (parseInt(hh) < 9 || parseInt(hh) >= 21)) {
                 $scope._popMsg(messages["smsSend.smsSendTimeAlert"]); // 전송가능한 시간대가 아닙니다. 09~21시만 전송가능합니다.
                 return;
             }

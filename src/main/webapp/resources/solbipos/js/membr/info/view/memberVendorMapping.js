@@ -50,7 +50,9 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
 
                     var storeScope = agrid.getScope('memberCtrl');
                     storeScope.setSelectedMember(selectedData);
-                    
+                    // 카드정보 탭에 선택 회원 전달
+                    $scope._broadcast('responseGet', selectedData);
+
                     $scope.memberRegistLayer.show(true);
                     event.preventDefault();
                 }
