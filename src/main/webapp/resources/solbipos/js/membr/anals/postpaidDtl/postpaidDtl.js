@@ -71,6 +71,8 @@ app.controller('postpaidDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCds = $("#storeCd").val();
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+    params.membrNo = $scope.membrNo;
+    params.membrNm = $scope.membrNm;
 
     $scope._broadcast('postpaidDtlExcelCtrl', params);
   };
@@ -85,6 +87,9 @@ app.controller('postpaidDtlExcelCtrl', ['$scope', '$http', '$timeout', function 
 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('postpaidDtlExcelCtrl', $scope, $http, false));
+
+  // 접속사용자의 권한(H : 본사, S: 매장)
+  $scope.orgnFg = gvOrgnFg;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {

@@ -185,7 +185,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" width="80" max-length="7"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" data-map="coupnApplyFgDataMap" width="85" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnTargetFg"/>" binding="coupnTargetFg" data-map="coupnTargetFgDataMap" width="85" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnProdFg"/>" binding="coupnProdFg" data-map="coupnProdFgDataMap" width="110" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnProdFg"/>" binding="coupnProdFg" data-map="coupnProdFgDataMap" width="110" align="center" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
           <c:if test="${orgnFg == 'HQ'}">
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>

@@ -104,7 +104,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(SBPENC.D(A.CALLBACK), '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -149,7 +149,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(SBPENC.D(A.CALLBACK), '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -201,7 +201,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(A.CALLBACK, '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -252,7 +252,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(A.CALLBACK, '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -436,7 +436,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(SBPENC.D(A.CALLBACK), '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -481,7 +481,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(SBPENC.D(A.CALLBACK), '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -533,7 +533,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(A.CALLBACK, '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
@@ -584,7 +584,7 @@
                         AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
                     </if>
                     <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
-                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                        AND REPLACE(A.CALLBACK, '-', '') LIKE '%' || REPLACE(#{ssPhoneNumber}, '-', '') || '%' --S_PHONE_NUMBER
                     </if>
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}

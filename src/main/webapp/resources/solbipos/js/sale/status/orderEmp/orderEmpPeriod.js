@@ -97,9 +97,9 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 		  return false;
 	  }
 
-	  // 조회일자 최대 3개월(93일) 제한
-	  if (diffDay > 93) {
-		  $scope._popMsg(messages['cmm.dateOver.3month.error']);
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
 		  return false;
 	  }
 
@@ -183,9 +183,9 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
 		  return false;
 	  }
 
-	  // 조회일자 최대 3개월(93일) 제한
-	  if (diffDay > 93) {
-		  $scope._popMsg(messages['cmm.dateOver.3month.error']);
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
 		  return false;
 	  }
 		// 파라미터

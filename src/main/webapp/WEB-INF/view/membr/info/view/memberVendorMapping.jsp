@@ -103,4 +103,4 @@
     var useDataMap = ${ccu.getCommCodeExcpAll("067")}; <%--사용, 미사용--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20210726.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20261027.01" charset="utf-8"></script>

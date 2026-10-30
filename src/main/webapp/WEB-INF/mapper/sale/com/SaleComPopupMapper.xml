@@ -980,7 +980,7 @@
 							AND TO_CHAR(TO_DATE(TSSD.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
 						</if>
 						 <if test='orderEmpNo != null and orderEmpNo != ""'>
-							 AND TSSD.ORDER_EMP_NO = #{orderEmpNo}
+							 AND NVL(TRIM(TSSD.ORDER_EMP_NO), '0000') = #{orderEmpNo}
 						 </if>
 				         AND EXISTS (SELECT *
 				                      FROM TB_SL_SALE_HDR Z
@@ -1078,7 +1078,7 @@
 							AND TO_CHAR(TO_DATE(TSSD.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
 						</if>
 						<if test='orderEmpNo != null and orderEmpNo != ""'>
-							AND TSSD.ORDER_EMP_NO = #{orderEmpNo}
+							AND NVL(TRIM(TSSD.ORDER_EMP_NO), '0000') = #{orderEmpNo}
 						</if>
 				         AND EXISTS (SELECT *
 				                      FROM TB_SL_SALE_HDR Z

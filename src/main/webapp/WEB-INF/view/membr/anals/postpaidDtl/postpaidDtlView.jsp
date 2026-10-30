@@ -81,7 +81,7 @@
           display-member-path="name"
           selected-value-path="value"
           is-editable="false"
-          initialized="initComboBox(s)">
+          initialized="_initComboBox(s)">
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
       <%-- 조회조건 엑셀다운로드 --%>
@@ -169,6 +169,6 @@
   var postpaidFgData = ${ccu.getCommCodeExcpAll("073")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaidDtl/postpaidDtl.js?ver=20231121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaidDtl/postpaidDtl.js?ver=20261028.01" charset="utf-8"></script>
 
 
