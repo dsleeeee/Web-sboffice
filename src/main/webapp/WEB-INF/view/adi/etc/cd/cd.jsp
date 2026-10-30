@@ -224,7 +224,7 @@
           <div class="oh mb5">
             <span class="fl bk lh30"><s:message code='cd.grpGridNm' /></span>
           </div>
-          <div class="wj-gridWrap" style="height: 400px;">
+          <div class="wj-gridWrap" style="height: 443px;">
             <wj-flex-grid
               autoGenerateColumns="false"
               control="grpFlex"
@@ -242,11 +242,38 @@
         <%-- 우측 : 매장 리스트 --%>
         <div class="fr" style="width: 60%;">
           <div class="oh mb5">
-            <span class="fl bk lh30"><s:message code='cd.storeAllow.storeGridNm' /></span>
+            <%--<span class="fl bk lh30"><s:message code='cd.storeAllow.storeGridNm' /></span>--%>
+            <span class="fl bk lh30" ng-show="selGrpCd !== ''">[{{selGrpCd}}] {{selGrpNm}}</span>
             <button class="btn_skyblue fr" id="btnStoreAllowSave" ng-click="saveStoreAllow()">
               <s:message code="cmm.save" />
             </button>
           </div>
+
+          <%-- 조회조건 --%>
+          <table class="tblType01 mb10">
+            <colgroup>
+              <col class="w15" />
+              <col class="w35" />
+              <col class="w15" />
+              <col class="w35" />
+            </colgroup>
+            <tbody>
+            <tr>
+              <%-- 매장명 --%>
+              <th><s:message code="cmm.store" /></th>
+              <td>
+                <input type="text" id="filterStoreNm" ng-model="filterStoreNm"/>
+              </td>
+              <td colspan="2">
+                <div class="tr">
+                  <%-- 필터 --%>
+                  <button class="btn_skyblue fl" ng-click="searchFilter()"><s:message code="selectStore.filter" /></button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
           <div class="wj-gridWrap" style="height: 400px;">
             <wj-flex-grid
               autoGenerateColumns="false"
@@ -270,4 +297,4 @@
 </wj-popup>
 <%--// 본사권한 매장사용 공통코드 매장수정 허용 팝업 --%>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20261013.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20261029.02" charset="utf-8"></script>

@@ -166,6 +166,9 @@ public interface HqManageMapper {
     /** 기준테이블바탕화면 이미지 등록*/
     int insertHqBaseTblBgImg(HqManageVO hqManageVO);
 
+    /** 기준듀얼모니터 이미지 등록*/
+    int insertHqBaseDualMonitorImg(HqManageVO hqManageVO);
+
     /** 모바일 사용메뉴 조회 */
     List<DefaultMap<String>> avlblMobileMenu(HqManageVO hqManage);
 
