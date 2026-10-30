@@ -169,11 +169,11 @@ public class SysConnectKpnController {
             throw new IllegalStateException("KPN 연동정보(API_NO=" + KPN_API_NO + ")가 등록되어 있지 않습니다.");
         }
 
-        // 캐시된 토큰이 만료되지 않았으면 그대로 재사용
+        // 캐시된 토큰이 만료되지 않았으면 그대로 재사용 (만료 15초 전부터는 신규 발급)
         String cachedToken = CmmUtil.nvl(apiInfo.getStr("intgCerTkn"), "");
         String expireDateTime = CmmUtil.nvl(apiInfo.getStr("intgCerTknDdlDate"), "")
                 + CmmUtil.nvl(apiInfo.getStr("intgCerTknDdlTime"), "");
-        String currentDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String currentDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis() + 15 * 1000L));
 
         if (!cachedToken.isEmpty() && expireDateTime.length() == 14 && currentDateTime.compareTo(expireDateTime) < 0) {
             return cachedToken;
