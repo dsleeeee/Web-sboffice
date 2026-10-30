@@ -255,6 +255,10 @@ public class HqManageServiceImpl implements HqManageService{
         result += mapper.insertHqBaseTblBgImg(hqManage);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        // 기준듀얼모니터 이미지 등록
+        result += mapper.insertHqBaseDualMonitorImg(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         return result;
     }
 

@@ -561,6 +561,8 @@ app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // 선택된 공통코드그룹
   $scope.selGrpCd = "";
+  // 선택된 공통코드그룹명
+  $scope.selGrpNm = "";
 
   // 대표명칭(공통) 그리드 초기화
   $scope.initGrpGrid = function (s, e) {
@@ -580,7 +582,7 @@ app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) 
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var selectedRow = s.rows[ht.row].dataItem;
         if (selectedRow) {
-          $scope.searchStoreAllowList(selectedRow.nmcodeCd);
+          $scope.searchStoreAllowList(selectedRow.nmcodeCd, selectedRow.nmcodeNm);
         }
       }
     });
@@ -595,6 +597,8 @@ app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) 
   // 팝업 열기
   $scope.$on("cdStoreAllowOpen", function (event, data) {
     $scope.selGrpCd = "";
+    $scope.selGrpNm = "";
+    $scope.filterStoreNm = "";
     if ($scope.storeFlex) {
       $scope.storeFlex.itemsSource = new wijmo.collections.CollectionView([]);
     }
@@ -615,8 +619,14 @@ app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) 
   });
 
   // 선택 그룹의 매장 허용설정 조회
-  $scope.searchStoreAllowList = function (grpCd) {
+  $scope.searchStoreAllowList = function (grpCd, grpNm) {
     $scope.selGrpCd = grpCd;
+    // 저장 후 재조회 시에는 그룹명을 넘기지 않으므로 기존 값 유지
+    if (grpNm !== undefined) {
+      $scope.selGrpNm = grpNm;
+    }
+    // 그리드 이벤트(mousedown)는 angular 밖이므로 제목 바인딩 갱신
+    $scope.$evalAsync();
     $.postJSON("/adi/etc/cd/cd/getCdStoreAllowList.sb", {nmcodeNm: grpCd}, function (response) {
       var list = response.data.list;
       if (list === undefined || list === null) {
@@ -639,7 +649,27 @@ app.controller('cdStoreAllowCtrl', ['$scope', '$http', function ($scope, $http) 
       var cv = new wijmo.collections.CollectionView(rows);
       cv.trackChanges = true;
       $scope.storeFlex.itemsSource = cv;
+      // 매장 필터 입력값이 있으면 재조회 후에도 유지
+      $scope.searchFilter();
     });
+  };
+
+  // 매장 필터 (매장코드 or 매장명 포함 여부로 행 표시/숨김)
+  $scope.searchFilter = function () {
+    var grid = $scope.storeFlex;
+    var filter = $scope.filterStoreNm;
+
+    if (!grid || grid.rows.length === 0) {
+      return;
+    }
+
+    var useFilter = (filter !== undefined && filter !== null && filter !== "");
+    for (var i = 0; i < grid.rows.length; i++) {
+      var item = grid.rows[i].dataItem;
+      // 필터 없으면 전체 표시, 있으면 매장코드/매장명 일치 행만 표시
+      grid.rows[i].visible = !useFilter || item.storeNm.indexOf(filter) > -1 || item.storeCd.indexOf(filter) > -1;
+    }
+    grid.refresh();
   };
 
   // 허용설정 저장 (변경분만 : 신규=I(코드 서버채번), 변경=U, 전부해제=D)

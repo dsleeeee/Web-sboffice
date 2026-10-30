@@ -867,13 +867,18 @@ public class StoreManageServiceImpl implements StoreManageService {
                 procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             }
 
-            // 기준테이블바탕화면 이미지 등록
+            // 기준테이블바탕화면, 기준듀얼모니터 이미지 등록
             if (!storeManageVO.getHqOfficeCd().equals("00000")) {
                 // 기준테이블바탕화면 이미지 등록(프랜차이즈 매장)
                 mapper.insertHqBaseTblBgImgToStore(storeManageVO);
+
+                // 기준듀얼모니터 이미지등록(프랜차이즈 매장)은 486번째 라인에서 이미 실행됨
             } else {
                 // 기준테이블바탕화면 이미지 등록(단독매장)
                 mapper.insertStoreBaseTblBgImg(storeManageVO);
+
+                // 기준듀얼모니터 이미지 등록(단독매장)
+                mapper.insertStoreBaseDualMonitorImg(storeManageVO);
             }
 
             // 포스 터미널 정보 등록
