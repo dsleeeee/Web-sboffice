@@ -2850,6 +2850,17 @@ Format.prototype.save = function () {
       // 수정인지 신규저장인지 파악하기 위해
       if($("#hdNewGrp").val() === 'Y'){
         var grpNm = prompt('그룹명을 입력하세요','그룹명');
+
+        // 터치키그룹명 길이 체크 (최대 50byte)
+        if(nvl(grpNm + '','').getByteLengthForOracle() > 50){
+          scope.$apply(function(){
+            scope.$broadcast('loadingPopupInactive');
+            scope._popMsg(messages["touchKey.layer.tukeyGrpNm"] + "은(는) " + messages["cmm.max50Chk"]
+                + "<br>(현재 : " + (grpNm + '').getByteLengthForOracle() + "byte)");
+          });
+          return false;
+        }
+
         if(nvl(grpNm,'') !== ''){
           params += '&tukeyGrpCd=';
           params += '&tukeyGrpNm=' + grpNm;
