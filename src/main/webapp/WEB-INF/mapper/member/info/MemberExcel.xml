@@ -52,7 +52,9 @@
             tmm.MOD_DT,
             tmm.MOD_ID,
             tmm.MEMBER_ENG_NM,
-            tmm.CST_CARD_USE_FG
+            tmm.CST_CARD_USE_FG,
+            tmm.CST_CARD_ISS_CNT,
+            tmm.ORG_CST_CARD_NO
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
@@ -81,7 +83,9 @@
             #{modDt},
             #{modId},
             #{memberEngNm},
-            #{cstCardUseFg}
+            #{cstCardUseFg},
+            DECODE(#{membrCardNo}, NULL, 0, 1),
+            UPPER(#{membrCardNo})
         )
     </insert>
 
