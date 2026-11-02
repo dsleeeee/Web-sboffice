@@ -776,7 +776,9 @@
             tmm.LATITUDE,
             tmm.LONGITUDE,
             tmm.CUSTOMER_FG,
-            tmm.CUSTOMER_CD
+            tmm.CUSTOMER_CD,
+            tmm.CST_CARD_ISS_CNT,
+            tmm.ORG_CST_CARD_NO
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
@@ -809,7 +811,9 @@
             #{latitude},
             #{longitude},
             #{customerFg},
-            #{customerCd}
+            #{customerCd},
+            DECODE(#{membrCardNo}, NULL, 0, 1),
+            UPPER(#{membrCardNo})
         )
         ]]>
     </insert>
@@ -1015,6 +1019,15 @@
         UPDATE TB_MB_MEMBER tmm
            SET tmm.MEMBR_CARD_NO = UPPER(#{membrCardNo}),
                tmm.CST_CARD_USE_FG = '0',
+               <!-- 발급횟수 : 회원의 카드 발급 건수, 최초카드번호 : 없으면 처음 발급한 카드번호 -->
+               tmm.CST_CARD_ISS_CNT = (SELECT COUNT(*) FROM TB_MB_MEMBER_CARD WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}),
+               tmm.ORG_CST_CARD_NO = NVL(tmm.ORG_CST_CARD_NO, (SELECT MEMBR_CARD_NO
+                                                                 FROM (SELECT MEMBR_CARD_NO
+                                                                         FROM TB_MB_MEMBER_CARD
+                                                                        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+                                                                          AND MEMBR_NO = #{membrNo}
+                                                                        ORDER BY REG_DT, MEMBR_CARD_SEQ)
+                                                                WHERE ROWNUM = 1)),
                tmm.MOD_ID = #{modId},
                tmm.MOD_DT = #{modDt}
          WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
