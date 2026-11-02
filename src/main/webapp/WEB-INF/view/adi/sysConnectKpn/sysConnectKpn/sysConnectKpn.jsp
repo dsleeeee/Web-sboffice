@@ -12,4 +12,4 @@
         KPN시스템접속
     </button>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/sysConnectKpn/sysConnectKpn/sysConnectKpn.js?ver=20260721.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sysConnectKpn/sysConnectKpn/sysConnectKpn.js?ver=20261102.03" charset="utf-8"></script>
