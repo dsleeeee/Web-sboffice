@@ -25,22 +25,16 @@ app.controller('sysConnectKpnCtrl', ['$scope', '$http', function ($scope, $http)
         $scope._broadcast('sysConnectKpnCtrl');
     };
 
-    // <-- 화면 진입 시 자동 접속 -->
+    // <-- 검색 호출 -->
     $scope.$on("sysConnectKpnCtrl", function(event, data) {
-        $scope.sysConnectKpn(true);
+        $scope.sysConnectKpn();
         event.preventDefault();
     });
 
     // 시스템 접속
-    // 서버가 접속 시점에 envst1355(KPN 백오피스 URL)를 직접 조회하고, 캐시/신규발급한 토큰을 붙인 접속 URL을 받아 새창으로 연다.
-    // isAuto : 화면 진입 시 자동 호출 여부 (사용자 클릭이 아니라 새창이 팝업차단될 수 있음 → 차단 시 현재 탭을 접속 URL로 이동)
-    $scope.sysConnectKpn = function(isAuto){
-
-        // 버튼 클릭 시 : 클릭 시점에 빈 새창을 먼저 열어 팝업차단을 피하고, 응답 후 접속 URL로 이동
-        var win = null;
-        if (isAuto !== true) {
-            win = window.open('', '_blank');
-        }
+    // 서버가 접속 시점에 envst1355(KPN 백오피스 URL)를 직접 조회하고, 캐시/신규발급한 토큰을 붙인 접속 URL을 받는다.
+    // 호출 주체(posCallYn)가 POS면 현재 탭을 접속 URL로 이동하고, 백오피스면 새창으로 연다.
+    $scope.sysConnectKpn = function(){
 
         var params = {};
         // 가상로그인시 세션활용
@@ -60,27 +54,25 @@ app.controller('sysConnectKpnCtrl', ['$scope', '$http', function ($scope, $http)
 
             // 서버에서 JsonException(SERVER_ERROR)으로 던진 에러 메시지·세션만료는 공통 상태체크에서 팝업
             if (!$scope._httpStatusCheck(response, true)) {
-                if (win) { win.close(); }
                 return;
             }
 
             var data = response.data.data;
 
-            // 정상 응답(status:OK) : 서버가 만들어준 URL(token/usr_id 포함)로 새창 이동
+            // 정상 응답(status:OK) : 서버가 만들어준 URL(token/usr_id 포함)로 이동
             if (data !== undefined && data !== null && data.url !== undefined && data.url !== "") {
-                if (win) {
-                    win.location.href = data.url;
-                } else if (!window.open(data.url)) {
-                    // 새창이 팝업차단된 경우(화면 진입 자동 호출 등) 현재 탭을 접속 URL로 이동
+                if (data.posCallYn === "Y") {
+                    // POS에서 호출 : 팝업 없이 현재 탭을 KPN 화면으로 이동
                     location.href = data.url;
+                } else {
+                    // 백오피스에서 호출 : 새창
+                    window.open(data.url);
                 }
             } else {
-                if (win) { win.close(); }
                 $scope._popMsg("KPN 접속 URL 생성에 실패했습니다.");
             }
         }, function (response) {
             $scope.$broadcast('loadingPopupInactive');
-            if (win) { win.close(); }
             $scope._popMsg(messages['cmm.error']);
         });
     };

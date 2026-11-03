@@ -135,6 +135,9 @@ public class SysConnectKpnController {
             throw new JsonException(Status.SERVER_ERROR, "접속 URL 생성에 실패했습니다.");
         }
 
+        // 호출 주체 구분 : POS 자동로그인(accessCd) 세션이면 Y → 화면에서 새창 대신 현재 탭 이동
+        resultMap.put("posCallYn", "Y".equals(sessionInfoVO.getAccessCdYn()) ? "Y" : "N");
+
         return ReturnUtil.returnJson(Status.OK, resultMap);
     }
 
