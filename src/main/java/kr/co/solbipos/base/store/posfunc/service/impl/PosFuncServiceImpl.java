@@ -13,6 +13,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.common.enums.ConfgFg;
@@ -22,11 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -38,6 +42,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.07.26  김지은      최초생성
+ * @ 2026.11.04  김유승      인증관리 - 사원별 인증허용 조회·일괄 저장 추가
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 06.26
@@ -390,6 +395,77 @@ public class PosFuncServiceImpl implements PosFuncService{
             procCnt = mapper.saveAuthEmp(posFuncVO);
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        }
+        return procCnt;
+    }
+
+    /** 포스기능 인증관리 - 재직 사원별 인증허용 기능키 조회 */
+    @Override
+    public List<DefaultMap<String>> getAuthEmpFnkeyList(PosFuncVO posFuncVO) {
+        return mapper.getAuthEmpFnkeyList(posFuncVO);
+    }
+
+    /**
+     * 포스기능 인증관리 - 인증여부 + 인증허용 사원 일괄 저장
+     * 사원번호가 없는 행은 기능키 인증여부(AUTH_YN), 사원번호가 있는 행은 사원 인증허용(USE_YN) 저장
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int savePosAuthEmpConf(PosFuncVO[] posFuncVOs, SessionInfoVO sessionInfoVO) {
+
+        if(posFuncVOs == null || posFuncVOs.length == 0) {
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.not.modify"));
+        }
+
+        // 저장 전 전체 검사 (하나라도 오류면 저장하지 않음)
+        String storeCd = posFuncVOs[0].getStoreCd();
+        String fnkeyFg = posFuncVOs[0].getFnkeyFg();
+        if(StringUtil.isEmpty(storeCd) || StringUtil.isEmpty(fnkeyFg)) {
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.input.fail"));
+        }
+
+        // 해당 매장·기능구분의 기능키, 재직 사원
+        PosFuncVO searchVO = new PosFuncVO();
+        searchVO.setStoreCd(storeCd);
+        searchVO.setFnkeyFg(fnkeyFg);
+
+        Set<String> fnkeyNoSet = new HashSet<>();
+        for(DefaultMap<String> fnkey : mapper.getPosConfAuthDetail(searchVO)) {
+            fnkeyNoSet.add(fnkey.getStr("fnkeyNo"));
+        }
+        Set<String> empNoSet = new HashSet<>();
+        for(DefaultMap<String> emp : mapper.getAuthEmpFnkeyList(searchVO)) {
+            empNoSet.add(emp.getStr("empNo"));
+        }
+
+        for(PosFuncVO posFuncVO : posFuncVOs) {
+            if(!storeCd.equals(posFuncVO.getStoreCd()) || !fnkeyFg.equals(posFuncVO.getFnkeyFg())
+                    || !fnkeyNoSet.contains(posFuncVO.getFnkeyNo())) {
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.input.fail") + "(" + messageService.get("posFunc.fnkeyNo") + ")");
+            }
+            if(!StringUtil.isEmpty(posFuncVO.getEmpNo()) && !empNoSet.contains(posFuncVO.getEmpNo())) {
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.input.fail") + "(" + messageService.get("posFunc.empNo") + ")");
+            }
+        }
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(PosFuncVO posFuncVO : posFuncVOs) {
+
+            posFuncVO.setRegDt(dt);
+            posFuncVO.setRegId(sessionInfoVO.getUserId());
+            posFuncVO.setModDt(dt);
+            posFuncVO.setModId(sessionInfoVO.getUserId());
+
+            if(StringUtil.isEmpty(posFuncVO.getEmpNo())) {
+                // 기능키 인증여부
+                procCnt = mapper.savePosAuthConf(posFuncVO);
+            } else {
+                // 사원 인증허용
+                procCnt = mapper.saveAuthEmp(posFuncVO);
+            }
+            if(procCnt <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
         }
         return procCnt;
     }

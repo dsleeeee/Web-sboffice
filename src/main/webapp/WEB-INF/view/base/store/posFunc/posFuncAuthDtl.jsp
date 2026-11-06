@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="posFuncAuthDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:560px;">
+<wj-popup control="posFuncAuthDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
     <div class="wj-dialog wj-dialog-columns title">
 
         <%-- header --%>
@@ -16,10 +16,13 @@
         <%-- body --%>
         <div class="wj-dialog-body" ng-controller="posFuncAuthDtlCtrl">
             <div class="updownSet mb10">
+                <%-- 변경 건수 --%>
+                <span id="authDtlChangeCnt" class="mr10" style="display:none; color:#b7791f; font-weight:bold;"></span>
                 <%-- 저장버튼 --%>
                 <button class="btn_skyblue" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></button>
             </div>
             <input type="hidden" id="hdStoreCd" />
+            <input type="hidden" id="hdFnkeyFg" />
 
             <%-- 그리드 --%>
             <%-- 개발시 높이 조절해서 사용--%>
@@ -39,8 +42,7 @@
                     <wj-flex-grid-column header="<s:message code="posFunc.fnkeyNm"/>" binding="fnkeyNm" width="160" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posFunc.dispSeq"/>" binding="dispSeq" width="*" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="posFunc.useYn"/>" binding="useYn" width="*" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="posFunc.authYn"/>" binding="authYn" width="70" format="boolean"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="posFunc.setting.auth"/>" binding="buttons" width="130" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="posFunc.authYn"/>" binding="authYn" width="80" format="boolean"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="*" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -48,4 +50,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncAuthDtl.js?ver=20241015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncAuthDtl.js?ver=20261104.01" charset="utf-8"></script>

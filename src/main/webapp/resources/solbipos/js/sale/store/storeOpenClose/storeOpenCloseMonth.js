@@ -47,6 +47,16 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOpenCloseMonthTimeCtrl", function (event, data) {
 
+        var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+        var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+        // 조회일자 최대 1년(12개월) 제한
+        if (diffMonth > 12) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         // 파라미터
         var params = {};
         params.startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '01'; // 조회기간

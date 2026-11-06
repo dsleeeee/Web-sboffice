@@ -266,6 +266,8 @@
 
     <!-- 시스템관리 > 관리자기능2 > 메뉴권한임의등록 -->
     <typeAlias alias="authorInExRegistVO" type="kr.co.solbipos.sys.admin2.authorInExRegist.service.AuthorInExRegistVO"/>
+    <!-- 시스템관리 > 관리자기능2 > 매출자료검증 -->
+    <typeAlias alias="saleBillDataChkVO" type="kr.co.solbipos.sys.admin2.saleBillDataChk.service.SaleBillDataChkVO"/>
 
     <!-- 시스템관리 > 연동 > OMS연동샘플 -->
     <typeAlias alias="omsLinkSampleVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO"/>

@@ -58,8 +58,9 @@ public class SmsSendServiceImpl implements SmsSendService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    // (2026.11.03) 맨 앞 \b → (?<![a-z0-9.\-]) 변경 : 한글 바로 뒤에 붙은 주소(예: 주소naver.com)도 탐지
     private static final Pattern URL_PATTERN = Pattern.compile(
-            "(?i)\\b((?:https?://|www\\.)[^\\s가-힣<>\"']+|(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:/[^\\s<>\"']*)?)"
+            "(?i)(?<![a-z0-9.\\-])((?:https?://|www\\.)[^\\s가-힣<>\"']+|(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:/[^\\s<>\"']*)?)"
     );
 
     /**
@@ -164,7 +165,9 @@ public class SmsSendServiceImpl implements SmsSendService {
             // (2026.09.21) 메신저 알림용 차단 URL 목록 (블랙/그레이)
             List<String> urlAlerts = new ArrayList<>();
 
-            Matcher matcher = URL_PATTERN.matcher(smsSendVOs[0].getContent() == null ? "" : smsSendVOs[0].getContent());
+            // (2026.11.03) 검사 대상에 제목 포함, 수신자별 내용이 다르면 모두 검사 (기존: 첫 번째 수신자 내용만)
+            String chkText = getChkText(smsSendVOs);
+            Matcher matcher = URL_PATTERN.matcher(chkText);
 
             // url 개별로 분리해서 저장
             while (matcher.find()) {
@@ -241,7 +244,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             }
 
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
-            FilterResult filterResult = badwordFilterService.check(smsSendVOs[0].getContent());
+            FilterResult filterResult = badwordFilterService.check(chkText);
 
             // (2026.09.21) 차단 사유 우선순위 변경: URL 우선 → 금칙어 우선
             //  - 금칙어 탐지 시 URL 문제 여부와 무관하게 금칙어 차단으로 안내 (URL 검사·XRAY 이력은 위에서 이미 수행/저장됨)
@@ -478,7 +481,9 @@ public class SmsSendServiceImpl implements SmsSendService {
             // (2026.09.21) 메신저 알림용 차단 URL 목록 (블랙/그레이)
             List<String> urlAlerts = new ArrayList<>();
 
-            Matcher matcher = URL_PATTERN.matcher(smsSendVO.getContent() == null ? "" : smsSendVO.getContent());
+            // (2026.11.03) 검사 대상에 제목 포함
+            String chkText = getChkText(smsSendVO);
+            Matcher matcher = URL_PATTERN.matcher(chkText);
 
             // url 개별로 분리해서 저장
             while (matcher.find()) {
@@ -549,7 +554,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             }
 
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
-            FilterResult filterResult = badwordFilterService.check(smsSendVO.getContent());
+            FilterResult filterResult = badwordFilterService.check(chkText);
 
             // (2026.09.21) 차단 사유 우선순위 변경: URL 우선 → 금칙어 우선
             //  - 금칙어 탐지 시 URL 문제 여부와 무관하게 금칙어 차단으로 안내 (URL 검사·XRAY 이력은 위에서 이미 수행/저장됨)
@@ -609,6 +614,17 @@ public class SmsSendServiceImpl implements SmsSendService {
         }
 
         return procCnt;
+    }
+
+    /** URL·금칙어 검사 대상 문구 (제목 + 내용, 수신자별로 다르면 서로 다른 것 모두) */
+    private String getChkText(SmsSendVO... smsSendVOs) {
+        Set<String> texts = new LinkedHashSet<>();
+        for (SmsSendVO smsSendVO : smsSendVOs) {
+            String title = smsSendVO.getTitle() == null ? "" : smsSendVO.getTitle();
+            String content = smsSendVO.getContent() == null ? "" : smsSendVO.getContent();
+            texts.add(title + "\n" + content);
+        }
+        return String.join("\n", texts);
     }
 
     /** 첨부파일 저장 */

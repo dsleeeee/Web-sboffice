@@ -342,6 +342,16 @@
     // KIOSK 엣지
     var momsKioskEdgeComboData = ${ccu.getCommCodeExcpAll("180")};
 
+    // 공통코드 콤보 (화면 진입 시 동시 조회하면 콤보 값이 섞이는 현상이 있어 JSP 에서 세팅)
+    var prodTypeFgComboList  = ${ccu.getCommCodeExcpAll("008")}; <%-- 상품유형 --%>
+    var saleProdYnComboList  = ${ccu.getCommCodeExcpAll("091")}; <%-- 판매상품여부 --%>
+    var poProdFgComboList    = ${ccu.getCommCodeExcpAll("092")}; <%-- 주문상품구분 --%>
+    var vatFgComboList       = ${ccu.getCommCodeExcpAll("039")}; <%-- 과세여부 --%>
+    var soldOutYnComboList   = ${ccu.getCommCodeExcpAll("094")}; <%-- 품절여부 --%>
+    var setProdFgComboList   = ${ccu.getCommCodeExcpAll("095")}; <%-- 세트상품구분 --%>
+    var prodTipYnComboList   = ${ccu.getCommCodeExcpAll("058")}; <%-- 봉사료포함여부 --%>
+    var prcCtrlFgComboList   = ${ccu.getCommCodeExcpAll("045")}; <%-- 가격관리구분 --%>
+
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
     var referrer = document.referrer;
@@ -362,7 +372,7 @@
     var urlProdFg = "${urlProdFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20260410.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20261030.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

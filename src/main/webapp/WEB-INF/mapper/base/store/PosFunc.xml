@@ -533,6 +533,32 @@
             tme.STORE_CD = #{storeCd}
     </select>
 
+    <!-- 포스기능 인증관리 - 재직 사원별 인증허용 기능키 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_FNKEY, TB_MS_STORE_FNKEY
+        PARAM    : posFuncVO
+        COMMENTS : 재직 사원 목록과 해당 기능구분에서 허용된 기능키를 조회한다. (허용 기능키가 없는 사원은 FNKEY_NO NULL 1행)
+    -->
+    <select id="getAuthEmpFnkeyList" parameterType="posFuncVO" resultType="DefaultMap">
+        /* USE : PosFuncMapper.getAuthEmpFnkeyList */
+        SELECT  tme.EMP_NO,
+                tme.EMP_NM,
+                tmf.FNKEY_NO
+          FROM  TB_MS_EMPLOYEE tme
+          LEFT OUTER JOIN TB_MS_EMPLOYEE_FNKEY tmf
+            ON  tmf.STORE_CD = tme.STORE_CD
+           AND  tmf.EMP_NO = tme.EMP_NO
+           AND  tmf.USE_YN = 'Y'
+           AND  tmf.FNKEY_NO IN (SELECT tmsf.FNKEY_NO
+                                   FROM TB_MS_STORE_FNKEY tmsf
+                                  WHERE tmsf.STORE_CD = #{storeCd}
+                                    AND tmsf.FNKEY_FG = #{fnkeyFg})
+         WHERE  tme.STORE_CD = #{storeCd}
+           AND  tme.SERVICE_FG = '1'
+         ORDER
+            BY  tme.EMP_NO, tmf.FNKEY_NO
+    </select>
+
     <!-- 포스기능 인증관리 인증여부 저장 -->
     <!--
         TABLE    : TB_MS_STORE_FNKEY
