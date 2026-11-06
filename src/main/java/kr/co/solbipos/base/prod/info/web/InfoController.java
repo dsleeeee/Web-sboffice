@@ -173,6 +173,26 @@ public class InfoController {
     }
 
     /**
+     * 분류 삭제 전 체크 (하위분류/상품 존재 여부)
+     * @param productClassVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return Result
+     */
+    @RequestMapping(value = "/class/chkDelProdClass.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkDelProdClass(@RequestBody ProductClassVO[] productClassVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.chkDelProdClass(productClassVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 상품분류정보관리(3단계) - 페이지 이동
      * @param request
      * @param response

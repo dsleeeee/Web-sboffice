@@ -136,6 +136,9 @@ public class InfoServiceImpl implements InfoService {
         String procResult;
         String dt = currentDateTimeString();
 
+        // 삭제 대상 분류 사전 체크 (하나라도 하위분류/상품이 존재하면 전체 삭제 불가)
+        chkDelProdClass(productClassVOs, sessionInfoVO);
+
         for(ProductClassVO productClassVO : productClassVOs){
 
             if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {   // 본사
@@ -191,24 +194,12 @@ public class InfoServiceImpl implements InfoService {
                 }
             }
             else if(productClassVO.getStatus() == GridDataFg.DELETE) {
-                // 해당 분류로 상품이 등록되어있으면 삭제 불가능
-                int chkProdCnt = mapper.chkProdCnt(productClassVO);
 
-                //본사권한인 경우, 매장에서도 해당 분류로 상품이 등록되어 있는지 확인 추가 : 2019.08.12_이다솜
+                procCnt += mapper.deleteCls(productClassVO);
+
+                // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    chkProdCnt += mapper.chkProdCntinStore(productClassVO);
-                }
-
-                if(chkProdCnt > 0) {
-                    throw new JsonException(Status.FAIL, messageService.get("info.delete.fail"));
-                }
-                else {
-                    procCnt += mapper.deleteCls(productClassVO);
-
-                    // 본사에서 접속시
-                    if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                        procResult = mapper.deleteClsToStore(productClassVO);
-                    }
+                    procResult = mapper.deleteClsToStore(productClassVO);
                 }
             }
         }
@@ -218,6 +209,66 @@ public class InfoServiceImpl implements InfoService {
         }
         else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 분류 삭제 전 체크 (삭제 대상 중 하나라도 하위분류/상품이 존재하면 삭제 불가) */
+    @Override
+    public int chkDelProdClass(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO) {
+
+        // 삭제 대상 분류코드 (같은 요청에서 함께 삭제되는 하위분류는 하위분류 체크에서 제외하기 위함)
+        List<String> delProdClassCdList = new ArrayList<String>();
+        for(ProductClassVO productClassVO : productClassVOs){
+            if(productClassVO.getStatus() == GridDataFg.DELETE) {
+                delProdClassCdList.add(productClassVO.getProdClassCd());
+            }
+        }
+        String[] arrDelProdClassCd = delProdClassCdList.toArray(new String[0]);
+
+        for(ProductClassVO productClassVO : productClassVOs){
+            if(productClassVO.getStatus() == GridDataFg.DELETE) {
+                chkDeleteProdClass(productClassVO, sessionInfoVO, arrDelProdClassCd);
+            }
+        }
+
+        return 0;
+    }
+
+    /** 분류 삭제 전 체크 (하위분류/상품(본사,매장) 존재 시 삭제 불가) */
+    private void chkDeleteProdClass(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO, String[] arrDelProdClassCd) {
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {   // 본사
+            productClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {    // 매장
+            productClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
+        productClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+
+        // 1. 해당 분류의 하위분류가 있으면 삭제 불가능 (같은 요청에서 함께 삭제되는 하위분류는 제외)
+        productClassVO.setArrProdClassCd(arrDelProdClassCd);
+        int chkChildCnt = mapper.chkChildClassCnt(productClassVO);
+
+        // 본사권한인 경우, 매장에서도 하위분류가 있는지 확인
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            chkChildCnt += mapper.chkChildClassCntinStore(productClassVO);
+        }
+        productClassVO.setArrProdClassCd(null);
+
+        if(chkChildCnt > 0) {
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("info.delProdClassDenied.msg"));
+        }
+
+        // 2. 해당 분류로 상품이 등록되어있으면 삭제 불가능
+        int chkProdCnt = mapper.chkProdCnt(productClassVO);
+
+        // 본사권한인 경우, 매장에서도 해당 분류로 상품이 등록되어 있는지 확인
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            chkProdCnt += mapper.chkProdCntinStore(productClassVO);
+        }
+
+        if(chkProdCnt > 0) {
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("info.delete.fail"));
         }
     }
 
@@ -258,7 +309,8 @@ public class InfoServiceImpl implements InfoService {
             productClassVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        return mapper.getProdClass(productClassVO);
+        // return mapper.getProdClass(productClassVO);
+        return mapper.getProdClass2(productClassVO);
     }
 
     /** 상품분류코드 채번방식 조회 */

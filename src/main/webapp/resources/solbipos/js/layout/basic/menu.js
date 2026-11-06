@@ -99,4 +99,76 @@ $(document).ready(function () {
     }
   });
 
+  // 터치/마우스 드래그로 좌측 메뉴 스크롤 (POS 터치 환경에서 기본 터치 스크롤이 동작하지 않는 경우 대응)
+  (function () {
+    var menuTree = document.querySelector(".menuTree");
+    if (!menuTree) { return; }
+
+    var DRAG_THRESHOLD = 8; // 이 거리(px) 이상 움직여야 스크롤로 판단, 그 미만은 메뉴 클릭으로 처리
+    var target = null;      // 스크롤 대상 트리
+    var startY = 0;
+    var startScroll = 0;
+    var dragging = false;
+    var suppressClick = false;
+
+    function getTree(el) {
+      while (el && el !== menuTree) {
+        if (el.className && typeof el.className === "string" && el.className.indexOf("theTreeAll") > -1) { return el; }
+        el = el.parentNode;
+      }
+      return null;
+    }
+
+    function onStart(e, y) {
+      target = getTree(e.target);
+      if (!target) { return; }
+      startY = y;
+      startScroll = target.scrollTop;
+      dragging = false;
+      suppressClick = false;
+    }
+
+    function onMove(e, y) {
+      if (!target) { return; }
+      var diff = startY - y;
+      if (!dragging && Math.abs(diff) < DRAG_THRESHOLD) { return; }
+      dragging = true;
+      suppressClick = true;
+      target.scrollTop = startScroll + diff;
+      if (e.cancelable) { e.preventDefault(); }
+    }
+
+    function onEnd() {
+      target = null;
+      dragging = false;
+      // 드래그 직후 발생하는 click 이 메뉴 선택으로 이어지지 않도록 잠시 후 해제
+      setTimeout(function () { suppressClick = false; }, 100);
+    }
+
+    // 터치 (기본 스크롤과 중복되지 않도록 non-passive 로 등록 후 직접 처리)
+    menuTree.addEventListener("touchstart", function (e) {
+      if (e.touches.length === 1) { onStart(e, e.touches[0].clientY); }
+    }, false);
+    menuTree.addEventListener("touchmove", function (e) {
+      if (e.touches.length === 1) { onMove(e, e.touches[0].clientY); }
+    }, false);
+    menuTree.addEventListener("touchend", onEnd, false);
+    menuTree.addEventListener("touchcancel", onEnd, false);
+
+    // 터치가 마우스 이벤트로 전달되는 환경
+    menuTree.addEventListener("mousedown", function (e) {
+      if (e.button === 0) { onStart(e, e.clientY); }
+    }, false);
+    document.addEventListener("mousemove", function (e) { onMove(e, e.clientY); }, false);
+    document.addEventListener("mouseup", function () { if (target) { onEnd(); } }, false);
+
+    // 드래그(스크롤) 후의 click 은 메뉴 선택으로 처리하지 않음
+    menuTree.addEventListener("click", function (e) {
+      if (suppressClick) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }, true);
+  })();
+
 });

@@ -11,6 +11,50 @@
 
 var app = agrid.getApp();
 
+// 분류 삭제 전, 서버에서 하위분류/상품(본사,매장) 존재 여부를 체크하고 통과하면 삭제 확인창 표시
+function popConfirmDelProdClass($scope, $http, msg, confirmCallback) {
+
+    var params = [];
+    for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk === true) {
+            var obj = {};
+            obj.status = "D";
+            obj.prodClassCd = item.prodClassCd;
+            params.push(obj);
+        }
+    }
+
+    var sParam = {};
+    // 가상로그인 대응한 session id 설정
+    if (document.getElementsByName('sessionId')[0]) {
+        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages['cmm.loading']);
+
+    $http({
+        method: 'POST',
+        url: '/base/prod/info/class/chkDelProdClass.sb',
+        data: params,
+        params: sParam,
+        headers: {'Content-Type': 'application/json; charset=utf-8'}
+    }).then(function successCallback(response) {
+        $scope.$broadcast('loadingPopupInactive');
+        // 하위분류/상품이 없으면 삭제 확인창 표시, 있으면 서버 메시지 표시
+        if ($scope._httpStatusCheck(response, true)) {
+            $scope._popConfirm(msg, confirmCallback);
+        }
+    }, function errorCallback(response) {
+        $scope.$broadcast('loadingPopupInactive');
+        if (response.data && response.data.message) {
+            $scope._popMsg(response.data.message);
+        } else {
+            $scope._popMsg(messages['cmm.saveFail']);
+        }
+    });
+}
+
 // 대분류
 app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -214,11 +258,12 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
                         }
                     }
 
-                    if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
-                        parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
-                        $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
-                        return;
-                    }
+                    // 하위분류/상품(본사,매장) 존재 여부 체크는 삭제 저장 시 서버(InfoServiceImpl.productClassSave)에서 수행
+                    // if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
+                    //     parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
+                    //     $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
+                    //     return;
+                    // }
                 }
             }
         }
@@ -226,7 +271,8 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
         var params = new Array();
 
         // 대분류를 삭제하시겠습니까?
-        $scope._popConfirm(messages["info.prodClassLevel1"] + "를 " + messages["cmm.choo.delete"], function() {
+        // $scope._popConfirm(messages["info.prodClassLevel1"] + "를 " + messages["cmm.choo.delete"], function() {
+        popConfirmDelProdClass($scope, $http, messages["info.prodClassLevel1"] + "를 " + messages["cmm.choo.delete"], function() {
 
             for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
                 var item = $scope.flex.collectionView.items[i];
@@ -689,11 +735,12 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
                         }
                     }
 
-                    if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
-                        parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
-                        $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
-                        return;
-                    }
+                    // 하위분류/상품(본사,매장) 존재 여부 체크는 삭제 저장 시 서버(InfoServiceImpl.productClassSave)에서 수행
+                    // if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
+                    //     parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
+                    //     $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
+                    //     return;
+                    // }
                 }
             }
         }
@@ -701,7 +748,8 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
         var params = new Array();
 
         // 중분류를 삭제하시겠습니까?
-        $scope._popConfirm(messages["info.prodClassLevel2"] + "를 " + messages["cmm.choo.delete"], function() {
+        // $scope._popConfirm(messages["info.prodClassLevel2"] + "를 " + messages["cmm.choo.delete"], function() {
+        popConfirmDelProdClass($scope, $http, messages["info.prodClassLevel2"] + "를 " + messages["cmm.choo.delete"], function() {
 
             for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
                 var item = $scope.flex.collectionView.items[i];
@@ -1143,11 +1191,12 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
                         }
                     }
 
-                    if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
-                        parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
-                        $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
-                        return;
-                    }
+                    // 하위분류/상품(본사,매장) 존재 여부 체크는 삭제 저장 시 서버(InfoServiceImpl.productClassSave)에서 수행
+                    // if(parseInt(nvl(item.hqChildClassCnt, 0)) !== 0 || parseInt(nvl(item.hqProdCnt, 0)) !== 0 ||
+                    //     parseInt(nvl(item.msChildClassCnt, 0)) !== 0 || parseInt(nvl(item.msProdCnt, 0)) !== 0){
+                    //     $scope._popMsg(messages["info.delProdClassDenied.msg"]);// 상품 또는 하위분류가 등록된 분류는 삭제할 수 없습니다.
+                    //     return;
+                    // }
                 }
             }
         }
@@ -1155,7 +1204,8 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
         var params = new Array();
 
         // 소분류를 삭제하시겠습니까?
-        $scope._popConfirm(messages["info.prodClassLevel3"] + "를 " + messages["cmm.choo.delete"], function() {
+        // $scope._popConfirm(messages["info.prodClassLevel3"] + "를 " + messages["cmm.choo.delete"], function() {
+        popConfirmDelProdClass($scope, $http, messages["info.prodClassLevel3"] + "를 " + messages["cmm.choo.delete"], function() {
 
             for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
                 var item = $scope.flex.collectionView.items[i];
