@@ -126,6 +126,12 @@ app.controller('prepaidCardChargeStatusCtrl', ['$scope', '$http', '$timeout', fu
             return false;
         }
 
+        // 조회일자 최대 1년 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         // 파라미터
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -197,6 +203,12 @@ app.controller('prepaidCardChargeStatusCtrl', ['$scope', '$http', '$timeout', fu
             return false;
         }
 
+        // 조회일자 최대 1년 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -229,6 +241,12 @@ app.controller('prepaidCardChargeStatusCtrl', ['$scope', '$http', '$timeout', fu
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
             $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
             return false;
         }
 

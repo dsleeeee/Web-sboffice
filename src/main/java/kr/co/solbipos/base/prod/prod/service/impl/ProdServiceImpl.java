@@ -395,6 +395,24 @@ public class ProdServiceImpl implements ProdService {
             throw new JsonException(Status.SERVER_ERROR, "가격관리구분 값이 올바르지 않습니다.<br/>화면을 새로고침한 후 다시 저장해주세요.");
         }
 
+        // 콤보 값 검증 : 화면에서 다른 콤보의 값이 섞여 들어오는 경우가 있어 코드 목록에 있는 값인지 확인 (값이 있을 때만)
+        DefaultMap<String> comboChk = prodMapper.getProdComboValueChk(prodVO);
+        String[][] comboList = {
+            {prodVO.getVatFg(),         "vatFgYn",         "과세여부"},
+            {prodVO.getSetProdFg(),     "setProdFgYn",     "세트상품구분"},
+            {prodVO.getProdTypeFg(),    "prodTypeFgYn",    "상품유형"},
+            {prodVO.getSaleProdYn(),    "saleProdYnYn",    "판매상품여부"},
+            {prodVO.getProdTipYn(),     "prodTipYnYn",     "봉사료포함여부"},
+            {prodVO.getPoUnitFg(),      "poUnitFgYn",      "주문단위"},
+            {prodVO.getSdattrClassCd(), "sdattrClassCdYn", "사이드메뉴 속성"},
+            {prodVO.getSdselGrpCd(),    "sdselGrpCdYn",    "사이드메뉴 선택메뉴"}
+        };
+        for(String[] combo : comboList) {
+            if(combo[0] != null && !"".equals(combo[0]) && !"Y".equals(comboChk.getStr(combo[1]))) {
+                throw new JsonException(Status.SERVER_ERROR, combo[2] + " 값이 올바르지 않습니다.<br/>화면을 새로고침한 후 다시 저장해주세요.");
+            }
+        }
+
         // 상품정보 저장
 //        int result = prodMapper.saveProductInfo(prodVO);
         long result = prodMapper.saveProductInfo(prodVO);

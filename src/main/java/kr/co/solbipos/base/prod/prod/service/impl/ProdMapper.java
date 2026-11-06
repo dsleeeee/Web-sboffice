@@ -72,6 +72,9 @@ public interface ProdMapper {
     /** 본사에서는 프로시저 호출에 사용할 상품의 존재여부를 미리 체크함 */
     int getProdExistInfo(ProdVO prodVO);
 
+    /** 상품정보 저장 전 콤보 값 존재여부 확인 */
+    DefaultMap<String> getProdComboValueChk(ProdVO prodVO);
+
     /** 상품코드 조회 */
     String getProdCd(ProdVO prodVO);
 

@@ -25,6 +25,7 @@ import java.util.*;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2023.01.27   이다솜      최초생성
+ * @ 2026.11.04   김유승      상품 화면 기간별 총매출액 1회 조회로 변경
  *
  * @author 솔비포스 개발본부 WEB개발팀 이다솜
  * @since 2023.01.27
@@ -144,6 +145,18 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
 
             long totAmt = 0;
 
+            // 기간별 총매출액 한 번에 구하기 (기간 시작일(일 : yyyyMMdd, 월 : yyyyMM01) → 총매출액)
+            saleAnalsMomsBstVO.setSaleStartDate(dateArr.get(0).get("sDate"));
+            saleAnalsMomsBstVO.setSaleEndDate(dateArr.get(dateArr.size() - 1).get("eDate"));
+            Map<String, Long> periodAmtMap = new HashMap<>();
+            long periodTotAmt = 0;
+            for (DefaultMap<Object> periodAmt : saleAnalsMomsBstMapper.getPeriodRealSaleAmtList(saleAnalsMomsBstVO)) {
+                Object realSaleAmt = periodAmt.get("realSaleAmt");
+                long amt = realSaleAmt instanceof Number ? ((Number) realSaleAmt).longValue() : 0L;
+                periodAmtMap.put(String.valueOf(periodAmt.get("saleDate")), amt);
+                periodTotAmt += amt;
+            }
+
             // 집계쿼리 생성
             for (int i = 0; i < dateArr.size(); i++) {
 
@@ -155,10 +168,8 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
                     saleAnalsMomsBstVO.setEndDate(dateArr.get(i).get("eDate"));
                 }
 
-                // 날짜별 총매출액 구하기
-                saleAnalsMomsBstVO.setSaleStartDate(dateArr.get(i).get("sDate"));
-                saleAnalsMomsBstVO.setSaleEndDate(dateArr.get(i).get("sDate"));
-                totAmt = saleAnalsMomsBstMapper.getRealSaleAmt(saleAnalsMomsBstVO);
+                // 날짜별 총매출액
+                totAmt = periodAmtMap.containsKey(dateArr.get(i).get("sDate")) ? periodAmtMap.get(dateArr.get(i).get("sDate")) : 0L;
 
                 if ("1".equals(saleAnalsMomsBstVO.getProdOption())) {
                     sQuery1 += ", SUM(CASE WHEN A.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') THEN A.SALE_QTY ELSE 0 END) AS SALE_QTY_1_" + dateArr.get(i).get("sOrgDate");
@@ -175,10 +186,8 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
                 }
             }
 
-            // 날짜기간 총매출액 구하기
-            saleAnalsMomsBstVO.setSaleStartDate(dateArr.get(0).get("sDate"));
-            saleAnalsMomsBstVO.setSaleEndDate(dateArr.get(dateArr.size() - 1).get("eDate"));
-            totAmt = saleAnalsMomsBstMapper.getRealSaleAmt(saleAnalsMomsBstVO);
+            // 날짜기간 총매출액 (기간별 총매출액 합계)
+            totAmt = periodTotAmt;
 
             if ("1".equals(saleAnalsMomsBstVO.getProdOption())) {
                 sQuery1 += ", SUM(CASE WHEN A.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') THEN A.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY";

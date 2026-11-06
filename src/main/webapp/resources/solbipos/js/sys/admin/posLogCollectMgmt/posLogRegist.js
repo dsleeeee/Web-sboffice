@@ -214,9 +214,21 @@ app.controller('regPosLogCtrl', ['$scope', '$http', '$timeout', function ($scope
                         return this.value;
                     }).get().join(",");
                 }
+
+                // VCAT 경로 바이트 체크 (컬럼 VARCHAR2(1000 BYTE))
+                if(nvl($scope.logFileVcatPath, '').getByteLengthForOracle() > 1000){
+                    $scope._popMsg(messages['posLogCollectMgmt.vcatPath'] + " 1000" + messages["verManage.byte"] + " 제한(확인: "+nvl($scope.logFileVcatPath, '').getByteLengthForOracle()+ messages["verManage.byte"] +")");
+                    return false;
+                }
             }
         }else {
             $scope._popMsg(messages["posLogCollectMgmt.msg.commandType"]); // 명령타입을 선택하여 주십시오
+            return false;
+        }
+
+        // 사유 바이트 체크 (컬럼 VARCHAR2(4000 BYTE))
+        if(nvl($scope.remark, '').getByteLengthForOracle() > 4000){
+            $scope._popMsg(messages['posLogCollectMgmt.remark'] + " 4000" + messages["verManage.byte"] + " 제한(확인: "+nvl($scope.remark, '').getByteLengthForOracle()+ messages["verManage.byte"] +")");
             return false;
         }
 

@@ -29,6 +29,6 @@ public interface SaleAnalsMomsBstMapper {
     /** 상품별시간대매출(채널별) 조회 */
     List<DefaultMap<String>> getSaleAnalsMomsBstList(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
 
-    /** 해당 날짜의 총매출액 조회 */
-    long getRealSaleAmt(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
+    /** 기간별 총매출액 조회 */
+    List<DefaultMap<Object>> getPeriodRealSaleAmtList(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
 }

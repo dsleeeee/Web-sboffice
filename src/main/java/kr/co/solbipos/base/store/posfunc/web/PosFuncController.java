@@ -468,4 +468,46 @@ public class PosFuncController {
 
         return returnListJson(Status.OK, result);
     }
+
+    /**
+     * 포스기능 인증관리 - 재직 사원별 인증허용 기능키 조회
+     * @param   posFuncVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 11. 04.
+     */
+    @RequestMapping(value = "/auth/getAuthEmpFnkeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAuthEmpFnkeyList(PosFuncVO posFuncVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> list = service.getAuthEmpFnkeyList(posFuncVO);
+
+        return returnListJson(Status.OK, list);
+    }
+
+    /**
+     * 포스기능 인증관리 - 인증여부 + 인증허용 사원 일괄 저장
+     * @param   posFuncVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2026. 11. 04.
+     */
+    @RequestMapping(value = "/auth/savePosAuthEmpConf.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePosAuthEmpConf(@RequestBody PosFuncVO[] posFuncVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.savePosAuthEmpConf(posFuncVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
 }

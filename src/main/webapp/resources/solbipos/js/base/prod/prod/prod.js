@@ -166,25 +166,25 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   // 브랜드명 콤보박스
   $scope._setComboData('hqBrandCd', brandList);
   // 상품유형 콤보박스
-  $scope._getComboDataQuery('008', 'prodTypeFgComboData');
+  $scope._setComboData('prodTypeFgComboData', prodTypeFgComboList);
   // 판매상품여부 콤보박스
-  $scope._getComboDataQuery('091', 'saleProdYnComboData');
+  $scope._setComboData('saleProdYnComboData', saleProdYnComboList);
   // 주문상품구분 콤보박스
-  $scope._getComboDataQuery('092', 'poProdFgComboData');
+  $scope._setComboData('poProdFgComboData', poProdFgComboList);
   // 주문단위 콤보박스와 data-map
   $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
   // 과세여부 콤보박스
-  $scope._getComboDataQuery('039', 'vatFgComboData');
+  $scope._setComboData('vatFgComboData', vatFgComboList);
   // 부가세포함여부
   $scope._setComboData("vatIncldYnComboData", vatIncldYnComboData);
   // 품절여부 콤보박스
-  $scope._getComboDataQuery('094', 'soldOutYnComboData');
+  $scope._setComboData('soldOutYnComboData', soldOutYnComboList);
   // 세트상품구분 콤보박스
-  $scope._getComboDataQuery('095', 'setProdFgComboData');
+  $scope._setComboData('setProdFgComboData', setProdFgComboList);
   // 봉사료포함여부 콤보박스
-  $scope._getComboDataQuery('058', 'prodTipYnComboData');
+  $scope._setComboData('prodTipYnComboData', prodTipYnComboList);
   // 가격관리구분 콤보박스
-  $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
+  $scope._setComboData('prcCtrlFgComboData', prcCtrlFgComboList);
   // 코너 콤보박스
   $scope._setComboData("cornrCdComboData", cornerList);
   // KIOSK 엣지 콤보박스

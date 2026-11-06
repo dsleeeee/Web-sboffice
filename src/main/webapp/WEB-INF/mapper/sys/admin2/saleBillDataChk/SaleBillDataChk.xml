@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleBillDataChk.xml
+    매출자료검증
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2026.11.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin2.saleBillDataChk.service.impl.SaleBillDataChkMapper">
+
+    <!-- 매출자료검증 - 영수증 1건 정합성 체크 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_SL_SALE_PAY_SEQ 등 매출 테이블 (조회만)
+        COMMENTS : SP_SALE_BILL_DATA_CHECK_S01 에서 데이터 변경(UPDATE) 처리만 뺀 S02 호출 (구분 '1' : 매출 정합성 체크)
+    -->
+    <select id="getSaleBillDataChk" statementType="CALLABLE" parameterType="saleBillDataChkVO" resultType="String">
+        /* SaleBillDataChkMapper.getSaleBillDataChk */
+        {
+            CALL SP_SALE_BILL_DATA_CHECK_S02
+            (
+                '1',
+                UPPER(#{storeCd})||'⊥'||#{saleDate}||'⊥'||#{posNo}||'⊥'||#{billNo},
+                #{resultCode, mode=OUT, jdbcType=VARCHAR},
+                #{resultMsg, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+</mapper>
