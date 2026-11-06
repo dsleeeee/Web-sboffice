@@ -404,6 +404,55 @@
           FROM TB_MS_PRODUCT
          WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
            AND PROD_CLASS_CD = #{prodClassCd}
+           AND ROWNUM = 1
+    </select>
+
+    <!-- 해당 분류의 하위분류 존재여부 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : 해당 분류를 상위분류로 가진 하위분류가 있는지 조회한다.(있으면 1, 없으면 0)
+    -->
+    <select id="chkChildClassCnt" parameterType="DefaultMap" resultType="Integer">
+        /* USE : InfoMapper.chkChildClassCnt */
+        SELECT COUNT(1) AS CNT
+        <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+          FROM TB_HQ_PRODUCT_CLASS
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+          FROM TB_MS_PRODUCT_CLASS
+         WHERE STORE_CD = #{storeCd}
+        </if>
+           AND P_PROD_CLASS_CD = #{prodClassCd}
+        <!-- 같은 요청에서 함께 삭제되는 하위분류는 제외 -->
+        <if test='arrProdClassCd != null and arrProdClassCd.length > 0'>
+           AND PROD_CLASS_CD NOT IN
+            <foreach collection="arrProdClassCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+           AND ROWNUM = 1
+    </select>
+
+    <!-- 해당 분류의 하위분류 존재여부 조회(매장전체조회) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS
+        COMMENTS : 본사 소속 매장에 해당 분류를 상위분류로 가진 하위분류가 있는지 조회한다.(있으면 1, 없으면 0)
+    -->
+    <select id="chkChildClassCntinStore" parameterType="DefaultMap" resultType="Integer">
+        /* USE : InfoMapper.chkChildClassCntinStore */
+        SELECT COUNT(1) AS CNT
+          FROM TB_MS_PRODUCT_CLASS
+         WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+           AND P_PROD_CLASS_CD = #{prodClassCd}
+        <!-- 같은 요청에서 함께 삭제되는 하위분류는 제외 -->
+        <if test='arrProdClassCd != null and arrProdClassCd.length > 0'>
+           AND PROD_CLASS_CD NOT IN
+            <foreach collection="arrProdClassCd" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+           AND ROWNUM = 1
     </select>
 
     <!-- 저장하려는 분류의 Level값 조회 -->
@@ -658,6 +707,50 @@
               AND   D.PROD_CLASS_CD   (+)= tmpc.PROD_CLASS_CD
               ORDER
               BY    tmpc.PROD_CLASS_CD ASC
+          </when>
+      </choose>
+    </select>
+
+    <!-- 상품분류정보관리(3단계) - 분류 조회 (삭제 가능 여부 체크용 하위분류/상품 건수 제외) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+        COMMENTS : 본사/매장의 상품 분류를 조회한다.
+                   하위분류/상품 존재 여부는 조회 시 확인하지 않고, 삭제 시 서비스(productClassSave)에서 체크한다.
+    -->
+    <select id="getProdClass2" parameterType="DefaultMap" resultType="DefaultMap">
+      /* USE : InfoMapper.getProdClass2 */
+      <choose>
+          <!-- 본사 -->
+          <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+              SELECT  thpc.PROD_CLASS_CD
+              ,       thpc.PROD_CLASS_NM
+              FROM    TB_HQ_PRODUCT_CLASS thpc
+              WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+              AND     thpc.CLS_LEVEL_CD = #{clsLevelCd}
+          <if test='clsLevelCd != null and clsLevelCd == "1"'>
+              AND     thpc.P_PROD_CLASS_CD = '00000'
+          </if>
+          <if test='clsLevelCd != null and clsLevelCd != "1"'>
+              AND     thpc.P_PROD_CLASS_CD = #{pProdClassCd}
+          </if>
+              ORDER
+              BY      thpc.PROD_CLASS_CD ASC
+          </when>
+          <!-- 매장 -->
+          <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+              SELECT  tmpc.PROD_CLASS_CD
+              ,       tmpc.PROD_CLASS_NM
+              FROM    TB_MS_PRODUCT_CLASS tmpc
+              WHERE   tmpc.STORE_CD = #{storeCd}
+              AND     tmpc.CLS_LEVEL_CD = #{clsLevelCd}
+          <if test='clsLevelCd != null and clsLevelCd == "1"'>
+              AND     tmpc.P_PROD_CLASS_CD = '00000'
+          </if>
+          <if test='clsLevelCd != null and clsLevelCd != "1"'>
+              AND     tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
+          </if>
+              ORDER
+              BY      tmpc.PROD_CLASS_CD ASC
           </when>
       </choose>
     </select>

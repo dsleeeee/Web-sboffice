@@ -73,10 +73,12 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
+                        <%-- 하위분류/상품 존재 여부는 삭제 저장 시 서버에서 체크 (조회 시 건수 컬럼 미사용)
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        --%>
                         <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -121,10 +123,12 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
+                        <%-- 하위분류/상품 존재 여부는 삭제 저장 시 서버에서 체크 (조회 시 건수 컬럼 미사용)
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        --%>
                         <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -168,10 +172,12 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassCd"/>" binding="prodClassCd" width="65" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="info.prodClassName"/>" binding="prodClassNm" width="140"></wj-flex-grid-column>
+                        <%-- 하위분류/상품 존재 여부는 삭제 저장 시 서버에서 체크 (조회 시 건수 컬럼 미사용)
                         <wj-flex-grid-column header="" binding="hqChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="hqProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msChildClassCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="" binding="msProdCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        --%>
                         <wj-flex-grid-column header="" binding="newRowYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -191,4 +197,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20240626.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/info/prodClass3LevelView.js?ver=20261105.01" charset="utf-8"></script>

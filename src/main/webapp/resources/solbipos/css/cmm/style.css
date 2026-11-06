@@ -180,29 +180,36 @@ button.btn_gray_alk:hover {background:#777; transition:all 0.2s;}
 
 nav.menuOpen .menuTree {height:100%; width:219px; overflow:hidden;}
 /*nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:240px; overflow-y:scroll; position:relative; top:20px;}*/
-nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:228px; overflow-y:scroll; position:relative; top:20px;}
+/* 마우스 없는 매장/포스에서도 메뉴 스크롤이 가능하도록 스크롤바 노출 (width 를 menuTree 폭에 맞춰 스크롤바가 잘리지 않도록 함) */
+/*nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:228px; overflow-y:scroll; position:relative; top:20px;}*/
+nav.menuOpen .menuTree .theTreeAll.wj-treeview {height:calc(100% - 120px); width:219px; overflow-y:scroll; overflow-x:hidden; position:relative; top:20px; -webkit-overflow-scrolling:touch; touch-action:pan-y; -webkit-user-select:none; -ms-user-select:none; user-select:none;}
 
-/*ie용 스크롤 숨기기*/
+/*ie용 스크롤바 색상*/
 nav.menuOpen .menuTree .theTreeAll.wj-treeview {
-    scrollbar-arrow-color: #2e333f;
-    scrollbar-Track-Color: #2e333f;
-    scrollbar-base-color: #2e333f;
-    scrollbar-Face-Color: #2e333f;
-    scrollbar-3dLight-Color: #2e333f;
-    scrollbar-DarkShadow-Color: #2e333f;
-    scrollbar-Highlight-Color: #2e333f;
-    scrollbar-Shadow-Color: #2e333f;
-    -ms-overflow-style: none;
+    scrollbar-arrow-color: #8a93a6;
+    scrollbar-Track-Color: #1b202b;
+    scrollbar-base-color: #1b202b;
+    scrollbar-Face-Color: #5b6477;
+    scrollbar-3dLight-Color: #1b202b;
+    scrollbar-DarkShadow-Color: #1b202b;
+    scrollbar-Highlight-Color: #1b202b;
+    scrollbar-Shadow-Color: #1b202b;
+    /*-ms-overflow-style: none;*/
 }
 
-/*크롬용 스크롤 숨기기*/
+/*크롬용 스크롤바 (터치 조작을 고려하여 두껍게 표시)*/
 /*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:12px; height:12px; }*/
-nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:0px; height:12px; }
+/*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:0px; height:12px; }*/
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar {width:8px; height:12px; }
 
-nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement,
+/*nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:start:decrement,
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button:end:increment {display:block; width: 12px;height: 12px; background:#2e333f;}
 nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-track {background: #2e333f;}
-nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background: #2e333f;}*/
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-button {display:none;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-track {background:#2e333f;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb {background:#5b6477; border-radius:3px;}
+nav.menuOpen .menuTree .theTreeAll.wj-treeview::-webkit-scrollbar-thumb:hover {background:#7c869b;}
 
 
 

@@ -31,6 +31,9 @@ public interface InfoService {
     /** 해당 분류로 등록된 상품 조회 */
     int chkProdCnt(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO);
 
+    /** 분류 삭제 전 체크 (하위분류/상품 존재 여부) */
+    int chkDelProdClass(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO);
+
     /** 상품분류정보관리(3단계) - 분류 조회 */
     List<DefaultMap<String>> getProdClass(ProductClassVO productClassVO, SessionInfoVO sessionInfoVO);
 

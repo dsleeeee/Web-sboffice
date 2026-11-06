@@ -1341,6 +1341,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
 
+        // 상품상세설명 길이 체크 (PROD_INFO VARCHAR2(2000))
+        if(nvl($scope.prodModifyInfo.prodInfo, '').getByteLengthForOracle() > 2000){
+            $scope._popMsg(messages['prod.title.info'] + messages["cmm.overLength"] + " 2000 " + ", 현재 : " + nvl($scope.prodModifyInfo.prodInfo, '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+            return false;
+        }
+
         return true;
     };
 
@@ -1768,6 +1774,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                 return false;
             }
+        }
+
+        // 상품상세설명 길이 체크 (PROD_INFO VARCHAR2(2000), 저장 전 재검증)
+        if(nvl(vParams.prodInfo, '').getByteLengthForOracle() > 2000){
+            $scope._popMsg(messages['prod.title.info'] + messages["cmm.overLength"] + " 2000 " + ", 현재 : " + nvl(vParams.prodInfo, '').getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
+            return false;
         }
 
         // 판매상품여부 변경으로 인한 배민 주문 차단
