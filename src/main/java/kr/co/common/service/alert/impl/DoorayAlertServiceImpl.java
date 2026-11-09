@@ -83,7 +83,7 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
     });
 
     @Override
-    public void notifySmsBadwordBlock(String keywords, String msgContent, SessionInfoVO sessionInfoVO) {
+    public void notifySmsBadwordBlock(String keywords, String msgTitle, String msgContent, SessionInfoVO sessionInfoVO) {
         if (!"Y".equals(SMS_BLOCK_USE_YN)) {
             return;
         }
@@ -91,11 +91,12 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
                 "[SMS 차단] 금칙어 탐지"
                         + "\norgnCd: " + orgnInfo(sessionInfoVO)
                         + "\n탐지: " + keywords
+                        + (msgTitle == null || msgTitle.trim().isEmpty() ? "" : "\n제목: " + preview(msgTitle))
                         + "\n본문: " + preview(msgContent));
     }
 
     @Override
-    public void notifySmsUrlBlock(List<String> urlSummaries, String msgContent, SessionInfoVO sessionInfoVO) {
+    public void notifySmsUrlBlock(List<String> urlSummaries, String msgTitle, String msgContent, SessionInfoVO sessionInfoVO) {
         if (!"Y".equals(SMS_BLOCK_USE_YN)) {
             return;
         }
@@ -103,6 +104,7 @@ public class DoorayAlertServiceImpl implements DoorayAlertService {
                 "[SMS 차단] URL 탐지"
                         + "\norgnCd: " + orgnInfo(sessionInfoVO)
                         + "\n탐지: " + String.join(", ", urlSummaries)
+                        + (msgTitle == null || msgTitle.trim().isEmpty() ? "" : "\n제목: " + preview(msgTitle))
                         + "\n본문: " + preview(msgContent));
     }
 

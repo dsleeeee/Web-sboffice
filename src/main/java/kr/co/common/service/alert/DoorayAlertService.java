@@ -19,19 +19,21 @@ public interface DoorayAlertService {
      * SMS 차단 알림 - 금칙어 탐지
      *
      * @param keywords      {@code String} 탐지된 금칙어(조합)
+     * @param msgTitle      {@code String} 발송 시도 제목 (있을 때만 표기, 앞 50자만 미리보기로 전송)
      * @param msgContent    {@code String} 발송 시도 본문 (앞 50자만 미리보기로 전송)
      * @param sessionInfoVO {@code SessionInfoVO} 세션정보 (조직코드/사용자ID 표기용)
      */
-    void notifySmsBadwordBlock(String keywords, String msgContent, SessionInfoVO sessionInfoVO);
+    void notifySmsBadwordBlock(String keywords, String msgTitle, String msgContent, SessionInfoVO sessionInfoVO);
 
     /**
      * SMS 차단 알림 - URL 탐지
      *
      * @param urlSummaries  {@code List<String>} 탐지된 URL 요약 목록
+     * @param msgTitle      {@code String} 발송 시도 제목 (있을 때만 표기, 앞 50자만 미리보기로 전송)
      * @param msgContent    {@code String} 발송 시도 본문 (앞 50자만 미리보기로 전송)
      * @param sessionInfoVO {@code SessionInfoVO} 세션정보 (조직코드/사용자ID 표기용)
      */
-    void notifySmsUrlBlock(List<String> urlSummaries, String msgContent, SessionInfoVO sessionInfoVO);
+    void notifySmsUrlBlock(List<String> urlSummaries, String msgTitle, String msgContent, SessionInfoVO sessionInfoVO);
 
     /**
      * 사이드메뉴 복사저장 자동 재전송 차단 알림

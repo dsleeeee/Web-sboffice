@@ -192,7 +192,9 @@ public class SmsSendServiceImpl implements SmsSendService {
                     chkUrlVO.setUserId(sessionInfoVO.getUserId());
                     chkUrlVO.setChkUrl(url);
                     chkUrlVO.setCallback(smsSendVOs[0].getCallback());
-                    chkUrlVO.setContent(smsSendVOs[0].getContent());
+                    // (2026.11.09) 이력 MSG_CONTENT에 제목 포함 (제목 없으면 내용만)
+                    String title = smsSendVOs[0].getTitle();
+                    chkUrlVO.setContent(title == null || title.trim().isEmpty() ? smsSendVOs[0].getContent() : "[제목] " + title + "\n" + smsSendVOs[0].getContent());
                     chkUrlVO.setSendDate(smsSendVOs[0].getSendDate());
 
                     String urlType;
@@ -240,7 +242,7 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // (2026.09.21) URL 차단(블랙/그레이) 발생 시 메신저 알림 — 금칙어 알림과 별개로 전송
             if (!sendYn) {
-                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVOs[0].getContent(), sessionInfoVO);
+                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVOs[0].getTitle(), smsSendVOs[0].getContent(), sessionInfoVO);
             }
 
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
@@ -252,7 +254,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             //  - 예외 대신 procCnt=-1 플래그로 처리 (트랜잭션 롤백에 이력이 사라지지 않도록)
             if (filterResult.isDetected()) {
                 // (2026.09.21) 금칙어 차단 메신저 알림 (수신자 수와 무관하게 전송 요청당 1건)
-                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVOs[0].getContent(), sessionInfoVO);
+                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVOs[0].getTitle(), smsSendVOs[0].getContent(), sessionInfoVO);
 
                 // 금칙어 탐지 - 이력만 남기고 SMS 미전송
                 for (SmsSendVO smsSendVO : smsSendVOs) {
@@ -508,7 +510,9 @@ public class SmsSendServiceImpl implements SmsSendService {
                     chkUrlVO.setUserId(sessionInfoVO.getUserId());
                     chkUrlVO.setChkUrl(url);
                     chkUrlVO.setCallback(smsSendVO.getCallback());
-                    chkUrlVO.setContent(smsSendVO.getContent());
+                    // (2026.11.09) 이력 MSG_CONTENT에 제목 포함 (제목 없으면 내용만)
+                    String title = smsSendVO.getTitle();
+                    chkUrlVO.setContent(title == null || title.trim().isEmpty() ? smsSendVO.getContent() : "[제목] " + title + "\n" + smsSendVO.getContent());
                     chkUrlVO.setSendDate(smsSendVO.getSendDate());
 
                     String urlType;
@@ -550,7 +554,7 @@ public class SmsSendServiceImpl implements SmsSendService {
 
             // (2026.09.21) URL 차단(블랙/그레이) 발생 시 메신저 알림 — 금칙어 알림과 별개로 전송
             if (!sendYn) {
-                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVO.getContent(), sessionInfoVO);
+                doorayAlertService.notifySmsUrlBlock(urlAlerts, smsSendVO.getTitle(), smsSendVO.getContent(), sessionInfoVO);
             }
 
             // 금칙어 필터링 — URL 체크 결과와 관계없이 항상 검사 (이력 저장 대상 판단용)
@@ -563,7 +567,7 @@ public class SmsSendServiceImpl implements SmsSendService {
             if (filterResult.isDetected()) {
 
                 // (2026.09.21) 금칙어 차단 메신저 알림 (전송 요청당 1건)
-                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVO.getContent(), sessionInfoVO);
+                doorayAlertService.notifySmsBadwordBlock(filterResult.getKeyword(), smsSendVO.getTitle(), smsSendVO.getContent(), sessionInfoVO);
 
                 // 금칙어 탐지 - 이력만 남기고 SMS 미전송
                 smsSendVO.setKeyword(filterResult.getKeyword());
