@@ -109,6 +109,7 @@ app.controller('verManageV2Ctrl', ['$scope', '$http', function ($scope, $http) {
     params.listScale = $scope.listScaleVer;
     params.curr = $scope._getPagingInfo('curr');
     params.hqOfficeCd = hqOfficeCd;
+    params.userId = userId; // NXPOS버전관리허용(공통코드 408) 대리점 판단용
     params.progFg = $scope.srchProgFgCombo.selectedValue;
     params.progDetailFg = $scope.srchProgDtlFgCombo.selectedValue;
     params.fileDesc = $scope.fileDesc;
