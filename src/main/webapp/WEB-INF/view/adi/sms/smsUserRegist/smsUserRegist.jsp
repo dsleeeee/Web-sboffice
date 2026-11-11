@@ -356,9 +356,9 @@
               <p class="sur-terms-p">(1) '링크(주)'는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
               <p class="sur-terms-p indent">▶ 개인정보 보호책임자</p>
               <table class="sur-terms-tbl"><tbody>
-                <tr><th>성명</th><td>윤한성</td></tr>
-                <tr><th>직책</th><td>실장</td></tr>
-                <tr><th>직급</th><td>이사</td></tr>
+                <tr><th>성명</th><td>임근주</td></tr>
+                <tr><th>직책</th><td>팀장</td></tr>
+                <tr><th>직급</th><td>부장</td></tr>
                 <tr><th>연락처</th><td>Tel. 1544-5194 / E-mail. yhs@kcp.co.kr / Fax. 02-868-5194</td></tr>
               </tbody></table>
               <p class="sur-terms-p indent">▶ 개인정보 보호 담당부서</p>
